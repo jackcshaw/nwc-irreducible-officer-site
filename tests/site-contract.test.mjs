@@ -69,6 +69,7 @@ assert(
 assert(html.includes(".toc::after"), "essay navigation should include a fill layer for reading progress");
 assert(html.includes("--toc-progress"), "essay navigation should expose a progress variable");
 assert(html.includes("function updateTocProgress()"), "site should update essay navigation as the reader scrolls");
+assert(html.includes('window.addEventListener("hashchange"'), "site should respond to mode hash changes");
 assert(html.includes("classList.toggle(\"is-active\""), "site should mark the active essay section");
 assert(html.includes("classList.toggle(\"is-past\""), "site should mark completed essay sections");
 assert(html.includes("data-copy-target=\"setup-prompt\""), "companion should include a copyable setup prompt");

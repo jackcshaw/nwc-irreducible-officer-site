@@ -558,6 +558,7 @@ function slugify(value) {
 function clientJs() {
   return `const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
+const modeNames = ["essay", "companion", "guide"];
 const toc = document.querySelector(".toc");
 const tocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
   .map((link) => ({ link, heading: document.getElementById(link.dataset.tocLink) }))
@@ -647,9 +648,17 @@ buttons.forEach((button) => {
 
 window.addEventListener("scroll", requestTocUpdate, { passive: true });
 window.addEventListener("resize", requestTocUpdate);
+window.addEventListener("hashchange", () => {
+  const mode = location.hash.replace("#", "");
+  if (modeNames.includes(mode)) {
+    setMode(mode, false);
+    return;
+  }
+  requestTocUpdate();
+});
 
 const initial = location.hash.replace("#", "");
-if (["essay", "companion", "guide"].includes(initial)) {
+if (modeNames.includes(initial)) {
   setMode(initial, false);
 }
 requestTocUpdate();
