@@ -32,7 +32,7 @@ The educational problem begins with the artifact. A paper, memo, or briefing pro
 
 AI changes the evidentiary value of the artifact. It does not make writing meaningless. It does not make analysis impossible. It makes the visible product less reliable as a stand-in for the student's understanding.
 
-That creates two different problems. The first is visible non-learning: the brief is thin, the reasoning collapses under questions, the prose carries the familiar smell of generated work, or the student cannot explain what the argument is doing. This failure is serious, but it is also useful because faculty and students can see it. The assessment has something to grab onto.
+That creates two different problems. The first is visible non-learning: the brief is thin, the reasoning collapses under questions, the prose carries the familiar smell of AI-generated work, or the student cannot explain what the argument is doing. This failure is serious, but it is also useful because faculty and students can see it. The assessment has something to grab onto.
 
 The second problem is harder: false learning. A student may use AI openly, follow the rules, produce a better artifact, and still fail to develop the intended judgment. The tool may supply the first useful frame. It may select the assumptions. It may decide what evidence matters. It may identify the policy tradeoffs. It may generate the language of balance, caution, and strategic sophistication. The student may then revise the prose without ever owning the deeper structure.
 
