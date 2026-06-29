@@ -4,7 +4,7 @@ import { join } from "node:path";
 const root = process.cwd();
 const dist = join(root, "dist");
 const indexPath = join(dist, "index.html");
-const pdfPath = join(dist, "assets", "assuring-learning-after-automation.pdf");
+const pdfPath = join(dist, "assets", "the-irreducible-officer.pdf");
 
 function assert(condition, message) {
   if (!condition) {
@@ -19,26 +19,27 @@ assert(statSync(pdfPath).size > 20_000, "essay PDF should be a real generated ar
 const html = readFileSync(indexPath, "utf8");
 
 [
-  "Assuring Learning After Automation",
-  "Published June 17, 2026",
+  "The Irreducible Officer",
+  "Published June 28, 2026",
   "Essay",
   "Companion",
   "Faculty Guide",
   "Agent Mode",
   "Copy setup prompt",
   "Open companion repo",
-  "https://github.com/jackcshaw/nwc-learning-companion",
+  "https://github.com/jackcshaw/nwc-irreducible-officer-agent-mode",
+  "https://github.com/jackcshaw/nwc-faculty-workbench",
   "AGENTS.md",
   "claims.md",
   "prompts/starter-prompts.md",
   "prompts/objections-and-responses.md",
   "sources/source-spine.md",
+  "patterns/nwc-ai-enabled-learning-workflows.md",
   "cases/cyber-group-strategy-transfer-case.md",
   "artifacts/traceable-learning-artifact.md",
   "Design An NWC Exercise",
   "Create A Flawed AI Assessment",
   "Run Oral Defense",
-  "Cyber Group Strategy",
   "NWC Primer",
   "Instructional Source Kit",
   "traceable learning artifact",
@@ -59,7 +60,7 @@ assert(html.includes("class=\"mode-switch\""), "site should include one clean mo
 assert(html.includes("class=\"article-shell\""), "site should use the clean article frame");
 assert(html.includes("data-toc-link="), "essay table of contents should expose progress-aware links");
 assert(
-  !html.includes('data-toc-link="teaching-frame-literacy-as-a-leadership-competency-at-nwc"'),
+  !html.includes('data-toc-link="purpose-accountability-and-ai-enabled-strategic-judgment"'),
   "essay table of contents should skip the suppressed subtitle heading",
 );
 assert(
@@ -77,25 +78,25 @@ assert(html.includes("navigator.clipboard.writeText"), "copy buttons should writ
 assert(!html.includes("## Purpose"), "companion tab should not render the old markdown appendix as its primary surface");
 assert(!html.includes(".site-header {\n  position: fixed;"), "PDF header should not float over the article while reading");
 assert(
-  !html.includes('<h2 id="teaching-frame-literacy-as-a-leadership-competency-at-nwc">Teaching Frame Literacy as a Leadership Competency at NWC</h2>'),
+  !html.includes('<h2 id="purpose-accountability-and-ai-enabled-strategic-judgment">Purpose, Accountability, and AI-Enabled Strategic Judgment</h2>'),
   "essay body should not repeat the subtitle as its first heading",
 );
 
 const articleStart = html.indexOf('<article class="essay article-body">');
 const articleEnd = html.indexOf("</article>", articleStart);
 const articleHtml = html.slice(articleStart, articleEnd);
-const firstParagraph = articleHtml.indexOf("AI in the classroom is often treated as a tool policy problem");
+const firstParagraph = articleHtml.indexOf("Strategic decisions are increasingly built from AI-shaped inputs");
 const loopImage = articleHtml.indexOf("assets/human-ai-human-loop.png");
-const accessSection = articleHtml.indexOf("Access Is Not Apprenticeship Into a Practice");
-const cheapSection = articleHtml.indexOf("What AI Makes Cheap");
+const relianceSection = articleHtml.indexOf("Appropriate Reliance as a Teachable Competency");
+const frictionSection = articleHtml.indexOf("Friction as Developmental Design");
 const ladderImage = articleHtml.indexOf("assets/framing-ladder.png");
-const ladderSection = articleHtml.indexOf("A Ladder of Framing Responsibility");
-const framerSection = articleHtml.indexOf("The Frame Is Not the Framer");
+const assessmentSection = articleHtml.indexOf("Assessment That Makes Ownership Visible");
+const pilotSection = articleHtml.indexOf("A Foundation Pilot");
 
-assert(loopImage > accessSection, "human-AI-human loop figure should appear inside the relevant essay argument, not near the header");
-assert(loopImage < cheapSection, "human-AI-human loop figure should appear before the essay moves to cheap competence");
+assert(loopImage < relianceSection, "human-AI-human loop figure should introduce the reliance section");
+assert(loopImage < frictionSection, "human-AI-human loop figure should appear before the essay moves to friction");
 assert(loopImage > firstParagraph, "human-AI-human loop figure should not appear before the opening prose");
-assert(ladderImage > ladderSection, "framing ladder figure should appear inside the ladder section");
-assert(ladderImage < framerSection, "framing ladder figure should appear before the frame/framer section");
+assert(ladderImage < assessmentSection, "framing ladder figure should introduce the assessment section");
+assert(ladderImage < pilotSection, "framing ladder figure should appear before the pilot section");
 
 console.log("site contract passed");

@@ -5,36 +5,25 @@ import { spawnSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
-const sourcePath = join(root, "nwc-human-machine-teaming-companion-draft.md");
+const sourcePath = join(root, "content", "the-irreducible-officer.md");
 const distDir = join(root, "dist");
 const assetsDir = join(distDir, "assets");
-const pdfPath = join(assetsDir, "assuring-learning-after-automation.pdf");
+const pdfPath = join(assetsDir, "the-irreducible-officer.pdf");
 const siteUrl = "https://nwc-learning-companion.web.app";
-const repoUrl = "https://github.com/jackcshaw/nwc-learning-companion";
+const companionRepoUrl = "https://github.com/jackcshaw/nwc-irreducible-officer-agent-mode";
+const workbenchRepoUrl = "https://github.com/jackcshaw/nwc-faculty-workbench";
 const pythonPath =
   process.env.PDF_PYTHON ||
   "/Users/jackcshaw-2/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3";
 
 const source = readFileSync(sourcePath, "utf8");
-const marker = "\n# Companion Agentic Tool";
-const markerIndex = source.indexOf(marker);
-
-if (markerIndex === -1) {
-  throw new Error("Could not find companion section marker");
-}
-
-const essayMarkdown = source
-  .slice(0, markerIndex)
-  .trim()
-  .replace(/\n---\s*$/u, "")
-  .trim();
-const companionMarkdown = source.slice(markerIndex + 1).trim();
+const essayMarkdown = source.trim();
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(assetsDir, { recursive: true });
 
 writeFileSync(join(assetsDir, "essay.md"), essayMarkdown + "\n", "utf8");
-writeFileSync(join(assetsDir, "companion.md"), companionMarkdown + "\n", "utf8");
+writeFileSync(join(assetsDir, "companion.md"), companionMarkdown() + "\n", "utf8");
 
 const assetResult = spawnSync(
   pythonPath,
@@ -71,13 +60,13 @@ function buildHtml({ essayToc, essayHtml, companionModeHtml, facultyGuideHtml })
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Assuring Learning After Automation</title>
-  <meta name="description" content="A long-form NWC essay and companion exercise on assurance of learning, frame literacy, and AI-enabled judgment.">
+  <title>The Irreducible Officer</title>
+  <meta name="description" content="A long-form NWC essay and companion package on purpose, accountability, and AI-enabled strategic judgment.">
   <style>${css()}</style>
 </head>
 <body data-active-mode="essay">
   <header class="site-header">
-    <a class="download-link" href="assets/assuring-learning-after-automation.pdf" download>Download PDF</a>
+    <a class="download-link" href="assets/the-irreducible-officer.pdf" download>Download PDF</a>
   </header>
 
   <main id="top" class="article-shell">
@@ -88,11 +77,11 @@ function buildHtml({ essayToc, essayHtml, companionModeHtml, facultyGuideHtml })
     </aside>
 
     <div class="content-frame">
-      <div class="published">Published June 17, 2026</div>
+      <div class="published">Published June 28, 2026</div>
       <div class="rule-frame" aria-hidden="true"></div>
       <section class="article-hero">
-        <h1>Assuring Learning After Automation</h1>
-        <p class="dek">Teaching frame literacy as a leadership competency at NWC.</p>
+        <h1>The Irreducible Officer</h1>
+        <p class="dek">Purpose, accountability, and AI-enabled strategic judgment.</p>
       </section>
 
     <section class="mode-view is-active" data-mode="essay">
@@ -127,10 +116,10 @@ function buildHtml({ essayToc, essayHtml, companionModeHtml, facultyGuideHtml })
 
 function placeEssayFigures(html) {
   return html
-    .replace('<h2 id="what-ai-makes-cheap">What AI Makes Cheap</h2>', `${humanAiLoopFigure()}
-<h2 id="what-ai-makes-cheap">What AI Makes Cheap</h2>`)
-    .replace('<h2 id="the-frame-is-not-the-framer">The Frame Is Not the Framer</h2>', `${framingLadderFigure()}
-<h2 id="the-frame-is-not-the-framer">The Frame Is Not the Framer</h2>`);
+    .replace('<h2 id="v-appropriate-reliance-as-a-teachable-competency">V. Appropriate Reliance as a Teachable Competency</h2>', `${humanAiLoopFigure()}
+<h2 id="v-appropriate-reliance-as-a-teachable-competency">V. Appropriate Reliance as a Teachable Competency</h2>`)
+    .replace('<h2 id="viii-assessment-that-makes-ownership-visible">VIII. Assessment That Makes Ownership Visible</h2>', `${framingLadderFigure()}
+<h2 id="viii-assessment-that-makes-ownership-visible">VIII. Assessment That Makes Ownership Visible</h2>`);
 }
 
 function humanAiLoopFigure() {
@@ -154,14 +143,15 @@ function buildCompanionMode() {
       <h2>Turn the essay into a working session.</h2>
       <p>
         The companion is not another appendix. It is a launcher for Codex,
-        Claude Code, OpenClaw, or another coding agent. Copy the setup prompt,
+        Claude Code, or another coding agent. Copy the setup prompt,
         point the agent at the companion repo, and use the prompts to interrogate
         the essay, test claims, design an NWC exercise, and export a traceable
         learning artifact.
       </p>
       <div class="agent-actions">
         <button class="copy-button primary" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
-        <a class="repo-link" href="${repoUrl}" target="_blank" rel="noreferrer">Open companion repo</a>
+        <a class="repo-link" href="${companionRepoUrl}" target="_blank" rel="noreferrer">Open companion repo</a>
+        <a class="repo-link" href="${workbenchRepoUrl}" target="_blank" rel="noreferrer">Open faculty workbench</a>
       </div>
     </section>
 
@@ -180,6 +170,7 @@ function buildCompanionMode() {
         ${sourceItem("README.md", "Explains the purpose, public-safe boundary, and first setup prompt.")}
         ${sourceItem("AGENTS.md", "Gives the agent operating rules for summaries, evidence checks, objections, and exercises.")}
         ${sourceItem("claims.md", "Maps the essay's core claims, evidence, unresolved questions, and where to look next.")}
+        ${sourceItem("patterns/", "Gives workflow-native ways to practice the essay's method with an agent.")}
         ${sourceItem("prompts/", "Holds starter prompts and objections so faculty can copy a task without inventing workflow language.")}
         ${sourceItem("sources/", "Keeps the public source spine separate from our interpretation of the argument.")}
         ${sourceItem("cases/ and artifacts/", "Frames the transfer exercise and the traceable learning artifact without publishing local course materials.")}
@@ -197,11 +188,11 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are helping me read and use the essay "Assuring Learning After Automation."
+  return `You are helping me read and use the essay "The Irreducible Officer."
 ${siteUrl}
 
 Use this companion GitHub repo as your source of truth:
-${repoUrl}
+${companionRepoUrl}
 
 If you can access GitHub or run shell commands, clone or open that repo first. Start with only these files:
 - README.md
@@ -210,6 +201,7 @@ If you can access GitHub or run shell commands, clone or open that repo first. S
 - prompts/starter-prompts.md
 - prompts/objections-and-responses.md
 - sources/source-spine.md
+- patterns/nwc-ai-enabled-learning-workflows.md
 - cases/cyber-group-strategy-transfer-case.md
 - artifacts/traceable-learning-artifact.md
 
@@ -225,17 +217,30 @@ If I ask to inspect evidence, read claims.md and sources/source-spine.md. If I a
 If you cannot access GitHub directly, tell me the smallest set of repo files you need me to paste before you continue.`;
 }
 
+function companionMarkdown() {
+  return `# Companion And Faculty Workbench
+
+The website is the public presentation layer for **The Irreducible Officer**.
+
+Use the companion repo for agent-mode practice:
+${companionRepoUrl}
+
+Use the faculty workbench repo for assignment design, assessment, reusable artifacts, calibration, and source-kit templates:
+${workbenchRepoUrl}
+`;
+}
+
 function starterPromptCards() {
   const prompts = [
     {
       id: "prompt-understand",
       title: "Understand The Argument",
       bestFor: "Get the clean version before debating or applying it.",
-      text: `Use "Assuring Learning After Automation" and the companion repo to explain the argument in 10 bullets.
+      text: `Use "The Irreducible Officer" and the companion repo to explain the argument in 10 bullets.
 
 Start with README.md, AGENTS.md, claims.md, and sources/source-spine.md.
 
-Do not turn this into a generic AI-in-education summary. Preserve the specific claim: once AI can produce the visible artifact, NWC must teach and assess frame ownership, appropriate reliance, and human accountability.
+Do not turn this into a generic AI-in-education summary. Preserve the specific claim: NWC must teach and certify AI-enabled strategic judgment by making purpose, frame, reliance, accountability, and transfer visible.
 
 Return the thesis, 10-bullet argument, most likely misunderstanding, why it is tempting, and two questions NWC faculty should keep open.`,
     },
@@ -243,7 +248,7 @@ Return the thesis, 10-bullet argument, most likely misunderstanding, why it is t
       id: "prompt-claims",
       title: "Inspect The Claims",
       bestFor: "Let faculty pressure-test the essay instead of passively receiving it.",
-      text: `Use the companion repo to help me inspect the evidence behind "Assuring Learning After Automation."
+      text: `Use the companion repo to help me inspect the evidence behind "The Irreducible Officer."
 
 Read claims.md and sources/source-spine.md first.
 
@@ -255,11 +260,11 @@ After I pick one, audit it with me: best evidence, strongest unresolved question
       id: "prompt-exercise",
       title: "Design An NWC Exercise",
       bestFor: "Turn the essay into a practical faculty activity.",
-      text: `I want to turn "Assuring Learning After Automation" into a practical NWC learning exercise.
+      text: `I want to turn "The Irreducible Officer" into a practical NWC learning exercise.
 
 Read README.md, AGENTS.md, claims.md, cases/cyber-group-strategy-transfer-case.md, and artifacts/traceable-learning-artifact.md.
 
-Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. It must force the learner to identify the frame, assumptions, evidence standard, AI reliance decisions, and a flawed AI output or flawed frame.
+Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. It must identify inherited AI-shaped inputs, force the learner to identify the frame, assumptions, evidence standard, AI reliance decisions, and include a flawed AI output or flawed frame.
 
 Return the learning objective, materials, step-by-step flow, facilitator notes, outputs, assessment criteria, and likely failure modes.`,
     },
@@ -297,7 +302,7 @@ After six questions, assess whether I demonstrated ownership of the reasoning an
 
 Read artifacts/traceable-learning-artifact.md and claims.md.
 
-Return a completed artifact with problem frame, assumptions, evidence standard, AI role and boundaries, accepted AI contributions, rejected or revised AI contributions, reliance decisions, oral-defense questions, final human judgment, and faculty review notes.
+Return a completed artifact with problem frame, inherited AI-shaped inputs, assumptions, evidence standard, AI role and boundaries, accepted AI contributions, rejected or revised AI contributions, reliance decisions, oral-defense questions, final human judgment, transfer check, and faculty review notes.
 
 Keep it practical enough to use in one seminar, not as a compliance packet.`,
     },
@@ -322,10 +327,10 @@ function buildFacultyGuide() {
     <p class="eyebrow">Faculty Guide</p>
     <h2>How to use this package with instructors.</h2>
     <p>
-      This guide is for Dr. Richard Andres, Col. Dan Whitnam, and NWC faculty
-      who want to pressure-test the argument before turning it into a pilot.
-      It explains what the source kit is for, what instructors should shape,
-      and how the companion turns the essay into a useful steel man for critique.
+      This guide is for faculty and curriculum leaders who want to pressure-test
+      the argument before turning it into a pilot. It explains what the companion
+      and workbench are for, what instructors should shape, and how the package
+      turns the essay into a useful object for critique.
     </p>
   </section>
 
@@ -345,10 +350,10 @@ function buildFacultyGuide() {
       <p class="eyebrow">Then transfer</p>
       <h3>Move from argument to real NWC work.</h3>
       <p>
-        After the essay has been mapped, the method transfers to Cyber Group
-        Strategy. That artifact creates the right instructional friction because
-        it is a real strategic product with problem framing, political aims,
-        lines of effort, risks, and AI disclosure.
+        After the essay has been mapped, the method transfers to an approved
+        NWC-style artifact. The right artifact has enough ambiguity to expose
+        problem framing, political aims, assumptions, risks, evidence standards,
+        and reliance decisions.
       </p>
     </div>
   </section>
@@ -365,8 +370,8 @@ function buildFacultyGuide() {
     <div class="source-grid">
       ${sourceItem("Anchor", "The essay defines the argument and gives the companion something to examine before it broadens.")}
       ${sourceItem("Rubric", "The NWC Primer supplies the vocabulary of strategic logic: ends, ways, means, assumptions, costs, risk, and reassessment.")}
-      ${sourceItem("Practice Object", "Cyber Group Strategy gives instructors and students a real artifact to critique rather than a generic classroom scenario.")}
-      ${sourceItem("Bridge", "Dr. Andres's article on AI and military leadership can connect the exercise to NWC's faculty-facing conversation.")}
+      ${sourceItem("Practice Object", "An approved NWC-style artifact gives instructors and students a real object to critique rather than a generic classroom scenario.")}
+      ${sourceItem("Bridge", "The companion repo turns the essay into prompts, objections, workflows, and trace artifacts that a reader can use with an agent.")}
       ${sourceItem("Trace", "The required output is a traceable learning artifact that records frame choices, reliance decisions, rejected outputs, and oral-defense questions.")}
       ${sourceItem("Governance", "The kit should document boundaries, source status, intended users, and points where human judgment must interrupt automation.")}
     </div>

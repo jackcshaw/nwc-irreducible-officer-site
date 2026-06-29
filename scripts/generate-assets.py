@@ -28,15 +28,9 @@ def main():
     asset_dir = Path(sys.argv[2])
     asset_dir.mkdir(parents=True, exist_ok=True)
 
-    source = source_path.read_text(encoding="utf-8")
-    marker = "\n# Companion Agentic Tool"
-    if marker not in source:
-        raise SystemExit("companion marker not found")
+    essay = source_path.read_text(encoding="utf-8").strip()
 
-    essay = source.split(marker, 1)[0].strip()
-    essay = re.sub(r"\n---\s*$", "", essay).strip()
-
-    write_pdf(essay, asset_dir / "assuring-learning-after-automation.pdf")
+    write_pdf(essay, asset_dir / "the-irreducible-officer.pdf")
     write_loop_diagram(asset_dir / "human-ai-human-loop.png")
     write_ladder_diagram(asset_dir / "framing-ladder.png")
 
@@ -49,7 +43,7 @@ def write_pdf(markdown, output_path):
         leftMargin=0.74 * inch,
         topMargin=0.68 * inch,
         bottomMargin=0.72 * inch,
-        title="Assuring Learning After Automation",
+        title="The Irreducible Officer",
         author="Jack Shaw",
     )
 
@@ -169,7 +163,7 @@ def page_footer(canvas, doc):
     canvas.saveState()
     canvas.setFont("Helvetica", 8)
     canvas.setFillColor(colors.HexColor("#625a51"))
-    canvas.drawCentredString(letter[0] / 2, 0.38 * inch, f"Assuring Learning After Automation | {doc.page}")
+    canvas.drawCentredString(letter[0] / 2, 0.38 * inch, f"The Irreducible Officer | {doc.page}")
     canvas.restoreState()
 
 
