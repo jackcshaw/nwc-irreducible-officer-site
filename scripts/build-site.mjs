@@ -1848,14 +1848,16 @@ h1 {
   padding-top: 10px;
 }
 
-.source-spine h2 {
-  margin-top: 30px;
+.source-spine.article-body h2 {
+  margin: 30px 0 10px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(8, 35, 70, 0.14);
   color: var(--red);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  line-height: 1.3;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
