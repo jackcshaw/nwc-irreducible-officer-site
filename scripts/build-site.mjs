@@ -427,7 +427,7 @@ function buildWorkbenchMode(tools) {
         </div>
         <div class="tool-actions">
           <button class="copy-button primary" type="button" data-copy-target="workbench-template">Copy template</button>
-          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download .md</a>
+          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download template</a>
         </div>
       </div>
       <div class="template-layout">

@@ -17,6 +17,7 @@ function assert(condition, message) {
 assert(existsSync(indexPath), "dist/index.html should exist after build");
 assert(existsSync(pdfPath), "downloadable essay PDF should exist after build");
 assert(existsSync(companionContextPath), "companion context bundle should exist after build");
+assert(!existsSync(join(dist, "assets", "companion.md")), "old companion.md asset should not be generated");
 assert(statSync(pdfPath).size > 20_000, "essay PDF should be a real generated artifact");
 assert(statSync(companionContextPath).size > 80_000, "companion context bundle should contain the companion source materials");
 
@@ -65,7 +66,7 @@ inlineScripts.forEach((script, index) => {
   "Run oral defense",
   "Faculty Workbench",
   "Copy template",
-  "Download .md",
+  "Download template",
   "Assignment Design Worksheet",
   "Assessment And Oral-Defense Rubric",
   "Flawed Output Library Template",
