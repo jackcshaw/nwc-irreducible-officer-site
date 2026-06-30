@@ -40,6 +40,12 @@ The generated public asset must also match:
 
 Proof is synced to SOT for review convenience, but Proof is not the canonical editing surface unless explicitly re-established as such.
 
+Active Proof review surface:
+
+`https://www.proofeditor.ai/d/xgvk1ncv`
+
+When syncing Proof, write from the site SOT and reread Proof afterward. Proof may serialize harmless markdown escapes, such as escaping square brackets in a reference note. Treat those as formatting serialization differences only after checking a diff and confirming the essay text has not changed.
+
 Downloads files, review packages, and old pasted drafts are provenance only unless the user explicitly says they supersede SOT.
 
 ## Provenance Archive
