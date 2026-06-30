@@ -1249,15 +1249,19 @@ function setMode(mode, shouldScroll = true) {
   requestTocUpdate();
 }
 
-function scrollHeadingIntoView(heading) {
+function scrollElementBelowNav(element, { behavior = "auto", offset = 34 } = {}) {
   const nav = document.querySelector(".package-nav");
   const navBottom = nav ? nav.getBoundingClientRect().bottom : 0;
-  const top = heading.getBoundingClientRect().top + window.scrollY - navBottom - 34;
+  const top = element.getBoundingClientRect().top + window.scrollY - navBottom - offset;
   const root = document.documentElement;
   const previousScrollBehavior = root.style.scrollBehavior;
   root.style.scrollBehavior = "auto";
-  window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+  window.scrollTo({ top: Math.max(0, top), behavior });
   root.style.scrollBehavior = previousScrollBehavior;
+}
+
+function scrollHeadingIntoView(heading) {
+  scrollElementBelowNav(heading);
 }
 
 function openEssaySection(sectionId, track = true) {
@@ -1376,7 +1380,12 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     const download = document.getElementById("selected-tool-download");
     download.href = "assets/workbench/" + tool.filename;
     download.download = tool.filename;
-    document.querySelector(".selected-tool").scrollIntoView({ behavior: "smooth", block: "start" });
+    window.requestAnimationFrame(() => {
+      const selectedTool = document.querySelector(".selected-tool");
+      if (selectedTool) {
+        scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+      }
+    });
   });
 });
 
