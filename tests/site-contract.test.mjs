@@ -25,6 +25,16 @@ const html = readFileSync(indexPath, "utf8");
 const companionContext = readFileSync(companionContextPath, "utf8");
 const inlineScripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]);
 
+[
+  "Format Reference",
+  "After Automation",
+  "Dan Shipper",
+  "every.to/p/after-automation",
+].forEach((needle) => {
+  assert(!html.includes(needle), "site should not include " + needle);
+  assert(!companionContext.includes(needle), "context bundle should not include " + needle);
+});
+
 inlineScripts.forEach((script, index) => {
   try {
     new Function(script);
