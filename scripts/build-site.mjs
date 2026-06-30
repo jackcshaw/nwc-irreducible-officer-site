@@ -517,7 +517,10 @@ function failureModesTable() {
     ["Frame capture", "The first plausible frame becomes the student's frame.", "What problem did the student choose to solve?"],
     ["Fluency substitution", "Polished analysis stands in for owned reasoning.", "Can the student independently explain the judgment in plain speech?"],
     ["Premature synthesis", "The model connects material before the student has built the map.", "Can the student explain why these connections matter?"],
+    ["Uncalibrated reliance", "The student accepts confident output without knowing whether the task fits the tool.", "What evidence justified relying on the system here?"],
     ["Invisible delegation", "A request for help transfers criteria, structure, or meaning.", "What did the AI decide for the student?"],
+    ["Institutional monoculture", "Shared systems and defaults narrow the range of frames available to the class.", "What frames are missing across the seminar?"],
+    ["Responsibility laundering", "The model's recommendation makes agency feel distributed or easier to defend.", "Who owns the recommendation if it proves wrong?"],
   ];
   return argumentTable("Core Failure Modes", ["Failure", "What Goes Wrong", "Faculty Check"], rows);
 }
