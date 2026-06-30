@@ -12,7 +12,7 @@ Picture two officers handed the same hard problem. The first works it alone, rev
 
 Now ask which officer understands the problem. The papers will not tell you by themselves. AI did not lower the bar for strategic judgment; it raised it, then hid whether the officer cleared it. The second officer may have done the more demanding work, directing machine capability toward a purpose she owns. Or the machine may have handed her a frame she never examined, and she dressed it in the vocabulary of someone who had. The person is still present. The ownership may not be.
 
-The policy questions are real, and NWC should get them right. The college has to decide where AI is allowed, how students disclose it, and which systems NWC trusts with which material. But a school can settle all of that and still certify the wrong thing. Disclosure tells faculty that a student used AI. It does not tell them whether the judgment in the work is theirs. The harder task sits downstream of policy, teaching strategic judgment with AI in the loop and certifying that the officer, not the machine, is the one exercising it.
+The policy questions are real, and NWC should get them right. The college has to decide where AI is allowed, how students disclose it, and which systems NWC trusts with which material. But a school can settle all of that and still certify the wrong thing. Disclosure tells faculty that a student used AI. It does not tell them whether the judgment in the work is theirs. The harder task sits downstream of policy. NWC has to prepare officers who can use machine speed while keeping purpose, reliance, and accountability attached to human judgment.
 
 None of this is new to NWC faculty. They have long read the finished paper against the work around it. Seminar challenge, revision, assumption audits, oral defense, and their feel for the student can all expose a borrowed argument.
 
@@ -24,7 +24,7 @@ NWC can lead here. The same shift that weakens the finished product as evidence 
 
 ## II. What the Problem Looks Like
 
-Return to the second officer. Her method — define the problem, drive a team of agents against it, and synthesize the result — is the standard NWC should prepare officers to meet. Human judgment supplies purpose, context, and accountability. Machine capability expands what one officer can search, simulate, compare, and test. The work is teaching officers to make that combination stronger than either could be alone without losing ownership of the judgment.
+Return to the second officer. Her method — define the problem, drive a team of agents against it, and synthesize the result — is the standard NWC should prepare officers to meet. Human judgment supplies purpose, context, and accountability. Machine capability expands what one officer can search, simulate, compare, and test. The work is teaching officers to direct that workflow: to set purpose, test frames, calibrate reliance, expose failure modes, and defend the judgment as their own.
 
 So is it a problem that her product is genuinely superior?
 
@@ -104,6 +104,8 @@ Friction worth protecting is less obvious but more important. The struggle to de
 
 The aviation automation record is the relevant precedent. Decades of flight-deck automation improved operations measurably: safer flights, more efficient procedures, reduced crew workload. The same period produced skill erosion, mode confusion, and a systematic reluctance to intervene when automation failed. The mechanism was not carelessness. Studies of experienced pilots found that those with more glass-cockpit hours showed measurably reduced manual flight skills and less effective instrument crosscheck: the automation had absorbed the practice that built the underlying competency ([Young, Fanjoy & Suckow, 2006](http://commons.erau.edu/jaaer/vol15/iss2/5/)). Separately, detailed documentation of incidents on highly automated aircraft showed that experienced pilots failed to track what the automation was doing not from inattention but because the system's behavior had become opaque: the automation was acting in ways the pilots had not commanded and could not predict ([Sarter & Woods, 1997](https://journals.sagepub.com/doi/10.1518/001872097778667997)). The industry's response was not to reduce automation. It was to design the gap back into training, building deliberate practice for the moments when automation is unavailable, misleading, or wrong.
 
+The PME equivalent is deliberate exposure to AI failure. Students should meet systems that help, systems that tempt them forward too quickly, systems that are partially wrong, and moments when the system is unavailable. They learn when to lean on the tool, when to slow down, and when to intervene by practicing those distinctions before speed forces the choice.
+
 The design principle for NWC follows the same logic. The institution should identify the forms of effort that build strategic judgment and design AI use around them, protecting the friction that matters and removing the friction that merely consumes time. That requires faculty judgment and explicit design. If instructors do not decide which friction matters, AI will decide by default. The same principle has emerged independently in higher-education pedagogy: preserving productive struggle before AI engagement, and sequencing AI-mediated with AI-free phases, are now foundational design requirements for learning environments where AI is present ([Vendrell & Johnston, 2026](https://doi.org/10.1016/j.caeai.2026.100572)).
 
 The design principle is no garden paths. Good assignments require students to own a frame before they can answer — problems where the template answer is wrong, or where multiple coherent frames exist and the student must defend a choice among them. Those problems force the exploration that builds judgment more reliably than word-count requirements or disclosure policies.
@@ -150,6 +152,8 @@ This approach increases assessment burden on faculty, and that is a real cost. I
 
 The pilot is a foundation layer, not the full future state. It tests whether students can own a problem frame before they scale judgment through AI. Later exercises should ask students and seminar teams to design, direct, and evaluate multi-agent workflows, using varied expertise and machine speed to test more frames than any one officer could test alone. This first pilot asks whether the human obligation is visible before that complexity is added.
 
+If AI-enabled command requires officers to use speed without surrendering ownership, the pilot gives NWC a way to practice that behavior before operational speed makes the cost real.
+
 The pilot runs on a framework NWC already teaches. The National Security Strategy Primer gives students five elements of strategic logic. They analyze the strategic situation, define desired ends, identify or develop means, design ways, and assess costs and risks. The Primer also makes clear that the work is iterative; assumptions, interests, political aims, and reassessment shape the whole process. The pilot adds no new vocabulary. It uses that one and asks a harder question of it: in an AI-enabled workflow, which parts of the strategic situation and frame stay the officer's to own, and how would a faculty member tell?
 
 The sequence runs inside a single existing assignment where framing is the central demand.
@@ -192,7 +196,7 @@ The stronger product matters. It still leaves the professional question: can eit
 
 The second officer orchestrating a set of agents is practicing exactly that competency, provided she defined what those agents were working toward, directed them against that purpose, calibrated her reliance across the uneven terrain of what each model does well, and can defend the result under pressure. That is what frame ownership looks like at scale. An officer who has not built that foundation first produces the same workflow and a different outcome: frame capture, responsibility laundering, uncalibrated reliance compounded across every agent in the loop.
 
-NWC graduates must be able to direct AI-enabled systems toward a plainly owned purpose, calibrate reliance across the jagged frontier of what those systems actually do well, and stand behind the judgment under questioning because the purpose was theirs. That is the standard the operational environment will require, and the one NWC can teach, assess, and certify.
+NWC graduates must be able to direct AI-enabled systems toward a plainly owned purpose, calibrate reliance across the jagged frontier of what those systems actually do well, and stand behind the judgment under questioning because the purpose was theirs. That is the standard the operational environment will require. NWC's task is to make it teachable, observable, and repeatable.
 
 Frame the problem. Calibrate the tool. Refuse the garden path. Own the decision.
 

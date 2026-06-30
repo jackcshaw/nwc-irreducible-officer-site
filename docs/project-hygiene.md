@@ -28,7 +28,7 @@ The essay source of truth is:
 
 Current verified SOT hash:
 
-`412d8568c7eb2777fe3340ca013464a5ce6428b8a486727b9cd6f545bc10c4d6`
+`92e65d59bd51af95662340661458aea486cbb6fde86813d79e6d69fc760b29fa`
 
 The companion mirror must match the essay:
 
