@@ -116,7 +116,7 @@ inlineScripts.forEach((script, index) => {
   "SECTION: TRANSFER CASE",
   "SECTION: TRACEABLE ARTIFACT",
   "SECTION: STARTER PROMPTS",
-  "Agent Instructions",
+  "AI Assistant Instructions",
   "NWC must teach and certify AI-enabled strategic judgment",
 ].forEach((needle) => {
   assert(companionContext.includes(needle), `context bundle should include ${needle}`);

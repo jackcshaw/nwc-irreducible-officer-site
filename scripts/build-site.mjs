@@ -13,7 +13,7 @@ const pdfPath = join(assetsDir, "the-irreducible-officer.pdf");
 const siteUrl = "https://nwc-learning-companion.web.app";
 const companionContextFilename = "companion-context.md";
 const companionContextUrl = `${siteUrl}/assets/${companionContextFilename}`;
-const companionRepoPath = process.env.COMPANION_REPO_PATH || "/private/tmp/nwc-companion-sync";
+const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
 const pythonPath =
   process.env.PDF_PYTHON ||
   "/Users/jackcshaw-2/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3";

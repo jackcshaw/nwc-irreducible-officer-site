@@ -21,7 +21,7 @@ transcripts, or audit notes.
 ## Source
 
 - Essay source: `content/the-irreducible-officer.md`
-- Companion source checkout: set `COMPANION_REPO_PATH` or use the default `/private/tmp/nwc-companion-sync`
+- Companion source checkout: set `COMPANION_REPO_PATH` or use the default sibling checkout at `../companion`
 - Build script: `scripts/build-site.mjs`
 - Asset generator: `scripts/generate-assets.py`
 - Site contract: `tests/site-contract.test.mjs`
