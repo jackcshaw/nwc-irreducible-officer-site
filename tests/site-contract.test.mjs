@@ -206,7 +206,10 @@ assert(html.includes("data-copy-target=\"setup-prompt\""), "companion should inc
 assert(html.includes("data-essay-section-link=\"ix-a-foundation-pilot\""), "overview should link directly to the foundation pilot");
 assert(html.includes("navigator.clipboard.writeText"), "copy buttons should write prompt/template text to the clipboard");
 assert(html.includes("data-tool-id=\"assignment-design\""), "workbench should expose selectable template cards");
-assert(html.includes("scrollIntoView"), "workbench cards should reveal the selected template");
+assert(html.includes("function scrollElementBelowNav"), "site should share one sticky-nav-aware scroll helper");
+assert(html.includes("scrollElementBelowNav(selectedTool"), "workbench cards should reveal the selected template below the sticky nav");
+assert(html.includes("id=\"workbench-tools\""), "workbench should expose a target for returning to the tool grid");
+assert(html.includes("data-workbench-tools-link"), "selected workbench templates should include a return-to-tools control");
 assert(html.includes("function trackPackageEvent"), "site should include a Plausible event wrapper");
 assert(html.includes("location.hostname === \"localhost\""), "analytics events should be suppressed on localhost");
 assert(html.includes("window.plausible(name, { props })"), "analytics wrapper should send custom event properties");

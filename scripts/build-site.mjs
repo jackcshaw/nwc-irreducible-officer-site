@@ -415,7 +415,7 @@ function buildWorkbenchMode(tools) {
       </p>
     </section>
 
-    <section class="tool-grid" aria-label="Faculty workbench tools">
+    <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
       ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
     </section>
 
@@ -428,6 +428,7 @@ function buildWorkbenchMode(tools) {
         <div class="tool-actions">
           <button class="copy-button primary" type="button" data-copy-target="workbench-template">Copy template</button>
           <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download template</a>
+          <button class="quiet-action" type="button" data-workbench-tools-link>Back to tools</button>
         </div>
       </div>
       <div class="template-layout">
@@ -1249,15 +1250,19 @@ function setMode(mode, shouldScroll = true) {
   requestTocUpdate();
 }
 
-function scrollHeadingIntoView(heading) {
+function scrollElementBelowNav(element, { behavior = "auto", offset = 34 } = {}) {
   const nav = document.querySelector(".package-nav");
   const navBottom = nav ? nav.getBoundingClientRect().bottom : 0;
-  const top = heading.getBoundingClientRect().top + window.scrollY - navBottom - 34;
+  const top = element.getBoundingClientRect().top + window.scrollY - navBottom - offset;
   const root = document.documentElement;
   const previousScrollBehavior = root.style.scrollBehavior;
   root.style.scrollBehavior = "auto";
-  window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+  window.scrollTo({ top: Math.max(0, top), behavior });
   root.style.scrollBehavior = previousScrollBehavior;
+}
+
+function scrollHeadingIntoView(heading) {
+  scrollElementBelowNav(heading);
 }
 
 function openEssaySection(sectionId, track = true) {
@@ -1376,7 +1381,21 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     const download = document.getElementById("selected-tool-download");
     download.href = "assets/workbench/" + tool.filename;
     download.download = tool.filename;
-    document.querySelector(".selected-tool").scrollIntoView({ behavior: "smooth", block: "start" });
+    window.requestAnimationFrame(() => {
+      const selectedTool = document.querySelector(".selected-tool");
+      if (selectedTool) {
+        scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+      }
+    });
+  });
+});
+
+document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const toolGrid = document.getElementById("workbench-tools");
+    if (toolGrid) {
+      scrollElementBelowNav(toolGrid, { behavior: "smooth" });
+    }
   });
 });
 
