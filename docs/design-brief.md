@@ -17,7 +17,7 @@ AI-education landing page.
 The final site should give readers clear paths to:
 
 - Essay: the final essay, table of contents, PDF, and visual argument aids.
-- Companion: the runnable agent-mode repo and setup prompt.
+- Companion: the AI assistant practice layer and setup prompt.
 - Workbench: faculty implementation layer with current templates and future context-curation direction.
 - Sources: public evidence map and links for deeper reading.
 
@@ -49,7 +49,7 @@ argument easier to scan.
 Keep the project surfaces honest:
 
 - Essay: final public argument.
-- Companion: runnable agent-mode source kit.
+- Companion: AI assistant practice layer and context source kit.
 - Workbench: faculty draft/use-now toolkit.
 - Library/context curation: future direction inspired by The Librarian, not a deployed NWC system.
 

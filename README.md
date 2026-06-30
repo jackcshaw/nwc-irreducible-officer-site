@@ -2,18 +2,26 @@
 
 This repo is the public website layer for **The Irreducible Officer**.
 
-The website presents the final essay, exposes a downloadable PDF, and routes
-readers to the two downstream repos:
+To read the essay, run the AI Companion, or use the Faculty Workbench, start at:
 
-- AI Companion: https://github.com/jackcshaw/nwc-irreducible-officer-agent-mode
-- Faculty Workbench: https://github.com/jackcshaw/nwc-faculty-workbench
+https://nwc-learning-companion.web.app
 
-It should not contain the companion source kit, workbench templates, private
-course materials, Proof scratch files, transcripts, or audit notes.
+This repo builds the public site and hosts derived public assets, including the
+essay PDF, ready-to-use workbench templates, and the Companion context file used
+by ChatGPT, Claude, Gemini, or another AI assistant.
+
+The source material behind the Companion lives in:
+
+- AI Companion source: https://github.com/jackcshaw/nwc-irreducible-officer-agent-mode
+- Faculty Workbench source: https://github.com/jackcshaw/nwc-faculty-workbench
+
+It should not contain private course materials, Proof scratch files,
+transcripts, or audit notes.
 
 ## Source
 
 - Essay source: `content/the-irreducible-officer.md`
+- Companion source checkout: set `COMPANION_REPO_PATH` or use the default sibling checkout at `../companion`
 - Build script: `scripts/build-site.mjs`
 - Asset generator: `scripts/generate-assets.py`
 - Site contract: `tests/site-contract.test.mjs`
