@@ -134,7 +134,7 @@ inlineScripts.forEach((script, index) => {
 });
 
 assert(
-  (html.match(/https:\/\/nwc-learning-companion\.web\.app\/assets\/companion-context\.md/g) || []).length >= 7,
+  (html.match(/https:\/\/judgmentlab\.net\/assets\/companion-context\.md/g) || []).length >= 7,
   "setup prompt and six starter prompts should all point at the context bundle",
 );
 

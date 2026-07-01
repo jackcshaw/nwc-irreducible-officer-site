@@ -4,7 +4,7 @@ This repo is the public website layer for **The Irreducible Officer**.
 
 To read the essay, run the AI Companion, or use the Faculty Workbench, start at:
 
-https://nwc-learning-companion.web.app
+https://judgmentlab.net
 
 This repo builds the public site and hosts derived public assets, including the
 essay PDF, ready-to-use workbench templates, and the Companion context file used
