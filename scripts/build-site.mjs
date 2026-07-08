@@ -1,4 +1,4 @@
-import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -36,6 +36,11 @@ writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext()
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
 });
+
+copyFileSync(
+  join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg"),
+  join(assetsDir, "asking-to-supervising.svg"),
+);
 
 const assetResult = spawnSync(
   pythonPath,
@@ -339,6 +344,18 @@ AI-enabled strategic judgment: purpose, frame, reliance, accountability, and
 transfer.`;
 }
 
+function workbenchSetupPrompt() {
+  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching.
+
+Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
+
+${workbenchContextUrl}
+
+If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
+
+Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly. I own every pedagogical judgment. You ask, structure, and challenge.`;
+}
+
 function companionContextInstruction() {
   return `Before you answer anything, fetch and read this file in full. It contains the essay and companion materials: claim map, source spine, objections, workflow patterns, transfer case, traceable-artifact template, and starter prompts.
 
@@ -448,12 +465,35 @@ function buildWorkbenchMode(tools) {
     <section class="surface-hero">
       <p class="eyebrow">Build</p>
       <h1>Faculty Workbench</h1>
-      <p class="dek">Ready-to-use teaching materials for adapting the essay into faculty practice.</p>
+      <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
-        Choose a tool, copy the template, and use it in a seminar, assignment
-        design conversation, or faculty calibration session. No repository
+        Fastest path: copy the setup prompt into ChatGPT, Claude, Gemini, or
+        another AI assistant. It reads the whole workbench, places your
+        assignment on the six-phase fluency progression, and facilitates the
+        right template with you. Every template also works on paper. No repository
         knowledge required.
       </p>
+      <div class="action-row">
+        <button class="copy-button primary" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+        <a class="quiet-action" href="assets/${workbenchContextFilename}" download>Download context file</a>
+      </div>
+    </section>
+
+    <section class="setup-panel">
+      <div class="panel-heading">
+        <p class="eyebrow">First Step</p>
+        <h2>Paste this once into your AI assistant.</h2>
+      </div>
+      ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
+    </section>
+
+    <section class="detail-band">
+      <p class="band-label">The Progression Behind The Tools</p>
+      <p>
+        Fluency grows from asking AI for help to supervising AI-supported work.
+        Judgment stays human at every phase.
+      </p>
+      <img src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution" style="width: 100%; height: auto; margin-top: 12px;">
     </section>
 
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
@@ -634,6 +674,15 @@ function closingStandard() {
 function getWorkbenchTools() {
   const tools = [
     {
+      id: "phase-diagnostic",
+      title: "Phase Placement Diagnostic",
+      cardTitle: "Start here: placement",
+      cardDesc: "Find your phase on the fluency progression and the right tool.",
+      cardAction: "Run diagnostic",
+      filename: "phase-placement-diagnostic.md",
+      useNote: "Give this to your AI assistant and say: run this diagnostic with me. Ten minutes.",
+    },
+    {
       id: "assignment-design",
       title: "Assignment Design Worksheet",
       cardTitle: "Assignment design",
@@ -686,6 +735,24 @@ function getWorkbenchTools() {
       cardAction: "Open note",
       filename: "after-action-note-template.md",
       useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
+    },
+    {
+      id: "method-card",
+      title: "Method Card Template",
+      cardTitle: "Method cards",
+      cardDesc: "Codify a recurring AI-enabled task into a reusable method.",
+      cardAction: "Open template",
+      filename: "method-card-template.md",
+      useNote: "Use this once a task has worked at least twice and is worth writing down.",
+    },
+    {
+      id: "supervised-delegation",
+      title: "Supervised Delegation Exercise",
+      cardTitle: "Supervised delegation",
+      cardDesc: "Design bounded student supervision of multi-step AI work.",
+      cardAction: "Open template",
+      filename: "supervised-delegation-exercise.md",
+      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
   return tools.map((tool) => ({

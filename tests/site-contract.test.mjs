@@ -194,6 +194,26 @@ assert(
 );
 
 [
+  "assets/workbench/phase-placement-diagnostic.md",
+  "assets/workbench/method-card-template.md",
+  "assets/workbench/supervised-delegation-exercise.md",
+].forEach((asset) => {
+  const filename = asset.split("/").pop();
+  assert(html.includes(filename), `site should include ${filename}`);
+  assert(existsSync(join(dist, asset)), `${asset} should be generated`);
+});
+
+assert(html.includes('data-tool-id="phase-diagnostic"'), "workbench should lead with the phase placement diagnostic");
+assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
+assert(html.includes("assets/workbench-context.md"), "workbench should link the context bundle");
+assert(
+  (html.match(/https:\/\/judgmentlab\.net\/assets\/workbench-context\.md/g) || []).length >= 1,
+  "workbench setup prompt should point at the workbench bundle",
+);
+assert(existsSync(join(dist, "assets", "asking-to-supervising.svg")), "progression visual should be copied into assets");
+assert(html.includes("assets/asking-to-supervising.svg"), "workbench page should show the fluency progression visual");
+
+[
   ["Open", "companion", "repo"],
   ["Open", "workbench", "repo"],
   ["Faculty", "Guide"],
