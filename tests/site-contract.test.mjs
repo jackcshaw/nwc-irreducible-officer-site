@@ -138,6 +138,28 @@ assert(
   "setup prompt and six starter prompts should all point at the context bundle",
 );
 
+const workbenchContextPath = join(dist, "assets", "workbench-context.md");
+assert(existsSync(workbenchContextPath), "workbench context bundle should exist after build");
+assert(statSync(workbenchContextPath).size > 30_000, "workbench context bundle should contain the workbench source materials");
+const workbenchContext = readFileSync(workbenchContextPath, "utf8");
+[
+  "SECTION: OPERATING RULES",
+  "SECTION: FRAMEWORK",
+  "SECTION: PHASE PLACEMENT DIAGNOSTIC",
+  "SECTION: ASSIGNMENT DESIGN WORKSHEET",
+  "SECTION: ASSESSMENT AND ORAL-DEFENSE RUBRIC",
+  "SECTION: FLAWED OUTPUT LIBRARY TEMPLATE",
+  "SECTION: FACULTY CALIBRATION PROTOCOL",
+  "SECTION: METHOD CARD TEMPLATE",
+  "SECTION: SUPERVISED DELEGATION EXERCISE",
+  "SECTION: SOURCE KIT TEMPLATE",
+  "SECTION: AFTER-ACTION NOTE TEMPLATE",
+  "AI Facilitation Block",
+  "Hypothesis — awaiting NWC validation",
+].forEach((needle) => {
+  assert(workbenchContext.includes(needle), `workbench bundle should include ${needle}`);
+});
+
 assert(
   /No repository\s+knowledge required/.test(html),
   "workbench should tell faculty no repository knowledge is required",

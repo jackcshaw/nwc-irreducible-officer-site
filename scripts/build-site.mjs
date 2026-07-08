@@ -13,6 +13,8 @@ const pdfPath = join(assetsDir, "the-irreducible-officer.pdf");
 const siteUrl = "https://judgmentlab.net";
 const companionContextFilename = "companion-context.md";
 const companionContextUrl = `${siteUrl}/assets/${companionContextFilename}`;
+const workbenchContextFilename = "workbench-context.md";
+const workbenchContextUrl = `${siteUrl}/assets/${workbenchContextFilename}`;
 const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
 const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
 const pythonPath =
@@ -30,6 +32,7 @@ mkdirSync(workbenchAssetsDir, { recursive: true });
 
 writeFileSync(join(assetsDir, "essay.md"), essayMarkdown + "\n", "utf8");
 writeFileSync(join(assetsDir, companionContextFilename), companionContextMarkdown + "\n", "utf8");
+writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext() + "\n", "utf8");
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
 });
@@ -106,6 +109,35 @@ function buildCompanionContext() {
 
   sections.forEach(([label, relativePath]) => {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredCompanionFile(relativePath).trim());
+  });
+
+  return parts.join("\n");
+}
+
+function buildWorkbenchContext() {
+  const sections = [
+    ["OPERATING RULES", "workbench-source-kit.md"],
+    ["FRAMEWORK", "framework/ai-fluency-progression.md"],
+    ["PHASE PLACEMENT DIAGNOSTIC", "templates/phase-placement-diagnostic.md"],
+    ["ASSIGNMENT DESIGN WORKSHEET", "templates/assignment-design-worksheet.md"],
+    ["ASSESSMENT AND ORAL-DEFENSE RUBRIC", "templates/assessment-and-oral-defense-rubric.md"],
+    ["FLAWED OUTPUT LIBRARY TEMPLATE", "templates/flawed-output-library-template.md"],
+    ["FACULTY CALIBRATION PROTOCOL", "templates/faculty-calibration-protocol.md"],
+    ["METHOD CARD TEMPLATE", "templates/method-card-template.md"],
+    ["SUPERVISED DELEGATION EXERCISE", "templates/supervised-delegation-exercise.md"],
+    ["SOURCE KIT TEMPLATE", "templates/source-kit-template.md"],
+    ["AFTER-ACTION NOTE TEMPLATE", "templates/after-action-note-template.md"],
+  ];
+
+  const parts = [
+    "# NWC Faculty Workbench - Context Bundle",
+    "",
+    "Read this whole file before answering. Sections are marked with clear SECTION headers.",
+    "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
+  ];
+
+  sections.forEach(([label, relativePath]) => {
+    parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredWorkbenchFile(relativePath).trim());
   });
 
   return parts.join("\n");
