@@ -37,10 +37,11 @@ workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
 });
 
-copyFileSync(
-  join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg"),
-  join(assetsDir, "asking-to-supervising.svg"),
-);
+const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
+if (!existsSync(progressionSvgPath)) {
+  throw new Error(`Missing workbench file: ${progressionSvgPath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
+}
+copyFileSync(progressionSvgPath, join(assetsDir, "asking-to-supervising.svg"));
 
 const assetResult = spawnSync(
   pythonPath,
@@ -139,6 +140,7 @@ function buildWorkbenchContext() {
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
+    "Relative links inside sections refer to files in the workbench repository; their contents appear as SECTIONs of this bundle.",
   ];
 
   sections.forEach(([label, relativePath]) => {

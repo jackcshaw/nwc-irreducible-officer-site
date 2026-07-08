@@ -141,6 +141,7 @@ assert(
 const workbenchContextPath = join(dist, "assets", "workbench-context.md");
 assert(existsSync(workbenchContextPath), "workbench context bundle should exist after build");
 assert(statSync(workbenchContextPath).size > 30_000, "workbench context bundle should contain the workbench source materials");
+assert(statSync(workbenchContextPath).size < 150_000, "workbench context bundle should stay within a one-paste size budget");
 const workbenchContext = readFileSync(workbenchContextPath, "utf8");
 [
   "SECTION: OPERATING RULES",
@@ -203,9 +204,10 @@ assert(
   assert(existsSync(join(dist, asset)), `${asset} should be generated`);
 });
 
-assert(html.includes('data-tool-id="phase-diagnostic"'), "workbench should lead with the phase placement diagnostic");
+const firstToolId = html.match(/data-tool-id="([a-z-]+)"/);
+assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should lead with the phase placement diagnostic");
 assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
-assert(html.includes("assets/workbench-context.md"), "workbench should link the context bundle");
+assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
 assert(
   (html.match(/https:\/\/judgmentlab\.net\/assets\/workbench-context\.md/g) || []).length >= 1,
   "workbench setup prompt should point at the workbench bundle",
