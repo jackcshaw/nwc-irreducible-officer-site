@@ -140,8 +140,9 @@ assert(
 
 const workbenchContextPath = join(dist, "assets", "workbench-context.md");
 assert(existsSync(workbenchContextPath), "workbench context bundle should exist after build");
-assert(statSync(workbenchContextPath).size > 30_000, "workbench context bundle should contain the workbench source materials");
-assert(statSync(workbenchContextPath).size < 150_000, "workbench context bundle should stay within a one-paste size budget");
+const workbenchContextSize = statSync(workbenchContextPath).size;
+assert(workbenchContextSize > 30_000, "workbench context bundle should contain the workbench source materials");
+assert(workbenchContextSize < 150_000, "workbench context bundle should stay within a one-paste size budget");
 const workbenchContext = readFileSync(workbenchContextPath, "utf8");
 [
   "SECTION: OPERATING RULES",
