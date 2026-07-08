@@ -138,6 +138,30 @@ assert(
   "setup prompt and six starter prompts should all point at the context bundle",
 );
 
+const workbenchContextPath = join(dist, "assets", "workbench-context.md");
+assert(existsSync(workbenchContextPath), "workbench context bundle should exist after build");
+const workbenchContextSize = statSync(workbenchContextPath).size;
+assert(workbenchContextSize > 30_000, "workbench context bundle should contain the workbench source materials");
+assert(workbenchContextSize < 150_000, "workbench context bundle should stay within a one-paste size budget");
+const workbenchContext = readFileSync(workbenchContextPath, "utf8");
+[
+  "SECTION: OPERATING RULES",
+  "SECTION: FRAMEWORK",
+  "SECTION: PHASE PLACEMENT DIAGNOSTIC",
+  "SECTION: ASSIGNMENT DESIGN WORKSHEET",
+  "SECTION: ASSESSMENT AND ORAL-DEFENSE RUBRIC",
+  "SECTION: FLAWED OUTPUT LIBRARY TEMPLATE",
+  "SECTION: FACULTY CALIBRATION PROTOCOL",
+  "SECTION: METHOD CARD TEMPLATE",
+  "SECTION: SUPERVISED DELEGATION EXERCISE",
+  "SECTION: SOURCE KIT TEMPLATE",
+  "SECTION: AFTER-ACTION NOTE TEMPLATE",
+  "AI Facilitation Block",
+  "Hypothesis — awaiting NWC validation",
+].forEach((needle) => {
+  assert(workbenchContext.includes(needle), `workbench bundle should include ${needle}`);
+});
+
 assert(
   /No repository\s+knowledge required/.test(html),
   "workbench should tell faculty no repository knowledge is required",
@@ -165,6 +189,32 @@ assert(
   assert(html.includes(filename), `site should include ${filename}`);
   assert(existsSync(join(dist, asset)), `${asset} should be generated`);
 });
+
+assert(
+  html.includes("AI Facilitation Block"),
+  "workbench templates should be read from the workbench repo (facilitation blocks present)",
+);
+
+[
+  "assets/workbench/phase-placement-diagnostic.md",
+  "assets/workbench/method-card-template.md",
+  "assets/workbench/supervised-delegation-exercise.md",
+].forEach((asset) => {
+  const filename = asset.split("/").pop();
+  assert(html.includes(filename), `site should include ${filename}`);
+  assert(existsSync(join(dist, asset)), `${asset} should be generated`);
+});
+
+const firstToolId = html.match(/data-tool-id="([a-z-]+)"/);
+assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should lead with the phase placement diagnostic");
+assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
+assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
+assert(
+  (html.match(/https:\/\/judgmentlab\.net\/assets\/workbench-context\.md/g) || []).length >= 1,
+  "workbench setup prompt should point at the workbench bundle",
+);
+assert(existsSync(join(dist, "assets", "asking-to-supervising.svg")), "progression visual should be copied into assets");
+assert(html.includes("assets/asking-to-supervising.svg"), "workbench page should show the fluency progression visual");
 
 [
   ["Open", "companion", "repo"],

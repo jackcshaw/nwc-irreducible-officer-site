@@ -1,4 +1,4 @@
-import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -13,7 +13,10 @@ const pdfPath = join(assetsDir, "the-irreducible-officer.pdf");
 const siteUrl = "https://judgmentlab.net";
 const companionContextFilename = "companion-context.md";
 const companionContextUrl = `${siteUrl}/assets/${companionContextFilename}`;
+const workbenchContextFilename = "workbench-context.md";
+const workbenchContextUrl = `${siteUrl}/assets/${workbenchContextFilename}`;
 const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
+const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
 const pythonPath =
   process.env.PDF_PYTHON ||
   "/Users/jackcshaw-2/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3";
@@ -29,9 +32,16 @@ mkdirSync(workbenchAssetsDir, { recursive: true });
 
 writeFileSync(join(assetsDir, "essay.md"), essayMarkdown + "\n", "utf8");
 writeFileSync(join(assetsDir, companionContextFilename), companionContextMarkdown + "\n", "utf8");
+writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext() + "\n", "utf8");
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
 });
+
+const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
+if (!existsSync(progressionSvgPath)) {
+  throw new Error(`Missing workbench file: ${progressionSvgPath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
+}
+copyFileSync(progressionSvgPath, join(assetsDir, "asking-to-supervising.svg"));
 
 const assetResult = spawnSync(
   pythonPath,
@@ -75,6 +85,14 @@ function readRequiredCompanionFile(relativePath) {
   return readFileSync(filePath, "utf8");
 }
 
+function readRequiredWorkbenchFile(relativePath) {
+  const filePath = join(workbenchRepoPath, relativePath);
+  if (!existsSync(filePath)) {
+    throw new Error(`Missing workbench file: ${filePath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
+  }
+  return readFileSync(filePath, "utf8");
+}
+
 function buildCompanionContext() {
   const sections = [
     ["OPERATING RULES", "AGENTS.md"],
@@ -97,6 +115,36 @@ function buildCompanionContext() {
 
   sections.forEach(([label, relativePath]) => {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredCompanionFile(relativePath).trim());
+  });
+
+  return parts.join("\n");
+}
+
+function buildWorkbenchContext() {
+  const sections = [
+    ["OPERATING RULES", "workbench-source-kit.md"],
+    ["FRAMEWORK", "framework/ai-fluency-progression.md"],
+    ["PHASE PLACEMENT DIAGNOSTIC", "templates/phase-placement-diagnostic.md"],
+    ["ASSIGNMENT DESIGN WORKSHEET", "templates/assignment-design-worksheet.md"],
+    ["ASSESSMENT AND ORAL-DEFENSE RUBRIC", "templates/assessment-and-oral-defense-rubric.md"],
+    ["FLAWED OUTPUT LIBRARY TEMPLATE", "templates/flawed-output-library-template.md"],
+    ["FACULTY CALIBRATION PROTOCOL", "templates/faculty-calibration-protocol.md"],
+    ["METHOD CARD TEMPLATE", "templates/method-card-template.md"],
+    ["SUPERVISED DELEGATION EXERCISE", "templates/supervised-delegation-exercise.md"],
+    ["SOURCE KIT TEMPLATE", "templates/source-kit-template.md"],
+    ["AFTER-ACTION NOTE TEMPLATE", "templates/after-action-note-template.md"],
+  ];
+
+  const parts = [
+    "# NWC Faculty Workbench - Context Bundle",
+    "",
+    "Read this whole file before answering. Sections are marked with clear SECTION headers.",
+    "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
+    "Relative links inside sections refer to files in the workbench repository; their contents appear as SECTIONs of this bundle.",
+  ];
+
+  sections.forEach(([label, relativePath]) => {
+    parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredWorkbenchFile(relativePath).trim());
   });
 
   return parts.join("\n");
@@ -298,6 +346,18 @@ AI-enabled strategic judgment: purpose, frame, reliance, accountability, and
 transfer.`;
 }
 
+function workbenchSetupPrompt() {
+  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching.
+
+Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
+
+${workbenchContextUrl}
+
+If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
+
+Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly. I own every pedagogical judgment. You ask, structure, and challenge.`;
+}
+
 function companionContextInstruction() {
   return `Before you answer anything, fetch and read this file in full. It contains the essay and companion materials: claim map, source spine, objections, workflow patterns, transfer case, traceable-artifact template, and starter prompts.
 
@@ -407,12 +467,35 @@ function buildWorkbenchMode(tools) {
     <section class="surface-hero">
       <p class="eyebrow">Build</p>
       <h1>Faculty Workbench</h1>
-      <p class="dek">Ready-to-use teaching materials for adapting the essay into faculty practice.</p>
+      <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
-        Choose a tool, copy the template, and use it in a seminar, assignment
-        design conversation, or faculty calibration session. No repository
+        Fastest path: copy the setup prompt into ChatGPT, Claude, Gemini, or
+        another AI assistant. It reads the whole workbench, places your
+        assignment on the six-phase fluency progression, and facilitates the
+        right template with you. Every template also works on paper. No repository
         knowledge required.
       </p>
+      <div class="action-row">
+        <button class="copy-button primary" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+        <a class="quiet-action" href="assets/${workbenchContextFilename}" download>Download context file</a>
+      </div>
+    </section>
+
+    <section class="setup-panel">
+      <div class="panel-heading">
+        <p class="eyebrow">First Step</p>
+        <h2>Paste this once into your AI assistant.</h2>
+      </div>
+      ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
+    </section>
+
+    <section class="detail-band">
+      <p class="band-label">The Progression Behind The Tools</p>
+      <p>
+        Fluency grows from asking AI for help to supervising AI-supported work.
+        Judgment stays human at every phase.
+      </p>
+      <img src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution" style="width: 100%; height: auto; margin-top: 12px;">
     </section>
 
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
@@ -591,7 +674,16 @@ function closingStandard() {
 }
 
 function getWorkbenchTools() {
-  return [
+  const tools = [
+    {
+      id: "phase-diagnostic",
+      title: "Phase Placement Diagnostic",
+      cardTitle: "Start here: placement",
+      cardDesc: "Find your phase on the fluency progression and the right tool.",
+      cardAction: "Run diagnostic",
+      filename: "phase-placement-diagnostic.md",
+      useNote: "Give this to your AI assistant and say: run this diagnostic with me. Ten minutes.",
+    },
     {
       id: "assignment-design",
       title: "Assignment Design Worksheet",
@@ -600,70 +692,6 @@ function getWorkbenchTools() {
       cardAction: "Open worksheet",
       filename: "assignment-design-worksheet.md",
       useNote: "Use this as a working document with faculty before revising an assignment.",
-      markdown: `# Assignment Design Worksheet
-
-## 1. Learning Purpose
-
-- Course or seminar:
-- Learning objective:
-- Strategic judgment students should practice:
-- Why this task matters for future AI-enabled leadership:
-
-## 2. Problem Frame Students Must Own
-
-- Strategic problem:
-- AI-shaped inputs students inherit before direct AI use:
-- Purpose of the work:
-- Key actors:
-- Assumptions:
-- Evidence standard:
-- Success standard:
-- Risks or tradeoffs:
-
-## 3. Developmental Friction
-
-- Work students should do without AI:
-- First-frame activity:
-- Ambiguity or uncertainty students should face:
-- Seminar challenge or peer critique:
-- What failure should teach:
-
-## 4. Wasteful Friction
-
-- Formatting or synthesis work:
-- Search or retrieval work:
-- Alternative framing:
-- Counterargument generation:
-- Red-team questions:
-
-## 5. AI-Free And AI-Mediated Sequence
-
-| Phase | Student action | AI role | Faculty observation |
-| --- | --- | --- | --- |
-| AI-free first frame |  | None |  |
-| AI-mediated challenge |  | Challenge, critique, expand, or compare |  |
-| Human revision |  | Optional support |  |
-| Oral defense or seminar challenge |  | None or limited |  |
-| Trace artifact |  | Formatting support only, if allowed |  |
-
-## 6. Reliance Decisions Students Must Make
-
-- AI output they may accept:
-- AI output they must verify:
-- AI output they should reject or challenge:
-- Part of the task where AI should be withheld:
-- Evidence required before reliance is justified:
-
-## 7. Assessment Evidence
-
-- Purpose through frame:
-- Inherited AI-shaped inputs:
-- Assumptions:
-- Evidence standard:
-- Accepted AI contributions:
-- Rejected or revised AI contributions:
-- Final human judgment:
-- Transfer check:`,
     },
     {
       id: "assessment",
@@ -673,47 +701,6 @@ function getWorkbenchTools() {
       cardAction: "Open rubric",
       filename: "assessment-and-oral-defense-rubric.md",
       useNote: "Use this to decide what evidence faculty need beyond the finished artifact.",
-      markdown: `# Assessment And Oral-Defense Rubric
-
-## Rating Scale
-
-| Rating | Meaning |
-| --- | --- |
-| 1 - Thin | Student relies on surface language or retrospective explanation. |
-| 2 - Emerging | Student explains some choices but struggles under follow-up. |
-| 3 - Proficient | Student owns purpose, frame, reliance decisions, and judgment. |
-| 4 - Strong | Student uses AI with discipline and transfers the method. |
-
-## Dimensions
-
-- Purpose through frame
-- Inherited AI-shaped inputs
-- Assumptions
-- Evidence standard
-- Reliance
-- Accountability
-- Transfer
-- Developmental friction
-
-## Oral-Defense Questions
-
-- What problem did you decide this work was actually solving?
-- What inputs had already sorted, summarized, or framed the problem?
-- Which assumption is doing the most work?
-- What evidence would change your conclusion?
-- Where did you rely on AI, and what justified that reliance?
-- What did you reject, withhold from AI, or rewrite?
-- State the final judgment in first person.
-- What part of your method would transfer to a different case?
-
-## Minimal Faculty Note
-
-1. Evidence of purpose through frame.
-2. Inherited AI-shaped input worth probing.
-3. Reliance decision worth probing.
-4. Accountability question asked.
-5. Transfer result.
-6. Follow-up needed.`,
     },
     {
       id: "flawed-output",
@@ -723,60 +710,6 @@ function getWorkbenchTools() {
       cardAction: "Open template",
       filename: "flawed-output-library-template.md",
       useNote: "Use this to build examples that fail under strategic questioning, not surface reading.",
-      markdown: `# Flawed Output Library Template
-
-## Entry Metadata
-
-- Title:
-- Course or seminar:
-- Case or topic:
-- Date created:
-- Created by:
-- Intended use:
-- Public, internal, or restricted:
-
-## Flaw Type
-
-- Frame error
-- Hidden assumption
-- Weak evidence standard
-- Uncalibrated reliance
-- Risk or tradeoff buried
-- Accountability evasion
-- Transfer failure
-
-## Student-Facing Artifact
-
-Paste or link the flawed AI output students will inspect.
-
-## Instructor Key
-
-### Hidden Frame
-
-### Flawed Assumptions
-
-### Missing Evidence
-
-### Risk Or Tradeoff
-
-### Accountability Problem
-
-### Stronger Frame
-
-## Oral-Defense Questions
-
-- Question 1:
-- Question 2:
-- Question 3:
-
-## Expected Student Trace
-
-- hidden frame identified;
-- assumptions revised;
-- evidence standard;
-- accepted, rejected, or revised AI outputs;
-- final human judgment;
-- transfer check.`,
     },
     {
       id: "source-kit",
@@ -786,65 +719,6 @@ Paste or link the flawed AI output students will inspect.
       cardAction: "Open template",
       filename: "source-kit-template.md",
       useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
-      markdown: `# Source Kit Template
-
-A source kit is not a file dump. It is the curated teaching packet for an AI-enabled exercise.
-
-## 1. Overview
-
-- Source kit title:
-- Course or seminar:
-- Faculty owner:
-- Public, internal, or restricted:
-- Intended exercise:
-
-## 2. Learning Purpose
-
-- Course objective:
-- Strategic judgment students should practice:
-- Why AI belongs in this exercise:
-- What students must own:
-
-## 3. Anchor Materials
-
-- Essay, prompt, or assignment:
-- Case materials:
-- AI-shaped inputs already present:
-- Doctrine or primer materials:
-- Public sources:
-- Course-specific sources:
-
-## 4. Allowed And Excluded Sources
-
-### Allowed
-
-### Excluded
-
-## 5. AI Role
-
-What AI may do:
-- retrieve;
-- summarize;
-- challenge;
-- generate alternatives;
-- create flawed output;
-- ask oral-defense questions;
-- help format a trace.
-
-What AI may not do:
-- choose the final purpose;
-- own the problem frame;
-- replace independent first-frame work;
-- make the final judgment;
-- convert private material into public output.
-
-## 6. Faculty Review Notes
-
-- What faculty should observe:
-- Common failure modes:
-- Reliance concern:
-- Accountability concern:
-- Transfer concern:`,
     },
     {
       id: "calibration",
@@ -854,57 +728,6 @@ What AI may not do:
       cardAction: "Open protocol",
       filename: "faculty-calibration-protocol.md",
       useNote: "Use this when faculty need to make tacit judgment easier to explain and reuse.",
-      markdown: `# Faculty Calibration Protocol
-
-## Purpose
-
-Faculty compare how they read the same AI-assisted work, where they think reliance was justified, and what questions expose whether the human still owns the frame.
-
-## Materials
-
-- One student trace, flawed AI output, or AI-assisted strategic product.
-- Current rubric or review criteria.
-- Individual diagnosis form.
-- Shared calibration note.
-
-## 1. Individual Review
-
-Record:
-- strongest part of the work;
-- weakest part of the work;
-- hidden frame;
-- key assumption;
-- reliance concern;
-- accountability concern;
-- transfer concern;
-- one oral-defense question.
-
-## 2. Compare Diagnoses
-
-- where judgments converged;
-- where judgments diverged;
-- which concern mattered most;
-- which rubric language caused ambiguity;
-- which oral-defense question would reveal the issue fastest.
-
-## 3. Revise Shared Artifacts
-
-Update one or more:
-- rubric;
-- oral-defense question set;
-- flawed-output instructor key;
-- trace artifact fields;
-- source-kit instructions;
-- after-action note.
-
-## Calibration Note
-
-- Agreement:
-- Disagreement:
-- Rubric language to revise:
-- Oral-defense question to keep:
-- Failure mode to watch:
-- Decision: approve, revise, archive, or run again.`,
     },
     {
       id: "after-action",
@@ -914,62 +737,30 @@ Update one or more:
       cardAction: "Open note",
       filename: "after-action-note-template.md",
       useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
-      markdown: `# After-Action Note Template
-
-## Exercise Information
-
-- Exercise:
-- Course or seminar:
-- Date:
-- Faculty:
-- Source kit used:
-
-## What The Exercise Was For
-
-- Learning purpose:
-- Judgment students were supposed to practice:
-- AI role:
-- Assessment evidence faculty expected:
-
-## What Worked
-
-- Strongest student performance:
-- Strongest faculty observation:
-- Useful AI contribution:
-- Useful friction preserved:
-- Reusable artifact created:
-
-## What Failed Or Confused Students
-
-- Common frame error:
-- Assumption students missed:
-- Reliance problem:
-- Accountability problem:
-- Transfer problem:
-- Confusing instructions:
-
-## Faculty Calibration Notes
-
-- Where faculty agreed:
-- Where faculty disagreed:
-- Rubric language to revise:
-- Oral-defense question to keep:
-- Trace field to revise:
-
-## Proposed Updates
-
-| Proposed update | Reason | Approve / revise / reject | Owner |
-| --- | --- | --- | --- |
-|  |  |  |  |
-
-## Next Run
-
-- Change before next use:
-- Source-kit update:
-- New flawed output needed:
-- Faculty calibration needed:`,
+    },
+    {
+      id: "method-card",
+      title: "Method Card Template",
+      cardTitle: "Method cards",
+      cardDesc: "Codify a recurring AI-enabled task into a reusable method.",
+      cardAction: "Open template",
+      filename: "method-card-template.md",
+      useNote: "Use this once a task has worked at least twice and is worth writing down.",
+    },
+    {
+      id: "supervised-delegation",
+      title: "Supervised Delegation Exercise",
+      cardTitle: "Supervised delegation",
+      cardDesc: "Design bounded student supervision of multi-step AI work.",
+      cardAction: "Open template",
+      filename: "supervised-delegation-exercise.md",
+      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
+  return tools.map((tool) => ({
+    ...tool,
+    markdown: readRequiredWorkbenchFile(join("templates", tool.filename)),
+  }));
 }
 
 function collectHeadings(markdown, options = {}) {
