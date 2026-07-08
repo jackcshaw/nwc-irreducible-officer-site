@@ -14,6 +14,7 @@ const siteUrl = "https://judgmentlab.net";
 const companionContextFilename = "companion-context.md";
 const companionContextUrl = `${siteUrl}/assets/${companionContextFilename}`;
 const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
+const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
 const pythonPath =
   process.env.PDF_PYTHON ||
   "/Users/jackcshaw-2/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3";
@@ -71,6 +72,14 @@ function readRequiredCompanionFile(relativePath) {
   const filePath = join(companionRepoPath, relativePath);
   if (!existsSync(filePath)) {
     throw new Error(`Missing companion context file: ${filePath}. Set COMPANION_REPO_PATH to the companion repo checkout.`);
+  }
+  return readFileSync(filePath, "utf8");
+}
+
+function readRequiredWorkbenchFile(relativePath) {
+  const filePath = join(workbenchRepoPath, relativePath);
+  if (!existsSync(filePath)) {
+    throw new Error(`Missing workbench file: ${filePath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
   }
   return readFileSync(filePath, "utf8");
 }
@@ -591,7 +600,7 @@ function closingStandard() {
 }
 
 function getWorkbenchTools() {
-  return [
+  const tools = [
     {
       id: "assignment-design",
       title: "Assignment Design Worksheet",
@@ -600,70 +609,6 @@ function getWorkbenchTools() {
       cardAction: "Open worksheet",
       filename: "assignment-design-worksheet.md",
       useNote: "Use this as a working document with faculty before revising an assignment.",
-      markdown: `# Assignment Design Worksheet
-
-## 1. Learning Purpose
-
-- Course or seminar:
-- Learning objective:
-- Strategic judgment students should practice:
-- Why this task matters for future AI-enabled leadership:
-
-## 2. Problem Frame Students Must Own
-
-- Strategic problem:
-- AI-shaped inputs students inherit before direct AI use:
-- Purpose of the work:
-- Key actors:
-- Assumptions:
-- Evidence standard:
-- Success standard:
-- Risks or tradeoffs:
-
-## 3. Developmental Friction
-
-- Work students should do without AI:
-- First-frame activity:
-- Ambiguity or uncertainty students should face:
-- Seminar challenge or peer critique:
-- What failure should teach:
-
-## 4. Wasteful Friction
-
-- Formatting or synthesis work:
-- Search or retrieval work:
-- Alternative framing:
-- Counterargument generation:
-- Red-team questions:
-
-## 5. AI-Free And AI-Mediated Sequence
-
-| Phase | Student action | AI role | Faculty observation |
-| --- | --- | --- | --- |
-| AI-free first frame |  | None |  |
-| AI-mediated challenge |  | Challenge, critique, expand, or compare |  |
-| Human revision |  | Optional support |  |
-| Oral defense or seminar challenge |  | None or limited |  |
-| Trace artifact |  | Formatting support only, if allowed |  |
-
-## 6. Reliance Decisions Students Must Make
-
-- AI output they may accept:
-- AI output they must verify:
-- AI output they should reject or challenge:
-- Part of the task where AI should be withheld:
-- Evidence required before reliance is justified:
-
-## 7. Assessment Evidence
-
-- Purpose through frame:
-- Inherited AI-shaped inputs:
-- Assumptions:
-- Evidence standard:
-- Accepted AI contributions:
-- Rejected or revised AI contributions:
-- Final human judgment:
-- Transfer check:`,
     },
     {
       id: "assessment",
@@ -673,47 +618,6 @@ function getWorkbenchTools() {
       cardAction: "Open rubric",
       filename: "assessment-and-oral-defense-rubric.md",
       useNote: "Use this to decide what evidence faculty need beyond the finished artifact.",
-      markdown: `# Assessment And Oral-Defense Rubric
-
-## Rating Scale
-
-| Rating | Meaning |
-| --- | --- |
-| 1 - Thin | Student relies on surface language or retrospective explanation. |
-| 2 - Emerging | Student explains some choices but struggles under follow-up. |
-| 3 - Proficient | Student owns purpose, frame, reliance decisions, and judgment. |
-| 4 - Strong | Student uses AI with discipline and transfers the method. |
-
-## Dimensions
-
-- Purpose through frame
-- Inherited AI-shaped inputs
-- Assumptions
-- Evidence standard
-- Reliance
-- Accountability
-- Transfer
-- Developmental friction
-
-## Oral-Defense Questions
-
-- What problem did you decide this work was actually solving?
-- What inputs had already sorted, summarized, or framed the problem?
-- Which assumption is doing the most work?
-- What evidence would change your conclusion?
-- Where did you rely on AI, and what justified that reliance?
-- What did you reject, withhold from AI, or rewrite?
-- State the final judgment in first person.
-- What part of your method would transfer to a different case?
-
-## Minimal Faculty Note
-
-1. Evidence of purpose through frame.
-2. Inherited AI-shaped input worth probing.
-3. Reliance decision worth probing.
-4. Accountability question asked.
-5. Transfer result.
-6. Follow-up needed.`,
     },
     {
       id: "flawed-output",
@@ -723,60 +627,6 @@ function getWorkbenchTools() {
       cardAction: "Open template",
       filename: "flawed-output-library-template.md",
       useNote: "Use this to build examples that fail under strategic questioning, not surface reading.",
-      markdown: `# Flawed Output Library Template
-
-## Entry Metadata
-
-- Title:
-- Course or seminar:
-- Case or topic:
-- Date created:
-- Created by:
-- Intended use:
-- Public, internal, or restricted:
-
-## Flaw Type
-
-- Frame error
-- Hidden assumption
-- Weak evidence standard
-- Uncalibrated reliance
-- Risk or tradeoff buried
-- Accountability evasion
-- Transfer failure
-
-## Student-Facing Artifact
-
-Paste or link the flawed AI output students will inspect.
-
-## Instructor Key
-
-### Hidden Frame
-
-### Flawed Assumptions
-
-### Missing Evidence
-
-### Risk Or Tradeoff
-
-### Accountability Problem
-
-### Stronger Frame
-
-## Oral-Defense Questions
-
-- Question 1:
-- Question 2:
-- Question 3:
-
-## Expected Student Trace
-
-- hidden frame identified;
-- assumptions revised;
-- evidence standard;
-- accepted, rejected, or revised AI outputs;
-- final human judgment;
-- transfer check.`,
     },
     {
       id: "source-kit",
@@ -786,65 +636,6 @@ Paste or link the flawed AI output students will inspect.
       cardAction: "Open template",
       filename: "source-kit-template.md",
       useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
-      markdown: `# Source Kit Template
-
-A source kit is not a file dump. It is the curated teaching packet for an AI-enabled exercise.
-
-## 1. Overview
-
-- Source kit title:
-- Course or seminar:
-- Faculty owner:
-- Public, internal, or restricted:
-- Intended exercise:
-
-## 2. Learning Purpose
-
-- Course objective:
-- Strategic judgment students should practice:
-- Why AI belongs in this exercise:
-- What students must own:
-
-## 3. Anchor Materials
-
-- Essay, prompt, or assignment:
-- Case materials:
-- AI-shaped inputs already present:
-- Doctrine or primer materials:
-- Public sources:
-- Course-specific sources:
-
-## 4. Allowed And Excluded Sources
-
-### Allowed
-
-### Excluded
-
-## 5. AI Role
-
-What AI may do:
-- retrieve;
-- summarize;
-- challenge;
-- generate alternatives;
-- create flawed output;
-- ask oral-defense questions;
-- help format a trace.
-
-What AI may not do:
-- choose the final purpose;
-- own the problem frame;
-- replace independent first-frame work;
-- make the final judgment;
-- convert private material into public output.
-
-## 6. Faculty Review Notes
-
-- What faculty should observe:
-- Common failure modes:
-- Reliance concern:
-- Accountability concern:
-- Transfer concern:`,
     },
     {
       id: "calibration",
@@ -854,57 +645,6 @@ What AI may not do:
       cardAction: "Open protocol",
       filename: "faculty-calibration-protocol.md",
       useNote: "Use this when faculty need to make tacit judgment easier to explain and reuse.",
-      markdown: `# Faculty Calibration Protocol
-
-## Purpose
-
-Faculty compare how they read the same AI-assisted work, where they think reliance was justified, and what questions expose whether the human still owns the frame.
-
-## Materials
-
-- One student trace, flawed AI output, or AI-assisted strategic product.
-- Current rubric or review criteria.
-- Individual diagnosis form.
-- Shared calibration note.
-
-## 1. Individual Review
-
-Record:
-- strongest part of the work;
-- weakest part of the work;
-- hidden frame;
-- key assumption;
-- reliance concern;
-- accountability concern;
-- transfer concern;
-- one oral-defense question.
-
-## 2. Compare Diagnoses
-
-- where judgments converged;
-- where judgments diverged;
-- which concern mattered most;
-- which rubric language caused ambiguity;
-- which oral-defense question would reveal the issue fastest.
-
-## 3. Revise Shared Artifacts
-
-Update one or more:
-- rubric;
-- oral-defense question set;
-- flawed-output instructor key;
-- trace artifact fields;
-- source-kit instructions;
-- after-action note.
-
-## Calibration Note
-
-- Agreement:
-- Disagreement:
-- Rubric language to revise:
-- Oral-defense question to keep:
-- Failure mode to watch:
-- Decision: approve, revise, archive, or run again.`,
     },
     {
       id: "after-action",
@@ -914,62 +654,12 @@ Update one or more:
       cardAction: "Open note",
       filename: "after-action-note-template.md",
       useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
-      markdown: `# After-Action Note Template
-
-## Exercise Information
-
-- Exercise:
-- Course or seminar:
-- Date:
-- Faculty:
-- Source kit used:
-
-## What The Exercise Was For
-
-- Learning purpose:
-- Judgment students were supposed to practice:
-- AI role:
-- Assessment evidence faculty expected:
-
-## What Worked
-
-- Strongest student performance:
-- Strongest faculty observation:
-- Useful AI contribution:
-- Useful friction preserved:
-- Reusable artifact created:
-
-## What Failed Or Confused Students
-
-- Common frame error:
-- Assumption students missed:
-- Reliance problem:
-- Accountability problem:
-- Transfer problem:
-- Confusing instructions:
-
-## Faculty Calibration Notes
-
-- Where faculty agreed:
-- Where faculty disagreed:
-- Rubric language to revise:
-- Oral-defense question to keep:
-- Trace field to revise:
-
-## Proposed Updates
-
-| Proposed update | Reason | Approve / revise / reject | Owner |
-| --- | --- | --- | --- |
-|  |  |  |  |
-
-## Next Run
-
-- Change before next use:
-- Source-kit update:
-- New flawed output needed:
-- Faculty calibration needed:`,
     },
   ];
+  return tools.map((tool) => ({
+    ...tool,
+    markdown: readRequiredWorkbenchFile(join("templates", tool.filename)),
+  }));
 }
 
 function collectHeadings(markdown, options = {}) {

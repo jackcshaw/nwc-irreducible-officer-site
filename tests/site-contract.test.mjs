@@ -166,6 +166,11 @@ assert(
   assert(existsSync(join(dist, asset)), `${asset} should be generated`);
 });
 
+assert(
+  html.includes("AI Facilitation Block"),
+  "workbench templates should be read from the workbench repo (facilitation blocks present)",
+);
+
 [
   ["Open", "companion", "repo"],
   ["Open", "workbench", "repo"],
