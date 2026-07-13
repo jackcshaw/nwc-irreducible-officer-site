@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
@@ -147,20 +147,38 @@ const workbenchContext = readFileSync(workbenchContextPath, "utf8");
 [
   "SECTION: OPERATING RULES",
   "SECTION: FRAMEWORK",
-  "SECTION: PHASE PLACEMENT DIAGNOSTIC",
-  "SECTION: ASSIGNMENT DESIGN WORKSHEET",
-  "SECTION: ASSESSMENT AND ORAL-DEFENSE RUBRIC",
-  "SECTION: FLAWED OUTPUT LIBRARY TEMPLATE",
-  "SECTION: FACULTY CALIBRATION PROTOCOL",
-  "SECTION: METHOD CARD TEMPLATE",
-  "SECTION: SUPERVISED DELEGATION EXERCISE",
-  "SECTION: SOURCE KIT TEMPLATE",
-  "SECTION: AFTER-ACTION NOTE TEMPLATE",
+  "SECTION: CONCEPTS",
+  "Start From Your Question",
+  "Vocabulary Bridge",
+  "the card is the source",
+  "assistant is the runtime",
+  "gated on evals",
+  "curated context",
+  "inter-rater reliability",
   "AI Facilitation Block",
   "Hypothesis — awaiting NWC validation",
 ].forEach((needle) => {
   assert(workbenchContext.includes(needle), `workbench bundle should include ${needle}`);
 });
+
+const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
+["templates", "concepts"].forEach((dir) => {
+  const dirPath = join(workbenchRepoPath, dir);
+  assert(existsSync(dirPath), `workbench ${dir}/ directory should exist`);
+  const files = readdirSync(dirPath).filter((name) => name.endsWith(".md"));
+  assert(files.length > 0, `workbench ${dir}/ should contain markdown files`);
+  files.forEach((name) => {
+    const probe = readFileSync(join(dirPath, name), "utf8").trim().slice(0, 200);
+    assert(workbenchContext.includes(probe), `workbench bundle should include content of ${dir}/${name}`);
+  });
+});
+
+const conceptsAt = workbenchContext.indexOf("SECTION: CONCEPTS");
+assert(
+  workbenchContext.indexOf("SECTION: FRAMEWORK") < conceptsAt &&
+    conceptsAt < workbenchContext.indexOf("SECTION: PHASE PLACEMENT DIAGNOSTIC"),
+  "CONCEPTS section should sit between FRAMEWORK and the templates",
+);
 
 assert(
   /No repository\s+knowledge required/.test(html),
