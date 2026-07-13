@@ -364,7 +364,7 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are helping me read and use the essay "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
+  return `You are a close-reading and analysis assistant working under my direction. I am reading "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
 
 ${companionContextInstruction()}
 
@@ -381,7 +381,7 @@ transfer.`;
 }
 
 function workbenchSetupPrompt() {
-  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
+  return `You are a facilitation assistant for the NWC Faculty Workbench, working under my direction. I am a faculty member designing AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
 
 Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
 
