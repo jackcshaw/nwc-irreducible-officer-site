@@ -24,16 +24,27 @@ const pythonPath =
 const source = readFileSync(sourcePath, "utf8");
 const essayMarkdown = source.trim();
 const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md").trim();
-const companionContextMarkdown = buildCompanionContext();
+const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
+const { text: workbenchContextMarkdown, sectionCount: workbenchSectionCount } = buildWorkbenchContext();
+
+// Completeness assertion: all template files must have cards, and all cards must have files
+const templateFiles = listWorkbenchFiles("templates");
+const toolFilenames = new Set(workbenchTools.map((tool) => tool.filename));
+templateFiles.forEach((name) => {
+  if (!toolFilenames.has(name)) throw new Error(`templates/${name} has no getWorkbenchTools() card — add one`);
+});
+toolFilenames.forEach((name) => {
+  if (!templateFiles.includes(name)) throw new Error(`getWorkbenchTools() lists ${name} but templates/${name} does not exist`);
+});
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(workbenchAssetsDir, { recursive: true });
 
 writeFileSync(join(assetsDir, "essay.md"), essayMarkdown + "\n", "utf8");
 writeFileSync(join(assetsDir, companionContextFilename), companionContextMarkdown + "\n", "utf8");
-writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext() + "\n", "utf8");
+writeFileSync(join(assetsDir, workbenchContextFilename), workbenchContextMarkdown + "\n", "utf8");
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
 });
@@ -73,8 +84,8 @@ writeFileSync(
     essayToc,
     overviewHtml: buildOverviewMode(),
     essayHtml,
-    companionHtml: buildCompanionMode(),
-    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts),
+    companionHtml: buildCompanionMode(companionSectionCount),
+    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts, workbenchSectionCount),
     sourcesHtml: buildSourcesMode(),
   }),
   "utf8",
@@ -130,7 +141,9 @@ function buildCompanionContext() {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredCompanionFile(relativePath).trim());
   });
 
-  return parts.join("\n");
+  const text = parts.join("\n");
+  const sectionCount = (text.match(/# ===== SECTION:/g) || []).length;
+  return { text, sectionCount };
 }
 
 function buildWorkbenchContext() {
@@ -162,7 +175,9 @@ function buildWorkbenchContext() {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", body);
   });
 
-  return parts.join("\n");
+  const text = parts.join("\n");
+  const sectionCount = (text.match(/# ===== SECTION:/g) || []).length;
+  return { text, sectionCount };
 }
 
 function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbenchHtml, sourcesHtml }) {
@@ -293,7 +308,7 @@ function pathCard(verb, target, body, action, mode) {
   </a>`;
 }
 
-function buildCompanionMode() {
+function buildCompanionMode(sectionCount) {
   return `<div class="surface companion-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
@@ -301,19 +316,23 @@ function buildCompanionMode() {
       <h1>AI Companion</h1>
       <p class="dek">Use ChatGPT, Claude, Gemini, or another AI assistant to work through the essay, test claims, design an exercise, and create a traceable learning artifact.</p>
       <p>
-        Start by copying the setup prompt. The assistant will read one context
-        file that contains the essay, claim map, source spine, objections,
-        workflow patterns, transfer case, and trace artifact before answering.
+        The setup prompt reads the whole companion file, tests that the read is
+        complete, and facilitates your next step. Every template also works on
+        paper. No repository knowledge required.
       </p>
-      <p class="helper-note">
-        Running this needs an assistant that can read a web page. Turn web
-        access on before you paste. If the assistant cannot open the file,
-        download the context file below and paste or attach it into the chat,
-        then paste the prompt.
-      </p>
-      <div class="action-row">
-        <button class="copy-button primary" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
-        <a class="quiet-action" href="assets/${companionContextFilename}" download>Download context file</a>
+      <p class="eyebrow">How will your assistant get the file?</p>
+      <div class="door-grid">
+        <div class="door">
+          <h3>Attach the file — works everywhere</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <a class="copy-button primary" href="assets/${companionContextFilename}" download>Download context file</a>
+          <button class="quiet-action" type="button" data-copy-target="setup-prompt">Copy the prompt</button>
+        </div>
+        <div class="door">
+          <h3>My assistant reads the web</h3>
+          <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the companion file itself.</p>
+          <button class="copy-button" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
+        </div>
       </div>
     </section>
 
@@ -349,6 +368,8 @@ function setupPrompt() {
 
 ${companionContextInstruction()}
 
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read.
+
 Start by giving me:
 1. the cleanest version of the core claim;
 2. the part of the argument most relevant to an NWC instructor or curriculum leader;
@@ -369,6 +390,8 @@ Before you answer anything, fetch and read this file in full. It contains the op
 ${workbenchContextUrl}
 
 If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
+
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read.
 
 Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly. I own every pedagogical judgment. You ask, structure, and challenge.`;
 }
@@ -475,7 +498,7 @@ After six questions, assess whether I demonstrated ownership of the reasoning an
   </article>`).join("\n        ");
 }
 
-function buildWorkbenchMode(tools, concepts) {
+function buildWorkbenchMode(tools, concepts, sectionCount) {
   const selected = tools[0];
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
@@ -484,15 +507,23 @@ function buildWorkbenchMode(tools, concepts) {
       <h1>Faculty Workbench</h1>
       <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
-        Fastest path: copy the setup prompt into ChatGPT, Claude, Gemini, or
-        another AI assistant. It reads the whole workbench, places your
-        assignment on the six-phase fluency progression, and facilitates the
-        right template with you. Every template also works on paper. No repository
-        knowledge required.
+        The setup prompt reads the whole workbench, places your assignment on the
+        six-phase fluency progression, and facilitates the right template with you.
+        Every template also works on paper. No repository knowledge required.
       </p>
-      <div class="action-row">
-        <button class="copy-button primary" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
-        <a class="quiet-action" href="assets/${workbenchContextFilename}" download>Download context file</a>
+      <p class="eyebrow">How will your assistant get the file?</p>
+      <div class="door-grid">
+        <div class="door">
+          <h3>Attach the file — works everywhere</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
+          <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+        </div>
+        <div class="door">
+          <h3>My assistant reads the web</h3>
+          <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the workbench itself.</p>
+          <button class="copy-button" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+        </div>
       </div>
     </section>
 
@@ -511,6 +542,8 @@ function buildWorkbenchMode(tools, concepts) {
         Judgment stays human at every phase.
       </p>
       <img src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution" style="width: 100%; height: auto; margin-top: 12px;">
+      <p class="visual-status">The persona rows above are reference-matrix content, published as
+        <a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Hypothesis — awaiting NWC validation</a> — the concept note explains why.</p>
     </section>
 
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
@@ -2305,6 +2338,13 @@ body:not([data-active-mode="essay"]) .toc {
   font-size: 12px;
   line-height: 1.45;
 }
+
+.door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
+.door { border: 1px solid rgba(10,34,66,0.15); padding: 18px 20px; background: rgba(255,255,255,0.5); }
+.door h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.door p { margin: 0 0 12px; font-size: 0.95rem; }
+
+.visual-status { font-size: 0.9rem; margin-top: 8px; opacity: 0.85; }
 
 @media (max-width: 980px) {
   .package-nav {
