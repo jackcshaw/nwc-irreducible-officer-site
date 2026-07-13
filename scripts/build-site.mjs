@@ -368,8 +368,6 @@ function setupPrompt() {
 
 ${companionContextInstruction()}
 
-After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read — a partial read causes you to invent content that is not in the file.
-
 Start by giving me:
 1. the cleanest version of the core claim;
 2. the part of the argument most relevant to an NWC instructor or curriculum leader;
@@ -401,7 +399,9 @@ function companionContextInstruction() {
 
 ${companionContextUrl}
 
-If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from the essay alone or from memory.`;
+If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from the essay alone or from memory.
+
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read — a partial read causes you to invent content that is not in the file.`;
 }
 
 function starterPromptCards() {
@@ -412,7 +412,7 @@ function starterPromptCards() {
       bestFor: "Get the thesis, argument map, likely misunderstanding, and open questions.",
       text: `${companionContextInstruction()}
 
-After you read the context file, explain "The Irreducible Officer" in 10 bullets.
+After you read the context file, help me understand "The Irreducible Officer."
 
 Do not turn this into a generic AI-in-education summary. Preserve the specific claim: NWC must teach and certify AI-enabled strategic judgment by making purpose, frame, reliance, accountability, and transfer visible.
 
@@ -433,7 +433,7 @@ After you read the context file, help me inspect the evidence behind "The Irredu
 
 List 5-7 important claims worth auditing. For each one, give me a short label and one sentence on why it matters. Then ask me which claim I want to inspect.
 
-After I pick one, audit it with me: best evidence, strongest unresolved question or counterexample, where the evidence is strong or incomplete, what source I should read, and one implication for NWC instruction.`,
+After I pick one, audit it with me: best evidence, strongest unresolved question or counterexample, where the evidence is strong or incomplete, what source I should read, and one implication for NWC instruction. Quote the CLAIMS and SOURCE SPINE entries you are drawing on — if you cannot point to the entry, say so rather than filling the gap.`,
     },
     {
       id: "prompt-objection",
@@ -443,7 +443,7 @@ After I pick one, audit it with me: best evidence, strongest unresolved question
 
 After you read the context file, help me test an objection to "The Irreducible Officer." Use the OBJECTIONS, CLAIMS, and SOURCE SPINE sections.
 
-Start by naming the objection in its strongest form. Then give:
+Start by naming the objection in its strongest form, quoting the OBJECTIONS section's formulation before sharpening it further. Then give:
 1. the essay's answer in plain English;
 2. the best evidence that supports that answer;
 3. the strongest way the objection could still be right;
@@ -458,7 +458,11 @@ Start by naming the objection in its strongest form. Then give:
 
 After you read the context file, help me turn "The Irreducible Officer" into a practical NWC learning exercise. Use the TRANSFER CASE and TRACEABLE ARTIFACT sections.
 
-Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. It must identify inherited AI-shaped inputs, force the learner to identify the frame, assumptions, evidence standard, and AI reliance decisions, include a flawed AI output or flawed frame, and end with a traceable learning artifact.
+Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
+1. identify inherited AI-shaped inputs;
+2. force the learner to identify the frame, assumptions, evidence standard, and AI reliance decisions;
+3. include a flawed AI output or flawed frame;
+4. end with a traceable learning artifact.
 
 Return the learning objective, materials, step-by-step flow, facilitator notes, outputs, assessment criteria, and likely failure modes.`,
     },
