@@ -499,7 +499,7 @@ function buildWorkbenchMode(tools) {
       ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
     </section>
 
-    <section class="detail-band">
+    <section class="detail-band" id="workbench-progression">
       <p class="band-label">The Progression Behind The Tools</p>
       <p>
         Fluency grows from asking AI for help to supervising AI-supported work.
@@ -525,7 +525,8 @@ function buildWorkbenchMode(tools) {
         </div>
       </div>
       <div class="template-layout">
-        <pre class="copy-block template-block"><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
+        <article class="template-rendered article-body" id="workbench-doc-view">${selected.html}</article>
+        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
         <aside class="use-note">
           <p class="eyebrow">How To Use It</p>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
@@ -767,10 +768,14 @@ function getWorkbenchTools() {
       useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
-  return tools.map((tool) => ({
-    ...tool,
-    markdown: readRequiredWorkbenchFile(join("templates", tool.filename)),
-  }));
+  return tools.map((tool) => {
+    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename));
+    return {
+      ...tool,
+      markdown,
+      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+    };
+  });
 }
 
 function collectHeadings(markdown, options = {}) {
@@ -954,9 +959,27 @@ function renderTable(lines) {
   return `<table>${head}<tbody>${rowsHtml}</tbody></table>`;
 }
 
+function rewriteWorkbenchLinks(markdown) {
+  return markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/gu, (match, label, href) => {
+    if (/^https?:/u.test(href) || href.startsWith("#")) return match;
+    const target = href.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "");
+    const mdName = (target.match(/^(?:templates\/|concepts\/)?([A-Za-z0-9-]+)\.md$/u) || [])[1];
+    if (mdName && (target.startsWith("templates/") || target.startsWith("concepts/") || !target.includes("/"))) {
+      return `[${label}](#wb-doc-${mdName})`;
+    }
+    if (target === "framework/ai-fluency-progression.md") {
+      return `[${label}](#workbench-progression)`;
+    }
+    return label; // unresolvable internal link: render as plain text, never a dead link
+  });
+}
+
 function renderInline(text) {
   let value = escapeHtml(text);
   value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/gu, (_match, label, href) => {
+    if (href.startsWith("#")) {
+      return `<a href="${href}" data-wb-link>${label}</a>`;
+    }
     return `<a href="${href}" target="_blank" rel="noreferrer">${label}</a>`;
   });
   value = value.replace(/\*\*([^*]+)\*\*/gu, "<strong>$1</strong>");
@@ -995,6 +1018,7 @@ const workbenchTools = ${JSON.stringify(workbenchTools.map((tool) => ({
     filename: tool.filename,
     useNote: tool.useNote,
     markdown: tool.markdown.trim(),
+    html: tool.html,
   })))};
 let tocFrame = null;
 let activeMode = document.body.dataset.activeMode || "overview";
@@ -1230,6 +1254,7 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     document.getElementById("selected-tool-title").textContent = tool.title;
     document.getElementById("selected-tool-note").textContent = tool.useNote;
     document.getElementById("workbench-template").textContent = tool.markdown;
+    document.getElementById("workbench-doc-view").innerHTML = tool.html;
     const download = document.getElementById("selected-tool-download");
     download.href = "assets/workbench/" + tool.filename;
     download.download = tool.filename;
@@ -1249,6 +1274,20 @@ document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
       scrollElementBelowNav(toolGrid, { behavior: "smooth" });
     }
   });
+});
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest("[data-wb-link]");
+  if (!link) return;
+  const id = link.getAttribute("href").replace("#wb-doc-", "");
+  const doc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
+  if (doc) {
+    event.preventDefault();
+    const button = document.querySelector(\`[data-tool-id="\${doc.id}"]\`);
+    if (button) {
+      button.click();
+    }
+  }
 });
 
 const firstTool = document.querySelector("[data-tool-id]");
@@ -1764,6 +1803,11 @@ h1 {
 .template-block {
   max-height: 520px;
 }
+
+.template-rendered { max-height: 640px; overflow-y: auto; padding: 20px 24px; background: var(--paper-soft); border: 1px solid rgba(10,34,66,0.12); }
+.template-rendered table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.template-rendered th, .template-rendered td { border: 1px solid rgba(10,34,66,0.15); padding: 6px 10px; text-align: left; }
+.template-rendered blockquote { border-left: 3px solid #d82032; margin: 12px 0; padding: 4px 14px; }
 
 .use-note {
   border: 1px solid rgba(8, 35, 70, 0.1);
