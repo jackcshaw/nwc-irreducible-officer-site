@@ -1,4 +1,4 @@
-import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
+import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -93,6 +93,14 @@ function readRequiredWorkbenchFile(relativePath) {
   return readFileSync(filePath, "utf8");
 }
 
+function listWorkbenchFiles(relativeDir) {
+  const dirPath = join(workbenchRepoPath, relativeDir);
+  if (!existsSync(dirPath)) {
+    throw new Error(`Missing workbench directory: ${dirPath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
+  }
+  return readdirSync(dirPath).filter((name) => name.endsWith(".md")).sort();
+}
+
 function buildCompanionContext() {
   const sections = [
     ["OPERATING RULES", "AGENTS.md"],
@@ -121,18 +129,17 @@ function buildCompanionContext() {
 }
 
 function buildWorkbenchContext() {
+  const conceptFiles = [
+    "concepts/README.md",
+    ...listWorkbenchFiles("concepts")
+      .filter((name) => name !== "README.md")
+      .map((name) => `concepts/${name}`),
+  ];
   const sections = [
     ["OPERATING RULES", "workbench-source-kit.md"],
     ["FRAMEWORK", "framework/ai-fluency-progression.md"],
-    ["PHASE PLACEMENT DIAGNOSTIC", "templates/phase-placement-diagnostic.md"],
-    ["ASSIGNMENT DESIGN WORKSHEET", "templates/assignment-design-worksheet.md"],
-    ["ASSESSMENT AND ORAL-DEFENSE RUBRIC", "templates/assessment-and-oral-defense-rubric.md"],
-    ["FLAWED OUTPUT LIBRARY TEMPLATE", "templates/flawed-output-library-template.md"],
-    ["FACULTY CALIBRATION PROTOCOL", "templates/faculty-calibration-protocol.md"],
-    ["METHOD CARD TEMPLATE", "templates/method-card-template.md"],
-    ["SUPERVISED DELEGATION EXERCISE", "templates/supervised-delegation-exercise.md"],
-    ["SOURCE KIT TEMPLATE", "templates/source-kit-template.md"],
-    ["AFTER-ACTION NOTE TEMPLATE", "templates/after-action-note-template.md"],
+    ["CONCEPTS", conceptFiles],
+    ...workbenchTools.map((tool) => [tool.title.toUpperCase(), `templates/${tool.filename}`]),
   ];
 
   const parts = [
@@ -144,7 +151,10 @@ function buildWorkbenchContext() {
   ];
 
   sections.forEach(([label, relativePath]) => {
-    parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredWorkbenchFile(relativePath).trim());
+    const body = Array.isArray(relativePath)
+      ? relativePath.map((p) => readRequiredWorkbenchFile(p).trim()).join("\n\n")
+      : readRequiredWorkbenchFile(relativePath).trim();
+    parts.push("", "", `# ===== SECTION: ${label} =====`, "", body);
   });
 
   return parts.join("\n");
