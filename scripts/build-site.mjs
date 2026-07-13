@@ -458,7 +458,9 @@ Start by naming the objection in its strongest form, quoting the OBJECTIONS sect
 
 After you read the context file, help me turn "The Irreducible Officer" into a practical NWC learning exercise. Use the TRANSFER CASE and TRACEABLE ARTIFACT sections.
 
-Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
+Before designing anything, ask me: my course or seminar, the artifact my students actually produce, and how much session time I have. Build on my answers rather than assuming.
+
+Then design an exercise sized to my time that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
 1. identify inherited AI-shaped inputs;
 2. force the learner to identify the frame, assumptions, evidence standard, and AI reliance decisions;
 3. include a flawed AI output or flawed frame;
@@ -486,7 +488,7 @@ After the session, assess what I commanded well, where I let the system set the 
 
 After you read the context file, act as an NWC seminar instructor conducting a short oral defense. Use the CLAIMS and TRACEABLE ARTIFACT sections.
 
-Ask one question at a time. Your goal is to determine whether I own the frame behind my AI-assisted work.
+Start by asking me what work I am defending and what role AI played in producing it. Then ask one question at a time. Your goal is to determine whether I own the frame behind my AI-assisted work.
 
 Press me on problem frame, assumptions, evidence standards, alternative frames, reliance decisions, rejected AI outputs, risks and costs, what would change my conclusion, and where human judgment must interrupt automation.
 
