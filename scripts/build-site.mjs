@@ -794,6 +794,8 @@ function renderMarkdown(markdown, options = {}) {
   const html = [];
   let paragraph = [];
   let listType = null;
+  let tableLines = [];
+  let quoteLines = [];
   let inCode = false;
   let codeLines = [];
   let skippedFirstH1 = false;
@@ -810,6 +812,20 @@ function renderMarkdown(markdown, options = {}) {
     if (listType) {
       html.push(`</${listType}>`);
       listType = null;
+    }
+  }
+
+  function flushTable() {
+    if (tableLines.length) {
+      html.push(renderTable(tableLines));
+      tableLines = [];
+    }
+  }
+
+  function flushQuote() {
+    if (quoteLines.length) {
+      html.push(`<blockquote><p>${renderInline(quoteLines.join(" "))}</p></blockquote>`);
+      quoteLines = [];
     }
   }
 
@@ -834,9 +850,29 @@ function renderMarkdown(markdown, options = {}) {
       continue;
     }
 
+    if (line.trim().startsWith("|")) {
+      flushParagraph();
+      closeList();
+      flushQuote();
+      tableLines.push(line.trim());
+      continue;
+    }
+    flushTable();
+
+    const quoted = line.match(/^>\s?(.*)$/u);
+    if (quoted) {
+      flushParagraph();
+      closeList();
+      if (quoted[1].trim()) quoteLines.push(quoted[1].trim());
+      continue;
+    }
+    flushQuote();
+
     if (!line.trim()) {
       flushParagraph();
       closeList();
+      flushTable();
+      flushQuote();
       continue;
     }
 
@@ -899,8 +935,23 @@ function renderMarkdown(markdown, options = {}) {
 
   flushParagraph();
   closeList();
+  flushTable();
+  flushQuote();
 
   return html.join("\n");
+}
+
+function renderTable(lines) {
+  const rows = lines.map((line) =>
+    line.replace(/^\|/u, "").replace(/\|$/u, "").split("|").map((cell) => cell.trim()),
+  );
+  const header = rows[0] ?? [];
+  const body = rows.slice(1).filter((cells) => !cells.every((cell) => /^:?-{3,}:?$/u.test(cell)));
+  const head = `<thead><tr>${header.map((cell) => `<th>${renderInline(cell)}</th>`).join("")}</tr></thead>`;
+  const rowsHtml = body
+    .map((cells) => `<tr>${cells.map((cell) => `<td>${renderInline(cell)}</td>`).join("")}</tr>`)
+    .join("");
+  return `<table>${head}<tbody>${rowsHtml}</tbody></table>`;
 }
 
 function renderInline(text) {
