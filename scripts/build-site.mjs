@@ -84,8 +84,8 @@ writeFileSync(
     essayToc,
     overviewHtml: buildOverviewMode(),
     essayHtml,
-    companionHtml: buildCompanionMode(companionSectionCount),
-    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts, workbenchSectionCount),
+    companionHtml: buildCompanionMode(),
+    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts),
     sourcesHtml: buildSourcesMode(),
   }),
   "utf8",
@@ -308,7 +308,7 @@ function pathCard(verb, target, body, action, mode) {
   </a>`;
 }
 
-function buildCompanionMode(sectionCount) {
+function buildCompanionMode() {
   return `<div class="surface companion-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
@@ -498,7 +498,7 @@ After six questions, assess whether I demonstrated ownership of the reasoning an
   </article>`).join("\n        ");
 }
 
-function buildWorkbenchMode(tools, concepts, sectionCount) {
+function buildWorkbenchMode(tools, concepts) {
   const selected = tools[0];
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
@@ -2340,7 +2340,7 @@ body:not([data-active-mode="essay"]) .toc {
 }
 
 .door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
-.door { border: 1px solid rgba(10,34,66,0.15); padding: 18px 20px; background: rgba(255,255,255,0.5); }
+.door { border: 1px solid var(--navy-border); padding: 18px 20px; background: rgba(255,255,255,0.5); }
 .door h3 { margin: 0 0 6px; font-size: 1.05rem; }
 .door p { margin: 0 0 12px; font-size: 0.95rem; }
 
