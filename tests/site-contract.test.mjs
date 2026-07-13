@@ -6,7 +6,6 @@ const dist = join(root, "dist");
 const indexPath = join(dist, "index.html");
 const pdfPath = join(dist, "assets", "the-irreducible-officer.pdf");
 const companionContextPath = join(dist, "assets", "companion-context.md");
-const workbenchDir = join(dist, "assets", "workbench");
 
 function assert(condition, message) {
   if (!condition) {
@@ -384,5 +383,25 @@ conceptFiles.forEach((file) => {
   const content = readFileSync(path, "utf8");
   assert(content.length > 0, `concept file ${file} should have content`);
 });
+
+[
+  "How will your assistant get the file?",
+  "The Design Behind The Tools",
+  'id="workbench-doc-view"',
+  "Hypothesis — awaiting NWC validation",
+  "Industry equivalent",
+  "Framework tie:",
+].forEach((needle) => {
+  assert(html.includes(needle), `site should include ${needle}`);
+});
+assert((html.match(/How will your assistant get the file\?/gu) || []).length === 2, "both modes should offer the two doors");
+
+// Rendered documents should have no raw relative markdown links (checked via rendered article body, not embedded data)
+const renderedDocStart = html.indexOf('class="template-rendered article-body"');
+const renderedDocEnd = html.indexOf("</article>", renderedDocStart);
+const renderedDocContent = html.slice(renderedDocStart, renderedDocEnd);
+assert(!/\]\(\.\.\//u.test(renderedDocContent), "rendered HTML should contain no raw relative markdown links");
+
+assert(existsSync(join(dist, "assets", "workbench", "concepts", "README.md")), "concept downloads should be generated");
 
 console.log("site contract passed");
