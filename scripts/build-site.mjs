@@ -26,6 +26,7 @@ const essayMarkdown = source.trim();
 const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md").trim();
 const companionContextMarkdown = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
+const workbenchConcepts = getWorkbenchConcepts();
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(workbenchAssetsDir, { recursive: true });
@@ -35,6 +36,10 @@ writeFileSync(join(assetsDir, companionContextFilename), companionContextMarkdow
 writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext() + "\n", "utf8");
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
+});
+mkdirSync(join(workbenchAssetsDir, "concepts"), { recursive: true });
+workbenchConcepts.forEach((note) => {
+  writeFileSync(join(workbenchAssetsDir, "concepts", note.filename), note.markdown.trim() + "\n", "utf8");
 });
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
@@ -69,7 +74,7 @@ writeFileSync(
     overviewHtml: buildOverviewMode(),
     essayHtml,
     companionHtml: buildCompanionMode(),
-    workbenchHtml: buildWorkbenchMode(workbenchTools),
+    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts),
     sourcesHtml: buildSourcesMode(),
   }),
   "utf8",
@@ -470,7 +475,7 @@ After six questions, assess whether I demonstrated ownership of the reasoning an
   </article>`).join("\n        ");
 }
 
-function buildWorkbenchMode(tools) {
+function buildWorkbenchMode(tools, concepts) {
   const selected = tools[0];
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
@@ -510,6 +515,19 @@ function buildWorkbenchMode(tools) {
 
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
       ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
+    </section>
+
+    <section class="detail-band">
+      <p class="band-label">The Design Behind The Tools</p>
+      <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
+    </section>
+
+    <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
+      ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
+        <span class="tool-title">${escapeHtml(note.title)}</span>
+        <span class="tool-desc">${escapeHtml(note.summary)}</span>
+        <span class="tool-action">Read note &rarr;</span>
+      </button>`).join("\n      ")}
     </section>
 
     <section class="selected-tool" aria-live="polite">
@@ -778,6 +796,23 @@ function getWorkbenchTools() {
   });
 }
 
+function getWorkbenchConcepts() {
+  const files = ["README.md", ...listWorkbenchFiles("concepts").filter((name) => name !== "README.md")];
+  return files.map((name) => {
+    const markdown = readRequiredWorkbenchFile(`concepts/${name}`);
+    const title = (markdown.match(/^#\s+(.+)$/mu) || [, name])[1].trim();
+    const summary = (markdown.match(/^\*\*(.+)\*\*$/mu) || [, ""])[1].trim();
+    return {
+      id: name.replace(/\.md$/u, ""),
+      title: name === "README.md" ? "Start Here: The Concepts Index" : title,
+      summary,
+      filename: name,
+      markdown,
+      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+    };
+  });
+}
+
 function collectHeadings(markdown, options = {}) {
   let skippedFirstH2 = false;
 
@@ -1022,6 +1057,14 @@ const workbenchTools = ${JSON.stringify(workbenchTools.map((tool) => ({
     markdown: tool.markdown.trim(),
     html: tool.html,
   })))};
+const workbenchConcepts = ${JSON.stringify(workbenchConcepts.map((note) => ({
+    id: note.id,
+    title: note.title,
+    filename: note.filename,
+    summary: note.summary,
+    markdown: note.markdown.trim(),
+    html: note.html,
+  })))};
 let tocFrame = null;
 let activeMode = document.body.dataset.activeMode || "overview";
 const reachedEssaySections = new Set();
@@ -1245,27 +1288,43 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
   });
 });
 
+function selectDocument(item, isFromConcept = false) {
+  document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
+    card.classList.remove("is-selected");
+  });
+  document.getElementById("selected-tool-title").textContent = item.title;
+  document.getElementById("selected-tool-note").textContent = item.useNote || (item.summary ? "Read it here, or download it to share with a colleague." : "");
+  document.getElementById("workbench-template").textContent = item.markdown;
+  document.getElementById("workbench-doc-view").innerHTML = item.html;
+  const download = document.getElementById("selected-tool-download");
+  const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
+  download.href = basePath + item.filename;
+  download.download = item.filename;
+  window.requestAnimationFrame(() => {
+    const selectedTool = document.querySelector(".selected-tool");
+    if (selectedTool) {
+      scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+    }
+  });
+}
+
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
   button.addEventListener("click", () => {
     const tool = workbenchTools.find((item) => item.id === button.dataset.toolId);
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
-    document.querySelectorAll("[data-tool-id]").forEach((card) => {
-      card.classList.toggle("is-selected", card === button);
-    });
-    document.getElementById("selected-tool-title").textContent = tool.title;
-    document.getElementById("selected-tool-note").textContent = tool.useNote;
-    document.getElementById("workbench-template").textContent = tool.markdown;
-    document.getElementById("workbench-doc-view").innerHTML = tool.html;
-    const download = document.getElementById("selected-tool-download");
-    download.href = "assets/workbench/" + tool.filename;
-    download.download = tool.filename;
-    window.requestAnimationFrame(() => {
-      const selectedTool = document.querySelector(".selected-tool");
-      if (selectedTool) {
-        scrollElementBelowNav(selectedTool, { behavior: "smooth" });
-      }
-    });
+    button.classList.add("is-selected");
+    selectDocument(tool, false);
+  });
+});
+
+document.querySelectorAll("[data-concept-id]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const concept = workbenchConcepts.find((item) => item.id === button.dataset.conceptId);
+    if (!concept) return;
+    trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
+    button.classList.add("is-selected");
+    selectDocument(concept, true);
   });
 });
 
@@ -1282,10 +1341,17 @@ document.addEventListener("click", (event) => {
   const link = event.target.closest("[data-wb-link]");
   if (!link) return;
   const id = link.getAttribute("href").replace("#wb-doc-", "");
-  const doc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
-  if (doc) {
+  const toolDoc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
+  const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
+  if (toolDoc) {
     event.preventDefault();
-    const button = document.querySelector(\`[data-tool-id="\${doc.id}"]\`);
+    const button = document.querySelector(\`[data-tool-id="\${toolDoc.id}"]\`);
+    if (button) {
+      button.click();
+    }
+  } else if (conceptDoc) {
+    event.preventDefault();
+    const button = document.querySelector(\`[data-concept-id="\${conceptDoc.id}"]\`);
     if (button) {
       button.click();
     }
@@ -1295,6 +1361,7 @@ document.addEventListener("click", (event) => {
 const firstTool = document.querySelector("[data-tool-id]");
 if (firstTool) {
   firstTool.classList.add("is-selected");
+  trackPackageEvent("Workbench Tool Selected", { tool_id: firstTool.dataset.toolId, tool_title: workbenchTools[0]?.title });
 }
 
 document.querySelectorAll("a[download]").forEach((link) => {
@@ -1303,7 +1370,8 @@ document.querySelectorAll("a[download]").forEach((link) => {
     let asset = "other";
     if (href.endsWith(".pdf")) asset = "essay_pdf";
     if (href.endsWith("${companionContextFilename}")) asset = "companion_context";
-    if (href.includes("/workbench/")) asset = "workbench_template";
+    if (href.includes("/workbench/concepts/")) asset = "workbench_concept";
+    else if (href.includes("/workbench/")) asset = "workbench_template";
     trackPackageEvent("Download", {
       asset,
       href,

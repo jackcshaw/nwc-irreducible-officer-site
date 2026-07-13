@@ -83,6 +83,7 @@ inlineScripts.forEach((script, index) => {
   "Source Kit Template",
   "Faculty Calibration Protocol",
   "After-Action Note Template",
+  "The Design Behind The Tools",
   "Future Context Layer",
   "not a current NWC system",
   "Evidence And Source Spine",
@@ -322,7 +323,7 @@ assert(articleHtml.includes("class=\"argument-insert closing-standard\""), "essa
 assert(!articleHtml.includes("assets/human-ai-human-loop.png"), "essay should use argument inserts instead of the old loop figure");
 assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use argument inserts instead of the old ladder figure");
 
-const workbenchToolsJson = html.match(/const workbenchTools = (\[.*\]);/u);
+const workbenchToolsJson = html.match(/const workbenchTools = (\[.*?\]);/u);
 assert(workbenchToolsJson, "client script should embed the workbench tools JSON");
 const embeddedWorkbenchTools = JSON.parse(workbenchToolsJson[1]);
 assert(
@@ -338,10 +339,51 @@ embeddedWorkbenchTools.forEach((tool) => {
   );
 });
 
+const workbenchConceptsJson = html.match(/const workbenchConcepts = (\[.*?\]);/u);
+assert(workbenchConceptsJson, "client script should embed the workbench concepts JSON");
+const embeddedWorkbenchConcepts = JSON.parse(workbenchConceptsJson[1]);
+assert(
+  embeddedWorkbenchConcepts.filter((note) => note.html && note.html.includes("<blockquote>")).length >= 4,
+  "rendered concept surfaces should include blockquotes (at least 4)",
+);
+embeddedWorkbenchConcepts.forEach((note) => {
+  assert(note.html && note.html.length > 0, `embedded concept ${note.filename} should carry rendered html`);
+  assert(note.markdown && note.markdown.length > 0, `embedded concept ${note.filename} should keep raw markdown for copy`);
+  assert(
+    !/\]\(\.\.\//u.test(note.html),
+    `rendered HTML for concept ${note.filename} should contain no raw relative markdown links`,
+  );
+});
+
+const conceptLink = embeddedWorkbenchTools.find((tool) => tool.html.includes("#wb-doc-method-cards-and-agent-skills"));
+if (conceptLink) {
+  const targetConcept = embeddedWorkbenchConcepts.find((note) => note.id === "method-cards-and-agent-skills");
+  assert(targetConcept, "template link to concept method-cards-and-agent-skills should resolve to embedded concept");
+}
+
 const docViewStart = html.indexOf('id="workbench-doc-view"');
 assert(docViewStart !== -1, "workbench should display the selected document as rendered HTML");
 const docViewHtml = html.slice(docViewStart, html.indexOf("</article>", docViewStart));
 assert(!/\]\(\.\.\//u.test(docViewHtml), "rendered HTML should contain no raw relative markdown links");
 assert(docViewHtml.includes("data-wb-link"), "rendered documents should rewrite internal links to workbench anchors");
+
+assert(
+  html.includes('id="workbench-concepts"'),
+  "workbench should include a section for concept notes",
+);
+assert(
+  html.includes('data-concept-id='),
+  "workbench should include clickable concept cards",
+);
+
+const conceptsDir = join(dist, "assets", "workbench", "concepts");
+assert(existsSync(conceptsDir), "concepts directory should be created in dist/assets/workbench/");
+const conceptFiles = readdirSync(conceptsDir).filter((name) => name.endsWith(".md"));
+assert(conceptFiles.length === 6, "six concept files should be emitted to dist/assets/workbench/concepts/");
+conceptFiles.forEach((file) => {
+  const path = join(conceptsDir, file);
+  const content = readFileSync(path, "utf8");
+  assert(content.length > 0, `concept file ${file} should have content`);
+});
 
 console.log("site contract passed");
