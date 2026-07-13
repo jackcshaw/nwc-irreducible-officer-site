@@ -410,3 +410,12 @@ assert(!/\]\(\.\.\//u.test(renderedDocContent), "rendered HTML should contain no
 assert(existsSync(join(dist, "assets", "workbench", "concepts", "README.md")), "concept downloads should be generated");
 
 console.log("site contract passed");
+
+assert(
+  (html.match(/headers the file contains/g) || []).length >= 8,
+  "every setup and starter prompt should carry the proof-of-read handshake",
+);
+assert(
+  (html.match(/do not continue from a partial read/g) || []).length >= 8,
+  "every prompt's partial-read guard should be present",
+);
