@@ -364,11 +364,11 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are helping me read and use the essay "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College.
+  return `You are helping me read and use the essay "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
 
 ${companionContextInstruction()}
 
-After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read.
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read — a partial read causes you to invent content that is not in the file.
 
 Start by giving me:
 1. the cleanest version of the core claim;
@@ -383,7 +383,7 @@ transfer.`;
 }
 
 function workbenchSetupPrompt() {
-  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching.
+  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
 
 Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
 
@@ -391,9 +391,9 @@ ${workbenchContextUrl}
 
 If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
 
-After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read.
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read — a partial read causes you to invent workbench content that is not in the file.
 
-Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly. I own every pedagogical judgment. You ask, structure, and challenge.`;
+Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly.`;
 }
 
 function companionContextInstruction() {
