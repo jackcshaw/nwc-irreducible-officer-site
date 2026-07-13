@@ -840,6 +840,8 @@ function renderMarkdown(markdown, options = {}) {
     if (line.startsWith("```")) {
       flushParagraph();
       closeList();
+      flushTable();
+      flushQuote();
       if (inCode) {
         html.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
         codeLines = [];
@@ -1800,14 +1802,10 @@ h1 {
   gap: 16px;
 }
 
-.template-block {
-  max-height: 520px;
-}
-
-.template-rendered { max-height: 640px; overflow-y: auto; padding: 20px 24px; background: var(--paper-soft); border: 1px solid rgba(10,34,66,0.12); }
+.template-rendered { max-height: 640px; overflow-y: auto; padding: 20px 24px; background: var(--paper-soft); border: 1px solid rgba(8, 35, 70, 0.12); }
 .template-rendered table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
-.template-rendered th, .template-rendered td { border: 1px solid rgba(10,34,66,0.15); padding: 6px 10px; text-align: left; }
-.template-rendered blockquote { border-left: 3px solid #d82032; margin: 12px 0; padding: 4px 14px; }
+.template-rendered th, .template-rendered td { border: 1px solid var(--navy-border); padding: 6px 10px; text-align: left; }
+.template-rendered blockquote { border-left: 3px solid var(--red); margin: 12px 0; padding: 4px 14px; }
 
 .use-note {
   border: 1px solid rgba(8, 35, 70, 0.1);

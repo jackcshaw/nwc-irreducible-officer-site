@@ -322,4 +322,26 @@ assert(articleHtml.includes("class=\"argument-insert closing-standard\""), "essa
 assert(!articleHtml.includes("assets/human-ai-human-loop.png"), "essay should use argument inserts instead of the old loop figure");
 assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use argument inserts instead of the old ladder figure");
 
+const workbenchToolsJson = html.match(/const workbenchTools = (\[.*\]);/u);
+assert(workbenchToolsJson, "client script should embed the workbench tools JSON");
+const embeddedWorkbenchTools = JSON.parse(workbenchToolsJson[1]);
+assert(
+  embeddedWorkbenchTools.filter((tool) => tool.html && tool.html.includes("<table>")).length >= 2,
+  "rendered workbench documents should include real tables",
+);
+embeddedWorkbenchTools.forEach((tool) => {
+  assert(tool.html && tool.html.length > 0, `embedded tool ${tool.filename} should carry rendered html`);
+  assert(tool.markdown && tool.markdown.length > 0, `embedded tool ${tool.filename} should keep raw markdown for copy`);
+  assert(
+    !/\]\(\.\.\//u.test(tool.html),
+    `rendered HTML for ${tool.filename} should contain no raw relative markdown links`,
+  );
+});
+
+const docViewStart = html.indexOf('id="workbench-doc-view"');
+assert(docViewStart !== -1, "workbench should display the selected document as rendered HTML");
+const docViewHtml = html.slice(docViewStart, html.indexOf("</article>", docViewStart));
+assert(!/\]\(\.\.\//u.test(docViewHtml), "rendered HTML should contain no raw relative markdown links");
+assert(docViewHtml.includes("data-wb-link"), "rendered documents should rewrite internal links to workbench anchors");
+
 console.log("site contract passed");
