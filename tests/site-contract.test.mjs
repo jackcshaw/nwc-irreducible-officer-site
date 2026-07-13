@@ -6,7 +6,6 @@ const dist = join(root, "dist");
 const indexPath = join(dist, "index.html");
 const pdfPath = join(dist, "assets", "the-irreducible-officer.pdf");
 const companionContextPath = join(dist, "assets", "companion-context.md");
-const workbenchDir = join(dist, "assets", "workbench");
 
 function assert(condition, message) {
   if (!condition) {
@@ -83,6 +82,7 @@ inlineScripts.forEach((script, index) => {
   "Source Kit Template",
   "Faculty Calibration Protocol",
   "After-Action Note Template",
+  "The Design Behind The Tools",
   "Future Context Layer",
   "not a current NWC system",
   "Evidence And Source Spine",
@@ -321,5 +321,92 @@ assert(closingStandard > pilotSequence, "closing standard should appear after th
 assert(articleHtml.includes("class=\"argument-insert closing-standard\""), "essay should render the closing standard as a designed element");
 assert(!articleHtml.includes("assets/human-ai-human-loop.png"), "essay should use argument inserts instead of the old loop figure");
 assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use argument inserts instead of the old ladder figure");
+
+const workbenchToolsJson = html.match(/const workbenchTools = (\[.*?\]);/u);
+assert(workbenchToolsJson, "client script should embed the workbench tools JSON");
+const embeddedWorkbenchTools = JSON.parse(workbenchToolsJson[1]);
+assert(
+  embeddedWorkbenchTools.filter((tool) => tool.html && tool.html.includes("<table>")).length >= 2,
+  "rendered workbench documents should include real tables",
+);
+embeddedWorkbenchTools.forEach((tool) => {
+  assert(tool.html && tool.html.length > 0, `embedded tool ${tool.filename} should carry rendered html`);
+  assert(tool.markdown && tool.markdown.length > 0, `embedded tool ${tool.filename} should keep raw markdown for copy`);
+  assert(
+    !/\]\(\.\.\//u.test(tool.html),
+    `rendered HTML for ${tool.filename} should contain no raw relative markdown links`,
+  );
+});
+
+const workbenchConceptsJson = html.match(/const workbenchConcepts = (\[.*?\]);/u);
+assert(workbenchConceptsJson, "client script should embed the workbench concepts JSON");
+const embeddedWorkbenchConcepts = JSON.parse(workbenchConceptsJson[1]);
+assert(
+  embeddedWorkbenchConcepts.filter((note) => note.html && note.html.includes("<blockquote>")).length >= 4,
+  "rendered concept surfaces should include blockquotes (at least 4)",
+);
+embeddedWorkbenchConcepts.forEach((note) => {
+  assert(note.html && note.html.length > 0, `embedded concept ${note.filename} should carry rendered html`);
+  assert(note.markdown && note.markdown.length > 0, `embedded concept ${note.filename} should keep raw markdown for copy`);
+  assert(
+    !/\]\(\.\.\//u.test(note.html),
+    `rendered HTML for concept ${note.filename} should contain no raw relative markdown links`,
+  );
+});
+
+const conceptLink = embeddedWorkbenchTools.find((tool) => tool.html.includes("#wb-doc-method-cards-and-agent-skills"));
+assert(conceptLink, "method card template should link to its concept note");
+const targetConcept = embeddedWorkbenchConcepts.find((note) => note.id === "method-cards-and-agent-skills");
+assert(targetConcept, "template link to concept method-cards-and-agent-skills should resolve to embedded concept");
+
+const docViewStart = html.indexOf('id="workbench-doc-view"');
+assert(docViewStart !== -1, "workbench should display the selected document as rendered HTML");
+const docViewHtml = html.slice(docViewStart, html.indexOf("</article>", docViewStart));
+assert(!/\]\(\.\.\//u.test(docViewHtml), "rendered HTML should contain no raw relative markdown links");
+assert(docViewHtml.includes("data-wb-link"), "rendered documents should rewrite internal links to workbench anchors");
+
+assert(
+  html.includes('id="workbench-concepts"'),
+  "workbench should include a section for concept notes",
+);
+assert(
+  html.includes('data-concept-id='),
+  "workbench should include clickable concept cards",
+);
+
+const conceptsDir = join(dist, "assets", "workbench", "concepts");
+assert(existsSync(conceptsDir), "concepts directory should be created in dist/assets/workbench/");
+const conceptFiles = readdirSync(conceptsDir).filter((name) => name.endsWith(".md"));
+const expectedConceptCount = readdirSync(join(workbenchRepoPath, "concepts")).filter((name) => name.endsWith(".md")).length;
+assert(expectedConceptCount > 0, "workbench concepts/ should contain markdown files");
+assert(
+  conceptFiles.length === expectedConceptCount,
+  `all ${expectedConceptCount} workbench concept files should be emitted to dist/assets/workbench/concepts/`,
+);
+conceptFiles.forEach((file) => {
+  const path = join(conceptsDir, file);
+  const content = readFileSync(path, "utf8");
+  assert(content.length > 0, `concept file ${file} should have content`);
+});
+
+[
+  "How will your assistant get the file?",
+  "The Design Behind The Tools",
+  'id="workbench-doc-view"',
+  "Hypothesis — awaiting NWC validation",
+  "Industry equivalent",
+  "Framework tie:",
+].forEach((needle) => {
+  assert(html.includes(needle), `site should include ${needle}`);
+});
+assert((html.match(/How will your assistant get the file\?/gu) || []).length === 2, "both modes should offer the two doors");
+
+// Rendered documents should have no raw relative markdown links (checked via rendered article body, not embedded data)
+const renderedDocStart = html.indexOf('class="template-rendered article-body"');
+const renderedDocEnd = html.indexOf("</article>", renderedDocStart);
+const renderedDocContent = html.slice(renderedDocStart, renderedDocEnd);
+assert(!/\]\(\.\.\//u.test(renderedDocContent), "rendered HTML should contain no raw relative markdown links");
+
+assert(existsSync(join(dist, "assets", "workbench", "concepts", "README.md")), "concept downloads should be generated");
 
 console.log("site contract passed");

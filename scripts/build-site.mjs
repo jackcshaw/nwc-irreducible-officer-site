@@ -24,17 +24,33 @@ const pythonPath =
 const source = readFileSync(sourcePath, "utf8");
 const essayMarkdown = source.trim();
 const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md").trim();
-const companionContextMarkdown = buildCompanionContext();
+const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
+const workbenchConcepts = getWorkbenchConcepts();
+const { text: workbenchContextMarkdown, sectionCount: workbenchSectionCount } = buildWorkbenchContext();
+
+// Completeness assertion: all template files must have cards, and all cards must have files
+const templateFiles = listWorkbenchFiles("templates");
+const toolFilenames = new Set(workbenchTools.map((tool) => tool.filename));
+templateFiles.forEach((name) => {
+  if (!toolFilenames.has(name)) throw new Error(`templates/${name} has no getWorkbenchTools() card — add one`);
+});
+toolFilenames.forEach((name) => {
+  if (!templateFiles.includes(name)) throw new Error(`getWorkbenchTools() lists ${name} but templates/${name} does not exist`);
+});
 
 rmSync(distDir, { recursive: true, force: true });
 mkdirSync(workbenchAssetsDir, { recursive: true });
 
 writeFileSync(join(assetsDir, "essay.md"), essayMarkdown + "\n", "utf8");
 writeFileSync(join(assetsDir, companionContextFilename), companionContextMarkdown + "\n", "utf8");
-writeFileSync(join(assetsDir, workbenchContextFilename), buildWorkbenchContext() + "\n", "utf8");
+writeFileSync(join(assetsDir, workbenchContextFilename), workbenchContextMarkdown + "\n", "utf8");
 workbenchTools.forEach((tool) => {
   writeFileSync(join(workbenchAssetsDir, tool.filename), tool.markdown.trim() + "\n", "utf8");
+});
+mkdirSync(join(workbenchAssetsDir, "concepts"), { recursive: true });
+workbenchConcepts.forEach((note) => {
+  writeFileSync(join(workbenchAssetsDir, "concepts", note.filename), note.markdown.trim() + "\n", "utf8");
 });
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
@@ -69,7 +85,7 @@ writeFileSync(
     overviewHtml: buildOverviewMode(),
     essayHtml,
     companionHtml: buildCompanionMode(),
-    workbenchHtml: buildWorkbenchMode(workbenchTools),
+    workbenchHtml: buildWorkbenchMode(workbenchTools, workbenchConcepts),
     sourcesHtml: buildSourcesMode(),
   }),
   "utf8",
@@ -125,7 +141,9 @@ function buildCompanionContext() {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", readRequiredCompanionFile(relativePath).trim());
   });
 
-  return parts.join("\n");
+  const text = parts.join("\n");
+  const sectionCount = (text.match(/# ===== SECTION:/g) || []).length;
+  return { text, sectionCount };
 }
 
 function buildWorkbenchContext() {
@@ -157,7 +175,9 @@ function buildWorkbenchContext() {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", body);
   });
 
-  return parts.join("\n");
+  const text = parts.join("\n");
+  const sectionCount = (text.match(/# ===== SECTION:/g) || []).length;
+  return { text, sectionCount };
 }
 
 function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbenchHtml, sourcesHtml }) {
@@ -296,19 +316,23 @@ function buildCompanionMode() {
       <h1>AI Companion</h1>
       <p class="dek">Use ChatGPT, Claude, Gemini, or another AI assistant to work through the essay, test claims, design an exercise, and create a traceable learning artifact.</p>
       <p>
-        Start by copying the setup prompt. The assistant will read one context
-        file that contains the essay, claim map, source spine, objections,
-        workflow patterns, transfer case, and trace artifact before answering.
+        The setup prompt reads the whole companion file, tests that the read is
+        complete, and facilitates your next step. Every template also works on
+        paper. No repository knowledge required.
       </p>
-      <p class="helper-note">
-        Running this needs an assistant that can read a web page. Turn web
-        access on before you paste. If the assistant cannot open the file,
-        download the context file below and paste or attach it into the chat,
-        then paste the prompt.
-      </p>
-      <div class="action-row">
-        <button class="copy-button primary" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
-        <a class="quiet-action" href="assets/${companionContextFilename}" download>Download context file</a>
+      <p class="eyebrow">How will your assistant get the file?</p>
+      <div class="door-grid">
+        <div class="door">
+          <h3>Attach the file — works everywhere</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <a class="copy-button primary" href="assets/${companionContextFilename}" download>Download context file</a>
+          <button class="quiet-action" type="button" data-copy-target="setup-prompt">Copy the prompt</button>
+        </div>
+        <div class="door">
+          <h3>My assistant reads the web</h3>
+          <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the companion file itself.</p>
+          <button class="copy-button" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
+        </div>
       </div>
     </section>
 
@@ -344,6 +368,8 @@ function setupPrompt() {
 
 ${companionContextInstruction()}
 
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${companionSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to paste or attach the context file instead; do not continue from a partial read.
+
 Start by giving me:
 1. the cleanest version of the core claim;
 2. the part of the argument most relevant to an NWC instructor or curriculum leader;
@@ -364,6 +390,8 @@ Before you answer anything, fetch and read this file in full. It contains the op
 ${workbenchContextUrl}
 
 If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
+
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read.
 
 Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly. I own every pedagogical judgment. You ask, structure, and challenge.`;
 }
@@ -470,7 +498,7 @@ After six questions, assess whether I demonstrated ownership of the reasoning an
   </article>`).join("\n        ");
 }
 
-function buildWorkbenchMode(tools) {
+function buildWorkbenchMode(tools, concepts) {
   const selected = tools[0];
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
@@ -479,15 +507,23 @@ function buildWorkbenchMode(tools) {
       <h1>Faculty Workbench</h1>
       <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
-        Fastest path: copy the setup prompt into ChatGPT, Claude, Gemini, or
-        another AI assistant. It reads the whole workbench, places your
-        assignment on the six-phase fluency progression, and facilitates the
-        right template with you. Every template also works on paper. No repository
-        knowledge required.
+        The setup prompt reads the whole workbench, places your assignment on the
+        six-phase fluency progression, and facilitates the right template with you.
+        Every template also works on paper. No repository knowledge required.
       </p>
-      <div class="action-row">
-        <button class="copy-button primary" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
-        <a class="quiet-action" href="assets/${workbenchContextFilename}" download>Download context file</a>
+      <p class="eyebrow">How will your assistant get the file?</p>
+      <div class="door-grid">
+        <div class="door">
+          <h3>Attach the file — works everywhere</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
+          <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+        </div>
+        <div class="door">
+          <h3>My assistant reads the web</h3>
+          <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the workbench itself.</p>
+          <button class="copy-button" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+        </div>
       </div>
     </section>
 
@@ -499,17 +535,32 @@ function buildWorkbenchMode(tools) {
       ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
     </section>
 
-    <section class="detail-band">
+    <section class="detail-band" id="workbench-progression">
       <p class="band-label">The Progression Behind The Tools</p>
       <p>
         Fluency grows from asking AI for help to supervising AI-supported work.
         Judgment stays human at every phase.
       </p>
       <img src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution" style="width: 100%; height: auto; margin-top: 12px;">
+      <p class="visual-status">The persona rows above are reference-matrix content, published as
+        <a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Hypothesis — awaiting NWC validation</a> — the concept note explains why.</p>
     </section>
 
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
       ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
+    </section>
+
+    <section class="detail-band">
+      <p class="band-label">The Design Behind The Tools</p>
+      <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
+    </section>
+
+    <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
+      ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
+        <span class="tool-title">${escapeHtml(note.title)}</span>
+        <span class="tool-desc">${escapeHtml(note.summary)}</span>
+        <span class="tool-action">Read note &rarr;</span>
+      </button>`).join("\n      ")}
     </section>
 
     <section class="selected-tool" aria-live="polite">
@@ -525,7 +576,8 @@ function buildWorkbenchMode(tools) {
         </div>
       </div>
       <div class="template-layout">
-        <pre class="copy-block template-block"><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
+        <article class="template-rendered article-body" id="workbench-doc-view">${selected.html}</article>
+        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
         <aside class="use-note">
           <p class="eyebrow">How To Use It</p>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
@@ -767,10 +819,31 @@ function getWorkbenchTools() {
       useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
-  return tools.map((tool) => ({
-    ...tool,
-    markdown: readRequiredWorkbenchFile(join("templates", tool.filename)),
-  }));
+  return tools.map((tool) => {
+    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename));
+    return {
+      ...tool,
+      markdown,
+      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+    };
+  });
+}
+
+function getWorkbenchConcepts() {
+  const files = ["README.md", ...listWorkbenchFiles("concepts").filter((name) => name !== "README.md")];
+  return files.map((name) => {
+    const markdown = readRequiredWorkbenchFile(`concepts/${name}`);
+    const title = (markdown.match(/^#\s+(.+)$/mu) || [, name])[1].trim();
+    const summary = (markdown.match(/^\*\*(.+)\*\*$/mu) || [, ""])[1].trim();
+    return {
+      id: name.replace(/\.md$/u, ""),
+      title: name === "README.md" ? "Start Here: The Concepts Index" : title,
+      summary,
+      filename: name,
+      markdown,
+      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+    };
+  });
 }
 
 function collectHeadings(markdown, options = {}) {
@@ -794,6 +867,8 @@ function renderMarkdown(markdown, options = {}) {
   const html = [];
   let paragraph = [];
   let listType = null;
+  let tableLines = [];
+  let quoteLines = [];
   let inCode = false;
   let codeLines = [];
   let skippedFirstH1 = false;
@@ -813,12 +888,28 @@ function renderMarkdown(markdown, options = {}) {
     }
   }
 
+  function flushTable() {
+    if (tableLines.length) {
+      html.push(renderTable(tableLines));
+      tableLines = [];
+    }
+  }
+
+  function flushQuote() {
+    if (quoteLines.length) {
+      html.push(`<blockquote><p>${renderInline(quoteLines.join(" "))}</p></blockquote>`);
+      quoteLines = [];
+    }
+  }
+
   for (const rawLine of lines) {
     const line = rawLine.trimEnd();
 
     if (line.startsWith("```")) {
       flushParagraph();
       closeList();
+      flushTable();
+      flushQuote();
       if (inCode) {
         html.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
         codeLines = [];
@@ -834,9 +925,29 @@ function renderMarkdown(markdown, options = {}) {
       continue;
     }
 
+    if (line.trim().startsWith("|")) {
+      flushParagraph();
+      closeList();
+      flushQuote();
+      tableLines.push(line.trim());
+      continue;
+    }
+    flushTable();
+
+    const quoted = line.match(/^>\s?(.*)$/u);
+    if (quoted) {
+      flushParagraph();
+      closeList();
+      if (quoted[1].trim()) quoteLines.push(quoted[1].trim());
+      continue;
+    }
+    flushQuote();
+
     if (!line.trim()) {
       flushParagraph();
       closeList();
+      flushTable();
+      flushQuote();
       continue;
     }
 
@@ -899,13 +1010,46 @@ function renderMarkdown(markdown, options = {}) {
 
   flushParagraph();
   closeList();
+  flushTable();
+  flushQuote();
 
   return html.join("\n");
+}
+
+function renderTable(lines) {
+  const rows = lines.map((line) =>
+    line.replace(/^\|/u, "").replace(/\|$/u, "").split("|").map((cell) => cell.trim()),
+  );
+  const header = rows[0] ?? [];
+  const body = rows.slice(1).filter((cells) => !cells.every((cell) => /^:?-{3,}:?$/u.test(cell)));
+  const head = `<thead><tr>${header.map((cell) => `<th>${renderInline(cell)}</th>`).join("")}</tr></thead>`;
+  const rowsHtml = body
+    .map((cells) => `<tr>${cells.map((cell) => `<td>${renderInline(cell)}</td>`).join("")}</tr>`)
+    .join("");
+  return `<table>${head}<tbody>${rowsHtml}</tbody></table>`;
+}
+
+function rewriteWorkbenchLinks(markdown) {
+  return markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/gu, (match, label, href) => {
+    if (/^https?:/u.test(href) || href.startsWith("#")) return match;
+    const target = href.replace(/^(?:\.\.\/)+/u, "").replace(/^\.\//u, "");
+    const mdName = (target.match(/^(?:templates\/|concepts\/)?([A-Za-z0-9-]+)\.md$/u) || [])[1];
+    if (mdName && (target.startsWith("templates/") || target.startsWith("concepts/") || !target.includes("/"))) {
+      return `[${label}](#wb-doc-${mdName})`;
+    }
+    if (target === "framework/ai-fluency-progression.md") {
+      return `[${label}](#workbench-progression)`;
+    }
+    return label; // unresolvable internal link: render as plain text, never a dead link
+  });
 }
 
 function renderInline(text) {
   let value = escapeHtml(text);
   value = value.replace(/\[([^\]]+)\]\(([^)]+)\)/gu, (_match, label, href) => {
+    if (href.startsWith("#")) {
+      return `<a href="${href}" data-wb-link>${label}</a>`;
+    }
     return `<a href="${href}" target="_blank" rel="noreferrer">${label}</a>`;
   });
   value = value.replace(/\*\*([^*]+)\*\*/gu, "<strong>$1</strong>");
@@ -944,6 +1088,15 @@ const workbenchTools = ${JSON.stringify(workbenchTools.map((tool) => ({
     filename: tool.filename,
     useNote: tool.useNote,
     markdown: tool.markdown.trim(),
+    html: tool.html,
+  })))};
+const workbenchConcepts = ${JSON.stringify(workbenchConcepts.map((note) => ({
+    id: note.id,
+    title: note.title,
+    filename: note.filename,
+    summary: note.summary,
+    markdown: note.markdown.trim(),
+    html: note.html,
   })))};
 let tocFrame = null;
 let activeMode = document.body.dataset.activeMode || "overview";
@@ -1168,26 +1321,43 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
   });
 });
 
+function selectDocument(item, isFromConcept = false) {
+  document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
+    card.classList.remove("is-selected");
+  });
+  document.getElementById("selected-tool-title").textContent = item.title;
+  document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
+  document.getElementById("workbench-template").textContent = item.markdown;
+  document.getElementById("workbench-doc-view").innerHTML = item.html;
+  const download = document.getElementById("selected-tool-download");
+  const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
+  download.href = basePath + item.filename;
+  download.download = item.filename;
+  window.requestAnimationFrame(() => {
+    const selectedTool = document.querySelector(".selected-tool");
+    if (selectedTool) {
+      scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+    }
+  });
+}
+
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
   button.addEventListener("click", () => {
     const tool = workbenchTools.find((item) => item.id === button.dataset.toolId);
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
-    document.querySelectorAll("[data-tool-id]").forEach((card) => {
-      card.classList.toggle("is-selected", card === button);
-    });
-    document.getElementById("selected-tool-title").textContent = tool.title;
-    document.getElementById("selected-tool-note").textContent = tool.useNote;
-    document.getElementById("workbench-template").textContent = tool.markdown;
-    const download = document.getElementById("selected-tool-download");
-    download.href = "assets/workbench/" + tool.filename;
-    download.download = tool.filename;
-    window.requestAnimationFrame(() => {
-      const selectedTool = document.querySelector(".selected-tool");
-      if (selectedTool) {
-        scrollElementBelowNav(selectedTool, { behavior: "smooth" });
-      }
-    });
+    selectDocument(tool, false);
+    button.classList.add("is-selected");
+  });
+});
+
+document.querySelectorAll("[data-concept-id]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const concept = workbenchConcepts.find((item) => item.id === button.dataset.conceptId);
+    if (!concept) return;
+    trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
+    selectDocument(concept, true);
+    button.classList.add("is-selected");
   });
 });
 
@@ -1198,6 +1368,27 @@ document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
       scrollElementBelowNav(toolGrid, { behavior: "smooth" });
     }
   });
+});
+
+document.addEventListener("click", (event) => {
+  const link = event.target.closest("[data-wb-link]");
+  if (!link) return;
+  const id = link.getAttribute("href").replace("#wb-doc-", "");
+  const toolDoc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
+  const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
+  if (toolDoc) {
+    event.preventDefault();
+    const button = document.querySelector(\`[data-tool-id="\${toolDoc.id}"]\`);
+    if (button) {
+      button.click();
+    }
+  } else if (conceptDoc) {
+    event.preventDefault();
+    const button = document.querySelector(\`[data-concept-id="\${conceptDoc.id}"]\`);
+    if (button) {
+      button.click();
+    }
+  }
 });
 
 const firstTool = document.querySelector("[data-tool-id]");
@@ -1211,7 +1402,8 @@ document.querySelectorAll("a[download]").forEach((link) => {
     let asset = "other";
     if (href.endsWith(".pdf")) asset = "essay_pdf";
     if (href.endsWith("${companionContextFilename}")) asset = "companion_context";
-    if (href.includes("/workbench/")) asset = "workbench_template";
+    if (href.includes("/workbench/concepts/")) asset = "workbench_concept";
+    else if (href.includes("/workbench/")) asset = "workbench_template";
     trackPackageEvent("Download", {
       asset,
       href,
@@ -1710,9 +1902,10 @@ h1 {
   gap: 16px;
 }
 
-.template-block {
-  max-height: 520px;
-}
+.template-rendered { max-height: 640px; overflow-y: auto; padding: 20px 24px; background: var(--paper-soft); border: 1px solid rgba(8, 35, 70, 0.12); }
+.template-rendered table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+.template-rendered th, .template-rendered td { border: 1px solid var(--navy-border); padding: 6px 10px; text-align: left; }
+.template-rendered blockquote { border-left: 3px solid var(--red); margin: 12px 0; padding: 4px 14px; }
 
 .use-note {
   border: 1px solid rgba(8, 35, 70, 0.1);
@@ -2144,6 +2337,13 @@ body:not([data-active-mode="essay"]) .toc {
   font-size: 12px;
   line-height: 1.45;
 }
+
+.door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
+.door { border: 1px solid var(--navy-border); padding: 18px 20px; background: rgba(255,255,255,0.5); }
+.door h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.door p { margin: 0 0 12px; font-size: 0.95rem; }
+
+.visual-status { font-size: 0.9rem; margin-top: 8px; opacity: 0.85; }
 
 @media (max-width: 980px) {
   .package-nav {
