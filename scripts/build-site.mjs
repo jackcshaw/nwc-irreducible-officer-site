@@ -1346,8 +1346,8 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     const tool = workbenchTools.find((item) => item.id === button.dataset.toolId);
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
-    button.classList.add("is-selected");
     selectDocument(tool, false);
+    button.classList.add("is-selected");
   });
 });
 
@@ -1356,8 +1356,8 @@ document.querySelectorAll("[data-concept-id]").forEach((button) => {
     const concept = workbenchConcepts.find((item) => item.id === button.dataset.conceptId);
     if (!concept) return;
     trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
-    button.classList.add("is-selected");
     selectDocument(concept, true);
+    button.classList.add("is-selected");
   });
 });
 
@@ -1394,7 +1394,6 @@ document.addEventListener("click", (event) => {
 const firstTool = document.querySelector("[data-tool-id]");
 if (firstTool) {
   firstTool.classList.add("is-selected");
-  trackPackageEvent("Workbench Tool Selected", { tool_id: firstTool.dataset.toolId, tool_title: workbenchTools[0]?.title });
 }
 
 document.querySelectorAll("a[download]").forEach((link) => {

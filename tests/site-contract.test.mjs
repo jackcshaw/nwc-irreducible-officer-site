@@ -377,7 +377,12 @@ assert(
 const conceptsDir = join(dist, "assets", "workbench", "concepts");
 assert(existsSync(conceptsDir), "concepts directory should be created in dist/assets/workbench/");
 const conceptFiles = readdirSync(conceptsDir).filter((name) => name.endsWith(".md"));
-assert(conceptFiles.length === 6, "six concept files should be emitted to dist/assets/workbench/concepts/");
+const expectedConceptCount = readdirSync(join(workbenchRepoPath, "concepts")).filter((name) => name.endsWith(".md")).length;
+assert(expectedConceptCount > 0, "workbench concepts/ should contain markdown files");
+assert(
+  conceptFiles.length === expectedConceptCount,
+  `all ${expectedConceptCount} workbench concept files should be emitted to dist/assets/workbench/concepts/`,
+);
 conceptFiles.forEach((file) => {
   const path = join(conceptsDir, file);
   const content = readFileSync(path, "utf8");
