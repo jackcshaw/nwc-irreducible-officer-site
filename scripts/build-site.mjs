@@ -1293,7 +1293,7 @@ function selectDocument(item, isFromConcept = false) {
     card.classList.remove("is-selected");
   });
   document.getElementById("selected-tool-title").textContent = item.title;
-  document.getElementById("selected-tool-note").textContent = item.useNote || (item.summary ? "Read it here, or download it to share with a colleague." : "");
+  document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
   const download = document.getElementById("selected-tool-download");

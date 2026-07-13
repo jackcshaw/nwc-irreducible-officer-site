@@ -356,10 +356,9 @@ embeddedWorkbenchConcepts.forEach((note) => {
 });
 
 const conceptLink = embeddedWorkbenchTools.find((tool) => tool.html.includes("#wb-doc-method-cards-and-agent-skills"));
-if (conceptLink) {
-  const targetConcept = embeddedWorkbenchConcepts.find((note) => note.id === "method-cards-and-agent-skills");
-  assert(targetConcept, "template link to concept method-cards-and-agent-skills should resolve to embedded concept");
-}
+assert(conceptLink, "method card template should link to its concept note");
+const targetConcept = embeddedWorkbenchConcepts.find((note) => note.id === "method-cards-and-agent-skills");
+assert(targetConcept, "template link to concept method-cards-and-agent-skills should resolve to embedded concept");
 
 const docViewStart = html.indexOf('id="workbench-doc-view"');
 assert(docViewStart !== -1, "workbench should display the selected document as rendered HTML");
