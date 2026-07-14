@@ -135,6 +135,7 @@ function buildCompanionContext() {
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "This bundle is generated from the public companion source materials.",
+    "Relative links inside sections refer to files in the companion repository; if a linked file is not among the sections, say so rather than describing it from memory.",
   ];
 
   sections.forEach(([label, relativePath]) => {
@@ -165,7 +166,7 @@ function buildWorkbenchContext() {
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
-    "Relative links inside sections refer to files in the workbench repository; their contents appear as SECTIONs of this bundle.",
+    "Relative links inside sections refer to files in the workbench repository; nearly all of their contents appear as SECTIONs of this bundle. If a linked file is not among the sections, say so rather than describing it from memory.",
   ];
 
   sections.forEach(([label, relativePath]) => {
@@ -364,7 +365,7 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are helping me read and use the essay "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
+  return `You are a close-reading and analysis assistant working under my direction. I am reading "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
 
 ${companionContextInstruction()}
 
@@ -381,7 +382,7 @@ transfer.`;
 }
 
 function workbenchSetupPrompt() {
-  return `You are helping me, a faculty member, use the NWC Faculty Workbench to design AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
+  return `You are a facilitation assistant for the NWC Faculty Workbench, working under my direction. I am a faculty member designing AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
 
 Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
 
@@ -458,7 +459,9 @@ Start by naming the objection in its strongest form, quoting the OBJECTIONS sect
 
 After you read the context file, help me turn "The Irreducible Officer" into a practical NWC learning exercise. Use the TRANSFER CASE and TRACEABLE ARTIFACT sections.
 
-Design a 60-90 minute exercise that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
+Before designing anything, ask me: my course or seminar, the artifact my students actually produce, and how much session time I have. Build on my answers rather than assuming.
+
+Then design an exercise sized to my time that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
 1. identify inherited AI-shaped inputs;
 2. force the learner to identify the frame, assumptions, evidence standard, and AI reliance decisions;
 3. include a flawed AI output or flawed frame;
@@ -486,7 +489,7 @@ After the session, assess what I commanded well, where I let the system set the 
 
 After you read the context file, act as an NWC seminar instructor conducting a short oral defense. Use the CLAIMS and TRACEABLE ARTIFACT sections.
 
-Ask one question at a time. Your goal is to determine whether I own the frame behind my AI-assisted work.
+Start by asking me what work I am defending and what role AI played in producing it. Then ask one question at a time. Your goal is to determine whether I own the frame behind my AI-assisted work.
 
 Press me on problem frame, assumptions, evidence standards, alternative frames, reliance decisions, rejected AI outputs, risks and costs, what would change my conclusion, and where human judgment must interrupt automation.
 
