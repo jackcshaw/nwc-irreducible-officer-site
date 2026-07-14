@@ -135,6 +135,7 @@ function buildCompanionContext() {
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "This bundle is generated from the public companion source materials.",
+    "Relative links inside sections refer to files in the companion repository; if a linked file is not among the sections, say so rather than describing it from memory.",
   ];
 
   sections.forEach(([label, relativePath]) => {
@@ -165,7 +166,7 @@ function buildWorkbenchContext() {
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
-    "Relative links inside sections refer to files in the workbench repository; their contents appear as SECTIONs of this bundle.",
+    "Relative links inside sections refer to files in the workbench repository; nearly all of their contents appear as SECTIONs of this bundle. If a linked file is not among the sections, say so rather than describing it from memory.",
   ];
 
   sections.forEach(([label, relativePath]) => {
