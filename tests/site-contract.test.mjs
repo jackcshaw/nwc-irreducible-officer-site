@@ -50,7 +50,6 @@ inlineScripts.forEach((script, index) => {
   "Workbench",
   "Sources",
   "What This Package Does",
-  "A Working Example",
   "One concrete model for operationalizing AI in professional military education",
   "Not a policy. A worked example",
   "Next Step",
@@ -76,12 +75,6 @@ inlineScripts.forEach((script, index) => {
   "Faculty Workbench",
   "Copy template",
   "Download template",
-  "Assignment Design Worksheet",
-  "Assessment And Oral-Defense Rubric",
-  "Flawed Output Library Template",
-  "Source Kit Template",
-  "Faculty Calibration Protocol",
-  "After-Action Note Template",
   "The Design Behind The Tools",
   "Future Context Layer",
   "not a current NWC system",
@@ -322,9 +315,28 @@ assert(articleHtml.includes("class=\"argument-insert closing-standard\""), "essa
 assert(!articleHtml.includes("assets/human-ai-human-loop.png"), "essay should use argument inserts instead of the old loop figure");
 assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use argument inserts instead of the old ladder figure");
 
-const workbenchToolsJson = html.match(/const workbenchTools = (\[.*?\]);/u);
-assert(workbenchToolsJson, "client script should embed the workbench tools JSON");
-const embeddedWorkbenchTools = JSON.parse(workbenchToolsJson[1]);
+// Workbench documents ship as a separate data file, fetched on demand when the
+// Workbench surface opens — they must not be inlined into the page.
+const workbenchDataPath = join(dist, "assets", "workbench-data.json");
+assert(existsSync(workbenchDataPath), "workbench data file should be generated");
+assert(!html.includes('"markdown":'), "workbench documents should not be inlined into the page");
+assert(html.includes('fetch("assets/workbench-data.json")'), "client script should fetch workbench data on demand");
+const workbenchData = JSON.parse(readFileSync(workbenchDataPath, "utf8"));
+const embeddedWorkbenchTools = workbenchData.tools;
+assert(Array.isArray(embeddedWorkbenchTools) && embeddedWorkbenchTools.length > 0, "workbench data should carry the tools");
+[
+  "Assignment Design Worksheet",
+  "Assessment And Oral-Defense Rubric",
+  "Flawed Output Library Template",
+  "Source Kit Template",
+  "Faculty Calibration Protocol",
+  "After-Action Note Template",
+].forEach((title) => {
+  assert(
+    embeddedWorkbenchTools.some((tool) => tool.title === title),
+    `workbench data should include ${title}`,
+  );
+});
 assert(
   embeddedWorkbenchTools.filter((tool) => tool.html && tool.html.includes("<table>")).length >= 2,
   "rendered workbench documents should include real tables",
@@ -338,9 +350,8 @@ embeddedWorkbenchTools.forEach((tool) => {
   );
 });
 
-const workbenchConceptsJson = html.match(/const workbenchConcepts = (\[.*?\]);/u);
-assert(workbenchConceptsJson, "client script should embed the workbench concepts JSON");
-const embeddedWorkbenchConcepts = JSON.parse(workbenchConceptsJson[1]);
+const embeddedWorkbenchConcepts = workbenchData.concepts;
+assert(Array.isArray(embeddedWorkbenchConcepts) && embeddedWorkbenchConcepts.length > 0, "workbench data should carry the concepts");
 assert(
   embeddedWorkbenchConcepts.filter((note) => note.html && note.html.includes("<blockquote>")).length >= 4,
   "rendered concept surfaces should include blockquotes (at least 4)",
@@ -394,10 +405,12 @@ conceptFiles.forEach((file) => {
   "The Design Behind The Tools",
   'id="workbench-doc-view"',
   "Hypothesis — awaiting NWC validation",
-  "Industry equivalent",
-  "Framework tie:",
 ].forEach((needle) => {
   assert(html.includes(needle), `site should include ${needle}`);
+});
+const workbenchDataRaw = readFileSync(workbenchDataPath, "utf8");
+["Industry equivalent", "Framework tie:"].forEach((needle) => {
+  assert(workbenchDataRaw.includes(needle), `workbench data should include ${needle}`);
 });
 assert((html.match(/How will your assistant get the file\?/gu) || []).length === 2, "both modes should offer the two doors");
 
@@ -410,6 +423,19 @@ assert(!/\]\(\.\.\//u.test(renderedDocContent), "rendered HTML should contain no
 assert(existsSync(join(dist, "assets", "workbench", "concepts", "README.md")), "concept downloads should be generated");
 
 console.log("site contract passed");
+
+// Accessibility and polish contract.
+assert(html.includes(":focus-visible"), "site should style keyboard focus");
+assert(html.includes("prefers-reduced-motion"), "site should respect reduced-motion preference");
+assert(html.includes('role="tablist"'), "surface navigation should be a tab pattern");
+assert((html.match(/role="tabpanel"/g) || []).length === 5, "each surface should be a tabpanel");
+assert(html.includes('id="copy-status"'), "copy feedback should have a live status region");
+assert(html.includes("history.pushState"), "surface changes should push history entries");
+assert(html.includes('property="og:image"'), "site should carry a social share image");
+assert(existsSync(join(dist, "assets", "share-card.png")), "share card should be generated");
+assert(!html.includes('class="eyebrow"'), "kicker labels above headings should stay removed");
+assert(!existsSync(join(dist, "assets", "human-ai-human-loop.png")), "orphaned loop diagram should not be generated");
+assert(!existsSync(join(dist, "assets", "framing-ladder.png")), "orphaned ladder diagram should not be generated");
 
 assert(
   (html.match(/headers the file contains/g) || []).length >= 8,
