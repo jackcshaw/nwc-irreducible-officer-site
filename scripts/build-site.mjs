@@ -2099,7 +2099,7 @@ h1 {
 }
 
 .prompt-card {
-  min-height: 210px;
+  min-height: 176px;
 }
 
 .prompt-card .copy-block {
@@ -2537,6 +2537,12 @@ body:not([data-active-mode="essay"]) .toc {
   gap: 0;
   margin-top: 44px;
   overflow: hidden;
+}
+
+/* The insert's opening rule (::before) must span the full grid row, not sit
+   in the first cell. */
+.closing-standard::before {
+  grid-column: 1 / -1;
 }
 
 .closing-standard p {
