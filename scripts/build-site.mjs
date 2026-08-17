@@ -17,9 +17,12 @@ const workbenchContextFilename = "workbench-context.md";
 const workbenchContextUrl = `${siteUrl}/assets/${workbenchContextFilename}`;
 const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
 const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
-const pythonPath =
-  process.env.PDF_PYTHON ||
-  "/Users/jackcshaw-2/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3";
+// PDF/share-card generation needs reportlab + pillow. By default uv supplies
+// them in an ephemeral environment; set PDF_PYTHON to a python3 that already
+// has both installed to skip uv.
+const assetCommand = process.env.PDF_PYTHON
+  ? { command: process.env.PDF_PYTHON, baseArgs: [] }
+  : { command: "uv", baseArgs: ["run", "--with", "reportlab", "--with", "pillow", "python3"] };
 
 const source = readFileSync(sourcePath, "utf8");
 const essayMarkdown = source.trim();
@@ -53,6 +56,31 @@ workbenchConcepts.forEach((note) => {
   writeFileSync(join(workbenchAssetsDir, "concepts", note.filename), note.markdown.trim() + "\n", "utf8");
 });
 
+// Workbench browsing data, fetched on demand when the Workbench surface opens
+// so essay readers never download it.
+writeFileSync(
+  join(assetsDir, "workbench-data.json"),
+  JSON.stringify({
+    tools: workbenchTools.map((tool) => ({
+      id: tool.id,
+      title: tool.title,
+      filename: tool.filename,
+      useNote: tool.useNote,
+      markdown: tool.markdown.trim(),
+      html: tool.html,
+    })),
+    concepts: workbenchConcepts.map((note) => ({
+      id: note.id,
+      title: note.title,
+      filename: note.filename,
+      summary: note.summary,
+      markdown: note.markdown.trim(),
+      html: note.html,
+    })),
+  }),
+  "utf8",
+);
+
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
   throw new Error(`Missing workbench file: ${progressionSvgPath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
@@ -60,8 +88,8 @@ if (!existsSync(progressionSvgPath)) {
 copyFileSync(progressionSvgPath, join(assetsDir, "asking-to-supervising.svg"));
 
 const assetResult = spawnSync(
-  pythonPath,
-  [join(root, "scripts", "generate-assets.py"), sourcePath, assetsDir],
+  assetCommand.command,
+  [...assetCommand.baseArgs, join(root, "scripts", "generate-assets.py"), sourcePath, assetsDir],
   { cwd: root, stdio: "inherit" },
 );
 
@@ -189,6 +217,19 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Irreducible Officer</title>
   <meta name="description" content="A public essay and working package for AI-enabled strategic judgment.">
+  <link rel="canonical" href="${siteUrl}/">
+  <meta name="theme-color" content="#f6f1e8">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The Irreducible Officer">
+  <meta property="og:description" content="Purpose, accountability, and AI-enabled strategic judgment. An essay, an AI companion, and a faculty workbench.">
+  <meta property="og:url" content="${siteUrl}/">
+  <meta property="og:image" content="${siteUrl}/assets/share-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Irreducible Officer">
+  <meta name="twitter:description" content="Purpose, accountability, and AI-enabled strategic judgment. An essay, an AI companion, and a faculty workbench.">
+  <meta name="twitter:image" content="${siteUrl}/assets/share-card.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a2242'/%3E%3Crect y='12' width='16' height='2' fill='%23d82032'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -199,12 +240,14 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 <body data-active-mode="overview">
   <header class="package-nav" aria-label="Package navigation">
     <a class="package-brand" href="#overview" data-mode-link="overview">The Irreducible Officer</a>
-    <nav class="package-tabs">
-      ${modeButton("overview", "Overview", true)}
-      ${modeButton("essay", "Essay")}
-      ${modeButton("companion", "Companion")}
-      ${modeButton("workbench", "Workbench")}
-      ${modeButton("sources", "Sources")}
+    <nav aria-label="Package surfaces">
+      <div class="package-tabs" role="tablist">
+        ${modeButton("overview", "Overview", true)}
+        ${modeButton("essay", "Essay")}
+        ${modeButton("companion", "Companion")}
+        ${modeButton("workbench", "Workbench")}
+        ${modeButton("sources", "Sources")}
+      </div>
     </nav>
   </header>
 
@@ -216,8 +259,8 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </aside>
 
     <div class="content-frame">
-      <section class="mode-view is-active" data-mode="overview">${overviewHtml}</section>
-      <section class="mode-view" data-mode="essay">
+      <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
+      <section class="mode-view" data-mode="essay" id="panel-essay" role="tabpanel" aria-labelledby="tab-essay">
         <div class="published">Published June 28, 2026</div>
         <div class="nwc-rule" aria-hidden="true"><span></span></div>
         <section class="essay-hero">
@@ -227,11 +270,13 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
         </section>
         <article class="essay article-body">${essayHtml}</article>
       </section>
-      <section class="mode-view" data-mode="companion">${companionHtml}</section>
-      <section class="mode-view" data-mode="workbench">${workbenchHtml}</section>
-      <section class="mode-view" data-mode="sources">${sourcesHtml}</section>
+      <section class="mode-view" data-mode="companion" id="panel-companion" role="tabpanel" aria-labelledby="tab-companion">${companionHtml}</section>
+      <section class="mode-view" data-mode="workbench" id="panel-workbench" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
+      <section class="mode-view" data-mode="sources" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources">${sourcesHtml}</section>
     </div>
   </main>
+
+  <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
 
   <script>${clientJs()}</script>
 </body>
@@ -254,14 +299,13 @@ function plausibleAnalytics() {
 }
 
 function modeButton(mode, label, active = false) {
-  return `<button type="button" data-mode-tab="${mode}" aria-pressed="${String(active)}">${label}</button>`;
+  return `<button type="button" id="tab-${mode}" role="tab" data-mode-tab="${mode}" aria-selected="${String(active)}" aria-controls="panel-${mode}" tabindex="${active ? "0" : "-1"}">${label}</button>`;
 }
 
 function buildOverviewMode() {
   return `<div class="surface overview">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="overview-hero">
-      <p class="eyebrow">A Working Example</p>
       <h1>The Irreducible Officer</h1>
       <p class="dek">One concrete model for operationalizing AI in professional military education, built as an essay, a practice companion, and a faculty workbench.</p>
       <p>
@@ -277,7 +321,7 @@ function buildOverviewMode() {
     </section>
 
     <section class="detail-band">
-      <p class="band-label">What This Package Does</p>
+      <h2 class="band-label">What This Package Does</h2>
       <p>
         The essay makes the case for teaching and assessing AI-enabled strategic
         judgment. The AI Companion helps a reader use ChatGPT, Claude, Gemini,
@@ -287,7 +331,7 @@ function buildOverviewMode() {
     </section>
 
     <section class="detail-band next-step-band">
-      <p class="band-label">Next Step</p>
+      <h2 class="band-label">Next Step</h2>
       <p>
         Want to see it work? Open the companion and run one session, then look
         at the workbench to see how faculty would use it.
@@ -313,7 +357,6 @@ function buildCompanionMode() {
   return `<div class="surface companion-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
-      <p class="eyebrow">Practice</p>
       <h1>AI Companion</h1>
       <p class="dek">Use ChatGPT, Claude, Gemini, or another AI assistant to work through the essay, test claims, design an exercise, and create a traceable learning artifact.</p>
       <p>
@@ -321,32 +364,35 @@ function buildCompanionMode() {
         complete, and facilitates your next step. Every template also works on
         paper. No repository knowledge required.
       </p>
-      <p class="eyebrow">How will your assistant get the file?</p>
+      <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
           <h3>Attach the file — works everywhere</h3>
           <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
-          <a class="copy-button primary" href="assets/${companionContextFilename}" download>Download context file</a>
-          <button class="quiet-action" type="button" data-copy-target="setup-prompt">Copy the prompt</button>
+          <div class="action-row">
+            <a class="copy-button primary" href="assets/${companionContextFilename}" download>Download context file</a>
+            <button class="quiet-action" type="button" data-copy-target="setup-prompt">Copy the prompt</button>
+          </div>
         </div>
         <div class="door">
           <h3>My assistant reads the web</h3>
           <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the companion file itself.</p>
-          <button class="copy-button" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
+          <div class="action-row">
+            <button class="copy-button" type="button" data-copy-target="setup-prompt">Copy setup prompt</button>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="setup-panel">
       <div class="panel-heading">
-        <p class="eyebrow">First Step</p>
         <h2>Paste this once into your AI assistant.</h2>
       </div>
       ${copyBlock("setup-prompt", setupPrompt())}
     </section>
 
     <section class="capability-section">
-      <p class="eyebrow">What You Can Do</p>
+      <h2 class="section-title">What You Can Do</h2>
       <div class="capability-grid">
         ${miniCard("Understand", "Get the thesis, argument map, likely misunderstanding, and open questions.")}
         ${miniCard("Inspect", "Audit claims against the source spine before deciding what you believe.")}
@@ -356,7 +402,7 @@ function buildCompanionMode() {
     </section>
 
     <section class="starter-section">
-      <p class="eyebrow">Choose A Starting Path</p>
+      <h2 class="section-title">Choose A Starting Path</h2>
       <div class="prompt-grid">
         ${starterPromptCards()}
       </div>
@@ -510,7 +556,6 @@ function buildWorkbenchMode(tools, concepts) {
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
-      <p class="eyebrow">Build</p>
       <h1>Faculty Workbench</h1>
       <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
@@ -518,37 +563,40 @@ function buildWorkbenchMode(tools, concepts) {
         six-phase fluency progression, and facilitates the right template with you.
         Every template also works on paper. No repository knowledge required.
       </p>
-      <p class="eyebrow">How will your assistant get the file?</p>
+      <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
           <h3>Attach the file — works everywhere</h3>
           <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
-          <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
-          <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+          <div class="action-row">
+            <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
+            <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+          </div>
         </div>
         <div class="door">
           <h3>My assistant reads the web</h3>
           <p>Copy the setup prompt and paste it into ChatGPT, Claude, or Gemini. It fetches the workbench itself.</p>
-          <button class="copy-button" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+          <div class="action-row">
+            <button class="copy-button" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="setup-panel">
       <div class="panel-heading">
-        <p class="eyebrow">First Step</p>
         <h2>Paste this once into your AI assistant.</h2>
       </div>
       ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
     </section>
 
     <section class="detail-band" id="workbench-progression">
-      <p class="band-label">The Progression Behind The Tools</p>
+      <h2 class="band-label">The Progression</h2>
       <p>
         Fluency grows from asking AI for help to supervising AI-supported work.
         Judgment stays human at every phase.
       </p>
-      <img src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution" style="width: 100%; height: auto; margin-top: 12px;">
+      <img class="progression-visual" src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution">
       <p class="visual-status">The persona rows above are reference-matrix content, published as
         <a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Hypothesis — awaiting NWC validation</a> — the concept note explains why.</p>
     </section>
@@ -558,7 +606,7 @@ function buildWorkbenchMode(tools, concepts) {
     </section>
 
     <section class="detail-band">
-      <p class="band-label">The Design Behind The Tools</p>
+      <h2 class="band-label">The Design Behind The Tools</h2>
       <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
     </section>
 
@@ -573,7 +621,6 @@ function buildWorkbenchMode(tools, concepts) {
     <section class="selected-tool" aria-live="polite">
       <div class="selected-heading">
         <div>
-          <p class="eyebrow">Selected Tool</p>
           <h2 id="selected-tool-title">${escapeHtml(selected.title)}</h2>
         </div>
         <div class="tool-actions">
@@ -583,17 +630,17 @@ function buildWorkbenchMode(tools, concepts) {
         </div>
       </div>
       <div class="template-layout">
-        <article class="template-rendered article-body" id="workbench-doc-view">${selected.html}</article>
+        <article class="template-rendered article-body" id="workbench-doc-view" tabindex="0" aria-label="Selected document">${selected.html}</article>
         <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
         <aside class="use-note">
-          <p class="eyebrow">How To Use It</p>
+          <h3 class="band-label">How To Use It</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
         </aside>
       </div>
     </section>
 
     <section class="detail-band future-layer">
-      <p class="band-label">Future Context Layer</p>
+      <h2 class="band-label">Future Context Layer</h2>
       <p>
         A future Librarian-style system could help faculty govern source kits,
         handoffs, proposals, diffs, and rollback. That belongs inside the
@@ -615,7 +662,6 @@ function buildSourcesMode() {
   return `<div class="surface sources-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
-      <p class="eyebrow">Sources</p>
       <h1>Evidence And Source Spine</h1>
       <p class="dek">The evidence map separates the essay's claims from the sources and open questions behind them.</p>
       <p>
@@ -637,26 +683,49 @@ function miniCard(title, body) {
 }
 
 function copyBlock(id, text) {
-  return `<pre class="copy-block"><code id="${id}">${escapeHtml(text)}</code></pre>`;
+  return `<pre class="copy-block" tabindex="0" role="region" aria-label="Prompt text"><code id="${id}">${escapeHtml(text)}</code></pre>`;
 }
 
 function placeEssayFigures(html) {
-  return html
-    .replace("The person is still present. The ownership may not be.</p>", `The person is still present. The ownership may not be.</p>
-${pullQuote("AI did not lower the bar for strategic judgment. It raised it, then hid whether the officer cleared it.")}`)
-    .replace('<p><strong>Frame capture</strong> occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it.', `${failureModesTable()}
-<p><strong>Frame capture</strong> occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it.`)
-    .replace("The framing is where the judgment lives: in the determination of what the situation requires, whose interests are implicated, what assumptions are doing work, and what kind of answer would actually matter. That is the intellectual work, not a preliminary step before it.</p>", `The framing is where the judgment lives: in the determination of what the situation requires, whose interests are implicated, what assumptions are doing work, and what kind of answer would actually matter. That is the intellectual work, not a preliminary step before it.</p>
-${pullQuote("The framing is where the judgment lives.")}`)
-    .replace("The educational target is specific. Students need to predict, with reasonable accuracy, when AI performs well for a given type of task and when it does not, and calibrate their use accordingly.</p>", `The educational target is specific. Students need to predict, with reasonable accuracy, when AI performs well for a given type of task and when it does not, and calibrate their use accordingly.</p>
-${relianceTable()}`)
-    .replace("Friction worth removing is real and abundant. Formatting, search, repetitive drafting, clerical assembly: these consume time without building judgment. AI can eliminate them and free student and faculty attention for the work that actually matters, a gain the design should capture.</p>", `Friction worth removing is real and abundant. Formatting, search, repetitive drafting, clerical assembly: these consume time without building judgment. AI can eliminate them and free student and faculty attention for the work that actually matters, a gain the design should capture.</p>
-${frictionCard()}`)
-    .replace("AI can compress the work before a decision. It cannot own what follows. A system that did not choose the purpose cannot answer for the consequences of pursuing it.</p>", `AI can compress the work before a decision. It cannot own what follows. A system that did not choose the purpose cannot answer for the consequences of pursuing it.</p>
-${pullQuote("AI can compress the work before a decision. It cannot own what follows.")}`)
-    .replace("The sequence runs inside a single existing assignment where framing is the central demand.</p>", `The sequence runs inside a single existing assignment where framing is the central demand.</p>
-${pilotSequence()}`)
-    .replace("<p>Frame the problem. Calibrate the tool. Refuse the garden path. Own the decision.</p>", closingStandard());
+  // Each insert is anchored to a sentence in the essay source. String.replace
+  // silently returns the input unchanged on a miss, which would ship the essay
+  // without its visual argument — so a missed anchor fails the build instead.
+  function insertAfter(input, anchor, insert) {
+    if (!input.includes(anchor)) {
+      throw new Error(`Essay figure anchor not found (essay prose changed?): "${anchor.slice(0, 80)}..."`);
+    }
+    return input.replace(anchor, `${anchor}\n${insert}`);
+  }
+  function insertBefore(input, anchor, insert) {
+    if (!input.includes(anchor)) {
+      throw new Error(`Essay figure anchor not found (essay prose changed?): "${anchor.slice(0, 80)}..."`);
+    }
+    return input.replace(anchor, `${insert}\n${anchor}`);
+  }
+  function replaceExact(input, anchor, replacement) {
+    if (!input.includes(anchor)) {
+      throw new Error(`Essay figure anchor not found (essay prose changed?): "${anchor.slice(0, 80)}..."`);
+    }
+    return input.replace(anchor, replacement);
+  }
+
+  let out = html;
+  out = insertAfter(out, "The person is still present. The ownership may not be.</p>",
+    pullQuote("AI did not lower the bar for strategic judgment. It raised it, then hid whether the officer cleared it."));
+  out = insertBefore(out, '<p><strong>Frame capture</strong> occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it.',
+    failureModesTable());
+  out = insertAfter(out, "The framing is where the judgment lives: in the determination of what the situation requires, whose interests are implicated, what assumptions are doing work, and what kind of answer would actually matter. That is the intellectual work, not a preliminary step before it.</p>",
+    pullQuote("The framing is where the judgment lives."));
+  out = insertAfter(out, "The educational target is specific. Students need to predict, with reasonable accuracy, when AI performs well for a given type of task and when it does not, and calibrate their use accordingly.</p>",
+    relianceTable());
+  out = insertAfter(out, "Friction worth removing is real and abundant. Formatting, search, repetitive drafting, clerical assembly: these consume time without building judgment. AI can eliminate them and free student and faculty attention for the work that actually matters, a gain the design should capture.</p>",
+    frictionCard());
+  out = insertAfter(out, "AI can compress the work before a decision. It cannot own what follows. A system that did not choose the purpose cannot answer for the consequences of pursuing it.</p>",
+    pullQuote("AI can compress the work before a decision. It cannot own what follows."));
+  out = insertAfter(out, "The sequence runs inside a single existing assignment where framing is the central demand.</p>",
+    pilotSequence());
+  out = replaceExact(out, "<p>Frame the problem. Calibrate the tool. Refuse the garden path. Own the decision.</p>", closingStandard());
+  return out;
 }
 
 function pullQuote(text) {
@@ -1089,22 +1158,34 @@ const toc = document.querySelector(".toc");
 const tocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
   .map((link) => ({ link, heading: document.getElementById(link.dataset.tocLink) }))
   .filter((entry) => entry.heading);
-const workbenchTools = ${JSON.stringify(workbenchTools.map((tool) => ({
-    id: tool.id,
-    title: tool.title,
-    filename: tool.filename,
-    useNote: tool.useNote,
-    markdown: tool.markdown.trim(),
-    html: tool.html,
-  })))};
-const workbenchConcepts = ${JSON.stringify(workbenchConcepts.map((note) => ({
-    id: note.id,
-    title: note.title,
-    filename: note.filename,
-    summary: note.summary,
-    markdown: note.markdown.trim(),
-    html: note.html,
-  })))};
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// Workbench documents are fetched on demand the first time the Workbench
+// surface opens, so essay readers never download them.
+let workbenchTools = [];
+let workbenchConcepts = [];
+let workbenchDataPromise = null;
+
+function ensureWorkbenchData() {
+  if (!workbenchDataPromise) {
+    workbenchDataPromise = fetch("assets/workbench-data.json")
+      .then((response) => {
+        if (!response.ok) throw new Error("workbench data " + response.status);
+        return response.json();
+      })
+      .then((data) => {
+        workbenchTools = data.tools || [];
+        workbenchConcepts = data.concepts || [];
+        return data;
+      })
+      .catch((error) => {
+        workbenchDataPromise = null;
+        throw error;
+      });
+  }
+  return workbenchDataPromise;
+}
+
 let tocFrame = null;
 let activeMode = document.body.dataset.activeMode || "overview";
 const reachedEssaySections = new Set();
@@ -1123,12 +1204,26 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
-function dotCenterY(entry) {
-  const dot = entry.link.querySelector("span");
-  if (!toc || !dot) return 0;
+// TOC geometry only changes on layout (resize, font load, mode change), never
+// on scroll — measure it once per layout instead of on every frame.
+let tocGeometry = null;
+
+function measureTocGeometry() {
+  if (!toc || !tocEntries.length) return null;
   const tocRect = toc.getBoundingClientRect();
-  const dotRect = dot.getBoundingClientRect();
-  return dotRect.top - tocRect.top + dotRect.height / 2;
+  const dotYs = tocEntries.map(({ link }) => {
+    const dot = link.querySelector("span");
+    if (!dot) return 0;
+    const dotRect = dot.getBoundingClientRect();
+    return dotRect.top - tocRect.top + dotRect.height / 2;
+  });
+  const headingTops = tocEntries.map(({ heading }) => heading.getBoundingClientRect().top + window.scrollY);
+  return { dotYs, headingTops };
+}
+
+function invalidateTocGeometry() {
+  tocGeometry = null;
+  requestTocUpdate();
 }
 
 function updateTocProgress() {
@@ -1141,8 +1236,12 @@ function updateTocProgress() {
     return;
   }
 
+  if (!tocGeometry) tocGeometry = measureTocGeometry();
+  if (!tocGeometry) return;
+  const { dotYs, headingTops } = tocGeometry;
+
   const marker = window.scrollY + Math.min(window.innerHeight * 0.36, 280);
-  const positions = tocEntries.map(({ heading }) => heading.getBoundingClientRect().top + window.scrollY);
+  const positions = headingTops;
   let activeIndex = 0;
 
   positions.forEach((top, index) => {
@@ -1151,11 +1250,10 @@ function updateTocProgress() {
     }
   });
 
-  const firstY = dotCenterY(tocEntries[0]);
-  const lastY = dotCenterY(tocEntries[tocEntries.length - 1]);
-  const activeY = dotCenterY(tocEntries[activeIndex]);
-  const nextEntry = tocEntries[Math.min(activeIndex + 1, tocEntries.length - 1)];
-  const nextY = dotCenterY(nextEntry);
+  const firstY = dotYs[0];
+  const lastY = dotYs[dotYs.length - 1];
+  const activeY = dotYs[activeIndex];
+  const nextY = dotYs[Math.min(activeIndex + 1, dotYs.length - 1)];
   const activeTop = positions[activeIndex];
   const nextTop = positions[Math.min(activeIndex + 1, positions.length - 1)] || activeTop + window.innerHeight;
   const sectionProgress = nextTop === activeTop ? 0 : clamp((marker - activeTop) / (nextTop - activeTop), 0, 1);
@@ -1188,27 +1286,41 @@ function requestTocUpdate() {
   });
 }
 
-function setMode(mode, shouldScroll = true) {
+function smoothBehavior() {
+  return reducedMotion.matches ? "auto" : "smooth";
+}
+
+function setMode(mode, shouldScroll = true, push = false) {
   const previousMode = activeMode;
   activeMode = mode;
   document.body.dataset.activeMode = mode;
   buttons.forEach((button) => {
     const active = button.dataset.modeTab === mode;
-    button.setAttribute("aria-pressed", String(active));
+    button.setAttribute("aria-selected", String(active));
+    button.tabIndex = active ? 0 : -1;
   });
   views.forEach((view) => {
     view.classList.toggle("is-active", view.dataset.mode === mode);
   });
   if (location.hash !== "#" + mode) {
-    history.replaceState(null, "", "#" + mode);
+    // User-initiated surface changes push a history entry so Back returns to
+    // the previous surface instead of leaving the site.
+    if (push) {
+      history.pushState(null, "", "#" + mode);
+    } else {
+      history.replaceState(null, "", "#" + mode);
+    }
+  }
+  if (mode === "workbench") {
+    ensureWorkbenchData().catch(() => {});
   }
   if (shouldScroll) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: smoothBehavior() });
   }
   if (mode !== previousMode || shouldScroll) {
     trackPackageEvent("Surface Viewed", { surface: mode, label: eventLabelFromMode(mode) });
   }
-  requestTocUpdate();
+  invalidateTocGeometry();
 }
 
 function scrollElementBelowNav(element, { behavior = "auto", offset = 34 } = {}) {
@@ -1218,7 +1330,7 @@ function scrollElementBelowNav(element, { behavior = "auto", offset = 34 } = {})
   const root = document.documentElement;
   const previousScrollBehavior = root.style.scrollBehavior;
   root.style.scrollBehavior = "auto";
-  window.scrollTo({ top: Math.max(0, top), behavior });
+  window.scrollTo({ top: Math.max(0, top), behavior: behavior === "smooth" ? smoothBehavior() : behavior });
   root.style.scrollBehavior = previousScrollBehavior;
 }
 
@@ -1247,9 +1359,27 @@ function openEssaySection(sectionId, track = true) {
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     trackPackageEvent("Top Navigation Clicked", { surface: button.dataset.modeTab });
-    setMode(button.dataset.modeTab);
+    setMode(button.dataset.modeTab, true, true);
   });
 });
+
+// Arrow-key navigation between surface tabs (roving tabindex).
+const tablist = document.querySelector('[role="tablist"]');
+if (tablist) {
+  tablist.addEventListener("keydown", (event) => {
+    const keys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const current = buttons.findIndex((button) => button.dataset.modeTab === activeMode);
+    let next = current;
+    if (event.key === "ArrowLeft") next = (current - 1 + buttons.length) % buttons.length;
+    if (event.key === "ArrowRight") next = (current + 1) % buttons.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = buttons.length - 1;
+    setMode(buttons[next].dataset.modeTab, true, true);
+    buttons[next].focus();
+  });
+}
 
 modeLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
@@ -1257,7 +1387,7 @@ modeLinks.forEach((link) => {
     if (!modeNames.includes(mode)) return;
     event.preventDefault();
     trackPackageEvent("Package Path Opened", { surface: mode, label: eventLabelFromMode(mode) });
-    setMode(mode);
+    setMode(mode, true, true);
   });
 });
 
@@ -1282,7 +1412,10 @@ tocEntries.forEach(({ link, heading }) => {
 });
 
 window.addEventListener("scroll", requestTocUpdate, { passive: true });
-window.addEventListener("resize", requestTocUpdate);
+window.addEventListener("resize", invalidateTocGeometry);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(invalidateTocGeometry);
+}
 window.addEventListener("hashchange", () => {
   const mode = location.hash.replace("#", "");
   if (modeNames.includes(mode)) {
@@ -1303,6 +1436,37 @@ if (modeNames.includes(initial)) {
 }
 requestTocUpdate();
 
+const copyStatus = document.getElementById("copy-status");
+
+function announceCopy(message) {
+  if (copyStatus) copyStatus.textContent = message;
+}
+
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
+  }
+  // Fallback for non-secure contexts, where navigator.clipboard is unavailable.
+  return new Promise((resolve, reject) => {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    scratch.setAttribute("readonly", "");
+    scratch.style.position = "fixed";
+    scratch.style.opacity = "0";
+    document.body.appendChild(scratch);
+    scratch.select();
+    let copied = false;
+    try {
+      copied = document.execCommand("copy");
+    } catch {
+      copied = false;
+    }
+    scratch.remove();
+    if (copied) resolve();
+    else reject(new Error("copy command failed"));
+  });
+}
+
 document.querySelectorAll("[data-copy-target]").forEach((button) => {
   button.addEventListener("click", async () => {
     const target = document.getElementById(button.dataset.copyTarget);
@@ -1310,8 +1474,9 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
     const original = button.textContent;
     const copyTarget = button.dataset.copyTarget;
     try {
-      await navigator.clipboard.writeText(target.textContent);
+      await copyTextToClipboard(target.textContent);
       button.textContent = "Copied";
+      announceCopy("Copied to clipboard.");
       trackPackageEvent("Copy Action", {
         target: copyTarget,
         surface: document.body.dataset.activeMode || activeMode,
@@ -1321,6 +1486,7 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
       }, 1400);
     } catch {
       button.textContent = "Copy failed";
+      announceCopy("Copy failed. Select the prompt text and copy it manually.");
       window.setTimeout(() => {
         button.textContent = original;
       }, 1400);
@@ -1349,7 +1515,12 @@ function selectDocument(item, isFromConcept = false) {
 }
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
+    try {
+      await ensureWorkbenchData();
+    } catch {
+      return;
+    }
     const tool = workbenchTools.find((item) => item.id === button.dataset.toolId);
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
@@ -1359,7 +1530,12 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
 });
 
 document.querySelectorAll("[data-concept-id]").forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", async () => {
+    try {
+      await ensureWorkbenchData();
+    } catch {
+      return;
+    }
     const concept = workbenchConcepts.find((item) => item.id === button.dataset.conceptId);
     if (!concept) return;
     trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
@@ -1377,20 +1553,24 @@ document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
   });
 });
 
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
   const link = event.target.closest("[data-wb-link]");
   if (!link) return;
+  event.preventDefault();
+  try {
+    await ensureWorkbenchData();
+  } catch {
+    return;
+  }
   const id = link.getAttribute("href").replace("#wb-doc-", "");
   const toolDoc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
   const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
   if (toolDoc) {
-    event.preventDefault();
     const button = document.querySelector(\`[data-tool-id="\${toolDoc.id}"]\`);
     if (button) {
       button.click();
     }
   } else if (conceptDoc) {
-    event.preventDefault();
     const button = document.querySelector(\`[data-concept-id="\${conceptDoc.id}"]\`);
     if (button) {
       button.click();
@@ -1434,14 +1614,25 @@ function css() {
   return `:root {
   --paper: #f6f1e8;
   --paper-soft: #fbf8f2;
+  --paper-bright: #fffdfa;
   --ink: #0a2242;
+  --ink-soft: #39404a;
   --body: #242a31;
   --muted: #4d5360;
+  --stone: #5b564f;
+  --stone-faint: #847d74;
   --faint: #d7d0c4;
+  --rail: #c9c5c0;
   --navy-wash: rgba(8, 35, 70, 0.055);
+  --navy-band: rgba(8, 35, 70, 0.045);
+  --navy-line: rgba(8, 35, 70, 0.1);
   --navy-soft: rgba(8, 35, 70, 0.1);
+  --navy-hairline: rgba(8, 35, 70, 0.12);
+  --navy-divider: rgba(8, 35, 70, 0.14);
   --navy-border: rgba(8, 35, 70, 0.15);
-  --red: #d82032;
+  --code-bg: #211f1e;
+  --code-ink: #fffaf1;
+  --red: #b81b2b;
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Newsreader", Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -1467,6 +1658,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 a {
   color: inherit;
 }
@@ -1483,6 +1679,48 @@ a {
 button:active,
 a:active {
   transform: scale(0.99);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.copy-block,
+.template-rendered {
+  scrollbar-width: thin;
+  scrollbar-color: var(--stone-faint) transparent;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  button,
+  a,
+  .toc a,
+  .toc a span,
+  .toc::after {
+    transition: none;
+  }
+
+  button:active,
+  a:active {
+    transform: none;
+  }
 }
 
 .package-nav {
@@ -1506,6 +1744,7 @@ a:active {
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+  padding: 13px 0;
 }
 
 .package-tabs {
@@ -1517,28 +1756,28 @@ a:active {
 
 .package-tabs button {
   position: relative;
+  min-height: 44px;
   border: 0;
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  padding: 8px 11px;
+  padding: 12px 13px;
   font-family: var(--font-mono);
   font-size: 12px;
 }
 
-.package-tabs button[aria-pressed="true"] {
+.package-tabs button[aria-selected="true"] {
   background: var(--navy-soft);
   color: var(--ink);
-  padding-left: 13px;
 }
 
-.package-tabs button[aria-pressed="true"]::before {
+.package-tabs button[aria-selected="true"]::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: 7px;
-  bottom: 7px;
-  width: 3px;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 2px;
   background: var(--red);
 }
 
@@ -1596,7 +1835,6 @@ body:not([data-active-mode="essay"]) .site-shell {
   background: var(--red);
 }
 
-.eyebrow,
 .published,
 .path-target,
 .path-action,
@@ -1609,15 +1847,6 @@ body:not([data-active-mode="essay"]) .site-shell {
 .toc,
 .package-nav {
   font-family: var(--font-mono);
-}
-
-.eyebrow {
-  margin: 0 0 18px;
-  color: var(--red);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  line-height: 1.25;
-  text-transform: uppercase;
 }
 
 h1,
@@ -1647,8 +1876,8 @@ h1 {
   margin-bottom: 30px;
 }
 
-.surface-hero > p:not(.eyebrow),
-.overview-hero > p:not(.eyebrow) {
+.surface-hero > p,
+.overview-hero > p {
   max-width: 740px;
   color: var(--body);
   font-size: 18px;
@@ -1657,7 +1886,7 @@ h1 {
 
 .surface-hero .helper-note {
   margin-top: 14px;
-  color: #4f5661;
+  color: var(--muted);
   font-size: 16px;
   line-height: 1.5;
 }
@@ -1667,7 +1896,17 @@ h1 {
   margin: 18px 0 22px;
   color: var(--muted);
   font-size: clamp(22px, 2.4vw, 30px);
-  line-height: 1.22;
+  line-height: 1.32;
+}
+
+.section-title {
+  margin: 0 0 18px;
+  font-size: 30px;
+}
+
+.door-question {
+  margin: 34px 0 14px;
+  font-size: 24px;
 }
 
 .path-cards,
@@ -1709,8 +1948,8 @@ h1 {
 .prompt-card:hover,
 .mini-card:hover,
 .tool-card.is-selected {
-  border-color: rgba(216, 32, 50, 0.38);
-  background: #fffdfa;
+  border-color: rgba(184, 27, 43, 0.42);
+  background: var(--paper-bright);
 }
 
 .path-verb,
@@ -1752,20 +1991,23 @@ h1 {
 .detail-band {
   margin-top: 18px;
   padding: 18px 20px;
-  border: 1px solid rgba(8, 35, 70, 0.1);
-  background: rgba(8, 35, 70, 0.045);
+  border: 1px solid var(--navy-line);
+  background: var(--navy-band);
 }
 
 .band-label {
-  margin-bottom: 8px;
+  margin: 0 0 8px;
   color: var(--ink);
+  font-family: var(--font-mono);
   font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.06em;
+  line-height: 1.3;
   text-transform: uppercase;
 }
 
 .detail-band > p:not(.band-label) {
-  color: #39404a;
+  color: var(--ink-soft);
   font-size: 16px;
   line-height: 1.48;
 }
@@ -1786,13 +2028,13 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 44px;
   border: 1px solid rgba(8, 35, 70, 0.2);
   background: var(--paper-soft);
   color: var(--ink);
   cursor: pointer;
   font-size: 11px;
-  padding: 0 12px;
+  padding: 0 14px;
   text-decoration: none;
 }
 
@@ -1813,7 +2055,7 @@ h1 {
   border: 0;
   background: transparent;
   cursor: pointer;
-  padding: 18px 0 0;
+  padding: 18px 0 10px;
 }
 
 .setup-panel,
@@ -1822,7 +2064,7 @@ h1 {
 .selected-tool {
   margin-top: 30px;
   padding-top: 18px;
-  border-top: 1px solid rgba(8, 35, 70, 0.14);
+  border-top: 1px solid var(--navy-divider);
 }
 
 .panel-heading {
@@ -1838,8 +2080,8 @@ h1 {
   max-height: 360px;
   margin: 0;
   overflow: auto;
-  border: 1px solid rgba(8, 35, 70, 0.12);
-  background: rgba(8, 35, 70, 0.055);
+  border: 1px solid var(--navy-hairline);
+  background: var(--navy-wash);
   color: var(--body);
   padding: 16px;
   white-space: pre-wrap;
@@ -1857,7 +2099,7 @@ h1 {
 }
 
 .prompt-card {
-  min-height: 210px;
+  min-height: 176px;
 }
 
 .prompt-card .copy-block {
@@ -1866,14 +2108,14 @@ h1 {
 
 .source-spine {
   max-width: 900px;
-  border-top: 1px solid rgba(8, 35, 70, 0.14);
+  border-top: 1px solid var(--navy-divider);
   padding-top: 10px;
 }
 
 .source-spine.article-body h2 {
   margin: 30px 0 10px;
   padding-top: 20px;
-  border-top: 1px solid rgba(8, 35, 70, 0.14);
+  border-top: 1px solid var(--navy-divider);
   color: var(--red);
   font-family: var(--font-mono);
   font-size: 16px;
@@ -1909,19 +2151,42 @@ h1 {
   gap: 16px;
 }
 
-.template-rendered { max-height: 640px; overflow-y: auto; padding: 20px 24px; background: var(--paper-soft); border: 1px solid rgba(8, 35, 70, 0.12); }
-.template-rendered table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
-.template-rendered th, .template-rendered td { border: 1px solid var(--navy-border); padding: 6px 10px; text-align: left; }
-.template-rendered blockquote { border-left: 3px solid var(--red); margin: 12px 0; padding: 4px 14px; }
+.template-rendered {
+  max-height: 640px;
+  overflow-y: auto;
+  padding: 20px 24px;
+  background: var(--paper-soft);
+  border: 1px solid var(--navy-hairline);
+}
+
+.template-rendered table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.template-rendered th,
+.template-rendered td {
+  border: 1px solid var(--navy-border);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.template-rendered blockquote {
+  margin: 12px 0;
+  padding: 8px 16px;
+  border: 1px solid var(--navy-line);
+  background: var(--navy-band);
+}
 
 .use-note {
-  border: 1px solid rgba(8, 35, 70, 0.1);
-  background: rgba(8, 35, 70, 0.045);
+  border: 1px solid var(--navy-line);
+  background: var(--navy-band);
   padding: 18px;
 }
 
 .use-note p:last-child {
-  color: #39404a;
+  color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.45;
 }
@@ -1967,7 +2232,7 @@ body:not([data-active-mode="essay"]) .toc {
   top: 7px;
   bottom: 14px;
   width: 1px;
-  background: #c9c5c0;
+  background: var(--rail);
 }
 
 .toc::after {
@@ -1980,7 +2245,6 @@ body:not([data-active-mode="essay"]) .toc {
   height: var(--toc-progress);
   max-height: calc(100% - var(--toc-fill-top) - 14px);
   background: var(--ink);
-  transition: height 140ms linear;
 }
 
 .toc a {
@@ -1990,7 +2254,7 @@ body:not([data-active-mode="essay"]) .toc {
   min-height: 31px;
   margin: 0 0 15px;
   padding: 0 0 0 34px;
-  color: #918d89;
+  color: var(--stone);
   font-size: 12px;
   line-height: 1.35;
   text-decoration: none;
@@ -2003,7 +2267,7 @@ body:not([data-active-mode="essay"]) .toc {
   top: 3px;
   width: 9px;
   height: 9px;
-  border: 1px solid #9b9792;
+  border: 1px solid var(--stone-faint);
   border-radius: 50%;
   background: var(--paper);
   transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
@@ -2071,7 +2335,7 @@ body:not([data-active-mode="essay"]) .toc {
 
 .article-body p {
   margin: 0 0 22px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .article-body ul,
@@ -2082,12 +2346,12 @@ body:not([data-active-mode="essay"]) .toc {
 
 .article-body li {
   margin: 8px 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .article-body a {
   color: var(--ink);
-  text-decoration-color: rgba(216, 32, 50, 0.45);
+  text-decoration-color: rgba(184, 27, 43, 0.5);
   text-underline-offset: 0.18em;
   overflow-wrap: anywhere;
 }
@@ -2102,8 +2366,8 @@ body:not([data-active-mode="essay"]) .toc {
   padding: 18px;
   overflow: auto;
   border: 1px solid var(--faint);
-  background: #211f1e;
-  color: #fffaf1;
+  background: var(--code-bg);
+  color: var(--code-ink);
 }
 
 .article-body hr {
@@ -2133,13 +2397,21 @@ body:not([data-active-mode="essay"]) .toc {
 .argument-insert {
   margin: 34px 0 36px;
   border: 1px solid var(--navy-border);
-  border-left: 3px solid var(--red);
   background: linear-gradient(90deg, rgba(8, 35, 70, 0.06), rgba(8, 35, 70, 0.025));
   color: var(--body);
 }
 
+/* Argument inserts open with the site's horizontal ink-and-red rule signature
+   (see .nwc-rule) rather than a colored side tab. */
+.argument-insert::before {
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ink) 0, var(--ink) 78px, var(--red) 78px, var(--red) 106px, transparent 106px);
+}
+
 .pull-quote {
-  padding: 20px 24px 20px 26px;
+  padding: 18px 24px 20px;
 }
 
 .pull-quote p {
@@ -2149,19 +2421,19 @@ body:not([data-active-mode="essay"]) .toc {
   font-family: var(--font-body);
   font-size: clamp(22px, 2.2vw, 28px);
   font-style: italic;
-  line-height: 1.22;
+  line-height: 1.3;
 }
 
 .insert-label {
   margin: 0;
-  padding: 14px 18px 10px;
-  border-bottom: 1px solid rgba(8, 35, 70, 0.1);
+  padding: 12px 18px 10px;
+  border-bottom: 1px solid var(--navy-line);
   color: var(--red);
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   line-height: 1.25;
-  text-transform: uppercase;
 }
 
 .argument-table {
@@ -2179,7 +2451,7 @@ body:not([data-active-mode="essay"]) .toc {
 
 .argument-table th,
 .argument-table td {
-  border-bottom: 1px solid rgba(8, 35, 70, 0.1);
+  border-bottom: 1px solid var(--navy-line);
   padding: 13px 14px;
   text-align: left;
   vertical-align: top;
@@ -2191,7 +2463,7 @@ body:not([data-active-mode="essay"]) .toc {
 }
 
 .argument-table td {
-  color: #39404a;
+  color: var(--ink-soft);
 }
 
 .argument-table tbody tr:last-child td {
@@ -2225,7 +2497,7 @@ body:not([data-active-mode="essay"]) .toc {
 .friction-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-bottom: 1px solid rgba(8, 35, 70, 0.1);
+  border-bottom: 1px solid var(--navy-line);
 }
 
 .friction-grid > div {
@@ -2233,7 +2505,7 @@ body:not([data-active-mode="essay"]) .toc {
 }
 
 .friction-grid > div:first-child {
-  border-right: 1px solid rgba(8, 35, 70, 0.1);
+  border-right: 1px solid var(--navy-line);
 }
 
 .friction-card h3 {
@@ -2246,7 +2518,7 @@ body:not([data-active-mode="essay"]) .toc {
 
 .friction-card p {
   margin: 0;
-  color: #39404a;
+  color: var(--ink-soft);
   font-size: 17px;
   line-height: 1.4;
 }
@@ -2267,10 +2539,16 @@ body:not([data-active-mode="essay"]) .toc {
   overflow: hidden;
 }
 
+/* The insert's opening rule (::before) must span the full grid row, not sit
+   in the first cell. */
+.closing-standard::before {
+  grid-column: 1 / -1;
+}
+
 .closing-standard p {
   margin: 0;
   min-height: 96px;
-  border-right: 1px solid rgba(8, 35, 70, 0.1);
+  border-right: 1px solid var(--navy-line);
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 24px;
@@ -2299,7 +2577,7 @@ body:not([data-active-mode="essay"]) .toc {
   position: relative;
   min-height: 116px;
   padding: 18px 14px 16px;
-  border-right: 1px solid rgba(8, 35, 70, 0.1);
+  border-right: 1px solid var(--navy-line);
 }
 
 .pilot-sequence li:last-child {
@@ -2345,12 +2623,50 @@ body:not([data-active-mode="essay"]) .toc {
   line-height: 1.45;
 }
 
-.door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 8px; }
-.door { border: 1px solid var(--navy-border); padding: 18px 20px; background: rgba(255,255,255,0.5); }
-.door h3 { margin: 0 0 6px; font-size: 1.05rem; }
-.door p { margin: 0 0 12px; font-size: 0.95rem; }
+.door-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 8px;
+}
 
-.visual-status { font-size: 0.9rem; margin-top: 8px; opacity: 0.85; }
+.door {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--navy-border);
+  background: var(--paper-soft);
+  padding: 20px;
+}
+
+.door h3 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  line-height: 1.15;
+}
+
+.door p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.door .action-row {
+  margin-top: auto;
+}
+
+.visual-status {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.progression-visual {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 12px;
+}
 
 @media (max-width: 980px) {
   .package-nav {
@@ -2403,7 +2719,7 @@ body:not([data-active-mode="essay"]) .toc {
   .friction-grid > div:first-child,
   .closing-standard p {
     border-right: 0;
-    border-bottom: 1px solid rgba(8, 35, 70, 0.1);
+    border-bottom: 1px solid var(--navy-line);
   }
 
   .closing-standard p:last-child {
@@ -2421,7 +2737,7 @@ body:not([data-active-mode="essay"]) .toc {
   .pilot-sequence li {
     min-height: 0;
     border-right: 0;
-    border-bottom: 1px solid rgba(8, 35, 70, 0.1);
+    border-bottom: 1px solid var(--navy-line);
   }
 
   .pilot-sequence li:last-child {
