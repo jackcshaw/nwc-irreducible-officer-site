@@ -22,6 +22,7 @@ transcripts, or audit notes.
 
 - Essay source: `content/the-irreducible-officer.md`
 - Companion source checkout: set `COMPANION_REPO_PATH` or use the default sibling checkout at `../companion`
+- Workbench source checkout: set `WORKBENCH_REPO_PATH` or use the default sibling checkout at `../workbench`
 - Build script: `scripts/build-site.mjs`
 - Asset generator: `scripts/generate-assets.py`
 - Site contract: `tests/site-contract.test.mjs`
@@ -29,9 +30,18 @@ transcripts, or audit notes.
 ## Commands
 
 ```bash
+export COMPANION_REPO_PATH=/path/to/nwc-irreducible-officer-companion   # default: ../companion
+export WORKBENCH_REPO_PATH=/path/to/nwc-faculty-workbench               # default: ../workbench
+
 npm run build
 npm test
 npm run dev
 ```
+
+Both `npm run build` and `npm test` read the companion and workbench checkouts,
+so set the two env vars (or place the checkouts at the default sibling paths)
+before running either. Asset generation (PDF + share card) runs via
+`uv run --with reportlab --with pillow`; set `PDF_PYTHON` to a python3 that
+already has both packages to skip uv.
 
 The build writes public output to `dist/`.
