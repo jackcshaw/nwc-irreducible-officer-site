@@ -115,3 +115,26 @@ assert.equal(prompt.textContent,'generic prompt');
 console.log('workbench audience contract passed: 27 adapted templates, 3 matrices, bundles, links, and live audience handler');
 
 assert(html.includes("assets/workbench-data.json?v="+createHash("sha256").update(read("assets/workbench-data.json")).digest("hex").slice(0,16)),"Workbench data cache key must match content");
+
+// The five user-facing paths are distinct; the original essay remains reachable under Learn.
+const navLabels=[...html.matchAll(/id="tab-[^"]+"[^>]+>([^<]+)<\/button>/g)].map(m=>m[1]);
+assert.deepEqual(navLabels,["Learn","Discuss","Practice","Design","References"]);
+assert(html.includes('aria-label="The Irreducible Officer"'));
+assert(html.includes('Strengthening human judgment in AI-enabled work.'));
+const claims=JSON.parse(readFileSync(join(root,'content/discussion-claims.json'),'utf8')).claims;
+assert.equal(claims.length,5);
+for(const c of claims) {
+ assert(html.includes('id="discuss-'+c.id+'"'));
+ assert(html.includes(c.objection));
+ assert(c.sources.length>0);
+ for(const source of c.sources) { assert(html.includes(source.href));assert(!source.label.includes(' · '),'Merged discussion evidence links'); }
+}
+context.location = new URL('https://test.example/?audience=he&claim=better#companion');
+context.applyAudience('he');
+assert(prompt.textContent.includes('Invisible delegation'));
+assert(prompt.textContent.includes('Use the HE audience guide'));
+context.location.searchParams.delete('claim');
+context.applyAudience('he');
+assert(!prompt.textContent.includes('Coming from the group discussion'));
+assert(prompt.textContent.includes('workbench-context-he.md'));
+console.log('masthead and discussion contract passed: five paths, five sourced claims, and clearable audience-preserving handoff');

@@ -392,10 +392,10 @@ def write_share_card(output_path):
     draw.text((margin - 4, rule_y + 52), "Judgment Lab", font=title_font, fill=ink)
     draw.text((margin - 4, rule_y + 158), "", font=title_font, fill=ink)
 
-    sub_font = font(33)
+    sub_font = font(31)
     draw.text(
         (margin, rule_y + 296),
-        "Practice judgment in AI-enabled work.",
+        "Strengthening human judgment in AI-enabled work.",
         font=sub_font,
         fill=muted,
     )

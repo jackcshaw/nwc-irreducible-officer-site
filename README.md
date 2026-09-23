@@ -2,7 +2,7 @@
 
 This repo builds Judgment Lab for PME, higher education, and K–12 (high school first). The Irreducible Officer remains the original PME essay.
 
-To read the essay, run the AI Companion, or use the Faculty Workbench, start at:
+The canonical production address is:
 
 https://judgmentlab.net
 
@@ -59,3 +59,14 @@ For a preview, set `SITE_URL` to its base URL when building. Browser copy action
 Selecting PME, HE, or high school changes the visible example, reference matrix, nine tool adaptations, setup prompt, and context download. Source profiles and guides live in the workbench `audiences/` directory; `scripts/workbench-audiences.mjs` builds 27 adapted template downloads, three standalone matrix SVGs, and three 14-section context bundles. The shared workbench bundle has 16 sections. Markdown and JSON assets revalidate to prevent old context files lingering after a testing update.
 
 Run `npm test` after the build to verify source/profile agreement, all adapted links, copy/download/bundle parity, the shipped audience handler, and the original essay contracts.
+
+
+### Judgment Lab masthead and five paths
+
+Purpose: **Strengthening human judgment in AI-enabled work.** The primary paths are Learn, Discuss, Practice, Design, and References. The original essay sits under Learn; legacy routes remain supported alongside `#learn`, `#practice`, `#design`, and `#references` aliases.
+
+The current testing edition is published at https://nwc-learning-companion--audience-refresh-zkiwg8wa.web.app. Production publication is a separate release step.
+
+The identity refinement is in `styles/lab-refresh.css`, appended by the generator. It retains the established cream/navy/red palette and serif typography. The masthead is global; only the path navigation sticks while scrolling.
+
+Discuss uses the five claims in `content/discussion-claims.json`, transcribed from the Judgment in Practice EduFish edition on September 23, 2026. Provenance is recorded in the file. Source links, objections, and discussion prompts remain visible; the original facilitator guide and reading room are linked. This does not migrate or change the separate application. `?claim=<id>` carries a claim into Practice/Design and can be cleared without changing audience. New browser contracts verify claim completeness and prompt handoff.
