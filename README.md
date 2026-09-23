@@ -1,6 +1,6 @@
-# The Irreducible Officer Website
+# Judgment Lab Website
 
-This repo is the public website layer for **The Irreducible Officer**.
+This repo builds Judgment Lab for PME, higher education, and K–12 (high school first). The Irreducible Officer remains the original PME essay.
 
 To read the essay, run the AI Companion, or use the Faculty Workbench, start at:
 
@@ -45,3 +45,11 @@ before running either. Asset generation (PDF + share card) runs via
 already has both packages to skip uv.
 
 The build writes public output to `dist/`.
+
+## Audience testing edition
+
+The homepage, audience views, companion prompts, workbench, source page, and downloadable contexts share the companion audience guides. Select a setting; its choice travels in the URL and is included in copied prompts. Existing essay anchors and context URLs remain supported. Individual workbench documents have stable `#wb-doc-<filename-without-extension>` links.
+
+Active source checkouts for this refresh are the three `nwc-irreducible-officer-*` / `nwc-faculty-workbench` siblings. Set explicit source paths; the older `nwc/` copies are not this release candidate. The essay source remains `content/the-irreducible-officer.md`, matched against the companion mirror at build time.
+
+For a preview, set `SITE_URL` to its base URL when building. Browser copy actions also use the current origin so preview sessions read preview assets. Run the build, contract tests, and audience checks before deploying. Educator and classroom validation remain pending.

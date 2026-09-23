@@ -2,23 +2,17 @@
 
 This note exists to prevent the NWC package from drifting back into mixed checkouts, stale drafts, and unclear source-of-truth rules.
 
-## Canonical Workspace
+## Active refresh workspace
 
-Use this local workspace:
+For the September 2026 audience testing edition, use these repositories:
 
-`/Users/jackcshaw-2/dev/comprendo-clients/nwc`
+- Site: `/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site`
+- Companion: `/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-companion`
+- Workbench: `/Users/jackcshaw-2/dev/comprendo-clients/nwc-faculty-workbench`
 
-It contains three separate repos:
+The earlier `nwc/{site,companion,workbench}` checkouts are older snapshots and are not the release candidate. The active site contains the subsequent accessibility/performance changes. Set COMPANION_REPO_PATH and WORKBENCH_REPO_PATH explicitly when building. The deployed host was verified to be Firebase site `nwc-learning-companion`, also serving judgmentlab.net. The separate `judgment-in-practice` Firebase site is a different application.
 
-- `site/` - public website, generated assets, package routing, and provenance archive.
-- `companion/` - AI companion source materials used to generate the public context bundle.
-- `workbench/` - faculty-facing markdown toolkit.
-
-Do not use `/Users/jackcshaw-2/Documents/NWC` as a working directory. That path was retired.
-
-The old mixed checkout is preserved only as an archive:
-
-`/Users/jackcshaw-2/Documents/NWC-archive-mixed-checkout-20260630-001`
+The archived Documents/NWC mixed checkout remains preservation only. Do not use archive or export copies as sources.
 
 ## Current Source Of Truth
 
@@ -58,12 +52,12 @@ Those files are preserved for worst-case audit and recovery. Do not apply them w
 
 ## Clean Work Rule
 
-Start future work from remote `main`, inside the relevant canonical repo.
+Start future work from remote `main`, inside the relevant active repo.
 
 For each repo:
 
 ```sh
-cd /Users/jackcshaw-2/dev/comprendo-clients/nwc/<repo>
+cd <active-repo-path>
 git fetch --all --prune
 git checkout main
 git pull --ff-only

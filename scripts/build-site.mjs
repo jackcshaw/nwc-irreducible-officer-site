@@ -10,7 +10,7 @@ const distDir = join(root, "dist");
 const assetsDir = join(distDir, "assets");
 const workbenchAssetsDir = join(assetsDir, "workbench");
 const pdfPath = join(assetsDir, "the-irreducible-officer.pdf");
-const siteUrl = "https://judgmentlab.net";
+const siteUrl = process.env.SITE_URL || "https://judgmentlab.net";
 const companionContextFilename = "companion-context.md";
 const companionContextUrl = `${siteUrl}/assets/${companionContextFilename}`;
 const workbenchContextFilename = "workbench-context.md";
@@ -24,7 +24,11 @@ const assetCommand = process.env.PDF_PYTHON
   ? { command: process.env.PDF_PYTHON, baseArgs: [] }
   : { command: "uv", baseArgs: ["run", "--with", "reportlab", "--with", "pillow", "python3"] };
 
+const audiences = JSON.parse(readRequiredCompanionFile("audiences/catalog.json"));
+const labCheck = spawnSync("python3", [join(companionRepoPath, "scripts/build_failure_mode_lab.py"), "--check"], {stdio:"inherit"});
+if (labCheck.status !== 0) throw new Error("Interactive context is stale; rebuild it in the companion repo first");
 const source = readFileSync(sourcePath, "utf8");
+if (source !== readRequiredCompanionFile("the-irreducible-officer.md")) throw new Error("Essay and companion mirror differ");
 const essayMarkdown = source.trim();
 const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md").trim();
 const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
@@ -56,6 +60,19 @@ workbenchConcepts.forEach((note) => {
   writeFileSync(join(workbenchAssetsDir, "concepts", note.filename), note.markdown.trim() + "\n", "utf8");
 });
 
+for (const folder of ["templates", "framework", "framework/assets"]) {
+  mkdirSync(join(workbenchAssetsDir, folder), {recursive: true});
+  for (const name of readdirSync(join(workbenchRepoPath, folder))) {
+    if (/\.(md|svg|png)$/.test(name)) copyFileSync(join(workbenchRepoPath, folder, name), join(workbenchAssetsDir, folder, name));
+  }
+}
+for (const tool of workbenchTools) {
+  // Flat download URLs predate the directory tree; make their relative links resolve.
+  const portable = tool.markdown.replace(/\]\(\.\.\//g, "](");
+  writeFileSync(join(workbenchAssetsDir, tool.filename), portable.trim() + "\n");
+  tool.markdown = portable;
+}
+
 // Workbench browsing data, fetched on demand when the Workbench surface opens
 // so essay readers never download it.
 writeFileSync(
@@ -80,6 +97,16 @@ writeFileSync(
   }),
   "utf8",
 );
+
+mkdirSync(join(assetsDir, "audiences"), { recursive: true });
+for (const name of ["shared-foundations.md", ...audiences.map(a => a.file)]) {
+  writeFileSync(join(assetsDir, "audiences", name), readRequiredCompanionFile("audiences/" + name));
+}
+writeFileSync(join(assetsDir, "judgment-lab-interactive-context.md"), readRequiredCompanionFile("artifacts/judgment-lab-interactive-context.md"));
+mkdirSync(join(workbenchAssetsDir, "audiences"), { recursive: true });
+writeFileSync(join(workbenchAssetsDir, "audiences/guide.md"), readRequiredWorkbenchFile("audiences/guide.md"));
+writeFileSync(join(assetsDir, "audiences", "evidence-notes.md"), readRequiredCompanionFile("sources/audience-foundations.md"));
+writeFileSync(join(assetsDir, "release.json"), JSON.stringify({edition: "2026-09-audience-testing", audiences: audiences.map(a => a.id), companionSections: companionSectionCount, workbenchSections: workbenchSectionCount}, null, 2));
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
@@ -134,7 +161,7 @@ function readRequiredWorkbenchFile(relativePath) {
   if (!existsSync(filePath)) {
     throw new Error(`Missing workbench file: ${filePath}. Set WORKBENCH_REPO_PATH to the workbench repo checkout.`);
   }
-  return readFileSync(filePath, "utf8");
+  return readFileSync(filePath, "utf8").replaceAll("https://judgmentlab.net", siteUrl);
 }
 
 function listWorkbenchFiles(relativeDir) {
@@ -156,10 +183,15 @@ function buildCompanionContext() {
     ["TRANSFER CASE", "cases/cyber-group-strategy-transfer-case.md"],
     ["TRACEABLE ARTIFACT", "artifacts/traceable-learning-artifact.md"],
     ["STARTER PROMPTS", "prompts/starter-prompts.md"],
+    ["SHARED FOUNDATION", "audiences/shared-foundations.md"],
+    ["ADAPTATION EVIDENCE", "sources/audience-foundations.md"],
+    ...audiences.map(a => ["AUDIENCE " + a.id.toUpperCase(), "audiences/" + a.file]),
+    ["INTERACTIVE LAB PROTOCOL", "labs/failure-mode-lab/facilitator.md"],
+    ["FAILURE MODE CASES", "labs/failure-mode-lab/cases.md"],
   ];
 
   const parts = [
-    "# The Irreducible Officer - Companion Context Bundle",
+    "# Judgment Lab - Companion Context Bundle",
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "This bundle is generated from the public companion source materials.",
@@ -184,13 +216,14 @@ function buildWorkbenchContext() {
   ];
   const sections = [
     ["OPERATING RULES", "workbench-source-kit.md"],
+    ["AUDIENCE GUIDE", "audiences/guide.md"],
     ["FRAMEWORK", "framework/ai-fluency-progression.md"],
     ["CONCEPTS", conceptFiles],
     ...workbenchTools.map((tool) => [tool.title.toUpperCase(), `templates/${tool.filename}`]),
   ];
 
   const parts = [
-    "# NWC Faculty Workbench - Context Bundle",
+    "# Judgment Lab Educator Workbench - Context Bundle",
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
@@ -215,20 +248,20 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Irreducible Officer</title>
-  <meta name="description" content="A public essay and working package for AI-enabled strategic judgment.">
+  <title>Judgment Lab · PME, Higher Education &amp; K–12</title>
+  <meta name="description" content="Practice, teach, and inspect judgment in AI-enabled work. Interactive sessions for PME, higher education, and high-school educators.">
   <link rel="canonical" href="${siteUrl}/">
   <meta name="theme-color" content="#f6f1e8">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="The Irreducible Officer">
-  <meta property="og:description" content="Purpose, accountability, and AI-enabled strategic judgment. An essay, an AI companion, and a faculty workbench.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Judgment Lab">
+  <meta property="og:description" content="Practice human judgment with AI. An essay, interactive companion, and educator workbench for PME, higher education, and high school.">
   <meta property="og:url" content="${siteUrl}/">
   <meta property="og:image" content="${siteUrl}/assets/share-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The Irreducible Officer">
-  <meta name="twitter:description" content="Purpose, accountability, and AI-enabled strategic judgment. An essay, an AI companion, and a faculty workbench.">
+  <meta name="twitter:title" content="Judgment Lab">
+  <meta name="twitter:description" content="Practice human judgment with AI. An essay, interactive companion, and educator workbench for PME, higher education, and high school.">
   <meta name="twitter:image" content="${siteUrl}/assets/share-card.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a2242'/%3E%3Crect y='12' width='16' height='2' fill='%23d82032'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -239,7 +272,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 </head>
 <body data-active-mode="overview">
   <header class="package-nav" aria-label="Package navigation">
-    <a class="package-brand" href="#overview" data-mode-link="overview">The Irreducible Officer</a>
+    <a class="package-brand" href="#overview" data-mode-link="overview">Judgment Lab</a>
     <nav aria-label="Package surfaces">
       <div class="package-tabs" role="tablist">
         ${modeButton("overview", "Overview", true)}
@@ -251,6 +284,11 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </nav>
   </header>
 
+  <nav class="audience-nav" aria-label="Audience views">
+    <span>Your setting</span>
+    ${audiences.map(a => `<a href="#${a.id}" data-mode-link="${a.id}" data-audience-link="${a.id}">${escapeHtml(a.label)}</a>`).join("")}
+  </nav>
+  <noscript><p class="surface">Interactive navigation requires JavaScript. You can still <a href="assets/essay.md">read the essay</a> or <a href="assets/judgment-lab-interactive-context.md">download the complete lab context</a>.</p></noscript>
   <main id="top" class="site-shell">
     <aside class="toc" aria-label="Essay sections">
       ${essayToc
@@ -260,12 +298,14 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 
     <div class="content-frame">
       <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
+      ${audiences.map(a => `<section class="mode-view" data-mode="${a.id}" id="panel-${a.id}" role="region" aria-label="${escapeHtml(a.title)}">${buildAudienceMode(a)}</section>`).join("")}
       <section class="mode-view" data-mode="essay" id="panel-essay" role="tabpanel" aria-labelledby="tab-essay">
         <div class="published">Published June 28, 2026</div>
         <div class="nwc-rule" aria-hidden="true"><span></span></div>
         <section class="essay-hero">
           <h1>The Irreducible Officer</h1>
           <p class="dek">Purpose, accountability, and AI-enabled strategic judgment.</p>
+          <p>The original PME argument. See the audience views for HE and high-school teaching adaptations.</p>
           <a class="quiet-action" href="assets/the-irreducible-officer.pdf" download>Download PDF</a>
         </section>
         <article class="essay article-body">${essayHtml}</article>
@@ -305,42 +345,29 @@ function modeButton(mode, label, active = false) {
 function buildOverviewMode() {
   return `<div class="surface overview">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
-    <section class="overview-hero">
-      <h1>The Irreducible Officer</h1>
-      <p class="dek">One concrete model for operationalizing AI in professional military education, built as an essay, a practice companion, and a faculty workbench.</p>
-      <p>
-        Not a policy. A worked example of what teaching and assessing
-        AI-enabled judgment could look like in practice.
-      </p>
+    <section class="overview-hero"><h1>Judgment Lab</h1>
+      <p class="dek">Teach judgment in work shaped by AI.</p>
+      <p>Practice with the argument. Test what an AI contribution helps you see—and what it decides for you. Then adapt the method to the people you teach.</p>
     </section>
-
+    <section class="audience-paths" aria-label="Choose your setting">
+      ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this view →</strong></a>`).join("")}
+    </section>
+    <section class="detail-band"><h2 class="band-label">One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions. Save what makes the next attempt better.</p><p>Foundations and support matter in every setting. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p></section>
     <section class="path-cards" aria-label="Package paths">
-      ${pathCard("Read", "Essay", "The core argument and standard.", "Open essay", "essay")}
-      ${pathCard("Practice", "AI Companion", "A guided AI session.", "Set up a session", "companion")}
-      ${pathCard("Build", "Faculty Workbench", "Tools for faculty adaptation.", "Open workbench", "workbench")}
+      ${pathCard("Read", "The Irreducible Officer", "The original PME argument, with its evidence and open questions.", "Open essay", "essay")}
+      ${pathCard("Practice", "AI Companion", "Test one of seven failure modes in a guided conversation.", "Set up a session", "companion")}
+      ${pathCard("Build", "Educator Workbench", "Adapt an assignment, review evidence, and preserve useful teaching decisions.", "Open workbench", "workbench")}
     </section>
+    <section class="detail-band"><h2 class="band-label">Ready for educator testing</h2><p>The audience guides are proposed teaching designs. The essay remains the PME application; neither the guides nor a successful chat establish learning gains. Test a session, inspect the decisions it records, and revise from what happens.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a><a class="quiet-action" href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a></section>
+  </div>`;
+}
 
-    <section class="detail-band">
-      <h2 class="band-label">What This Package Does</h2>
-      <p>
-        The essay makes the case for teaching and assessing AI-enabled strategic
-        judgment. The AI Companion helps a reader use ChatGPT, Claude, Gemini,
-        or another AI assistant to work through the argument. The Faculty
-        Workbench turns the method into materials faculty can use and revise.
-      </p>
-    </section>
-
-    <section class="detail-band next-step-band">
-      <h2 class="band-label">Next Step</h2>
-      <p>
-        Want to see it work? Open the companion and run one session, then look
-        at the workbench to see how faculty would use it.
-      </p>
-      <div class="action-row">
-        <a class="quiet-action" href="#companion" data-mode-link="companion">Set up a session</a>
-        <a class="quiet-action" href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a>
-      </div>
-    </section>
+function buildAudienceMode(a) {
+  return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
+    <section class="surface-hero"><h1>${escapeHtml(a.title)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
+    <div class="action-row"><a class="copy-button primary" href="#companion" data-mode-link="companion">Start an interactive session</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Adapt your teaching</a><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></div></section>
+    <section class="detail-band"><h2 class="band-label">A useful first test</h2><p>${escapeHtml(a.focus)}. Make your judgment before the assistant contributes, then test whether it holds when a condition changes.</p></section>
+    <article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/id="([^"]+)"/g, `id="${a.id}-$1"`)}</article>
   </div>`;
 }
 
@@ -361,14 +388,13 @@ function buildCompanionMode() {
       <p class="dek">Use ChatGPT, Claude, Gemini, or another AI assistant to work through the essay, test claims, design an exercise, and create a traceable learning artifact.</p>
       <p>
         The setup prompt reads the whole companion file, tests that the read is
-        complete, and facilitates your next step. Every template also works on
-        paper. No repository knowledge required.
+        complete, and facilitates your next step. Choose your setting above; the prompt follows it. You make the decisions, one question at a time.
       </p>
       <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
-          <h3>Attach the file — works everywhere</h3>
-          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <h3>Attach the context file</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. If attachments are unavailable, paste the file text. A partial read needs to be resolved before the session starts.</p>
           <div class="action-row">
             <a class="copy-button primary" href="assets/${companionContextFilename}" download>Download context file</a>
             <button class="quiet-action" type="button" data-copy-target="setup-prompt">Copy the prompt</button>
@@ -384,6 +410,7 @@ function buildCompanionMode() {
       </div>
     </section>
 
+    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. Begin with the essay as an educator, then transfer to your teaching.</p><p>Frame capture · Fluency substitution · Premature synthesis · Uncalibrated reliance · Invisible delegation · Institutional monoculture · Responsibility laundering</p><div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
         <h2>Paste this once into your AI assistant.</h2>
@@ -411,26 +438,23 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are a close-reading and analysis assistant working under my direction. I am reading "The Irreducible Officer," a piece about purpose, accountability, and AI-enabled strategic judgment at the National War College. The positions I take are mine to form; you structure, challenge, and point at evidence.
+  return `You are a close-reading and analysis assistant working under my direction. I am exploring The Irreducible Officer and its proposed applications in PME, higher education, or high school. I own my judgments; you structure, challenge, and point to evidence.
 
 ${companionContextInstruction()}
 
-Start by giving me:
-1. the cleanest version of the core claim;
-2. the part of the argument most relevant to an NWC instructor or curriculum leader;
-3. the most useful next path for what I want to do.
+Use my stated audience, or ask which setting I want. Give the essay's core claim briefly, distinguish it from the audience adaptation, then ask what I want to test. For an interactive session, follow INTERACTIVE LAB PROTOCOL: one question at a time, wait for my judgment before the contribution, then test a changed condition. Use the selected AUDIENCE section for teaching transfer. Do not assume PME prerequisites in HE or K–12. Preserve disagreement and source limits. Save only decisions I actually made.`;
+}
 
-Then follow my lead. If I ask to inspect evidence, use the CLAIMS and SOURCE SPINE sections. If I ask to design an exercise, use the TRANSFER CASE and TRACEABLE ARTIFACT sections. If I ask to argue with the essay, start from the strongest version of the objection in the OBJECTIONS section. If I ask to practice faculty fluency, use the WORKFLOW PATTERNS section.
+function labPrompt() {
+  return `Run the Judgment Lab interactive failure-mode session. Use an attached judgment-lab-interactive-context.md if provided; otherwise read ${siteUrl}/assets/judgment-lab-interactive-context.md in full. If you cannot read the complete file, ask me to attach or paste it before proceeding.
 
-Do not turn this into a generic AI-in-education summary. Keep the focus on
-AI-enabled strategic judgment: purpose, frame, reliance, accountability, and
-transfer.`;
+Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Begin with the essay and help me choose one of its seven failure modes. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
 }
 
 function workbenchSetupPrompt() {
-  return `You are a facilitation assistant for the NWC Faculty Workbench, working under my direction. I am a faculty member designing AI-enabled teaching. I own every pedagogical judgment; you ask, structure, and challenge.
+  return `You are a facilitation assistant for the Judgment Lab Educator Workbench, working under my direction. I am an educator designing AI-enabled teaching in PME, higher education, or high school. I own every pedagogical judgment; you ask, structure, and challenge.
 
-Before you answer anything, fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
+Before you answer anything, use the attached context file if provided; otherwise fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
 
 ${workbenchContextUrl}
 
@@ -438,11 +462,11 @@ If you cannot reach that URL, tell me you could not read it and ask me to paste 
 
 After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read — a partial read causes you to invent workbench content that is not in the file.
 
-Start by running the Phase Placement Diagnostic with me, one question at a time. Then facilitate the template it routes me to, following its AI Facilitation Block exactly.`;
+Use my selected setting or ask for it, then read the AUDIENCE GUIDE. Ask whether I have practiced with the essay or already have a concrete teaching task. If I need that practice first, direct me to the interactive lab context at ${siteUrl}/assets/judgment-lab-interactive-context.md; do not invent the essay from this workbench bundle. Otherwise run the Phase Placement Diagnostic, one question at a time, with task readiness and support explicit. Then facilitate the chosen template. The progression is a design lens, not a universal developmental ladder.`;
 }
 
 function companionContextInstruction() {
-  return `Before you answer anything, fetch and read this file in full. It contains the essay and companion materials: claim map, source spine, objections, workflow patterns, transfer case, traceable-artifact template, and starter prompts.
+  return `Before you answer anything, use the attached context file if provided; otherwise fetch and read this file in full. It contains the essay and companion materials: claim map, source spine, objections, workflow patterns, transfer case, traceable-artifact template, and starter prompts.
 
 ${companionContextUrl}
 
@@ -468,7 +492,7 @@ Return:
 2. the argument in 10 bullets;
 3. the claim most likely to be misunderstood;
 4. why that misunderstanding is tempting;
-5. two questions NWC faculty should keep open.`,
+5. two questions educators in my setting should keep open.`,
     },
     {
       id: "prompt-claims",
@@ -480,7 +504,7 @@ After you read the context file, help me inspect the evidence behind "The Irredu
 
 List 5-7 important claims worth auditing. For each one, give me a short label and one sentence on why it matters. Then ask me which claim I want to inspect.
 
-After I pick one, audit it with me: best evidence, strongest unresolved question or counterexample, where the evidence is strong or incomplete, what source I should read, and one implication for NWC instruction. Quote the CLAIMS and SOURCE SPINE entries you are drawing on — if you cannot point to the entry, say so rather than filling the gap.`,
+After I pick one, audit it with me: best evidence, strongest unresolved question or counterexample, where the evidence is strong or incomplete, what source I should read, and one implication for teaching in my setting, clearly distinguished from the essay’s original PME claim. Quote the CLAIMS and SOURCE SPINE entries you are drawing on — if you cannot point to the entry, say so rather than filling the gap.`,
     },
     {
       id: "prompt-objection",
@@ -494,20 +518,20 @@ Start by naming the objection in its strongest form, quoting the OBJECTIONS sect
 1. the essay's answer in plain English;
 2. the best evidence that supports that answer;
 3. the strongest way the objection could still be right;
-4. how the objection changes NWC instructional design;
+4. how the objection changes instructional design in my setting;
 5. one experiment, source, or review loop that would make the answer more concrete.`,
     },
     {
       id: "prompt-exercise",
       title: "Design an exercise",
-      bestFor: "Move from the essay to an approved NWC-style artifact.",
+      bestFor: "Move from the essay to a task in your setting.",
       text: `${companionContextInstruction()}
 
-After you read the context file, help me turn "The Irreducible Officer" into a practical NWC learning exercise. Use the TRANSFER CASE and TRACEABLE ARTIFACT sections.
+After you read the context file, help me turn "The Irreducible Officer" into a practical learning exercise. Use my AUDIENCE section and TRACEABLE ARTIFACT; the NWC TRANSFER CASE is a PME example.
 
 Before designing anything, ask me: my course or seminar, the artifact my students actually produce, and how much session time I have. Build on my answers rather than assuming.
 
-Then design an exercise sized to my time that begins by interrogating the essay itself, then transfers the method to an approved NWC-style artifact. Requirements, in order:
+Then design an exercise sized to my time that begins by interrogating the essay itself, then transfers the method to an appropriate task in my setting. Check prerequisite knowledge, readiness, and needed support first. Requirements, in order:
 1. identify inherited AI-shaped inputs;
 2. force the learner to identify the frame, assumptions, evidence standard, and AI reliance decisions;
 3. include a flawed AI output or flawed frame;
@@ -523,7 +547,7 @@ Return the learning objective, materials, step-by-step flow, facilitator notes, 
 
 After you read the context file, use "The Irreducible Officer" as a faculty fluency lab. Use the WORKFLOW PATTERNS and TRACEABLE ARTIFACT sections.
 
-Ask me for one NWC-style task, case, assignment, or strategic problem. Help me define the purpose, problem frame, assumptions, and evidence standard. Propose an AI-assisted workflow that could sharpen the work, identify where the workflow might hide judgment, and ask me to defend which AI outputs I would accept, reject, verify, or withhold.
+Ask me for one task, case, assignment, or problem in my setting. Help me define the purpose, problem frame, assumptions, and evidence standard. Propose an AI-assisted workflow that could sharpen the work, identify where the workflow might hide judgment, and ask me to defend which AI outputs I would accept, reject, verify, or withhold.
 
 After the session, assess what I commanded well, where I let the system set the terms, and what faculty artifact should be improved.`,
     },
@@ -533,13 +557,13 @@ After the session, assess what I commanded well, where I let the system set the 
       bestFor: "Press whether the learner owns the frame behind the artifact.",
       text: `${companionContextInstruction()}
 
-After you read the context file, act as an NWC seminar instructor conducting a short oral defense. Use the CLAIMS and TRACEABLE ARTIFACT sections.
+After you read the context file, help me rehearse a short defense appropriate to my setting. Written or accessible equivalent responses are welcome. Use the CLAIMS and TRACEABLE ARTIFACT sections.
 
 Start by asking me what work I am defending and what role AI played in producing it. Then ask one question at a time. Your goal is to determine whether I own the frame behind my AI-assisted work.
 
 Press me on problem frame, assumptions, evidence standards, alternative frames, reliance decisions, rejected AI outputs, risks and costs, what would change my conclusion, and where human judgment must interrupt automation.
 
-After six questions, assess whether I demonstrated ownership of the reasoning and identify what evidence should be added to the traceable learning artifact.`,
+After six questions, describe what the responses show and leave uncertain about ownership and identify what evidence should be added to the traceable learning artifact.`,
     },
   ];
 
@@ -556,18 +580,18 @@ function buildWorkbenchMode(tools, concepts) {
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
-      <h1>Faculty Workbench</h1>
+      <h1>Educator Workbench</h1>
       <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
       <p>
         The setup prompt reads the whole workbench, places your assignment on the
         six-phase fluency progression, and facilitates the right template with you.
-        Every template also works on paper. No repository knowledge required.
+        No repository knowledge required. Choose PME, HE, or high school above. Readiness and learning purpose determine the next step; a later phase is not automatically better.
       </p>
       <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
-          <h3>Attach the file — works everywhere</h3>
-          <p>Download the context file, attach it to a new chat, then paste the setup prompt. Works on filtered networks and with assistants that cannot browse.</p>
+          <h3>Attach the context file</h3>
+          <p>Download the context file, attach it to a new chat, then paste the setup prompt. If attachments are unavailable, paste the file text. A partial read needs to be resolved before the session starts.</p>
           <div class="action-row">
             <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
             <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
@@ -593,14 +617,15 @@ function buildWorkbenchMode(tools, concepts) {
     <section class="detail-band" id="workbench-progression">
       <h2 class="band-label">The Progression</h2>
       <p>
-        Fluency grows from asking AI for help to supervising AI-supported work.
-        Judgment stays human at every phase.
+        The progression offers six ways to organize AI-supported work.
+        Judgment stays human at every phase. This is a design lens, not a validated age ladder or a requirement that every learner reach supervision.
       </p>
       <img class="progression-visual" src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution">
       <p class="visual-status">The persona rows above are reference-matrix content, published as
         <a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Hypothesis — awaiting NWC validation</a> — the concept note explains why.</p>
     </section>
 
+    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
     <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
       ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
     </section>
@@ -669,6 +694,9 @@ function buildSourcesMode() {
         reading. The formal reference list remains at the end of the essay.
       </p>
     </section>
+    <section class="detail-band"><h2 class="band-label">Shared method and audience limits</h2><p>Read the shared foundation alongside the original source spine. HE and high-school examples are constructed teaching proposals. The source notes are not a substitute for inspecting the original papers, and this refresh adds no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
+    <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}).replace(/id="([^"]+)"/g, 'id="shared-$1"')}</article></details>
+    <article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article>
     <article class="source-spine article-body">
       ${renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true })}
     </article>
@@ -683,7 +711,7 @@ function miniCard(title, body) {
 }
 
 function copyBlock(id, text) {
-  return `<pre class="copy-block" tabindex="0" role="region" aria-label="Prompt text"><code id="${id}">${escapeHtml(text)}</code></pre>`;
+  return `<pre class="copy-block" tabindex="0" role="region" aria-label="Prompt text"><code id="${id}" data-session-prompt>${escapeHtml(text)}</code></pre>`;
 }
 
 function placeEssayFigures(html) {
@@ -827,7 +855,7 @@ function getWorkbenchTools() {
       title: "Assignment Design Worksheet",
       cardTitle: "Assignment design",
       cardDesc: "Decide where AI belongs and what students must own.",
-      cardAction: "Open worksheet",
+      cardAction: "Open guided design",
       filename: "assignment-design-worksheet.md",
       useNote: "Use this as a working document with faculty before revising an assignment.",
     },
@@ -844,7 +872,7 @@ function getWorkbenchTools() {
       id: "flawed-output",
       title: "Flawed Output Library Template",
       cardTitle: "Flawed outputs",
-      cardDesc: "Create polished AI work with a hidden strategic problem.",
+      cardDesc: "Create a useful contribution with a consequential reasoning problem.",
       cardAction: "Open template",
       filename: "flawed-output-library-template.md",
       useNote: "Use this to build examples that fail under strategic questioning, not surface reading.",
@@ -1113,6 +1141,7 @@ function rewriteWorkbenchLinks(markdown) {
     if (mdName && (target.startsWith("templates/") || target.startsWith("concepts/") || !target.includes("/"))) {
       return `[${label}](#wb-doc-${mdName})`;
     }
+    if (target === "audiences/guide.md") return `[${label}](assets/workbench/audiences/guide.md)`;
     if (target === "framework/ai-fluency-progression.md") {
       return `[${label}](#workbench-progression)`;
     }
@@ -1153,7 +1182,19 @@ function clientJs() {
 const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
-const modeNames = ["overview", "essay", "companion", "workbench", "sources"];
+const modeNames = ["overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12"];
+const audienceLabels = {pme: "PME", he: "higher education", k12: "high school"};
+const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-prompt]")).map(el => [el, el.textContent]));
+function applyAudience(id) {
+  const label = audienceLabels[id];
+  document.querySelectorAll("[data-audience-current]").forEach(el => el.textContent = label || "Choose your setting above");
+  document.querySelectorAll("[data-audience-link]").forEach(el => { if (el.dataset.audienceLink === id) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); });
+  promptBases.forEach((text, el) => {
+    const local = text.replaceAll("https://judgmentlab.net/assets/", new URL("assets/", location.href).href);
+    el.textContent = (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide.\\n\\n" : "") + local;
+  });
+}
+applyAudience(new URL(location.href).searchParams.get("audience"));
 const toc = document.querySelector(".toc");
 const tocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
   .map((link) => ({ link, heading: document.getElementById(link.dataset.tocLink) }))
@@ -1174,12 +1215,14 @@ function ensureWorkbenchData() {
         return response.json();
       })
       .then((data) => {
+        document.getElementById("workbench-error").hidden = true;
         workbenchTools = data.tools || [];
         workbenchConcepts = data.concepts || [];
         return data;
       })
       .catch((error) => {
         workbenchDataPromise = null;
+        document.getElementById("workbench-error").hidden = false;
         throw error;
       });
   }
@@ -1291,24 +1334,28 @@ function smoothBehavior() {
 }
 
 function setMode(mode, shouldScroll = true, push = false) {
+  const url = new URL(location.href);
+  if (audienceLabels[mode]) url.searchParams.set("audience", mode);
+  applyAudience(url.searchParams.get("audience"));
   const previousMode = activeMode;
   activeMode = mode;
   document.body.dataset.activeMode = mode;
   buttons.forEach((button) => {
-    const active = button.dataset.modeTab === mode;
+    const active = button.dataset.modeTab === (audienceLabels[mode] ? "overview" : mode);
     button.setAttribute("aria-selected", String(active));
     button.tabIndex = active ? 0 : -1;
   });
   views.forEach((view) => {
     view.classList.toggle("is-active", view.dataset.mode === mode);
+    view.hidden = view.dataset.mode !== mode;
   });
-  if (location.hash !== "#" + mode) {
+  if (location.hash !== "#" + mode || location.search !== url.search) {
     // User-initiated surface changes push a history entry so Back returns to
     // the previous surface instead of leaving the site.
     if (push) {
-      history.pushState(null, "", "#" + mode);
+      url.hash = mode; history.pushState(null, "", url);
     } else {
-      history.replaceState(null, "", "#" + mode);
+      url.hash = mode; history.replaceState(null, "", url);
     }
   }
   if (mode === "workbench") {
@@ -1422,6 +1469,7 @@ window.addEventListener("hashchange", () => {
     setMode(mode, false);
     return;
   }
+  if (mode.startsWith("wb-doc-")) { openWorkbenchRoute(mode); return; }
   if (openEssaySection(mode, false)) {
     return;
   }
@@ -1431,8 +1479,12 @@ window.addEventListener("hashchange", () => {
 const initial = location.hash.replace("#", "");
 if (modeNames.includes(initial)) {
   setMode(initial, false);
+} else if (initial.startsWith("wb-doc-")) {
+  openWorkbenchRoute(initial);
 } else if (initial) {
-  openEssaySection(initial, false);
+  if (!openEssaySection(initial, false)) setMode("overview", false);
+} else {
+  setMode("overview", false);
 }
 requestTocUpdate();
 
@@ -1444,7 +1496,12 @@ function announceCopy(message) {
 
 function copyTextToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text);
+    const policy = document.permissionsPolicy || document.featurePolicy;
+    if (policy && !policy.allowsFeature("clipboard-write")) return Promise.reject(new Error("clipboard blocked"));
+    return new Promise((resolve, reject) => {
+      const timeout = window.setTimeout(() => reject(new Error("clipboard timeout")), 1800);
+      navigator.clipboard.writeText(text).then(() => { clearTimeout(timeout); resolve(); }, error => { clearTimeout(timeout); reject(error); });
+    });
   }
   // Fallback for non-secure contexts, where navigator.clipboard is unavailable.
   return new Promise((resolve, reject) => {
@@ -1487,6 +1544,8 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
     } catch {
       button.textContent = "Copy failed";
       announceCopy("Copy failed. Select the prompt text and copy it manually.");
+      const block = target.closest("pre");
+      if (block) { block.hidden = false; block.style.display = "block"; block.tabIndex = 0; block.focus(); }
       window.setTimeout(() => {
         button.textContent = original;
       }, 1400);
@@ -1494,7 +1553,20 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
   });
 });
 
-function selectDocument(item, isFromConcept = false) {
+async function openWorkbenchRoute(route) {
+  setMode("workbench", false);
+  history.replaceState(null, "", "#" + route);
+  try { await ensureWorkbenchData(); } catch { return; }
+  const id = route.replace("wb-doc-", "");
+  const tool = workbenchTools.find(item => item.filename === id + ".md");
+  const concept = workbenchConcepts.find(item => item.filename === id + ".md");
+  if (tool || concept) selectDocument(tool || concept, !tool, false);
+  else { const message = document.getElementById("workbench-error"); message.textContent = "That document was not found. Choose a workbench tool below."; message.hidden = false; }
+}
+
+function selectDocument(item, isFromConcept = false, push = true) {
+  const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
+  if (location.hash !== route) { if (push) history.pushState(null, "", route); else history.replaceState(null, "", route); }
   document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
     card.classList.remove("is-selected");
   });
@@ -1611,7 +1683,21 @@ document.querySelectorAll(".article-body a[target='_blank'], .source-spine a[tar
 }
 
 function css() {
-  return `:root {
+  return `.audience-nav {display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 24px; padding:16px 24px; border-bottom:1px solid var(--faint); font-family:var(--font-mono); font-size:13px;}
+.audience-nav a {padding:7px 3px; text-underline-offset:6px;}
+.audience-nav [aria-current] {color:var(--red); text-decoration-thickness:2px;}
+.audience-paths {margin:36px 0; border-top:1px solid var(--faint);}
+.audience-path {display:grid; grid-template-columns:1fr 1.2fr; gap:6px 28px; padding:25px 0; border-bottom:1px solid var(--faint); text-decoration:none;}
+.audience-path h2 {font-size:28px; margin:0; font-family:var(--font-display);}
+.audience-path p {margin:0; font-size:23px; color:var(--ink);}
+.audience-path span {grid-column:2; max-width:65ch;}
+.audience-path strong {grid-column:2; font-size:16px; color:var(--red); font-weight:500; margin-top:8px;}
+.audience-path:hover h2 {text-decoration:underline; text-underline-offset:5px;}
+.audience-guide,.foundation-detail {max-width:75ch; margin:32px auto;}
+.foundation-detail summary {cursor:pointer; padding:16px 0; color:var(--ink);}
+[hidden] {display:none !important;}
+@media(max-width:640px) {.audience-path {grid-template-columns:1fr;}.audience-path span,.audience-path strong {grid-column:1;}.audience-nav {gap:6px 14px;padding:10px 16px;}.audience-nav>span {width:100%;text-align:center;}}
+:root {
   --paper: #f6f1e8;
   --paper-soft: #fbf8f2;
   --paper-bright: #fffdfa;

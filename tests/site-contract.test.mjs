@@ -2,6 +2,7 @@ import { existsSync, readFileSync, statSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
+const siteUrl = process.env.SITE_URL || "https://judgmentlab.net";
 const dist = join(root, "dist");
 const indexPath = join(dist, "index.html");
 const pdfPath = join(dist, "assets", "the-irreducible-officer.pdf");
@@ -49,10 +50,10 @@ inlineScripts.forEach((script, index) => {
   "Companion",
   "Workbench",
   "Sources",
-  "What This Package Does",
-  "One concrete model for operationalizing AI in professional military education",
-  "Not a policy. A worked example",
-  "Next Step",
+  "One method, different teaching decisions",
+  "Teach judgment in work shaped by AI.",
+  "Ready for educator testing",
+  "A useful first test",
   "Set up a session",
   "See the five-step pilot",
   "Read",
@@ -63,7 +64,7 @@ inlineScripts.forEach((script, index) => {
   "Copy setup prompt",
   "Download context file",
   "assets/companion-context.md",
-  "Before you answer anything, fetch and read this file in full",
+  "Before you answer anything, use the attached context file if provided",
   "If you cannot reach that URL, tell me you could not read it",
   "Choose A Starting Path",
   "Understand the argument",
@@ -72,7 +73,7 @@ inlineScripts.forEach((script, index) => {
   "Design an exercise",
   "Practice faculty fluency",
   "Run oral defense",
-  "Faculty Workbench",
+  "Educator Workbench",
   "Copy template",
   "Download template",
   "The Design Behind The Tools",
@@ -127,7 +128,7 @@ inlineScripts.forEach((script, index) => {
 });
 
 assert(
-  (html.match(/https:\/\/judgmentlab\.net\/assets\/companion-context\.md/g) || []).length >= 7,
+  (html.split(siteUrl + "/assets/companion-context.md").length - 1) >= 7,
   "setup prompt and six starter prompts should all point at the context bundle",
 );
 
@@ -221,7 +222,7 @@ assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should l
 assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
 assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
 assert(
-  (html.match(/https:\/\/judgmentlab\.net\/assets\/workbench-context\.md/g) || []).length >= 1,
+  (html.split(siteUrl + "/assets/workbench-context.md").length - 1) >= 1,
   "workbench setup prompt should point at the workbench bundle",
 );
 assert(existsSync(join(dist, "assets", "asking-to-supervising.svg")), "progression visual should be copied into assets");
