@@ -11,7 +11,7 @@ const catalog=JSON.parse(readFileSync(join(companion,"audiences/catalog.json"),"
 assert.deepEqual(catalog.map(a=>a.id),["pme","he","k12"]);
 for(const a of catalog){
   assert(html.includes('id="panel-'+a.id+'"'),a.id+" view missing");
-  assert(html.includes('data-audience-link="'+a.id+'"'),a.id+" navigation missing");
+  assert(html.includes('<option value="'+a.id+'">'),a.id+" selector option missing");
   const source=readFileSync(join(companion,"audiences",a.file),"utf8");
   assert.equal(read("assets/audiences/"+a.file),source,a.id+" guide stale");
   assert(bundle.includes(source.trim()),a.id+" missing from companion");
@@ -96,7 +96,7 @@ new vm.Script(script); // Parse all client code, including unexecuted branches.
 const profileDecl=script.match(/const workbenchProfiles = ([^\n]+);/)[1];
 const promptDecl=script.match(/const workbenchPrompts = ([^\n]+);/)[1];
 const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
-const elements=Object.fromEntries(['workbench-title','workbench-summary','workbench-setting-status','workbench-setting','workbench-context-download'].map(id=>[id,{}]));
+const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-setting','workbench-context-download'].map(id=>[id,{}]));
 const prompt={id:'workbench-setup-prompt',textContent:''};
 const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
 const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
@@ -138,3 +138,17 @@ context.applyAudience('he');
 assert(!prompt.textContent.includes('Coming from the group discussion'));
 assert(prompt.textContent.includes('workbench-context-he.md'));
 console.log('masthead and discussion contract passed: five paths, five sourced claims, and clearable audience-preserving handoff');
+
+assert(!html.includes('<nav class="audience-nav"'));
+assert(html.includes('for="lab-audience"'));
+const changeCode=script.match(/function changeAudience\([\s\S]+?\n}\n/)[0];
+const routeContext={URL,location:new URL('https://test.example/?audience=he&claim=better#wb-doc-assessment-and-oral-defense-rubric'),activeMode:'workbench',audienceLabels:{he:'HE',pme:'PME',k12:'High school'},applyAudience(id){routeContext.applied=id},setMode(mode){routeContext.activeMode=mode}};
+routeContext.history={pushState(a,b,url){routeContext.location=new URL(url)}};
+vm.runInNewContext(changeCode,routeContext);
+routeContext.changeAudience({target:{value:'k12'}});
+assert.equal(routeContext.location.searchParams.get('audience'),'k12');
+assert.equal(routeContext.location.searchParams.get('claim'),'better');
+assert.equal(routeContext.location.hash,'#wb-doc-assessment-and-oral-defense-rubric');
+routeContext.activeMode='he';routeContext.changeAudience({target:{value:'pme'}});assert.equal(routeContext.activeMode,'pme');
+routeContext.changeAudience({target:{value:''}});assert.equal(routeContext.activeMode,'overview');assert.equal(routeContext.location.searchParams.has('audience'),false);
+console.log('global audience selector passed: context, document route, and learning views');

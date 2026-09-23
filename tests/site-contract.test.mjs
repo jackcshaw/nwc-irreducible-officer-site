@@ -248,7 +248,7 @@ assert(!html.includes("Site source"), "public package should not show old site-s
 assert(!html.includes("class=\"brand\""), "site should not include the NWC badge/logo treatment");
 
 assert(html.includes("fonts.googleapis.com"), "site should load approved web fonts");
-assert(html.includes("Fraunces"), "site should include Fraunces display font");
+assert(html.includes("Source Serif 4"), "site should include Source Serif 4 display font");
 assert(html.includes("Newsreader"), "site should include Newsreader body font");
 assert(html.includes("IBM Plex Mono"), "site should include IBM Plex Mono UI font");
 

@@ -160,3 +160,28 @@ h2,h3 {line-height:1.25;}
 .discussion-carry {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;margin:18px 0;border-top:1px solid var(--faint);border-bottom:1px solid var(--faint);}
 .discussion-carry p {font-size:18px;color:var(--ink);}
 @media(max-width:640px){.discussion-carry{align-items:flex-start;flex-direction:column;gap:12px;}}
+
+/* Settled B masthead: compact, left-aligned, all-navy italic purpose. */
+.lab-masthead {border-top:0;}
+.masthead-inner {display:block;max-width:1160px;padding:24px 28px;}
+.package-brand {display:inline-block;font-family:"Source Serif 4",Georgia,serif;font-size:54px;font-weight:600;line-height:1.12;letter-spacing:-.025em;}
+.brand-purpose {font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-weight:400;font-synthesis:none;font-size:26px;line-height:1.35;color:var(--ink);max-width:none;margin:10px 0 0;}
+.package-nav {padding:0 28px;border-top:0;}
+.package-nav-inner {max-width:1104px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;border-top:1px solid var(--faint);}
+.package-tabs {display:flex;gap:30px;margin:0;max-width:none;width:auto;}
+.package-tabs button {font-family:"Source Sans 3",sans-serif;font-size:19px;font-weight:500;padding:15px 0 12px;min-height:59px;}
+.package-tabs button[aria-selected="true"] {font-weight:700;}
+.package-tabs button[aria-selected="true"]::after {left:0;right:0;}
+.audience-setting {display:flex;align-items:center;gap:14px;flex-shrink:0;font-family:"Source Sans 3",sans-serif;font-size:16px;}
+.audience-setting select {font:600 16px "Source Sans 3",sans-serif;color:var(--ink);border:0;border-radius:0;background:transparent;min-height:44px;padding:8px 24px 8px 6px;max-width:220px;}
+@media(max-width:900px){.package-tabs{gap:22px;}.package-nav-inner{gap:14px;}}
+@media(max-width:700px){
+ .masthead-inner {padding:20px;}
+ .package-brand {font-size:40px;}
+ .brand-purpose {font-size:22px;line-height:1.3;margin-top:9px;max-width:30ch;}
+ .package-nav {padding:0 20px;}
+ .package-nav-inner {flex-direction:column;align-items:stretch;gap:0;border-top:0;}
+ .audience-setting {order:-1;align-self:flex-start;margin-bottom:14px;}
+ .package-tabs {display:flex;justify-content:space-between;gap:10px;width:100%;border-top:1px solid var(--faint);}
+ .package-tabs button {font-size:17px;min-height:49px;padding:12px 0;}
+}

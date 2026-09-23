@@ -126,7 +126,7 @@ for (const [id,v] of Object.entries(workbenchVariants)) {
   for (const t of v.tools) writeFileSync(join(workbenchAssetsDir,id,t.filename),t.markdown+"\n");
   writeFileSync(join(assetsDir,"workbench-context-"+id+".md"),v.bundle.text+"\n");
 }
-writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-lab-masthead",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
+writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-settled-masthead",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
@@ -289,7 +289,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a2242'/%3E%3Crect y='12' width='16' height='2' fill='%23d82032'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,420;9..144,520;9..144,620&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
   ${plausibleAnalytics()}
   <style>${css()}</style>
 </head>
@@ -298,10 +298,10 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   <header class="lab-masthead" aria-label="Judgment Lab">
     <div class="masthead-inner">
       <a class="package-brand" href="#overview" data-mode-link="overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a>
-      <p class="brand-purpose">Strengthening human judgment<br class="purpose-break"> in AI-enabled work.</p>
+      <p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p>
     </div>
   </header>
-  <nav class="package-nav" aria-label="Learning paths">
+  <nav class="package-nav" aria-label="Learning paths"><div class="package-nav-inner">
     <div class="package-tabs" role="tablist" aria-label="Learning paths">
       ${modeButton("overview", "Learn", true)}
       ${modeButton("discuss", "Discuss")}
@@ -309,11 +309,10 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       ${modeButton("workbench", "Design")}
       ${modeButton("sources", "References")}
     </div>
-  </nav>
-
-  <nav class="audience-nav" aria-label="Audience views">
-    <span>Explore in your setting</span>
-    ${audiences.map(a => `<a href="#${a.id}" data-mode-link="${a.id}" data-audience-link="${a.id}">${escapeHtml(a.label)}</a>`).join("")}
+    <label class="audience-setting" for="lab-audience">Audience
+      <select id="lab-audience"><option value="">All settings</option>${audiences.map(a=>`<option value="${a.id}">${escapeHtml(a.label)}</option>`).join("")}</select>
+    </label>
+    </div>
   </nav>
   <noscript><p class="surface">Interactive navigation requires JavaScript. You can still <a href="assets/essay.md">read the essay</a> or <a href="assets/judgment-lab-interactive-context.md">download the complete lab context</a>.</p></noscript>
   <main id="top" class="site-shell" tabindex="-1">
@@ -1250,6 +1249,7 @@ function applyAudience(id) {
   document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
   document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
   document.getElementById("workbench-setting").value = currentWorkbenchAudience;
+  document.getElementById("lab-audience").value = currentWorkbenchAudience;
   document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
   document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
   document.querySelectorAll("[data-audience-current]").forEach(el => el.textContent = label || "Choose your setting above");
@@ -1700,12 +1700,17 @@ document.querySelectorAll("[data-clear-discussion]").forEach(button=>button.addE
   history.replaceState(null,"",url); applyAudience(url.searchParams.get("audience"));
 }));
 
-document.getElementById("workbench-setting").addEventListener("change", event => {
+function changeAudience(event) {
+  const id = audienceLabels[event.target.value] ? event.target.value : "";
   const url = new URL(location.href);
-  if (event.target.value) url.searchParams.set("audience",event.target.value); else url.searchParams.delete("audience");
+  if (id) url.searchParams.set("audience",id); else url.searchParams.delete("audience");
+  const nextMode = activeMode === "overview" || audienceLabels[activeMode] ? id || "overview" : activeMode;
+  if (nextMode !== activeMode) url.hash = nextMode;
   history.pushState(null,"",url);
-  applyAudience(event.target.value);
-});
+  if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
+}
+document.getElementById("workbench-setting").addEventListener("change",changeAudience);
+document.getElementById("lab-audience").addEventListener("change",changeAudience);
 window.addEventListener("popstate",()=>applyAudience(new URL(location.href).searchParams.get("audience")));
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
@@ -1848,7 +1853,7 @@ function css() {
   --code-bg: #211f1e;
   --code-ink: #fffaf1;
   --red: #b81b2b;
-  --font-display: "Fraunces", Georgia, serif;
+  --font-display: "Source Serif 4", Georgia, serif;
   --font-body: "Newsreader", Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);

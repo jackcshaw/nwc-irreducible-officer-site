@@ -70,3 +70,10 @@ The current testing edition is published at https://nwc-learning-companion--audi
 The identity refinement is in `styles/lab-refresh.css`, appended by the generator. It retains the established cream/navy/red palette and serif typography. The masthead is global; only the path navigation sticks while scrolling.
 
 Discuss uses the five claims in `content/discussion-claims.json`, transcribed from the Judgment in Practice EduFish edition on September 23, 2026. Provenance is recorded in the file. Source links, objections, and discussion prompts remain visible; the original facilitator guide and reading room are linked. This does not migrate or change the separate application. `?claim=<id>` carries a claim into Practice/Design and can be cleared without changing audience. New browser contracts verify claim completeness and prompt handoff.
+
+
+### Settled masthead design
+
+The approved B masthead places the all-navy italic purpose directly below the name. The wordmark and display headings use Source Serif 4; masthead controls use Source Sans 3. Keep the red wordmark period and active-path indicator; do not color individual words in the purpose. Desktop wordmark/purpose sizes are 54px/26px; mobile sizes are 40px/22px.
+
+The audience is a labeled selector in the primary navigation row, not a second set of navigation links. On Learn it opens the selected audience view. On other paths it changes the teaching context while preserving the path, discussion claim, and selected document. Both audience selectors synchronize through the same handler.
