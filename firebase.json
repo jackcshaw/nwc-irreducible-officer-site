@@ -43,6 +43,15 @@
             "value": "application/pdf"
           }
         ]
+      },
+      {
+        "source": "**/*.@(md|json)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
       }
     ],
     "site": "nwc-learning-companion"

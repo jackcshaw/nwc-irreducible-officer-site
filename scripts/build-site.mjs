@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
 import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,7 +36,13 @@ const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md")
 const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
+const profiles = JSON.parse(readRequiredWorkbenchFile("audiences/profiles.json"));
+const workbenchVariants = Object.fromEntries(profiles.map(p => [p.id, {
+  profile:p, tools:workbenchTools.map(t => adaptTool(t,p,readRequiredWorkbenchFile,renderMarkdown,rewriteWorkbenchLinks,siteUrl)),
+  guide:readRequiredWorkbenchFile("audiences/"+p.id+".md"), framework:matrixMarkdown(p)
+}]));
 const { text: workbenchContextMarkdown, sectionCount: workbenchSectionCount } = buildWorkbenchContext();
+for (const variant of Object.values(workbenchVariants)) variant.bundle = buildWorkbenchContext(variant);
 
 // Completeness assertion: all template files must have cards, and all cards must have files
 const templateFiles = listWorkbenchFiles("templates");
@@ -78,11 +86,13 @@ for (const tool of workbenchTools) {
 writeFileSync(
   join(assetsDir, "workbench-data.json"),
   JSON.stringify({
+    audiences: workbenchVariants,
     tools: workbenchTools.map((tool) => ({
       id: tool.id,
       title: tool.title,
       filename: tool.filename,
       useNote: tool.useNote,
+      cardDesc: tool.cardDesc,
       markdown: tool.markdown.trim(),
       html: tool.html,
     })),
@@ -98,6 +108,7 @@ writeFileSync(
   "utf8",
 );
 
+const workbenchDataVersion = createHash("sha256").update(readFileSync(join(assetsDir,"workbench-data.json"))).digest("hex").slice(0,16);
 mkdirSync(join(assetsDir, "audiences"), { recursive: true });
 for (const name of ["shared-foundations.md", ...audiences.map(a => a.file)]) {
   writeFileSync(join(assetsDir, "audiences", name), readRequiredCompanionFile("audiences/" + name));
@@ -106,7 +117,15 @@ writeFileSync(join(assetsDir, "judgment-lab-interactive-context.md"), readRequir
 mkdirSync(join(workbenchAssetsDir, "audiences"), { recursive: true });
 writeFileSync(join(workbenchAssetsDir, "audiences/guide.md"), readRequiredWorkbenchFile("audiences/guide.md"));
 writeFileSync(join(assetsDir, "audiences", "evidence-notes.md"), readRequiredCompanionFile("sources/audience-foundations.md"));
-writeFileSync(join(assetsDir, "release.json"), JSON.stringify({edition: "2026-09-audience-testing", audiences: audiences.map(a => a.id), companionSections: companionSectionCount, workbenchSections: workbenchSectionCount}, null, 2));
+for (const [id,v] of Object.entries(workbenchVariants)) {
+  mkdirSync(join(workbenchAssetsDir,id),{recursive:true});
+  writeFileSync(join(workbenchAssetsDir,"audiences",id+".md"),v.guide);
+  writeFileSync(join(workbenchAssetsDir,id,"framework.md"),v.framework);
+  writeFileSync(join(workbenchAssetsDir,id,"reference-matrix.svg"),matrixSvg(v.profile,escapeHtml));
+  for (const t of v.tools) writeFileSync(join(workbenchAssetsDir,id,t.filename),t.markdown+"\n");
+  writeFileSync(join(assetsDir,"workbench-context-"+id+".md"),v.bundle.text+"\n");
+}
+writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-workbench-audiences",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
@@ -207,7 +226,7 @@ function buildCompanionContext() {
   return { text, sectionCount };
 }
 
-function buildWorkbenchContext() {
+function buildWorkbenchContext(variant = null) {
   const conceptFiles = [
     "concepts/README.md",
     ...listWorkbenchFiles("concepts")
@@ -217,13 +236,14 @@ function buildWorkbenchContext() {
   const sections = [
     ["OPERATING RULES", "workbench-source-kit.md"],
     ["AUDIENCE GUIDE", "audiences/guide.md"],
+    ...(!variant ? profiles.map(p => ["AUDIENCE " + p.id.toUpperCase(), "audiences/"+p.id+".md"]) : [["AUDIENCE " + variant.profile.id.toUpperCase(), "audiences/"+variant.profile.id+".md"]]),
     ["FRAMEWORK", "framework/ai-fluency-progression.md"],
     ["CONCEPTS", conceptFiles],
     ...workbenchTools.map((tool) => [tool.title.toUpperCase(), `templates/${tool.filename}`]),
   ];
 
   const parts = [
-    "# Judgment Lab Educator Workbench - Context Bundle",
+    "# Judgment Lab Educator Workbench - " + (variant ? variant.profile.label : "All settings") + " Context Bundle",
     "",
     "Read this whole file before answering. Sections are marked with clear SECTION headers.",
     "Start from the OPERATING RULES. Every template contains an AI Facilitation Block; follow it exactly when facilitating.",
@@ -231,9 +251,11 @@ function buildWorkbenchContext() {
   ];
 
   sections.forEach(([label, relativePath]) => {
-    const body = Array.isArray(relativePath)
+    let body = Array.isArray(relativePath)
       ? relativePath.map((p) => readRequiredWorkbenchFile(p).trim()).join("\n\n")
       : readRequiredWorkbenchFile(relativePath).trim();
+    if (variant && label === "FRAMEWORK") body = variant.framework;
+    if (variant && typeof relativePath === "string" && relativePath.startsWith("templates/")) body = variant.tools.find(t=>relativePath.endsWith(t.filename)).markdown;
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", body);
   });
 
@@ -451,18 +473,21 @@ function labPrompt() {
 Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Begin with the essay and help me choose one of its seven failure modes. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
 }
 
-function workbenchSetupPrompt() {
+function workbenchSetupPrompt(id = null) {
+  const variant = workbenchVariants[id];
+  const url = variant ? `${siteUrl}/assets/workbench-context-${id}.md` : workbenchContextUrl;
+  const count = variant ? variant.bundle.sectionCount : workbenchSectionCount;
   return `You are a facilitation assistant for the Judgment Lab Educator Workbench, working under my direction. I am an educator designing AI-enabled teaching in PME, higher education, or high school. I own every pedagogical judgment; you ask, structure, and challenge.
 
 Before you answer anything, use the attached context file if provided; otherwise fetch and read this file in full. It contains the operating rules, the AI fluency progression, the phase placement diagnostic, and every workbench template with its AI Facilitation Block:
 
-${workbenchContextUrl}
+${url}
 
 If you cannot reach that URL, tell me you could not read it and ask me to paste or attach the context file. Do not answer from memory.
 
-After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${workbenchSectionCount}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read — a partial read causes you to invent workbench content that is not in the file.
+After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${count}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read — a partial read causes you to invent workbench content that is not in the file.
 
-Use my selected setting or ask for it, then read the AUDIENCE GUIDE. Ask whether I have practiced with the essay or already have a concrete teaching task. If I need that practice first, direct me to the interactive lab context at ${siteUrl}/assets/judgment-lab-interactive-context.md; do not invent the essay from this workbench bundle. Otherwise run the Phase Placement Diagnostic, one question at a time, with task readiness and support explicit. Then facilitate the chosen template. The progression is a design lens, not a universal developmental ladder.`;
+Use my selected setting or ask for it, then read the AUDIENCE GUIDE and the matching AUDIENCE section. Confirm the bundle setting matches mine; if it does not, ask for the matching file before facilitating. Apply that setting’s reference matrix, worked example, support and responsibility limits throughout. The example is optional; preserve my actual teaching task. Ask whether I have practiced with the essay or already have a concrete teaching task. If I need that practice first, direct me to the interactive lab context at ${siteUrl}/assets/judgment-lab-interactive-context.md; do not invent the essay from this workbench bundle. Otherwise run the Phase Placement Diagnostic, one question at a time, with task readiness and support explicit. Then facilitate the chosen template. The progression is a design lens, not a universal developmental ladder.`;
 }
 
 function companionContextInstruction() {
@@ -580,12 +605,14 @@ function buildWorkbenchMode(tools, concepts) {
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero">
-      <h1>Educator Workbench</h1>
-      <p class="dek">Ready-to-use teaching materials for designing, assessing, and governing AI-enabled learning.</p>
+      <h1 id="workbench-title">Educator Workbench</h1>
+      <p class="dek" id="workbench-summary">Choose a setting to open its teaching examples, reference matrix, and adapted tools.</p>
+      <p id="workbench-setting-status" role="status">PME, HE, and high-school materials each require evidence from use in their own setting.</p>
+      <label for="workbench-setting">Workbench setting</label>
+      <select id="workbench-setting"><option value="">Choose your setting</option>${profiles.map(p=>`<option value="${p.id}">${escapeHtml(p.label)}</option>`).join("")}</select>
       <p>
-        The setup prompt reads the whole workbench, places your assignment on the
-        six-phase fluency progression, and facilitates the right template with you.
-        No repository knowledge required. Choose PME, HE, or high school above. Readiness and learning purpose determine the next step; a later phase is not automatically better.
+        The setup prompt reads the whole workbench, helps you choose a practice for your learning objective, and facilitates the right template with you.
+        Choose a setting for its worked example, matrix, and nine adapted templates. Readiness and learning purpose determine the next step; a later phase is not automatically better.
       </p>
       <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
@@ -593,7 +620,7 @@ function buildWorkbenchMode(tools, concepts) {
           <h3>Attach the context file</h3>
           <p>Download the context file, attach it to a new chat, then paste the setup prompt. If attachments are unavailable, paste the file text. A partial read needs to be resolved before the session starts.</p>
           <div class="action-row">
-            <a class="copy-button primary" href="assets/${workbenchContextFilename}" download>Download context file</a>
+            <a class="copy-button primary" id="workbench-context-download" href="assets/${workbenchContextFilename}" download>Download context file</a>
             <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
           </div>
         </div>
@@ -615,18 +642,19 @@ function buildWorkbenchMode(tools, concepts) {
     </section>
 
     <section class="detail-band" id="workbench-progression">
-      <h2 class="band-label">The Progression</h2>
-      <p>
-        The progression offers six ways to organize AI-supported work.
-        Judgment stays human at every phase. This is a design lens, not a validated age ladder or a requirement that every learner reach supervision.
-      </p>
-      <img class="progression-visual" src="assets/asking-to-supervising.svg" alt="AI fluency progression: six phases from Ask to Supervise across learners, faculty, and institution">
-      <p class="visual-status">The persona rows above are reference-matrix content, published as
-        <a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Hypothesis — awaiting NWC validation</a> — the concept note explains why.</p>
+      <h2 class="band-label">Practice in your setting</h2>
+      <div data-workbench-audience=""><p>Choose PME, higher education, or high school to see a worked example and its reference matrix. Ask, understand, produce, judge, codify, and supervise are optional task designs; they are not an age ladder.</p></div>
+      ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
+        <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
+        <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
+        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}).replace(/id="([^"]+)"/g,`id="wb-${p.id}-$1"`)}</div></details>
+        <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
+      </div>`).join("")}
+      <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
     </section>
 
     <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
-    <section id="workbench-tools" class="tool-grid" aria-label="Faculty workbench tools">
+    <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
       ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
     </section>
 
@@ -669,7 +697,7 @@ function buildWorkbenchMode(tools, concepts) {
       <p>
         A future Librarian-style system could help faculty govern source kits,
         handoffs, proposals, diffs, and rollback. That belongs inside the
-        workbench roadmap. It is not a current NWC system.
+        workbench roadmap. It is a proposal, not a deployed institutional system.
       </p>
     </section>
   </div>`;
@@ -848,7 +876,7 @@ function getWorkbenchTools() {
       cardDesc: "Find your phase on the fluency progression and the right tool.",
       cardAction: "Run diagnostic",
       filename: "phase-placement-diagnostic.md",
-      useNote: "Give this to your AI assistant and say: run this diagnostic with me. Ten minutes.",
+      useNote: "Give this to your AI assistant and say: run this diagnostic with me. Record the actual time needed.",
     },
     {
       id: "assignment-design",
@@ -875,7 +903,7 @@ function getWorkbenchTools() {
       cardDesc: "Create a useful contribution with a consequential reasoning problem.",
       cardAction: "Open template",
       filename: "flawed-output-library-template.md",
-      useNote: "Use this to build examples that fail under strategic questioning, not surface reading.",
+      useNote: "Use this to build inspectable contributions, including warranted ones, against the learning objective.",
     },
     {
       id: "source-kit",
@@ -1183,18 +1211,31 @@ const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
 const modeNames = ["overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12"];
+const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,...p})=>p)).replaceAll("<","\\u003c")};
+const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
+let currentWorkbenchAudience = "";
 const audienceLabels = {pme: "PME", he: "higher education", k12: "high school"};
 const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-prompt]")).map(el => [el, el.textContent]));
 function applyAudience(id) {
+  currentWorkbenchAudience = audienceLabels[id] ? id : "";
   const label = audienceLabels[id];
+  const profile = workbenchProfiles.find(p=>p.id===id);
+  document.getElementById("workbench-title").textContent = profile ? profile.title : "Educator Workbench";
+  document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
+  document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
+  document.getElementById("workbench-setting").value = currentWorkbenchAudience;
+  document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
+  document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
   document.querySelectorAll("[data-audience-current]").forEach(el => el.textContent = label || "Choose your setting above");
   document.querySelectorAll("[data-audience-link]").forEach(el => { if (el.dataset.audienceLink === id) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); });
   promptBases.forEach((text, el) => {
-    const local = text.replaceAll("https://judgmentlab.net/assets/", new URL("assets/", location.href).href);
+    const base = el.id === "workbench-setup-prompt" && profile ? workbenchPrompts[id] : text;
+    const local = base.replaceAll("${siteUrl}/assets/", new URL("assets/", location.href).href);
     el.textContent = (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide.\\n\\n" : "") + local;
   });
+  if (typeof refreshWorkbench === "function") refreshWorkbench();
 }
-applyAudience(new URL(location.href).searchParams.get("audience"));
+// Initial audience application occurs through setMode after client state is initialized.
 const toc = document.querySelector(".toc");
 const tocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
   .map((link) => ({ link, heading: document.getElementById(link.dataset.tocLink) }))
@@ -1206,18 +1247,34 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 let workbenchTools = [];
 let workbenchConcepts = [];
 let workbenchDataPromise = null;
+let loadedWorkbenchData = null;
+let selectedWorkbenchFile = "phase-placement-diagnostic.md";
+let selectedWorkbenchConcept = false;
+function refreshWorkbench() {
+  if (!loadedWorkbenchData) return;
+  const variant = loadedWorkbenchData.audiences[currentWorkbenchAudience];
+  workbenchTools = variant ? variant.tools : loadedWorkbenchData.tools;
+  workbenchConcepts = loadedWorkbenchData.concepts;
+  for (const tool of workbenchTools) {
+    const card = document.querySelector('[data-tool-id="'+tool.id+'"]');
+    if (card) card.querySelector(".tool-desc").textContent = tool.cardDesc || tool.useNote;
+  }
+  const item = (selectedWorkbenchConcept ? workbenchConcepts : workbenchTools).find(t=>t.filename===selectedWorkbenchFile) || workbenchTools[0];
+  renderWorkbenchDocument(item,selectedWorkbenchConcept);
+}
+
 
 function ensureWorkbenchData() {
   if (!workbenchDataPromise) {
-    workbenchDataPromise = fetch("assets/workbench-data.json")
+    workbenchDataPromise = fetch("assets/workbench-data.json?v=${workbenchDataVersion}")
       .then((response) => {
         if (!response.ok) throw new Error("workbench data " + response.status);
         return response.json();
       })
       .then((data) => {
         document.getElementById("workbench-error").hidden = true;
-        workbenchTools = data.tools || [];
-        workbenchConcepts = data.concepts || [];
+        loadedWorkbenchData = data;
+        refreshWorkbench();
         return data;
       })
       .catch((error) => {
@@ -1564,20 +1621,26 @@ async function openWorkbenchRoute(route) {
   else { const message = document.getElementById("workbench-error"); message.textContent = "That document was not found. Choose a workbench tool below."; message.hidden = false; }
 }
 
-function selectDocument(item, isFromConcept = false, push = true) {
-  const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
-  if (location.hash !== route) { if (push) history.pushState(null, "", route); else history.replaceState(null, "", route); }
-  document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
-    card.classList.remove("is-selected");
-  });
+function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("selected-tool-title").textContent = item.title;
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
   const download = document.getElementById("selected-tool-download");
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
-  download.href = basePath + item.filename;
+  download.href = item.downloadPath || basePath + item.filename;
   download.download = item.filename;
+ }
+
+function selectDocument(item, isFromConcept = false, push = true) {
+  const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
+  if (location.hash !== route) { if (push) history.pushState(null, "", route); else history.replaceState(null, "", route); }
+  document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
+    card.classList.remove("is-selected");
+  });
+  selectedWorkbenchFile = item.filename;
+  selectedWorkbenchConcept = isFromConcept;
+  renderWorkbenchDocument(item,isFromConcept);
   window.requestAnimationFrame(() => {
     const selectedTool = document.querySelector(".selected-tool");
     if (selectedTool) {
@@ -1585,6 +1648,14 @@ function selectDocument(item, isFromConcept = false, push = true) {
     }
   });
 }
+
+document.getElementById("workbench-setting").addEventListener("change", event => {
+  const url = new URL(location.href);
+  if (event.target.value) url.searchParams.set("audience",event.target.value); else url.searchParams.delete("audience");
+  history.pushState(null,"",url);
+  applyAudience(event.target.value);
+});
+window.addEventListener("popstate",()=>applyAudience(new URL(location.href).searchParams.get("audience")));
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
   button.addEventListener("click", async () => {
@@ -1634,6 +1705,7 @@ document.addEventListener("click", async (event) => {
   } catch {
     return;
   }
+  if (link.getAttribute("href") === "#workbench-progression") { scrollElementBelowNav(document.getElementById("workbench-progression")); return; }
   const id = link.getAttribute("href").replace("#wb-doc-", "");
   const toolDoc = workbenchTools.find((tool) => tool.filename === \`\${id}.md\`);
   const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
@@ -1683,7 +1755,13 @@ document.querySelectorAll(".article-body a[target='_blank'], .source-spine a[tar
 }
 
 function css() {
-  return `.audience-nav {display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 24px; padding:16px 24px; border-bottom:1px solid var(--faint); font-family:var(--font-mono); font-size:13px;}
+  return `#workbench-setting {display:block;max-width:100%;margin:8px 0 28px;padding:10px 36px 10px 12px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);font:inherit;}
+[data-workbench-audience][hidden] {display:none;}
+[data-workbench-audience] details {margin:20px 0;}
+[data-workbench-audience] summary {cursor:pointer;text-decoration:underline;text-underline-offset:4px;}
+.audience-matrix {overflow-x:auto;}
+.audience-matrix table {min-width:650px;}
+.audience-nav {display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 24px; padding:16px 24px; border-bottom:1px solid var(--faint); font-family:var(--font-mono); font-size:13px;}
 .audience-nav a {padding:7px 3px; text-underline-offset:6px;}
 .audience-nav [aria-current] {color:var(--red); text-decoration-thickness:2px;}
 .audience-paths {margin:36px 0; border-top:1px solid var(--faint);}

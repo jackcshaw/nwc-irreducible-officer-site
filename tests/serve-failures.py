@@ -6,7 +6,7 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(Path(__file__).resolve().parents[1]/"dist"), **kwargs)
     def do_GET(self):
-        if self.path == "/assets/workbench-data.json" and not Handler.failed:
+        if self.path.split("?")[0] == "/assets/workbench-data.json" and not Handler.failed:
             Handler.failed=True
             self.send_error(503,"Intentional one-time QA failure")
             return

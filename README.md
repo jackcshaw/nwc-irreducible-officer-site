@@ -53,3 +53,9 @@ The homepage, audience views, companion prompts, workbench, source page, and dow
 Active source checkouts for this refresh are the three `nwc-irreducible-officer-*` / `nwc-faculty-workbench` siblings. Set explicit source paths; the older `nwc/` copies are not this release candidate. The essay source remains `content/the-irreducible-officer.md`, matched against the companion mirror at build time.
 
 For a preview, set `SITE_URL` to its base URL when building. Browser copy actions also use the current origin so preview sessions read preview assets. Run the build, contract tests, and audience checks before deploying. Educator and classroom validation remain pending.
+
+### Audience-specific workbench release
+
+Selecting PME, HE, or high school changes the visible example, reference matrix, nine tool adaptations, setup prompt, and context download. Source profiles and guides live in the workbench `audiences/` directory; `scripts/workbench-audiences.mjs` builds 27 adapted template downloads, three standalone matrix SVGs, and three 14-section context bundles. The shared workbench bundle has 16 sections. Markdown and JSON assets revalidate to prevent old context files lingering after a testing update.
+
+Run `npm test` after the build to verify source/profile agreement, all adapted links, copy/download/bundle parity, the shipped audience handler, and the original essay contracts.

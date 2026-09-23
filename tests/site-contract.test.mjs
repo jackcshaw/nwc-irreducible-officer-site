@@ -78,7 +78,7 @@ inlineScripts.forEach((script, index) => {
   "Download template",
   "The Design Behind The Tools",
   "Future Context Layer",
-  "not a current NWC system",
+  "not a deployed institutional system",
   "Evidence And Source Spine",
   "Use this as the working source spine",
   "The formal reference list remains at the end of the essay",
@@ -150,7 +150,7 @@ const workbenchContext = readFileSync(workbenchContextPath, "utf8");
   "curated context",
   "inter-rater reliability",
   "AI Facilitation Block",
-  "Hypothesis — awaiting NWC validation",
+  "Hypothesis — evidence required in the intended setting",
 ].forEach((needle) => {
   assert(workbenchContext.includes(needle), `workbench bundle should include ${needle}`);
 });
@@ -175,8 +175,8 @@ assert(
 );
 
 assert(
-  /No repository\s+knowledge required/.test(html),
-  "workbench should tell faculty no repository knowledge is required",
+  html.includes("Choose a setting for its worked example"),
+  "workbench should explain how to select adapted materials",
 );
 
 [
@@ -226,7 +226,7 @@ assert(
   "workbench setup prompt should point at the workbench bundle",
 );
 assert(existsSync(join(dist, "assets", "asking-to-supervising.svg")), "progression visual should be copied into assets");
-assert(html.includes("assets/asking-to-supervising.svg"), "workbench page should show the fluency progression visual");
+assert(html.includes("assets/workbench/k12/reference-matrix.svg"), "workbench should offer audience-specific reference visuals");
 
 [
   ["Open", "companion", "repo"],
@@ -321,7 +321,7 @@ assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use arg
 const workbenchDataPath = join(dist, "assets", "workbench-data.json");
 assert(existsSync(workbenchDataPath), "workbench data file should be generated");
 assert(!html.includes('"markdown":'), "workbench documents should not be inlined into the page");
-assert(html.includes('fetch("assets/workbench-data.json")'), "client script should fetch workbench data on demand");
+assert(/fetch\("assets\/workbench-data\.json\?v=[a-f0-9]{16}"\)/.test(html), "client script should fetch workbench data on demand");
 const workbenchData = JSON.parse(readFileSync(workbenchDataPath, "utf8"));
 const embeddedWorkbenchTools = workbenchData.tools;
 assert(Array.isArray(embeddedWorkbenchTools) && embeddedWorkbenchTools.length > 0, "workbench data should carry the tools");
@@ -405,7 +405,7 @@ conceptFiles.forEach((file) => {
   "How will your assistant get the file?",
   "The Design Behind The Tools",
   'id="workbench-doc-view"',
-  "Hypothesis — awaiting NWC validation",
+  "Why each audience needs its own evidence",
 ].forEach((needle) => {
   assert(html.includes(needle), `site should include ${needle}`);
 });

@@ -52,3 +52,66 @@ for (const id of ["pme","he","k12"]) {
   assert.equal(current.hash,"#companion");
 }
 console.log("direct audience handoff regression passed");
+
+// Full audience contract: the screen, template copy, downloads and context agree.
+const wbData=JSON.parse(read('assets/workbench-data.json'));
+const wbRoot=process.env.WORKBENCH_REPO_PATH || join(root,'../workbench');
+const profiles=JSON.parse(readFileSync(join(wbRoot,'audiences/profiles.json'),'utf8'));
+for (const p of profiles) {
+ const v=wbData.audiences[p.id], ctx=read('assets/workbench-context-'+p.id+'.md');
+ assert.equal(v.tools.length,9);
+ assert.equal(v.bundle.sectionCount,(ctx.match(/^# ===== SECTION:/gm)||[]).length);
+ assert.equal(release.workbenchAudienceSections[p.id],v.bundle.sectionCount);
+ assert.equal(ctx.trim(),v.bundle.text.trim());
+ assert(ctx.includes('SECTION: AUDIENCE '+p.id.toUpperCase()));
+ assert(ctx.includes(v.framework.trim()));
+ assert(ctx.includes(v.guide.trim()));
+ for(const key of ['status','readiness','responsibility','facts','baseline','change','record','trial']) assert(v.guide.includes(p[key]),p.id+' guide/profile disagreement: '+key);
+ assert.equal(p.rows.length,6);
+ for(const row of p.rows) for(const cell of row) {assert(v.framework.includes(cell));assert(v.guide.includes(cell));}
+ for(const t of v.tools) {
+  assert.equal(read(t.downloadPath).trim(),t.markdown,p.id+' copy/download mismatch: '+t.id);
+  assert(ctx.includes(t.markdown),p.id+' bundle missing '+t.id);
+  assert(t.markdown.includes(p.tools[t.filename.replace(/\.md$/,'')].guidance));
+  assert(t.markdown.includes(p.responsibility));
+  assert(t.html.includes(p.case));
+  assert(!t.markdown.includes('awaiting NWC validation'));
+  if(p.id!=='pme') assert(!/commander|adversary|NWC policy/.test(t.markdown));
+  // Every generated template link resolves, including standalone use outside the site.
+  for (const m of t.markdown.matchAll(/\]\((https?:\/\/[^)]+)\)/g)) {
+    const url=new URL(m[1]); if(url.pathname.startsWith('/assets/')) assert(existsSync(join(dist,url.pathname.slice(1))), 'Broken adapted template link: '+m[1]);
+  }
+ }
+ assert(read('assets/workbench/'+p.id+'/reference-matrix.svg').includes(p.label+' reference matrix'));
+}
+assert(!read('assets/asking-to-supervising.svg').includes('Every learner becomes a capable supervisor'));
+assert(!JSON.stringify(wbData).includes('awaiting NWC validation'));
+assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes('correct denominator'));
+assert(wbData.audiences.k12.tools.find(t=>t.id==='assessment').markdown.includes('Taught concept'));
+assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes('Causal interpretation'));
+
+// Execute the shipped audience handler with the actual data and prompts.
+const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+new vm.Script(script); // Parse all client code, including unexecuted branches.
+const profileDecl=script.match(/const workbenchProfiles = ([^\n]+);/)[1];
+const promptDecl=script.match(/const workbenchPrompts = ([^\n]+);/)[1];
+const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
+const elements=Object.fromEntries(['workbench-title','workbench-summary','workbench-setting-status','workbench-setting','workbench-context-download'].map(id=>[id,{}]));
+const prompt={id:'workbench-setup-prompt',textContent:''};
+const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
+const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
+vm.runInNewContext(applyCode,context);
+for(const p of [...profiles,profiles[0]]) {
+ context.applyAudience(p.id);
+ assert.equal(elements['workbench-title'].textContent,p.title);
+ assert.equal(elements['workbench-context-download'].href,'assets/workbench-context-'+p.id+'.md');
+ assert(prompt.textContent.includes('/assets/workbench-context-'+p.id+'.md'));
+ assert(prompt.textContent.includes('it should be '+wbData.audiences[p.id].bundle.sectionCount));
+ assert.deepEqual(panels.filter(x=>!x.hidden).map(x=>x.dataset.workbenchAudience),[p.id]);
+}
+context.applyAudience('unknown');
+assert.equal(elements['workbench-context-download'].href,'assets/workbench-context.md');
+assert.equal(prompt.textContent,'generic prompt');
+console.log('workbench audience contract passed: 27 adapted templates, 3 matrices, bundles, links, and live audience handler');
+
+assert(html.includes("assets/workbench-data.json?v="+createHash("sha256").update(read("assets/workbench-data.json")).digest("hex").slice(0,16)),"Workbench data cache key must match content");
