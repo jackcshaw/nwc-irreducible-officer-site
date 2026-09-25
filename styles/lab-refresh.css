@@ -7,7 +7,8 @@
 .package-nav {display:block;padding:0 28px;background:var(--paper);backdrop-filter:none;border-top:1px solid var(--ink);border-bottom:1px solid var(--faint);letter-spacing:0;}
 .package-tabs {max-width:1104px;margin:auto;padding:0;display:grid;grid-template-columns:repeat(5,1fr);background:none;gap:0;}
 .package-tabs button {font-family:var(--font-body);font-size:20px;color:var(--ink);min-height:57px;padding:15px 12px;}
-.package-tabs button:hover {background:var(--paper-soft);}
+.package-tabs button:hover {background:transparent;}
+.package-tabs button:not([aria-selected="true"]):hover::after {content:"";position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--red);opacity:.4;}
 .package-tabs button[aria-selected="true"] {background:transparent;font-weight:600;}
 .package-tabs button[aria-selected="true"]::after {bottom:0;left:20%;right:20%;height:3px;}
 .audience-nav {font-family:var(--font-body);font-size:16px;gap:12px 28px;border:0;padding:18px 28px;}
@@ -185,3 +186,25 @@ h2,h3 {line-height:1.25;}
  .package-tabs {display:flex;justify-content:space-between;gap:10px;width:100%;border-top:1px solid var(--faint);}
  .package-tabs button {font-size:17px;min-height:49px;padding:12px 0;}
 }
+
+/* Companion editions follow the existing essay reading measure. */
+.companion-edition {max-width:76ch;margin-inline:auto;}
+.edition-links {display:flex;flex-direction:column;gap:14px;margin:20px 0;font-size:20px;line-height:1.4;}
+.edition-links span {font-size:16px;color:var(--muted);}
+.edition-toc {border-block:1px solid var(--faint);padding:18px 0;margin:28px 0 40px;}
+.edition-toc summary {cursor:pointer;font-size:20px;}
+.edition-toc nav {display:flex;flex-direction:column;gap:12px;padding-top:20px;font-size:17px;}
+.companion-edition .article-body {overflow-wrap:anywhere;}
+
+.judgment-try {border-block:1px solid var(--ink);padding:30px 0;margin:36px 0 44px;max-width:74ch;}
+.judgment-try h2 {font-size:32px;margin-bottom:16px;}
+.judgment-try h3 {font-size:25px;margin:28px 0 16px;}
+.judgment-try p {font-size:19px;line-height:1.5;margin:14px 0;}
+.judgment-try>p {font-size:16px;color:var(--muted);}
+.judgment-try label {display:block;font-size:18px;margin:20px 0 10px;}
+.judgment-try textarea {display:block;width:100%;box-sizing:border-box;resize:vertical;font:19px/1.5 var(--font-body);color:var(--ink);caret-color:var(--red);background:var(--paper);border:1px solid var(--muted);padding:12px;margin-bottom:18px;}
+.judgment-try blockquote {border:0;padding:20px 24px;background:var(--paper-soft);font-size:22px;line-height:1.45;margin:18px 0;}
+.judgment-try [data-try-record] p {white-space:pre-wrap;overflow-wrap:anywhere;}
+.judgment-try [data-try-record] h4 {font-size:19px;margin-top:24px;}
+/* Keep decorative separators out of inactive reading surfaces. */
+.mode-view[hidden] .article-body hr::before {content:none;}

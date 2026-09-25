@@ -152,3 +152,57 @@ assert.equal(routeContext.location.hash,'#wb-doc-assessment-and-oral-defense-rub
 routeContext.activeMode='he';routeContext.changeAudience({target:{value:'pme'}});assert.equal(routeContext.activeMode,'pme');
 routeContext.changeAudience({target:{value:''}});assert.equal(routeContext.activeMode,'overview');assert.equal(routeContext.location.searchParams.has('audience'),false);
 console.log('global audience selector passed: context, document route, and learning views');
+
+// Full editions must reach the reader, practice context and selected Design bundle.
+for (const a of catalog.filter(a=>a.id!=='pme')) {
+ const source=readFileSync(join(companion,a.essayFile),'utf8');
+ assert.equal((source.match(/^## [IVX]+\./gm)||[]).length,11,a.id+' incomplete essay progression');
+ assert.equal(read('assets/'+a.essayFile),source,a.id+' essay download differs');
+ assert(bundle.includes(source.trim()),a.id+' missing from Practice');
+ assert(lab.includes(source.trim()),a.id+' missing from lab');
+ const ctx=read('assets/workbench-context-'+a.id+'.md');
+ assert(ctx.includes(source.trim()),a.id+' missing from Design');
+ assert(Buffer.byteLength(ctx)<150000,a.id+' Design bundle exceeds paste budget');
+ assert(html.includes('id="panel-'+a.essayMode+'"'),a.id+' reading surface absent');
+ assert(html.includes('data-mode-link="'+a.essayMode+'"'),a.id+' reading surface unreachable');
+ // Source-relative links in standalone essay downloads resolve.
+ for(const m of source.matchAll(/\]\(([^)]+)\)/g)) if(!/^https?:/.test(m[1])) {
+  assert(existsSync(join(dist,'assets',a.essayFile,'..',m[1])),'Broken essay source link: '+m[1]);
+ }
+}
+for(const mode of ['he-essay','k12-essay']) {
+ let current=new URL('https://test.example/#'+mode),selected;
+ const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){}};
+ vm.runInNewContext(routing+';setMode("'+mode+'",false);',ctx);
+ assert.equal(selected,mode.replace('-essay',''));
+ assert.equal(current.searchParams.get('audience'),selected);
+}
+routeContext.activeMode='he-essay';routeContext.changeAudience({target:{value:'k12'}});assert.equal(routeContext.activeMode,'k12-essay');
+assert(html.includes('Teaching guide and review notes (reveals the case analysis)</summary>'));
+assert.equal((html.match(/data-try-stage="0"/g)||[]).length,4);
+assert(html.includes('caseText+fields.map'),'Downloaded practice record must include the actual case');
+assert(html.includes('p.textContent=field.value'),'User responses must be rendered as text');
+console.log('companion essays passed: 11 sections each, source parity, complete contexts, relative links and audience routing');
+
+// Execute the shipped practice handler: no reveal without a response, no invented record.
+const practiceCode=script.slice(script.indexOf('document.querySelectorAll("[data-try]")'),script.indexOf('const copyStatus ='));
+let downloadedBlob;
+const fields=Array.from({length:3},()=>({value:'',disabled:true,readOnly:false,validity:'',setCustomValidity(x){this.validity=x},reportValidity(){},focus(){},addEventListener(){}}));
+fields[0].disabled=false;
+const stages=Array.from({length:4},(_,i)=>({hidden:i!==0,focus(){},querySelector(sel){return {textContent:sel==='blockquote'?'Constructed contribution':'Case condition '+i}}}));
+const savedNodes=[];const recordNode={append(...nodes){savedNodes.push(...nodes)}};
+let submit,download;
+const form={querySelectorAll(){return fields},addEventListener(type,fn){submit=fn}};
+const container={dataset:{tryAudience:'he'},querySelectorAll(){return stages},querySelector(sel){return sel==='[data-try-form]'?form:sel==='[data-try-record]'?recordNode:{addEventListener(type,fn){download=fn}}}};
+const ctx={Blob,URL:{createObjectURL(b){downloadedBlob=b;return 'blob:test'},revokeObjectURL(){}},setTimeout(){},document:{querySelectorAll(){return [container]},createElement(){return {textContent:'',click(){}}}}};
+vm.runInNewContext(practiceCode,ctx);
+download();assert.equal(downloadedBlob,undefined,'No record before answers');
+fields[0].value='   ';submit({preventDefault(){}});assert.equal(stages[0].hidden,false);assert(fields[0].validity);
+const replies=['My starting claim','<b>Keep my disagreement literally</b>','I retain my judgment for this reason'];
+for(let i=0;i<3;i++) {fields[i].value=replies[i];submit({preventDefault(){}});assert.equal(stages[i+1].hidden,false);assert.equal(fields[i].readOnly,true)}
+assert.deepEqual(savedNodes.filter((_,i)=>i%2===1).map(n=>n.textContent),replies);
+download();const record=await downloadedBlob.text();
+for(const text of [...replies,'Case condition 0','Constructed contribution','Case condition 2','Educator review: pending']) assert(record.includes(text));
+assert(record.includes('\n\nSetting: he'),'Record should have real line breaks');
+assert(!record.includes('proficient'));
+console.log('opening practice passed: response gates, literal decisions, full case record and honest status');

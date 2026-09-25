@@ -53,7 +53,7 @@ inlineScripts.forEach((script, index) => {
   "One method, different teaching decisions",
   "Strengthening human judgment",
   "Ready for educator testing",
-  "A useful first test",
+  "Try a judgment before you read on.",
   "Set up a session",
   "See the five-step pilot",
   "Read",
@@ -283,7 +283,7 @@ assert(
   "essay body should not repeat the subtitle as its first heading",
 );
 
-const articleStart = html.indexOf('<article class="essay article-body">');
+const articleStart = html.indexOf('<article class="essay article-body">', html.indexOf('id="panel-essay"'));
 const articleEnd = html.indexOf("</article>", articleStart);
 const articleHtml = html.slice(articleStart, articleEnd);
 const firstParagraph = articleHtml.indexOf("Strategic decisions are increasingly built from AI-shaped inputs");

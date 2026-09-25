@@ -28,6 +28,7 @@ const assetCommand = process.env.PDF_PYTHON
 
 const discussionClaims = JSON.parse(readFileSync(join(root,"content/discussion-claims.json"),"utf8")).claims;
 const audiences = JSON.parse(readRequiredCompanionFile("audiences/catalog.json"));
+const companionEditions = audiences.filter(a => a.id !== "pme");
 const labCheck = spawnSync("python3", [join(companionRepoPath, "scripts/build_failure_mode_lab.py"), "--check"], {stdio:"inherit"});
 if (labCheck.status !== 0) throw new Error("Interactive context is stale; rebuild it in the companion repo first");
 const source = readFileSync(sourcePath, "utf8");
@@ -126,7 +127,12 @@ for (const [id,v] of Object.entries(workbenchVariants)) {
   for (const t of v.tools) writeFileSync(join(workbenchAssetsDir,id,t.filename),t.markdown+"\n");
   writeFileSync(join(assetsDir,"workbench-context-"+id+".md"),v.bundle.text+"\n");
 }
-writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-settled-masthead",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
+// Preserve repository-relative links in the new standalone essay downloads.
+for (const name of ["essays/he.md", "essays/k12.md", "essays/adaptation-map.md", "sources/source-spine.md", "sources/audience-foundations.md", "claims.md", "the-irreducible-officer.md"]) {
+  mkdirSync(dirname(join(assetsDir,name)),{recursive:true});
+  writeFileSync(join(assetsDir,name),readRequiredCompanionFile(name));
+}
+writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-companion-essays",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
@@ -196,6 +202,8 @@ function buildCompanionContext() {
   const sections = [
     ["OPERATING RULES", "AGENTS.md"],
     ["ESSAY", "the-irreducible-officer.md"],
+    ...companionEditions.map(a => ["ESSAY " + a.id.toUpperCase(), a.essayFile]),
+    ["ESSAY ADAPTATION MAP", "essays/adaptation-map.md"],
     ["CLAIMS", "claims.md"],
     ["SOURCE SPINE", "sources/source-spine.md"],
     ["OBJECTIONS", "prompts/objections-and-responses.md"],
@@ -260,6 +268,11 @@ function buildWorkbenchContext(variant = null) {
     parts.push("", "", `# ===== SECTION: ${label} =====`, "", body);
   });
 
+  for (const a of audiences.filter(a => variant && a.id === variant.profile.id)) {
+    parts.push("", "# ===== SECTION: ESSAY " + a.id.toUpperCase() + " =====", "", readRequiredCompanionFile(a.essayFile).trim());
+  }
+  if (!variant) parts.push("", "Select a setting and use its workbench-context-pme.md, workbench-context-he.md, or workbench-context-k12.md bundle before essay discussion. Each includes the full selected essay. The all-settings bundle contains the adaptation map, not the full essays.");
+  parts.push("", "# ===== SECTION: ESSAY ADAPTATION MAP =====", "", readRequiredCompanionFile("essays/adaptation-map.md").trim());
   const text = parts.join("\n");
   const sectionCount = (text.match(/# ===== SECTION:/g) || []).length;
   return { text, sectionCount };
@@ -314,7 +327,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </label>
     </div>
   </nav>
-  <noscript><p class="surface">Interactive navigation requires JavaScript. You can still <a href="assets/essay.md">read the essay</a> or <a href="assets/judgment-lab-interactive-context.md">download the complete lab context</a>.</p></noscript>
+  <noscript><p class="surface">Interactive navigation requires JavaScript. Read <a href="assets/essays/he.md">the HE essay</a>, <a href="assets/essays/k12.md">the high-school educator essay</a>, or <a href="assets/essay.md">read the essay</a> or <a href="assets/judgment-lab-interactive-context.md">download the complete lab context</a>.</p></noscript>
   <main id="top" class="site-shell" tabindex="-1">
     <aside class="toc" aria-label="Essay sections">
       ${essayToc
@@ -325,13 +338,14 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     <div class="content-frame">
       <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
       ${audiences.map(a => `<section class="mode-view" data-mode="${a.id}" id="panel-${a.id}" role="region" aria-label="${escapeHtml(a.title)}">${buildAudienceMode(a)}</section>`).join("")}
+      ${companionEditions.map(a => `<section class="mode-view" data-mode="${a.essayMode}" id="panel-${a.essayMode}" role="region" aria-label="${escapeHtml(a.essayTitle)}">${buildCompanionEssay(a)}</section>`).join("")}
       <section class="mode-view" data-mode="essay" id="panel-essay" role="region" aria-label="The Irreducible Officer">
         <div class="published">Published June 28, 2026</div>
         <div class="nwc-rule" aria-hidden="true"><span></span></div>
         <section class="essay-hero">
           <h1>The Irreducible Officer</h1>
           <p class="dek">Purpose, accountability, and AI-enabled strategic judgment.</p>
-          <p>The original PME argument. See the audience views for HE and high-school teaching adaptations.</p>
+          <p>The original PME argument. Read the companion editions for other settings.</p>${editionLinks()}
           <a class="quiet-action" href="assets/the-irreducible-officer.pdf" download>Download PDF</a>
         </section>
         <article class="essay article-body">${essayHtml}</article>
@@ -374,8 +388,10 @@ function buildOverviewMode() {
   return `<div class="surface overview">
     <section class="learn-opening">
       <div><h1>When AI helps,<br>who owns the judgment?</h1><p class="dek">Better work can make human understanding harder to see.</p><p>Explore the argument. Challenge it with others. Test a decision, then design practice that makes the reasoning visible.</p></div>
-      <aside class="featured-reading"><h2>The Irreducible Officer</h2><p>The essay that started the Lab: purpose, accountability, and judgment in work shaped by AI.</p><a href="#essay" data-mode-link="essay">Read the essay <span aria-hidden="true">→</span></a><span class="reading-context">The original PME argument. Teaching adaptations begin with your setting.</span></aside>
+      <aside class="featured-reading"><h2>The Irreducible Officer</h2><p>The essay that started the Lab: purpose, accountability, and judgment in work shaped by AI.</p><a href="#essay" data-mode-link="essay">Read the essay <span aria-hidden="true">→</span></a><span class="reading-context">The original PME argument, with full companion essays for higher education and high-school educators.</span></aside>
     </section>
+    ${buildOpeningPractice("home", "he")}
+    <section class="detail-band"><h2 class="band-label">Three settings, one argument to test</h2>${editionLinks()}</section>
     <section class="audience-paths" aria-label="Choose your setting">
       ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this view →</strong></a>`).join("")}
     </section>
@@ -392,6 +408,7 @@ function buildOverviewMode() {
 function buildDiscussMode() {
   return `<div class="surface discuss-surface">
     <section class="surface-hero"><h1>Judgment in Practice</h1><p class="dek">A conversation worth having before the next AI-assisted assignment.</p><p>Choose a claim to challenge. Bring a concrete example, a serious objection, and a willingness to reconsider. Use this 20–30 minute guided discussion with colleagues, supported by a facilitator guide.</p><div class="action-row"><a class="copy-button primary" href="https://judgment-in-practice.web.app/guide.html" target="_blank" rel="noreferrer">Open the facilitator guide</a><a class="quiet-action" href="https://judgment-in-practice.web.app/" target="_blank" rel="noreferrer">Open the guided discussion</a></div></section>
+    <section class="detail-band"><h2 class="band-label">Read the argument in your setting</h2>${editionLinks()}</section>
     <section class="discussion-opening"><h2>Where does the judgment happen?</h2><p>A student submits an excellent paper with help from an AI agent. The agent helped define the problem and develop the argument. Which choices can the student explain—and what happens when an assumption changes?</p><p>Start with an example from your work. Whose decision is it, and what would make their understanding visible?</p><p class="source-note">Fictional education example adapted from <a href="#essay" data-mode-link="essay">The Irreducible Officer</a>.</p></section>
     <p class="discussion-setting" data-discussion-setting>Choose a setting above to frame the discussion for your audience.</p>
     <section class="discussion-claims" aria-label="Five claims to challenge">
@@ -402,12 +419,43 @@ function buildDiscussMode() {
   </div>`;
 }
 
+function buildOpeningPractice(key, audience) {
+  const examples = {
+    pme: {label:"PME",initial:"A fictional report lists 12 outages: 8 followed equipment updates; 4 have unexplained causes. What can you conclude, and what would you need before recommending a rollback?",contribution:"All 12 outages resulted from equipment updates. Roll back the whole fleet.",change:"Independent diagnostic evidence now identifies a software defect in 10 outages; 2 remain unexplained. What action becomes more defensible, what remains uncertain, and who can authorize it?",review:"Timing alone did not establish cause. The diagnostic evidence strengthens the case for action, while the unexplained outages and authority to act still need attention."},
+    he: {label:"Higher education",initial:"A fictional university survey invites 1,000 students. One hundred respond; 80 favor an evening shuttle. What does that establish, and about whom?",contribution:"Eighty percent of all students favor the shuttle. The university should adopt the service.",change:"Now 100 students were randomly sampled from the 1,000, all 100 responded, and 80 favor the shuttle. What changes in your conclusion, and what still needs checking?",review:"The first percentage described respondents. The random sample gives a stronger basis for a population estimate, with sampling uncertainty. Neither result alone settles service costs or the policy decision."},
+    k12: {label:"High-school educator practice",initial:"Fictional surface-temperature readings show sunlit asphalt at 36°C and shaded grass at 28°C. What changed between the observations, and what can this comparison establish?",contribution:"Shade always lowers temperature by 8°C. Use this result to predict the benefit everywhere.",change:"Two otherwise matched asphalt tiles start at 30°C. A coin toss selects one for a shade screen. After 30 minutes, it is 31°C; the sunny tile is 37°C. What does this single trial support, and what still needs checking?",review:"The initial comparison changed both surface and shade. The tile comparison supports a more limited claim about less warming under this screen, with a 6°C final difference. It does not establish a universal effect or an air-temperature effect. Missing knowledge calls for teaching and supported practice."}
+  };
+  const c=examples[audience];
+  return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Try a judgment before you read on.</h2><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
+    <form data-try-form>
+      <div data-try-stage="0"><h3>Your starting point</h3><p>${c.initial}</p><label for="${key}-initial">Your judgment and reason</label><textarea id="${key}-initial" name="initial" rows="3" required maxlength="4000"></textarea><button class="copy-button" type="submit">Examine a contribution</button></div>
+      <div data-try-stage="1" hidden><h3>A contribution to examine</h3><p>Constructed AI-style contribution for practice:</p><blockquote>${c.contribution}</blockquote><label for="${key}-reliance">What would you accept, check, revise, or refuse—and why?</label><textarea id="${key}-reliance" name="reliance" rows="3" disabled required maxlength="4000"></textarea><button class="copy-button" type="submit">Change a condition</button></div>
+      <div data-try-stage="2" hidden><h3>Now change a condition</h3><p>${c.change}</p><label for="${key}-changed">Your decision now, with a reason</label><textarea id="${key}-changed" name="changed" rows="3" disabled required maxlength="4000"></textarea><button class="copy-button" type="submit">Compare your reasoning</button></div>
+    </form>
+    <div data-try-stage="3" hidden tabindex="-1"><h3>Review the decisions you made</h3><p>${c.review}</p><p>This note does not grade your response. Keep a justified disagreement. One exercise cannot establish lasting understanding.</p><div data-try-record></div><div class="action-row"><button class="copy-button" type="button" data-try-download>Download your record</button><a class="quiet-action" href="?audience=${audience}#companion" data-mode-link="companion" data-practice-audience="${audience}">Continue in Practice</a></div><p>Bring the record to your assistant for a fuller conversation. The record preserves the case and your responses, with review status left open.</p></div>
+  </section>`;
+}
+
+function editionLinks() {
+  return `<div class="edition-links" aria-label="Essay editions">${audiences.map(a => `<a href="#${a.essayMode}" data-mode-link="${a.essayMode}">${escapeHtml(a.essayTitle)} <span>(${escapeHtml(a.label)})</span></a>`).join("")}</div>`;
+}
+
+function buildCompanionEssay(a) {
+  const markdown = readRequiredCompanionFile(a.essayFile);
+  const prefix = a.essayMode + "-";
+  const body = renderMarkdown(markdown,{skipFirstH1:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>").replace(/id="([^"]+)"/g,`id="${prefix}$1"`)
+    .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
+  const toc = collectHeadings(markdown).map(h=>`<a href="#${prefix}${h.id}" data-essay-section-link="${prefix}${h.id}">${escapeHtml(h.text)}</a>`).join("");
+  return `<div class="surface companion-edition"><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.label)} companion essay</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><details class="edition-toc"><summary>In this essay</summary><nav aria-label="Sections in ${escapeHtml(a.essayTitle)}">${toc}</nav></details><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
+}
+
 function buildAudienceMode(a) {
   return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero"><h1>${escapeHtml(a.title)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
     <div class="action-row"><a class="copy-button primary" href="#companion" data-mode-link="companion">Start an interactive session</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Adapt your teaching</a><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></div></section>
-    <section class="detail-band"><h2 class="band-label">A useful first test</h2><p>${escapeHtml(a.focus)}. Make your judgment before the assistant contributes, then test whether it holds when a condition changes.</p></section>
-    <article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/id="([^"]+)"/g, `id="${a.id}-$1"`)}</article>
+    <section class="detail-band"><h2 class="band-label">The argument in your setting</h2><p><a href="#${a.essayMode}" data-mode-link="${a.essayMode}">${escapeHtml(a.essayTitle)}</a></p><p>Read the full essay, then use the guide below to try its method. ${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p></section>
+    ${buildOpeningPractice(a.id, a.id)}
+    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`).replace(/id="([^"]+)"/g, `id="${a.id}-$1"`)}</article></details>
   </div>`;
 }
 
@@ -450,7 +498,7 @@ function buildCompanionMode() {
       </div>
     </section>
 
-    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. Begin with the essay as an educator, then transfer to your teaching.</p><p>Frame capture · Fluency substitution · Premature synthesis · Uncalibrated reliance · Invisible delegation · Institutional monoculture · Responsibility laundering</p><div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
+    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. Begin with your setting’s essay as an educator, then transfer to your teaching. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p><p>Frame capture · Fluency substitution · Premature synthesis · Uncalibrated reliance · Invisible delegation · Institutional monoculture · Responsibility laundering</p><div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
         <h2>Paste this once into your AI assistant.</h2>
@@ -478,17 +526,17 @@ function buildCompanionMode() {
 }
 
 function setupPrompt() {
-  return `You are a close-reading and analysis assistant working under my direction. I am exploring The Irreducible Officer and its proposed applications in PME, higher education, or high school. I own my judgments; you structure, challenge, and point to evidence.
+  return `You are a close-reading and analysis assistant working under my direction. I am exploring Judgment Lab’s original PME essay and its HE and high-school companion editions. I own my judgments; you structure, challenge, and point to evidence.
 
 ${companionContextInstruction()}
 
-Use my stated audience, or ask which setting I want. Give the essay's core claim briefly, distinguish it from the audience adaptation, then ask what I want to test. For an interactive session, follow INTERACTIVE LAB PROTOCOL: one question at a time, wait for my judgment before the contribution, then test a changed condition. Use the selected AUDIENCE section for teaching transfer. Do not assume PME prerequisites in HE or K–12. Preserve disagreement and source limits. Save only decisions I actually made.`;
+Use my stated audience, or ask which setting I want. Read ESSAY for PME, ESSAY HE for higher education, or ESSAY K12 for high school. Give the selected edition’s core claim briefly, distinguish adaptations from the original, then ask what I want to test. For an interactive session, follow INTERACTIVE LAB PROTOCOL: one question at a time, wait for my judgment before the contribution, then test a changed condition. Use the selected AUDIENCE section for teaching transfer. Do not assume PME prerequisites in HE or K–12. Preserve disagreement and source limits. Save only decisions I actually made.`;
 }
 
 function labPrompt() {
   return `Run the Judgment Lab interactive failure-mode session. Use an attached judgment-lab-interactive-context.md if provided; otherwise read ${siteUrl}/assets/judgment-lab-interactive-context.md in full. If you cannot read the complete file, ask me to attach or paste it before proceeding.
 
-Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Begin with the essay and help me choose one of its seven failure modes. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
+Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Read the selected edition: the-irreducible-officer.md for PME, essays/he.md for HE, or essays/k12.md for high school. Begin with that essay and help me choose one of its seven failure modes. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
 }
 
 function workbenchSetupPrompt(id = null) {
@@ -505,7 +553,7 @@ If you cannot reach that URL, tell me you could not read it and ask me to paste 
 
 After reading, tell me exactly how many "===== SECTION:" headers the file contains and the name of the last section — it should be ${count}. If your count differs or you cannot see the whole file, say so and ask me to attach the file instead; do not continue from a partial read — a partial read causes you to invent workbench content that is not in the file.
 
-Use my selected setting or ask for it, then read the AUDIENCE GUIDE and the matching AUDIENCE section. Confirm the bundle setting matches mine; if it does not, ask for the matching file before facilitating. Apply that setting’s reference matrix, worked example, support and responsibility limits throughout. The example is optional; preserve my actual teaching task. Ask whether I have practiced with the essay or already have a concrete teaching task. If I need that practice first, direct me to the interactive lab context at ${siteUrl}/assets/judgment-lab-interactive-context.md; do not invent the essay from this workbench bundle. Otherwise run the Phase Placement Diagnostic, one question at a time, with task readiness and support explicit. Then facilitate the chosen template. The progression is a design lens, not a universal developmental ladder.`;
+Use my selected setting or ask for it, then read the AUDIENCE GUIDE and the matching AUDIENCE section. Confirm the bundle setting matches mine; if it does not, ask for the matching file before facilitating. Apply that setting’s reference matrix, worked example, support and responsibility limits throughout. The example is optional; preserve my actual teaching task. Ask whether I have practiced with the essay or already have a concrete teaching task. If I need that practice first, direct me to the interactive lab context at ${siteUrl}/assets/judgment-lab-interactive-context.md; the matching ESSAY section is included here, but the interactive lab context supplies the full facilitation protocol and cases. Otherwise run the Phase Placement Diagnostic, one question at a time, with task readiness and support explicit. Then facilitate the chosen template. The progression is a design lens, not a universal developmental ladder.`;
 }
 
 function companionContextInstruction() {
@@ -740,9 +788,10 @@ function buildSourcesMode() {
         reading. The formal reference list remains at the end of the essay.
       </p>
     </section>
+    <section class="detail-band"><h2 class="band-label">Essay editions and changes</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Download the section and claim comparison</a></section>
     <section class="detail-band"><h2 class="band-label">Shared method and audience limits</h2><p>Read the shared foundation alongside the original source spine. HE and high-school examples are constructed teaching proposals. The source notes are not a substitute for inspecting the original papers, and this refresh adds no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
     <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}).replace(/id="([^"]+)"/g, 'id="shared-$1"')}</article></details>
-    <article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article>
+    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article>
     <article class="source-spine article-body">
       ${renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true })}
     </article>
@@ -1229,7 +1278,7 @@ const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
 const modeAliases = {learn:"overview",practice:"companion",design:"workbench",references:"sources"};
-const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12"];
+const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay"];
 const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,...p})=>p)).replaceAll("<","\\u003c")};
 const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
 let currentWorkbenchAudience = "";
@@ -1238,6 +1287,8 @@ const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-
 function applyAudience(id) {
   currentWorkbenchAudience = audienceLabels[id] ? id : "";
   const label = audienceLabels[id];
+  const selectedEssayMode = id === "he" || id === "k12" ? id + "-essay" : "essay";
+  document.querySelectorAll("[data-selected-essay]").forEach(el=>{el.href="#"+selectedEssayMode;el.dataset.modeLink=selectedEssayMode;});
   const discussionSetting = {pme:"Discuss a professional recommendation: who framed it, who can authorize it, and what risk remains?",he:"Discuss an assignment in your discipline: which inference should the student own, and what evidence would demonstrate it?",k12:"Discuss as educators first: which concepts have been taught, what support is needed, and which choices can students own? Adult institutional duties remain with adults."};
   document.querySelectorAll("[data-discussion-setting]").forEach(el=>el.textContent=discussionSetting[id] || "Choose a setting above to frame the discussion for your audience.");
   const currentClaim = new URL(location.href).searchParams.get("claim");
@@ -1260,7 +1311,7 @@ function applyAudience(id) {
     const claim = new URL(location.href).searchParams.get("claim");
     const claimFocus = {learning:"Fluency substitution: distinguish assisted output from evidence of understanding",approval:"Frame capture: examine the judgment made before approval",friction:"Premature synthesis: distinguish useful support from lost practice",better:"Invisible delegation: inspect who supplied the criteria",frames:"Institutional monoculture: test whether different answers share the same frame"};
     const discussionContext = claimFocus[claim] && ["failure-mode-prompt","setup-prompt","workbench-setup-prompt"].includes(el.id) ? "Coming from the group discussion, I want to examine " + claimFocus[claim] + ". Help me test this claim; do not assume it is correct.\\n\\n" : "";
-    el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide.\\n\\n" : "") + local;
+    el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide and its matching full essay edition.\\n\\n" : "") + local;
   });
   if (typeof refreshWorkbench === "function") refreshWorkbench();
 }
@@ -1422,12 +1473,13 @@ function smoothBehavior() {
 function setMode(mode, shouldScroll = true, push = false) {
   const url = new URL(location.href);
   if (audienceLabels[mode]) url.searchParams.set("audience", mode);
+  if (["he-essay","k12-essay"].includes(mode)) url.searchParams.set("audience",mode.replace("-essay",""));
   applyAudience(url.searchParams.get("audience"));
   const previousMode = activeMode;
   activeMode = mode;
   document.body.dataset.activeMode = mode;
   buttons.forEach((button) => {
-    const active = button.dataset.modeTab === (audienceLabels[mode] || mode === "essay" ? "overview" : mode);
+    const active = button.dataset.modeTab === (audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode);
     button.setAttribute("aria-selected", String(active));
     button.tabIndex = active ? 0 : -1;
   });
@@ -1482,8 +1534,9 @@ function scrollHeadingIntoView(heading) {
 
 function openEssaySection(sectionId, track = true) {
   const heading = document.getElementById(sectionId);
-  if (!heading || !heading.closest('[data-mode="essay"]')) return false;
-  setMode("essay", false);
+  const edition = heading && heading.closest("[data-mode]");
+  if (!edition || !["essay","he-essay","k12-essay"].includes(edition.dataset.mode)) return false;
+  setMode(edition.dataset.mode, false);
   window.requestAnimationFrame(() => {
     scrollHeadingIntoView(heading);
     history.replaceState(null, "", "#" + sectionId);
@@ -1528,6 +1581,9 @@ modeLinks.forEach((link) => {
     const mode = link.dataset.modeLink;
     if (!modeNames.includes(mode)) return;
     event.preventDefault();
+    if (link.dataset.practiceAudience) {
+      const url = new URL(location.href); url.searchParams.set("audience",link.dataset.practiceAudience); history.replaceState(null,"",url);
+    }
     if (link.dataset.discussionClaim) {
       const url = new URL(location.href); url.searchParams.set("claim",link.dataset.discussionClaim); history.replaceState(null,"",url);
     }
@@ -1590,6 +1646,36 @@ if (modeNames.includes(initial)) {
   setMode("overview", false);
 }
 requestTocUpdate();
+
+document.querySelectorAll("[data-try]").forEach(container => {
+  const form=container.querySelector("[data-try-form]");
+  const stages=Array.from(container.querySelectorAll("[data-try-stage]"));
+  const fields=Array.from(form.querySelectorAll("textarea"));
+  let step=0;
+  let record="";
+  form.addEventListener("submit",event=>{
+    event.preventDefault();
+    if (step>=3) return;
+    if (!fields[step].value.trim()) {fields[step].setCustomValidity("Add your judgment and a reason before continuing.");fields[step].reportValidity();return;}
+    fields[step].readOnly=true;
+    stages[step].hidden=true;
+    step+=1;
+    stages[step].hidden=false;
+    if (step<3) {fields[step].disabled=false;fields[step].focus();return;}
+    const labels=["Initial judgment","Decision about the contribution","Changed-condition response"];
+    const output=container.querySelector("[data-try-record]");
+    fields.forEach((field,i)=>{const heading=document.createElement("h4");heading.textContent=labels[i];const p=document.createElement("p");p.textContent=field.value;output.append(heading,p);});
+    const caseText="## Case\\n\\n"+stages[0].querySelector("p").textContent+"\\n\\n## Constructed contribution\\n\\n"+stages[1].querySelector("blockquote").textContent+"\\n\\n## Changed condition\\n\\n"+stages[2].querySelector("p").textContent+"\\n\\n";
+    record="# Judgment Lab practice record\\n\\nSetting: "+container.dataset.tryAudience+"\\nFictional, scripted practice. Review notes shown after responses. No proficiency assessment.\\n\\n"+caseText+fields.map((field,i)=>"## "+labels[i]+"\\n\\n"+field.value).join("\\n\\n")+"\\n\\nEducator review: pending. Classroom evidence: absent. Further support or prior familiarity: not recorded.\\n";
+    stages[step].focus();
+  });
+  fields.forEach(field=>field.addEventListener("input",()=>field.setCustomValidity("")));
+  container.querySelector("[data-try-download]").addEventListener("click",()=>{
+    if (!record) return;
+    const url=URL.createObjectURL(new Blob([record],{type:"text/markdown;charset=utf-8"}));
+    const link=document.createElement("a");link.href=url;link.download="judgment-lab-"+container.dataset.tryAudience+"-practice.md";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+});
 
 const copyStatus = document.getElementById("copy-status");
 
@@ -1704,7 +1790,8 @@ function changeAudience(event) {
   const id = audienceLabels[event.target.value] ? event.target.value : "";
   const url = new URL(location.href);
   if (id) url.searchParams.set("audience",id); else url.searchParams.delete("audience");
-  const nextMode = activeMode === "overview" || audienceLabels[activeMode] ? id || "overview" : activeMode;
+  const readingEssay = activeMode === "essay" || activeMode.endsWith("-essay");
+  const nextMode = readingEssay ? (id === "he" || id === "k12" ? id+"-essay" : id === "pme" ? "essay" : "overview") : activeMode === "overview" || audienceLabels[activeMode] ? id || "overview" : activeMode;
   if (nextMode !== activeMode) url.hash = nextMode;
   history.pushState(null,"",url);
   if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
