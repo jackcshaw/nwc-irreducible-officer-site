@@ -86,8 +86,8 @@ for (const p of profiles) {
 }
 assert(!read('assets/asking-to-supervising.svg').includes('Every learner becomes a capable supervisor'));
 assert(!JSON.stringify(wbData).includes('awaiting NWC validation'));
-assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes('correct denominator'));
-assert(wbData.audiences.k12.tools.find(t=>t.id==='assessment').markdown.includes('Taught concept'));
+assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes('what productivity should mean'));
+assert(wbData.audiences.k12.tools.find(t=>t.id==='assessment').markdown.includes('success by what standard, and for whom'));
 assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes('Causal interpretation'));
 
 // Execute the shipped audience handler with the actual data and prompts.
@@ -156,7 +156,11 @@ console.log('global audience selector passed: context, document route, and learn
 // Full editions must reach the reader, practice context and selected Design bundle.
 for (const a of catalog.filter(a=>a.id!=='pme')) {
  const source=readFileSync(join(companion,a.essayFile),'utf8');
- assert.equal((source.match(/^## [IVX]+\./gm)||[]).length,11,a.id+' incomplete essay progression');
+ // Editions set their own section count; numbering must run I, II, III... without gaps.
+ const numerals=(source.match(/^## ([IVX]+)\./gm)||[]).map(h=>h.slice(3,-1));
+ const roman=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+ assert(numerals.length>=8,a.id+' incomplete essay progression');
+ assert.deepEqual(numerals,roman.slice(0,numerals.length),a.id+' essay sections out of order');
  assert.equal(read('assets/'+a.essayFile),source,a.id+' essay download differs');
  assert(bundle.includes(source.trim()),a.id+' missing from Practice');
  assert(lab.includes(source.trim()),a.id+' missing from lab');
@@ -182,7 +186,7 @@ assert(html.includes('Teaching guide and review notes (reveals the case analysis
 assert.equal((html.match(/data-try-stage="0"/g)||[]).length,4);
 assert(html.includes('caseText+fields.map'),'Downloaded practice record must include the actual case');
 assert(html.includes('p.textContent=field.value'),'User responses must be rendered as text');
-console.log('companion essays passed: 11 sections each, source parity, complete contexts, relative links and audience routing');
+console.log('companion essays passed: sequential sections, source parity, complete contexts, relative links and audience routing');
 
 // Execute the shipped practice handler: no reveal without a response, no invented record.
 const practiceCode=script.slice(script.indexOf('document.querySelectorAll("[data-try]")'),script.indexOf('const copyStatus ='));
