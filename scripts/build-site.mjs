@@ -128,7 +128,7 @@ for (const [id,v] of Object.entries(workbenchVariants)) {
   writeFileSync(join(assetsDir,"workbench-context-"+id+".md"),v.bundle.text+"\n");
 }
 // Preserve repository-relative links in the new standalone essay downloads.
-for (const name of ["essays/he.md", "essays/k12.md", "essays/adaptation-map.md", "sources/source-spine.md", "sources/audience-foundations.md", "claims.md", "the-irreducible-officer.md"]) {
+for (const name of ["essays/he.md", "essays/k12.md", "essays/adaptation-map.md", "artifacts/frame-first-assignment-design.md", "tasks/companion-essay-spine.md", "sources/source-spine.md", "sources/audience-foundations.md", "claims.md", "the-irreducible-officer.md"]) {
   mkdirSync(dirname(join(assetsDir,name)),{recursive:true});
   writeFileSync(join(assetsDir,name),readRequiredCompanionFile(name));
 }
@@ -791,7 +791,7 @@ function buildSourcesMode() {
     <section class="detail-band"><h2 class="band-label">Essay editions and changes</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Download the section and claim comparison</a></section>
     <section class="detail-band"><h2 class="band-label">Shared method and audience limits</h2><p>Read the shared foundation alongside the original source spine. HE and high-school examples are constructed teaching proposals. The source notes are not a substitute for inspecting the original papers, and this refresh adds no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
     <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}).replace(/id="([^"]+)"/g, 'id="shared-$1"')}</article></details>
-    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article>
+    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article></details>
     <article class="source-spine article-body">
       ${renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true })}
     </article>
@@ -1697,8 +1697,10 @@ function copyTextToClipboard(text) {
     const policy = document.permissionsPolicy || document.featurePolicy;
     if (policy && !policy.allowsFeature("clipboard-write")) return Promise.reject(new Error("clipboard blocked"));
     return new Promise((resolve, reject) => {
-      const timeout = window.setTimeout(() => reject(new Error("clipboard timeout")), 1800);
-      navigator.clipboard.writeText(text).then(() => { clearTimeout(timeout); resolve(); }, error => { clearTimeout(timeout); reject(error); });
+      const write = navigator.clipboard.writeText(text);
+      // Keep the manual fallback for hung writes; pass the write along so a late success can correct the UI.
+      const timeout = window.setTimeout(() => reject(Object.assign(new Error("clipboard timeout"), {pending: write})), 1800);
+      write.then(() => { clearTimeout(timeout); resolve(); }, error => { clearTimeout(timeout); reject(error); });
     });
   }
   // Fallback for non-secure contexts, where navigator.clipboard is unavailable.
@@ -1739,9 +1741,10 @@ document.querySelectorAll("[data-copy-target]").forEach((button) => {
       window.setTimeout(() => {
         button.textContent = original;
       }, 1400);
-    } catch {
+    } catch (error) {
       button.textContent = "Copy failed";
       announceCopy("Copy failed. Select the prompt text and copy it manually.");
+      if (error && error.pending) error.pending.then(() => { button.textContent = "Copied"; announceCopy("Copied to clipboard."); }, () => {});
       const block = target.closest("pre");
       if (block) { block.hidden = false; block.style.display = "block"; block.tabIndex = 0; block.focus(); }
       window.setTimeout(() => {
@@ -1763,6 +1766,7 @@ async function openWorkbenchRoute(route) {
 }
 
 function renderWorkbenchDocument(item, isFromConcept = false) {
+  document.getElementById("workbench-error").hidden = true;
   document.getElementById("selected-tool-title").textContent = item.title;
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;

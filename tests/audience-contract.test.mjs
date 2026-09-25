@@ -87,7 +87,10 @@ for (const p of profiles) {
 assert(!read('assets/asking-to-supervising.svg').includes('Every learner becomes a capable supervisor'));
 assert(!JSON.stringify(wbData).includes('awaiting NWC validation'));
 assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes('what productivity should mean'));
-assert(wbData.audiences.k12.tools.find(t=>t.id==='assessment').markdown.includes('success by what standard, and for whom'));
+{ const k12Assessment=wbData.audiences.k12.tools.find(t=>t.id==='assessment').markdown;
+  assert(k12Assessment.includes('success by what standard, and for whom'));
+  assert(!/an oral defense|faculty member/.test(k12Assessment),'k12 rubric kept PME/HE wording');
+  assert(k12Assessment.includes('a short explanation') && k12Assessment.includes('teacher'),'k12 wording swap did not land'); }
 assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes('Causal interpretation'));
 
 // Execute the shipped audience handler with the actual data and prompts.
@@ -161,6 +164,7 @@ for (const a of catalog.filter(a=>a.id!=='pme')) {
  const roman=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
  assert(numerals.length>=8,a.id+' incomplete essay progression');
  assert.deepEqual(numerals,roman.slice(0,numerals.length),a.id+' essay sections out of order');
+ assert(/^## References$/m.test(source.slice(source.lastIndexOf('\n## '+numerals.at(-1)+'.'))),a.id+' essay truncated: no References after the last section');
  assert.equal(read('assets/'+a.essayFile),source,a.id+' essay download differs');
  assert(bundle.includes(source.trim()),a.id+' missing from Practice');
  assert(lab.includes(source.trim()),a.id+' missing from lab');
@@ -174,6 +178,15 @@ for (const a of catalog.filter(a=>a.id!=='pme')) {
   assert(existsSync(join(dist,'assets',a.essayFile,'..',m[1])),'Broken essay source link: '+m[1]);
  }
 }
+// Every relative link in the downloadable adaptation record resolves on the site.
+{ const record=readFileSync(join(companion,'essays/adaptation-map.md'),'utf8');
+  for(const m of record.matchAll(/\]\(([^)#]+)[^)]*\)/g)) if(!/^https?:/.test(m[1]))
+    assert(existsSync(join(dist,'assets/essays',m[1])),'Broken adaptation-map link: '+m[1]); }
+// References keeps the source spine visible: its disclosure closes before the spine begins.
+{ const start=html.indexOf('id="panel-sources"'), spine=html.indexOf('class="source-spine',start);
+  assert(start>=0 && spine>start,'References panel or source spine missing');
+  const panel=html.slice(start,spine);
+  assert.equal((panel.match(/<details/g)||[]).length,(panel.match(/<\/details>/g)||[]).length,'source spine is inside an unclosed <details>'); }
 for(const mode of ['he-essay','k12-essay']) {
  let current=new URL('https://test.example/#'+mode),selected;
  const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){}};
