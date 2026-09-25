@@ -443,7 +443,7 @@ function editionLinks() {
 function buildCompanionEssay(a) {
   const markdown = readRequiredCompanionFile(a.essayFile);
   const prefix = a.essayMode + "-";
-  const body = renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>").replace(/id="([^"]+)"/g,`id="${prefix}$1"`)
+  const body = prefixIds(renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>"), prefix)
     .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
   const subtitle = markdown.split("\n").find(line=>line.startsWith("## ")).slice(3);
   return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
@@ -455,7 +455,7 @@ function buildAudienceMode(a) {
     <div class="action-row"><a class="copy-button primary" href="#companion" data-mode-link="companion">Start an interactive session</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Adapt your teaching</a><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></div></section>
     <section class="detail-band"><h2 class="band-label">The argument in your setting</h2><p><a href="#${a.essayMode}" data-mode-link="${a.essayMode}">${escapeHtml(a.essayTitle)}</a></p><p>Read the full essay, then use the guide below to try its method. ${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p></section>
     ${buildOpeningPractice(a.id, a.id)}
-    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`).replace(/id="([^"]+)"/g, `id="${a.id}-$1"`)}</article></details>
+    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;
 }
 
@@ -713,7 +713,7 @@ function buildWorkbenchMode(tools, concepts) {
       ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
         <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
         <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
-        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}).replace(/id="([^"]+)"/g,`id="wb-${p.id}-$1"`)}</div></details>
+        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${prefixIds(renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}), `wb-${p.id}-`)}</div></details>
         <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
       </div>`).join("")}
       <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
@@ -790,7 +790,7 @@ function buildSourcesMode() {
     </section>
     <section class="detail-band"><h2 class="band-label">Essay editions and changes</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Download the section and claim comparison</a></section>
     <section class="detail-band"><h2 class="band-label">Shared method and audience limits</h2><p>Read the shared foundation alongside the original source spine. HE and high-school examples are constructed teaching proposals. The source notes are not a substitute for inspecting the original papers, and this refresh adds no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
-    <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}).replace(/id="([^"]+)"/g, 'id="shared-$1"')}</article></details>
+    <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}), "shared-")}</article></details>
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article></details>
     <article class="source-spine article-body">
       ${renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true })}
@@ -1263,6 +1263,10 @@ function escapeHtml(value) {
     .replace(/</gu, "&lt;")
     .replace(/>/gu, "&gt;")
     .replace(/"/gu, "&quot;");
+}
+
+function prefixIds(html, prefix) {
+  return html.replace(/id="([^"]+)"/g, `id="${prefix}$1"`);
 }
 
 function slugify(value) {
