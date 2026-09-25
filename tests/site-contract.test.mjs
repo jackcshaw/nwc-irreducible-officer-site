@@ -253,7 +253,7 @@ assert(html.includes("Newsreader"), "site should include Newsreader body font");
 assert(html.includes("IBM Plex Mono"), "site should include IBM Plex Mono UI font");
 
 assert(
-  html.includes('body:not([data-active-mode="essay"]) .toc'),
+  html.includes('body:not([data-reading-essay="true"]) .toc'),
   "essay navigation should be hidden outside essay mode",
 );
 assert(html.includes(".toc::after"), "essay navigation should include a fill layer for reading progress");

@@ -329,11 +329,11 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   </nav>
   <noscript><p class="surface">Interactive navigation requires JavaScript. Read <a href="assets/essays/he.md">the HE essay</a>, <a href="assets/essays/k12.md">the high-school educator essay</a>, or <a href="assets/essay.md">read the essay</a> or <a href="assets/judgment-lab-interactive-context.md">download the complete lab context</a>.</p></noscript>
   <main id="top" class="site-shell" tabindex="-1">
-    <aside class="toc" aria-label="Essay sections">
-      ${essayToc
-        .map((item, index) => `<a href="#${item.id}" data-toc-link="${item.id}"><span></span>${index + 1}. ${escapeHtml(item.text)}</a>`)
-        .join("\n      ")}
-    </aside>
+    ${audiences.map(a => {
+      const headings = a.id === "pme" ? essayToc : collectHeadings(readRequiredCompanionFile(a.essayFile),{skipFirstH2:true});
+      const prefix = a.id === "pme" ? "" : a.essayMode + "-";
+      return `<aside class="toc" data-essay-rail="${a.essayMode}" aria-label="${escapeHtml(a.essayTitle)} sections" hidden>${headings.map((item,index)=>`<a href="#${prefix}${item.id}" data-toc-link="${prefix}${item.id}"><span></span>${index+1}. ${escapeHtml(item.text.replace(/^[IVX]+\.\s*/, ""))}</a>`).join("")}</aside>`;
+    }).join("")}
 
     <div class="content-frame">
       <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
@@ -443,10 +443,10 @@ function editionLinks() {
 function buildCompanionEssay(a) {
   const markdown = readRequiredCompanionFile(a.essayFile);
   const prefix = a.essayMode + "-";
-  const body = renderMarkdown(markdown,{skipFirstH1:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>").replace(/id="([^"]+)"/g,`id="${prefix}$1"`)
+  const body = renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>").replace(/id="([^"]+)"/g,`id="${prefix}$1"`)
     .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
-  const toc = collectHeadings(markdown).map(h=>`<a href="#${prefix}${h.id}" data-essay-section-link="${prefix}${h.id}">${escapeHtml(h.text)}</a>`).join("");
-  return `<div class="surface companion-edition"><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.label)} companion essay</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><details class="edition-toc"><summary>In this essay</summary><nav aria-label="Sections in ${escapeHtml(a.essayTitle)}">${toc}</nav></details><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
+  const subtitle = markdown.split("\n").find(line=>line.startsWith("## ")).slice(3);
+  return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
 }
 
 function buildAudienceMode(a) {
@@ -1316,10 +1316,17 @@ function applyAudience(id) {
   if (typeof refreshWorkbench === "function") refreshWorkbench();
 }
 // Initial audience application occurs through setMode after client state is initialized.
-const toc = document.querySelector(".toc");
-const tocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
+const essayRails = Array.from(document.querySelectorAll("[data-essay-rail]"));
+let toc = null;
+let tocEntries = [];
+const allTocEntries = Array.from(document.querySelectorAll("[data-toc-link]"))
   .map((link) => ({ link, heading: document.getElementById(link.dataset.tocLink) }))
   .filter((entry) => entry.heading);
+function selectEssayRail(mode) {
+  toc = essayRails.find(rail => rail.dataset.essayRail === mode) || null;
+  essayRails.forEach(rail => {rail.hidden = rail !== toc;});
+  tocEntries = allTocEntries.filter(({link}) => link.closest("[data-essay-rail]") === toc);
+}
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 // Workbench documents are fetched on demand the first time the Workbench
@@ -1408,7 +1415,7 @@ function invalidateTocGeometry() {
 
 function updateTocProgress() {
   if (!toc || !tocEntries.length) return;
-  if (document.body.dataset.activeMode !== "essay") {
+  if (!["essay","he-essay","k12-essay"].includes(document.body.dataset.activeMode)) {
     toc.style.setProperty("--toc-progress", "0px");
     tocEntries.forEach(({ link }) => {
       link.classList.remove("is-active", "is-past");
@@ -1478,6 +1485,8 @@ function setMode(mode, shouldScroll = true, push = false) {
   const previousMode = activeMode;
   activeMode = mode;
   document.body.dataset.activeMode = mode;
+  document.body.dataset.readingEssay = String(["essay","he-essay","k12-essay"].includes(mode));
+  selectEssayRail(mode);
   buttons.forEach((button) => {
     const active = button.dataset.modeTab === (audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode);
     button.setAttribute("aria-selected", String(active));
@@ -1599,7 +1608,7 @@ essaySectionLinks.forEach((link) => {
   });
 });
 
-tocEntries.forEach(({ link, heading }) => {
+allTocEntries.forEach(({ link, heading }) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
     scrollHeadingIntoView(heading);
@@ -2097,7 +2106,7 @@ a:active {
   padding: 28px 28px 132px;
 }
 
-body:not([data-active-mode="essay"]) .site-shell {
+body:not([data-reading-essay="true"]) .site-shell {
   grid-template-columns: minmax(0, 980px);
   justify-content: center;
 }
@@ -2516,6 +2525,8 @@ h1 {
   margin-top: 4px;
 }
 
+.toc[hidden] {display:none;}
+
 .toc {
   --toc-fill-top: 7px;
   --toc-progress: 0px;
@@ -2527,7 +2538,7 @@ h1 {
   padding: 0 0 22px;
 }
 
-body:not([data-active-mode="essay"]) .toc {
+body:not([data-reading-essay="true"]) .toc {
   display: none;
 }
 
@@ -2991,7 +3002,7 @@ body:not([data-active-mode="essay"]) .toc {
   }
 
   .site-shell,
-  body:not([data-active-mode="essay"]) .site-shell {
+  body:not([data-reading-essay="true"]) .site-shell {
     display: block;
     max-width: 900px;
     padding: 22px 18px 86px;

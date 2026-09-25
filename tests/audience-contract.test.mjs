@@ -45,7 +45,7 @@ for (const id of ["pme","he","k12"]) {
   const context={URL, audienceLabels:{pme:"PME",he:"HE",k12:"high school"},
     get location(){return current;}, history:{pushState(_a,_b,url){current=new URL(url,current);},replaceState(_a,_b,url){current=new URL(url,current);}},
     applyAudience(value){selected=value;}, activeMode:"overview", document:{body:{dataset:{}}}, buttons:[],views:[],
-    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},ensureWorkbenchData(){return Promise.resolve();}};
+    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},selectEssayRail(){},ensureWorkbenchData(){return Promise.resolve();}};
   vm.runInNewContext(routing+';setMode("'+id+'",false);setMode("companion",true,true);',context);
   assert.equal(current.searchParams.get("audience"),id,"Direct audience link loses setting");
   assert.equal(selected,id,"Prompt audience does not follow route");
@@ -172,7 +172,7 @@ for (const a of catalog.filter(a=>a.id!=='pme')) {
 }
 for(const mode of ['he-essay','k12-essay']) {
  let current=new URL('https://test.example/#'+mode),selected;
- const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){}};
+ const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){}};
  vm.runInNewContext(routing+';setMode("'+mode+'",false);',ctx);
  assert.equal(selected,mode.replace('-essay',''));
  assert.equal(current.searchParams.get('audience'),selected);
@@ -206,3 +206,21 @@ for(const text of [...replies,'Case condition 0','Constructed contribution','Cas
 assert(record.includes('\n\nSetting: he'),'Record should have real line breaks');
 assert(!record.includes('proficient'));
 console.log('opening practice passed: response gates, literal decisions, full case record and honest status');
+
+// Each edition uses its own section rail; switching replaces rail and progress targets.
+assert(!html.includes('<summary>In this essay</summary>'));
+const rails=catalog.map(a=>({dataset:{essayRail:a.essayMode},hidden:true}));
+const entries=rails.flatMap(rail=>Array.from({length:12},()=>({link:{closest(){return rail}},heading:{}})));
+const railContext={essayRails:rails,allTocEntries:entries,toc:null,tocEntries:[]};
+const railCode=script.match(/function selectEssayRail\([\s\S]+?\n}\n/)[0];
+vm.runInNewContext(railCode,railContext);
+for(const a of catalog) {
+ assert(html.includes('data-essay-rail="'+a.essayMode+'"'));
+ railContext.selectEssayRail(a.essayMode);
+ assert.equal(railContext.toc.dataset.essayRail,a.essayMode);
+ assert.equal(railContext.tocEntries.length,12);
+ assert.deepEqual(rails.filter(r=>!r.hidden).map(r=>r.dataset.essayRail),[a.essayMode]);
+}
+railContext.selectEssayRail('companion');assert.equal(railContext.toc,null);assert.equal(railContext.tocEntries.length,0);
+assert(rails.every(r=>r.hidden));
+console.log('essay rails passed: edition-specific headings, selected rail, progress targets and non-reading reset');
