@@ -47,6 +47,17 @@ for (const p of profiles) {
   if (!a?.rows?.length || !a?.questions?.length || a?.descriptors?.length !== 4) {
     throw new Error(`profiles.json ${p.id}: assessment needs rows, questions, and 4 descriptors`);
   }
+  const text = v => typeof v === "string" && v.trim() !== "";
+  a.rows.forEach((row, i) => {
+    if (!Array.isArray(row) || row.length !== 2 || !row.every(text)) {
+      throw new Error(`profiles.json ${p.id}: assessment.rows[${i}] must be two non-empty strings`);
+    }
+  });
+  for (const field of ["questions", "descriptors"]) {
+    a[field].forEach((v, i) => {
+      if (!text(v)) throw new Error(`profiles.json ${p.id}: assessment.${field}[${i}] must be a non-empty string`);
+    });
+  }
 }
 const workbenchVariants = Object.fromEntries(profiles.map(p => [p.id, {
   profile:p, tools:workbenchTools.map(t => adaptTool(t,p,readRequiredWorkbenchFile,renderMarkdown,rewriteWorkbenchLinks,siteUrl)),
