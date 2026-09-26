@@ -1,0 +1,66 @@
+name: alignment
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+    inputs:
+      caller_repo: { type: string, required: true }
+      caller_ref: { type: string, required: true }
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CALLER_REPO: ${{ inputs.caller_repo || 'nwc-irreducible-officer-site' }}
+      CALLER_REF: ${{ inputs.caller_ref || github.head_ref || github.ref_name }}
+      COMPANION_REPO_PATH: ../nwc-irreducible-officer-companion
+      WORKBENCH_REPO_PATH: ../nwc-faculty-workbench
+    steps:
+      - name: Choose a ref for each repository
+        id: refs
+        run: |
+          echo "| repository | ref |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          for repo in nwc-irreducible-officer-companion nwc-faculty-workbench nwc-irreducible-officer-site; do
+            if [ "$repo" = "$CALLER_REPO" ] || git ls-remote --exit-code --heads "https://github.com/jackcshaw/$repo" "$CALLER_REF" >/dev/null; then
+              ref="$CALLER_REF"
+            else
+              ref=main
+            fi
+            key="${repo##*-}"
+            echo "$key=$ref" >> "$GITHUB_OUTPUT"
+            echo "| $repo | $ref |" >> "$GITHUB_STEP_SUMMARY"
+          done
+      - uses: actions/checkout@v4
+        with: { repository: jackcshaw/nwc-irreducible-officer-companion, ref: "${{ steps.refs.outputs.companion }}", path: nwc-irreducible-officer-companion }
+      - uses: actions/checkout@v4
+        with: { repository: jackcshaw/nwc-faculty-workbench, ref: "${{ steps.refs.outputs.workbench }}", path: nwc-faculty-workbench }
+      - uses: actions/checkout@v4
+        with: { repository: jackcshaw/nwc-irreducible-officer-site, ref: "${{ steps.refs.outputs.site }}", path: nwc-irreducible-officer-site }
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm, cache-dependency-path: nwc-irreducible-officer-site/package-lock.json }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: astral-sh/setup-uv@v6
+      - name: Install
+        working-directory: nwc-irreducible-officer-site
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Build
+        working-directory: nwc-irreducible-officer-site
+        run: npm run build
+      - name: Contract and alignment tests
+        working-directory: nwc-irreducible-officer-site
+        run: npm test
+      - name: Browser checks
+        working-directory: nwc-irreducible-officer-site
+        run: npm run test:browser
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alignment-failure
+          path: |
+            nwc-irreducible-officer-site/dist
+            nwc-irreducible-officer-site/playwright-report
+          retention-days: 7
