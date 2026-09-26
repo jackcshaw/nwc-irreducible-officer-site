@@ -23,6 +23,7 @@ const out = (item) => `Frame Check out of sync: ${item} — change templates/fra
 
 assert.equal(tests(doc).length, 5, "Companion should define five tests");
 assert.deepEqual(tests(tpl), tests(doc), out("the five tests (name, Ask, or Fails when)"));
+assert.equal(bullets(doc).length, 5, "Companion should define five rubric bullets");
 assert.deepEqual(bullets(tpl), bullets(doc), out("defended-frame rubric bullets"));
 assert.deepEqual(steps(tpl), steps(doc), out("workflow steps"));
 assert.equal(steps(doc).length, 6, "Companion workflow should have six steps");
