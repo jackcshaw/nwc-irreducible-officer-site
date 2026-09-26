@@ -15,36 +15,11 @@ export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
     md = md.replace(/ In PME, this may be a commander or policymaker\./g, '').replace(/ In PME, consider adversary, time horizon, or authority\./g, '');
   }
   if (tool.id === 'assessment') {
-    const rows = profile.id === 'pme' ? [
-      ['Causal interpretation','Distinguishes temporal association, causal diagnosis, and unknown causes.'],
-      ['Purpose and authority','States the recommendation’s purpose and who can authorize action.'],
-      ['Reliance and risk','Accepts warranted assistance, challenges unsupported attribution, and explains residual risk.'],
-      ['Changed conditions','Reconsiders the recommendation after the new diagnostic evidence.']
-    ] : profile.id === 'he' ? [
-      ['Frame','States what productivity should mean for this firm and why that standard fits.'],
-      ['Evidence','Uses the studies that bear on the chosen standard and says what each measured and whom it followed.'],
-      ['Reliance','Accepts accurate study summaries after checking them and refuses the mixed-evidence verdict with a reason.'],
-      ['Changed case','Re-asks what productivity means for the call center and adjusts which evidence decides.']
-    ] : [
-      ['Standard','States a standard of success and why it fits the question; record modeling or hints used.'],
-      ['Sources','Uses documents that bear on the standard and notes who wrote them and why.'],
-      ['Reliance','Keeps AI claims confirmed by the packet and throws out invented details, with reasons.'],
-      ['Changed case','Asks "success by what standard, and for whom?" about the phone policy.']
-    ];
+    const { rows, questions, descriptors } = profile.assessment;
     const table = '## Dimensions\n\nUse these example criteria only when this is the educator’s chosen objective. For another task, agree equivalent subject criteria before inspecting work. Mark untaught or unassigned criteria not applicable. The educator determines assessment; these prompts do not validate a score.\n\n| Dimension | Evidence to inspect | Observation and support |\n| --- | --- | --- |\n' + rows.map(r=>'| '+r.join(' | ')+' |  |').join('\n')+'\n\n';
     md = replaceOrThrow(md, /## Dimensions[\s\S]*?(?=## Oral-Defense Question Bank)/, table, at('dimensions'));
-    const questions = {
-      pme:["Which outage evidence supports a causal claim, and which causes remain unknown?", "Which part of the rollback recommendation would you accept, check, revise, or refuse? Why?", "Who can authorize the action, and what risk would remain?", "What changes when diagnostic evidence identifies a defect in 10 cases?"],
-      he:["What should productivity mean for this firm, and why that standard?", "Which AI contribution did you accept, and how did you check it?", "What question did the AI synthesis actually answer?", "For the call center, which study now matters most, and why?"],
-      k12:["What standard of success did you use, and why?", "Which AI claim did you keep, and how did you check it?", "What standard does the AI essay use without saying so?", "Is the school phone policy a success? By what standard, and for whom?"]
-    }[profile.id];
     md = replaceOrThrow(md, /## Oral-Defense Question Bank[\s\S]*?(?=## Minimal Faculty Note)/,
       '## Explanation and changed-case prompts\n\nAsk one question at a time. These prompts fit the optional worked example; agree equivalent questions for another course objective. Accept accessible ways of explaining.\n\n'+questions.map(q=>'- '+q).join('\n')+'\n\n', at('question bank'));
-    const descriptors = {
-      pme:['The causal claim or action authority remains unclear.','Some evidence is used, but unknown causes or remaining risk need further examination.','The recommendation fits the inspected evidence and assigned authority; limits are explained.','The recommendation is reconsidered coherently when diagnostic evidence changes.'],
-      he:['The memo’s standard is unstated or inherited from the synthesis.','A standard is stated, but the evidence used does not bear on it.','The standard fits the firm, the evidence bears on it, and reliance decisions are explained.','The learner re-frames coherently for the call center and explains what changed.'],
-      k12:['The standard of success is not yet stated; record what needs teaching.','A standard is stated; record the hint or modeling needed to connect evidence to it.','The student defends a standard with checked evidence, with support recorded.','The student carries the standard-setting question to the phone policy without prompting.']
-    }[profile.id];
     md = replaceOrThrow(md, /## Provisional discussion scale[\s\S]*?(?=## Dimensions)/,
       '## Provisional discussion scale\n\nOptional descriptions for educator discussion, not validated scores or automatic grades. Record support separately; these categories do not establish independence or durable learning. Mark untaught or unassigned criteria not applicable.\n\n| Description | Evidence in this task |\n| --- | --- |\n'+descriptors.map((d,i)=>'| '+(i+1)+' | '+d+' |').join('\n')+'\n\n', at('discussion scale'));
     md = replaceOrThrow(md, /## Minimal Faculty Note[\s\S]*/, '## Minimal educator note\n\n1. Learning objective and assigned choice.\n2. Actual explanation or decision.\n3. Support supplied and what remains unclear.\n4. Evidence used to accept, check, revise, or refuse.\n5. Response to the changed case.\n6. Next instructional step; unobserved outcomes stay open.\n', at('faculty note'));

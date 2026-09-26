@@ -39,6 +39,15 @@ const { text: companionContextMarkdown, sectionCount: companionSectionCount } = 
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
 const profiles = JSON.parse(readRequiredWorkbenchFile("audiences/profiles.json"));
+for (const p of profiles) {
+  for (const k of ["label", "initial", "contribution", "change", "review"]) {
+    if (typeof p.practice?.[k] !== "string") throw new Error(`profiles.json ${p.id}: practice.${k} missing`);
+  }
+  const a = p.assessment;
+  if (!a?.rows?.length || !a?.questions?.length || a?.descriptors?.length !== 4) {
+    throw new Error(`profiles.json ${p.id}: assessment needs rows, questions, and 4 descriptors`);
+  }
+}
 const workbenchVariants = Object.fromEntries(profiles.map(p => [p.id, {
   profile:p, tools:workbenchTools.map(t => adaptTool(t,p,readRequiredWorkbenchFile,renderMarkdown,rewriteWorkbenchLinks,siteUrl)),
   guide:readRequiredWorkbenchFile("audiences/"+p.id+".md"), framework:matrixMarkdown(p)
@@ -420,12 +429,7 @@ function buildDiscussMode() {
 }
 
 function buildOpeningPractice(key, audience) {
-  const examples = {
-    pme: {label:"PME",initial:"A fictional report lists 12 outages: 8 followed equipment updates; 4 have unexplained causes. What can you conclude, and what would you need before recommending a rollback?",contribution:"All 12 outages resulted from equipment updates. Roll back the whole fleet.",change:"Independent diagnostic evidence now identifies a software defect in 10 outages; 2 remain unexplained. What action becomes more defensible, what remains uncertain, and who can authorize it?",review:"Timing alone did not establish cause. The diagnostic evidence strengthens the case for action, while the unexplained outages and authority to act still need attention."},
-    he: {label:"Higher education",initial:"A fictional software firm, most of whose recent hires are new graduates, is deciding whether to require office work. Before reading any AI summary: what should productivity mean for this firm, and what evidence would decide the question?",contribution:"Research on remote work is mixed. Ctrip call-center employees working from home performed 13% better; a Trip.com hybrid trial cut quits by a third with no change in performance reviews; junior engineers received less code feedback away from teammates. Hybrid offers the best of both.",change:"The firm is instead an established call center whose staff average ten years of experience and are rarely promoted out of their roles. Which evidence matters most now, and does your recommendation change?",review:"Each summary is accurate. The synthesis treats productivity as short-run output averaged across workers. For a firm developing new graduates, the feedback and promotion findings decide the question; the Ctrip result came from experienced volunteers. For the call center, that result carries more weight. The frame you set decides which accurate evidence counts."},
-    k12: {label:"High-school educator practice",initial:"A US History class answers: Was the New Deal a success? Before reading any AI answer: by what standard would you judge success, and for whom?",contribution:"Unemployment fell from about 25% in 1933 to about 14% in 1937 before rising to 19% in 1938. Programs like Social Security still exist. Critics said federal power grew too far. The New Deal was mixed but largely successful.",change:"Now judge your school's phone policy. Was it a success? By what standard, and for whom?",review:"The figures are right. The essay judges success by recovery and durability and never asks for whom. Social Security's old-age program first excluded agricultural and domestic workers, about two-thirds of Black workers, and historians still dispute how much race drove that choice. Setting the standard first lets a student use the accurate facts without inheriting the verdict."}
-  };
-  const c=examples[audience];
+  const c = profiles.find(p => p.id === audience).practice;
   return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Try a judgment before you read on.</h2><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
     <form data-try-form>
       <div data-try-stage="0"><h3>Your starting point</h3><p>${c.initial}</p><label for="${key}-initial">Your judgment and reason</label><textarea id="${key}-initial" name="initial" rows="3" required maxlength="4000"></textarea><button class="copy-button" type="submit">Examine a contribution</button></div>
