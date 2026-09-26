@@ -92,7 +92,7 @@ All three audiences move, including PME. The site reads these fields and keeps n
 
 ### Loud rewrites (site)
 
-A helper `replaceOrThrow(text, pattern, replacement, label, {all})` replaces the silent `.replace()` and `.replaceAll()` calls in `adaptTool` (`scripts/workbench-audiences.mjs`). The context-bundle builders concatenate files without rewriting them and need no change. The two PME-only sentence removals stay optional, since only one of nine templates contains them.
+A helper `replaceOrThrow(text, pattern, replacement, label, {all})` replaces the silent `.replace()` and `.replaceAll()` calls in `adaptTool` (`scripts/workbench-audiences.mjs`). The context-bundle builders concatenate files without rewriting them and need no change. The two PME-only sentence removals stay optional, since only one of nine templates contains them. When a pattern matches nothing, the build throws with the template name and label. Replacement strings from profiles are passed through a function replacer so `$` sequences are never interpreted.
 
 ## CI workflow
 
