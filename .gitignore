@@ -10,3 +10,5 @@ dist/
 # Separate local drafting lane, not part of this public companion repo
 cyber-apprenticeship-proof-draft.md
 
+playwright-report/
+test-results/

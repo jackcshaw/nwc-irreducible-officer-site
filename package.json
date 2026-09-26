@@ -6,6 +6,10 @@
   "scripts": {
     "build": "node scripts/build-site.mjs",
     "test": "node tests/site-contract.test.mjs && node tests/audience-contract.test.mjs && node tests/alignment/replace-or-throw.test.mjs && node tests/alignment/single-source.test.mjs && node tests/alignment/retired-phrases.test.mjs && node tests/alignment/links.test.mjs",
+    "test:browser": "playwright test",
     "dev": "python3 -m http.server 5173 --directory dist"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0"
   }
 }
