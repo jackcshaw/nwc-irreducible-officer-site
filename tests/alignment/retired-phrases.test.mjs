@@ -1,0 +1,56 @@
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { join, relative } from "node:path";
+const root = process.cwd();
+const dist = join(root, "dist");
+const companion = process.env.COMPANION_REPO_PATH || join(root, "../companion");
+const workbench = process.env.WORKBENCH_REPO_PATH || join(root, "../workbench");
+const rulesPath = join(companion, "alignment/retired-phrases.json");
+assert(existsSync(rulesPath), `Missing ${rulesPath}; the companion owns the retired-phrase rules`);
+const rules = JSON.parse(readFileSync(rulesPath, "utf8"));
+
+// Markup, emphasis, quotes, and line breaks must not hide a phrase.
+const normalize = s => s
+  .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ")
+  .replace(/<[^>]+>/g, " ").replace(/&[a-z#0-9]+;/gi, " ")
+  .replace(/[*_`#>|\[\]()"“”‘’']/g, " ").replace(/\s+/g, " ").toLowerCase();
+assert(normalize("Teach the\n*foundations*").includes(normalize("teach the foundations")));
+assert(normalize("the student’s choices").includes(normalize("the student's choices")));
+
+const walk = d => readdirSync(d, { withFileTypes: true })
+  .filter(e => ![".git", "node_modules"].includes(e.name))
+  .flatMap(e => e.isDirectory() ? walk(join(d, e.name)) : [join(d, e.name)]);
+const readSource = p => {
+  for (const r of [companion, workbench]) if (existsSync(join(r, p))) return readFileSync(join(r, p), "utf8");
+  throw new Error(`retired-phrases.json allowed_in path not found in companion or workbench: ${p}`);
+};
+for (const r of rules) {
+  assert(r.pattern && r.reason && /^\d{4}-\d{2}-\d{2}$/.test(r.retired) && Array.isArray(r.allowed_in),
+    `Malformed rule: ${JSON.stringify(r)}`);
+}
+// A marked source line allows its own text wherever it is published (the comment itself is stripped).
+const markerLines = [companion, workbench].flatMap(walk).filter(f => /\.(md|json)$/.test(f))
+  .flatMap(f => readFileSync(f, "utf8").split("\n").filter(l => l.includes("alignment-allow")))
+  .map(l => normalize(l).trim()).filter(Boolean);
+const allowedByMarker = (text, m) => markerLines.some(line => line.includes(m[0].toLowerCase()) &&
+  text.slice(Math.max(0, m.index - line.length), m.index + line.length).includes(line));
+const textOf = f => f.endsWith(".json")
+  ? JSON.stringify(JSON.parse(readFileSync(f, "utf8"))).replace(/\\n/g, "\n")
+  : readFileSync(f, "utf8");
+const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const compiled = rules.map(r => ({
+  ...r,
+  re: new RegExp(r.regex ? r.pattern : escape(normalize(r.pattern).trim()), "gi"),
+  allowed: normalize(r.allowed_in.map(readSource).join("\n")),
+}));
+
+const failures = [];
+for (const file of walk(dist).filter(f => /\.(html|md|json)$/.test(f))) {
+  const text = normalize(textOf(file));
+  for (const r of compiled) for (const m of text.matchAll(r.re)) {
+    const win = text.slice(Math.max(0, m.index - 30), m.index + m[0].length + 30);
+    if (!r.allowed.includes(win) && !allowedByMarker(text, m)) failures.push(`Retired phrase "${m[0]}" in ${relative(dist, file)} — rewrite, or add <!-- alignment-allow: reason --> if intentional (rule: ${r.reason}, retired ${r.retired}). Context: …${win}…`);
+  }
+}
+assert.deepEqual(failures, [], "\n" + failures.join("\n"));
+console.log(`retired phrases passed: ${rules.length} rules over ${walk(dist).length} built files`);
