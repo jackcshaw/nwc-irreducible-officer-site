@@ -5,7 +5,8 @@ const root = process.cwd();
 const workbench = process.env.WORKBENCH_REPO_PATH || join(root, "../workbench");
 const profiles = JSON.parse(readFileSync(join(workbench, "audiences/profiles.json"), "utf8"));
 const scripts = ["scripts/build-site.mjs", "scripts/workbench-audiences.mjs"].map(f => readFileSync(join(root, f), "utf8")).join("\n");
-const html = readFileSync(join(root, "dist/index.html"), "utf8");
+// Only rendered markup counts: embedded script data must not satisfy "is on the page".
+const html = readFileSync(join(root, "dist/index.html"), "utf8").replace(/<script\b[\s\S]*?<\/script>/gi, " ");
 const wbData = JSON.parse(readFileSync(join(root, "dist/assets/workbench-data.json"), "utf8"));
 // Short labels ("Frame", "PME") legitimately appear in code; only sentences prove duplication.
 const sentence = s => s.length > 25;

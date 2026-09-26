@@ -1287,7 +1287,7 @@ const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-sect
 const views = Array.from(document.querySelectorAll("[data-mode]"));
 const modeAliases = {learn:"overview",practice:"companion",design:"workbench",references:"sources"};
 const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay"];
-const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,...p})=>p)).replaceAll("<","\\u003c")};
+const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,practice,assessment,...p})=>p)).replaceAll("<","\\u003c")};
 const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
 let currentWorkbenchAudience = "";
 const audienceLabels = {pme: "PME", he: "higher education", k12: "high school"};
