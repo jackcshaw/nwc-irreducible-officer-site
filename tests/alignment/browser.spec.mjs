@@ -66,3 +66,15 @@ test.describe("phone width", () => {
     });
   }
 });
+
+for (const p of profiles) {
+  test(`${p.id} workbench offers Frame Check with its own primer`, async ({ page }) => {
+    await page.goto(`/?audience=${p.id}#workbench`);
+    await expect(page.locator('[data-tool-id="frame-check"]')).toBeVisible();
+    await page.goto(`/?audience=${p.id}#wb-doc-frame-check`);
+    await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+    const res = await page.request.get(`/assets/workbench/${p.id}/frame-check.md`);
+    expect(res.ok()).toBe(true);
+    expect(await res.text()).toContain("## Calibration primer");
+  });
+}
