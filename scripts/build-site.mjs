@@ -395,7 +395,7 @@ function buildOverviewMode() {
     <section class="audience-paths" aria-label="Choose your setting">
       ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this view →</strong></a>`).join("")}
     </section>
-    <section class="method-band"><h2>One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions.</p><p>Foundations and support matter in every setting. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Read the shared foundation</a></section>
+    <section class="method-band"><h2>One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions.</p><p>Every setting builds foundations inside the work while learners direct AI. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Read the shared foundation</a></section>
     <section class="learning-paths" aria-label="Ways to use the Lab">
       <a href="#discuss" data-mode-link="discuss"><h2>Discuss</h2><p>Bring an example. Challenge one of five claims with colleagues.</p><span>Open Judgment in Practice →</span></a>
       <a href="#companion" data-mode-link="companion"><h2>Practice</h2><p>Make a judgment before the assistant contributes. See what changes.</p><span>Set up a session →</span></a>
