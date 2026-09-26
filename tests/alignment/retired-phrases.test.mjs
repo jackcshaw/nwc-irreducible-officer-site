@@ -10,12 +10,21 @@ assert(existsSync(rulesPath), `Missing ${rulesPath}; the companion owns the reti
 const rules = JSON.parse(readFileSync(rulesPath, "utf8"));
 
 // Markup, emphasis, quotes, and line breaks must not hide a phrase.
+// Inline script text is scanned as-is (it renders on the page); style is dropped;
+// every other tag is replaced by its aria-label, title, and alt values.
+const attrText = tag => [...tag.matchAll(/\s(?:aria-label|title|alt)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)]
+  .map(a => a[1] ?? a[2]).join(" ");
 const normalize = s => s
-  .replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, " ")
-  .replace(/<[^>]+>/g, " ").replace(/&[a-z#0-9]+;/gi, " ")
+  .replace(/<style\b[\s\S]*?<\/style>|<script\b[^>]*>([\s\S]*?)<\/script>|<[^>]+>/gi,
+    (tag, script) => ` ${script ?? (/^<style/i.test(tag) ? "" : attrText(tag))} `)
+  .replace(/&[a-z#0-9]+;/gi, " ")
   .replace(/[*_`#>|\[\]()"“”‘’']/g, " ").replace(/\s+/g, " ").toLowerCase();
 assert(normalize("Teach the\n*foundations*").includes(normalize("teach the foundations")));
 assert(normalize("the student’s choices").includes(normalize("the student's choices")));
+assert(normalize('<script>x = "Teach the foundations"</script>').includes("teach the foundations"));
+assert(normalize('<a aria-label="Teach the foundations" href="#">x</a>').includes("teach the foundations"));
+assert(normalize('<img alt="teach the foundations">').includes("teach the foundations"));
+assert(!normalize("<style>.teach-the-foundations{}</style>").includes("teach"));
 
 const walk = d => readdirSync(d, { withFileTypes: true })
   .filter(e => ![".git", "node_modules"].includes(e.name))
