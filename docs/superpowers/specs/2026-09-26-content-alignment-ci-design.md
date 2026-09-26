@@ -38,7 +38,7 @@ Rejected: keeping duplicated copies with a comparison test (every change still e
 | Single source for case text | Site build | Audience practice or assessment text is not read from `profiles.json` |
 | Text rewrites land | Site build | A template or bundle rewrite matches nothing |
 | Retired phrases | `npm test`, over built output | A retired pattern appears outside its allowed files without an allow marker on the line |
-| Download links | `npm test`, over built output | A relative link in any published Markdown file points to a file the site does not publish |
+| Download links | `npm test`, over built output | A relative link in a published standalone Markdown file points to a file the site does not publish. Context bundles are exempt; their headers state that relative links refer to the source repositories. |
 | Visible content | `npm run test:browser`, headless Chromium | Key content is hidden, a practice flow does not complete, or the view changes without user action after load |
 | Existing contracts | `npm test` | As today, including the companion `build_failure_mode_lab.py --check` |
 
@@ -78,7 +78,7 @@ All three audiences move, including PME. The site reads these fields and keeps n
 ```
 
 - Patterns match case-insensitively as plain text unless `regex` is true.
-- `allowed_in` lists companion or workbench source paths. A match inside the text copied from an allowed file also passes wherever that file is bundled; the scanner locates sources by the `BEGIN SOURCE` markers and section headers the bundles already carry.
+- `allowed_in` lists companion or workbench source paths (resolved in the companion first, then the workbench). A match passes when the normalized text around it also appears in one of those files, so the history notes pass wherever they are bundled.
 - Any other intentional mention carries `<!-- alignment-allow: reason -->` on the same line.
 - The initial list covers the framings retired on 2026-09-25 (for example "teach the foundations", "foundations made explicit", "bound learner responsibility", "model missing foundations", "before they can judge") and the old cases ("shuttle", "asphalt", "shaded grass", "matched tile", "surface-temperature readings", "survey warrant"), with the two history files allowed.
 - A PR that retires a framing adds its rule in the same PR.
@@ -92,7 +92,7 @@ All three audiences move, including PME. The site reads these fields and keeps n
 
 ### Loud rewrites (site)
 
-A helper `replaceOrThrow(text, pattern, replacement, label)` replaces the silent `.replace()` and `.replaceAll()` calls in `adaptTool` (`scripts/workbench-audiences.mjs`) and the section rewrites in the context-bundle builders in `scripts/build-site.mjs`. When a pattern matches nothing, the build throws with the template name and label. Replacement strings from profiles are passed through a function replacer so `$` sequences are never interpreted.
+A helper `replaceOrThrow(text, pattern, replacement, label, {all})` replaces the silent `.replace()` and `.replaceAll()` calls in `adaptTool` (`scripts/workbench-audiences.mjs`). The context-bundle builders concatenate files without rewriting them and need no change. The two PME-only sentence removals stay optional, since only one of nine templates contains them.
 
 ## CI workflow
 
@@ -129,11 +129,12 @@ Required approving reviews are not enabled, since there is one maintainer and Gi
 ## Rollout
 
 1. Merge the open audience-refresh PRs (companion #6, workbench #6, site #19) in order.
-2. Implement this design on branch `content-alignment-ci` in all three repositories: profile fields and site reads; rules file; check scripts; loud rewrites; workflows.
+2. Implement on branch `content-alignment-ci`: companion rules file; workbench profile fields; site checks, reads, and reusable workflow.
 3. Verify each check fails on a deliberately broken input and passes on the fix.
-4. Open the three PRs, confirm the alignment check runs green on each, and merge in order.
-5. Apply branch protection.
-6. Record any flaky browser check and fix it before calling the rollout done.
+4. Open the three PRs. The site PR's own workflow run checks out the same-named companion and workbench branches; merge companion, workbench, then site once it is green.
+5. Add the caller workflows to companion and workbench in small follow-up PRs (they reference the site workflow on `main`, which now exists); merge when green.
+6. Apply branch protection using the check names reported by the first runs.
+7. Record any flaky browser check and fix it before calling the rollout done.
 
 ## Risks
 
