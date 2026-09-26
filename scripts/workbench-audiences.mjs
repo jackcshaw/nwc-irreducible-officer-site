@@ -6,7 +6,7 @@ export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
   if (!spec) throw new Error(`Missing ${profile.id} adaptation: ${tool.filename}`);
   const title = `${profile.label}: ${spec.title}`;
   let md = read('templates/' + tool.filename);
-  const at = (what) => `${profile.id}/${tool.filename}: ${what}`;
+  const at = what => `${profile.id}/${tool.filename}: ${what}`;
   const intro = `## Audience and readiness\n\nSelected setting: ${profile.label}. ${profile.status}\n\nAsk one question at a time and wait. The educator owns the decisions. Preserve their actual task; the fictional example below is optional. Record support, proposals, and unanswered questions.\n\n${profile.readiness}\n\n${profile.responsibility}\n\n## ${spec.title}\n\n${spec.guidance}\n\n### Optional worked example: ${profile.case}\n\nAuthored, fictional example; not a classroom result or captured model response.\n\n${profile.facts}\n\n${profile.baseline}\n\nEducator/facilitator note — hold until the initial judgment has been recorded, unless the user requests it: ${profile.change}\n\n${profile.record}\n\n[Read the ${profile.label} guide and reference matrix](${siteUrl}/assets/workbench/audiences/${profile.id}.md)\n\n`;
   md = replaceOrThrow(md, /^# .+$/m, '# ' + title, at('title'));
   md = replaceOrThrow(md, /## Audience and readiness[\s\S]*?(?=## AI Facilitation Block)/, intro, at('audience section'));

@@ -64,8 +64,9 @@ const compiled = rules.map(r => ({
   allowed: normalize(r.allowed_in.map(readSource).join("\n")),
 }));
 
+const distFiles = walk(dist);
 const failures = [];
-for (const file of walk(dist).filter(f => /\.(html|md|json)$/.test(f))) {
+for (const file of distFiles.filter(f => /\.(html|md|json)$/.test(f))) {
   const text = normalize(textOf(file));
   for (const r of compiled) for (const m of text.matchAll(r.re)) {
     const win = text.slice(Math.max(0, m.index - 30), m.index + m[0].length + 30);
@@ -73,4 +74,4 @@ for (const file of walk(dist).filter(f => /\.(html|md|json)$/.test(f))) {
   }
 }
 assert.deepEqual(failures, [], "\n" + failures.join("\n"));
-console.log(`retired phrases passed: ${rules.length} rules over ${walk(dist).length} built files`);
+console.log(`retired phrases passed: ${rules.length} rules over ${distFiles.length} built files`);
