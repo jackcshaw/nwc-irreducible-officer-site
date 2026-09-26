@@ -19,6 +19,15 @@ const workbenchContextFilename = "workbench-context.md";
 const workbenchContextUrl = `${siteUrl}/assets/${workbenchContextFilename}`;
 const companionRepoPath = process.env.COMPANION_REPO_PATH || join(root, "..", "companion");
 const workbenchRepoPath = process.env.WORKBENCH_REPO_PATH || join(root, "..", "workbench");
+// A light release stamp: the package version plus the commit each source repo was built from.
+const commitOf = repo => {
+  const r = spawnSync("git", ["-C", repo, "rev-parse", "--short=7", "HEAD"], { encoding: "utf8" });
+  return r.status === 0 ? r.stdout.trim() : "unknown";
+};
+const release = {
+  version: JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version,
+  commits: { site: commitOf(root), companion: commitOf(companionRepoPath), workbench: commitOf(workbenchRepoPath) },
+};
 // PDF/share-card generation needs reportlab + pillow. By default uv supplies
 // them in an ephemeral environment; set PDF_PYTHON to a python3 that already
 // has both installed to skip uv.
@@ -152,7 +161,7 @@ for (const name of ["essays/he.md", "essays/k12.md", "essays/adaptation-map.md",
   mkdirSync(dirname(join(assetsDir,name)),{recursive:true});
   writeFileSync(join(assetsDir,name),readRequiredCompanionFile(name));
 }
-writeFileSync(join(assetsDir,"release.json"),JSON.stringify({edition:"2026-09-companion-essays",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
+writeFileSync(join(assetsDir,"release.json"),JSON.stringify({...release,edition:"2026-09-companion-essays",audiences:audiences.map(a=>a.id),companionSections:companionSectionCount,workbenchSections:workbenchSectionCount,workbenchAudienceSections:Object.fromEntries(Object.entries(workbenchVariants).map(([id,v])=>[id,v.bundle.sectionCount]))},null,2));
 
 const progressionSvgPath = join(workbenchRepoPath, "framework", "assets", "asking-to-supervising.svg");
 if (!existsSync(progressionSvgPath)) {
@@ -377,7 +386,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </div>
   </main>
 
-  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a></footer>
+  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
 
   <script>${clientJs()}</script>

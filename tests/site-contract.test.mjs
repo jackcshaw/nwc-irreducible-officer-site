@@ -423,6 +423,17 @@ assert(!/\]\(\.\.\//u.test(renderedDocContent), "rendered HTML should contain no
 
 assert(existsSync(join(dist, "assets", "workbench", "concepts", "README.md")), "concept downloads should be generated");
 
+// Every release carries a visible version and the commit each source repo was built from.
+const release = JSON.parse(readFileSync(join(dist, "assets", "release.json"), "utf8"));
+const pkgVersion = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version;
+assert(release.version === pkgVersion, "release.json version should match package.json");
+for (const repo of ["site", "companion", "workbench"]) {
+  assert(/^[0-9a-f]{7}$/.test(release.commits?.[repo] ?? ""), `release.json should record the ${repo} commit`);
+}
+assert(
+  html.includes(`<p class="lab-version">Version ${pkgVersion} · ${release.commits.site}</p>`),
+  "footer should show the version and site commit",
+);
 console.log("site contract passed");
 
 // Accessibility and polish contract.
