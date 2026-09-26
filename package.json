@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.mjs",
-    "test": "node tests/site-contract.test.mjs && node tests/audience-contract.test.mjs",
+    "test": "node tests/site-contract.test.mjs && node tests/audience-contract.test.mjs && node tests/alignment/replace-or-throw.test.mjs",
     "dev": "python3 -m http.server 5173 --directory dist"
   }
 }
