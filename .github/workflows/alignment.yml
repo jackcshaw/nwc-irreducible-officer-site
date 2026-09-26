@@ -8,6 +8,13 @@ on:
       caller_repo: { type: string, required: true }
       caller_ref: { type: string, required: true }
 
+permissions:
+  contents: read
+
+concurrency:
+  group: alignment-${{ github.workflow }}-${{ inputs.caller_repo || github.repository }}-${{ inputs.caller_ref || github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -20,25 +27,39 @@ jobs:
     steps:
       - name: Choose a ref for each repository
         id: refs
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          # CALLER_REF is passed via env and always quoted; it is never interpolated into this script.
           echo "| repository | ref |" >> "$GITHUB_STEP_SUMMARY"
           echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
           for repo in nwc-irreducible-officer-companion nwc-faculty-workbench nwc-irreducible-officer-site; do
-            if [ "$repo" = "$CALLER_REPO" ] || git ls-remote --exit-code --heads "https://github.com/jackcshaw/$repo" "$CALLER_REF" >/dev/null; then
+            ref=main
+            if [ "$repo" = "$CALLER_REPO" ]; then
               ref="$CALLER_REF"
             else
-              ref=main
+              # Match the full ref so "foo" cannot tail-match "codex/foo". Exit 2 means absent.
+              status=0
+              git ls-remote --exit-code --heads "https://github.com/jackcshaw/$repo" "refs/heads/$CALLER_REF" >/dev/null || status=$?
+              if [ "$status" -eq 0 ]; then
+                # Use a sibling's same-named branch only when it carries commits main lacks.
+                ahead=$(gh api "repos/jackcshaw/$repo/compare/main...$(jq -rn --arg r "$CALLER_REF" '$r|@uri')" -q .ahead_by)
+                if [ "$ahead" -gt 0 ]; then ref="$CALLER_REF"; fi
+              elif [ "$status" -ne 2 ]; then
+                echo "::error::git ls-remote for $repo failed with exit $status"
+                exit 1
+              fi
             fi
             key="${repo##*-}"
             echo "$key=$ref" >> "$GITHUB_OUTPUT"
             echo "| $repo | $ref |" >> "$GITHUB_STEP_SUMMARY"
           done
       - uses: actions/checkout@v4
-        with: { repository: jackcshaw/nwc-irreducible-officer-companion, ref: "${{ steps.refs.outputs.companion }}", path: nwc-irreducible-officer-companion }
+        with: { repository: jackcshaw/nwc-irreducible-officer-companion, ref: "${{ steps.refs.outputs.companion }}", path: nwc-irreducible-officer-companion, persist-credentials: false }
       - uses: actions/checkout@v4
-        with: { repository: jackcshaw/nwc-faculty-workbench, ref: "${{ steps.refs.outputs.workbench }}", path: nwc-faculty-workbench }
+        with: { repository: jackcshaw/nwc-faculty-workbench, ref: "${{ steps.refs.outputs.workbench }}", path: nwc-faculty-workbench, persist-credentials: false }
       - uses: actions/checkout@v4
-        with: { repository: jackcshaw/nwc-irreducible-officer-site, ref: "${{ steps.refs.outputs.site }}", path: nwc-irreducible-officer-site }
+        with: { repository: jackcshaw/nwc-irreducible-officer-site, ref: "${{ steps.refs.outputs.site }}", path: nwc-irreducible-officer-site, persist-credentials: false }
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: npm, cache-dependency-path: nwc-irreducible-officer-site/package-lock.json }
       - uses: actions/setup-python@v5
