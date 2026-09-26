@@ -43,7 +43,7 @@ jobs:
               git ls-remote --exit-code --heads "https://github.com/jackcshaw/$repo" "refs/heads/$CALLER_REF" >/dev/null || status=$?
               if [ "$status" -eq 0 ]; then
                 # Use a sibling's same-named branch only when it carries commits main lacks.
-                ahead=$(gh api "repos/jackcshaw/$repo/compare/main...$(jq -rn --arg r "$CALLER_REF" '$r|@uri')" -q .ahead_by)
+                ahead=$(gh api "repos/jackcshaw/$repo/compare/main...$(jq -rn --arg r "$CALLER_REF" '$r|@uri')" -q .ahead_by) || { echo "::error::Could not compare $repo main...$CALLER_REF (GitHub API error); rerun the job"; exit 1; }
                 if [ "$ahead" -gt 0 ]; then ref="$CALLER_REF"; fi
               elif [ "$status" -ne 2 ]; then
                 echo "::error::git ls-remote for $repo failed with exit $status"
