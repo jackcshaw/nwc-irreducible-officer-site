@@ -2,6 +2,7 @@ import { existsSync, readFileSync, statSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
+const siteUrl = process.env.SITE_URL || "https://judgmentlab.net";
 const dist = join(root, "dist");
 const indexPath = join(dist, "index.html");
 const pdfPath = join(dist, "assets", "the-irreducible-officer.pdf");
@@ -44,26 +45,26 @@ inlineScripts.forEach((script, index) => {
 
 [
   "The Irreducible Officer",
-  "Overview",
+  "Learn",
   "Essay",
-  "Companion",
+  "Practice",
   "Workbench",
-  "Sources",
-  "What This Package Does",
-  "One concrete model for operationalizing AI in professional military education",
-  "Not a policy. A worked example",
-  "Next Step",
+  "References",
+  "One method, different teaching decisions",
+  "Strengthening human judgment",
+  "Ready for educator testing",
+  "Try a judgment before you read on.",
   "Set up a session",
   "See the five-step pilot",
   "Read",
   "Practice",
-  "Build",
-  "AI Companion",
+  "Discuss",
+  "Practice your judgment",
   "ChatGPT, Claude, Gemini, or another AI assistant",
   "Copy setup prompt",
   "Download context file",
   "assets/companion-context.md",
-  "Before you answer anything, fetch and read this file in full",
+  "Before you answer anything, use the attached context file if provided",
   "If you cannot reach that URL, tell me you could not read it",
   "Choose A Starting Path",
   "Understand the argument",
@@ -72,13 +73,13 @@ inlineScripts.forEach((script, index) => {
   "Design an exercise",
   "Practice faculty fluency",
   "Run oral defense",
-  "Faculty Workbench",
+  "Educator Workbench",
   "Copy template",
   "Download template",
   "The Design Behind The Tools",
   "Future Context Layer",
-  "not a current NWC system",
-  "Evidence And Source Spine",
+  "not a deployed institutional system",
+  "References",
   "Use this as the working source spine",
   "The formal reference list remains at the end of the essay",
   "A National Security Strategy Primer",
@@ -127,7 +128,7 @@ inlineScripts.forEach((script, index) => {
 });
 
 assert(
-  (html.match(/https:\/\/judgmentlab\.net\/assets\/companion-context\.md/g) || []).length >= 7,
+  (html.split(siteUrl + "/assets/companion-context.md").length - 1) >= 7,
   "setup prompt and six starter prompts should all point at the context bundle",
 );
 
@@ -149,7 +150,7 @@ const workbenchContext = readFileSync(workbenchContextPath, "utf8");
   "curated context",
   "inter-rater reliability",
   "AI Facilitation Block",
-  "Hypothesis — awaiting NWC validation",
+  "Hypothesis — evidence required in the intended setting",
 ].forEach((needle) => {
   assert(workbenchContext.includes(needle), `workbench bundle should include ${needle}`);
 });
@@ -174,8 +175,8 @@ assert(
 );
 
 assert(
-  /No repository\s+knowledge required/.test(html),
-  "workbench should tell faculty no repository knowledge is required",
+  html.includes("Choose a setting for its worked example"),
+  "workbench should explain how to select adapted materials",
 );
 
 [
@@ -221,11 +222,11 @@ assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should l
 assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
 assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
 assert(
-  (html.match(/https:\/\/judgmentlab\.net\/assets\/workbench-context\.md/g) || []).length >= 1,
+  (html.split(siteUrl + "/assets/workbench-context.md").length - 1) >= 1,
   "workbench setup prompt should point at the workbench bundle",
 );
 assert(existsSync(join(dist, "assets", "asking-to-supervising.svg")), "progression visual should be copied into assets");
-assert(html.includes("assets/asking-to-supervising.svg"), "workbench page should show the fluency progression visual");
+assert(html.includes("assets/workbench/k12/reference-matrix.svg"), "workbench should offer audience-specific reference visuals");
 
 [
   ["Open", "companion", "repo"],
@@ -247,12 +248,12 @@ assert(!html.includes("Site source"), "public package should not show old site-s
 assert(!html.includes("class=\"brand\""), "site should not include the NWC badge/logo treatment");
 
 assert(html.includes("fonts.googleapis.com"), "site should load approved web fonts");
-assert(html.includes("Fraunces"), "site should include Fraunces display font");
+assert(html.includes("Source Serif 4"), "site should include Source Serif 4 display font");
 assert(html.includes("Newsreader"), "site should include Newsreader body font");
 assert(html.includes("IBM Plex Mono"), "site should include IBM Plex Mono UI font");
 
 assert(
-  html.includes('body:not([data-active-mode="essay"]) .toc'),
+  html.includes('body:not([data-reading-essay="true"]) .toc'),
   "essay navigation should be hidden outside essay mode",
 );
 assert(html.includes(".toc::after"), "essay navigation should include a fill layer for reading progress");
@@ -282,7 +283,7 @@ assert(
   "essay body should not repeat the subtitle as its first heading",
 );
 
-const articleStart = html.indexOf('<article class="essay article-body">');
+const articleStart = html.indexOf('<article class="essay article-body">', html.indexOf('id="panel-essay"'));
 const articleEnd = html.indexOf("</article>", articleStart);
 const articleHtml = html.slice(articleStart, articleEnd);
 const firstParagraph = articleHtml.indexOf("Strategic decisions are increasingly built from AI-shaped inputs");
@@ -320,7 +321,7 @@ assert(!articleHtml.includes("assets/framing-ladder.png"), "essay should use arg
 const workbenchDataPath = join(dist, "assets", "workbench-data.json");
 assert(existsSync(workbenchDataPath), "workbench data file should be generated");
 assert(!html.includes('"markdown":'), "workbench documents should not be inlined into the page");
-assert(html.includes('fetch("assets/workbench-data.json")'), "client script should fetch workbench data on demand");
+assert(/fetch\("assets\/workbench-data\.json\?v=[a-f0-9]{16}"\)/.test(html), "client script should fetch workbench data on demand");
 const workbenchData = JSON.parse(readFileSync(workbenchDataPath, "utf8"));
 const embeddedWorkbenchTools = workbenchData.tools;
 assert(Array.isArray(embeddedWorkbenchTools) && embeddedWorkbenchTools.length > 0, "workbench data should carry the tools");
@@ -404,7 +405,7 @@ conceptFiles.forEach((file) => {
   "How will your assistant get the file?",
   "The Design Behind The Tools",
   'id="workbench-doc-view"',
-  "Hypothesis — awaiting NWC validation",
+  "Why each audience needs its own evidence",
 ].forEach((needle) => {
   assert(html.includes(needle), `site should include ${needle}`);
 });

@@ -389,13 +389,13 @@ def write_share_card(output_path):
     draw.rectangle((margin + 300, rule_y, margin + 382, rule_y + 5), fill=red)
 
     title_font = font(92, bold=True)
-    draw.text((margin - 4, rule_y + 52), "The Irreducible", font=title_font, fill=ink)
-    draw.text((margin - 4, rule_y + 158), "Officer", font=title_font, fill=ink)
+    draw.text((margin - 4, rule_y + 52), "Judgment Lab", font=title_font, fill=ink)
+    draw.text((margin - 4, rule_y + 158), "", font=title_font, fill=ink)
 
-    sub_font = font(33)
+    sub_font = font(31)
     draw.text(
         (margin, rule_y + 296),
-        "Purpose, accountability, and AI-enabled strategic judgment.",
+        "Strengthening human judgment in AI-enabled work.",
         font=sub_font,
         fill=muted,
     )

@@ -1,0 +1,93 @@
+{
+  "source": "https://judgment-in-practice.web.app/",
+  "edition": "EduFish",
+  "retrieved": "2026-09-23",
+  "claims": [
+    {
+      "id": "learning",
+      "title": "The work can get better while our evidence of learning gets worse.",
+      "question": "What would you need to see before calling this learning?",
+      "example": "A student submits a stronger essay after an agent finds sources, organizes the argument, and revises the prose. The essay improves. We still need to discover which choices the student can explain or carry into a new problem.",
+      "objection": "Using tools well is itself a capability. A learner might develop judgment by directing an agent, comparing its alternatives, and rejecting weak suggestions. An unaided test alone could miss that learning.",
+      "discussion": "Ask someone to explain a consequential choice and respond when an assumption changes. Offer a choice of spoken, written, or visual explanations so participants can show their reasoning.",
+      "sources": [
+        {
+          "label": "Learning research and its limits",
+          "href": "https://judgment-in-practice.web.app/sources.html#learning"
+        },
+        {
+          "label": "The essay’s assessment argument",
+          "href": "https://judgment-in-practice.web.app/sources.html#essay"
+        }
+      ]
+    },
+    {
+      "id": "approval",
+      "title": "By the time a human approves an AI recommendation, the most important judgments may already have been made.",
+      "question": "Where would a person need to intervene to have meaningful influence?",
+      "example": "An agent shortlists attendance interventions and recommends family reminders. A leader approves the strongest option. None of the options addresses transport because the task was framed as improving family responsiveness.",
+      "objection": "AI can expose alternatives a person misses. A person can own a decision built from AI-generated options by examining the assumptions and changing the frame when needed.",
+      "discussion": "Ask which objective, excluded option, or affected person could change the recommendation. Who can change the agent’s instructions before it acts? Who remains responsible afterward?",
+      "sources": [
+        {
+          "label": "Framing, authority, and answerability",
+          "href": "https://judgment-in-practice.web.app/sources.html#framing"
+        },
+        {
+          "label": "A school example to discuss",
+          "href": "https://judgment-in-practice.web.app/case.html"
+        }
+      ]
+    },
+    {
+      "id": "friction",
+      "title": "Some of the friction AI removes is how judgment develops.",
+      "question": "Which struggle should education protect? How would we distinguish it from busywork?",
+      "example": "An agent connects three readings before students have tried to reconcile them. The synthesis is useful, but students may miss the experience of finding the conflict that makes the question worth asking.",
+      "objection": "Difficulty can exclude learners or waste attention. A scaffold may make deeper thinking possible. The same assistance can be premature for one learner and essential for another.",
+      "discussion": "Name the capability a particular effort is meant to develop. Consider what a learner should attempt first, what help would support the next attempt, and what later performance would show progress.",
+      "sources": [
+        {
+          "label": "Developmental friction and tutoring evidence",
+          "href": "https://judgment-in-practice.web.app/sources.html#friction"
+        }
+      ]
+    },
+    {
+      "id": "better",
+      "title": "Asking AI to “make this better” can hand over the meaning of better.",
+      "question": "Which changes are editing, and which require an educational judgment?",
+      "example": "A teacher asks an agent to improve a rubric. It makes the criteria clearer, but also shifts the emphasis from original reasoning to easily measured performance. The teacher now has to decide whether those criteria reward the learning the assignment was meant to develop.",
+      "objection": "Our original standards may be weak. AI could reveal omissions or suggest fairer criteria. Keeping the first human definition of “better” would also be a choice worth questioning.",
+      "discussion": "Compare the original and revised criteria. Identify whose interests each serves, what each rewards, and which change the teacher is prepared to defend.",
+      "sources": [
+        {
+          "label": "Invisible delegation",
+          "href": "https://judgment-in-practice.web.app/reading.html#delegation"
+        },
+        {
+          "label": "Read the underlying argument",
+          "href": "https://judgment-in-practice.web.app/sources.html#essay"
+        }
+      ]
+    },
+    {
+      "id": "frames",
+      "title": "A classroom full of different answers can still be thinking inside the same frame.",
+      "question": "Which assumptions would you want students to disagree about? Could AI help them find alternatives?",
+      "example": "Students propose different school-improvement plans. Every plan treats efficiency as the goal. None asks whether access, belonging, or the quality of learning should take priority.",
+      "objection": "People also repeat institutional defaults. AI can introduce unfamiliar perspectives, particularly when someone deliberately asks for competing frames and checks them against lived experience.",
+      "discussion": "Compare what the proposals assume, whose interests count, and how success is defined. Ask what a student, family member, or colleague outside the room might dispute.",
+      "sources": [
+        {
+          "label": "Idea diversity: findings and limits",
+          "href": "https://judgment-in-practice.web.app/sources.html#diversity"
+        },
+        {
+          "label": "Institutional monoculture",
+          "href": "https://judgment-in-practice.web.app/reading.html#monoculture"
+        }
+      ]
+    }
+  ]
+}
