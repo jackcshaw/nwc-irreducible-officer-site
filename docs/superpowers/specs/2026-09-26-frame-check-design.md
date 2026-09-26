@@ -1,12 +1,12 @@
-# Frame Check: assignment builder for every workbench
+# Frame Check and a job-based workbench
 
-Date: 2026-09-26. Status: design approved in conversation; awaiting spec review.
+Date: 2026-09-26. Status: design approved in conversation, including the workbench restructure folded in after an Impeccable critique (24/40); awaiting spec review.
 
 ## Purpose
 
 Frame Check helps educators create and repair assignments that make students own a frame while directing AI. It turns the method used on 2026-09-25 to replace the survey and temperature cases (name the skill, run the stock-phrase test, rate against five tests, compare candidates, pressure-test, repair) into a workbench tool any educator can run. It also teaches that method: every rating is explained through the test it applies, so educators learn to make good examples, not just receive one.
 
-Frame Check is the workbench's tenth tool, adapted for PME, higher education, and high school like the other nine.
+Frame Check is the workbench's tenth tool, adapted for PME, higher education, and high school like the other nine. It ships inside a restructured workbench organized around what a teacher came to do, with Frame Check leading "Design an assignment" (see Workbench restructure).
 
 ## Decisions
 
@@ -75,7 +75,7 @@ Markdown containing the final case or assignment, the five-test rating table, ca
 
 ### Site (`nwc-irreducible-officer-site`)
 
-- `getWorkbenchTools()` gains `{ id: "frame-check", title: "Frame Check", cardTitle: "Frame Check", cardDesc: "Build or check a case that makes students own the frame.", cardAction: "Open Frame Check", filename: "frame-check.md" }` with a use note in the same style as the others.
+- `getWorkbenchTools()` gains `{ id: "frame-check", title: "Frame Check", toolName: "Frame Check", job: "design", cardTitle: "Build a case students must frame", cardDesc: "Build or check a case that makes students own the frame.", filename: "frame-check.md" }` with a use note in the same style as the others.
 - `adaptTool` gains a Frame Check branch: for the selected audience, remove the other two primer blocks and the markers with `replaceOrThrow` (a missing marker stops the build).
 - The phase-placement diagnostic's list of tools gains Frame Check.
 - Contract tests and README counts move from 9 to 10 tools, 27 to 30 adapted templates, and each bundle's section count up by one.
@@ -84,6 +84,37 @@ Markdown containing the final case or assignment, the five-test rating table, ca
 
 - `artifacts/frame-first-assignment-design.md` gains a `## Frame Check workflow` section with the six build steps and two calibration-table rows (the PME outage attribution, rated weak; the PME exercise-window rollback, rated strong), and remains the source of truth for the tests, rubric, workflow, and calibration verdicts.
 - `alignment/retired-phrases.json`: the old-case rules (`shuttle`, `campus survey`, `asphalt`, `shaded grass`, `matched[- ]tiles?`, `surface-temperature readings`) add `templates/frame-check.md` to `allowed_in`.
+
+## Workbench restructure
+
+An Impeccable critique of the current workbench (2026-09-26; 24/40; `.impeccable/critique/` in the site repository) found three P1 issues: tools organized by artifact rather than teacher job, three competing starting points, and a document viewer 4–8 screens below the list at about 123 characters per line. The restructure fixes all three and ships with Frame Check.
+
+### Overview page, top to bottom
+
+1. Title, one-line purpose, and the selected audience's status line.
+2. The selected audience's worked example, followed by the link "Build or check a case like this → Frame Check".
+3. Four job groups, each a heading with its tools; Design is visually heaviest and Make it repeatable lightest:
+
+| Job | Tools (card title · tool name) |
+| --- | --- |
+| Design an assignment | Build a case students must frame · Frame Check; Decide where AI belongs in an assignment · Assignment design worksheet; Package the materials students will use · Source kit |
+| Assess student work | Grade the reasoning, not just the product · Assessment rubric; Collect AI answers worth critiquing · Flawed output library |
+| Work with colleagues | Compare how colleagues judge the same work · Faculty calibration protocol; Record what worked after a class · After-action note |
+| Make it repeatable | Turn a task that works into a reusable method · Method card; Let students direct multi-step AI work · Supervised delegation exercise |
+
+   A small link, "Not sure where to start? Find your starting point", opens the placement diagnostic, which is no longer a card.
+4. "How this works with your assistant", collapsed: the setup prompt, the attach-or-read-the-web choice, and the student-data note ("Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.").
+5. "Why these tools work", collapsed: the concept notes.
+
+Removed: the in-page audience selector (the masthead selector remains the one control), the "Future Context Layer" section, and hardcoded tool counts in page copy (counts derive from the tool list).
+
+### Cards
+
+Each card shows the plain job title, the tool name as a small secondary label, a one-line description, and one action, "Open". Every tool uses the same verb.
+
+### Document view
+
+Opening a tool (click or `#wb-doc-<file>` route) switches the workbench to a document view at the top of the page: breadcrumb "Workbench › <job> › <tool name>" with Workbench returning to the overview; a primary "Start in your assistant" button that copies `Read <site>/assets/workbench/<audience>/<file> in full and run it with me. My setting is <audience label>.` (without an audience, the shared template URL and no setting sentence); "Download" as the fallback; the document at a reading measure near 70 characters; the matching card marked `aria-current="true"` when returning to the overview; and a one-line polite status ("Opened <tool name>") instead of a live region around the whole viewer. Browser back returns to the overview.
 
 ## Checks
 
@@ -94,6 +125,8 @@ Markdown containing the final case or assignment, the five-test rating table, ca
 | Retired phrases | Old-case phrases appear anywhere other than the allowed history files and `templates/frame-check.md` (existing check, narrowly extended) |
 | Browser | The Frame Check card is missing from any audience's workbench, does not open, or its download link fails |
 | Contracts | Tool, template, and bundle counts do not match the new totals |
+| Workbench structure | A job group is missing a tool or holds the wrong one; the placement diagnostic appears as a card; the in-page audience selector or "Future Context Layer" returns; page copy hardcodes a tool count |
+| Document view | Opening a tool does not land at the top with the breadcrumb; the reading measure exceeds 72 characters at 1440px; "Start in your assistant" does not copy the tool's audience URL; no horizontal scroll at 390px |
 
 ## Live assistant test (before release)
 
@@ -109,8 +142,9 @@ Failures are fixed in the facilitation block before release.
 
 1. Companion PR (workflow section, retired-phrase allowance), then workbench PR (template, profile entries), then site PR (tool registry, adaptation, checks, counts), each through the alignment gate. Shared branch name `frame-check`.
 2. Live assistant test.
-3. Bump the site version to `2026.9.27`; deploy to production; verify every file byte for byte and the footer version.
-4. Update the draft to Andy Rotherham: the third bullet says the update includes Frame Check.
+3. Re-run the Impeccable critique on the workbench; the three P1s must be resolved, then run an Impeccable polish pass.
+4. Bump the site version to `2026.9.27`; deploy to production; verify every file byte for byte and the footer version.
+5. Update the draft to Andy Rotherham: the third bullet says the update includes Frame Check.
 
 ## Out of scope
 

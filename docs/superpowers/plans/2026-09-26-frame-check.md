@@ -1,10 +1,10 @@
-# Frame Check Implementation Plan
+# Frame Check and Job-Based Workbench Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add Frame Check, a tenth workbench tool that builds, rates, and repairs frame-first assignment cases, adapted for PME, higher education, and high school, and kept in sync with the companion design doc by CI.
+**Goal:** Add Frame Check, a tenth workbench tool that builds, rates, and repairs frame-first assignment cases (adapted per audience and kept in sync with the companion design doc by CI), and restructure the workbench around teacher jobs with Frame Check leading "Design an assignment".
 
-**Architecture:** The workbench gains `templates/frame-check.md`, run in the educator's own AI assistant, carrying the five tests, levels, rubric, workflow, and three calibration primer blocks. The site registers the tool and keeps only the selected audience's primer block. The companion design doc gains the workflow section and two PME calibration rows and stays the source of truth; a site test fails when the template and doc drift.
+**Architecture:** The workbench gains `templates/frame-check.md`, run in the educator's own AI assistant, carrying the five tests, levels, rubric, workflow, and three calibration primer blocks. The site registers the tool and keeps only the selected audience's primer block. The companion design doc gains the workflow section and two PME calibration rows and stays the source of truth; a site test fails when the template and doc drift. The workbench page becomes an overview (example, four job groups, collapsed setup and concepts) plus a document view that opens at the top with a breadcrumb.
 
 **Tech Stack:** Markdown templates, Node 24 ESM build and `node:assert` tests, Playwright, GitHub Actions alignment workflow (already live).
 
@@ -17,7 +17,10 @@
 - No `Co-Authored-By` trailers or "Generated with" lines in commits or PR bodies.
 - Build and test from the site directory with `COMPANION_REPO_PATH=../nwc-irreducible-officer-companion WORKBENCH_REPO_PATH=../nwc-faculty-workbench`.
 - Frame Check runs in the educator's own AI assistant. No backend, no API calls.
-- Tool id and profile key: `frame-check`; file `templates/frame-check.md`; card title "Frame Check"; card description "Build or check a case that makes students own the frame."; card action "Open Frame Check".
+- Tool id and profile key: `frame-check`; file `templates/frame-check.md`; tool name "Frame Check"; card title "Build a case students must frame"; card description "Build or check a case that makes students own the frame."; job `design`.
+- Job groups (order, heading, tool ids): `design` "Design an assignment" [frame-check, assignment-design, source-kit]; `assess` "Assess student work" [assessment, flawed-output]; `colleagues` "Work with colleagues" [calibration, after-action]; `repeat` "Make it repeatable" [method-card, supervised-delegation]. The placement diagnostic (`phase-diagnostic`) is a link, not a card.
+- Every card has one action label, "Open". The student-data note reads exactly: "Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy."
+- Load the Impeccable craft floor (`/Users/jackcshaw-2/.claude/plugins/cache/impeccable/impeccable/4.0.4/skills/impeccable/reference/craft-floor.md`) before any UI edit; preserve the settled identity (cream/navy/red, Source Serif 4, Source Sans 3, masthead).
 - Primer markers: `<!-- frame-check:primer <id> -->` and `<!-- /frame-check:primer <id> -->`, `<id>` in `pme`, `he`, `k12`.
 - The companion design doc is the source of truth for the five tests (name, Ask, Fails when), the rubric bullets, the six workflow steps, and calibration ratings.
 - The PME strong example is fictional and needs PME faculty review; say so wherever it appears.
@@ -309,9 +312,11 @@ Expected: FAIL with `templates/frame-check.md has no getWorkbenchTools() card �
     {
       id: "frame-check",
       title: "Frame Check",
-      cardTitle: "Frame Check",
+      toolName: "Frame Check",
+      job: "design",
+      cardTitle: "Build a case students must frame",
       cardDesc: "Build or check a case that makes students own the frame.",
-      cardAction: "Open Frame Check",
+      cardAction: "Open",
       filename: "frame-check.md",
       useNote: "Give this to your AI assistant and say: run Frame Check with me. Bring your objective and the materials students will use.",
     },
@@ -453,7 +458,7 @@ git commit -m "Keep Frame Check in sync with the companion design doc"
 for (const p of profiles) {
   test(`${p.id} workbench offers Frame Check with its own primer`, async ({ page }) => {
     await page.goto(`/?audience=${p.id}#workbench`);
-    await expect(page.locator(".tool-title", { hasText: "Frame Check" }).first()).toBeVisible();
+    await expect(page.locator('[data-tool-id="frame-check"]')).toBeVisible();
     await page.goto(`/?audience=${p.id}#wb-doc-frame-check`);
     await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
     const res = await page.request.get(`/assets/workbench/${p.id}/frame-check.md`);
@@ -494,7 +499,177 @@ Scripted sessions run by a separate assistant given only the adapted template as
 
 ---
 
-### Task 7: PRs, review, merge, release
+### Task 7: Job groups and cards
+
+**Files:**
+- Modify: `nwc-irreducible-officer-site/scripts/build-site.mjs` (`getWorkbenchTools` entries, `workbenchCard`, `buildWorkbenchMode` tool grid)
+- Modify: `nwc-irreducible-officer-site/tests/site-contract.test.mjs`
+
+**Interfaces:**
+- Consumes: tool ids and filenames (unchanged); Frame Check entry (Task 3).
+- Produces: every tool object carries `job` and `toolName`; constant `workbenchJobs = [{id:"design",heading:"Design an assignment"},{id:"assess",heading:"Assess student work"},{id:"colleagues",heading:"Work with colleagues"},{id:"repeat",heading:"Make it repeatable"}]`; markup `<section class="job-group" data-job="<id>"><h2>…</h2><div class="tool-grid">cards…</div></section>` inside `#workbench-tools`; placement link `<a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>`.
+
+- [ ] **Step 1: Write failing assertions** in `tests/site-contract.test.mjs` (before `console.log("site contract passed")`):
+
+```js
+const jobs = { design: ["frame-check", "assignment-design", "source-kit"], assess: ["assessment", "flawed-output"], colleagues: ["calibration", "after-action"], repeat: ["method-card", "supervised-delegation"] };
+for (const [job, ids] of Object.entries(jobs)) {
+  const start = html.indexOf(`data-job="${job}"`);
+  assert(start > 0, `workbench should have the ${job} job group`);
+  const group = html.slice(start, html.indexOf("</section>", start));
+  for (const id of ids) assert(group.includes(`data-tool-id="${id}"`), `${job} group should hold ${id}`);
+}
+assert(!html.includes('data-tool-id="phase-diagnostic"'), "placement should be a link, not a card");
+assert(html.includes('href="#wb-doc-phase-placement-diagnostic"'), "placement link should be present");
+const toolsHtml = html.slice(html.indexOf('id="workbench-tools"'), html.indexOf("</section>\n    </section>", html.indexOf('id="workbench-tools"')) + 1 || undefined);
+assert(!/<span class="tool-action">(?!Open &rarr;)/.test(toolsHtml), "every tool card action should read Open (concept cards keep Read note)");
+```
+
+- [ ] **Step 2: Run to verify it fails.** Run: `npm run build && node tests/site-contract.test.mjs`. Expected: FAIL `workbench should have the design job group`.
+
+- [ ] **Step 3: Implement.** Add `job` and `toolName` to each `getWorkbenchTools()` entry and set `cardTitle`/`cardAction` as follows (keep `id`, `title`, `filename`, `useNote`):
+
+| id | job | toolName | cardTitle |
+| --- | --- | --- | --- |
+| phase-diagnostic | (none) | Placement diagnostic | Find your starting point |
+| frame-check | design | Frame Check | Build a case students must frame |
+| assignment-design | design | Assignment design worksheet | Decide where AI belongs in an assignment |
+| source-kit | design | Source kit | Package the materials students will use |
+| assessment | assess | Assessment rubric | Grade the reasoning, not just the product |
+| flawed-output | assess | Flawed output library | Collect AI answers worth critiquing |
+| calibration | colleagues | Faculty calibration protocol | Compare how colleagues judge the same work |
+| after-action | colleagues | After-action note | Record what worked after a class |
+| method-card | repeat | Method card | Turn a task that works into a reusable method |
+| supervised-delegation | repeat | Supervised delegation exercise | Let students direct multi-step AI work |
+
+Every `cardAction` becomes `"Open"`. Update `workbenchCard(tool)` to render the tool name as a secondary label:
+
+```js
+function workbenchCard(tool) {
+  return `<button class="tool-card" type="button" data-tool-id="${tool.id}">
+    <span class="tool-title">${escapeHtml(tool.cardTitle)}</span>
+    <span class="tool-name">${escapeHtml(tool.toolName)}</span>
+    <span class="tool-desc">${escapeHtml(tool.cardDesc)}</span>
+    <span class="tool-action">${escapeHtml(tool.cardAction)} &rarr;</span>
+  </button>`;
+}
+```
+
+Replace the `#workbench-tools` section body in `buildWorkbenchMode` with the placement link followed by one `job-group` section per `workbenchJobs` entry, each containing the cards whose `job` matches, in the table's order. Style `.job-group` headings with the existing band-label/heading tokens; give `design` more visual weight (larger heading, first position) and `repeat` less, per the craft floor. Add `.tool-name` as a small muted label.
+
+- [ ] **Step 4: Run to verify it passes.** Run: `npm run build && npm test`. Expected: 14 passed lines. Update any existing site-contract assertion that pinned the old flat grid only if its behavior is intentionally removed; keep assertions for retained behavior.
+
+- [ ] **Step 5: Commit.** `git commit -am "Group workbench tools by teacher job with plain card titles"`
+
+---
+
+### Task 8: Overview order, collapsed setup, removals
+
+**Files:**
+- Modify: `nwc-irreducible-officer-site/scripts/build-site.mjs` (`buildWorkbenchMode`, `applyAudience` client code)
+- Modify: `nwc-irreducible-officer-site/tests/site-contract.test.mjs`, `tests/audience-contract.test.mjs`
+
+**Interfaces:**
+- Produces: overview order hero → `#workbench-progression` (worked example + `<a href="#wb-doc-frame-check" data-wb-link class="example-next">Build or check a case like this → Frame Check</a>`) → `#workbench-tools` → `<details class="assistant-setup"><summary>How this works with your assistant</summary>…</details>` (door grid, setup prompt block, student-data note) → `<details class="workbench-concepts"><summary>Why these tools work</summary>…</details>` (concept cards). No `#workbench-setting` element; no "Future Context Layer"; hero copy without a hardcoded tool count.
+
+- [ ] **Step 1: Write failing assertions.** In `tests/site-contract.test.mjs` replace the `"Future Context Layer"` expectation (line ~80) with its absence and add:
+
+```js
+assert(!html.includes("Future Context Layer"), "roadmap note should not appear on the workbench");
+assert(!html.includes('id="workbench-setting"'), "the masthead selector is the only audience control");
+assert(html.includes('<summary>How this works with your assistant</summary>'), "setup should be collapsed");
+assert(html.includes("Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy."), "student-data note should be present");
+assert(html.includes('class="example-next"') && html.includes('href="#wb-doc-frame-check"'), "worked example should lead into Frame Check");
+const wb = html.slice(html.indexOf('id="panel-workbench"'), html.indexOf('id="panel-sources"'));
+assert(wb.indexOf('id="workbench-progression"') < wb.indexOf('id="workbench-tools"') && wb.indexOf('id="workbench-tools"') < wb.indexOf('class="assistant-setup"'), "overview order: example, jobs, setup");
+assert(!/\b(nine|ten) (adapted )?templates\b/i.test(wb), "page copy should not hardcode a tool count");
+```
+
+In `tests/audience-contract.test.mjs`, remove `'workbench-setting'` from the `elements` id list (line ~102) and any assertion on its value; keep the others.
+
+- [ ] **Step 2: Run to verify it fails.** Run: `npm run build && npm test`. Expected: FAIL on `roadmap note should not appear`.
+
+- [ ] **Step 3: Implement** in `buildWorkbenchMode`: remove the `<label for="workbench-setting">`, the `<select id="workbench-setting">`, and the paragraph mentioning "nine adapted templates"; move the door grid, the setup-prompt `copyBlock`, and the student-data note into `<details class="assistant-setup">` placed after `#workbench-tools`; move the concepts intro and `#workbench-concepts` grid into `<details class="workbench-concepts">` after it; delete the `future-layer` section; add the `example-next` link after each audience's worked example (inside each `data-workbench-audience` block, and for the no-audience block). In the client code, delete the `document.getElementById("workbench-setting")` reads/writes and its `change` listener; the masthead selector already calls `changeAudience`.
+
+- [ ] **Step 4: Run to verify it passes.** Run: `npm run build && npm test && npm run test:browser`. Expected: 14 passed lines; browser suite passes (18).
+
+- [ ] **Step 5: Commit.** `git commit -am "Lead the workbench with the example and jobs; collapse setup and concepts"`
+
+---
+
+### Task 9: Document view
+
+**Files:**
+- Modify: `nwc-irreducible-officer-site/scripts/build-site.mjs` (`.selected-tool` markup, `renderWorkbenchDocument`, `selectDocument`, `openWorkbenchRoute`, `setMode` for `workbench`, the `[data-workbench-tools-link]` handler, styles)
+- Modify: `nwc-irreducible-officer-site/tests/alignment/browser.spec.mjs`
+
+**Interfaces:**
+- Consumes: tool `job`/`toolName` (Task 7), `workbenchJobs`, `currentWorkbenchAudience`, `workbenchProfiles` labels, `siteUrl` (embed as a client constant).
+- Produces: `#panel-workbench[data-wb-view="overview"|"doc"]`; breadcrumb `<nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="#workbench" data-wb-home>Workbench</a> › <span data-wb-crumb-job></span> › <span data-wb-crumb-tool aria-current="page"></span></nav>`; button `<button class="copy-button primary" type="button" data-start-assistant>Start in your assistant</button>`; `#copy-status` receives "Opened <tool name>" on open.
+
+- [ ] **Step 1: Write failing browser checks** at the end of `browser.spec.mjs`:
+
+```js
+test("opening a tool shows the document view at the top", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="frame-check"]').click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator(".wb-breadcrumb")).toContainText("Design an assignment");
+  await expect(page.locator(".wb-breadcrumb")).toContainText("Frame Check");
+  expect(await page.evaluate(() => document.querySelector(".wb-breadcrumb").getBoundingClientRect().top)).toBeLessThan(400);
+  const perLine = await page.evaluate(() => { const el = document.querySelector("#workbench-doc-view p"); const cs = getComputedStyle(el); const ch = document.createElement("span"); ch.textContent = "0"; ch.style.font = cs.font; document.body.append(ch); const w = ch.getBoundingClientRect().width; ch.remove(); return el.getBoundingClientRect().width / w; });
+  expect(perLine).toBeLessThanOrEqual(72);
+});
+
+test("Workbench crumb and browser back return to the overview with the card marked", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="assessment"]').click();
+  await page.goBack();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "overview");
+  await expect(page.locator('[data-tool-id="assessment"]')).toHaveAttribute("aria-current", "true");
+});
+
+test("Start in your assistant copies the tool's audience URL", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  await page.locator("[data-start-assistant]").click();
+  const text = await page.evaluate(() => navigator.clipboard.readText());
+  expect(text).toContain("/assets/workbench/k12/frame-check.md");
+  expect(text).toContain("My setting is High school.");
+});
+
+test("job groups show their tools", async ({ page }) => {
+  await page.goto("/?audience=pme#workbench");
+  for (const job of ["design", "assess", "colleagues", "repeat"]) await expect(page.locator(`[data-job="${job}"] .tool-card`).first()).toBeVisible();
+});
+```
+
+- [ ] **Step 2: Run to verify they fail.** Run: `npm run build && WORKBENCH_REPO_PATH=../nwc-faculty-workbench npm run test:browser`. Expected: the four new tests fail (no `data-wb-view`).
+
+- [ ] **Step 3: Implement.**
+  - Wrap the overview sections (hero, progression, tools, setup, concepts) in `<div class="wb-overview">` and the selected-tool section in `<div class="wb-doc">`; CSS shows one or the other by `#panel-workbench[data-wb-view]`. Default `overview`.
+  - Replace the `.selected-tool` heading block with the breadcrumb, the tool name as `h2#selected-tool-title`, the `data-start-assistant` button, the existing `selected-tool-download` link relabelled "Download", and keep the hidden template `<pre>`. Remove `aria-live` from `.selected-tool`. Remove the "Back to tools" button and its handler; `data-wb-home` navigates to `#workbench`.
+  - Cap `#workbench-doc-view` at `max-width: 68ch`.
+  - `renderWorkbenchDocument(item, isFromConcept)`: set the breadcrumb job (from `workbenchJobs`, or "Why these tools work" for concepts, or omit the middle crumb for the placement diagnostic), tool name (`item.toolName || item.title`), and write `Opened <name>` to `#copy-status`.
+  - `selectDocument`: set `data-wb-view="doc"` and scroll to the top of the panel instead of `.selected-tool`; set `aria-current="true"` on the clicked card and remove it from others.
+  - Route handling: `#workbench` sets `data-wb-view="overview"`; `#wb-doc-*` sets `doc` (existing `openWorkbenchRoute`). Browser back therefore returns to the overview.
+  - `[data-start-assistant]` click: copy (via the existing `copyTextToClipboard`) `Read ${SITE}/assets/workbench/${audience}/${file} in full and run it with me. My setting is ${label}.` when an audience is selected, else `Read ${SITE}/assets/workbench/${file} in full and run it with me.`; announce "Copied" through `#copy-status`.
+
+- [ ] **Step 4: Run to verify they pass.** Run: `npm run build && npm test && WORKBENCH_REPO_PATH=../nwc-faculty-workbench npm run test:browser`. Expected: 14 passed lines; 22 browser tests pass (including the existing 390px no-horizontal-scroll check on `#workbench`).
+
+- [ ] **Step 5: Commit.** `git commit -am "Open workbench tools in their own view with breadcrumb and a start-in-assistant action"`
+
+---
+
+### Task 10: Impeccable critique re-run and polish
+
+- [ ] **Step 1: Re-run the critique** on the workbench (`/impeccable critique` against `dist/index.html#workbench`, both assessments as isolated subagents, as on 2026-09-26). Pass when the three P1s from the first run are resolved (job grouping, one starting path, document view) and the score improves on 24/40.
+- [ ] **Step 2: Fix** any new P0/P1 in one batch, rebuild, run all suites.
+- [ ] **Step 3: Polish** (`/impeccable polish` on the workbench), one batched desktop+mobile inspection, fix, confirm once. Commit.
+
+---
+
+### Task 11: PRs, review, merge, release
 
 - [ ] **Step 1: Full local verification**
 
@@ -505,7 +680,7 @@ export COMPANION_REPO_PATH=../nwc-irreducible-officer-companion WORKBENCH_REPO_P
 npm run build && npm test && npm run test:browser
 ```
 
-Expected: 14 `passed` lines; 18 browser tests pass.
+Expected: 14 `passed` lines; 22 browser tests pass.
 
 - [ ] **Step 2: Push the three `frame-check` branches and open PRs** (companion, workbench, site), bodies with summary, test plan, and "Merge order: companion, workbench, site." Confirm each PR's alignment check is green; the job summary should show all three repositories on `frame-check`.
 
