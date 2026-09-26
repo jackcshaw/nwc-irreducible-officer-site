@@ -29,11 +29,15 @@ for (const p of profiles) {
     const box = page.locator(`.judgment-try[data-try="${p.id}"]`);
     await expect(box.locator('[data-try-stage="0"] p').first()).toHaveText(p.practice.initial);
     const answers = { initial: `First judgment ${p.id}`, reliance: `Reliance decision ${p.id}`, changed: `Changed-case decision ${p.id}` };
+    // Each later stage must show its own profile text: 1 contribution, 2 change, 3 review.
+    const stageText = [null, p.practice.contribution, p.practice.change, p.practice.review];
     for (const [i, name] of ["initial", "reliance", "changed"].entries()) {
+      if (stageText[i]) await expect(box.locator(`[data-try-stage="${i}"]`)).toContainText(stageText[i]);
       await box.locator(`textarea[name="${name}"]`).fill(answers[name]);
       await box.locator(`[data-try-stage="${i}"] button[type="submit"]`).click();
     }
     await expect(box.locator('[data-try-stage="3"]')).toBeVisible();
+    await expect(box.locator('[data-try-stage="3"]')).toContainText(stageText[3]);
     for (const a of Object.values(answers)) await expect(box.locator("[data-try-record]")).toContainText(a);
     const [download] = await Promise.all([page.waitForEvent("download"), box.locator("[data-try-download]").click()]);
     const record = readFileSync(await download.path(), "utf8");
