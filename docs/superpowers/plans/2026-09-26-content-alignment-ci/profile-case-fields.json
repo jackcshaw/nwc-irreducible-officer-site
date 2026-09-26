@@ -1,0 +1,125 @@
+{
+  "pme": {
+    "practice": {
+      "label": "PME",
+      "initial": "A fictional report lists 12 outages: 8 followed equipment updates; 4 have unexplained causes. What can you conclude, and what would you need before recommending a rollback?",
+      "contribution": "All 12 outages resulted from equipment updates. Roll back the whole fleet.",
+      "change": "Independent diagnostic evidence now identifies a software defect in 10 outages; 2 remain unexplained. What action becomes more defensible, what remains uncertain, and who can authorize it?",
+      "review": "Timing alone did not establish cause. The diagnostic evidence strengthens the case for action, while the unexplained outages and authority to act still need attention."
+    },
+    "assessment": {
+      "rows": [
+        [
+          "Causal interpretation",
+          "Distinguishes temporal association, causal diagnosis, and unknown causes."
+        ],
+        [
+          "Purpose and authority",
+          "States the recommendation’s purpose and who can authorize action."
+        ],
+        [
+          "Reliance and risk",
+          "Accepts warranted assistance, challenges unsupported attribution, and explains residual risk."
+        ],
+        [
+          "Changed conditions",
+          "Reconsiders the recommendation after the new diagnostic evidence."
+        ]
+      ],
+      "questions": [
+        "Which outage evidence supports a causal claim, and which causes remain unknown?",
+        "Which part of the rollback recommendation would you accept, check, revise, or refuse? Why?",
+        "Who can authorize the action, and what risk would remain?",
+        "What changes when diagnostic evidence identifies a defect in 10 cases?"
+      ],
+      "descriptors": [
+        "The causal claim or action authority remains unclear.",
+        "Some evidence is used, but unknown causes or remaining risk need further examination.",
+        "The recommendation fits the inspected evidence and assigned authority; limits are explained.",
+        "The recommendation is reconsidered coherently when diagnostic evidence changes."
+      ]
+    }
+  },
+  "he": {
+    "practice": {
+      "label": "Higher education",
+      "initial": "A fictional software firm, most of whose recent hires are new graduates, is deciding whether to require office work. Before reading any AI summary: what should productivity mean for this firm, and what evidence would decide the question?",
+      "contribution": "Research on remote work is mixed. Ctrip call-center employees working from home performed 13% better; a Trip.com hybrid trial cut quits by a third with no change in performance reviews; junior engineers received less code feedback away from teammates. Hybrid offers the best of both.",
+      "change": "The firm is instead an established call center whose staff average ten years of experience and are rarely promoted out of their roles. Which evidence matters most now, and does your recommendation change?",
+      "review": "Each summary is accurate. The synthesis treats productivity as short-run output averaged across workers. For a firm developing new graduates, the feedback and promotion findings decide the question; the Ctrip result came from experienced volunteers. For the call center, that result carries more weight. The frame you set decides which accurate evidence counts."
+    },
+    "assessment": {
+      "rows": [
+        [
+          "Frame",
+          "States what productivity should mean for this firm and why that standard fits."
+        ],
+        [
+          "Evidence",
+          "Uses the studies that bear on the chosen standard and says what each measured and whom it followed."
+        ],
+        [
+          "Reliance",
+          "Accepts accurate study summaries after checking them and refuses the mixed-evidence verdict with a reason."
+        ],
+        [
+          "Changed case",
+          "Re-asks what productivity means for the call center and adjusts which evidence decides."
+        ]
+      ],
+      "questions": [
+        "What should productivity mean for this firm, and why that standard?",
+        "Which AI contribution did you accept, and how did you check it?",
+        "What question did the AI synthesis actually answer?",
+        "For the call center, which study now matters most, and why?"
+      ],
+      "descriptors": [
+        "The memo’s standard is unstated or inherited from the synthesis.",
+        "A standard is stated, but the evidence used does not bear on it.",
+        "The standard fits the firm, the evidence bears on it, and reliance decisions are explained.",
+        "The learner re-frames coherently for the call center and explains what changed."
+      ]
+    }
+  },
+  "k12": {
+    "practice": {
+      "label": "High-school educator practice",
+      "initial": "A US History class answers: Was the New Deal a success? Before reading any AI answer: by what standard would you judge success, and for whom?",
+      "contribution": "Unemployment fell from about 25% in 1933 to about 14% in 1937 before rising to 19% in 1938. Programs like Social Security still exist. Critics said federal power grew too far. The New Deal was mixed but largely successful.",
+      "change": "Now judge your school's phone policy. Was it a success? By what standard, and for whom?",
+      "review": "The figures are right. The essay judges success by recovery and durability and never asks for whom. Social Security's old-age program first excluded agricultural and domestic workers, about two-thirds of Black workers, and historians still dispute how much race drove that choice. Setting the standard first lets a student use the accurate facts without inheriting the verdict."
+    },
+    "assessment": {
+      "rows": [
+        [
+          "Standard",
+          "States a standard of success and why it fits the question; record modeling or hints used."
+        ],
+        [
+          "Sources",
+          "Uses documents that bear on the standard and notes who wrote them and why."
+        ],
+        [
+          "Reliance",
+          "Keeps AI claims confirmed by the packet and throws out invented details, with reasons."
+        ],
+        [
+          "Changed case",
+          "Asks \"success by what standard, and for whom?\" about the phone policy."
+        ]
+      ],
+      "questions": [
+        "What standard of success did you use, and why?",
+        "Which AI claim did you keep, and how did you check it?",
+        "What standard does the AI essay use without saying so?",
+        "Is the school phone policy a success? By what standard, and for whom?"
+      ],
+      "descriptors": [
+        "The standard of success is not yet stated; record what needs teaching.",
+        "A standard is stated; record the hint or modeling needed to connect evidence to it.",
+        "The student defends a standard with checked evidence, with support recorded.",
+        "The student carries the standard-setting question to the phone policy without prompting."
+      ]
+    }
+  }
+}
