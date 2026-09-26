@@ -10,7 +10,7 @@ const rulesPath = join(companion, "alignment/retired-phrases.json");
 assert(existsSync(rulesPath), `Missing ${rulesPath}; the companion owns the retired-phrase rules`);
 const rules = JSON.parse(readFileSync(rulesPath, "utf8"));
 
-// Markup, emphasis, quotes, and line breaks must not hide a phrase.
+// Markup, emphasis, quotes, escapes, and line breaks must not hide a phrase.
 // Inline script text is scanned as-is (it renders on the page); style is dropped;
 // every other tag is replaced by its aria-label, title, and alt values.
 const attrText = tag => [...tag.matchAll(/\s(?:aria-label|title|alt)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)]
@@ -18,7 +18,7 @@ const attrText = tag => [...tag.matchAll(/\s(?:aria-label|title|alt)\s*=\s*(?:"(
 const normalize = s => s
   .replace(/<style\b[\s\S]*?<\/style>|<script\b[^>]*>([\s\S]*?)<\/script>|<[^>]+>/gi,
     (tag, script) => ` ${script ?? (/^<style/i.test(tag) ? "" : attrText(tag))} `)
-  .replace(/&[a-z#0-9]+;/gi, " ")
+  .replace(/&[a-z#0-9]+;/gi, " ").replace(/\\[nrt]/g, " ").replace(/\\/g, " ")
   .replace(/[*_`#>|\[\]()"“”‘’']/g, " ").replace(/\s+/g, " ").toLowerCase();
 assert(normalize("Teach the\n*foundations*").includes(normalize("teach the foundations")));
 assert(normalize("the student’s choices").includes(normalize("the student's choices")));
@@ -26,6 +26,8 @@ assert(normalize('<script>x = "Teach the foundations"</script>').includes("teach
 assert(normalize('<a aria-label="Teach the foundations" href="#">x</a>').includes("teach the foundations"));
 assert(normalize('<img alt="teach the foundations">').includes("teach the foundations"));
 assert(!normalize("<style>.teach-the-foundations{}</style>").includes("teach"));
+assert(normalize('"Teach the\\nfoundations"').includes("teach the foundations"));
+assert(normalize("teach the \\*foundations\\*").includes("teach the foundations"));
 
 const walk = d => readdirSync(d, { withFileTypes: true })
   .filter(e => ![".git", "node_modules"].includes(e.name))
@@ -54,6 +56,8 @@ const textOf = f => f.endsWith(".json")
   ? JSON.stringify(JSON.parse(readFileSync(f, "utf8"))).replace(/\\n/g, "\n")
   : readFileSync(f, "utf8");
 const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+// Regex rules run against normalized text: lowercase, with markup, quotes, apostrophes,
+// emphasis, and backslashes already replaced by spaces. Write patterns for that form.
 const compiled = rules.map(r => ({
   ...r,
   re: new RegExp(r.regex ? r.pattern : escape(normalize(r.pattern).trim()), "gi"),
