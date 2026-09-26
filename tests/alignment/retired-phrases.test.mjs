@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, relative } from "node:path";
+import { execFileSync } from "node:child_process";
 const root = process.cwd();
 const dist = join(root, "dist");
 const companion = process.env.COMPANION_REPO_PATH || join(root, "../companion");
@@ -38,10 +39,16 @@ for (const r of rules) {
     `Malformed rule: ${JSON.stringify(r)}`);
 }
 // A marked source line allows its own text wherever it is published (the comment itself is stripped).
-const markerLines = [companion, workbench].flatMap(walk).filter(f => /\.(md|json)$/.test(f))
+// Only git-tracked files count, so untracked local notes never change the result, and the
+// marked line must carry at least 20 characters beyond the match so a bare heading such as
+// "## Shuttle <!-- alignment-allow -->" cannot allow the phrase everywhere.
+const tracked = repo => execFileSync("git", ["-C", repo, "ls-files", "-z"], { encoding: "utf8" })
+  .split("\0").filter(Boolean).map(f => join(repo, f));
+const markerLines = [companion, workbench].flatMap(tracked).filter(f => /\.(md|json)$/.test(f) && existsSync(f))
   .flatMap(f => readFileSync(f, "utf8").split("\n").filter(l => l.includes("alignment-allow")))
   .map(l => normalize(l).trim()).filter(Boolean);
-const allowedByMarker = (text, m) => markerLines.some(line => line.includes(m[0].toLowerCase()) &&
+const allowedByMarker = (text, m) => markerLines.some(line => line.length >= m[0].length + 20 &&
+  line.includes(m[0].toLowerCase()) &&
   text.slice(Math.max(0, m.index - line.length), m.index + line.length).includes(line));
 const textOf = f => f.endsWith(".json")
   ? JSON.stringify(JSON.parse(readFileSync(f, "utf8"))).replace(/\\n/g, "\n")
