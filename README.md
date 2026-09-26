@@ -77,3 +77,13 @@ Discuss uses the five claims in `content/discussion-claims.json`, transcribed fr
 The approved B masthead places the all-navy italic purpose directly below the name. The wordmark and display headings use Source Serif 4; masthead controls use Source Sans 3. Keep the red wordmark period and active-path indicator; do not color individual words in the purpose. Desktop wordmark/purpose sizes are 54px/26px; mobile sizes are 40px/22px.
 
 The audience is a labeled selector in the primary navigation row, not a second set of navigation links. On Learn it opens the selected audience view. On other paths it changes the teaching context while preserving the path, discussion claim, and selected document. Both audience selectors synchronize through the same handler.
+
+## Alignment CI
+
+Every PR in this repo, the companion, and the workbench runs the same shared alignment check: build; contract tests; single-source, retired-phrase, and link checks; browser checks.
+
+To retire a framing, add a rule to the companion's `alignment/retired-phrases.json` in the same PR. Mark an intentional mention with an inline `<!-- alignment-allow: reason -->` comment instead of retiring the phrase.
+
+Changes that span multiple repos share one branch name and merge in order: companion, then workbench, then site.
+
+`main` is protected and requires this check to pass before merging. On failure, the run uploads `dist` and the Playwright report as artifacts.
