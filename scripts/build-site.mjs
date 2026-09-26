@@ -1041,6 +1041,17 @@ function getWorkbenchTools() {
       filename: "supervised-delegation-exercise.md",
       useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
+    {
+      id: "frame-check",
+      title: "Frame Check",
+      toolName: "Frame Check",
+      job: "design",
+      cardTitle: "Build a case students must frame",
+      cardDesc: "Build or check a case that makes students own the frame.",
+      cardAction: "Open",
+      filename: "frame-check.md",
+      useNote: "Give this to your AI assistant and say: run Frame Check with me. Bring your objective and the materials students will use.",
+    },
   ];
   return tools.map((tool) => {
     const markdown = readRequiredWorkbenchFile(join("templates", tool.filename));

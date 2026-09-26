@@ -18,7 +18,7 @@ for(const a of catalog){
   assert(lab.includes(source.trim()),a.id+" missing from lab");
 }
 const tools=JSON.parse(read("assets/workbench-data.json")).tools;
-assert.equal(tools.length,9);
+assert.equal(tools.length,10);
 for(const t of tools){
  assert.equal(read("assets/workbench/"+t.filename).trim(),t.markdown.trim(),t.id+" copy/download mismatch");
  assert(t.markdown.includes("## Audience and readiness"),t.id+" missing audience adaptation");
@@ -36,7 +36,7 @@ const release=JSON.parse(read("assets/release.json"));
 assert.equal(release.companionSections,(bundle.match(/^# ===== SECTION:/gm)||[]).length);
 assert.equal(release.workbenchSections,(workbench.match(/^# ===== SECTION:/gm)||[]).length);
 assert(!html.includes("Every template also works on paper"));
-console.log("audience contract passed: 3 views, 9 templates, source parity, assets, IDs, and manifest");
+console.log("audience contract passed: 3 views, 10 templates, source parity, assets, IDs, and manifest");
 
 // Execute the shipped routing function against direct-entry URLs, not a duplicate implementation.
 const routing = html.match(/function setMode\([\s\S]+?\n}\n/)[0];
@@ -59,7 +59,7 @@ const wbRoot=process.env.WORKBENCH_REPO_PATH || join(root,'../workbench');
 const profiles=JSON.parse(readFileSync(join(wbRoot,'audiences/profiles.json'),'utf8'));
 for (const p of profiles) {
  const v=wbData.audiences[p.id], ctx=read('assets/workbench-context-'+p.id+'.md');
- assert.equal(v.tools.length,9);
+ assert.equal(v.tools.length,10);
  assert.equal(v.bundle.sectionCount,(ctx.match(/^# ===== SECTION:/gm)||[]).length);
  assert.equal(release.workbenchAudienceSections[p.id],v.bundle.sectionCount);
  assert.equal(ctx.trim(),v.bundle.text.trim());
@@ -93,6 +93,14 @@ assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes(
   assert(k12Assessment.includes('a short explanation') && k12Assessment.includes('teacher'),'k12 wording swap did not land'); }
 assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes('Causal interpretation'));
 
+{ const pairs={pme:['PME outage attribution','PME exercise-window rollback'],he:['Campus shuttle survey','Return-to-office research memo'],k12:['Asphalt vs. shaded grass','"Was the New Deal a success?"']};
+  for(const [id,own] of Object.entries(pairs)){
+    const md=wbData.audiences[id].tools.find(t=>t.id==='frame-check').markdown;
+    for(const name of own) assert(md.includes(name),id+' Frame Check missing its primer: '+name);
+    for(const [other,names] of Object.entries(pairs)) if(other!==id) for(const name of names) assert(!md.includes(name),id+' Frame Check leaks '+other+' primer: '+name);
+    assert(!md.includes('frame-check:primer'),id+' Frame Check still has primer markers');
+  } }
+
 // Execute the shipped audience handler with the actual data and prompts.
 const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
 new vm.Script(script); // Parse all client code, including unexecuted branches.
@@ -115,7 +123,7 @@ for(const p of [...profiles,profiles[0]]) {
 context.applyAudience('unknown');
 assert.equal(elements['workbench-context-download'].href,'assets/workbench-context.md');
 assert.equal(prompt.textContent,'generic prompt');
-console.log('workbench audience contract passed: 27 adapted templates, 3 matrices, bundles, links, and live audience handler');
+console.log('workbench audience contract passed: 30 adapted templates, 3 matrices, bundles, links, and live audience handler');
 
 assert(html.includes("assets/workbench-data.json?v="+createHash("sha256").update(read("assets/workbench-data.json")).digest("hex").slice(0,16)),"Workbench data cache key must match content");
 

@@ -30,6 +30,12 @@ export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
       md = replaceOrThrow(md, 'Use this rubric when the assignment goal is to make ownership visible in AI-enabled work.', 'Use these observation prompts to inspect a defended argument, with support recorded.', at('k12 rubric intro'));
     }
   }
+  if (tool.id === 'frame-check') {
+    for (const id of ['pme', 'he', 'k12']) {
+      const block = new RegExp(`<!-- frame-check:primer ${id} -->\\n([\\s\\S]*?)<!-- /frame-check:primer ${id} -->\\n?`);
+      md = replaceOrThrow(md, block, id === profile.id ? (_, body) => body : '', at(`primer ${id}`));
+    }
+  }
   // Render routes before making the raw Markdown portable outside its folder.
   const html = render(rewrite(md), {skipFirstH1:true});
   md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (all,label,href)=> {
