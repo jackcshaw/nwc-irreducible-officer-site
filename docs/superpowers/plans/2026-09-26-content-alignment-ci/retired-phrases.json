@@ -1,0 +1,16 @@
+[
+  {"pattern":"teach the foundations","reason":"Foundations are built inside the loop, not as a gate before AI use","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"foundations made explicit","reason":"Foundations are built inside the loop, not as a gate before AI use","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"model missing foundations","reason":"Foundations are built inside the loop, not as a gate before AI use","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"bound learner responsibility","reason":"Students own the standard they choose and defend","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"before they can judge","reason":"Foundations are built inside the loop, not as a gate before AI use","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"start with subject readiness","reason":"Readiness is checked in the unaided first step","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"independent frame generation","reason":"High-school students choose and defend a standard","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"before expecting independent AI critique","reason":"Readiness is checked in the unaided first step, then students direct AI","retired":"2026-09-25","allowed_in":[]},
+  {"pattern":"shuttle","reason":"Old HE case replaced by the return-to-office memo","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]},
+  {"pattern":"campus survey","reason":"Old HE case replaced by the return-to-office memo","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]},
+  {"pattern":"asphalt","reason":"Old high-school case replaced by the New Deal unit","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]},
+  {"pattern":"shaded grass","reason":"Old high-school case replaced by the New Deal unit","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]},
+  {"pattern":"matched[- ]tiles?","regex":true,"reason":"Old high-school case replaced by the New Deal unit","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]},
+  {"pattern":"surface-temperature readings","reason":"Old high-school case replaced by the New Deal unit","retired":"2026-09-25","allowed_in":["essays/adaptation-map.md","artifacts/frame-first-assignment-design.md"]}
+]
