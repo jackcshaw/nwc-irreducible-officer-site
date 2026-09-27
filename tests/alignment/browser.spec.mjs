@@ -128,6 +128,16 @@ test("Start in your assistant copies the tool's audience URL", async ({ page, co
   expect(text).toBe("Read " + expected + " in full and run it with me. My setting is high school.");
 });
 
+test("switching audience dismisses the previous audience's next-step panel", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  await page.locator("[data-start-assistant]").click();
+  await expect(page.locator("#wb-next-step")).toBeVisible();
+  await page.locator("#lab-audience").selectOption("he");
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator("#wb-next-step")).toBeHidden();
+});
+
 test("job groups show their tools", async ({ page }) => {
   await page.goto("/?audience=pme#workbench");
   for (const job of ["design", "assess", "colleagues", "repeat"]) await expect(page.locator(`[data-job="${job}"] .tool-card`).first()).toBeVisible();

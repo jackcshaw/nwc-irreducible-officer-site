@@ -153,10 +153,11 @@ console.log('masthead and discussion contract passed: five paths, five sourced c
 assert(!html.includes('<nav class="audience-nav"'));
 assert(html.includes('for="lab-audience"'));
 const changeCode=script.match(/function changeAudience\([\s\S]+?\n}\n/)[0];
-const routeContext={URL,location:new URL('https://test.example/?audience=he&claim=better#wb-doc-assessment-and-oral-defense-rubric'),activeMode:'workbench',audienceLabels:{he:'HE',pme:'PME',k12:'High school'},applyAudience(id){routeContext.applied=id},setMode(mode){routeContext.activeMode=mode}};
+const routeContext={URL,location:new URL('https://test.example/?audience=he&claim=better#wb-doc-assessment-and-oral-defense-rubric'),activeMode:'workbench',audienceLabels:{he:'HE',pme:'PME',k12:'High school'},applyAudience(id){routeContext.applied=id},setMode(mode){routeContext.activeMode=mode},hideNextStep(){routeContext.hidNextStep=true}};
 routeContext.history={pushState(a,b,url){routeContext.location=new URL(url)}};
 vm.runInNewContext(changeCode,routeContext);
 routeContext.changeAudience({target:{value:'k12'}});
+assert.equal(routeContext.hidNextStep,true,'changing audience should dismiss the previous next-step panel');
 assert.equal(routeContext.location.searchParams.get('audience'),'k12');
 assert.equal(routeContext.location.searchParams.get('claim'),'better');
 assert.equal(routeContext.location.hash,'#wb-doc-assessment-and-oral-defense-rubric');

@@ -2009,10 +2009,16 @@ function changeAudience(event) {
   const nextMode = readingEssay ? (id === "he" || id === "k12" ? id+"-essay" : id === "pme" ? "essay" : "overview") : activeMode === "overview" || audienceLabels[activeMode] ? id || "overview" : activeMode;
   if (nextMode !== activeMode) url.hash = nextMode;
   history.pushState(null,"",url);
+  // A panel copied for the previous audience would point at the wrong file.
+  hideNextStep();
   if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
 }
 document.getElementById("lab-audience").addEventListener("change",changeAudience);
-window.addEventListener("popstate",()=>applyAudience(new URL(location.href).searchParams.get("audience")));
+window.addEventListener("popstate",()=>{
+  const id = new URL(location.href).searchParams.get("audience");
+  if ((audienceLabels[id] ? id : "") !== currentWorkbenchAudience) hideNextStep();
+  applyAudience(id);
+});
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
   button.addEventListener("click", async () => {
