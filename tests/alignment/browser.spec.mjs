@@ -121,3 +121,71 @@ test("job groups show their tools", async ({ page }) => {
   await page.goto("/?audience=pme#workbench");
   for (const job of ["design", "assess", "colleagues", "repeat"]) await expect(page.locator(`[data-job="${job}"] .tool-card`).first()).toBeVisible();
 });
+
+const studentDataNote = "Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.";
+
+// The document scrolls with the page (no nested scroller) while the title,
+// Start, and Download stay in a sticky bar just below the site nav.
+async function expectDocScrollsWithActionsInReach(page) {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+  expect(await page.evaluate(() => getComputedStyle(document.querySelector(".template-rendered")).overflowY)).not.toMatch(/auto|scroll/);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight * 3)).toBe(true);
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.8));
+  await page.waitForTimeout(100);
+  for (const sel of ["#selected-tool-title", "[data-start-assistant]", "#selected-tool-download"]) {
+    const hit = await page.evaluate((s) => {
+      const el = document.querySelector(s); const r = el.getBoundingClientRect();
+      const nav = document.querySelector(".package-nav").getBoundingClientRect().bottom;
+      const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return { below: r.top >= nav - 1, inView: r.bottom <= innerHeight, reachable: !!top && (top === el || el.contains(top)) };
+    }, sel);
+    expect(hit, sel).toEqual({ below: true, inView: true, reachable: true });
+  }
+}
+
+test("document view scrolls with the page and keeps its actions in reach", async ({ page }) => {
+  await expectDocScrollsWithActionsInReach(page);
+});
+
+test("phone: document view scrolls with the page and keeps its actions in reach", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expectDocScrollsWithActionsInReach(page);
+});
+
+test("Start in your assistant shows the next step until the view changes", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  const panel = page.locator("#wb-next-step");
+  await expect(panel).toBeHidden();
+  await page.locator("[data-start-assistant]").click();
+  await expect(panel).toBeVisible();
+  await expect(panel).toContainText("Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.");
+  await expect(panel).toContainText("Assistant can't read web links? Download the file and attach it instead.");
+  await expect(panel).toContainText(studentDataNote);
+  await expect(page.locator("#wb-next-line")).toContainText("/assets/workbench/k12/frame-check.md");
+  await expect(page.locator("#copy-status")).toContainText("Copied");
+  await page.waitForTimeout(1600);
+  await expect(panel).toBeVisible();
+  await page.locator("[data-wb-home]").click();
+  await page.locator('[data-tool-id="assessment"]').click();
+  await expect(panel).toBeHidden();
+});
+
+test("Start in your assistant selects the line for manual copy when copying fails", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("denied")) } });
+  });
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await page.locator("[data-start-assistant]").click();
+  await expect(page.locator("#wb-next-step")).toBeVisible();
+  const line = await page.locator("#wb-next-line").textContent();
+  expect(line).toContain("/assets/workbench/he/frame-check.md");
+  expect(await page.evaluate(() => String(window.getSelection()))).toBe(line);
+});
+
+test("no tool card is marked current before a selection", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await expect(page.locator('[data-tool-id="frame-check"]')).toBeVisible();
+  await expect(page.locator("[data-tool-id][aria-current], [data-concept-id][aria-current]")).toHaveCount(0);
+});

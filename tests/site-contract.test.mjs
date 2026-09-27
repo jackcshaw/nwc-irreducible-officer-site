@@ -76,7 +76,7 @@ inlineScripts.forEach((script, index) => {
   "Educator Workbench",
   "Start in your assistant",
   "Download",
-  "The Design Behind The Tools",
+  "The design behind the tools",
   "References",
   "Use this as the working source spine",
   "The formal reference list remains at the end of the essay",
@@ -401,7 +401,7 @@ conceptFiles.forEach((file) => {
 
 [
   "How will your assistant get the file?",
-  "The Design Behind The Tools",
+  "The design behind the tools",
   'id="workbench-doc-view"',
   "Why each audience needs its own evidence",
 ].forEach((needle) => {

@@ -47,6 +47,7 @@ const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md")
 const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
+const studentDataNote = "Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.";
 const workbenchJobs = [
   { id: "design", heading: "Design an assignment" },
   { id: "assess", heading: "Assess student work" },
@@ -744,7 +745,7 @@ function buildWorkbenchMode(tools, concepts) {
           <p>Download the context file, attach it to a new chat, then paste the setup prompt. If attachments are unavailable, paste the file text. A partial read needs to be resolved before the session starts.</p>
           <div class="action-row">
             <a class="copy-button primary" id="workbench-context-download" href="assets/${workbenchContextFilename}" download>Download context file</a>
-            <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+            <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
           </div>
         </div>
         <div class="door">
@@ -761,13 +762,13 @@ function buildWorkbenchMode(tools, concepts) {
         </div>
         ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
       </section>
-      <p class="student-data-note">Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.</p>
+      <p class="student-data-note">${escapeHtml(studentDataNote)}</p>
     </details>
 
     <details class="workbench-concepts">
       <summary>Why these tools work</summary>
       <section class="detail-band">
-        <h2 class="band-label">The Design Behind The Tools</h2>
+        <h2 class="band-label">The design behind the tools</h2>
         <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
       </section>
 
@@ -799,13 +800,20 @@ function buildWorkbenchMode(tools, concepts) {
           <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download</a>
         </div>
       </div>
+      <section class="wb-next-step" id="wb-next-step" aria-label="Next step" hidden>
+        <p class="wb-next-lead" data-next-lead>Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.</p>
+        <p class="wb-next-line"><code id="wb-next-line" tabindex="-1"></code></p>
+        <p>Assistant can't read web links? <a id="wb-next-download" href="assets/workbench/${selected.filename}" download>Download the file</a> and attach it instead.</p>
+        <p class="wb-next-note">${escapeHtml(studentDataNote)}</p>
+        <button class="quiet-action" type="button" data-next-dismiss>Dismiss</button>
+      </section>
       <div class="template-layout">
-        <article class="template-rendered article-body" id="workbench-doc-view" tabindex="0" aria-label="Selected document">${selected.html}</article>
-        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
         <aside class="use-note">
-          <h3 class="band-label">How To Use It</h3>
+          <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
         </aside>
+        <article class="template-rendered article-body" id="workbench-doc-view" aria-label="Selected document">${selected.html}</article>
+        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
       </div>
     </section>
     </div>
@@ -1586,6 +1594,7 @@ function setMode(mode, shouldScroll = true, push = false) {
     const panel = document.getElementById("panel-workbench");
     const wasDoc = panel && panel.dataset.wbView === "doc";
     if (panel) panel.dataset.wbView = "overview";
+    hideNextStep();
     ensureWorkbenchData().catch(() => {});
     if (wasDoc && !shouldScroll) {
       window.requestAnimationFrame(() => {
@@ -1871,6 +1880,10 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
   download.href = item.downloadPath || basePath + item.filename;
   download.download = item.filename;
+  const nextDownload = document.getElementById("wb-next-download");
+  nextDownload.href = download.href;
+  nextDownload.download = item.filename;
+  hideNextStep();
   announceCopy("Opened " + name);
  }
 
@@ -1897,12 +1910,63 @@ function selectDocument(item, isFromConcept = false, push = true) {
   });
 }
 
+// The sticky action bar sits just below the sticky site nav, whose height
+// changes with the viewport.
+function syncStickyOffsets() {
+  const nav = document.querySelector(".package-nav");
+  const bar = document.querySelector(".selected-heading");
+  document.documentElement.style.setProperty("--wb-nav-h", (nav ? nav.getBoundingClientRect().height : 0) + "px");
+  if (bar && bar.offsetHeight) document.documentElement.style.setProperty("--wb-bar-h", bar.offsetHeight + "px");
+}
+syncStickyOffsets();
+if (window.ResizeObserver) {
+  const stickyObserver = new ResizeObserver(syncStickyOffsets);
+  document.querySelectorAll(".package-nav, .selected-heading").forEach((el) => stickyObserver.observe(el));
+} else {
+  window.addEventListener("resize", syncStickyOffsets);
+}
+
+const pasteInstruction = "Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.";
+
+function hideNextStep() {
+  const nextStep = document.getElementById("wb-next-step");
+  if (nextStep) nextStep.hidden = true;
+}
+
+// After Start: say what to do next, and keep it on screen until the view changes or it is dismissed.
+function showNextStep(line, copied) {
+  const nextStep = document.getElementById("wb-next-step");
+  const lineEl = document.getElementById("wb-next-line");
+  nextStep.querySelector("[data-next-lead]").textContent = copied
+    ? pasteInstruction
+    : "Copying didn't work. Copy the selected line below, then paste it into a new chat in ChatGPT, Claude, or Gemini.";
+  lineEl.textContent = line;
+  nextStep.hidden = false;
+  const rect = nextStep.getBoundingClientRect();
+  const bar = document.querySelector(".selected-heading");
+  const barBottom = bar ? bar.getBoundingClientRect().bottom : 0;
+  if (rect.top < barBottom || rect.bottom > window.innerHeight) {
+    scrollElementBelowNav(nextStep, { offset: (bar ? bar.offsetHeight : 0) + 16 });
+  }
+  if (!copied) {
+    lineEl.focus();
+    window.getSelection().selectAllChildren(lineEl);
+  }
+}
+
+document.querySelector("[data-next-dismiss]").addEventListener("click", () => {
+  hideNextStep();
+  if (startAssistantButton) startAssistantButton.focus();
+});
+
 const startAssistantButton = document.querySelector("[data-start-assistant]");
 if (startAssistantButton) {
   startAssistantButton.addEventListener("click", async () => {
     const item = (selectedWorkbenchConcept ? workbenchConcepts : workbenchTools).find((t) => t.filename === selectedWorkbenchFile);
     if (!item) return;
     const original = startAssistantButton.textContent;
+    // Hold the button's width so "Copied" does not reflow the sticky bar.
+    startAssistantButton.style.minWidth = startAssistantButton.offsetWidth + "px";
     const profile = workbenchProfiles.find((p) => p.id === currentWorkbenchAudience);
     const basePath = selectedWorkbenchConcept
       ? "assets/workbench/concepts/"
@@ -1911,13 +1975,15 @@ if (startAssistantButton) {
     try {
       await copyTextToClipboard(text);
       startAssistantButton.textContent = "Copied";
-      announceCopy("Copied");
+      showNextStep(text, true);
+      announceCopy(pasteInstruction);
       trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
       window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
     } catch (error) {
       startAssistantButton.textContent = "Copy failed";
-      announceCopy("Copy failed. Select the document text and copy it manually.");
-      if (error && error.pending) error.pending.then(() => { startAssistantButton.textContent = "Copied"; announceCopy("Copied"); }, () => {});
+      showNextStep(text, false);
+      announceCopy("Copy failed. The line to paste is selected below; copy it manually.");
+      if (error && error.pending) error.pending.then(() => { startAssistantButton.textContent = "Copied"; showNextStep(text, true); announceCopy(pasteInstruction); }, () => {});
       window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
     }
   });
@@ -1990,11 +2056,6 @@ document.addEventListener("click", async (event) => {
     if (button) button.click(); else selectDocument(conceptDoc, true);
   }
 });
-
-const firstTool = document.querySelector("[data-tool-id]");
-if (firstTool) {
-  firstTool.setAttribute("aria-current", "true");
-}
 
 document.querySelectorAll("a[download]").forEach((link) => {
   link.addEventListener("click", () => {
@@ -2375,13 +2436,20 @@ h1 {
   cursor: pointer;
 }
 
-.path-card:hover,
-.tool-card:hover,
-.prompt-card:hover,
-.mini-card:hover,
 .tool-card[aria-current="true"] {
   border-color: rgba(184, 27, 43, 0.42);
   background: var(--paper-bright);
+}
+
+/* Hover only where a pointer can hover, so a tap never leaves a stuck state. */
+@media (hover: hover) {
+  .path-card:hover,
+  .tool-card:hover,
+  .prompt-card:hover,
+  .mini-card:hover {
+    border-color: rgba(184, 27, 43, 0.42);
+    background: var(--paper-bright);
+  }
 }
 
 .path-verb,
@@ -2476,9 +2544,11 @@ h1 {
   color: var(--paper);
 }
 
-.copy-button:hover,
-.quiet-action:hover {
-  border-color: var(--red);
+@media (hover: hover) {
+  .copy-button:hover,
+  .quiet-action:hover {
+    border-color: var(--red);
+  }
 }
 
 .link-style {
@@ -2604,7 +2674,7 @@ h1 {
 }
 
 #workbench-doc-view {
-  max-width: 68ch;
+  max-width: 57ch;
 }
 
 /* Programmatic focus (route-change heading, card returned to) doesn't reliably
@@ -2632,8 +2702,6 @@ h1 {
 }
 
 .template-rendered {
-  max-height: 640px;
-  overflow-y: auto;
   padding: 20px 24px;
   background: var(--paper-soft);
   border: 1px solid var(--navy-hairline);

@@ -59,13 +59,14 @@ h2,h3 {line-height:1.25;}
 .band-label {font-family:var(--font-display);font-size:24px;font-weight:520;text-transform:none;letter-spacing:0;line-height:1.3;margin-bottom:14px;}
 .detail-band>p:not(.band-label) {font-size:18px;line-height:1.55;max-width:72ch;}
 .copy-button,.quiet-action {font-family:var(--font-body);font-size:17px;padding:9px 18px;line-height:1.3;}
-.copy-button.primary:hover {background:var(--red);color:var(--paper);}
+@media(hover:hover){.copy-button.primary:hover {background:var(--red);color:var(--paper);}}
 .door {padding:26px;}
 .door h3 {font-size:26px;}
 .door p {font-size:18px;line-height:1.5;}
 .tool-grid {display:block;border-top:1px solid var(--ink);margin-top:26px;}
 .tool-grid .tool-card {display:grid;grid-template-columns:1fr 1.4fr 150px;grid-template-areas:"title desc action" "name desc action";align-items:baseline;gap:4px 24px;min-height:0;padding:22px 0;border:0;border-bottom:1px solid var(--faint);background:none;width:100%;text-align:left;}
-.tool-grid .tool-card:hover,.tool-grid .tool-card[aria-current="true"] {background:var(--paper-soft);}
+.tool-grid .tool-card[aria-current="true"] {background:var(--paper-soft);}
+@media(hover:hover){.tool-grid .tool-card:hover {background:var(--paper-soft);}}
 .tool-grid .tool-title {grid-area:title;font-size:25px;line-height:1.25;}
 .tool-grid .tool-name {grid-area:name;font-family:var(--font-body);font-size:13px;line-height:1.3;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
 .tool-grid .tool-desc {grid-area:desc;font-size:18px;line-height:1.4;}
@@ -76,13 +77,15 @@ h2,h3 {line-height:1.25;}
 .job-group {margin-top:44px;}
 .job-group:first-child {margin-top:0;}
 .job-group .tool-grid {margin-top:16px;}
-.job-group[data-job=design] > h2.band-label {font-size:32px;}
-.job-group[data-job=assess] > h2.band-label {font-size:25px;}
-.job-group[data-job=repeat] > h2.band-label {font-size:19px;}
+.job-group[data-job=design] > h2.band-label {font-size:30px;}
+.job-group[data-job=assess] > h2.band-label {font-size:26px;}
+.job-group[data-job=repeat] > h2.band-label {font-size:22px;}
 .start-link {display:block;margin:0 0 32px;font-family:var(--font-body);font-size:19px;color:var(--ink);text-decoration:underline;text-underline-offset:5px;}
-.start-link:hover {color:var(--red);}
+@media(hover:hover){.start-link:hover {color:var(--red);}}
 .example-next {display:block;margin-top:16px;font-family:var(--font-body);font-size:18px;color:var(--red);text-decoration:underline;text-underline-offset:5px;}
-.example-next:hover {color:var(--ink);}
+@media(hover:hover){.example-next:hover {color:var(--ink);}}
+/* The worked example reads as prose: a held measure and paragraph rhythm. */
+#workbench-progression [data-workbench-audience] p {max-width:52ch;margin:0 0 16px;font-size:18px;line-height:1.55;}
 
 /* Collapsed overview sections read as intentional toggles, not default <details>. */
 .assistant-setup,.workbench-concepts {border-top:1px solid var(--faint);margin-top:44px;padding-top:2px;}
@@ -97,6 +100,27 @@ h2,h3 {line-height:1.25;}
 .use-note {background:transparent;border:0;border-top:2px solid var(--ink);padding:20px 0;}
 .use-note p:last-child {font-size:18px;line-height:1.5;}
 .template-layout {gap:30px;}
+/* Document view: the page scrolls, not the document. Title, Start and Download
+   stay in a sticky bar just below the site nav; the use note sits beside the
+   document on wide screens (sticky under the bar) and above it on narrow ones. */
+#panel-workbench .selected-heading {position:sticky;top:var(--wb-nav-h,61px);z-index:20;align-items:center;margin:0 0 24px;padding:12px 0;background:var(--paper);border-bottom:1px solid var(--faint);}
+#panel-workbench .selected-heading h2 {margin:0;}
+.template-layout {grid-template-columns:minmax(0,auto) minmax(240px,1fr);gap:48px;align-items:start;}
+.template-layout>.use-note {grid-column:2;grid-row:1;position:sticky;top:calc(var(--wb-nav-h,61px) + var(--wb-bar-h,70px) + 24px);}
+.template-layout>.template-rendered {grid-column:1;grid-row:1;}
+.wb-next-step {max-width:62ch;margin:0 0 28px;padding:20px 24px;background:var(--paper-soft);border:1px solid var(--faint);border-top:2px solid var(--ink);}
+.wb-next-step p {font-size:17px;line-height:1.5;margin:0 0 12px;}
+.wb-next-step .wb-next-lead {font-family:var(--font-display);font-size:22px;line-height:1.35;color:var(--ink);}
+.wb-next-line code {display:block;padding:10px 12px;font-family:var(--font-mono);font-size:13px;line-height:1.5;color:var(--ink);background:var(--paper);border:1px solid var(--faint);overflow-wrap:anywhere;}
+.wb-next-line code:focus {outline:2px solid var(--ink);outline-offset:2px;}
+.wb-next-step .wb-next-note {font-size:15px;color:var(--muted);}
+.wb-next-step [data-next-dismiss] {margin-top:4px;}
+@media(max-width:980px){
+ .template-layout {grid-template-columns:1fr;gap:24px;}
+ .template-layout>.use-note,.template-layout>.template-rendered {grid-column:auto;grid-row:auto;position:static;}
+ #panel-workbench .selected-heading {display:flex;flex-wrap:wrap;gap:10px 16px;}
+ #panel-workbench .selected-heading .tool-actions {margin-top:0;}
+}
 .template-rendered {padding:26px;}
 .selected-heading h2 {font-size:32px;}
 #panel-workbench[data-wb-view="doc"] .selected-tool {margin-top:0;padding-top:0;border-top:0;}
@@ -189,6 +213,11 @@ h2,h3 {line-height:1.25;}
  .template-rendered {padding:20px 16px;}
  .surface-hero>p {font-size:19px;}
  .selected-heading h2 {font-size:28px;}
+ #panel-workbench .selected-heading {padding:10px 0;margin-bottom:18px;}
+ #panel-workbench .selected-heading h2 {font-size:21px;line-height:1.25;}
+ #panel-workbench .selected-heading .tool-actions {gap:8px;}
+ #panel-workbench .selected-heading .copy-button,#panel-workbench .selected-heading .quiet-action {padding:9px 14px;font-size:16px;}
+ .wb-next-step {padding:18px 16px;}
 }
 
 .discussion-carry {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;margin:18px 0;border-top:1px solid var(--faint);border-bottom:1px solid var(--faint);}
