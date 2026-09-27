@@ -18,7 +18,7 @@ for(const a of catalog){
   assert(lab.includes(source.trim()),a.id+" missing from lab");
 }
 const tools=JSON.parse(read("assets/workbench-data.json")).tools;
-assert.equal(tools.length,9);
+assert.equal(tools.length,10);
 for(const t of tools){
  assert.equal(read("assets/workbench/"+t.filename).trim(),t.markdown.trim(),t.id+" copy/download mismatch");
  assert(t.markdown.includes("## Audience and readiness"),t.id+" missing audience adaptation");
@@ -36,7 +36,7 @@ const release=JSON.parse(read("assets/release.json"));
 assert.equal(release.companionSections,(bundle.match(/^# ===== SECTION:/gm)||[]).length);
 assert.equal(release.workbenchSections,(workbench.match(/^# ===== SECTION:/gm)||[]).length);
 assert(!html.includes("Every template also works on paper"));
-console.log("audience contract passed: 3 views, 9 templates, source parity, assets, IDs, and manifest");
+console.log("audience contract passed: 3 views, 10 templates, source parity, assets, IDs, and manifest");
 
 // Execute the shipped routing function against direct-entry URLs, not a duplicate implementation.
 const routing = html.match(/function setMode\([\s\S]+?\n}\n/)[0];
@@ -59,7 +59,7 @@ const wbRoot=process.env.WORKBENCH_REPO_PATH || join(root,'../workbench');
 const profiles=JSON.parse(readFileSync(join(wbRoot,'audiences/profiles.json'),'utf8'));
 for (const p of profiles) {
  const v=wbData.audiences[p.id], ctx=read('assets/workbench-context-'+p.id+'.md');
- assert.equal(v.tools.length,9);
+ assert.equal(v.tools.length,10);
  assert.equal(v.bundle.sectionCount,(ctx.match(/^# ===== SECTION:/gm)||[]).length);
  assert.equal(release.workbenchAudienceSections[p.id],v.bundle.sectionCount);
  assert.equal(ctx.trim(),v.bundle.text.trim());
@@ -93,13 +93,26 @@ assert(wbData.audiences.he.tools.find(t=>t.id==='assessment').markdown.includes(
   assert(k12Assessment.includes('a short explanation') && k12Assessment.includes('teacher'),'k12 wording swap did not land'); }
 assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes('Causal interpretation'));
 
+{ const pairs={pme:['PME outage attribution','PME exercise-window rollback'],he:['Campus shuttle survey','Return-to-office research memo'],k12:['Asphalt vs. shaded grass','"Was the New Deal a success?"']};
+  for(const [id,own] of Object.entries(pairs)){
+    const md=wbData.audiences[id].tools.find(t=>t.id==='frame-check').markdown;
+    for(const name of own) assert(md.includes(name),id+' Frame Check missing its primer: '+name);
+    for(const [other,names] of Object.entries(pairs)) if(other!==id) for(const name of names) assert(!md.includes(name),id+' Frame Check leaks '+other+' primer: '+name);
+    assert(!md.includes('frame-check:primer'),id+' Frame Check still has primer markers');
+  } }
+{ const base=wbData.tools.find(t=>t.id==='frame-check');
+  assert(!base.html.includes('frame-check:primer'),'no-audience Frame Check html shows primer markers');
+  assert(!base.markdown.includes('frame-check:primer'),'no-audience Frame Check markdown keeps primer markers');
+  assert(!read('assets/workbench/frame-check.md').includes('frame-check:primer'),'flat Frame Check download keeps primer markers');
+  for (const name of ['PME outage attribution','Campus shuttle survey','Asphalt vs. shaded grass']) assert(base.markdown.includes(name),'no-audience Frame Check lost a primer: '+name); }
+
 // Execute the shipped audience handler with the actual data and prompts.
 const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
 new vm.Script(script); // Parse all client code, including unexecuted branches.
 const profileDecl=script.match(/const workbenchProfiles = ([^\n]+);/)[1];
 const promptDecl=script.match(/const workbenchPrompts = ([^\n]+);/)[1];
 const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
-const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-setting','workbench-context-download'].map(id=>[id,{}]));
+const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-context-download'].map(id=>[id,{}]));
 const prompt={id:'workbench-setup-prompt',textContent:''};
 const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
 const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
@@ -115,7 +128,7 @@ for(const p of [...profiles,profiles[0]]) {
 context.applyAudience('unknown');
 assert.equal(elements['workbench-context-download'].href,'assets/workbench-context.md');
 assert.equal(prompt.textContent,'generic prompt');
-console.log('workbench audience contract passed: 27 adapted templates, 3 matrices, bundles, links, and live audience handler');
+console.log('workbench audience contract passed: 30 adapted templates, 3 matrices, bundles, links, and live audience handler');
 
 assert(html.includes("assets/workbench-data.json?v="+createHash("sha256").update(read("assets/workbench-data.json")).digest("hex").slice(0,16)),"Workbench data cache key must match content");
 
@@ -145,10 +158,11 @@ console.log('masthead and discussion contract passed: five paths, five sourced c
 assert(!html.includes('<nav class="audience-nav"'));
 assert(html.includes('for="lab-audience"'));
 const changeCode=script.match(/function changeAudience\([\s\S]+?\n}\n/)[0];
-const routeContext={URL,location:new URL('https://test.example/?audience=he&claim=better#wb-doc-assessment-and-oral-defense-rubric'),activeMode:'workbench',audienceLabels:{he:'HE',pme:'PME',k12:'High school'},applyAudience(id){routeContext.applied=id},setMode(mode){routeContext.activeMode=mode}};
+const routeContext={URL,location:new URL('https://test.example/?audience=he&claim=better#wb-doc-assessment-and-oral-defense-rubric'),activeMode:'workbench',audienceLabels:{he:'HE',pme:'PME',k12:'High school'},applyAudience(id){routeContext.applied=id},setMode(mode){routeContext.activeMode=mode},hideNextStep(){routeContext.hidNextStep=true}};
 routeContext.history={pushState(a,b,url){routeContext.location=new URL(url)}};
 vm.runInNewContext(changeCode,routeContext);
 routeContext.changeAudience({target:{value:'k12'}});
+assert.equal(routeContext.hidNextStep,true,'changing audience should dismiss the previous next-step panel');
 assert.equal(routeContext.location.searchParams.get('audience'),'k12');
 assert.equal(routeContext.location.searchParams.get('claim'),'better');
 assert.equal(routeContext.location.hash,'#wb-doc-assessment-and-oral-defense-rubric');

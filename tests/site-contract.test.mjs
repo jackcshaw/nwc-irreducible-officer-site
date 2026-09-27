@@ -74,11 +74,9 @@ inlineScripts.forEach((script, index) => {
   "Practice faculty fluency",
   "Run oral defense",
   "Educator Workbench",
-  "Copy template",
-  "Download template",
-  "The Design Behind The Tools",
-  "Future Context Layer",
-  "not a deployed institutional system",
+  "Start in your assistant",
+  "Download",
+  "The design behind the tools",
   "References",
   "Use this as the working source spine",
   "The formal reference list remains at the end of the essay",
@@ -175,7 +173,7 @@ assert(
 );
 
 assert(
-  html.includes("Choose a setting for its worked example"),
+  html.includes("Choose a setting to open its teaching examples, reference matrix, and adapted tools."),
   "workbench should explain how to select adapted materials",
 );
 
@@ -218,7 +216,7 @@ assert(
 });
 
 const firstToolId = html.match(/data-tool-id="([a-z-]+)"/);
-assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should lead with the phase placement diagnostic");
+assert(firstToolId && firstToolId[1] === "frame-check", "workbench should lead with Frame Check in the design job group");
 assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
 assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
 assert(
@@ -269,9 +267,9 @@ assert(html.includes("data-essay-section-link=\"ix-a-foundation-pilot\""), "over
 assert(html.includes("navigator.clipboard.writeText"), "copy buttons should write prompt/template text to the clipboard");
 assert(html.includes("data-tool-id=\"assignment-design\""), "workbench should expose selectable template cards");
 assert(html.includes("function scrollElementBelowNav"), "site should share one sticky-nav-aware scroll helper");
-assert(html.includes("scrollElementBelowNav(selectedTool"), "workbench cards should reveal the selected template below the sticky nav");
+assert(html.includes("scrollElementBelowNav(panel"), "workbench cards should reveal the selected document below the sticky nav");
 assert(html.includes("id=\"workbench-tools\""), "workbench should expose a target for returning to the tool grid");
-assert(html.includes("data-workbench-tools-link"), "selected workbench templates should include a return-to-tools control");
+assert(html.includes("data-wb-home"), "the document view breadcrumb should include a home control back to the tool grid");
 assert(html.includes("function trackPackageEvent"), "site should include a Plausible event wrapper");
 assert(html.includes("location.hostname === \"localhost\""), "analytics events should be suppressed on localhost");
 assert(html.includes("window.plausible(name, { props })"), "analytics wrapper should send custom event properties");
@@ -403,7 +401,7 @@ conceptFiles.forEach((file) => {
 
 [
   "How will your assistant get the file?",
-  "The Design Behind The Tools",
+  "The design behind the tools",
   'id="workbench-doc-view"',
   "Why each audience needs its own evidence",
 ].forEach((needle) => {
@@ -434,6 +432,35 @@ assert(
   html.includes(`<p class="lab-version">Version ${pkgVersion} · ${release.commits.site}</p>`),
   "footer should show the version and site commit",
 );
+
+const jobs = { design: ["frame-check", "assignment-design", "source-kit"], assess: ["assessment", "flawed-output"], colleagues: ["calibration", "after-action"], repeat: ["method-card", "supervised-delegation"] };
+for (const [job, ids] of Object.entries(jobs)) {
+  const start = html.indexOf(`data-job="${job}"`);
+  assert(start > 0, `workbench should have the ${job} job group`);
+  const group = html.slice(start, html.indexOf("</section>", start));
+  for (const id of ids) assert(group.includes(`data-tool-id="${id}"`), `${job} group should hold ${id}`);
+}
+assert(!html.includes('data-tool-id="phase-diagnostic"'), "placement should be a link, not a card");
+assert(html.includes('href="#wb-doc-phase-placement-diagnostic"'), "placement link should be present");
+// Isolate the #workbench-tools markup up to the next known sibling section
+// (the collapsed "How this works with your assistant" details) rather than a
+// brittle </section> count, so the slice covers every tool card and excludes
+// the concept cards below it.
+const toolsStart = html.indexOf('id="workbench-tools"');
+const toolsEnd = html.indexOf('class="assistant-setup"', toolsStart);
+assert(toolsEnd > toolsStart, "assistant-setup band should follow the tool grid");
+const toolsHtml = html.slice(toolsStart, toolsEnd);
+assert(!/<span class="tool-action">(?!Open &rarr;)/.test(toolsHtml), "every tool card action should read Open (concept cards keep Read note)");
+
+assert(!html.includes("Future Context Layer"), "roadmap note should not appear on the workbench");
+assert(!html.includes('id="workbench-setting"'), "the masthead selector is the only audience control");
+assert(html.includes('<summary>How this works with your assistant</summary>'), "setup should be collapsed");
+assert(html.includes("Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy."), "student-data note should be present");
+assert(html.includes('class="example-next"') && html.includes('href="#wb-doc-frame-check"'), "worked example should lead into Frame Check");
+const wb = html.slice(html.indexOf('id="panel-workbench"'), html.indexOf('id="panel-sources"'));
+assert(wb.indexOf('id="workbench-progression"') < wb.indexOf('id="workbench-tools"') && wb.indexOf('id="workbench-tools"') < wb.indexOf('class="assistant-setup"'), "overview order: example, jobs, setup");
+assert(!/\b(nine|ten) (adapted )?templates\b/i.test(wb), "page copy should not hardcode a tool count");
+
 console.log("site contract passed");
 
 // Accessibility and polish contract.

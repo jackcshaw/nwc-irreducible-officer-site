@@ -51,7 +51,7 @@ Keep the project surfaces honest:
 - Essay: final public argument.
 - Companion: AI assistant practice layer and context source kit.
 - Workbench: faculty draft/use-now toolkit.
-- Library/context curation: future direction inspired by The Librarian, not a deployed NWC system.
+- Library/context curation: not surfaced on the site (the workbench's "Future Context Layer" preview was removed on 2026-09-26). If it returns, label it a future direction, not a deployed NWC system.
 
 ## Public-Safe Boundary
 

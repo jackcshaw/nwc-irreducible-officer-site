@@ -47,6 +47,13 @@ const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md")
 const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
+const studentDataNote = "Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.";
+const workbenchJobs = [
+  { id: "design", heading: "Design an assignment" },
+  { id: "assess", heading: "Assess student work" },
+  { id: "colleagues", heading: "Work with colleagues" },
+  { id: "repeat", heading: "Make it repeatable" },
+];
 const profiles = JSON.parse(readRequiredWorkbenchFile("audiences/profiles.json"));
 for (const p of profiles) {
   for (const k of ["label", "initial", "contribution", "change", "review"]) {
@@ -121,6 +128,8 @@ writeFileSync(
     tools: workbenchTools.map((tool) => ({
       id: tool.id,
       title: tool.title,
+      toolName: tool.toolName,
+      job: tool.job,
       filename: tool.filename,
       useNote: tool.useNote,
       cardDesc: tool.cardDesc,
@@ -381,7 +390,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       </section>
       <section class="mode-view" data-mode="discuss" id="panel-discuss" role="tabpanel" aria-labelledby="tab-discuss">${buildDiscussMode()}</section>
       <section class="mode-view" data-mode="companion" id="panel-companion" role="tabpanel" aria-labelledby="tab-companion">${companionHtml}</section>
-      <section class="mode-view" data-mode="workbench" id="panel-workbench" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
+      <section class="mode-view" data-mode="workbench" id="panel-workbench" data-wb-view="overview" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
       <section class="mode-view" data-mode="sources" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources">${sourcesHtml}</section>
     </div>
   </main>
@@ -481,15 +490,6 @@ function buildAudienceMode(a) {
     ${buildOpeningPractice(a.id, a.id)}
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;
-}
-
-function pathCard(verb, target, body, action, mode) {
-  return `<a class="path-card" href="#${mode}" data-mode-link="${mode}">
-    <span class="path-verb">${escapeHtml(verb)}</span>
-    <span class="path-target">${escapeHtml(target)}</span>
-    <span class="path-body">${escapeHtml(body)}</span>
-    <span class="path-action">${escapeHtml(action)} &rarr;</span>
-  </a>`;
 }
 
 function buildCompanionMode() {
@@ -692,18 +692,43 @@ After six questions, describe what the responses show and leave uncertain about 
 
 function buildWorkbenchMode(tools, concepts) {
   const selected = tools[0];
+  const selectedJobHeading = (workbenchJobs.find((job) => job.id === selected.job) || {}).heading;
+  const selectedName = selected.toolName || selected.title;
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
+    <div class="wb-overview">
     <section class="surface-hero">
-      <h1 id="workbench-title">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
+      <h1 id="workbench-title" tabindex="-1">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
       <p class="dek" id="workbench-summary">Choose a setting to open its teaching examples, reference matrix, and adapted tools.</p>
       <p id="workbench-setting-status" role="status">PME, HE, and high-school materials each require evidence from use in their own setting.</p>
-      <label for="workbench-setting">Workbench setting</label>
-      <select id="workbench-setting"><option value="">Choose your setting</option>${profiles.map(p=>`<option value="${p.id}">${escapeHtml(p.label)}</option>`).join("")}</select>
-      <p>
-        The setup prompt reads the whole workbench, helps you choose a practice for your learning objective, and facilitates the right template with you.
-        Choose a setting for its worked example, matrix, and nine adapted templates. Readiness and learning purpose determine the next step; a later phase is not automatically better.
-      </p>
+    </section>
+
+    <section class="detail-band" id="workbench-progression">
+      <h2 class="band-label">Practice in your setting</h2>
+      <div data-workbench-audience=""><p>Choose PME, higher education, or high school to see a worked example and its reference matrix. Ask, understand, produce, judge, codify, and supervise are optional task designs; they are not an age ladder.</p><a href="#wb-doc-frame-check" data-wb-link class="example-next">Build or check a case like this → Frame Check</a></div>
+      ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
+        <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
+        <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
+        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${prefixIds(renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}), `wb-${p.id}-`)}</div></details>
+        <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
+        <a href="#wb-doc-frame-check" data-wb-link class="example-next">Build or check a case like this → Frame Check</a>
+      </div>`).join("")}
+      <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
+    </section>
+
+    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the context file under “How this works with your assistant” below.</p>
+    <section id="workbench-tools" aria-label="Educator workbench tools">
+      <a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>
+      ${workbenchJobs.map((job) => `<section class="job-group" data-job="${job.id}">
+        <h2 class="band-label">${escapeHtml(job.heading)}</h2>
+        <div class="tool-grid">
+          ${tools.filter((tool) => tool.job === job.id).map((tool) => workbenchCard(tool)).join("\n          ")}
+        </div>
+      </section>`).join("\n      ")}
+    </section>
+
+    <details class="assistant-setup">
+      <summary>How this works with your assistant</summary>
       <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
@@ -711,7 +736,7 @@ function buildWorkbenchMode(tools, concepts) {
           <p>Download the context file, attach it to a new chat, then paste the setup prompt. If attachments are unavailable, paste the file text. A partial read needs to be resolved before the session starts.</p>
           <div class="action-row">
             <a class="copy-button primary" id="workbench-context-download" href="assets/${workbenchContextFilename}" download>Download context file</a>
-            <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy the prompt</button>
+            <button class="quiet-action" type="button" data-copy-target="workbench-setup-prompt">Copy setup prompt</button>
           </div>
         </div>
         <div class="door">
@@ -722,80 +747,74 @@ function buildWorkbenchMode(tools, concepts) {
           </div>
         </div>
       </div>
-    </section>
+      <section class="setup-panel">
+        <div class="panel-heading">
+          <h2>Paste this once into your AI assistant.</h2>
+        </div>
+        ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
+      </section>
+      <p class="student-data-note">${escapeHtml(studentDataNote)}</p>
+    </details>
 
-    <section class="setup-panel">
-      <div class="panel-heading">
-        <h2>Paste this once into your AI assistant.</h2>
-      </div>
-      ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
-    </section>
+    <details class="workbench-concepts">
+      <summary>Why these tools work</summary>
+      <section class="detail-band">
+        <h2 class="band-label">The design behind the tools</h2>
+        <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
+      </section>
 
-    <section class="detail-band" id="workbench-progression">
-      <h2 class="band-label">Practice in your setting</h2>
-      <div data-workbench-audience=""><p>Choose PME, higher education, or high school to see a worked example and its reference matrix. Ask, understand, produce, judge, codify, and supervise are optional task designs; they are not an age ladder.</p></div>
-      ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
-        <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
-        <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
-        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${prefixIds(renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}), `wb-${p.id}-`)}</div></details>
-        <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
-      </div>`).join("")}
-      <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
-    </section>
+      <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
+        ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
+          <span class="tool-title">${escapeHtml(note.title)}</span>
+          <span class="tool-desc">${escapeHtml(note.summary)}</span>
+          <span class="tool-action">Read note &rarr;</span>
+        </button>`).join("\n        ")}
+      </section>
+    </details>
+    </div>
 
-    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
-    <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
-      ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
-    </section>
-
-    <section class="detail-band">
-      <h2 class="band-label">The Design Behind The Tools</h2>
-      <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
-    </section>
-
-    <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
-      ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
-        <span class="tool-title">${escapeHtml(note.title)}</span>
-        <span class="tool-desc">${escapeHtml(note.summary)}</span>
-        <span class="tool-action">Read note &rarr;</span>
-      </button>`).join("\n      ")}
-    </section>
-
-    <section class="selected-tool" aria-live="polite">
+    <div class="wb-doc">
+    <section class="selected-tool">
+      <nav class="wb-breadcrumb" aria-label="Breadcrumb">
+        <a href="#workbench" data-wb-home>Workbench</a>
+        <span class="wb-crumb-sep" data-wb-crumb-sep="job" aria-hidden="true"${selectedJobHeading ? "" : " hidden"}>&rsaquo;</span>
+        <span data-wb-crumb-job${selectedJobHeading ? "" : " hidden"}>${selectedJobHeading ? escapeHtml(selectedJobHeading) : ""}</span>
+        <span class="wb-crumb-sep" aria-hidden="true">&rsaquo;</span>
+        <span data-wb-crumb-tool aria-current="page">${escapeHtml(selectedName)}</span>
+      </nav>
       <div class="selected-heading">
         <div>
-          <h2 id="selected-tool-title">${escapeHtml(selected.title)}</h2>
+          <h2 id="selected-tool-title" tabindex="-1">${escapeHtml(selectedName)}</h2>
         </div>
         <div class="tool-actions">
-          <button class="copy-button primary" type="button" data-copy-target="workbench-template">Copy template</button>
-          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download template</a>
-          <button class="quiet-action" type="button" data-workbench-tools-link>Back to tools</button>
+          <button class="copy-button primary" type="button" data-start-assistant>Start in your assistant</button>
+          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download</a>
         </div>
       </div>
+      <section class="wb-next-step" id="wb-next-step" aria-label="Next step" hidden>
+        <p class="wb-next-lead" data-next-lead>Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.</p>
+        <p class="wb-next-line"><code id="wb-next-line" tabindex="-1"></code></p>
+        <p>Assistant can't read web links? <a id="wb-next-download" href="assets/workbench/${selected.filename}" download>Download the file</a> and attach it instead.</p>
+        <p class="wb-next-note">${escapeHtml(studentDataNote)}</p>
+        <button class="quiet-action" type="button" data-next-dismiss>Dismiss</button>
+      </section>
       <div class="template-layout">
-        <article class="template-rendered article-body" id="workbench-doc-view" tabindex="0" aria-label="Selected document">${selected.html}</article>
-        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
         <aside class="use-note">
-          <h3 class="band-label">How To Use It</h3>
+          <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
         </aside>
+        <article class="template-rendered article-body" id="workbench-doc-view" aria-label="Selected document">${selected.html}</article>
+        <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
       </div>
     </section>
-
-    <section class="detail-band future-layer">
-      <h2 class="band-label">Future Context Layer</h2>
-      <p>
-        A future Librarian-style system could help faculty govern source kits,
-        handoffs, proposals, diffs, and rollback. That belongs inside the
-        workbench roadmap. It is a proposal, not a deployed institutional system.
-      </p>
-    </section>
+    </div>
   </div>`;
 }
 
 function workbenchCard(tool) {
   return `<button class="tool-card" type="button" data-tool-id="${tool.id}">
     <span class="tool-title">${escapeHtml(tool.cardTitle)}</span>
+    <span class="tool-name">${escapeHtml(tool.toolName)}</span>
     <span class="tool-desc">${escapeHtml(tool.cardDesc)}</span>
     <span class="tool-action">${escapeHtml(tool.cardAction)} &rarr;</span>
   </button>`;
@@ -963,87 +982,117 @@ function getWorkbenchTools() {
     {
       id: "phase-diagnostic",
       title: "Phase Placement Diagnostic",
-      cardTitle: "Start here: placement",
+      toolName: "Placement diagnostic",
+      cardTitle: "Find your starting point",
       cardDesc: "Find your phase on the fluency progression and the right tool.",
-      cardAction: "Run diagnostic",
+      cardAction: "Open",
       filename: "phase-placement-diagnostic.md",
       useNote: "Give this to your AI assistant and say: run this diagnostic with me. Record the actual time needed.",
     },
     {
+      id: "frame-check",
+      title: "Frame Check",
+      toolName: "Frame Check",
+      job: "design",
+      cardTitle: "Build a case students must frame",
+      cardDesc: "Build or check a case that makes students own the frame.",
+      cardAction: "Open",
+      filename: "frame-check.md",
+      useNote: "Give this to your AI assistant and say: run Frame Check with me. Bring your objective and the materials students will use.",
+    },
+    {
       id: "assignment-design",
       title: "Assignment Design Worksheet",
-      cardTitle: "Assignment design",
+      toolName: "Assignment design worksheet",
+      job: "design",
+      cardTitle: "Decide where AI belongs in an assignment",
       cardDesc: "Decide where AI belongs and what students must own.",
-      cardAction: "Open guided design",
+      cardAction: "Open",
       filename: "assignment-design-worksheet.md",
       useNote: "Use this as a working document with faculty before revising an assignment.",
     },
     {
+      id: "source-kit",
+      title: "Source Kit Template",
+      toolName: "Source kit",
+      job: "design",
+      cardTitle: "Package the materials students will use",
+      cardDesc: "Package materials and boundaries for an AI-assisted exercise.",
+      cardAction: "Open",
+      filename: "source-kit-template.md",
+      useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
+    },
+    {
       id: "assessment",
       title: "Assessment And Oral-Defense Rubric",
-      cardTitle: "Assessment",
+      toolName: "Assessment rubric",
+      job: "assess",
+      cardTitle: "Grade the reasoning, not just the product",
       cardDesc: "Review purpose, frame, reliance, accountability, and transfer.",
-      cardAction: "Open rubric",
+      cardAction: "Open",
       filename: "assessment-and-oral-defense-rubric.md",
       useNote: "Use this to decide what evidence faculty need beyond the finished artifact.",
     },
     {
       id: "flawed-output",
       title: "Flawed Output Library Template",
-      cardTitle: "Flawed outputs",
+      toolName: "Flawed output library",
+      job: "assess",
+      cardTitle: "Collect AI answers worth critiquing",
       cardDesc: "Create a useful contribution with a consequential reasoning problem.",
-      cardAction: "Open template",
+      cardAction: "Open",
       filename: "flawed-output-library-template.md",
       useNote: "Use this to build inspectable contributions, including warranted ones, against the learning objective.",
     },
     {
-      id: "source-kit",
-      title: "Source Kit Template",
-      cardTitle: "Source kits",
-      cardDesc: "Package materials and boundaries for an AI-assisted exercise.",
-      cardAction: "Open template",
-      filename: "source-kit-template.md",
-      useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
-    },
-    {
       id: "calibration",
       title: "Faculty Calibration Protocol",
-      cardTitle: "Faculty calibration",
+      toolName: "Faculty calibration protocol",
+      job: "colleagues",
+      cardTitle: "Compare how colleagues judge the same work",
       cardDesc: "Compare how faculty diagnose the same AI-assisted work.",
-      cardAction: "Open protocol",
+      cardAction: "Open",
       filename: "faculty-calibration-protocol.md",
       useNote: "Use this when faculty need to make tacit judgment easier to explain and reuse.",
     },
     {
       id: "after-action",
       title: "After-Action Note Template",
-      cardTitle: "After-action note",
+      toolName: "After-action note",
+      job: "colleagues",
+      cardTitle: "Record what worked after a class",
       cardDesc: "Save what worked, what failed, and what faculty should change.",
-      cardAction: "Open note",
+      cardAction: "Open",
       filename: "after-action-note-template.md",
       useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
     },
     {
       id: "method-card",
       title: "Method Card Template",
-      cardTitle: "Method cards",
+      toolName: "Method card",
+      job: "repeat",
+      cardTitle: "Turn a task that works into a reusable method",
       cardDesc: "Codify a recurring AI-enabled task into a reusable method.",
-      cardAction: "Open template",
+      cardAction: "Open",
       filename: "method-card-template.md",
       useNote: "Use this once a task has worked at least twice and is worth writing down.",
     },
     {
       id: "supervised-delegation",
       title: "Supervised Delegation Exercise",
-      cardTitle: "Supervised delegation",
+      toolName: "Supervised delegation exercise",
+      job: "repeat",
+      cardTitle: "Let students direct multi-step AI work",
       cardDesc: "Design bounded student supervision of multi-step AI work.",
-      cardAction: "Open template",
+      cardAction: "Open",
       filename: "supervised-delegation-exercise.md",
       useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
   return tools.map((tool) => {
-    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename));
+    // With no audience selected every primer shows; drop the markers that audience adaptation keys on.
+    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename))
+      .replace(/^<!-- \/?frame-check:primer [a-z0-9]+ -->\n?/gmu, "");
     return {
       ...tool,
       markdown,
@@ -1147,6 +1196,9 @@ function renderMarkdown(markdown, options = {}) {
       codeLines.push(rawLine);
       continue;
     }
+
+    // Whole-line HTML comments are authoring notes, never reader text.
+    if (/^\s*<!--.*-->\s*$/u.test(line)) continue;
 
     if (line.trim().startsWith("|")) {
       flushParagraph();
@@ -1309,6 +1361,7 @@ const modeAliases = {learn:"overview",practice:"companion",design:"workbench",re
 const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay"];
 const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,practice,assessment,...p})=>p)).replaceAll("<","\\u003c")};
 const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
+const workbenchJobs = ${JSON.stringify(workbenchJobs).replaceAll("<","\\u003c")};
 let currentWorkbenchAudience = "";
 const audienceLabels = {pme: "PME", he: "higher education", k12: "high school"};
 const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-prompt]")).map(el => [el, el.textContent]));
@@ -1327,7 +1380,6 @@ function applyAudience(id) {
   document.getElementById("workbench-title").textContent = profile ? profile.title : "Educator Workbench";
   document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
   document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
-  document.getElementById("workbench-setting").value = currentWorkbenchAudience;
   document.getElementById("lab-audience").value = currentWorkbenchAudience;
   document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
   document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
@@ -1365,6 +1417,9 @@ let workbenchDataPromise = null;
 let loadedWorkbenchData = null;
 let selectedWorkbenchFile = "phase-placement-diagnostic.md";
 let selectedWorkbenchConcept = false;
+// Each Start click takes a token; hiding the next-step panel retires it, so a
+// late clipboard result from an earlier click cannot reopen the panel.
+let startAssistantToken = 0;
 function refreshWorkbench() {
   if (!loadedWorkbenchData) return;
   const variant = loadedWorkbenchData.audiences[currentWorkbenchAudience];
@@ -1534,7 +1589,23 @@ function setMode(mode, shouldScroll = true, push = false) {
     }
   }
   if (mode === "workbench") {
+    const panel = document.getElementById("panel-workbench");
+    const wasDoc = panel && panel.dataset.wbView === "doc";
+    if (panel) panel.dataset.wbView = "overview";
+    hideNextStep();
     ensureWorkbenchData().catch(() => {});
+    if (wasDoc && !shouldScroll) {
+      window.requestAnimationFrame(() => {
+        // A document route re-claimed the panel before this frame; it owns focus.
+        if (panel.dataset.wbView === "doc") return;
+        const current = document.querySelector('[data-tool-id][aria-current="true"], [data-concept-id][aria-current="true"]');
+        // Concept cards live in a collapsed <details>; open it so the card can take focus.
+        const closed = current && current.closest("details:not([open])");
+        if (closed) closed.open = true;
+        const target = current && current.getClientRects().length ? current : document.getElementById("workbench-title");
+        if (target) { scrollElementBelowNav(target, { behavior: "smooth" }); target.focus(); }
+      });
+    }
   }
   if (shouldScroll) {
     window.scrollTo({ top: 0, behavior: smoothBehavior() });
@@ -1795,7 +1866,15 @@ async function openWorkbenchRoute(route) {
 
 function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("workbench-error").hidden = true;
-  document.getElementById("selected-tool-title").textContent = item.title;
+  const name = item.toolName || item.title;
+  const jobHeading = isFromConcept ? "Why these tools work" : (workbenchJobs.find((job) => job.id === item.job) || {}).heading;
+  const jobCrumb = document.querySelector("[data-wb-crumb-job]");
+  const jobSep = document.querySelector('[data-wb-crumb-sep="job"]');
+  if (jobCrumb) { jobCrumb.hidden = !jobHeading; jobCrumb.textContent = jobHeading || ""; }
+  if (jobSep) jobSep.hidden = !jobHeading;
+  const toolCrumb = document.querySelector("[data-wb-crumb-tool]");
+  if (toolCrumb) toolCrumb.textContent = name;
+  document.getElementById("selected-tool-title").textContent = name;
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
@@ -1803,21 +1882,145 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
   download.href = item.downloadPath || basePath + item.filename;
   download.download = item.filename;
- }
+  const nextDownload = document.getElementById("wb-next-download");
+  nextDownload.href = download.href;
+  nextDownload.download = item.filename;
+  // Concept notes are for reading, not running: only Download applies.
+  const start = document.querySelector("[data-start-assistant]");
+  if (start) start.hidden = isFromConcept;
+}
 
 function selectDocument(item, isFromConcept = false, push = true) {
   const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
   if (location.hash !== route) { if (push) history.pushState(null, "", route); else history.replaceState(null, "", route); }
   document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
-    card.classList.remove("is-selected");
+    card.removeAttribute("aria-current");
   });
+  const selector = isFromConcept ? '[data-concept-id="' + item.id + '"]' : '[data-tool-id="' + item.id + '"]';
+  const card = document.querySelector(selector);
+  if (card) card.setAttribute("aria-current", "true");
   selectedWorkbenchFile = item.filename;
   selectedWorkbenchConcept = isFromConcept;
+  const panel = document.getElementById("panel-workbench");
+  if (panel) panel.dataset.wbView = "doc";
   renderWorkbenchDocument(item,isFromConcept);
+  // Announce and reset only on an actual open; audience re-renders stay silent.
+  hideNextStep();
+  announceCopy("Opened " + (item.toolName || item.title));
   window.requestAnimationFrame(() => {
-    const selectedTool = document.querySelector(".selected-tool");
-    if (selectedTool) {
-      scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+    // Scroll first so the heading is already near its resting position before
+    // focus() runs, so the two don't visibly fight over where to land.
+    if (panel) scrollElementBelowNav(panel, { behavior: "smooth" });
+    const heading = document.getElementById("selected-tool-title");
+    if (heading) heading.focus();
+  });
+}
+
+// The sticky action bar sits just below the sticky site nav, whose height
+// changes with the viewport.
+function syncStickyOffsets() {
+  const nav = document.querySelector(".package-nav");
+  const bar = document.querySelector(".selected-heading");
+  document.documentElement.style.setProperty("--wb-nav-h", (nav ? nav.getBoundingClientRect().height : 0) + "px");
+  if (bar && bar.offsetHeight) document.documentElement.style.setProperty("--wb-bar-h", bar.offsetHeight + "px");
+}
+syncStickyOffsets();
+if (window.ResizeObserver) {
+  const stickyObserver = new ResizeObserver(syncStickyOffsets);
+  document.querySelectorAll(".package-nav, .selected-heading").forEach((el) => stickyObserver.observe(el));
+} else {
+  window.addEventListener("resize", syncStickyOffsets);
+}
+
+const pasteInstruction = "Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.";
+
+// Desktop sticks the whole heading row; phones stick only the actions
+// (the heading row becomes display:contents there).
+function stickyActionBar() {
+  return [".selected-heading", ".selected-heading .tool-actions"]
+    .map((q) => document.querySelector(q))
+    // display:contents keeps a computed position but has no box, so require geometry.
+    .find((el) => el && el.getClientRects().length > 0 && getComputedStyle(el).position === "sticky") || null;
+}
+
+function hideNextStep() {
+  startAssistantToken++;
+  const nextStep = document.getElementById("wb-next-step");
+  if (nextStep) nextStep.hidden = true;
+}
+
+// After Start: say what to do next, and keep it on screen until the view changes or it is dismissed.
+function showNextStep(line, copied) {
+  const nextStep = document.getElementById("wb-next-step");
+  const lineEl = document.getElementById("wb-next-line");
+  nextStep.querySelector("[data-next-lead]").textContent = copied
+    ? pasteInstruction
+    : "Copying didn't work. Copy the selected line below, then paste it into a new chat in ChatGPT, Claude, or Gemini.";
+  lineEl.textContent = line;
+  nextStep.hidden = false;
+  const rect = nextStep.getBoundingClientRect();
+  const bar = stickyActionBar();
+  const barBottom = bar ? bar.getBoundingClientRect().bottom : 0;
+  if (rect.top < barBottom || rect.bottom > window.innerHeight) {
+    // Instant jump (behavior "auto"), so reduced-motion users get no smooth scroll.
+    scrollElementBelowNav(nextStep, { offset: (bar ? bar.offsetHeight : 0) + 16 });
+  }
+  if (!copied) {
+    lineEl.focus();
+    window.getSelection().selectAllChildren(lineEl);
+  }
+}
+
+document.querySelector("[data-next-dismiss]").addEventListener("click", () => {
+  hideNextStep();
+  if (startAssistantButton) startAssistantButton.focus();
+});
+
+const startAssistantButton = document.querySelector("[data-start-assistant]");
+const startAssistantLabel = startAssistantButton ? startAssistantButton.textContent : "";
+let startAssistantClicks = 0;
+if (startAssistantButton) {
+  startAssistantButton.addEventListener("click", async () => {
+    const item = (selectedWorkbenchConcept ? workbenchConcepts : workbenchTools).find((t) => t.filename === selectedWorkbenchFile);
+    if (!item) return;
+    const token = ++startAssistantToken;
+    const click = ++startAssistantClicks;
+    // Show a result briefly, then restore the label unless a newer click owns the button.
+    const settle = (label) => {
+      startAssistantButton.textContent = label;
+      window.setTimeout(() => {
+        if (click !== startAssistantClicks) return;
+        startAssistantButton.textContent = startAssistantLabel;
+        startAssistantButton.style.minWidth = "";
+      }, 1400);
+    };
+    // Hold the button's width so "Copied" does not reflow the sticky bar.
+    startAssistantButton.style.minWidth = startAssistantButton.offsetWidth + "px";
+    const setting = audienceLabels[currentWorkbenchAudience];
+    const basePath = selectedWorkbenchConcept
+      ? "assets/workbench/concepts/"
+      : currentWorkbenchAudience ? "assets/workbench/" + currentWorkbenchAudience + "/" : "assets/workbench/";
+    // Use the current origin so preview sessions point the assistant at preview assets.
+    const text = "Read " + new URL(basePath + item.filename, location.href).href + " in full and run it with me." + (setting ? " My setting is " + setting + "." : "");
+    try {
+      await copyTextToClipboard(text);
+      settle("Copied");
+      trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
+      // The reader moved on while the copy was in flight: don't reopen a panel for the old view.
+      if (token !== startAssistantToken) return;
+      showNextStep(text, true);
+      announceCopy(pasteInstruction);
+    } catch (error) {
+      settle("Copy failed");
+      if (token !== startAssistantToken) return;
+      showNextStep(text, false);
+      announceCopy("Copy failed. The line to paste is selected below; copy it manually.");
+      if (error && error.pending) error.pending.then(() => {
+        if (token !== startAssistantToken) return;
+        settle("Copied");
+        showNextStep(text, true);
+        announceCopy(pasteInstruction);
+      }, () => {});
     }
   });
 }
@@ -1835,11 +2038,16 @@ function changeAudience(event) {
   const nextMode = readingEssay ? (id === "he" || id === "k12" ? id+"-essay" : id === "pme" ? "essay" : "overview") : activeMode === "overview" || audienceLabels[activeMode] ? id || "overview" : activeMode;
   if (nextMode !== activeMode) url.hash = nextMode;
   history.pushState(null,"",url);
+  // A panel copied for the previous audience would point at the wrong file.
+  hideNextStep();
   if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
 }
-document.getElementById("workbench-setting").addEventListener("change",changeAudience);
 document.getElementById("lab-audience").addEventListener("change",changeAudience);
-window.addEventListener("popstate",()=>applyAudience(new URL(location.href).searchParams.get("audience")));
+window.addEventListener("popstate",()=>{
+  const id = new URL(location.href).searchParams.get("audience");
+  if ((audienceLabels[id] ? id : "") !== currentWorkbenchAudience) hideNextStep();
+  applyAudience(id);
+});
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
   button.addEventListener("click", async () => {
@@ -1852,7 +2060,6 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
     selectDocument(tool, false);
-    button.classList.add("is-selected");
   });
 });
 
@@ -1867,16 +2074,6 @@ document.querySelectorAll("[data-concept-id]").forEach((button) => {
     if (!concept) return;
     trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
     selectDocument(concept, true);
-    button.classList.add("is-selected");
-  });
-});
-
-document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const toolGrid = document.getElementById("workbench-tools");
-    if (toolGrid) {
-      scrollElementBelowNav(toolGrid, { behavior: "smooth" });
-    }
   });
 });
 
@@ -1895,21 +2092,12 @@ document.addEventListener("click", async (event) => {
   const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
   if (toolDoc) {
     const button = document.querySelector(\`[data-tool-id="\${toolDoc.id}"]\`);
-    if (button) {
-      button.click();
-    }
+    if (button) button.click(); else selectDocument(toolDoc, false);
   } else if (conceptDoc) {
     const button = document.querySelector(\`[data-concept-id="\${conceptDoc.id}"]\`);
-    if (button) {
-      button.click();
-    }
+    if (button) button.click(); else selectDocument(conceptDoc, true);
   }
 });
-
-const firstTool = document.querySelector("[data-tool-id]");
-if (firstTool) {
-  firstTool.classList.add("is-selected");
-}
 
 document.querySelectorAll("a[download]").forEach((link) => {
   link.addEventListener("click", () => {
@@ -1939,8 +2127,7 @@ document.querySelectorAll(".article-body a[target='_blank'], .source-spine a[tar
 }
 
 function css() {
-  return `#workbench-setting {display:block;max-width:100%;margin:8px 0 28px;padding:10px 36px 10px 12px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);font:inherit;}
-[data-workbench-audience][hidden] {display:none;}
+  return `[data-workbench-audience][hidden] {display:none;}
 [data-workbench-audience] details {margin:20px 0;}
 [data-workbench-audience] summary {cursor:pointer;text-decoration:underline;text-underline-offset:4px;}
 .audience-matrix {overflow-x:auto;}
@@ -2184,8 +2371,6 @@ body:not([data-reading-essay="true"]) .site-shell {
 }
 
 .published,
-.path-target,
-.path-action,
 .band-label,
 .copy-button,
 .quiet-action,
@@ -2257,7 +2442,6 @@ h1 {
   font-size: 24px;
 }
 
-.path-cards,
 .tool-grid,
 .prompt-grid,
 .capability-grid,
@@ -2272,7 +2456,6 @@ h1 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.path-card,
 .tool-card,
 .prompt-card,
 .mini-card {
@@ -2291,16 +2474,21 @@ h1 {
   cursor: pointer;
 }
 
-.path-card:hover,
-.tool-card:hover,
-.prompt-card:hover,
-.mini-card:hover,
-.tool-card.is-selected {
+.tool-card[aria-current="true"] {
   border-color: rgba(184, 27, 43, 0.42);
   background: var(--paper-bright);
 }
 
-.path-verb,
+/* Hover only where a pointer can hover, so a tap never leaves a stuck state. */
+@media (hover: hover) {
+  .tool-card:hover,
+  .prompt-card:hover,
+  .mini-card:hover {
+    border-color: rgba(184, 27, 43, 0.42);
+    background: var(--paper-bright);
+  }
+}
+
 .tool-title,
 .prompt-card h3,
 .mini-card h3 {
@@ -2310,14 +2498,6 @@ h1 {
   line-height: 1.08;
 }
 
-.path-target {
-  margin: 7px 0 14px;
-  color: var(--red);
-  font-size: 11px;
-  letter-spacing: 0.02em;
-}
-
-.path-body,
 .tool-desc,
 .prompt-card p,
 .mini-card p {
@@ -2326,7 +2506,6 @@ h1 {
   line-height: 1.38;
 }
 
-.path-action,
 .tool-action,
 .link-style {
   margin-top: auto;
@@ -2392,9 +2571,11 @@ h1 {
   color: var(--paper);
 }
 
-.copy-button:hover,
-.quiet-action:hover {
-  border-color: var(--red);
+@media (hover: hover) {
+  .copy-button:hover,
+  .quiet-action:hover {
+    border-color: var(--red);
+  }
 }
 
 .link-style {
@@ -2485,6 +2666,54 @@ h1 {
   margin-bottom: 22px;
 }
 
+#panel-workbench[data-wb-view="doc"] .wb-overview {
+  display: none;
+}
+
+#panel-workbench[data-wb-view="overview"] .wb-doc {
+  display: none;
+}
+
+/* Font, size, colour, and spacing come from lab-refresh.css. */
+.wb-breadcrumb {
+  letter-spacing: 0.02em;
+}
+
+.wb-breadcrumb a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .wb-breadcrumb a:hover {
+    color: var(--red);
+  }
+}
+
+.wb-crumb-sep {
+  color: var(--muted);
+}
+
+#workbench-doc-view {
+  max-width: 57ch;
+}
+
+/* Programmatic focus (route-change heading, card returned to) doesn't reliably
+   trigger :focus-visible, so give these an explicit, visible ring rather than
+   leaving them silently unfocused-looking. */
+#workbench-title:focus,
+.tool-card:focus,
+#selected-tool-title:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* The doc heading takes focus on every open (for screen readers) and sits in
+   the sticky bar, so a ring there would linger; draw it only for keyboard. */
+#selected-tool-title:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .selected-heading {
   display: flex;
   align-items: flex-start;
@@ -2500,8 +2729,6 @@ h1 {
 }
 
 .template-rendered {
-  max-height: 640px;
-  overflow-y: auto;
   padding: 20px 24px;
   background: var(--paper-soft);
   border: 1px solid var(--navy-hairline);
@@ -2537,10 +2764,6 @@ h1 {
   color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.45;
-}
-
-.future-layer {
-  margin-top: 18px;
 }
 
 .published {
@@ -2623,7 +2846,6 @@ body:not([data-reading-essay="true"]) .toc {
   transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.toc a:hover,
 .toc a.is-active,
 .toc a.is-past {
   color: var(--ink);
@@ -2631,6 +2853,12 @@ body:not([data-reading-essay="true"]) .toc {
 
 .toc a.is-active {
   font-weight: 600;
+}
+
+@media (hover: hover) {
+  .toc a:hover {
+    color: var(--ink);
+  }
 }
 
 .toc a.is-active span,
@@ -3044,7 +3272,6 @@ body:not([data-reading-essay="true"]) .toc {
     display: none;
   }
 
-  .path-cards,
   .tool-grid,
   .prompt-grid,
   .capability-grid,
