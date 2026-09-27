@@ -64,12 +64,23 @@ h2,h3 {line-height:1.25;}
 .door h3 {font-size:26px;}
 .door p {font-size:18px;line-height:1.5;}
 .tool-grid {display:block;border-top:1px solid var(--ink);margin-top:26px;}
-.tool-grid .tool-card {display:grid;grid-template-columns:1fr 1.4fr 150px;align-items:baseline;gap:24px;min-height:0;padding:22px 0;border:0;border-bottom:1px solid var(--faint);background:none;width:100%;text-align:left;}
+.tool-grid .tool-card {display:grid;grid-template-columns:1fr 1.4fr 150px;grid-template-areas:"title desc action" "name desc action";align-items:baseline;gap:4px 24px;min-height:0;padding:22px 0;border:0;border-bottom:1px solid var(--faint);background:none;width:100%;text-align:left;}
 .tool-grid .tool-card:hover,.tool-grid .tool-card.is-selected {background:var(--paper-soft);}
-.tool-grid .tool-title {font-size:25px;line-height:1.25;}
-.tool-grid .tool-desc {font-size:18px;line-height:1.4;}
-.tool-grid .tool-action {padding-top:0;margin:0;font-family:var(--font-body);font-size:16px;line-height:1.4;}
-#workbench-concepts .tool-card {grid-template-columns:1fr 1.4fr 150px;}
+.tool-grid .tool-title {grid-area:title;font-size:25px;line-height:1.25;}
+.tool-grid .tool-name {grid-area:name;font-family:var(--font-body);font-size:13px;line-height:1.3;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.tool-grid .tool-desc {grid-area:desc;font-size:18px;line-height:1.4;}
+.tool-grid .tool-action {grid-area:action;padding-top:0;margin:0;font-family:var(--font-body);font-size:16px;line-height:1.4;}
+#workbench-concepts .tool-card {grid-template-columns:1fr 1.4fr 150px;grid-template-areas:"title desc action";}
+
+/* Workbench tools grouped by teacher job, in visual order of prominence. */
+.job-group {margin-top:44px;}
+.job-group:first-child {margin-top:0;}
+.job-group .tool-grid {margin-top:16px;}
+.job-group[data-job=design] > h2.band-label {font-size:32px;}
+.job-group[data-job=assess] > h2.band-label {font-size:25px;}
+.job-group[data-job=repeat] > h2.band-label {font-size:19px;}
+.start-link {display:block;margin:0 0 32px;font-family:var(--font-body);font-size:19px;color:var(--ink);text-decoration:underline;text-underline-offset:5px;}
+.start-link:hover {color:var(--red);}
 .use-note {background:transparent;border:0;border-top:2px solid var(--ink);padding:20px 0;}
 .use-note p:last-child {font-size:18px;line-height:1.5;}
 .template-layout {gap:30px;}
@@ -119,8 +130,10 @@ h2,h3 {line-height:1.25;}
  .featured-reading {padding:28px 24px;}
  .learning-paths>a {grid-template-columns:120px 1fr;}
  .learning-paths span {grid-column:2;}
- .tool-grid .tool-card,#workbench-concepts .tool-card {grid-template-columns:1fr 1.4fr;gap:10px 24px;}
- .tool-action {grid-column:2;text-align:left;}
+ .tool-grid .tool-card,#workbench-concepts .tool-card {grid-template-columns:1fr 1.4fr;gap:6px 24px;}
+ .tool-grid .tool-card {grid-template-areas:"title desc" "name desc" "action action";}
+ #workbench-concepts .tool-card {grid-template-areas:"title desc" "action action";}
+ .tool-action {grid-area:action;text-align:left;}
  .lab-footer {grid-template-columns:1fr;gap:12px;}
 }
 @media(max-width:640px) {
@@ -147,8 +160,10 @@ h2,h3 {line-height:1.25;}
  .method-band h2 {font-size:28px;}
  .learning-paths>a {grid-template-columns:1fr;gap:12px;}
  .learning-paths span {grid-column:1;}
- .tool-grid .tool-card,#workbench-concepts .tool-card {grid-template-columns:1fr;gap:12px;padding:23px 6px;}
- .tool-grid .tool-action {grid-column:1;}
+ .tool-grid .tool-card,#workbench-concepts .tool-card {grid-template-columns:1fr;gap:10px;padding:23px 6px;}
+ .tool-grid .tool-card {grid-template-areas:"title" "name" "desc" "action";}
+ #workbench-concepts .tool-card {grid-template-areas:"title" "desc" "action";}
+ .tool-grid .tool-action {grid-area:action;}
  .discussion-body {padding:0 0 12px;}
  .discussion-columns {grid-template-columns:1fr;gap:26px;}
  .discussion-close {padding:28px 24px;}

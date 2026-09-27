@@ -47,6 +47,12 @@ const sourceSpineMarkdown = readRequiredCompanionFile("sources/source-spine.md")
 const { text: companionContextMarkdown, sectionCount: companionSectionCount } = buildCompanionContext();
 const workbenchTools = getWorkbenchTools();
 const workbenchConcepts = getWorkbenchConcepts();
+const workbenchJobs = [
+  { id: "design", heading: "Design an assignment" },
+  { id: "assess", heading: "Assess student work" },
+  { id: "colleagues", heading: "Work with colleagues" },
+  { id: "repeat", heading: "Make it repeatable" },
+];
 const profiles = JSON.parse(readRequiredWorkbenchFile("audiences/profiles.json"));
 for (const p of profiles) {
   for (const k of ["label", "initial", "contribution", "change", "review"]) {
@@ -745,7 +751,13 @@ function buildWorkbenchMode(tools, concepts) {
 
     <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
     <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
-      ${tools.map((tool) => workbenchCard(tool)).join("\n      ")}
+      <a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>
+      ${workbenchJobs.map((job) => `<section class="job-group" data-job="${job.id}">
+        <h2 class="band-label">${escapeHtml(job.heading)}</h2>
+        <div class="tool-grid">
+          ${tools.filter((tool) => tool.job === job.id).map((tool) => workbenchCard(tool)).join("\n          ")}
+        </div>
+      </section>`).join("\n      ")}
     </section>
 
     <section class="detail-band">
@@ -796,6 +808,7 @@ function buildWorkbenchMode(tools, concepts) {
 function workbenchCard(tool) {
   return `<button class="tool-card" type="button" data-tool-id="${tool.id}">
     <span class="tool-title">${escapeHtml(tool.cardTitle)}</span>
+    <span class="tool-name">${escapeHtml(tool.toolName)}</span>
     <span class="tool-desc">${escapeHtml(tool.cardDesc)}</span>
     <span class="tool-action">${escapeHtml(tool.cardAction)} &rarr;</span>
   </button>`;
@@ -963,83 +976,12 @@ function getWorkbenchTools() {
     {
       id: "phase-diagnostic",
       title: "Phase Placement Diagnostic",
-      cardTitle: "Start here: placement",
+      toolName: "Placement diagnostic",
+      cardTitle: "Find your starting point",
       cardDesc: "Find your phase on the fluency progression and the right tool.",
-      cardAction: "Run diagnostic",
+      cardAction: "Open",
       filename: "phase-placement-diagnostic.md",
       useNote: "Give this to your AI assistant and say: run this diagnostic with me. Record the actual time needed.",
-    },
-    {
-      id: "assignment-design",
-      title: "Assignment Design Worksheet",
-      cardTitle: "Assignment design",
-      cardDesc: "Decide where AI belongs and what students must own.",
-      cardAction: "Open guided design",
-      filename: "assignment-design-worksheet.md",
-      useNote: "Use this as a working document with faculty before revising an assignment.",
-    },
-    {
-      id: "assessment",
-      title: "Assessment And Oral-Defense Rubric",
-      cardTitle: "Assessment",
-      cardDesc: "Review purpose, frame, reliance, accountability, and transfer.",
-      cardAction: "Open rubric",
-      filename: "assessment-and-oral-defense-rubric.md",
-      useNote: "Use this to decide what evidence faculty need beyond the finished artifact.",
-    },
-    {
-      id: "flawed-output",
-      title: "Flawed Output Library Template",
-      cardTitle: "Flawed outputs",
-      cardDesc: "Create a useful contribution with a consequential reasoning problem.",
-      cardAction: "Open template",
-      filename: "flawed-output-library-template.md",
-      useNote: "Use this to build inspectable contributions, including warranted ones, against the learning objective.",
-    },
-    {
-      id: "source-kit",
-      title: "Source Kit Template",
-      cardTitle: "Source kits",
-      cardDesc: "Package materials and boundaries for an AI-assisted exercise.",
-      cardAction: "Open template",
-      filename: "source-kit-template.md",
-      useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
-    },
-    {
-      id: "calibration",
-      title: "Faculty Calibration Protocol",
-      cardTitle: "Faculty calibration",
-      cardDesc: "Compare how faculty diagnose the same AI-assisted work.",
-      cardAction: "Open protocol",
-      filename: "faculty-calibration-protocol.md",
-      useNote: "Use this when faculty need to make tacit judgment easier to explain and reuse.",
-    },
-    {
-      id: "after-action",
-      title: "After-Action Note Template",
-      cardTitle: "After-action note",
-      cardDesc: "Save what worked, what failed, and what faculty should change.",
-      cardAction: "Open note",
-      filename: "after-action-note-template.md",
-      useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
-    },
-    {
-      id: "method-card",
-      title: "Method Card Template",
-      cardTitle: "Method cards",
-      cardDesc: "Codify a recurring AI-enabled task into a reusable method.",
-      cardAction: "Open template",
-      filename: "method-card-template.md",
-      useNote: "Use this once a task has worked at least twice and is worth writing down.",
-    },
-    {
-      id: "supervised-delegation",
-      title: "Supervised Delegation Exercise",
-      cardTitle: "Supervised delegation",
-      cardDesc: "Design bounded student supervision of multi-step AI work.",
-      cardAction: "Open template",
-      filename: "supervised-delegation-exercise.md",
-      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
     {
       id: "frame-check",
@@ -1051,6 +993,94 @@ function getWorkbenchTools() {
       cardAction: "Open",
       filename: "frame-check.md",
       useNote: "Give this to your AI assistant and say: run Frame Check with me. Bring your objective and the materials students will use.",
+    },
+    {
+      id: "assignment-design",
+      title: "Assignment Design Worksheet",
+      toolName: "Assignment design worksheet",
+      job: "design",
+      cardTitle: "Decide where AI belongs in an assignment",
+      cardDesc: "Decide where AI belongs and what students must own.",
+      cardAction: "Open",
+      filename: "assignment-design-worksheet.md",
+      useNote: "Use this as a working document with faculty before revising an assignment.",
+    },
+    {
+      id: "source-kit",
+      title: "Source Kit Template",
+      toolName: "Source kit",
+      job: "design",
+      cardTitle: "Package the materials students will use",
+      cardDesc: "Package materials and boundaries for an AI-assisted exercise.",
+      cardAction: "Open",
+      filename: "source-kit-template.md",
+      useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
+    },
+    {
+      id: "assessment",
+      title: "Assessment And Oral-Defense Rubric",
+      toolName: "Assessment rubric",
+      job: "assess",
+      cardTitle: "Grade the reasoning, not just the product",
+      cardDesc: "Review purpose, frame, reliance, accountability, and transfer.",
+      cardAction: "Open",
+      filename: "assessment-and-oral-defense-rubric.md",
+      useNote: "Use this to decide what evidence faculty need beyond the finished artifact.",
+    },
+    {
+      id: "flawed-output",
+      title: "Flawed Output Library Template",
+      toolName: "Flawed output library",
+      job: "assess",
+      cardTitle: "Collect AI answers worth critiquing",
+      cardDesc: "Create a useful contribution with a consequential reasoning problem.",
+      cardAction: "Open",
+      filename: "flawed-output-library-template.md",
+      useNote: "Use this to build inspectable contributions, including warranted ones, against the learning objective.",
+    },
+    {
+      id: "calibration",
+      title: "Faculty Calibration Protocol",
+      toolName: "Faculty calibration protocol",
+      job: "colleagues",
+      cardTitle: "Compare how colleagues judge the same work",
+      cardDesc: "Compare how faculty diagnose the same AI-assisted work.",
+      cardAction: "Open",
+      filename: "faculty-calibration-protocol.md",
+      useNote: "Use this when faculty need to make tacit judgment easier to explain and reuse.",
+    },
+    {
+      id: "after-action",
+      title: "After-Action Note Template",
+      toolName: "After-action note",
+      job: "colleagues",
+      cardTitle: "Record what worked after a class",
+      cardDesc: "Save what worked, what failed, and what faculty should change.",
+      cardAction: "Open",
+      filename: "after-action-note-template.md",
+      useNote: "Use this after running an exercise so lesson rationale and faculty judgment do not disappear.",
+    },
+    {
+      id: "method-card",
+      title: "Method Card Template",
+      toolName: "Method card",
+      job: "repeat",
+      cardTitle: "Turn a task that works into a reusable method",
+      cardDesc: "Codify a recurring AI-enabled task into a reusable method.",
+      cardAction: "Open",
+      filename: "method-card-template.md",
+      useNote: "Use this once a task has worked at least twice and is worth writing down.",
+    },
+    {
+      id: "supervised-delegation",
+      title: "Supervised Delegation Exercise",
+      toolName: "Supervised delegation exercise",
+      job: "repeat",
+      cardTitle: "Let students direct multi-step AI work",
+      cardDesc: "Design bounded student supervision of multi-step AI work.",
+      cardAction: "Open",
+      filename: "supervised-delegation-exercise.md",
+      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
   return tools.map((tool) => {

@@ -218,7 +218,7 @@ assert(
 });
 
 const firstToolId = html.match(/data-tool-id="([a-z-]+)"/);
-assert(firstToolId && firstToolId[1] === "phase-diagnostic", "workbench should lead with the phase placement diagnostic");
+assert(firstToolId && firstToolId[1] === "frame-check", "workbench should lead with Frame Check in the design job group");
 assert(html.includes('data-copy-target="workbench-setup-prompt"'), "workbench should include a copyable setup prompt");
 assert(html.includes('href="assets/workbench-context.md"'), "workbench should link the context bundle");
 assert(
@@ -434,6 +434,24 @@ assert(
   html.includes(`<p class="lab-version">Version ${pkgVersion} · ${release.commits.site}</p>`),
   "footer should show the version and site commit",
 );
+
+const jobs = { design: ["frame-check", "assignment-design", "source-kit"], assess: ["assessment", "flawed-output"], colleagues: ["calibration", "after-action"], repeat: ["method-card", "supervised-delegation"] };
+for (const [job, ids] of Object.entries(jobs)) {
+  const start = html.indexOf(`data-job="${job}"`);
+  assert(start > 0, `workbench should have the ${job} job group`);
+  const group = html.slice(start, html.indexOf("</section>", start));
+  for (const id of ids) assert(group.includes(`data-tool-id="${id}"`), `${job} group should hold ${id}`);
+}
+assert(!html.includes('data-tool-id="phase-diagnostic"'), "placement should be a link, not a card");
+assert(html.includes('href="#wb-doc-phase-placement-diagnostic"'), "placement link should be present");
+// Isolate the #workbench-tools markup up to the next known sibling section
+// ("The Design Behind The Tools" band) rather than a brittle </section> count,
+// so the slice covers every tool card and excludes the concept cards below it.
+const toolsStart = html.indexOf('id="workbench-tools"');
+const toolsEnd = html.indexOf("The Design Behind The Tools", toolsStart);
+const toolsHtml = html.slice(toolsStart, toolsEnd);
+assert(!/<span class="tool-action">(?!Open &rarr;)/.test(toolsHtml), "every tool card action should read Open (concept cards keep Read note)");
+
 console.log("site contract passed");
 
 // Accessibility and polish contract.
