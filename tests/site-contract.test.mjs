@@ -74,8 +74,8 @@ inlineScripts.forEach((script, index) => {
   "Practice faculty fluency",
   "Run oral defense",
   "Educator Workbench",
-  "Copy template",
-  "Download template",
+  "Start in your assistant",
+  "Download",
   "The Design Behind The Tools",
   "References",
   "Use this as the working source spine",
@@ -267,9 +267,9 @@ assert(html.includes("data-essay-section-link=\"ix-a-foundation-pilot\""), "over
 assert(html.includes("navigator.clipboard.writeText"), "copy buttons should write prompt/template text to the clipboard");
 assert(html.includes("data-tool-id=\"assignment-design\""), "workbench should expose selectable template cards");
 assert(html.includes("function scrollElementBelowNav"), "site should share one sticky-nav-aware scroll helper");
-assert(html.includes("scrollElementBelowNav(selectedTool"), "workbench cards should reveal the selected template below the sticky nav");
+assert(html.includes("scrollElementBelowNav(panel"), "workbench cards should reveal the selected document below the sticky nav");
 assert(html.includes("id=\"workbench-tools\""), "workbench should expose a target for returning to the tool grid");
-assert(html.includes("data-workbench-tools-link"), "selected workbench templates should include a return-to-tools control");
+assert(html.includes("data-wb-home"), "the document view breadcrumb should include a home control back to the tool grid");
 assert(html.includes("function trackPackageEvent"), "site should include a Plausible event wrapper");
 assert(html.includes("location.hostname === \"localhost\""), "analytics events should be suppressed on localhost");
 assert(html.includes("window.plausible(name, { props })"), "analytics wrapper should send custom event properties");

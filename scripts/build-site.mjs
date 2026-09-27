@@ -127,6 +127,8 @@ writeFileSync(
     tools: workbenchTools.map((tool) => ({
       id: tool.id,
       title: tool.title,
+      toolName: tool.toolName,
+      job: tool.job,
       filename: tool.filename,
       useNote: tool.useNote,
       cardDesc: tool.cardDesc,
@@ -387,7 +389,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       </section>
       <section class="mode-view" data-mode="discuss" id="panel-discuss" role="tabpanel" aria-labelledby="tab-discuss">${buildDiscussMode()}</section>
       <section class="mode-view" data-mode="companion" id="panel-companion" role="tabpanel" aria-labelledby="tab-companion">${companionHtml}</section>
-      <section class="mode-view" data-mode="workbench" id="panel-workbench" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
+      <section class="mode-view" data-mode="workbench" id="panel-workbench" data-wb-view="overview" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
       <section class="mode-view" data-mode="sources" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources">${sourcesHtml}</section>
     </div>
   </main>
@@ -698,8 +700,11 @@ After six questions, describe what the responses show and leave uncertain about 
 
 function buildWorkbenchMode(tools, concepts) {
   const selected = tools[0];
+  const selectedJobHeading = (workbenchJobs.find((job) => job.id === selected.job) || {}).heading;
+  const selectedName = selected.toolName || selected.title;
   return `<div class="surface workbench-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
+    <div class="wb-overview">
     <section class="surface-hero">
       <h1 id="workbench-title">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
       <p class="dek" id="workbench-summary">Choose a setting to open its teaching examples, reference matrix, and adapted tools.</p>
@@ -774,16 +779,24 @@ function buildWorkbenchMode(tools, concepts) {
         </button>`).join("\n        ")}
       </section>
     </details>
+    </div>
 
-    <section class="selected-tool" aria-live="polite">
+    <div class="wb-doc">
+    <section class="selected-tool">
+      <nav class="wb-breadcrumb" aria-label="Breadcrumb">
+        <a href="#workbench" data-wb-home>Workbench</a>
+        <span class="wb-crumb-sep" aria-hidden="true"${selectedJobHeading ? "" : " hidden"}>&rsaquo;</span>
+        <span data-wb-crumb-job${selectedJobHeading ? "" : " hidden"}>${selectedJobHeading ? escapeHtml(selectedJobHeading) : ""}</span>
+        <span class="wb-crumb-sep" aria-hidden="true">&rsaquo;</span>
+        <span data-wb-crumb-tool aria-current="page">${escapeHtml(selectedName)}</span>
+      </nav>
       <div class="selected-heading">
         <div>
-          <h2 id="selected-tool-title">${escapeHtml(selected.title)}</h2>
+          <h2 id="selected-tool-title">${escapeHtml(selectedName)}</h2>
         </div>
         <div class="tool-actions">
-          <button class="copy-button primary" type="button" data-copy-target="workbench-template">Copy template</button>
-          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download template</a>
-          <button class="quiet-action" type="button" data-workbench-tools-link>Back to tools</button>
+          <button class="copy-button primary" type="button" data-start-assistant>Start in your assistant</button>
+          <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download</a>
         </div>
       </div>
       <div class="template-layout">
@@ -795,6 +808,7 @@ function buildWorkbenchMode(tools, concepts) {
         </aside>
       </div>
     </section>
+    </div>
   </div>`;
 }
 
@@ -1335,7 +1349,8 @@ function slugify(value) {
 }
 
 function clientJs() {
-  return `const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
+  return `const SITE = ${JSON.stringify(siteUrl)};
+const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
 const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
@@ -1343,6 +1358,7 @@ const modeAliases = {learn:"overview",practice:"companion",design:"workbench",re
 const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay"];
 const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,practice,assessment,...p})=>p)).replaceAll("<","\\u003c")};
 const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
+const workbenchJobs = ${JSON.stringify(workbenchJobs).replaceAll("<","\\u003c")};
 let currentWorkbenchAudience = "";
 const audienceLabels = {pme: "PME", he: "higher education", k12: "high school"};
 const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-prompt]")).map(el => [el, el.textContent]));
@@ -1567,7 +1583,16 @@ function setMode(mode, shouldScroll = true, push = false) {
     }
   }
   if (mode === "workbench") {
+    const panel = document.getElementById("panel-workbench");
+    const wasDoc = panel && panel.dataset.wbView === "doc";
+    if (panel) panel.dataset.wbView = "overview";
     ensureWorkbenchData().catch(() => {});
+    if (wasDoc && !shouldScroll) {
+      window.requestAnimationFrame(() => {
+        const current = document.querySelector('[data-tool-id][aria-current="true"], [data-concept-id][aria-current="true"]');
+        if (current) scrollElementBelowNav(current, { behavior: "smooth" });
+      });
+    }
   }
   if (shouldScroll) {
     window.scrollTo({ top: 0, behavior: smoothBehavior() });
@@ -1828,7 +1853,15 @@ async function openWorkbenchRoute(route) {
 
 function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("workbench-error").hidden = true;
-  document.getElementById("selected-tool-title").textContent = item.title;
+  const name = item.toolName || item.title;
+  const jobHeading = isFromConcept ? "Why these tools work" : (workbenchJobs.find((job) => job.id === item.job) || {}).heading;
+  const jobCrumb = document.querySelector("[data-wb-crumb-job]");
+  const jobSep = document.querySelector(".wb-crumb-sep");
+  if (jobCrumb) { jobCrumb.hidden = !jobHeading; jobCrumb.textContent = jobHeading || ""; }
+  if (jobSep) jobSep.hidden = !jobHeading;
+  const toolCrumb = document.querySelector("[data-wb-crumb-tool]");
+  if (toolCrumb) toolCrumb.textContent = name;
+  document.getElementById("selected-tool-title").textContent = name;
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
@@ -1836,21 +1869,50 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
   download.href = item.downloadPath || basePath + item.filename;
   download.download = item.filename;
+  announceCopy("Opened " + name);
  }
 
 function selectDocument(item, isFromConcept = false, push = true) {
   const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
   if (location.hash !== route) { if (push) history.pushState(null, "", route); else history.replaceState(null, "", route); }
   document.querySelectorAll("[data-tool-id], [data-concept-id]").forEach((card) => {
-    card.classList.remove("is-selected");
+    card.removeAttribute("aria-current");
   });
+  const selector = isFromConcept ? '[data-concept-id="' + item.id + '"]' : '[data-tool-id="' + item.id + '"]';
+  const card = document.querySelector(selector);
+  if (card) card.setAttribute("aria-current", "true");
   selectedWorkbenchFile = item.filename;
   selectedWorkbenchConcept = isFromConcept;
+  const panel = document.getElementById("panel-workbench");
+  if (panel) panel.dataset.wbView = "doc";
   renderWorkbenchDocument(item,isFromConcept);
   window.requestAnimationFrame(() => {
-    const selectedTool = document.querySelector(".selected-tool");
-    if (selectedTool) {
-      scrollElementBelowNav(selectedTool, { behavior: "smooth" });
+    if (panel) scrollElementBelowNav(panel, { behavior: "smooth" });
+  });
+}
+
+const startAssistantButton = document.querySelector("[data-start-assistant]");
+if (startAssistantButton) {
+  startAssistantButton.addEventListener("click", async () => {
+    const item = (selectedWorkbenchConcept ? workbenchConcepts : workbenchTools).find((t) => t.filename === selectedWorkbenchFile);
+    if (!item) return;
+    const original = startAssistantButton.textContent;
+    const profile = workbenchProfiles.find((p) => p.id === currentWorkbenchAudience);
+    const basePath = selectedWorkbenchConcept
+      ? "assets/workbench/concepts/"
+      : currentWorkbenchAudience ? "assets/workbench/" + currentWorkbenchAudience + "/" : "assets/workbench/";
+    const text = "Read " + SITE + "/" + basePath + item.filename + " in full and run it with me." + (profile ? " My setting is " + profile.label + "." : "");
+    try {
+      await copyTextToClipboard(text);
+      startAssistantButton.textContent = "Copied";
+      announceCopy("Copied");
+      trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
+      window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
+    } catch (error) {
+      startAssistantButton.textContent = "Copy failed";
+      announceCopy("Copy failed. Select the document text and copy it manually.");
+      if (error && error.pending) error.pending.then(() => { startAssistantButton.textContent = "Copied"; announceCopy("Copied"); }, () => {});
+      window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
     }
   });
 }
@@ -1884,7 +1946,6 @@ document.querySelectorAll("[data-tool-id]").forEach((button) => {
     if (!tool) return;
     trackPackageEvent("Workbench Tool Selected", { tool_id: tool.id, tool_title: tool.title });
     selectDocument(tool, false);
-    button.classList.add("is-selected");
   });
 });
 
@@ -1899,16 +1960,6 @@ document.querySelectorAll("[data-concept-id]").forEach((button) => {
     if (!concept) return;
     trackPackageEvent("Workbench Concept Selected", { concept_id: concept.id, concept_title: concept.title });
     selectDocument(concept, true);
-    button.classList.add("is-selected");
-  });
-});
-
-document.querySelectorAll("[data-workbench-tools-link]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const toolGrid = document.getElementById("workbench-tools");
-    if (toolGrid) {
-      scrollElementBelowNav(toolGrid, { behavior: "smooth" });
-    }
   });
 });
 
@@ -1927,20 +1978,16 @@ document.addEventListener("click", async (event) => {
   const conceptDoc = workbenchConcepts.find((note) => note.id === id || note.filename === \`\${id}.md\`);
   if (toolDoc) {
     const button = document.querySelector(\`[data-tool-id="\${toolDoc.id}"]\`);
-    if (button) {
-      button.click();
-    }
+    if (button) button.click(); else selectDocument(toolDoc, false);
   } else if (conceptDoc) {
     const button = document.querySelector(\`[data-concept-id="\${conceptDoc.id}"]\`);
-    if (button) {
-      button.click();
-    }
+    if (button) button.click(); else selectDocument(conceptDoc, true);
   }
 });
 
 const firstTool = document.querySelector("[data-tool-id]");
 if (firstTool) {
-  firstTool.classList.add("is-selected");
+  firstTool.setAttribute("aria-current", "true");
 }
 
 document.querySelectorAll("a[download]").forEach((link) => {
@@ -2326,7 +2373,7 @@ h1 {
 .tool-card:hover,
 .prompt-card:hover,
 .mini-card:hover,
-.tool-card.is-selected {
+.tool-card[aria-current="true"] {
   border-color: rgba(184, 27, 43, 0.42);
   background: var(--paper-bright);
 }
@@ -2514,6 +2561,44 @@ h1 {
 
 .tool-grid {
   margin-bottom: 22px;
+}
+
+#panel-workbench[data-wb-view="doc"] .wb-overview {
+  display: none;
+}
+
+#panel-workbench[data-wb-view="overview"] .wb-doc {
+  display: none;
+}
+
+.wb-breadcrumb {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.wb-breadcrumb a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.wb-breadcrumb a:hover {
+  color: var(--red);
+}
+
+.wb-breadcrumb [data-wb-crumb-tool] {
+  color: var(--ink);
+}
+
+.wb-crumb-sep {
+  color: var(--muted);
+}
+
+#workbench-doc-view {
+  max-width: 68ch;
 }
 
 .selected-heading {

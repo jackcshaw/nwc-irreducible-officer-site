@@ -78,3 +78,36 @@ for (const p of profiles) {
     expect(await res.text()).toContain("## Calibration primer");
   });
 }
+
+test("opening a tool shows the document view at the top", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="frame-check"]').click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator(".wb-breadcrumb")).toContainText("Design an assignment");
+  await expect(page.locator(".wb-breadcrumb")).toContainText("Frame Check");
+  expect(await page.evaluate(() => document.querySelector(".wb-breadcrumb").getBoundingClientRect().top)).toBeLessThan(400);
+  const perLine = await page.evaluate(() => { const el = document.querySelector("#workbench-doc-view p"); const cs = getComputedStyle(el); const ch = document.createElement("span"); ch.textContent = "0"; ch.style.font = cs.font; document.body.append(ch); const w = ch.getBoundingClientRect().width; ch.remove(); return el.getBoundingClientRect().width / w; });
+  expect(perLine).toBeLessThanOrEqual(72);
+});
+
+test("Workbench crumb and browser back return to the overview with the card marked", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="assessment"]').click();
+  await page.goBack();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "overview");
+  await expect(page.locator('[data-tool-id="assessment"]')).toHaveAttribute("aria-current", "true");
+});
+
+test("Start in your assistant copies the tool's audience URL", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  await page.locator("[data-start-assistant]").click();
+  const text = await page.evaluate(() => navigator.clipboard.readText());
+  expect(text).toContain("/assets/workbench/k12/frame-check.md");
+  expect(text).toContain("My setting is High school.");
+});
+
+test("job groups show their tools", async ({ page }) => {
+  await page.goto("/?audience=pme#workbench");
+  for (const job of ["design", "assess", "colleagues", "repeat"]) await expect(page.locator(`[data-job="${job}"] .tool-card`).first()).toBeVisible();
+});
