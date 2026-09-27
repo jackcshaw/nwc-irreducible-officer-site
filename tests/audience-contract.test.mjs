@@ -107,7 +107,7 @@ new vm.Script(script); // Parse all client code, including unexecuted branches.
 const profileDecl=script.match(/const workbenchProfiles = ([^\n]+);/)[1];
 const promptDecl=script.match(/const workbenchPrompts = ([^\n]+);/)[1];
 const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
-const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-setting','workbench-context-download'].map(id=>[id,{}]));
+const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-context-download'].map(id=>[id,{}]));
 const prompt={id:'workbench-setup-prompt',textContent:''};
 const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
 const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};

@@ -77,8 +77,6 @@ inlineScripts.forEach((script, index) => {
   "Copy template",
   "Download template",
   "The Design Behind The Tools",
-  "Future Context Layer",
-  "not a deployed institutional system",
   "References",
   "Use this as the working source spine",
   "The formal reference list remains at the end of the essay",
@@ -175,7 +173,7 @@ assert(
 );
 
 assert(
-  html.includes("Choose a setting for its worked example"),
+  html.includes("Choose a setting to open its teaching examples, reference matrix, and adapted tools."),
   "workbench should explain how to select adapted materials",
 );
 
@@ -445,12 +443,23 @@ for (const [job, ids] of Object.entries(jobs)) {
 assert(!html.includes('data-tool-id="phase-diagnostic"'), "placement should be a link, not a card");
 assert(html.includes('href="#wb-doc-phase-placement-diagnostic"'), "placement link should be present");
 // Isolate the #workbench-tools markup up to the next known sibling section
-// ("The Design Behind The Tools" band) rather than a brittle </section> count,
-// so the slice covers every tool card and excludes the concept cards below it.
+// (the collapsed "How this works with your assistant" details) rather than a
+// brittle </section> count, so the slice covers every tool card and excludes
+// the concept cards below it.
 const toolsStart = html.indexOf('id="workbench-tools"');
-const toolsEnd = html.indexOf("The Design Behind The Tools", toolsStart);
+const toolsEnd = html.indexOf('class="assistant-setup"', toolsStart);
+assert(toolsEnd > toolsStart, "assistant-setup band should follow the tool grid");
 const toolsHtml = html.slice(toolsStart, toolsEnd);
 assert(!/<span class="tool-action">(?!Open &rarr;)/.test(toolsHtml), "every tool card action should read Open (concept cards keep Read note)");
+
+assert(!html.includes("Future Context Layer"), "roadmap note should not appear on the workbench");
+assert(!html.includes('id="workbench-setting"'), "the masthead selector is the only audience control");
+assert(html.includes('<summary>How this works with your assistant</summary>'), "setup should be collapsed");
+assert(html.includes("Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy."), "student-data note should be present");
+assert(html.includes('class="example-next"') && html.includes('href="#wb-doc-frame-check"'), "worked example should lead into Frame Check");
+const wb = html.slice(html.indexOf('id="panel-workbench"'), html.indexOf('id="panel-sources"'));
+assert(wb.indexOf('id="workbench-progression"') < wb.indexOf('id="workbench-tools"') && wb.indexOf('id="workbench-tools"') < wb.indexOf('class="assistant-setup"'), "overview order: example, jobs, setup");
+assert(!/\b(nine|ten) (adapted )?templates\b/i.test(wb), "page copy should not hardcode a tool count");
 
 console.log("site contract passed");
 

@@ -704,12 +704,34 @@ function buildWorkbenchMode(tools, concepts) {
       <h1 id="workbench-title">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
       <p class="dek" id="workbench-summary">Choose a setting to open its teaching examples, reference matrix, and adapted tools.</p>
       <p id="workbench-setting-status" role="status">PME, HE, and high-school materials each require evidence from use in their own setting.</p>
-      <label for="workbench-setting">Workbench setting</label>
-      <select id="workbench-setting"><option value="">Choose your setting</option>${profiles.map(p=>`<option value="${p.id}">${escapeHtml(p.label)}</option>`).join("")}</select>
-      <p>
-        The setup prompt reads the whole workbench, helps you choose a practice for your learning objective, and facilitates the right template with you.
-        Choose a setting for its worked example, matrix, and nine adapted templates. Readiness and learning purpose determine the next step; a later phase is not automatically better.
-      </p>
+    </section>
+
+    <section class="detail-band" id="workbench-progression">
+      <h2 class="band-label">Practice in your setting</h2>
+      <div data-workbench-audience=""><p>Choose PME, higher education, or high school to see a worked example and its reference matrix. Ask, understand, produce, judge, codify, and supervise are optional task designs; they are not an age ladder.</p><a href="#wb-doc-frame-check" data-wb-link class="example-next">Build or check a case like this → Frame Check</a></div>
+      ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
+        <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
+        <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
+        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${prefixIds(renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}), `wb-${p.id}-`)}</div></details>
+        <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
+        <a href="#wb-doc-frame-check" data-wb-link class="example-next">Build or check a case like this → Frame Check</a>
+      </div>`).join("")}
+      <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
+    </section>
+
+    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
+    <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
+      <a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>
+      ${workbenchJobs.map((job) => `<section class="job-group" data-job="${job.id}">
+        <h2 class="band-label">${escapeHtml(job.heading)}</h2>
+        <div class="tool-grid">
+          ${tools.filter((tool) => tool.job === job.id).map((tool) => workbenchCard(tool)).join("\n          ")}
+        </div>
+      </section>`).join("\n      ")}
+    </section>
+
+    <details class="assistant-setup">
+      <summary>How this works with your assistant</summary>
       <h2 class="door-question">How will your assistant get the file?</h2>
       <div class="door-grid">
         <div class="door">
@@ -728,50 +750,30 @@ function buildWorkbenchMode(tools, concepts) {
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="setup-panel">
-      <div class="panel-heading">
-        <h2>Paste this once into your AI assistant.</h2>
-      </div>
-      ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
-    </section>
-
-    <section class="detail-band" id="workbench-progression">
-      <h2 class="band-label">Practice in your setting</h2>
-      <div data-workbench-audience=""><p>Choose PME, higher education, or high school to see a worked example and its reference matrix. Ask, understand, produce, judge, codify, and supervise are optional task designs; they are not an age ladder.</p></div>
-      ${profiles.map(p => `<div data-workbench-audience="${p.id}" hidden>
-        <h3>${escapeHtml(p.case)}</h3><p>Authored, fictional teaching example.</p><p>${escapeHtml(p.facts)}</p><p>${escapeHtml(p.baseline)}</p>
-        <details><summary>Inspect the changed case and teaching record</summary><p>${escapeHtml(p.change)}</p><p>${escapeHtml(p.record)}</p></details>
-        <details><summary>Read the ${escapeHtml(p.label)} reference matrix and review criteria</summary><div class="audience-matrix article-body">${prefixIds(renderMarkdown(matrixMarkdown(p),{skipFirstH1:true}), `wb-${p.id}-`)}</div></details>
-        <div class="action-row"><a class="quiet-action" href="assets/workbench/audiences/${p.id}.md" download>Download ${escapeHtml(p.label)} guide</a><a class="quiet-action" href="assets/workbench/${p.id}/reference-matrix.svg" download>Download ${escapeHtml(p.label)} matrix</a></div>
-      </div>`).join("")}
-      <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
-    </section>
-
-    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
-    <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
-      <a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>
-      ${workbenchJobs.map((job) => `<section class="job-group" data-job="${job.id}">
-        <h2 class="band-label">${escapeHtml(job.heading)}</h2>
-        <div class="tool-grid">
-          ${tools.filter((tool) => tool.job === job.id).map((tool) => workbenchCard(tool)).join("\n          ")}
+      <section class="setup-panel">
+        <div class="panel-heading">
+          <h2>Paste this once into your AI assistant.</h2>
         </div>
-      </section>`).join("\n      ")}
-    </section>
+        ${copyBlock("workbench-setup-prompt", workbenchSetupPrompt())}
+      </section>
+      <p class="student-data-note">Remove names and identifying details from student work before pasting it into an AI assistant, and follow your school's or institution's policy.</p>
+    </details>
 
-    <section class="detail-band">
-      <h2 class="band-label">The Design Behind The Tools</h2>
-      <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
-    </section>
+    <details class="workbench-concepts">
+      <summary>Why these tools work</summary>
+      <section class="detail-band">
+        <h2 class="band-label">The Design Behind The Tools</h2>
+        <p>Why each artifact has the fields it does — each note bridges a workbench tool to an idea you may already know.</p>
+      </section>
 
-    <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
-      ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
-        <span class="tool-title">${escapeHtml(note.title)}</span>
-        <span class="tool-desc">${escapeHtml(note.summary)}</span>
-        <span class="tool-action">Read note &rarr;</span>
-      </button>`).join("\n      ")}
-    </section>
+      <section id="workbench-concepts" class="tool-grid" aria-label="Workbench concept notes">
+        ${concepts.map((note) => `<button class="tool-card" type="button" data-concept-id="${note.id}">
+          <span class="tool-title">${escapeHtml(note.title)}</span>
+          <span class="tool-desc">${escapeHtml(note.summary)}</span>
+          <span class="tool-action">Read note &rarr;</span>
+        </button>`).join("\n        ")}
+      </section>
+    </details>
 
     <section class="selected-tool" aria-live="polite">
       <div class="selected-heading">
@@ -792,15 +794,6 @@ function buildWorkbenchMode(tools, concepts) {
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
         </aside>
       </div>
-    </section>
-
-    <section class="detail-band future-layer">
-      <h2 class="band-label">Future Context Layer</h2>
-      <p>
-        A future Librarian-style system could help faculty govern source kits,
-        handoffs, proposals, diffs, and rollback. That belongs inside the
-        workbench roadmap. It is a proposal, not a deployed institutional system.
-      </p>
     </section>
   </div>`;
 }
@@ -1368,7 +1361,6 @@ function applyAudience(id) {
   document.getElementById("workbench-title").textContent = profile ? profile.title : "Educator Workbench";
   document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
   document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
-  document.getElementById("workbench-setting").value = currentWorkbenchAudience;
   document.getElementById("lab-audience").value = currentWorkbenchAudience;
   document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
   document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
@@ -1878,7 +1870,6 @@ function changeAudience(event) {
   history.pushState(null,"",url);
   if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
 }
-document.getElementById("workbench-setting").addEventListener("change",changeAudience);
 document.getElementById("lab-audience").addEventListener("change",changeAudience);
 window.addEventListener("popstate",()=>applyAudience(new URL(location.href).searchParams.get("audience")));
 
@@ -1980,8 +1971,7 @@ document.querySelectorAll(".article-body a[target='_blank'], .source-spine a[tar
 }
 
 function css() {
-  return `#workbench-setting {display:block;max-width:100%;margin:8px 0 28px;padding:10px 36px 10px 12px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);font:inherit;}
-[data-workbench-audience][hidden] {display:none;}
+  return `[data-workbench-audience][hidden] {display:none;}
 [data-workbench-audience] details {margin:20px 0;}
 [data-workbench-audience] summary {cursor:pointer;text-decoration:underline;text-underline-offset:4px;}
 .audience-matrix {overflow-x:auto;}
@@ -2578,10 +2568,6 @@ h1 {
   color: var(--ink-soft);
   font-size: 15px;
   line-height: 1.45;
-}
-
-.future-layer {
-  margin-top: 18px;
 }
 
 .published {
