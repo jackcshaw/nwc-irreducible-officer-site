@@ -88,7 +88,7 @@ Each bullet is one or two plain sentences addressed to the educator ("you"). No 
 **Method card**
 - **You bring:** A task you have done well with AI at least twice.
 - **You do:** Write down the brief, the steps, how to review the output, and when to stop.
-- **You get:** A reusable method card: the steps and checks your assistant follows each time, much like a saved skill or custom GPT. You stop re-explaining the task.
+- **You get:** A reusable method card: the steps and checks your assistant follows each time, much like a skill in Claude or ChatGPT. You stop re-explaining the task.
 
 **Placement diagnostic**
 - **You bring:** An assignment, exercise, or course you want to match to the right workbench tool.
