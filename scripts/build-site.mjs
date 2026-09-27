@@ -793,6 +793,10 @@ function buildWorkbenchMode(tools, concepts) {
           <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download</a>
         </div>
       </div>
+      <section class="wb-glance" id="wb-glance" aria-labelledby="wb-glance-title"${selected.glance ? "" : " hidden"}>
+        <h3 id="wb-glance-title">What you'll do</h3>
+        <dl>${(selected.glance || []).map(g => `<div><dt>${escapeHtml(g.label)}</dt><dd>${escapeHtml(g.text)}</dd></div>`).join("")}</dl>
+      </section>
       <section class="wb-next-step" id="wb-next-step" aria-label="Next step" hidden>
         <p class="wb-next-lead" data-next-lead>Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.</p>
         <p class="wb-next-line"><code id="wb-next-line" tabindex="-1"></code></p>
@@ -1025,6 +1029,17 @@ function getWorkbenchTools() {
       useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
     },
     {
+      id: "supervised-delegation",
+      title: "Supervised Delegation Exercise",
+      toolName: "Supervised delegation exercise",
+      job: "design",
+      cardTitle: "Let students direct multi-step AI work",
+      cardDesc: "Design bounded student supervision of multi-step AI work.",
+      cardAction: "Open",
+      filename: "supervised-delegation-exercise.md",
+      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
+    },
+    {
       id: "assessment",
       title: "Assessment And Oral-Defense Rubric",
       toolName: "Assessment rubric",
@@ -1078,17 +1093,6 @@ function getWorkbenchTools() {
       cardAction: "Open",
       filename: "method-card-template.md",
       useNote: "Use this once a task has worked at least twice and is worth writing down.",
-    },
-    {
-      id: "supervised-delegation",
-      title: "Supervised Delegation Exercise",
-      toolName: "Supervised delegation exercise",
-      job: "repeat",
-      cardTitle: "Let students direct multi-step AI work",
-      cardDesc: "Design bounded student supervision of multi-step AI work.",
-      cardAction: "Open",
-      filename: "supervised-delegation-exercise.md",
-      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
     },
   ];
   return tools.map((tool) => {
@@ -1883,6 +1887,18 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
+  const glance = document.getElementById("wb-glance");
+  const rows = (item.glance || []).map((g) => {
+    const row = document.createElement("div");
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = g.label;
+    dd.textContent = g.text;
+    row.append(dt, dd);
+    return row;
+  });
+  glance.querySelector("dl").replaceChildren(...rows);
+  glance.hidden = rows.length === 0;
   const download = document.getElementById("selected-tool-download");
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
   download.href = item.downloadPath || basePath + item.filename;

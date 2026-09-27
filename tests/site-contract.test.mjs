@@ -433,12 +433,16 @@ assert(
   "footer should show the version and site commit",
 );
 
-const jobs = { design: ["frame-check", "assignment-design", "source-kit"], assess: ["assessment", "flawed-output"], colleagues: ["calibration", "after-action"], repeat: ["method-card", "supervised-delegation"] };
+const jobs = { design: ["frame-check", "assignment-design", "source-kit", "supervised-delegation"], assess: ["assessment", "flawed-output"], colleagues: ["calibration", "after-action"], repeat: ["method-card"] };
+assert(html.includes('id="wb-glance"') && html.includes("What you'll do"), "doc view should ship the What you'll do card in the first paint");
 for (const [job, ids] of Object.entries(jobs)) {
   const start = html.indexOf(`data-job="${job}"`);
   assert(start > 0, `workbench should have the ${job} job group`);
   const group = html.slice(start, html.indexOf("</section>", start));
   for (const id of ids) assert(group.includes(`data-tool-id="${id}"`), `${job} group should hold ${id}`);
+  const order = ids.map(id => group.indexOf(`data-tool-id="${id}"`));
+  assert(order.every((pos, i) => i === 0 || pos > order[i - 1]), `${job} group should list ${ids.join(", ")} in that order`);
+  assert((group.match(/data-tool-id="/g) || []).length === ids.length, `${job} group should hold only ${ids.join(", ")}`);
 }
 assert(!html.includes('data-tool-id="phase-diagnostic"'), "placement should be a link, not a card");
 assert(html.includes('href="#wb-doc-phase-placement-diagnostic"'), "placement link should be present");
