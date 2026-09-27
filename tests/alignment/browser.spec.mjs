@@ -88,6 +88,7 @@ test("opening a tool shows the document view at the top", async ({ page }) => {
   expect(await page.evaluate(() => document.querySelector(".wb-breadcrumb").getBoundingClientRect().top)).toBeLessThan(400);
   const perLine = await page.evaluate(() => { const el = document.querySelector("#workbench-doc-view p"); const cs = getComputedStyle(el); const ch = document.createElement("span"); ch.textContent = "0"; ch.style.font = cs.font; document.body.append(ch); const w = ch.getBoundingClientRect().width; ch.remove(); return el.getBoundingClientRect().width / w; });
   expect(perLine).toBeLessThanOrEqual(72);
+  await expect(page.locator("#selected-tool-title")).toBeFocused();
 });
 
 test("Workbench crumb and browser back return to the overview with the card marked", async ({ page }) => {
@@ -96,6 +97,15 @@ test("Workbench crumb and browser back return to the overview with the card mark
   await page.goBack();
   await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "overview");
   await expect(page.locator('[data-tool-id="assessment"]')).toHaveAttribute("aria-current", "true");
+  await expect(page.locator('[data-tool-id="assessment"]')).toBeFocused();
+});
+
+test("Find your starting point opens the placement diagnostic in the doc view", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator(".start-link").click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator(".wb-breadcrumb")).toContainText("Placement diagnostic");
+  await expect(page.locator("[data-wb-crumb-job]")).toBeHidden();
 });
 
 test("Start in your assistant copies the tool's audience URL", async ({ page, context }) => {

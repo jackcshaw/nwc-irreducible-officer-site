@@ -706,7 +706,7 @@ function buildWorkbenchMode(tools, concepts) {
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
     <div class="wb-overview">
     <section class="surface-hero">
-      <h1 id="workbench-title">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
+      <h1 id="workbench-title" tabindex="-1">Educator Workbench</h1><div class="discussion-carry" data-discussion-carry hidden><p data-discussion-focus></p><button type="button" class="quiet-action" data-clear-discussion>Clear discussion focus</button></div>
       <p class="dek" id="workbench-summary">Choose a setting to open its teaching examples, reference matrix, and adapted tools.</p>
       <p id="workbench-setting-status" role="status">PME, HE, and high-school materials each require evidence from use in their own setting.</p>
     </section>
@@ -785,14 +785,14 @@ function buildWorkbenchMode(tools, concepts) {
     <section class="selected-tool">
       <nav class="wb-breadcrumb" aria-label="Breadcrumb">
         <a href="#workbench" data-wb-home>Workbench</a>
-        <span class="wb-crumb-sep" aria-hidden="true"${selectedJobHeading ? "" : " hidden"}>&rsaquo;</span>
+        <span class="wb-crumb-sep" data-wb-crumb-sep="job" aria-hidden="true"${selectedJobHeading ? "" : " hidden"}>&rsaquo;</span>
         <span data-wb-crumb-job${selectedJobHeading ? "" : " hidden"}>${selectedJobHeading ? escapeHtml(selectedJobHeading) : ""}</span>
         <span class="wb-crumb-sep" aria-hidden="true">&rsaquo;</span>
         <span data-wb-crumb-tool aria-current="page">${escapeHtml(selectedName)}</span>
       </nav>
       <div class="selected-heading">
         <div>
-          <h2 id="selected-tool-title">${escapeHtml(selectedName)}</h2>
+          <h2 id="selected-tool-title" tabindex="-1">${escapeHtml(selectedName)}</h2>
         </div>
         <div class="tool-actions">
           <button class="copy-button primary" type="button" data-start-assistant>Start in your assistant</button>
@@ -1591,6 +1591,8 @@ function setMode(mode, shouldScroll = true, push = false) {
       window.requestAnimationFrame(() => {
         const current = document.querySelector('[data-tool-id][aria-current="true"], [data-concept-id][aria-current="true"]');
         if (current) scrollElementBelowNav(current, { behavior: "smooth" });
+        const target = current || document.getElementById("workbench-title");
+        if (target) target.focus();
       });
     }
   }
@@ -1856,7 +1858,7 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   const name = item.toolName || item.title;
   const jobHeading = isFromConcept ? "Why these tools work" : (workbenchJobs.find((job) => job.id === item.job) || {}).heading;
   const jobCrumb = document.querySelector("[data-wb-crumb-job]");
-  const jobSep = document.querySelector(".wb-crumb-sep");
+  const jobSep = document.querySelector('[data-wb-crumb-sep="job"]');
   if (jobCrumb) { jobCrumb.hidden = !jobHeading; jobCrumb.textContent = jobHeading || ""; }
   if (jobSep) jobSep.hidden = !jobHeading;
   const toolCrumb = document.querySelector("[data-wb-crumb-tool]");
@@ -1887,7 +1889,11 @@ function selectDocument(item, isFromConcept = false, push = true) {
   if (panel) panel.dataset.wbView = "doc";
   renderWorkbenchDocument(item,isFromConcept);
   window.requestAnimationFrame(() => {
+    // Scroll first so the heading is already near its resting position before
+    // focus() runs, so the two don't visibly fight over where to land.
     if (panel) scrollElementBelowNav(panel, { behavior: "smooth" });
+    const heading = document.getElementById("selected-tool-title");
+    if (heading) heading.focus();
   });
 }
 
@@ -2599,6 +2605,16 @@ h1 {
 
 #workbench-doc-view {
   max-width: 68ch;
+}
+
+/* Programmatic focus (route-change heading, card returned to) doesn't reliably
+   trigger :focus-visible, so give these an explicit, visible ring rather than
+   leaving them silently unfocused-looking. */
+#selected-tool-title:focus,
+#workbench-title:focus,
+.tool-card:focus {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .selected-heading {
