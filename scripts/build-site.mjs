@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
+import { extractAtAGlance, collapseFacilitation } from "./at-a-glance.mjs";
 import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -135,6 +136,7 @@ writeFileSync(
       cardDesc: tool.cardDesc,
       markdown: tool.markdown.trim(),
       html: tool.html,
+      glance: tool.glance,
     })),
     concepts: workbenchConcepts.map((note) => ({
       id: note.id,
@@ -1093,10 +1095,13 @@ function getWorkbenchTools() {
     // With no audience selected every primer shows; drop the markers that audience adaptation keys on.
     const markdown = readRequiredWorkbenchFile(join("templates", tool.filename))
       .replace(/^<!-- \/?frame-check:primer [a-z0-9]+ -->\n?/gmu, "");
+    const where = `templates/${tool.filename}`;
+    const { glance, body } = extractAtAGlance(markdown, where);
     return {
       ...tool,
       markdown,
-      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+      glance,
+      html: collapseFacilitation(renderMarkdown(rewriteWorkbenchLinks(body), { skipFirstH1: true }), where),
     };
   });
 }

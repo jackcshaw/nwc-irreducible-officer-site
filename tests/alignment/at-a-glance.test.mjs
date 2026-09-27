@@ -23,4 +23,24 @@ const workbench = process.env.WORKBENCH_REPO_PATH || join(process.cwd(), "../wor
 const files = readdirSync(join(workbench, "templates")).filter(f => f.endsWith(".md"));
 assert.equal(files.length, 10, "expected ten templates");
 for (const f of files) extractAtAGlance(readFileSync(join(workbench, "templates", f), "utf8"), `templates/${f}`);
+
+const data = JSON.parse(readFileSync(join(process.cwd(), "dist/assets/workbench-data.json"), "utf8"));
+const sets = [["shared", data.tools], ...Object.entries(data.audiences).map(([id, v]) => [id, v.tools])];
+for (const [who, tools] of sets) {
+  for (const t of tools) {
+    const where = `${who}/${t.filename}`;
+    assert.deepEqual(t.glance?.map(g => g.label), ["You bring", "You do", "You get"], `${where}: glance missing`);
+    const source = extractAtAGlance(readFileSync(join(workbench, "templates", t.filename), "utf8"), t.filename).glance;
+    assert.deepEqual(t.glance, source, `${where}: card text differs from the template`);
+    assert(!t.html.includes("You bring:"), `${where}: At a glance rendered twice`);
+    assert.equal((t.html.match(/<details class="assistant-script">/g) || []).length, 1, `${where}: script not collapsed once`);
+    assert(t.markdown.includes("## At a glance") && t.markdown.includes("## AI Facilitation Block"), `${where}: markdown lost a section`);
+  }
+}
+for (const f of files) {
+  const shipped = readFileSync(join(process.cwd(), "dist/assets/workbench", f), "utf8");
+  assert(shipped.includes("## At a glance") && shipped.includes("## AI Facilitation Block"), `download ${f} lost a section`);
+}
+const bundle = readFileSync(join(process.cwd(), "dist/assets/workbench-context.md"), "utf8");
+assert(bundle.includes("## At a glance"), "context bundle lost At a glance");
 console.log(`at a glance passed: module and ${files.length} templates`);

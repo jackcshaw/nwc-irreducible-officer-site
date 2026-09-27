@@ -1,4 +1,5 @@
 import { replaceOrThrow } from "./replace-or-throw.mjs";
+import { extractAtAGlance, collapseFacilitation } from "./at-a-glance.mjs";
 
 // Audience source profiles drive the browser, standalone templates and context bundles.
 export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
@@ -37,7 +38,8 @@ export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
     }
   }
   // Render routes before making the raw Markdown portable outside its folder.
-  const html = render(rewrite(md), {skipFirstH1:true});
+  const { glance, body } = extractAtAGlance(md, at('at a glance'));
+  const html = collapseFacilitation(render(rewrite(body), {skipFirstH1:true}), at('facilitation block'));
   md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (all,label,href)=> {
     if (/^(https?:|#)/.test(href)) return all;
     const target=href.replace(/^(\.\.\/)+/,'').replace(/^\.\//,'');
@@ -47,7 +49,7 @@ export function adaptTool(tool, profile, read, render, rewrite, siteUrl) {
     if (target.startsWith('audiences/')) return `[${label}](${siteUrl}/assets/workbench/audiences/${profile.id}.md)`;
     return `[${label}](${siteUrl}/assets/workbench/${profile.id}/${name})`;
   });
-  return {...tool, title, cardDesc:spec.title, useNote:spec.guidance, html, markdown:md.trim(), downloadPath:`assets/workbench/${profile.id}/${tool.filename}`};
+  return {...tool, title, cardDesc:spec.title, useNote:spec.guidance, glance, html, markdown:md.trim(), downloadPath:`assets/workbench/${profile.id}/${tool.filename}`};
 }
 
 export function matrixMarkdown(p) {
