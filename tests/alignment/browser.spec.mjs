@@ -100,6 +100,16 @@ test("Workbench crumb and browser back return to the overview with the card mark
   await expect(page.locator('[data-tool-id="assessment"]')).toBeFocused();
 });
 
+test("Workbench crumb returns to the overview with the card marked and focused", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="assessment"]').click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await page.locator("[data-wb-home]").click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "overview");
+  await expect(page.locator('[data-tool-id="assessment"]')).toHaveAttribute("aria-current", "true");
+  await expect(page.locator('[data-tool-id="assessment"]')).toBeFocused();
+});
+
 test("Find your starting point opens the placement diagnostic in the doc view", async ({ page }) => {
   await page.goto("/?audience=he#workbench");
   await page.locator(".start-link").click();
@@ -112,9 +122,10 @@ test("Start in your assistant copies the tool's audience URL", async ({ page, co
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/?audience=k12#wb-doc-frame-check");
   await page.locator("[data-start-assistant]").click();
+  await expect(page.locator("#wb-next-step")).toBeVisible();
   const text = await page.evaluate(() => navigator.clipboard.readText());
-  expect(text).toContain("/assets/workbench/k12/frame-check.md");
-  expect(text).toContain("My setting is High school.");
+  const expected = await page.evaluate(() => new URL("assets/workbench/k12/frame-check.md", location.href).href);
+  expect(text).toBe("Read " + expected + " in full and run it with me. My setting is high school.");
 });
 
 test("job groups show their tools", async ({ page }) => {
@@ -131,8 +142,8 @@ async function expectDocScrollsWithActionsInReach(page, inBar) {
   await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
   expect(await page.evaluate(() => getComputedStyle(document.querySelector(".template-rendered")).overflowY)).not.toMatch(/auto|scroll/);
   expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight * 3)).toBe(true);
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.8));
-  await page.waitForTimeout(100);
+  const target = await page.evaluate(() => { const y = Math.round(document.documentElement.scrollHeight * 0.8); window.scrollTo(0, y); return Math.min(y, document.documentElement.scrollHeight - innerHeight); });
+  await page.waitForFunction((y) => Math.abs(window.scrollY - y) <= 1, target);
   for (const sel of inBar) {
     const hit = await page.evaluate((s) => {
       const el = document.querySelector(s); const r = el.getBoundingClientRect();
@@ -211,18 +222,16 @@ for (const [width, height] of [[1440, 900], [390, 844]]) {
     await page.setViewportSize({ width, height });
     await page.goto("/?audience=he#wb-doc-frame-check");
     await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
-    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.6));
-    await page.waitForTimeout(100);
+    const target = await page.evaluate(() => { const y = Math.round(document.documentElement.scrollHeight * 0.6); window.scrollTo(0, y); return Math.min(y, document.documentElement.scrollHeight - innerHeight); });
+    await page.waitForFunction((y) => Math.abs(window.scrollY - y) <= 1, target);
     await page.locator("[data-start-assistant]").click();
     await expect(page.locator("#wb-next-step")).toBeVisible();
-    await page.waitForTimeout(200);
-    const geo = await page.evaluate(() => {
+    const geo = () => page.evaluate(() => {
       const bar = document.querySelector(".selected-heading .tool-actions").getBoundingClientRect();
       const panel = document.getElementById("wb-next-step").getBoundingClientRect();
-      return { barBottom: bar.bottom, panelTop: panel.top, panelBottom: panel.bottom };
+      return { belowBar: panel.top >= bar.bottom, inView: panel.bottom <= innerHeight };
     });
-    expect(geo.panelTop).toBeGreaterThanOrEqual(geo.barBottom);
-    expect(geo.panelBottom).toBeLessThanOrEqual(height);
+    await expect.poll(geo).toEqual({ belowBar: true, inView: true });
   });
 }
 
@@ -231,4 +240,33 @@ test("375: document view has no horizontal scroll", async ({ page }) => {
   await page.goto("/?audience=he#wb-doc-frame-check");
   await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+});
+
+const workbenchDataLoaded = (page) => page.waitForFunction(() => typeof loadedWorkbenchData !== "undefined" && !!loadedWorkbenchData);
+
+test("re-rendering the workbench does not announce an opened tool", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await workbenchDataLoaded(page);
+  await expect(page.locator('[data-tool-id="frame-check"]')).toBeVisible();
+  await expect(page.locator("#copy-status")).not.toContainText("Opened");
+  await page.locator('[data-mode-tab="overview"]').click();
+  await expect(page.locator("#copy-status")).not.toContainText("Opened");
+  await page.locator('[data-mode-tab="workbench"]').click();
+  await expect(page.locator("#copy-status")).not.toContainText("Opened");
+  await page.locator('[data-tool-id="frame-check"]').click();
+  await expect(page.locator("#copy-status")).toHaveText("Opened Frame Check");
+});
+
+test("returning from a concept note focuses its card inside the collapsed notes", async ({ page }) => {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+  await page.locator('#workbench-doc-view a[href="#wb-doc-facilitation-blocks"]').first().click();
+  await expect(page.locator(".wb-breadcrumb [data-wb-crumb-tool]")).toContainText("Facilitation Blocks");
+  await expect(page.locator("[data-start-assistant]")).toBeHidden();
+  await expect(page.locator("#selected-tool-download")).toBeVisible();
+  await page.locator("[data-wb-home]").click();
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "overview");
+  const card = page.locator('[data-concept-id="facilitation-blocks"]');
+  await expect(card).toBeFocused();
+  await expect(card).toBeInViewport();
 });

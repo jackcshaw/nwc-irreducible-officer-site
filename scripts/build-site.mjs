@@ -492,15 +492,6 @@ function buildAudienceMode(a) {
   </div>`;
 }
 
-function pathCard(verb, target, body, action, mode) {
-  return `<a class="path-card" href="#${mode}" data-mode-link="${mode}">
-    <span class="path-verb">${escapeHtml(verb)}</span>
-    <span class="path-target">${escapeHtml(target)}</span>
-    <span class="path-body">${escapeHtml(body)}</span>
-    <span class="path-action">${escapeHtml(action)} &rarr;</span>
-  </a>`;
-}
-
 function buildCompanionMode() {
   return `<div class="surface companion-surface">
     <div class="nwc-rule" aria-hidden="true"><span></span></div>
@@ -725,8 +716,8 @@ function buildWorkbenchMode(tools, concepts) {
       <p class="visual-status"><a href="#wb-doc-why-the-matrix-is-a-hypothesis" data-wb-link>Why each audience needs its own evidence</a>. The original framework has PME roots; evidence from one setting does not validate another.</p>
     </section>
 
-    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the workbench context above.</p>
-    <section id="workbench-tools" class="tool-grid" aria-label="Educator workbench tools">
+    <p id="workbench-error" role="alert" hidden>Could not load the workbench documents. Choose a tool again to retry, or download the context file under “How this works with your assistant” below.</p>
+    <section id="workbench-tools" aria-label="Educator workbench tools">
       <a href="#wb-doc-phase-placement-diagnostic" data-wb-link class="start-link">Not sure where to start? Find your starting point</a>
       ${workbenchJobs.map((job) => `<section class="job-group" data-job="${job.id}">
         <h2 class="band-label">${escapeHtml(job.heading)}</h2>
@@ -1357,8 +1348,7 @@ function slugify(value) {
 }
 
 function clientJs() {
-  return `const SITE = ${JSON.stringify(siteUrl)};
-const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
+  return `const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
 const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
@@ -1599,9 +1589,11 @@ function setMode(mode, shouldScroll = true, push = false) {
     if (wasDoc && !shouldScroll) {
       window.requestAnimationFrame(() => {
         const current = document.querySelector('[data-tool-id][aria-current="true"], [data-concept-id][aria-current="true"]');
-        if (current) scrollElementBelowNav(current, { behavior: "smooth" });
-        const target = current || document.getElementById("workbench-title");
-        if (target) target.focus();
+        // Concept cards live in a collapsed <details>; open it so the card can take focus.
+        const closed = current && current.closest("details:not([open])");
+        if (closed) closed.open = true;
+        const target = current && current.getClientRects().length ? current : document.getElementById("workbench-title");
+        if (target) { scrollElementBelowNav(target, { behavior: "smooth" }); target.focus(); }
       });
     }
   }
@@ -1883,9 +1875,10 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   const nextDownload = document.getElementById("wb-next-download");
   nextDownload.href = download.href;
   nextDownload.download = item.filename;
-  hideNextStep();
-  announceCopy("Opened " + name);
- }
+  // Concept notes are for reading, not running: only Download applies.
+  const start = document.querySelector("[data-start-assistant]");
+  if (start) start.hidden = isFromConcept;
+}
 
 function selectDocument(item, isFromConcept = false, push = true) {
   const route = "#wb-doc-" + item.filename.replace(/\\.md$/, "");
@@ -1901,6 +1894,9 @@ function selectDocument(item, isFromConcept = false, push = true) {
   const panel = document.getElementById("panel-workbench");
   if (panel) panel.dataset.wbView = "doc";
   renderWorkbenchDocument(item,isFromConcept);
+  // Announce and reset only on an actual open; audience re-renders stay silent.
+  hideNextStep();
+  announceCopy("Opened " + (item.toolName || item.title));
   window.requestAnimationFrame(() => {
     // Scroll first so the heading is already near its resting position before
     // focus() runs, so the two don't visibly fight over where to land.
@@ -1977,24 +1973,25 @@ if (startAssistantButton) {
     const original = startAssistantButton.textContent;
     // Hold the button's width so "Copied" does not reflow the sticky bar.
     startAssistantButton.style.minWidth = startAssistantButton.offsetWidth + "px";
-    const profile = workbenchProfiles.find((p) => p.id === currentWorkbenchAudience);
+    const setting = audienceLabels[currentWorkbenchAudience];
     const basePath = selectedWorkbenchConcept
       ? "assets/workbench/concepts/"
       : currentWorkbenchAudience ? "assets/workbench/" + currentWorkbenchAudience + "/" : "assets/workbench/";
-    const text = "Read " + SITE + "/" + basePath + item.filename + " in full and run it with me." + (profile ? " My setting is " + profile.label + "." : "");
+    // Use the current origin so preview sessions point the assistant at preview assets.
+    const text = "Read " + new URL(basePath + item.filename, location.href).href + " in full and run it with me." + (setting ? " My setting is " + setting + "." : "");
     try {
       await copyTextToClipboard(text);
       startAssistantButton.textContent = "Copied";
       showNextStep(text, true);
       announceCopy(pasteInstruction);
       trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
-      window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
+      window.setTimeout(() => { startAssistantButton.textContent = original; startAssistantButton.style.minWidth = ""; }, 1400);
     } catch (error) {
       startAssistantButton.textContent = "Copy failed";
       showNextStep(text, false);
       announceCopy("Copy failed. The line to paste is selected below; copy it manually.");
       if (error && error.pending) error.pending.then(() => { startAssistantButton.textContent = "Copied"; showNextStep(text, true); announceCopy(pasteInstruction); }, () => {});
-      window.setTimeout(() => { startAssistantButton.textContent = original; }, 1400);
+      window.setTimeout(() => { startAssistantButton.textContent = original; startAssistantButton.style.minWidth = ""; }, 1400);
     }
   });
 }
@@ -2339,8 +2336,6 @@ body:not([data-reading-essay="true"]) .site-shell {
 }
 
 .published,
-.path-target,
-.path-action,
 .band-label,
 .copy-button,
 .quiet-action,
@@ -2412,7 +2407,6 @@ h1 {
   font-size: 24px;
 }
 
-.path-cards,
 .tool-grid,
 .prompt-grid,
 .capability-grid,
@@ -2427,7 +2421,6 @@ h1 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.path-card,
 .tool-card,
 .prompt-card,
 .mini-card {
@@ -2453,7 +2446,6 @@ h1 {
 
 /* Hover only where a pointer can hover, so a tap never leaves a stuck state. */
 @media (hover: hover) {
-  .path-card:hover,
   .tool-card:hover,
   .prompt-card:hover,
   .mini-card:hover {
@@ -2462,7 +2454,6 @@ h1 {
   }
 }
 
-.path-verb,
 .tool-title,
 .prompt-card h3,
 .mini-card h3 {
@@ -2472,14 +2463,6 @@ h1 {
   line-height: 1.08;
 }
 
-.path-target {
-  margin: 7px 0 14px;
-  color: var(--red);
-  font-size: 11px;
-  letter-spacing: 0.02em;
-}
-
-.path-body,
 .tool-desc,
 .prompt-card p,
 .mini-card p {
@@ -2488,7 +2471,6 @@ h1 {
   line-height: 1.38;
 }
 
-.path-action,
 .tool-action,
 .link-style {
   margin-top: auto;
@@ -2657,16 +2639,12 @@ h1 {
   display: none;
 }
 
+/* Font, size, colour, and spacing come from lab-refresh.css. */
 .wb-breadcrumb {
-  margin-bottom: 18px;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 13px;
   letter-spacing: 0.02em;
 }
 
 .wb-breadcrumb a {
-  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -2675,10 +2653,6 @@ h1 {
   .wb-breadcrumb a:hover {
     color: var(--red);
   }
-}
-
-.wb-breadcrumb [data-wb-crumb-tool] {
-  color: var(--ink);
 }
 
 .wb-crumb-sep {
@@ -3263,7 +3237,6 @@ body:not([data-reading-essay="true"]) .toc {
     display: none;
   }
 
-  .path-cards,
   .tool-grid,
   .prompt-grid,
   .capability-grid,

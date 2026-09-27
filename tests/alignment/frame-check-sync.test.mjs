@@ -22,6 +22,13 @@ const steps = md => section(md, "Frame Check workflow").split("\n").filter(l => 
 const out = (item) => `Frame Check out of sync: ${item} — change templates/frame-check.md to match artifacts/frame-first-assignment-design.md (companion is the source of truth)`;
 
 assert.equal(tests(doc).length, 5, "Companion should define five tests");
+// Every test must carry its own Ask and Fails when lines, so a missing line on both sides cannot compare equal.
+for (const [label, md] of [["companion", doc], ["template", tpl]]) {
+  for (const t of tests(md)) {
+    assert(t.ask && t.ask.trim(), `${label}: test "${t.name}" has no "- **Ask:**" line`);
+    assert(t.fails && t.fails.trim(), `${label}: test "${t.name}" has no "- **Fails when:**" line`);
+  }
+}
 assert.deepEqual(tests(tpl), tests(doc), out("the five tests (name, Ask, or Fails when)"));
 assert.equal(bullets(doc).length, 5, "Companion should define five rubric bullets");
 assert.deepEqual(bullets(tpl), bullets(doc), out("defended-frame rubric bullets"));
