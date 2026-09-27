@@ -126,14 +126,14 @@ const studentDataNote = "Remove names and identifying details from student work 
 
 // The document scrolls with the page (no nested scroller) while the title,
 // Start, and Download stay in a sticky bar just below the site nav.
-async function expectDocScrollsWithActionsInReach(page) {
+async function expectDocScrollsWithActionsInReach(page, inBar) {
   await page.goto("/?audience=he#wb-doc-frame-check");
   await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
   expect(await page.evaluate(() => getComputedStyle(document.querySelector(".template-rendered")).overflowY)).not.toMatch(/auto|scroll/);
   expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight * 3)).toBe(true);
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.8));
   await page.waitForTimeout(100);
-  for (const sel of ["#selected-tool-title", "[data-start-assistant]", "#selected-tool-download"]) {
+  for (const sel of inBar) {
     const hit = await page.evaluate((s) => {
       const el = document.querySelector(s); const r = el.getBoundingClientRect();
       const nav = document.querySelector(".package-nav").getBoundingClientRect().bottom;
@@ -145,12 +145,24 @@ async function expectDocScrollsWithActionsInReach(page) {
 }
 
 test("document view scrolls with the page and keeps its actions in reach", async ({ page }) => {
-  await expectDocScrollsWithActionsInReach(page);
+  await expectDocScrollsWithActionsInReach(page, ["#selected-tool-title", "[data-start-assistant]", "#selected-tool-download"]);
 });
 
-test("phone: document view scrolls with the page and keeps its actions in reach", async ({ page }) => {
+test("phone: document view scrolls with the page and keeps a compact action bar", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await expectDocScrollsWithActionsInReach(page);
+  await expectDocScrollsWithActionsInReach(page, ["[data-start-assistant]", "#selected-tool-download"]);
+  // Only Start + Download stick on phones: one 44px row under the 110px site nav (measured bottom 166.5px).
+  const barBottom = await page.evaluate(() => document.querySelector(".selected-heading .tool-actions").getBoundingClientRect().bottom);
+  expect(barBottom).toBeLessThanOrEqual(170);
+  expect(await page.evaluate(() => document.querySelector("#selected-tool-title").getBoundingClientRect().bottom)).toBeLessThan(0);
+});
+
+test("the opened tool's heading takes focus without a lingering ring after a click", async ({ page }) => {
+  await page.goto("/?audience=he#workbench");
+  await page.locator('[data-tool-id="frame-check"]').click();
+  const title = page.locator("#selected-tool-title");
+  await expect(title).toBeFocused();
+  expect(await title.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("none");
 });
 
 test("Start in your assistant shows the next step until the view changes", async ({ page, context }) => {

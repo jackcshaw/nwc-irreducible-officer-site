@@ -1928,6 +1928,13 @@ if (window.ResizeObserver) {
 
 const pasteInstruction = "Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.";
 
+// Desktop sticks the whole heading row; phones stick only the actions.
+function stickyActionBar() {
+  return [".selected-heading", ".selected-heading .tool-actions"]
+    .map((q) => document.querySelector(q))
+    .find((el) => el && getComputedStyle(el).position === "sticky") || null;
+}
+
 function hideNextStep() {
   const nextStep = document.getElementById("wb-next-step");
   if (nextStep) nextStep.hidden = true;
@@ -1943,9 +1950,10 @@ function showNextStep(line, copied) {
   lineEl.textContent = line;
   nextStep.hidden = false;
   const rect = nextStep.getBoundingClientRect();
-  const bar = document.querySelector(".selected-heading");
+  const bar = stickyActionBar();
   const barBottom = bar ? bar.getBoundingClientRect().bottom : 0;
   if (rect.top < barBottom || rect.bottom > window.innerHeight) {
+    // Instant jump (behavior "auto"), so reduced-motion users get no smooth scroll.
     scrollElementBelowNav(nextStep, { offset: (bar ? bar.offsetHeight : 0) + 16 });
   }
   if (!copied) {
@@ -2661,8 +2669,10 @@ h1 {
   text-underline-offset: 3px;
 }
 
-.wb-breadcrumb a:hover {
-  color: var(--red);
+@media (hover: hover) {
+  .wb-breadcrumb a:hover {
+    color: var(--red);
+  }
 }
 
 .wb-breadcrumb [data-wb-crumb-tool] {
@@ -2680,11 +2690,17 @@ h1 {
 /* Programmatic focus (route-change heading, card returned to) doesn't reliably
    trigger :focus-visible, so give these an explicit, visible ring rather than
    leaving them silently unfocused-looking. */
-#selected-tool-title:focus,
 #workbench-title:focus,
-.tool-card:focus {
+.tool-card:focus,
+#selected-tool-title:focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
+}
+
+/* The doc heading takes focus on every open (for screen readers) and sits in
+   the sticky bar, so a ring there would linger; draw it only for keyboard. */
+#selected-tool-title:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .selected-heading {
@@ -2819,7 +2835,6 @@ body:not([data-reading-essay="true"]) .toc {
   transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.toc a:hover,
 .toc a.is-active,
 .toc a.is-past {
   color: var(--ink);
@@ -2827,6 +2842,12 @@ body:not([data-reading-essay="true"]) .toc {
 
 .toc a.is-active {
   font-weight: 600;
+}
+
+@media (hover: hover) {
+  .toc a:hover {
+    color: var(--ink);
+  }
 }
 
 .toc a.is-active span,
