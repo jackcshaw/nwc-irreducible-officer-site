@@ -201,3 +201,34 @@ test("no tool card is marked current before a selection", async ({ page }) => {
   await expect(page.locator('[data-tool-id="frame-check"]')).toBeVisible();
   await expect(page.locator("[data-tool-id][aria-current], [data-concept-id][aria-current]")).toHaveCount(0);
 });
+
+// Start clicked deep in the document scrolls the next-step panel into view
+// below whichever element is actually stuck (whole heading row on desktop,
+// just the actions on phones).
+for (const [width, height] of [[1440, 900], [390, 844]]) {
+  test(`${width}: Start deep in the document shows the panel below the stuck bar`, async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.setViewportSize({ width, height });
+    await page.goto("/?audience=he#wb-doc-frame-check");
+    await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.6));
+    await page.waitForTimeout(100);
+    await page.locator("[data-start-assistant]").click();
+    await expect(page.locator("#wb-next-step")).toBeVisible();
+    await page.waitForTimeout(200);
+    const geo = await page.evaluate(() => {
+      const bar = document.querySelector(".selected-heading .tool-actions").getBoundingClientRect();
+      const panel = document.getElementById("wb-next-step").getBoundingClientRect();
+      return { barBottom: bar.bottom, panelTop: panel.top, panelBottom: panel.bottom };
+    });
+    expect(geo.panelTop).toBeGreaterThanOrEqual(geo.barBottom);
+    expect(geo.panelBottom).toBeLessThanOrEqual(height);
+  });
+}
+
+test("375: document view has no horizontal scroll", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
+});

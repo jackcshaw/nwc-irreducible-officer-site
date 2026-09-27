@@ -1928,11 +1928,13 @@ if (window.ResizeObserver) {
 
 const pasteInstruction = "Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.";
 
-// Desktop sticks the whole heading row; phones stick only the actions.
+// Desktop sticks the whole heading row; phones stick only the actions
+// (the heading row becomes display:contents there).
 function stickyActionBar() {
   return [".selected-heading", ".selected-heading .tool-actions"]
     .map((q) => document.querySelector(q))
-    .find((el) => el && getComputedStyle(el).position === "sticky") || null;
+    // display:contents keeps a computed position but has no box, so require geometry.
+    .find((el) => el && el.getClientRects().length > 0 && getComputedStyle(el).position === "sticky") || null;
 }
 
 function hideNextStep() {
