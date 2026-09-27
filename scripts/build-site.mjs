@@ -1090,7 +1090,9 @@ function getWorkbenchTools() {
     },
   ];
   return tools.map((tool) => {
-    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename));
+    // With no audience selected every primer shows; drop the markers that audience adaptation keys on.
+    const markdown = readRequiredWorkbenchFile(join("templates", tool.filename))
+      .replace(/^<!-- \/?frame-check:primer [a-z0-9]+ -->\n?/gmu, "");
     return {
       ...tool,
       markdown,
@@ -1194,6 +1196,9 @@ function renderMarkdown(markdown, options = {}) {
       codeLines.push(rawLine);
       continue;
     }
+
+    // Whole-line HTML comments are authoring notes, never reader text.
+    if (/^\s*<!--.*-->\s*$/u.test(line)) continue;
 
     if (line.trim().startsWith("|")) {
       flushParagraph();
@@ -1412,6 +1417,9 @@ let workbenchDataPromise = null;
 let loadedWorkbenchData = null;
 let selectedWorkbenchFile = "phase-placement-diagnostic.md";
 let selectedWorkbenchConcept = false;
+// Each Start click takes a token; hiding the next-step panel retires it, so a
+// late clipboard result from an earlier click cannot reopen the panel.
+let startAssistantToken = 0;
 function refreshWorkbench() {
   if (!loadedWorkbenchData) return;
   const variant = loadedWorkbenchData.audiences[currentWorkbenchAudience];
@@ -1588,6 +1596,8 @@ function setMode(mode, shouldScroll = true, push = false) {
     ensureWorkbenchData().catch(() => {});
     if (wasDoc && !shouldScroll) {
       window.requestAnimationFrame(() => {
+        // A document route re-claimed the panel before this frame; it owns focus.
+        if (panel.dataset.wbView === "doc") return;
         const current = document.querySelector('[data-tool-id][aria-current="true"], [data-concept-id][aria-current="true"]');
         // Concept cards live in a collapsed <details>; open it so the card can take focus.
         const closed = current && current.closest("details:not([open])");
@@ -1934,6 +1944,7 @@ function stickyActionBar() {
 }
 
 function hideNextStep() {
+  startAssistantToken++;
   const nextStep = document.getElementById("wb-next-step");
   if (nextStep) nextStep.hidden = true;
 }
@@ -1966,11 +1977,23 @@ document.querySelector("[data-next-dismiss]").addEventListener("click", () => {
 });
 
 const startAssistantButton = document.querySelector("[data-start-assistant]");
+const startAssistantLabel = startAssistantButton ? startAssistantButton.textContent : "";
+let startAssistantClicks = 0;
 if (startAssistantButton) {
   startAssistantButton.addEventListener("click", async () => {
     const item = (selectedWorkbenchConcept ? workbenchConcepts : workbenchTools).find((t) => t.filename === selectedWorkbenchFile);
     if (!item) return;
-    const original = startAssistantButton.textContent;
+    const token = ++startAssistantToken;
+    const click = ++startAssistantClicks;
+    // Show a result briefly, then restore the label unless a newer click owns the button.
+    const settle = (label) => {
+      startAssistantButton.textContent = label;
+      window.setTimeout(() => {
+        if (click !== startAssistantClicks) return;
+        startAssistantButton.textContent = startAssistantLabel;
+        startAssistantButton.style.minWidth = "";
+      }, 1400);
+    };
     // Hold the button's width so "Copied" does not reflow the sticky bar.
     startAssistantButton.style.minWidth = startAssistantButton.offsetWidth + "px";
     const setting = audienceLabels[currentWorkbenchAudience];
@@ -1981,17 +2004,23 @@ if (startAssistantButton) {
     const text = "Read " + new URL(basePath + item.filename, location.href).href + " in full and run it with me." + (setting ? " My setting is " + setting + "." : "");
     try {
       await copyTextToClipboard(text);
-      startAssistantButton.textContent = "Copied";
+      settle("Copied");
+      trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
+      // The reader moved on while the copy was in flight: don't reopen a panel for the old view.
+      if (token !== startAssistantToken) return;
       showNextStep(text, true);
       announceCopy(pasteInstruction);
-      trackPackageEvent("Copy Action", { target: "start-assistant", surface: document.body.dataset.activeMode || activeMode });
-      window.setTimeout(() => { startAssistantButton.textContent = original; startAssistantButton.style.minWidth = ""; }, 1400);
     } catch (error) {
-      startAssistantButton.textContent = "Copy failed";
+      settle("Copy failed");
+      if (token !== startAssistantToken) return;
       showNextStep(text, false);
       announceCopy("Copy failed. The line to paste is selected below; copy it manually.");
-      if (error && error.pending) error.pending.then(() => { startAssistantButton.textContent = "Copied"; showNextStep(text, true); announceCopy(pasteInstruction); }, () => {});
-      window.setTimeout(() => { startAssistantButton.textContent = original; startAssistantButton.style.minWidth = ""; }, 1400);
+      if (error && error.pending) error.pending.then(() => {
+        if (token !== startAssistantToken) return;
+        settle("Copied");
+        showNextStep(text, true);
+        announceCopy(pasteInstruction);
+      }, () => {});
     }
   });
 }

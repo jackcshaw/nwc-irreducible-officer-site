@@ -126,6 +126,56 @@ test("Start in your assistant copies the tool's audience URL", async ({ page, co
   const text = await page.evaluate(() => navigator.clipboard.readText());
   const expected = await page.evaluate(() => new URL("assets/workbench/k12/frame-check.md", location.href).href);
   expect(text).toBe("Read " + expected + " in full and run it with me. My setting is high school.");
+  await expect(page.locator("#wb-next-download")).toHaveAttribute("href", expected);
+});
+
+test("no-audience Frame Check shows no primer marker comments", async ({ page }) => {
+  await page.goto("/#wb-doc-frame-check");
+  await expect(page.locator("#workbench-template")).toContainText("Frame Check record");
+  await expect(page.locator("#workbench-doc-view")).not.toContainText("frame-check:primer");
+});
+
+test("Dismiss hides the next-step panel and returns focus to Start", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await page.locator("[data-start-assistant]").click();
+  await expect(page.locator("#wb-next-step")).toBeVisible();
+  await page.locator("[data-next-dismiss]").click();
+  await expect(page.locator("#wb-next-step")).toBeHidden();
+  await expect(page.locator("[data-start-assistant]")).toBeFocused();
+});
+
+test("a late clipboard success after dismissal does not reopen the next step", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { value: { writeText: () => new Promise((resolve) => setTimeout(resolve, 2500)) } });
+  });
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  const start = page.locator("[data-start-assistant]");
+  await start.click();
+  await expect(page.locator("#wb-next-step")).toBeVisible();
+  await expect(start).toHaveText("Copy failed");
+  await page.locator("[data-next-dismiss]").click();
+  await expect(page.locator("#wb-next-step")).toBeHidden();
+  await page.waitForTimeout(3000);
+  await expect(page.locator("#wb-next-step")).toBeHidden();
+  await expect(start).toHaveText("Start in your assistant");
+});
+
+test("browser back from one tool to another restores the first tool's document", async ({ page }) => {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator(".wb-breadcrumb [data-wb-crumb-tool]")).toHaveText("Frame Check");
+  await page.evaluate(() => { location.hash = "#wb-doc-assessment-and-oral-defense-rubric"; });
+  await expect(page.locator(".wb-breadcrumb [data-wb-crumb-tool]")).not.toHaveText("Frame Check");
+  // Record every focus stop: the overview's return-focus must not fire when a document re-claims the panel.
+  await page.evaluate(() => { window.__focused = []; const focus = HTMLElement.prototype.focus; HTMLElement.prototype.focus = function (...args) { window.__focused.push(this.id || this.dataset.toolId || this.tagName); return focus.apply(this, args); }; });
+  await page.goBack();
+  await expect(page.locator(".wb-breadcrumb [data-wb-crumb-tool]")).toHaveText("Frame Check");
+  await page.waitForTimeout(800);
+  const focused = await page.evaluate(() => window.__focused);
+  expect(focused).not.toContain("workbench-title");
+  expect(focused.at(-1)).toBe("selected-tool-title");
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator("#selected-tool-title")).toBeFocused();
 });
 
 test("switching audience dismisses the previous audience's next-step panel", async ({ page, context }) => {

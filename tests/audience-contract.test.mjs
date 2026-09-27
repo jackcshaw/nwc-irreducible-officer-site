@@ -100,6 +100,11 @@ assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes
     for(const [other,names] of Object.entries(pairs)) if(other!==id) for(const name of names) assert(!md.includes(name),id+' Frame Check leaks '+other+' primer: '+name);
     assert(!md.includes('frame-check:primer'),id+' Frame Check still has primer markers');
   } }
+{ const base=wbData.tools.find(t=>t.id==='frame-check');
+  assert(!base.html.includes('frame-check:primer'),'no-audience Frame Check html shows primer markers');
+  assert(!base.markdown.includes('frame-check:primer'),'no-audience Frame Check markdown keeps primer markers');
+  assert(!read('assets/workbench/frame-check.md').includes('frame-check:primer'),'flat Frame Check download keeps primer markers');
+  for (const name of ['PME outage attribution','Campus shuttle survey','Asphalt vs. shaded grass']) assert(base.markdown.includes(name),'no-audience Frame Check lost a primer: '+name); }
 
 // Execute the shipped audience handler with the actual data and prompts.
 const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
