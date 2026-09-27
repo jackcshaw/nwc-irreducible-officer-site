@@ -1,6 +1,6 @@
 # Teacher summaries for workbench tools
 
-Date: 2026-09-27. Status: design approved in conversation; draft summaries below await Jack's edits.
+Date: 2026-09-27. Status: design approved in conversation; summaries revised with Jack's edits (2026-09-27).
 
 ## Purpose
 
@@ -43,7 +43,7 @@ Each bullet is one or two plain sentences addressed to the educator ("you"). No 
 - **Unchanged outputs.** Downloaded templates, context bundles, and the text "Start in your assistant" points to keep `## At a glance` and the full facilitation block.
 - **Job group.** `supervised-delegation` moves to `job: "design"`; "Design an assignment" lists Frame Check, Assignment design worksheet, Source kit, Supervised delegation exercise.
 
-## Draft summaries (for Jack to edit)
+## Summaries
 
 **Frame Check**
 - **You bring:** Your learning objective and the materials students will actually use (readings, documents, data).
@@ -56,7 +56,7 @@ Each bullet is one or two plain sentences addressed to the educator ("you"). No 
 - **You get:** A revised assignment plan that shows the AI-free and AI-assisted steps and the evidence you will look at.
 
 **Source kit**
-- **You bring:** The readings, data, and standards the exercise depends on.
+- **You bring:** The readings and data students will use, and the standards you grade against.
 - **You do:** Decide what counts as a source, what is off limits, what role AI plays, and what you will review.
 - **You get:** A curated packet students and their assistant can work from, with its boundaries written down.
 
@@ -67,12 +67,12 @@ Each bullet is one or two plain sentences addressed to the educator ("you"). No 
 
 **Assessment rubric**
 - **You bring:** The assignment, what it was meant to teach, and anonymized student work.
-- **You do:** Agree the criteria that fit your objective, then use the questions to hear students explain and defend their choices.
-- **You get:** Observations on each student's reasoning and the support they used, not an automatic grade.
+- **You do:** Choose the criteria that match what the assignment teaches, then use the questions to have students explain and defend their choices.
+- **You get:** Notes on how each student reasoned and what help they used. You decide the grade.
 
 **Flawed output library**
-- **You bring:** A topic you teach and the sources a careful answer would rely on.
-- **You do:** Shape plausible AI-style answers that hide one consequential reasoning flaw, plus the questions that expose it.
+- **You bring:** A topic you teach and its key sources.
+- **You do:** Shape plausible AI-style answers that each hide one flaw that changes the conclusion, plus the questions that expose it.
 - **You get:** Reusable library entries: the student-facing text, an instructor key, and notes on when to retire each one.
 
 **Faculty calibration protocol**
@@ -88,12 +88,12 @@ Each bullet is one or two plain sentences addressed to the educator ("you"). No 
 **Method card**
 - **You bring:** A task you have done well with AI at least twice.
 - **You do:** Write down the brief, the steps, how to review the output, and when to stop.
-- **You get:** A reusable method card, so the task no longer has to be re-explained each time.
+- **You get:** A reusable method card: the steps and checks your assistant follows each time, much like a saved skill or custom GPT. You stop re-explaining the task.
 
 **Placement diagnostic**
-- **You bring:** An assignment, exercise, or course you want to place.
+- **You bring:** An assignment, exercise, or course you want to match to the right workbench tool.
 - **You do:** Answer a few questions about what students do with AI and what they must do themselves.
-- **You get:** Where it sits on the AI fluency progression and which workbench tool to use next.
+- **You get:** Which of six stages of AI use it asks of students, from asking AI questions to supervising multi-step AI work, and which tool to open next.
 
 ## Checks
 
@@ -120,5 +120,5 @@ Per-audience summaries; time estimates; changes to template bodies beyond adding
 
 ## Risks
 
-- A wrong or vague summary misleads more than no summary, because it is the first thing teachers read. Jack edits the drafts above before build.
+- A wrong or vague summary misleads more than no summary, because it is the first thing teachers read. The summaries above carry Jack's edits; any wording change during build goes back to him.
 - Collapsing the facilitation block hides it from teachers who want to read it; the summary line "What your assistant will do" keeps it one click away.
