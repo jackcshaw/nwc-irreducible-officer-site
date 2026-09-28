@@ -292,3 +292,18 @@ h2,h3 {line-height:1.25;}
 .assistant-script>summary {font-size:20px;padding:16px 0;}
 .template-rendered>.assistant-script:first-child {margin-top:0;}
 .assistant-script .script-tag {margin-left:12px;font-family:var(--font-mono);font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+
+/* Setting identity: one colour per setting, used only on the chip, the rule above the nav, the breadcrumb, and the essay rail. The red stays the action colour. */
+:root {--set-pme:#6e1f28;--set-he:#1d6668;--set-k12:#8a4e12;}
+html[data-setting=pme] {--setting:var(--set-pme);}
+html[data-setting=he] {--setting:var(--set-he);}
+html[data-setting=k12] {--setting:var(--set-k12);}
+.audience-setting {gap:10px;}
+.audience-setting [data-setting-label] {font-size:13px;letter-spacing:.02em;color:var(--muted);}
+.audience-setting select {appearance:none;-webkit-appearance:none;max-width:none;min-height:40px;padding:7px 34px 7px 14px;border:1px solid var(--ink);border-radius:2px;font-size:15px;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%230a2242' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;}
+html[data-setting] .audience-setting select {color:#fff;border-color:var(--setting);background-color:var(--setting);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23ffffff' stroke-width='1.8'/%3E%3C/svg%3E");}
+.audience-setting select option {color:var(--ink);background:var(--paper-bright);}
+html[data-setting] .package-nav-inner {border-top:3px solid var(--setting);}
+html[data-setting] .toc::after {background:var(--setting);width:2px;left:8.5px;}
+html[data-setting] .toc a.is-active {color:var(--setting);}
+html[data-setting] .toc a.is-active span {background:var(--setting);border-color:var(--setting);}

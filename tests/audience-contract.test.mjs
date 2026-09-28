@@ -115,7 +115,7 @@ const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
 const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-context-download'].map(id=>[id,{}]));
 const prompt={id:'workbench-setup-prompt',textContent:''};
 const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
-const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
+const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',markSetting(){},promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
 vm.runInNewContext(applyCode,context);
 for(const p of [...profiles,profiles[0]]) {
  context.applyAudience(p.id);

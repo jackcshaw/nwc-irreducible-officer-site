@@ -362,8 +362,8 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       ${modeButton("workbench", "Design")}
       ${modeButton("sources", "References")}
     </div>
-    <label class="audience-setting" for="lab-audience">Audience
-      <select id="lab-audience"><option value="">All settings</option>${audiences.map(a=>`<option value="${a.id}">${escapeHtml(a.label)}</option>`).join("")}</select>
+    <label class="audience-setting" for="lab-audience"><span data-setting-label hidden>Your setting</span>
+      <select id="lab-audience" aria-label="Your setting"><option value="">All settings</option>${audiences.map(a=>`<option value="${a.id}">${escapeHtml(a.label)}</option>`).join("")}</select>
     </label>
     </div>
   </nav>
@@ -1403,6 +1403,17 @@ function applyAudience(id) {
     el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide and its matching full essay edition.\\n\\n" : "") + local;
   });
   if (typeof refreshWorkbench === "function") refreshWorkbench();
+  markSetting(currentWorkbenchAudience);
+}
+
+// The chosen setting colours the chip, the rule above the nav, and the essay rail.
+function markSetting(id) {
+  const root = document.documentElement;
+  if (audienceLabels[id]) root.dataset.setting = id; else delete root.dataset.setting;
+  const select = document.getElementById("lab-audience");
+  if (select) select.options[0].text = audienceLabels[id] ? "All settings" : "Choose your setting";
+  const label = document.querySelector("[data-setting-label]");
+  if (label) label.hidden = !audienceLabels[id];
 }
 // Initial audience application occurs through setMode after client state is initialized.
 const essayRails = Array.from(document.querySelectorAll("[data-essay-rail]"));

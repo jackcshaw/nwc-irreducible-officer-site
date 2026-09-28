@@ -411,3 +411,28 @@ test("desktop: a concept note's document starts level with its note", async ({ p
   const top = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().top);
   expect(Math.abs((await top("#workbench-doc-view")) - (await top(".use-note")))).toBeLessThan(8);
 });
+
+const settingColour = { pme: "rgb(110, 31, 40)", he: "rgb(29, 102, 104)", k12: "rgb(138, 78, 18)" };
+test("the chip and the rule above the nav carry the setting colour", async ({ page }) => {
+  for (const id of ["pme", "he", "k12"]) {
+    await page.goto(`/?audience=${id}#companion`);
+    await expect(page.locator("html")).toHaveAttribute("data-setting", id);
+    const chip = await page.locator("#lab-audience").evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(chip, id).toBe(settingColour[id]);
+    const rule = await page.locator(".package-nav-inner").evaluate(el => [getComputedStyle(el).borderTopWidth, getComputedStyle(el).borderTopColor]);
+    expect(rule, id).toEqual(["3px", settingColour[id]]);
+    await expect(page.locator("[data-setting-label]")).toBeVisible();
+  }
+});
+test("with no setting the chip asks you to choose and nothing is coloured", async ({ page }) => {
+  await page.goto("/#companion");
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+  await expect(page.locator("#lab-audience option:checked")).toHaveText("Choose your setting");
+  await expect(page.locator("[data-setting-label]")).toBeHidden();
+  expect(await page.locator(".package-nav-inner").evaluate(el => getComputedStyle(el).borderTopWidth)).toBe("1px");
+});
+test("the essay rail shows reading progress in the setting colour", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  const rail = await page.locator('.toc[data-essay-rail="k12-essay"]').evaluate(el => getComputedStyle(el, "::after").backgroundColor);
+  expect(rail).toBe(settingColour.k12);
+});
