@@ -467,3 +467,21 @@ test("Back after Learn, essay, Learn keeps the setting", async ({ page }) => {
   await expect(page.locator("#panel-he")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
 });
+
+test("each setting page leads with its essay", async ({ page }) => {
+  const essays = { pme: ["The Irreducible Officer", "essay"], he: ["Judgment in Higher Education", "he-essay"], k12: ["Learning to Exercise Judgment", "k12-essay"] };
+  for (const [id, [title, mode]] of Object.entries(essays)) {
+    await page.goto(`/?audience=${id}#${id}`);
+    await expect(page.locator(`#panel-${id} h1`)).toHaveText(title);
+    const read = page.locator(`#panel-${id} .surface-hero .copy-button.primary`);
+    await expect(read).toHaveText("Read the essay");
+    await expect(read).toHaveAttribute("href", `#${mode}`);
+  }
+});
+test("the general Learn page offers the three settings instead of one exercise", async ({ page }) => {
+  await page.goto("/#overview");
+  await expect(page.locator("#panel-overview [data-try]")).toHaveCount(0);
+  await page.locator('#panel-overview .setting-chooser a[data-mode-link="k12"]').click();
+  await expect(page.locator("#panel-k12")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
+});

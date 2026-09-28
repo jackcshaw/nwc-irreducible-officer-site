@@ -210,7 +210,8 @@ for(const mode of ['he-essay','k12-essay']) {
 }
 routeContext.activeMode='he-essay';routeContext.changeAudience({target:{value:'k12'}});assert.equal(routeContext.activeMode,'k12-essay');
 assert(html.includes('Teaching guide and review notes (reveals the case analysis)</summary>'));
-assert.equal((html.match(/data-try-stage="0"/g)||[]).length,4);
+// One exercise per setting page; the general Learn page asks for a setting instead.
+assert.equal((html.match(/data-try-stage="0"/g)||[]).length,3);
 assert(html.includes('caseText+fields.map'),'Downloaded practice record must include the actual case');
 assert(html.includes('p.textContent=field.value'),'User responses must be rendered as text');
 console.log('companion essays passed: sequential sections, source parity, complete contexts, relative links and audience routing');
