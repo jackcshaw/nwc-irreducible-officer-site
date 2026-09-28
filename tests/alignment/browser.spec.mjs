@@ -330,3 +330,84 @@ test("returning from a concept note focuses its card inside the collapsed notes"
   await expect(card).toBeFocused();
   await expect(card).toBeInViewport();
 });
+
+const toolIds = ["frame-check", "assignment-design", "source-kit", "supervised-delegation", "assessment", "flawed-output", "calibration", "after-action", "method-card"];
+
+test("every tool opens with its What you'll do card above the document", async ({ page }) => {
+  for (const id of toolIds) {
+    await page.goto("/?audience=he#workbench");
+    await page.locator(`[data-tool-id="${id}"]`).click();
+    const card = page.locator("#wb-glance");
+    await expect(card).toBeVisible();
+    await expect(card.locator("h3")).toHaveText("What you'll do");
+    await expect(card.locator("dt")).toHaveText(["You bring", "You do", "You get"]);
+    const [cardTop, docTop] = await page.evaluate(() => [
+      document.getElementById("wb-glance").getBoundingClientRect().top,
+      document.getElementById("workbench-doc-view").getBoundingClientRect().top,
+    ]);
+    expect(cardTop, id).toBeLessThan(docTop);
+    await expect(page.locator("#workbench-doc-view")).not.toContainText("You bring:");
+  }
+});
+
+test("the placement diagnostic, reached by link, shows its card", async ({ page }) => {
+  await page.goto("/?audience=pme#workbench");
+  await page.locator(".start-link").click();
+  await expect(page.locator("#wb-glance dt")).toHaveText(["You bring", "You do", "You get"]);
+});
+
+test("a concept note hides the card instead of showing the last tool's", async ({ page }) => {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#wb-glance")).toBeVisible();
+  await page.evaluate(() => { location.hash = "#wb-doc-facilitation-blocks"; });
+  await expect(page.locator("#panel-workbench")).toHaveAttribute("data-wb-view", "doc");
+  await expect(page.locator("[data-wb-crumb-tool]")).not.toHaveText("Frame Check");
+  await expect(page.locator("#wb-glance")).toBeHidden();
+});
+
+test("switching audience keeps the card filled", async ({ page }) => {
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  await page.locator("#lab-audience").selectOption("pme");
+  await expect(page.locator("#wb-glance dd").first()).toContainText("learning objective");
+});
+
+test("the assistant's script is collapsed and opens on demand", async ({ page }) => {
+  await page.goto("/?audience=k12#wb-doc-frame-check");
+  const script = page.locator("#workbench-doc-view details.assistant-script");
+  await expect(script).toHaveCount(1);
+  await expect(script.locator("summary .script-label")).toContainText("What your assistant will do");
+  await expect(script.locator("summary .script-tag")).toHaveText("AI Facilitation Block");
+  const line = script.getByText("Run Frame Check with me", { exact: false });
+  await expect(line).toBeHidden();
+  await script.locator("summary").click();
+  await expect(line).toBeVisible();
+});
+
+test("desktop: the card, the how-to note, and the document line up", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#wb-glance")).toBeVisible();
+  const box = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().toJSON());
+  const [card, note, doc] = [await box("#wb-glance"), await box(".use-note"), await box("#workbench-doc-view")];
+  expect(Math.abs(note.top - card.top)).toBeLessThan(8);
+  expect(Math.abs(card.width - doc.width)).toBeLessThan(2);
+  expect(doc.top).toBeGreaterThan(card.bottom);
+  const firstInDoc = await page.locator("#workbench-doc-view > *").first().evaluate(el => el.className);
+  expect(firstInDoc).toBe("assistant-script");
+  const scriptTop = await page.locator("#workbench-doc-view > .assistant-script").evaluate(el => el.getBoundingClientRect().top);
+  expect(scriptTop - doc.top, "no empty band above the collapsed script").toBeLessThan(34);
+});
+
+test("a deep-linked tool title has no focus outline competing with the card", async ({ page }) => {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#selected-tool-title")).toBeFocused();
+  expect(await page.locator("#selected-tool-title").evaluate(el => getComputedStyle(el).outlineStyle)).toBe("none");
+});
+
+test("desktop: a concept note's document starts level with its note", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#wb-doc-facilitation-blocks");
+  await expect(page.locator("#wb-glance")).toBeHidden();
+  const top = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().top);
+  expect(Math.abs((await top("#workbench-doc-view")) - (await top(".use-note")))).toBeLessThan(8);
+});
