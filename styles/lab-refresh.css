@@ -307,7 +307,8 @@ html[data-setting] .package-nav-inner {border-top:3px solid var(--setting);}
 html[data-setting] .toc::after {background:var(--setting);width:2px;left:8.5px;}
 html[data-setting] .toc a.is-active {color:var(--setting);}
 html[data-setting] .toc a.is-active span {background:var(--setting);border-color:var(--setting);}
-.try-purpose {max-width:62ch;margin:6px 0 18px;font-size:18px;line-height:1.5;color:var(--ink);}
+.judgment-try .try-purpose {max-width:62ch;margin:6px 0 18px;font-size:19px;line-height:1.5;color:var(--ink);}
+.surface-hero .hero-note {margin-top:6px;font-size:15px;color:var(--muted);}
 .setting-chooser-band>p {margin:6px 0 20px;max-width:62ch;}
 /* Site breadcrumb: the workbench breadcrumb's style, with the setting name in its colour. */
 .site-crumb {font-family:"Source Sans 3",sans-serif;font-size:15px;color:var(--muted);margin:0 0 18px;}

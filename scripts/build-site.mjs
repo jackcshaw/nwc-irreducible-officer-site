@@ -489,8 +489,8 @@ function buildCompanionEssay(a) {
 function buildAudienceMode(a) {
   return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
-    <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Practice</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Design</a><a class="quiet-action" href="#discuss" data-mode-link="discuss">Discuss</a></div>
-    <p class="reading-context">${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p></section>
+    <p class="hero-note">${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p>
+    <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Practice</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Design</a><a class="quiet-action" href="#discuss" data-mode-link="discuss">Discuss</a></div></section>
     ${buildOpeningPractice(a.id, a.id)}
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide"><p><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></p>${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;

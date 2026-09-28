@@ -511,3 +511,14 @@ test("the breadcrumb's setting name carries the setting colour", async ({ page }
   await page.goto("/?audience=pme#pme");
   expect(await page.locator("[data-site-crumb] .crumb-setting").evaluate(el => getComputedStyle(el).color)).toBe("rgb(110, 31, 40)");
 });
+
+test("the setting page's purpose line reads at body size and the edition note sits with the summary", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#he");
+  const [size, colour] = await page.locator("#panel-he .try-purpose").evaluate(el => [parseFloat(getComputedStyle(el).fontSize), getComputedStyle(el).color]);
+  expect(size).toBeGreaterThanOrEqual(18);
+  expect(colour).toBe("rgb(10, 34, 66)");
+  const noteTop = await page.locator("#panel-he .surface-hero .hero-note").evaluate(el => el.getBoundingClientRect().top);
+  const buttonsTop = await page.locator("#panel-he .surface-hero .action-row").evaluate(el => el.getBoundingClientRect().top);
+  expect(noteTop).toBeLessThan(buttonsTop);
+});
