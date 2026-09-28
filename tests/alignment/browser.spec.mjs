@@ -587,3 +587,14 @@ test("the general Learn page lists each setting once", async ({ page }) => {
   await expect(page.locator("#panel-overview").getByText("Three settings, one argument to test")).toHaveCount(0);
   await expect(page.locator("#panel-overview .setting-chooser .audience-path strong").first()).toHaveText("Open this setting →");
 });
+
+test("reading another setting's edition keeps your setting", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  await page.locator('#panel-k12-essay a[data-mode-link="he-essay"]').first().click();
+  await expect(page.locator("#panel-he-essay")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
+  await expect(page).toHaveURL(/audience=k12/);
+  expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "")).toBe("Learn›Essay");
+  await page.goto("/#he-essay");
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
+});

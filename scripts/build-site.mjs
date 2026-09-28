@@ -1614,7 +1614,8 @@ function setMode(mode, shouldScroll = true, push = false) {
   }
   const url = new URL(location.href);
   if (audienceLabels[mode]) url.searchParams.set("audience", mode);
-  if (["he-essay","k12-essay"].includes(mode)) url.searchParams.set("audience",mode.replace("-essay",""));
+  // An edition sets the setting only when none is chosen; reading another edition keeps your choice.
+  if (["he-essay","k12-essay"].includes(mode) && !audienceLabels[url.searchParams.get("audience")]) url.searchParams.set("audience",mode.replace("-essay",""));
   applyAudience(url.searchParams.get("audience"));
   const previousMode = activeMode;
   activeMode = mode;
