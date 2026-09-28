@@ -294,7 +294,8 @@ h2,h3 {line-height:1.25;}
 .assistant-script .script-tag {margin-left:12px;font-family:var(--font-mono);font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
 
 /* Setting identity: one colour per setting, used only on the chip, the rule above the nav, the breadcrumb, and the essay rail. The red stays the action colour. */
-:root {--set-pme:#6e1f28;--set-he:#1d6668;--set-k12:#8a4e12;}
+/* PME takes the NWC nav-bar blue; the Lab already wears NWC crimson (its action red) and navy (its ink). */
+:root {--set-pme:#2f5597;--set-he:#6b3a6b;--set-k12:#8a4e12;}
 html[data-setting=pme] {--setting:var(--set-pme);}
 html[data-setting=he] {--setting:var(--set-he);}
 html[data-setting=k12] {--setting:var(--set-k12);}

@@ -53,7 +53,7 @@ inlineScripts.forEach((script, index) => {
   "One method, different teaching decisions",
   "Strengthening human judgment",
   "Ready for educator testing",
-  "Try a judgment before you read on.",
+  "Or try the judgment first.",
   "Set up a session",
   "See the five-step pilot",
   "Read",
@@ -498,3 +498,5 @@ for (const id of ["pme", "he", "k12"]) {
 }
 assert(!html.includes('data-try="home"'), "the general Learn page should not default to one setting's exercise");
 assert(html.includes('class="audience-paths setting-chooser"'), "the general Learn page should ask readers to choose a setting");
+
+assert(!html.includes("Try a judgment before you read on."), "the exercise heading should offer itself as the alternative to reading first");

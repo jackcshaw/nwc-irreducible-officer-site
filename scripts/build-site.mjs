@@ -433,10 +433,9 @@ function buildOverviewMode() {
     </section>
     <section class="setting-chooser-band" aria-label="Choose your setting"><h2 class="band-label">Choose your setting</h2><p>Each setting has its own essay and a judgment to try in its own case.</p>
       <div class="audience-paths setting-chooser">
-        ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this view →</strong></a>`).join("")}
+        ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this setting →</strong></a>`).join("")}
       </div>
     </section>
-    <section class="detail-band"><h2 class="band-label">Three settings, one argument to test</h2>${editionLinks()}</section>
     <section class="method-band"><h2>One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions.</p><p>Every setting builds foundations inside the work while learners direct AI. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Read the shared foundation</a></section>
     <section class="learning-paths" aria-label="Ways to use the Lab">
       <a href="#discuss" data-mode-link="discuss"><h2>Discuss</h2><p>Bring an example. Challenge one of five claims with colleagues.</p><span>Open Judgment in Practice →</span></a>
@@ -463,7 +462,7 @@ function buildDiscussMode() {
 
 function buildOpeningPractice(key, audience) {
   const c = profiles.find(p => p.id === audience).practice;
-  return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Try a judgment before you read on.</h2><p class="try-purpose">Three moves the essay argues for: set your own frame before AI answers, decide what to take from an AI answer, and test whether your frame holds when the situation changes.</p><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
+  return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Or try the judgment first.</h2><p class="try-purpose">Three moves the essay argues for: set your own frame before AI answers, decide what to take from an AI answer, and test whether your frame holds when the situation changes.</p><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
     <form data-try-form>
       <div data-try-stage="0"><h3>Your starting point</h3><p>${c.initial}</p><label for="${key}-initial">Your judgment and reason</label><textarea id="${key}-initial" name="initial" rows="3" required maxlength="4000"></textarea><button class="copy-button" type="submit">Examine a contribution</button></div>
       <div data-try-stage="1" hidden><h3>A contribution to examine</h3><p>Constructed AI-style contribution for practice:</p><blockquote>${c.contribution}</blockquote><label for="${key}-reliance">What would you accept, check, revise, or refuse—and why?</label><textarea id="${key}-reliance" name="reliance" rows="3" disabled required maxlength="4000"></textarea><button class="copy-button" type="submit">Change a condition</button></div>
@@ -1431,11 +1430,14 @@ function renderSiteCrumb(mode) {
   const settingName = option ? option.text : "";
   const tab = crumbTabs[mode];
   const isEssay = mode === "essay" || mode.endsWith("-essay");
+  // On an essay, name the setting only when the essay is that setting's edition.
+  const essaySetting = { essay: "pme", "he-essay": "he", "k12-essay": "k12" }[mode];
+  const showSetting = settingName && (!isEssay || setting === essaySetting);
   const inDoc = mode === "workbench" && document.getElementById("panel-workbench")?.dataset.wbView === "doc";
-  crumb.hidden = !tab || inDoc || (!settingName && !isEssay);
+  crumb.hidden = !tab || inDoc || (!showSetting && !isEssay);
   if (crumb.hidden) return;
   const parts = [isEssay ? '<a href="#overview" data-mode-link="overview">' + tab + "</a>" : "<span>" + tab + "</span>"];
-  if (settingName) parts.push(isEssay ? '<a class="crumb-setting" href="#' + setting + '">' + settingName + "</a>" : '<span class="crumb-setting">' + settingName + "</span>");
+  if (showSetting) parts.push(isEssay ? '<a class="crumb-setting" href="#' + setting + '">' + settingName + "</a>" : '<span class="crumb-setting">' + settingName + "</span>");
   if (isEssay) parts.push('<span aria-current="page">Essay</span>');
   crumb.innerHTML = parts.join('<span class="crumb-sep" aria-hidden="true">›</span>');
 }
@@ -2118,6 +2120,11 @@ window.addEventListener("popstate",()=>{
   const rawMode = location.hash.replace("#", "");
   const mode = modeAliases[rawMode] || rawMode;
   if (modeNames.includes(mode) && mode !== activeMode) setMode(mode, false);
+  else if (!modeNames.includes(mode)) {
+    // A section anchor belongs to an essay; reopen that essay if another page is showing.
+    const owner = document.getElementById(rawMode)?.closest("[data-mode]")?.dataset.mode;
+    if (owner && owner !== activeMode) openEssaySection(rawMode, false);
+  }
 });
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {
