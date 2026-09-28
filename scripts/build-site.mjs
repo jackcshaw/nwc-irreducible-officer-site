@@ -793,10 +793,6 @@ function buildWorkbenchMode(tools, concepts) {
           <a id="selected-tool-download" class="quiet-action" href="assets/workbench/${selected.filename}" download>Download</a>
         </div>
       </div>
-      <section class="wb-glance" id="wb-glance" aria-labelledby="wb-glance-title"${selected.glance ? "" : " hidden"}>
-        <h3 id="wb-glance-title">What you'll do</h3>
-        <dl>${(selected.glance || []).map(g => `<div><dt>${escapeHtml(g.label)}</dt><dd>${escapeHtml(g.text)}</dd></div>`).join("")}</dl>
-      </section>
       <section class="wb-next-step" id="wb-next-step" aria-label="Next step" hidden>
         <p class="wb-next-lead" data-next-lead>Copied. Paste it into a new chat in ChatGPT, Claude, or Gemini.</p>
         <p class="wb-next-line"><code id="wb-next-line" tabindex="-1"></code></p>
@@ -805,6 +801,10 @@ function buildWorkbenchMode(tools, concepts) {
         <button class="quiet-action" type="button" data-next-dismiss>Dismiss</button>
       </section>
       <div class="template-layout">
+        <section class="wb-glance" id="wb-glance" aria-labelledby="wb-glance-title"${selected.glance ? "" : " hidden"}>
+          <h3 id="wb-glance-title">What you'll do</h3>
+          <dl>${(selected.glance || []).map(g => `<div><dt>${escapeHtml(g.label)}</dt><dd>${escapeHtml(g.text)}</dd></div>`).join("")}</dl>
+        </section>
         <aside class="use-note">
           <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
@@ -2723,15 +2723,15 @@ h1 {
    trigger :focus-visible, so give these an explicit, visible ring rather than
    leaving them silently unfocused-looking. */
 #workbench-title:focus,
-.tool-card:focus,
-#selected-tool-title:focus-visible {
+.tool-card:focus {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
 
-/* The doc heading takes focus on every open (for screen readers) and sits in
-   the sticky bar, so a ring there would linger; draw it only for keyboard. */
-#selected-tool-title:focus:not(:focus-visible) {
+/* The doc heading takes focus on every open so screen readers land on it. It is
+   not keyboard-reachable (tabindex -1) and sits in the sticky bar, so it draws no
+   ring: one would linger there and compete with the What you'll do card. */
+#selected-tool-title:focus {
   outline: none;
 }
 

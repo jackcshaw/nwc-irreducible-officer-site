@@ -381,3 +381,24 @@ test("the assistant's script is collapsed and opens on demand", async ({ page })
   await script.locator("summary").click();
   await expect(line).toBeVisible();
 });
+
+test("desktop: the card, the how-to note, and the document line up", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#wb-glance")).toBeVisible();
+  const box = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().toJSON());
+  const [card, note, doc] = [await box("#wb-glance"), await box(".use-note"), await box("#workbench-doc-view")];
+  expect(Math.abs(note.top - card.top)).toBeLessThan(8);
+  expect(Math.abs(card.width - doc.width)).toBeLessThan(2);
+  expect(doc.top).toBeGreaterThan(card.bottom);
+  const firstInDoc = await page.locator("#workbench-doc-view > *").first().evaluate(el => el.className);
+  expect(firstInDoc).toBe("assistant-script");
+  const scriptTop = await page.locator("#workbench-doc-view > .assistant-script").evaluate(el => el.getBoundingClientRect().top);
+  expect(scriptTop - doc.top, "no empty band above the collapsed script").toBeLessThan(34);
+});
+
+test("a deep-linked tool title has no focus outline competing with the card", async ({ page }) => {
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator("#selected-tool-title")).toBeFocused();
+  expect(await page.locator("#selected-tool-title").evaluate(el => getComputedStyle(el).outlineStyle)).toBe("none");
+});

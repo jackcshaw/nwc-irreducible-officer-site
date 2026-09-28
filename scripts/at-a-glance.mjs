@@ -24,9 +24,10 @@ export function collapseFacilitation(html, where) {
   const headEnd = html.indexOf("</h2>", start) + "</h2>".length;
   const next = html.indexOf("<h2", headEnd);
   const end = next < 0 ? html.length : next;
-  return html.slice(0, start)
-    + '<details class="assistant-script"><summary>What your assistant will do</summary>'
+  // The assistant's part leads the document, right under the teacher's card.
+  return '<details class="assistant-script"><summary>What your assistant will do</summary>'
     + html.slice(headEnd, end)
     + "</details>\n"
+    + html.slice(0, start)
     + html.slice(end);
 }
