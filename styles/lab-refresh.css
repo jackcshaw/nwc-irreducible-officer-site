@@ -113,6 +113,8 @@ h2,h3 {line-height:1.25;}
 /* The document sets the column's width; the card fills it without widening it. */
 .template-layout>.wb-glance {grid-column:1;grid-row:1;width:0;min-width:100%;box-sizing:border-box;}
 .template-layout>.template-rendered {grid-column:1;grid-row:2;}
+/* Concept notes have no card: let the document take the card's row too. */
+.template-layout:has(>.wb-glance[hidden])>.template-rendered {grid-row:1 / span 2;}
 .wb-next-step {max-width:62ch;margin:0 0 28px;padding:20px 24px;background:var(--paper-soft);border:1px solid var(--faint);border-top:2px solid var(--ink);}
 .wb-next-step p {font-size:17px;line-height:1.5;margin:0 0 12px;}
 .wb-next-step .wb-next-lead {font-family:var(--font-display);font-size:22px;line-height:1.35;color:var(--ink);}

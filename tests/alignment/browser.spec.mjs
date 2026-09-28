@@ -402,3 +402,11 @@ test("a deep-linked tool title has no focus outline competing with the card", as
   await expect(page.locator("#selected-tool-title")).toBeFocused();
   expect(await page.locator("#selected-tool-title").evaluate(el => getComputedStyle(el).outlineStyle)).toBe("none");
 });
+
+test("desktop: a concept note's document starts level with its note", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#wb-doc-facilitation-blocks");
+  await expect(page.locator("#wb-glance")).toBeHidden();
+  const top = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().top);
+  expect(Math.abs((await top("#workbench-doc-view")) - (await top(".use-note")))).toBeLessThan(8);
+});
