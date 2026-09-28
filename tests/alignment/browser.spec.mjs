@@ -334,6 +334,7 @@ test("returning from a concept note focuses its card inside the collapsed notes"
 const toolIds = ["frame-check", "assignment-design", "source-kit", "supervised-delegation", "assessment", "flawed-output", "calibration", "after-action", "method-card"];
 
 test("every tool opens with its What you'll do card above the document", async ({ page }) => {
+  test.setTimeout(90_000); // Walks every tool/setting in one test; slow machines need the room.
   for (const id of toolIds) {
     await page.goto("/?audience=he#workbench");
     await page.locator(`[data-tool-id="${id}"]`).click();
@@ -410,4 +411,194 @@ test("desktop: a concept note's document starts level with its note", async ({ p
   await expect(page.locator("#wb-glance")).toBeHidden();
   const top = sel => page.locator(sel).evaluate(el => el.getBoundingClientRect().top);
   expect(Math.abs((await top("#workbench-doc-view")) - (await top(".use-note")))).toBeLessThan(8);
+});
+
+const settingColour = { pme: "rgb(47, 85, 151)", he: "rgb(107, 58, 107)", k12: "rgb(138, 78, 18)" };
+test("the chip and the rule above the nav carry the setting colour", async ({ page }) => {
+  test.setTimeout(90_000); // Walks every tool/setting in one test; slow machines need the room.
+  for (const id of ["pme", "he", "k12"]) {
+    await page.goto(`/?audience=${id}#companion`);
+    await expect(page.locator("html")).toHaveAttribute("data-setting", id);
+    const chip = await page.locator("#lab-audience").evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(chip, id).toBe(settingColour[id]);
+    const rule = await page.locator(".package-nav-inner").evaluate(el => [getComputedStyle(el).borderTopWidth, getComputedStyle(el).borderTopColor]);
+    expect(rule, id).toEqual(["3px", settingColour[id]]);
+    await expect(page.locator("[data-setting-label]")).toBeVisible();
+  }
+});
+test("with no setting the chip asks you to choose and nothing is coloured", async ({ page }) => {
+  await page.goto("/#companion");
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+  await expect(page.locator("#lab-audience option:checked")).toHaveText("Choose your setting");
+  await expect(page.locator("[data-setting-label]")).toBeHidden();
+  expect(await page.locator(".package-nav-inner").evaluate(el => getComputedStyle(el).borderTopWidth)).toBe("1px");
+});
+test("the essay rail shows reading progress in the setting colour", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  const rail = await page.locator('.toc[data-essay-rail="k12-essay"]').evaluate(el => getComputedStyle(el, "::after").backgroundColor);
+  expect(rail).toBe(settingColour.k12);
+});
+
+test("Learn opens your setting's page", async ({ page }) => {
+  for (const id of ["pme", "he", "k12"]) {
+    await page.goto(`/?audience=${id}#companion`);
+    await page.locator('[data-mode-tab="overview"]').click();
+    await expect(page.locator(`#panel-${id}`)).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+    await expect(page.locator('[data-mode-tab="overview"]')).toHaveAttribute("aria-selected", "true");
+  }
+});
+test("a Learn link that carries a setting opens that setting's page", async ({ page }) => {
+  await page.goto("/?audience=k12#overview");
+  await expect(page.locator("#panel-k12")).toBeVisible();
+  await page.goto("/?audience=he#learn");
+  await expect(page.locator("#panel-he")).toBeVisible();
+});
+test("clearing the setting on a setting page returns to the general Learn page", async ({ page }) => {
+  await page.goto("/?audience=he#he");
+  await page.locator("#lab-audience").selectOption("");
+  await expect(page.locator("#panel-overview")).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+});
+test("Back after Learn, essay, Learn keeps the setting", async ({ page }) => {
+  await page.goto("/?audience=he#companion");
+  await page.locator('[data-mode-tab="overview"]').click();
+  await page.locator('#panel-he a[data-mode-link="he-essay"]').first().click();
+  await expect(page.locator("#panel-he-essay")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#panel-he")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
+});
+
+test("each setting page leads with its essay", async ({ page }) => {
+  const essays = { pme: ["The Irreducible Officer", "essay"], he: ["Judgment in Higher Education", "he-essay"], k12: ["Learning to Exercise Judgment", "k12-essay"] };
+  for (const [id, [title, mode]] of Object.entries(essays)) {
+    await page.goto(`/?audience=${id}#${id}`);
+    await expect(page.locator(`#panel-${id} h1`)).toHaveText(title);
+    const read = page.locator(`#panel-${id} .surface-hero .copy-button.primary`);
+    await expect(read).toHaveText("Read the essay");
+    await expect(read).toHaveAttribute("href", `#${mode}`);
+  }
+});
+test("the general Learn page offers the three settings instead of one exercise", async ({ page }) => {
+  await page.goto("/#overview");
+  await expect(page.locator("#panel-overview [data-try]")).toHaveCount(0);
+  await page.locator('#panel-overview .setting-chooser a[data-mode-link="k12"]').click();
+  await expect(page.locator("#panel-k12")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
+});
+
+async function crumbText(page) {
+  return (await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "");
+}
+
+test("the breadcrumb names the page and the setting", async ({ page }) => {
+  const cases = [["/?audience=he#he", "Learn›Higher education"], ["/?audience=he#he-essay", "Learn›Higher education›Essay"], ["/?audience=pme#companion", "Practice›PME"], ["/?audience=k12#workbench", "Design›K–12 · High school"], ["/#essay", "Learn›Essay"]];
+  for (const [url, text] of cases) {
+    await page.goto(url);
+    await expect(page.locator("[data-site-crumb]"), url).toBeVisible();
+    expect(await crumbText(page), url).toBe(text.replace(/\s+/g, ""));
+  }
+});
+test("the breadcrumb sits above the essay's edition line and hides where it adds nothing", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  const crumb = await page.locator("[data-site-crumb]").evaluate(el => el.getBoundingClientRect().top);
+  const published = await page.locator("#panel-he-essay .published").evaluate(el => el.getBoundingClientRect().top);
+  expect(crumb).toBeLessThan(published);
+  await page.goto("/#overview");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+  await page.goto("/?audience=he#sources");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator(".wb-breadcrumb")).toBeVisible();
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+});
+test("the breadcrumb's setting name carries the setting colour", async ({ page }) => {
+  await page.goto("/?audience=pme#pme");
+  expect(await page.locator("[data-site-crumb] .crumb-setting").evaluate(el => getComputedStyle(el).color)).toBe(settingColour.pme);
+});
+
+test("the setting page's purpose line reads at body size and the edition note sits with the summary", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?audience=he#he");
+  const [size, colour] = await page.locator("#panel-he .try-purpose").evaluate(el => [parseFloat(getComputedStyle(el).fontSize), getComputedStyle(el).color]);
+  expect(size).toBeGreaterThanOrEqual(18);
+  expect(colour).toBe("rgb(10, 34, 66)");
+  const noteTop = await page.locator("#panel-he .surface-hero .hero-note").evaluate(el => el.getBoundingClientRect().top);
+  const buttonsTop = await page.locator("#panel-he .surface-hero .action-row").evaluate(el => el.getBoundingClientRect().top);
+  expect(noteTop).toBeLessThan(buttonsTop);
+});
+
+test("choosing All settings on Practice clears the breadcrumb", async ({ page }) => {
+  await page.goto("/?audience=pme#companion");
+  await expect(page.locator("[data-site-crumb]")).toBeVisible();
+  await page.locator("#lab-audience").selectOption("");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+});
+test("Back after choosing a setting from the general page returns to the general page", async ({ page }) => {
+  await page.goto("/#overview");
+  await page.locator('#panel-overview .setting-chooser a[data-mode-link="he"]').click();
+  await expect(page.locator("#panel-he")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#panel-overview")).toBeVisible();
+  await expect(page.locator("#panel-he")).toBeHidden();
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+});
+test("switching setting mid-essay starts the new essay at the top", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  await page.evaluate(() => window.scrollTo(0, 3000));
+  await page.locator("#lab-audience").selectOption("k12");
+  await expect(page.locator("#panel-k12-essay")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(200);
+});
+test("Open the teaching guide opens the guide", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  await page.locator('#panel-he-essay a[data-open-guide]').click();
+  const guide = page.locator("#panel-he details.teaching-guide");
+  await expect(guide).toHaveAttribute("open", "");
+  await expect(guide.locator("summary")).toBeInViewport();
+});
+test("on an essay the breadcrumb's setting name leads to the setting page", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  await page.locator("[data-site-crumb] a.crumb-setting").click();
+  await expect(page.locator("#panel-k12")).toBeVisible();
+});
+test("the setting page's other routes are quiet links in tab order", async ({ page }) => {
+  await page.goto("/?audience=he#he");
+  await expect(page.locator("#panel-he .surface-hero .hero-routes a")).toHaveText(["Discuss", "Practice", "Design"]);
+  await expect(page.locator("#panel-he .surface-hero .quiet-action")).toHaveCount(0);
+});
+
+test("on another setting's essay the breadcrumb does not claim your setting", async ({ page }) => {
+  await page.goto("/?audience=he#essay");
+  expect(await crumbText(page)).toBe("Learn›Essay");
+  await page.goto("/?audience=pme#essay");
+  expect(await crumbText(page)).toBe("Learn›PME›Essay");
+});
+test("Back after a section link and a setting change restores the essay and its setting", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  await page.locator('.toc[data-essay-rail="he-essay"] a').nth(2).click();
+  await expect(page).toHaveURL(/#he-essay-/);
+  await page.locator("#lab-audience").selectOption("k12");
+  await expect(page.locator("#panel-k12-essay")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#panel-he-essay")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
+  expect(await crumbText(page)).toBe("Learn›Highereducation›Essay");
+});
+test("the general Learn page lists each setting once", async ({ page }) => {
+  await page.goto("/#overview");
+  await expect(page.locator("#panel-overview").getByText("Three settings, one argument to test")).toHaveCount(0);
+  await expect(page.locator("#panel-overview .setting-chooser .audience-path strong").first()).toHaveText("Open this setting →");
+});
+
+test("reading another setting's edition keeps your setting", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  await page.locator('#panel-k12-essay a[data-mode-link="he-essay"]').first().click();
+  await expect(page.locator("#panel-he-essay")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
+  await expect(page).toHaveURL(/audience=k12/);
+  expect(await crumbText(page)).toBe("Learn›Essay");
+  await page.goto("/#he-essay");
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
 });

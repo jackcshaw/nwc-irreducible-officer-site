@@ -362,8 +362,8 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       ${modeButton("workbench", "Design")}
       ${modeButton("sources", "References")}
     </div>
-    <label class="audience-setting" for="lab-audience">Audience
-      <select id="lab-audience"><option value="">All settings</option>${audiences.map(a=>`<option value="${a.id}">${escapeHtml(a.label)}</option>`).join("")}</select>
+    <label class="audience-setting" for="lab-audience"><span data-setting-label hidden>Your setting</span>
+      <select id="lab-audience" aria-label="Your setting"><option value="">All settings</option>${audiences.map(a=>`<option value="${a.id}">${escapeHtml(a.label)}</option>`).join("")}</select>
     </label>
     </div>
   </nav>
@@ -376,6 +376,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     }).join("")}
 
     <div class="content-frame">
+      <nav class="site-crumb" aria-label="Breadcrumb" data-site-crumb hidden></nav>
       <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
       ${audiences.map(a => `<section class="mode-view" data-mode="${a.id}" id="panel-${a.id}" role="region" aria-label="${escapeHtml(a.title)}">${buildAudienceMode(a)}</section>`).join("")}
       ${companionEditions.map(a => `<section class="mode-view" data-mode="${a.essayMode}" id="panel-${a.essayMode}" role="region" aria-label="${escapeHtml(a.essayTitle)}">${buildCompanionEssay(a)}</section>`).join("")}
@@ -430,10 +431,10 @@ function buildOverviewMode() {
       <div><h1>When AI helps,<br>who owns the judgment?</h1><p class="dek">Better work can make human understanding harder to see.</p><p>Explore the argument. Challenge it with others. Test a decision, then design practice that makes the reasoning visible.</p></div>
       <aside class="featured-reading"><h2>The Irreducible Officer</h2><p>The essay that started the Lab: purpose, accountability, and judgment in work shaped by AI.</p><a href="#essay" data-mode-link="essay">Read the essay <span aria-hidden="true">→</span></a><span class="reading-context">The original PME argument, with full companion essays for higher education and high-school educators.</span></aside>
     </section>
-    ${buildOpeningPractice("home", "he")}
-    <section class="detail-band"><h2 class="band-label">Three settings, one argument to test</h2>${editionLinks()}</section>
-    <section class="audience-paths" aria-label="Choose your setting">
-      ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this view →</strong></a>`).join("")}
+    <section class="setting-chooser-band" aria-label="Choose your setting"><h2 class="band-label">Choose your setting</h2><p>Each setting has its own essay and a judgment to try in its own case.</p>
+      <div class="audience-paths setting-chooser">
+        ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this setting →</strong></a>`).join("")}
+      </div>
     </section>
     <section class="method-band"><h2>One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions.</p><p>Every setting builds foundations inside the work while learners direct AI. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Read the shared foundation</a></section>
     <section class="learning-paths" aria-label="Ways to use the Lab">
@@ -461,7 +462,7 @@ function buildDiscussMode() {
 
 function buildOpeningPractice(key, audience) {
   const c = profiles.find(p => p.id === audience).practice;
-  return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Try a judgment before you read on.</h2><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
+  return `<section class="judgment-try" data-try="${key}" data-try-audience="${audience}"><h2>Or try the judgment first.</h2><p class="try-purpose">Three moves the essay argues for: set your own frame before AI answers, decide what to take from an AI answer, and test whether your frame holds when the situation changes.</p><p>${c.label} · fictional example. A short, scripted practice sequence. Your responses stay in this tab unless you download or share them; reloading clears them.</p>
     <form data-try-form>
       <div data-try-stage="0"><h3>Your starting point</h3><p>${c.initial}</p><label for="${key}-initial">Your judgment and reason</label><textarea id="${key}-initial" name="initial" rows="3" required maxlength="4000"></textarea><button class="copy-button" type="submit">Examine a contribution</button></div>
       <div data-try-stage="1" hidden><h3>A contribution to examine</h3><p>Constructed AI-style contribution for practice:</p><blockquote>${c.contribution}</blockquote><label for="${key}-reliance">What would you accept, check, revise, or refuse—and why?</label><textarea id="${key}-reliance" name="reliance" rows="3" disabled required maxlength="4000"></textarea><button class="copy-button" type="submit">Change a condition</button></div>
@@ -481,16 +482,17 @@ function buildCompanionEssay(a) {
   const body = prefixIds(renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>"), prefix)
     .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
   const subtitle = markdown.split("\n").find(line=>line.startsWith("## ")).slice(3);
-  return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
+  return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}" data-open-guide>Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
 }
 
 function buildAudienceMode(a) {
   return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
-    <section class="surface-hero"><h1>${escapeHtml(a.title)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
-    <div class="action-row"><a class="copy-button primary" href="#companion" data-mode-link="companion">Start an interactive session</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Adapt your teaching</a><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></div></section>
-    <section class="detail-band"><h2 class="band-label">The argument in your setting</h2><p><a href="#${a.essayMode}" data-mode-link="${a.essayMode}">${escapeHtml(a.essayTitle)}</a></p><p>Read the full essay, then use the guide below to try its method. ${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p></section>
+    <section class="surface-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
+    <p class="hero-note">${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p>
+    <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a></div>
+    <nav class="hero-routes" aria-label="More in this setting"><a href="#discuss" data-mode-link="discuss">Discuss</a><a href="#companion" data-mode-link="companion">Practice</a><a href="#workbench" data-mode-link="workbench">Design</a></nav></section>
     ${buildOpeningPractice(a.id, a.id)}
-    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
+    <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide"><p><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></p>${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;
 }
 
@@ -1403,6 +1405,42 @@ function applyAudience(id) {
     el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide and its matching full essay edition.\\n\\n" : "") + local;
   });
   if (typeof refreshWorkbench === "function") refreshWorkbench();
+  markSetting(currentWorkbenchAudience);
+}
+
+// The chosen setting colours the chip, the rule above the nav, and the essay rail.
+function markSetting(id) {
+  const settingLabel = audienceLabels[id];
+  const root = document.documentElement;
+  if (settingLabel) root.dataset.setting = id; else delete root.dataset.setting;
+  const select = document.getElementById("lab-audience");
+  if (select) select.options[0].text = settingLabel ? "All settings" : "Choose your setting";
+  const label = document.querySelector("[data-setting-label]");
+  if (label) label.hidden = !settingLabel;
+  renderSiteCrumb(activeMode);
+}
+
+// One breadcrumb above the content: the tab, the chosen setting, and "Essay" when reading one.
+// References does not change with the setting, and the workbench tool view has its own trail.
+const crumbTabs = { overview: "Learn", essay: "Learn", "he-essay": "Learn", "k12-essay": "Learn", pme: "Learn", he: "Learn", k12: "Learn", discuss: "Discuss", companion: "Practice", workbench: "Design" };
+function renderSiteCrumb(mode) {
+  const crumb = document.querySelector("[data-site-crumb]");
+  if (!crumb) return;
+  const setting = new URL(location.href).searchParams.get("audience");
+  const option = audienceLabels[setting] && document.querySelector('#lab-audience option[value="' + setting + '"]');
+  const settingName = option ? option.text : "";
+  const tab = crumbTabs[mode];
+  const isEssay = mode === "essay" || mode.endsWith("-essay");
+  // On an essay, name the setting only when the essay is that setting's edition.
+  const essaySetting = { essay: "pme", "he-essay": "he", "k12-essay": "k12" }[mode];
+  const showSetting = settingName && (!isEssay || setting === essaySetting);
+  const inDoc = mode === "workbench" && document.getElementById("panel-workbench")?.dataset.wbView === "doc";
+  crumb.hidden = !tab || inDoc || (!showSetting && !isEssay);
+  if (crumb.hidden) return;
+  const parts = [isEssay ? '<a href="#overview" data-mode-link="overview">' + tab + "</a>" : "<span>" + tab + "</span>"];
+  if (showSetting) parts.push(isEssay ? '<a class="crumb-setting" href="#' + setting + '">' + settingName + "</a>" : '<span class="crumb-setting">' + settingName + "</span>");
+  if (isEssay) parts.push('<span aria-current="page">Essay</span>');
+  crumb.innerHTML = parts.join('<span class="crumb-sep" aria-hidden="true">›</span>');
 }
 // Initial audience application occurs through setMode after client state is initialized.
 const essayRails = Array.from(document.querySelectorAll("[data-essay-rail]"));
@@ -1571,8 +1609,12 @@ function smoothBehavior() {
 
 function setMode(mode, shouldScroll = true, push = false) {
   const url = new URL(location.href);
+  const chosenSetting = url.searchParams.get("audience");
+  // Learn is the chosen setting's page; with no setting it is the general page.
+  if (mode === "overview" && audienceLabels[chosenSetting]) mode = chosenSetting;
   if (audienceLabels[mode]) url.searchParams.set("audience", mode);
-  if (["he-essay","k12-essay"].includes(mode)) url.searchParams.set("audience",mode.replace("-essay",""));
+  // An edition sets the setting only when none is chosen; reading another edition keeps your choice.
+  if (["he-essay","k12-essay"].includes(mode) && !audienceLabels[chosenSetting]) url.searchParams.set("audience",mode.replace("-essay",""));
   applyAudience(url.searchParams.get("audience"));
   const previousMode = activeMode;
   activeMode = mode;
@@ -1622,6 +1664,7 @@ function setMode(mode, shouldScroll = true, push = false) {
   if (mode !== previousMode || shouldScroll) {
     trackPackageEvent("Surface Viewed", { surface: mode, label: eventLabelFromMode(mode) });
   }
+  renderSiteCrumb(mode);
   invalidateTocGeometry();
 }
 
@@ -1706,6 +1749,10 @@ modeLinks.forEach((link) => {
     }
     trackPackageEvent("Package Path Opened", { surface: mode, label: eventLabelFromMode(mode) });
     setMode(mode, true, true);
+    if (link.hasAttribute("data-open-guide")) {
+      const guide = document.querySelector("#panel-" + mode + " details.teaching-guide");
+      if (guide) { guide.open = true; window.requestAnimationFrame(() => scrollElementBelowNav(guide)); }
+    }
   });
 });
 
@@ -1935,6 +1982,7 @@ function selectDocument(item, isFromConcept = false, push = true) {
     const heading = document.getElementById("selected-tool-title");
     if (heading) heading.focus();
   });
+  renderSiteCrumb(activeMode);
 }
 
 // The sticky action bar sits just below the sticky site nav, whose height
@@ -2061,13 +2109,23 @@ function changeAudience(event) {
   history.pushState(null,"",url);
   // A panel copied for the previous audience would point at the wrong file.
   hideNextStep();
-  if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
+  if (nextMode !== activeMode) setMode(nextMode,true); else applyAudience(id);
 }
 document.getElementById("lab-audience").addEventListener("change",changeAudience);
 window.addEventListener("popstate",()=>{
   const id = new URL(location.href).searchParams.get("audience");
   if ((audienceLabels[id] ? id : "") !== currentWorkbenchAudience) hideNextStep();
   applyAudience(id);
+  // Back and Forward can change the page as well as the setting; re-resolve it so the two agree.
+  const rawMode = location.hash.replace("#", "");
+  const mode = modeAliases[rawMode] || rawMode;
+  const isKnownMode = modeNames.includes(mode);
+  if (isKnownMode && mode !== activeMode) setMode(mode, false);
+  else if (!isKnownMode) {
+    // A section anchor belongs to an essay; reopen that essay if another page is showing.
+    const owner = document.getElementById(rawMode)?.closest("[data-mode]")?.dataset.mode;
+    if (owner && owner !== activeMode) openEssaySection(rawMode, false);
+  }
 });
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {

@@ -45,7 +45,7 @@ for (const id of ["pme","he","k12"]) {
   const context={URL, audienceLabels:{pme:"PME",he:"HE",k12:"high school"},
     get location(){return current;}, history:{pushState(_a,_b,url){current=new URL(url,current);},replaceState(_a,_b,url){current=new URL(url,current);}},
     applyAudience(value){selected=value;}, activeMode:"overview", document:{body:{dataset:{}}}, buttons:[],views:[],
-    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},selectEssayRail(){},ensureWorkbenchData(){return Promise.resolve();}};
+    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},selectEssayRail(){},renderSiteCrumb(){},ensureWorkbenchData(){return Promise.resolve();}};
   vm.runInNewContext(routing+';setMode("'+id+'",false);setMode("companion",true,true);',context);
   assert.equal(current.searchParams.get("audience"),id,"Direct audience link loses setting");
   assert.equal(selected,id,"Prompt audience does not follow route");
@@ -115,7 +115,7 @@ const applyCode=script.match(/function applyAudience\([\s\S]+?\n}\n/)[0];
 const elements=Object.fromEntries(['lab-audience','workbench-title','workbench-summary','workbench-setting-status','workbench-context-download'].map(id=>[id,{}]));
 const prompt={id:'workbench-setup-prompt',textContent:''};
 const panels=profiles.map(p=>({dataset:{workbenchAudience:p.id},hidden:true}));
-const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
+const context={URL,location:new URL('https://test.example/?audience=he#workbench'),workbenchProfiles:JSON.parse(profileDecl),workbenchPrompts:JSON.parse(promptDecl),audienceLabels:{pme:'PME',he:'higher education',k12:'high school'},currentWorkbenchAudience:'',markSetting(){},promptBases:new Map([[prompt,'generic prompt']]),refreshWorkbench(){},document:{getElementById(id){return elements[id];},querySelectorAll(sel){return sel==='[data-workbench-audience]'?panels:[];}}};
 vm.runInNewContext(applyCode,context);
 for(const p of [...profiles,profiles[0]]) {
  context.applyAudience(p.id);
@@ -203,14 +203,15 @@ for (const a of catalog.filter(a=>a.id!=='pme')) {
   assert.equal((panel.match(/<details/g)||[]).length,(panel.match(/<\/details>/g)||[]).length,'source spine is inside an unclosed <details>'); }
 for(const mode of ['he-essay','k12-essay']) {
  let current=new URL('https://test.example/#'+mode),selected;
- const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){}};
+ const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){},renderSiteCrumb(){}};
  vm.runInNewContext(routing+';setMode("'+mode+'",false);',ctx);
  assert.equal(selected,mode.replace('-essay',''));
  assert.equal(current.searchParams.get('audience'),selected);
 }
 routeContext.activeMode='he-essay';routeContext.changeAudience({target:{value:'k12'}});assert.equal(routeContext.activeMode,'k12-essay');
 assert(html.includes('Teaching guide and review notes (reveals the case analysis)</summary>'));
-assert.equal((html.match(/data-try-stage="0"/g)||[]).length,4);
+// One exercise per setting page; the general Learn page asks for a setting instead.
+assert.equal((html.match(/data-try-stage="0"/g)||[]).length,3);
 assert(html.includes('caseText+fields.map'),'Downloaded practice record must include the actual case');
 assert(html.includes('p.textContent=field.value'),'User responses must be rendered as text');
 console.log('companion essays passed: sequential sections, source parity, complete contexts, relative links and audience routing');
