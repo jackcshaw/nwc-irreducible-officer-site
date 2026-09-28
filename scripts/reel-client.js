@@ -23,8 +23,9 @@
   const dot = dialog.querySelector(".reel-dot");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  const SEEN = "jl-reel-seen";
+  const SEEN = dialog.dataset.seenKey; // one key, set by the build for <head> and here
   const HANDOFF_AT = 13.6; // seconds: the end card has held long enough to read
+  const STALL_MS = 5000; // playing but stuck this long: step aside rather than hold the site
   const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
   const FADE_OUT = [{ opacity: 1 }, { opacity: 0 }];
   // The reel's closing red period, as fractions of its 1920×1080 frame.
@@ -40,7 +41,9 @@
 
   function load() {
     if (video.dataset.loaded) {
-      if (video.error) video.load();
+      // After a failed load every source can be spent without an error set;
+      // start source selection again so a replay can recover.
+      if (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) video.load();
       return;
     }
     video.dataset.loaded = "true";
@@ -82,6 +85,9 @@
     syncSound();
     close.textContent = intro ? "Skip" : "Close";
     close.setAttribute("aria-label", intro ? "Skip the reel" : "Close the reel");
+    // Hold the scrollbar's width while scrolling is locked, so the page behind
+    // (and the period the dot lands on) does not shift on open or close.
+    root.style.setProperty("--reel-gutter", `${window.innerWidth - root.clientWidth}px`);
     root.classList.add("reel-open");
     dialog.showModal();
     // Focus the dialog itself: screen readers announce it, Tab reaches the
@@ -105,10 +111,25 @@
 
   function track(id) {
     cancelAnimationFrame(frame);
-    const step = () => {
+    let last = -1;
+    let movedAt = performance.now();
+    let prev = movedAt;
+    const step = (now) => {
       if (id !== session || leaving) return;
-      if (video.duration) progress.style.transform = `scaleX(${Math.min(1, video.currentTime / video.duration)})`;
-      if (video.currentTime >= HANDOFF_AT) return handoff();
+      const t = video.currentTime;
+      // A hidden tab runs no frames and browsers pause muted video there, so a
+      // long gap between frames is time away, not a stall.
+      if (t !== last || now - prev > 1000) {
+        last = t;
+        movedAt = now;
+      } else if (t > 0 && now - movedAt > STALL_MS) {
+        // The start timer covers a reel that never begins; this covers one that
+        // began and then stopped moving (a dropped connection, a stalled stream).
+        return dismiss();
+      }
+      prev = now;
+      if (video.duration) progress.style.transform = `scaleX(${Math.min(1, t / video.duration)})`;
+      if (t >= HANDOFF_AT) return handoff();
       frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);
@@ -116,9 +137,11 @@
 
   function fadeVolume(ms) {
     if (video.muted) return;
+    const id = session;
     const start = performance.now();
     const from = video.volume;
     const step = (now) => {
+      if (id !== session) return;
       const t = Math.min(1, (now - start) / ms);
       video.volume = from * (1 - t);
       if (t < 1 && dialog.open) requestAnimationFrame(step);
@@ -208,14 +231,16 @@
     stop();
     resetMotion();
     root.classList.remove("reel-open");
+    root.style.removeProperty("--reel-gutter");
   });
   video.addEventListener("playing", () => clearTimeout(startTimer));
   video.addEventListener("ended", () => handoff());
-  // Source errors do not bubble; catch them on the way down and give up only
-  // once no source is left to try.
+  // Source errors do not bubble; catch them on the way down. One failed source
+  // is not the end while another remains, so give up on a media error (the
+  // element's own, including one mid-play) or once no source is left.
   video.addEventListener(
     "error",
-    () => video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE && dismiss(false),
+    () => (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) && dismiss(false),
     true,
   );
   sound.addEventListener("click", () => {
@@ -227,9 +252,24 @@
   replay.addEventListener("animationend", () => replay.classList.remove("is-cued"));
 
   if (root.classList.contains("reel-pending")) {
-    try {
-      localStorage.setItem(SEEN, "1");
-    } catch {}
-    open(true);
+    const start = () => {
+      try {
+        localStorage.setItem(SEEN, "1");
+      } catch {}
+      open(true);
+    };
+    if (document.visibilityState === "hidden") {
+      // Opened in a background tab (or prerendered): show the site for now and
+      // start the reel the first time the visitor actually sees the tab.
+      reveal();
+      const onShow = () => {
+        if (document.visibilityState !== "visible") return;
+        document.removeEventListener("visibilitychange", onShow);
+        start();
+      };
+      document.addEventListener("visibilitychange", onShow);
+    } else {
+      start();
+    }
   }
 })();

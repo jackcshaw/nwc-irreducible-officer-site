@@ -27,10 +27,13 @@
    never runs, the page reveals itself after three seconds. */
 html.reel-pending .lab-masthead,html.reel-pending .package-nav,html.reel-pending .site-shell,html.reel-pending .lab-footer {visibility:hidden;animation:reel-reveal 0s linear 3s forwards;}
 @keyframes reel-reveal {to {visibility:visible;}}
-html.reel-open {overflow:hidden;}
+html.reel-open {overflow:hidden;padding-right:var(--reel-gutter,0px);}
 
 .reel {position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;color:var(--ink);overflow:hidden;}
 .reel::backdrop {background:transparent;}
+/* Browsers without <dialog> have no rule hiding a closed one; without this the
+   fixed, paper-filled dialog would cover every page. */
+.reel:not([open]) {display:none;}
 .reel:focus {outline:none;}
 .reel-surface {position:absolute;inset:0;display:grid;place-items:center;background:var(--paper);}
 /* Sized to the frame so its box is the picture; the feathered edge hides any

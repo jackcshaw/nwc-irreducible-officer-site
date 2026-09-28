@@ -193,6 +193,8 @@ for (const name of reelFiles) {
   reelVersionHash.update(readFileSync(source));
 }
 const reelVersion = reelVersionHash.digest("hex").slice(0, 10);
+// The returning-visitor flag: read by the <head> check, written by reel-client.js.
+const REEL_SEEN_KEY = "jl-reel-seen";
 
 const assetResult = spawnSync(
   assetCommand.command,
@@ -428,24 +430,27 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 // the reel covers it: home page only, first visit only, and never when the
 // visitor prefers reduced motion or has asked to save data.
 function reelEligibility() {
-  return `try {
-    var h = location.hash.slice(1);
-    if (
-      (!h || h === "overview" || h === "learn") &&
-      localStorage.getItem("jl-reel-seen") !== "1" &&
-      !matchMedia("(prefers-reduced-motion: reduce)").matches &&
-      !(navigator.connection && navigator.connection.saveData) &&
-      window.HTMLDialogElement &&
-      "showModal" in HTMLDialogElement.prototype
-    ) {
-      document.documentElement.classList.add("reel-pending");
-    }
-  } catch (e) {}`;
+  // Wrapped so none of its names become page globals.
+  return `(function () {
+    try {
+      var h = location.hash.slice(1);
+      if (
+        (!h || h === "overview" || h === "learn") &&
+        localStorage.getItem(${JSON.stringify(REEL_SEEN_KEY)}) !== "1" &&
+        !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        !(navigator.connection && navigator.connection.saveData) &&
+        window.HTMLDialogElement &&
+        "showModal" in HTMLDialogElement.prototype
+      ) {
+        document.documentElement.classList.add("reel-pending");
+      }
+    } catch (e) {}
+  })();`;
 }
 
 function reelDialog() {
   const asset = (name) => `assets/reel/${name}?v=${reelVersion}`;
-  return `<dialog id="reel-dialog" class="reel" tabindex="-1" aria-label="Judgment Lab reel" aria-describedby="reel-description" data-mp4="${asset("judgment-lab-reel.mp4")}" data-webm="${asset("judgment-lab-reel.webm")}" data-poster="${asset("poster.jpg")}">
+  return `<dialog id="reel-dialog" class="reel" tabindex="-1" aria-label="Judgment Lab reel" aria-describedby="reel-description" data-mp4="${asset("judgment-lab-reel.mp4")}" data-webm="${asset("judgment-lab-reel.webm")}" data-poster="${asset("poster.jpg")}" data-seen-key="${REEL_SEEN_KEY}">
     <div class="reel-surface"><video class="reel-video" playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
     <p id="reel-description" class="sr-only">A 15-second film. A red dot, standing for human judgment, holds still while pages of machine-written analysis flood the screen. Everything freezes and four words form a question: whose judgment is this? The film then works through the closing line of The Irreducible Officer: frame the problem, calibrate the tool, refuse the garden path, own the decision. The dot becomes the period in the Judgment Lab wordmark.</p>
     <div class="reel-controls">
