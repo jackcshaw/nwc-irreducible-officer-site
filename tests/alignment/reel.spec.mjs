@@ -48,9 +48,9 @@ test("the reel autoplays only on the first visit", async ({ page }) => {
   expect(await isOpen(page)).toBe(false);
 });
 
-for (const [hash, mode] of [["workbench", "workbench"], ["sources", "sources"], ["he-essay", "he-essay"]]) {
-  test(`a first visit to #${hash} goes straight to that page`, async ({ page }) => {
-    await page.goto(`/#${hash}`);
+for (const mode of ["workbench", "sources", "he-essay"]) {
+  test(`a first visit to #${mode} goes straight to that page`, async ({ page }) => {
+    await page.goto(`/#${mode}`);
     await expect(page.locator("body")).toHaveAttribute("data-active-mode", mode);
     await expect(page.locator(".lab-masthead")).toBeVisible();
     await expect(page.getByRole("button", { name: /Watch the reel/ })).toBeVisible();

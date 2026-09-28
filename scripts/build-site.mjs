@@ -428,7 +428,19 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 // the reel covers it: home page only, first visit only, and never when the
 // visitor prefers reduced motion or has asked to save data.
 function reelEligibility() {
-  return `try{var h=location.hash.slice(1);if((!h||h==="overview"||h==="learn")&&localStorage.getItem("jl-reel-seen")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!(navigator.connection&&navigator.connection.saveData)&&window.HTMLDialogElement&&"showModal" in HTMLDialogElement.prototype)document.documentElement.classList.add("reel-pending")}catch(e){}`;
+  return `try {
+    var h = location.hash.slice(1);
+    if (
+      (!h || h === "overview" || h === "learn") &&
+      localStorage.getItem("jl-reel-seen") !== "1" &&
+      !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+      !(navigator.connection && navigator.connection.saveData) &&
+      window.HTMLDialogElement &&
+      "showModal" in HTMLDialogElement.prototype
+    ) {
+      document.documentElement.classList.add("reel-pending");
+    }
+  } catch (e) {}`;
 }
 
 function reelDialog() {

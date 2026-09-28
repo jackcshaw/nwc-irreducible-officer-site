@@ -26,6 +26,7 @@
   const SEEN = "jl-reel-seen";
   const HANDOFF_AT = 13.6; // seconds: the end card has held long enough to read
   const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
+  const FADE_OUT = [{ opacity: 1 }, { opacity: 0 }];
   // The reel's closing red period, as fractions of its 1920×1080 frame.
   const PERIOD = { x: 1421.5 / 1920, y: 528.6 / 1080, size: 21.3 / 1920 };
   // Source Serif 4's period: ink centre 0.1297em from the glyph origin and
@@ -89,15 +90,16 @@
     reveal();
     // A replay rewinds; a first play already starts at the beginning.
     if (video.currentTime > 0) video.currentTime = 0;
-    clearTimeout(startTimer);
     // Never keep the site waiting on the network. The first frame is already on
     // screen as the poster and Skip is available, so the intro allows for a
     // cold media start; a replay was asked for, so it waits longer still.
-    startTimer = setTimeout(() => {
+    const giveUp = () => {
       if (id === session) dismiss(false);
-    }, intro ? 8000 : 12000);
+    };
+    clearTimeout(startTimer);
+    startTimer = setTimeout(giveUp, intro ? 8000 : 12000);
     const playing = video.play();
-    if (playing) playing.catch(() => id === session && dismiss(false));
+    if (playing) playing.catch(giveUp);
     track(id);
   }
 
@@ -124,15 +126,22 @@
     requestAnimationFrame(step);
   }
 
-  function dismiss(fade = true) {
-    if (!dialog.open) return;
-    const id = ++session;
+  // Stops the film and anything it scheduled; callbacks still in flight see a
+  // new session and bail.
+  function stop() {
+    session++;
     leaving = true;
     clearTimeout(startTimer);
     cancelAnimationFrame(frame);
     video.pause();
+  }
+
+  function dismiss(fade = true) {
+    if (!dialog.open) return;
+    stop();
+    const id = session;
     if (!fade || reduce.matches) return finish(id);
-    dialog.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: "ease-out" }).finished.then(() => finish(id));
+    dialog.animate(FADE_OUT, { duration: 320, easing: "ease-out" }).finished.then(() => finish(id));
   }
 
   function finish(id) {
@@ -152,15 +161,13 @@
     const period = document.querySelector(".package-brand .brand-period");
     const target = period && period.getBoundingClientRect();
     const onScreen = target && target.width > 0 && target.bottom > 0 && target.top < window.innerHeight;
-    if (reduce.matches || !onScreen) {
-      leaving = false;
-      return dismiss();
-    }
+    if (reduce.matches || !onScreen) return dismiss();
 
     const box = video.getBoundingClientRect();
     const from = { x: box.left + PERIOD.x * box.width, y: box.top + PERIOD.y * box.height, size: PERIOD.size * box.width };
     const em = parseFloat(getComputedStyle(period).fontSize);
     const to = { x: target.left + GLYPH.x * em, y: target.top + (GLYPH.ascent - GLYPH.lift) * em, size: GLYPH.size * em };
+    // A quadratic curve that bows above both ends, sampled into keyframes.
     const bow = Math.hypot(to.x - from.x, to.y - from.y) * 0.12;
     const cx = (from.x + to.x) / 2;
     const cy = Math.min(from.y, to.y) - bow;
@@ -178,9 +185,9 @@
     dot.style.transform = path[0].transform;
     dot.hidden = false;
     const timing = (duration, delay = 0) => ({ duration, delay, easing: EASE, fill: "forwards" });
-    controls.animate([{ opacity: 1 }, { opacity: 0 }], timing(200));
-    video.animate([{ opacity: 1 }, { opacity: 0 }], timing(280));
-    surface.animate([{ opacity: 1 }, { opacity: 0 }], timing(700, 160));
+    controls.animate(FADE_OUT, timing(200));
+    video.animate(FADE_OUT, timing(280));
+    surface.animate(FADE_OUT, timing(700, 160));
     dot
       .animate(path, timing(1000, 80))
       .finished.then(() => {
@@ -198,16 +205,12 @@
   // Every way out lands here, including an Escape the browser will not let
   // the page intercept.
   dialog.addEventListener("close", () => {
-    session++;
-    leaving = true;
-    clearTimeout(startTimer);
-    cancelAnimationFrame(frame);
-    video.pause();
+    stop();
     resetMotion();
     root.classList.remove("reel-open");
   });
   video.addEventListener("playing", () => clearTimeout(startTimer));
-  video.addEventListener("ended", () => dialog.open && handoff());
+  video.addEventListener("ended", () => handoff());
   // Source errors do not bubble; catch them on the way down and give up only
   // once no source is left to try.
   video.addEventListener(
