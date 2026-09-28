@@ -488,12 +488,16 @@ test("the general Learn page offers the three settings instead of one exercise",
   await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
 });
 
+async function crumbText(page) {
+  return (await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "");
+}
+
 test("the breadcrumb names the page and the setting", async ({ page }) => {
   const cases = [["/?audience=he#he", "Learn›Higher education"], ["/?audience=he#he-essay", "Learn›Higher education›Essay"], ["/?audience=pme#companion", "Practice›PME"], ["/?audience=k12#workbench", "Design›K–12 · High school"], ["/#essay", "Learn›Essay"]];
   for (const [url, text] of cases) {
     await page.goto(url);
     await expect(page.locator("[data-site-crumb]"), url).toBeVisible();
-    expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, ""), url).toBe(text.replace(/\s+/g, ""));
+    expect(await crumbText(page), url).toBe(text.replace(/\s+/g, ""));
   }
 });
 test("the breadcrumb sits above the essay's edition line and hides where it adds nothing", async ({ page }) => {
@@ -567,9 +571,9 @@ test("the setting page's other routes are quiet links in tab order", async ({ pa
 
 test("on another setting's essay the breadcrumb does not claim your setting", async ({ page }) => {
   await page.goto("/?audience=he#essay");
-  expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "")).toBe("Learn›Essay");
+  expect(await crumbText(page)).toBe("Learn›Essay");
   await page.goto("/?audience=pme#essay");
-  expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "")).toBe("Learn›PME›Essay");
+  expect(await crumbText(page)).toBe("Learn›PME›Essay");
 });
 test("Back after a section link and a setting change restores the essay and its setting", async ({ page }) => {
   await page.goto("/?audience=he#he-essay");
@@ -580,7 +584,7 @@ test("Back after a section link and a setting change restores the essay and its 
   await page.goBack();
   await expect(page.locator("#panel-he-essay")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
-  expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "")).toBe("Learn›Highereducation›Essay");
+  expect(await crumbText(page)).toBe("Learn›Highereducation›Essay");
 });
 test("the general Learn page lists each setting once", async ({ page }) => {
   await page.goto("/#overview");
@@ -594,7 +598,7 @@ test("reading another setting's edition keeps your setting", async ({ page }) =>
   await expect(page.locator("#panel-he-essay")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
   await expect(page).toHaveURL(/audience=k12/);
-  expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, "")).toBe("Learn›Essay");
+  expect(await crumbText(page)).toBe("Learn›Essay");
   await page.goto("/#he-essay");
   await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
 });

@@ -1410,12 +1410,13 @@ function applyAudience(id) {
 
 // The chosen setting colours the chip, the rule above the nav, and the essay rail.
 function markSetting(id) {
+  const settingLabel = audienceLabels[id];
   const root = document.documentElement;
-  if (audienceLabels[id]) root.dataset.setting = id; else delete root.dataset.setting;
+  if (settingLabel) root.dataset.setting = id; else delete root.dataset.setting;
   const select = document.getElementById("lab-audience");
-  if (select) select.options[0].text = audienceLabels[id] ? "All settings" : "Choose your setting";
+  if (select) select.options[0].text = settingLabel ? "All settings" : "Choose your setting";
   const label = document.querySelector("[data-setting-label]");
-  if (label) label.hidden = !audienceLabels[id];
+  if (label) label.hidden = !settingLabel;
   renderSiteCrumb(activeMode);
 }
 
@@ -1607,15 +1608,13 @@ function smoothBehavior() {
 }
 
 function setMode(mode, shouldScroll = true, push = false) {
-  // Learn is the chosen setting's page; with no setting it is the general page.
-  if (mode === "overview") {
-    const chosen = new URL(location.href).searchParams.get("audience");
-    if (audienceLabels[chosen]) mode = chosen;
-  }
   const url = new URL(location.href);
+  const chosenSetting = url.searchParams.get("audience");
+  // Learn is the chosen setting's page; with no setting it is the general page.
+  if (mode === "overview" && audienceLabels[chosenSetting]) mode = chosenSetting;
   if (audienceLabels[mode]) url.searchParams.set("audience", mode);
   // An edition sets the setting only when none is chosen; reading another edition keeps your choice.
-  if (["he-essay","k12-essay"].includes(mode) && !audienceLabels[url.searchParams.get("audience")]) url.searchParams.set("audience",mode.replace("-essay",""));
+  if (["he-essay","k12-essay"].includes(mode) && !audienceLabels[chosenSetting]) url.searchParams.set("audience",mode.replace("-essay",""));
   applyAudience(url.searchParams.get("audience"));
   const previousMode = activeMode;
   activeMode = mode;
@@ -2120,8 +2119,9 @@ window.addEventListener("popstate",()=>{
   // Back and Forward can change the page as well as the setting; re-resolve it so the two agree.
   const rawMode = location.hash.replace("#", "");
   const mode = modeAliases[rawMode] || rawMode;
-  if (modeNames.includes(mode) && mode !== activeMode) setMode(mode, false);
-  else if (!modeNames.includes(mode)) {
+  const isKnownMode = modeNames.includes(mode);
+  if (isKnownMode && mode !== activeMode) setMode(mode, false);
+  else if (!isKnownMode) {
     // A section anchor belongs to an essay; reopen that essay if another page is showing.
     const owner = document.getElementById(rawMode)?.closest("[data-mode]")?.dataset.mode;
     if (owner && owner !== activeMode) openEssaySection(rawMode, false);
