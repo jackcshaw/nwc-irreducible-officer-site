@@ -107,7 +107,7 @@ assert(wbData.audiences.pme.tools.find(t=>t.id==='assessment').markdown.includes
   for (const name of ['PME outage attribution','Campus shuttle survey','Asphalt vs. shaded grass']) assert(base.markdown.includes(name),'no-audience Frame Check lost a primer: '+name); }
 
 // Execute the shipped audience handler with the actual data and prompts.
-const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].at(-1)[1];
+const script=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]).find(code=>code.includes('const workbenchProfiles = '));
 new vm.Script(script); // Parse all client code, including unexecuted branches.
 const profileDecl=script.match(/const workbenchProfiles = ([^\n]+);/)[1];
 const promptDecl=script.match(/const workbenchPrompts = ([^\n]+);/)[1];

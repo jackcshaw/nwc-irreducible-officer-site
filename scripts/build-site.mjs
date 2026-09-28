@@ -178,6 +178,20 @@ if (!existsSync(progressionSvgPath)) {
 }
 copyFileSync(progressionSvgPath, join(assetsDir, "asking-to-supervising.svg"));
 
+// The intro reel's site cut (rendered in the judgment-lab-showreel project).
+// One content version covers all three files so an updated reel is never
+// served stale from cache.
+const reelFiles = ["judgment-lab-reel.mp4", "judgment-lab-reel.webm", "poster.jpg"];
+const reelVersionHash = createHash("sha256");
+mkdirSync(join(assetsDir, "reel"), { recursive: true });
+for (const name of reelFiles) {
+  const source = join(root, "media", "reel", name);
+  if (!existsSync(source)) throw new Error(`Missing reel asset: ${source}`);
+  copyFileSync(source, join(assetsDir, "reel", name));
+  reelVersionHash.update(readFileSync(source));
+}
+const reelVersion = reelVersionHash.digest("hex").slice(0, 10);
+
 const assetResult = spawnSync(
   assetCommand.command,
   [...assetCommand.baseArgs, join(root, "scripts", "generate-assets.py"), sourcePath, assetsDir],
@@ -342,6 +356,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
   ${plausibleAnalytics()}
+  <script>${reelEligibility()}</script>
   <style>${css()}</style>
 </head>
 <body data-active-mode="overview">
@@ -350,6 +365,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     <div class="masthead-inner">
       <a class="package-brand" href="#overview" data-mode-link="overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a>
       <p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p>
+      <button class="reel-replay" type="button" data-reel-replay aria-haspopup="dialog" aria-controls="reel-dialog"><span class="reel-replay-dot" aria-hidden="true"></span>Watch the reel <span class="reel-replay-length" aria-hidden="true">0:15</span><span class="sr-only">(15 seconds)</span></button>
     </div>
   </header>
   <nav class="package-nav" aria-label="Learning paths"><div class="package-nav-inner">
@@ -397,11 +413,34 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
 
   <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
+  ${reelDialog()}
 
   <script>${clientJs()}</script>
+  <script>${readFileSync(join(root, "scripts", "reel-client.js"), "utf8")}</script>
 </body>
 </html>
 `;
+}
+
+// Decided in <head> so a first-time visitor never sees the page flash before
+// the reel covers it: home page only, first visit only, and never when the
+// visitor prefers reduced motion or has asked to save data.
+function reelEligibility() {
+  return `try{var h=location.hash.slice(1);if((!h||h==="overview"||h==="learn")&&localStorage.getItem("jl-reel-seen")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!(navigator.connection&&navigator.connection.saveData)&&window.HTMLDialogElement&&"showModal" in HTMLDialogElement.prototype)document.documentElement.classList.add("reel-pending")}catch(e){}`;
+}
+
+function reelDialog() {
+  const asset = (name) => `assets/reel/${name}?v=${reelVersion}`;
+  return `<dialog id="reel-dialog" class="reel" tabindex="-1" aria-label="Judgment Lab reel" aria-describedby="reel-description" data-mp4="${asset("judgment-lab-reel.mp4")}" data-webm="${asset("judgment-lab-reel.webm")}" data-poster="${asset("poster.jpg")}">
+    <div class="reel-surface"><video class="reel-video" playsinline preload="none" disablepictureinpicture disableremoteplayback aria-hidden="true"></video></div>
+    <p id="reel-description" class="sr-only">A 15-second film. A red dot, standing for human judgment, holds still while pages of machine-written analysis flood the screen. Everything freezes and four words form a question: whose judgment is this? The film then works through the closing line of The Irreducible Officer: frame the problem, calibrate the tool, refuse the garden path, own the decision. The dot becomes the period in the Judgment Lab wordmark.</p>
+    <div class="reel-controls">
+      <button class="reel-button" type="button" data-reel-sound aria-label="Turn sound on">Sound on</button>
+      <button class="reel-button reel-button-primary" type="button" data-reel-close aria-label="Skip the reel">Skip</button>
+    </div>
+    <div class="reel-progress" aria-hidden="true"><span data-reel-progress></span></div>
+    <span class="reel-dot" aria-hidden="true" hidden></span>
+  </dialog>`;
 }
 
 function plausibleAnalytics() {
@@ -3356,5 +3395,6 @@ body:not([data-reading-essay="true"]) .toc {
     font-size: 22px;
   }
 }
-${readFileSync(join(root,"styles/lab-refresh.css"),"utf8")}`;
+${readFileSync(join(root,"styles/lab-refresh.css"),"utf8")}
+${readFileSync(join(root,"styles/reel.css"),"utf8")}`;
 }
