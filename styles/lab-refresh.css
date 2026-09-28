@@ -291,3 +291,4 @@ h2,h3 {line-height:1.25;}
 .assistant-script {margin:28px 0;border-top:1px solid var(--faint);border-bottom:1px solid var(--faint);}
 .assistant-script>summary {font-size:20px;padding:16px 0;}
 .template-rendered>.assistant-script:first-child {margin-top:0;}
+.assistant-script .script-tag {margin-left:12px;font-family:var(--font-mono);font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}

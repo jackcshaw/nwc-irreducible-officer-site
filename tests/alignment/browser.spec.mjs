@@ -375,7 +375,8 @@ test("the assistant's script is collapsed and opens on demand", async ({ page })
   await page.goto("/?audience=k12#wb-doc-frame-check");
   const script = page.locator("#workbench-doc-view details.assistant-script");
   await expect(script).toHaveCount(1);
-  await expect(script.locator("summary")).toHaveText("What your assistant will do");
+  await expect(script.locator("summary .script-label")).toContainText("What your assistant will do");
+  await expect(script.locator("summary .script-tag")).toHaveText("AI Facilitation Block");
   const line = script.getByText("Run Frame Check with me", { exact: false });
   await expect(line).toBeHidden();
   await script.locator("summary").click();

@@ -15,7 +15,7 @@ assert.throws(() => extractAtAGlance(good.replace("## Audience and readiness", "
 
 const html = '<p>Intro</p>\n<h2 id="ai-facilitation-block">AI Facilitation Block</h2>\n<p>Say hi.</p>\n<h2 id="next">Next</h2>\n<p>After</p>';
 const wrapped = collapseFacilitation(html, "t.md");
-assert(wrapped.startsWith('<details class="assistant-script"><summary>What your assistant will do</summary>\n<p>Say hi.</p>\n</details>'), "the assistant's script leads the document, right under the card: " + wrapped);
+assert(wrapped.startsWith('<details class="assistant-script"><summary><span class="script-label">What your assistant will do <span class="script-tag">AI Facilitation Block</span></span></summary>\n<p>Say hi.</p>\n</details>'), "the assistant's script leads the document, right under the card, tagged with the template's section name: " + wrapped);
 assert(wrapped.includes("<p>Intro</p>") && wrapped.indexOf("<p>Intro</p>") > wrapped.indexOf("</details>"), "the intro follows the script");
 assert(wrapped.includes('<h2 id="next">Next</h2>') && !wrapped.includes('<details class="assistant-script" open'));
 assert.throws(() => collapseFacilitation("<p>none</p>", "t.md"), /t\.md: no AI Facilitation Block/);

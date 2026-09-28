@@ -25,7 +25,8 @@ export function collapseFacilitation(html, where) {
   const next = html.indexOf("<h2", headEnd);
   const end = next < 0 ? html.length : next;
   // The assistant's part leads the document, right under the teacher's card.
-  return '<details class="assistant-script"><summary>What your assistant will do</summary>'
+  // The tag keeps the template's own section name, which the concept notes use.
+  return '<details class="assistant-script"><summary><span class="script-label">What your assistant will do <span class="script-tag">AI Facilitation Block</span></span></summary>'
     + html.slice(headEnd, end)
     + "</details>\n"
     + html.slice(0, start)
