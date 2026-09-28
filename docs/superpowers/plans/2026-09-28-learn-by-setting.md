@@ -29,7 +29,7 @@
 
 ## Review Focus
 
-1. Clearing the setting ("All settings") while on a setting page or an essay must land somewhere sensible (generic Learn page from a setting page; the essay stays open from an essay) and remove all colour.
+1. Clearing the setting ("All settings") while on a setting page or an essay must land on the general Learn page (existing `changeAudience` behaviour) and remove all colour and the breadcrumb's setting name.
 2. Deep links that carry both a setting and a Learn hash (`?audience=k12#overview`, `#learn`) must open the setting page, not the generic one.
 3. The PME essay (`#essay`) read with no setting shows no setting colour and a breadcrumb without a setting name.
 4. Browser Back after Learn→essay→Learn returns through the same pages without flipping the setting.
@@ -211,7 +211,7 @@ test("the general Learn page offers the three settings instead of one exercise",
   and delete the `<section class="detail-band"><h2 class="band-label">The argument in your setting</h2>…</section>` that followed it. Move the guide download into the teaching guide: first child of `<article class="article-body audience-guide">` becomes `<p><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></p>`.
   - `buildOverviewMode`: replace `${buildOpeningPractice("home", "he")}` with the existing `<section class="audience-paths" …>` block (moved up, not duplicated), given `class="audience-paths setting-chooser"` and preceded by `<h2 class="band-label">Choose your setting</h2><p>Each setting has its own essay and a judgment to try in its own case.</p>` inside the same section.
   - CSS (`lab-refresh.css`): `.try-purpose {max-width:62ch;margin:6px 0 18px;font-size:18px;line-height:1.5;color:var(--ink);}`.
-- [ ] **Step 4: Run to verify they pass**, then the full suites. The opening-practice `vm` test in `audience-contract.test.mjs` reads the `he` exercise; point it at the `he` setting page's container if it relied on the home one. Expected: 16 node lines unchanged in count (15 + contract assertions inside existing files → still 15 lines); 57 browser tests.
+- [ ] **Step 4: Run to verify they pass**, then the full suites. The opening-practice `vm` test in `audience-contract.test.mjs` reads the `he` exercise; point it at the `he` setting page's container if it relied on the home one. Expected: 15 node lines; 57 browser tests.
 - [ ] **Step 5: Commit.** `git commit -am "Setting pages lead with the essay; the exercise says what it rehearses"`
 
 ### Task 4: Breadcrumb above the content
