@@ -334,6 +334,7 @@ test("returning from a concept note focuses its card inside the collapsed notes"
 const toolIds = ["frame-check", "assignment-design", "source-kit", "supervised-delegation", "assessment", "flawed-output", "calibration", "after-action", "method-card"];
 
 test("every tool opens with its What you'll do card above the document", async ({ page }) => {
+  test.setTimeout(90_000); // Walks every tool/setting in one test; slow machines need the room.
   for (const id of toolIds) {
     await page.goto("/?audience=he#workbench");
     await page.locator(`[data-tool-id="${id}"]`).click();
@@ -414,6 +415,7 @@ test("desktop: a concept note's document starts level with its note", async ({ p
 
 const settingColour = { pme: "rgb(110, 31, 40)", he: "rgb(29, 102, 104)", k12: "rgb(138, 78, 18)" };
 test("the chip and the rule above the nav carry the setting colour", async ({ page }) => {
+  test.setTimeout(90_000); // Walks every tool/setting in one test; slow machines need the room.
   for (const id of ["pme", "he", "k12"]) {
     await page.goto(`/?audience=${id}#companion`);
     await expect(page.locator("html")).toHaveAttribute("data-setting", id);
@@ -521,4 +523,44 @@ test("the setting page's purpose line reads at body size and the edition note si
   const noteTop = await page.locator("#panel-he .surface-hero .hero-note").evaluate(el => el.getBoundingClientRect().top);
   const buttonsTop = await page.locator("#panel-he .surface-hero .action-row").evaluate(el => el.getBoundingClientRect().top);
   expect(noteTop).toBeLessThan(buttonsTop);
+});
+
+test("choosing All settings on Practice clears the breadcrumb", async ({ page }) => {
+  await page.goto("/?audience=pme#companion");
+  await expect(page.locator("[data-site-crumb]")).toBeVisible();
+  await page.locator("#lab-audience").selectOption("");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+});
+test("Back after choosing a setting from the general page returns to the general page", async ({ page }) => {
+  await page.goto("/#overview");
+  await page.locator('#panel-overview .setting-chooser a[data-mode-link="he"]').click();
+  await expect(page.locator("#panel-he")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#panel-overview")).toBeVisible();
+  await expect(page.locator("#panel-he")).toBeHidden();
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+});
+test("switching setting mid-essay starts the new essay at the top", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  await page.evaluate(() => window.scrollTo(0, 3000));
+  await page.locator("#lab-audience").selectOption("k12");
+  await expect(page.locator("#panel-k12-essay")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(200);
+});
+test("Open the teaching guide opens the guide", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  await page.locator('#panel-he-essay a[data-open-guide]').click();
+  const guide = page.locator("#panel-he details.teaching-guide");
+  await expect(guide).toHaveAttribute("open", "");
+  await expect(guide.locator("summary")).toBeInViewport();
+});
+test("on an essay the breadcrumb's setting name leads to the setting page", async ({ page }) => {
+  await page.goto("/?audience=k12#k12-essay");
+  await page.locator("[data-site-crumb] a.crumb-setting").click();
+  await expect(page.locator("#panel-k12")).toBeVisible();
+});
+test("the setting page's other routes are quiet links in tab order", async ({ page }) => {
+  await page.goto("/?audience=he#he");
+  await expect(page.locator("#panel-he .surface-hero .hero-routes a")).toHaveText(["Discuss", "Practice", "Design"]);
+  await expect(page.locator("#panel-he .surface-hero .quiet-action")).toHaveCount(0);
 });

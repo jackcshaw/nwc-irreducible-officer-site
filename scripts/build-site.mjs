@@ -483,14 +483,15 @@ function buildCompanionEssay(a) {
   const body = prefixIds(renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>"), prefix)
     .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
   const subtitle = markdown.split("\n").find(line=>line.startsWith("## ")).slice(3);
-  return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}">Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
+  return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}" data-open-guide>Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
 }
 
 function buildAudienceMode(a) {
   return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
     <p class="hero-note">${a.id === "pme" ? "The original PME argument." : "Companion testing edition; the adaptation record makes its changes explicit."}</p>
-    <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Practice</a><a class="quiet-action" href="#workbench" data-mode-link="workbench">Design</a><a class="quiet-action" href="#discuss" data-mode-link="discuss">Discuss</a></div></section>
+    <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a></div>
+    <nav class="hero-routes" aria-label="More in this setting"><a href="#discuss" data-mode-link="discuss">Discuss</a><a href="#companion" data-mode-link="companion">Practice</a><a href="#workbench" data-mode-link="workbench">Design</a></nav></section>
     ${buildOpeningPractice(a.id, a.id)}
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide"><p><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></p>${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;
@@ -1416,6 +1417,7 @@ function markSetting(id) {
   if (select) select.options[0].text = audienceLabels[id] ? "All settings" : "Choose your setting";
   const label = document.querySelector("[data-setting-label]");
   if (label) label.hidden = !audienceLabels[id];
+  renderSiteCrumb(activeMode);
 }
 
 // One breadcrumb above the content: the tab, the chosen setting, and "Essay" when reading one.
@@ -1433,7 +1435,7 @@ function renderSiteCrumb(mode) {
   crumb.hidden = !tab || inDoc || (!settingName && !isEssay);
   if (crumb.hidden) return;
   const parts = [isEssay ? '<a href="#overview" data-mode-link="overview">' + tab + "</a>" : "<span>" + tab + "</span>"];
-  if (settingName) parts.push('<span class="crumb-setting">' + settingName + "</span>");
+  if (settingName) parts.push(isEssay ? '<a class="crumb-setting" href="#' + setting + '">' + settingName + "</a>" : '<span class="crumb-setting">' + settingName + "</span>");
   if (isEssay) parts.push('<span aria-current="page">Essay</span>');
   crumb.innerHTML = parts.join('<span class="crumb-sep" aria-hidden="true">›</span>');
 }
@@ -1745,6 +1747,10 @@ modeLinks.forEach((link) => {
     }
     trackPackageEvent("Package Path Opened", { surface: mode, label: eventLabelFromMode(mode) });
     setMode(mode, true, true);
+    if (link.hasAttribute("data-open-guide")) {
+      const guide = document.querySelector("#panel-" + mode + " details.teaching-guide");
+      if (guide) { guide.open = true; window.requestAnimationFrame(() => scrollElementBelowNav(guide)); }
+    }
   });
 });
 
@@ -2101,13 +2107,17 @@ function changeAudience(event) {
   history.pushState(null,"",url);
   // A panel copied for the previous audience would point at the wrong file.
   hideNextStep();
-  if (nextMode !== activeMode) setMode(nextMode,false); else applyAudience(id);
+  if (nextMode !== activeMode) setMode(nextMode,true); else applyAudience(id);
 }
 document.getElementById("lab-audience").addEventListener("change",changeAudience);
 window.addEventListener("popstate",()=>{
   const id = new URL(location.href).searchParams.get("audience");
   if ((audienceLabels[id] ? id : "") !== currentWorkbenchAudience) hideNextStep();
   applyAudience(id);
+  // Back and Forward can change the page as well as the setting; re-resolve it so the two agree.
+  const rawMode = location.hash.replace("#", "");
+  const mode = modeAliases[rawMode] || rawMode;
+  if (modeNames.includes(mode) && mode !== activeMode) setMode(mode, false);
 });
 
 document.querySelectorAll("[data-tool-id]").forEach((button) => {

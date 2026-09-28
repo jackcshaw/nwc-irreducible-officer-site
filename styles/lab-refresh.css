@@ -315,3 +315,6 @@ html[data-setting] .toc a.is-active span {background:var(--setting);border-color
 .site-crumb a {color:var(--muted);text-decoration:underline;text-underline-offset:3px;}
 .site-crumb .crumb-sep {margin:0 6px;}
 .site-crumb .crumb-setting {color:var(--setting,var(--ink));font-weight:600;}
+.surface-hero .hero-routes {display:flex;flex-wrap:wrap;gap:22px;margin-top:16px;font-family:"Source Sans 3",sans-serif;font-size:16px;}
+.surface-hero .hero-routes a {color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:4px;}
+@media(hover:hover){.surface-hero .hero-routes a:hover {text-decoration-color:var(--red);}}
