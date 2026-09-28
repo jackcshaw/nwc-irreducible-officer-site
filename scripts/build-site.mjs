@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
+import { extractAtAGlance, collapseFacilitation } from "./at-a-glance.mjs";
 import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -135,6 +136,7 @@ writeFileSync(
       cardDesc: tool.cardDesc,
       markdown: tool.markdown.trim(),
       html: tool.html,
+      glance: tool.glance,
     })),
     concepts: workbenchConcepts.map((note) => ({
       id: note.id,
@@ -799,6 +801,10 @@ function buildWorkbenchMode(tools, concepts) {
         <button class="quiet-action" type="button" data-next-dismiss>Dismiss</button>
       </section>
       <div class="template-layout">
+        <section class="wb-glance" id="wb-glance" aria-labelledby="wb-glance-title"${selected.glance ? "" : " hidden"}>
+          <h3 id="wb-glance-title">What you'll do</h3>
+          <dl>${(selected.glance || []).map(g => `<div><dt>${escapeHtml(g.label)}</dt><dd>${escapeHtml(g.text)}</dd></div>`).join("")}</dl>
+        </section>
         <aside class="use-note">
           <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
@@ -1023,6 +1029,17 @@ function getWorkbenchTools() {
       useNote: "Use this to tell an AI assistant what materials, standards, and boundaries matter.",
     },
     {
+      id: "supervised-delegation",
+      title: "Supervised Delegation Exercise",
+      toolName: "Supervised delegation exercise",
+      job: "design",
+      cardTitle: "Let students direct multi-step AI work",
+      cardDesc: "Design bounded student supervision of multi-step AI work.",
+      cardAction: "Open",
+      filename: "supervised-delegation-exercise.md",
+      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
+    },
+    {
       id: "assessment",
       title: "Assessment And Oral-Defense Rubric",
       toolName: "Assessment rubric",
@@ -1077,26 +1094,18 @@ function getWorkbenchTools() {
       filename: "method-card-template.md",
       useNote: "Use this once a task has worked at least twice and is worth writing down.",
     },
-    {
-      id: "supervised-delegation",
-      title: "Supervised Delegation Exercise",
-      toolName: "Supervised delegation exercise",
-      job: "repeat",
-      cardTitle: "Let students direct multi-step AI work",
-      cardDesc: "Design bounded student supervision of multi-step AI work.",
-      cardAction: "Open",
-      filename: "supervised-delegation-exercise.md",
-      useNote: "Use this when students are ready to direct AI work they remain accountable for.",
-    },
   ];
   return tools.map((tool) => {
     // With no audience selected every primer shows; drop the markers that audience adaptation keys on.
     const markdown = readRequiredWorkbenchFile(join("templates", tool.filename))
       .replace(/^<!-- \/?frame-check:primer [a-z0-9]+ -->\n?/gmu, "");
+    const where = `templates/${tool.filename}`;
+    const { glance, body } = extractAtAGlance(markdown, where);
     return {
       ...tool,
       markdown,
-      html: renderMarkdown(rewriteWorkbenchLinks(markdown), { skipFirstH1: true }),
+      glance,
+      html: collapseFacilitation(renderMarkdown(rewriteWorkbenchLinks(body), { skipFirstH1: true }), where),
     };
   });
 }
@@ -1878,6 +1887,18 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
+  const glance = document.getElementById("wb-glance");
+  const rows = (item.glance || []).map((g) => {
+    const row = document.createElement("div");
+    const dt = document.createElement("dt");
+    const dd = document.createElement("dd");
+    dt.textContent = g.label;
+    dd.textContent = g.text;
+    row.append(dt, dd);
+    return row;
+  });
+  glance.querySelector("dl").replaceChildren(...rows);
+  glance.hidden = rows.length === 0;
   const download = document.getElementById("selected-tool-download");
   const basePath = isFromConcept ? "assets/workbench/concepts/" : "assets/workbench/";
   download.href = item.downloadPath || basePath + item.filename;
@@ -2702,15 +2723,15 @@ h1 {
    trigger :focus-visible, so give these an explicit, visible ring rather than
    leaving them silently unfocused-looking. */
 #workbench-title:focus,
-.tool-card:focus,
-#selected-tool-title:focus-visible {
+.tool-card:focus {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
 
-/* The doc heading takes focus on every open (for screen readers) and sits in
-   the sticky bar, so a ring there would linger; draw it only for keyboard. */
-#selected-tool-title:focus:not(:focus-visible) {
+/* The doc heading takes focus on every open so screen readers land on it. It is
+   not keyboard-reachable (tabindex -1) and sits in the sticky bar, so it draws no
+   ring: one would linger there and compete with the What you'll do card. */
+#selected-tool-title:focus {
   outline: none;
 }
 

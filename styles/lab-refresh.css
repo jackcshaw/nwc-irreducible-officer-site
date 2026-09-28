@@ -92,12 +92,12 @@ h2,h3 {line-height:1.25;}
 
 /* Collapsed overview sections read as intentional toggles, not default <details>. */
 .assistant-setup,.workbench-concepts {border-top:1px solid var(--faint);margin-top:44px;padding-top:2px;}
-.assistant-setup>summary,.workbench-concepts>summary {display:flex;align-items:center;justify-content:space-between;gap:20px;list-style:none;cursor:pointer;padding:20px 0;font-family:var(--font-display);font-size:24px;font-weight:520;line-height:1.3;color:var(--ink);}
-.assistant-setup>summary::-webkit-details-marker,.workbench-concepts>summary::-webkit-details-marker {display:none;}
-.assistant-setup>summary::after,.workbench-concepts>summary::after {content:"+";flex-shrink:0;font-family:var(--font-mono);font-size:22px;color:var(--muted);}
-.assistant-setup[open]>summary::after,.workbench-concepts[open]>summary::after {content:"\2212";}
-@media(hover:hover){.assistant-setup>summary:hover,.workbench-concepts>summary:hover,.assistant-setup>summary:hover::after,.workbench-concepts>summary:hover::after {color:var(--red);}}
-.assistant-setup[open]>summary,.workbench-concepts[open]>summary {border-bottom:1px solid var(--faint);margin-bottom:24px;}
+.assistant-setup>summary,.workbench-concepts>summary,.assistant-script>summary {display:flex;align-items:center;justify-content:space-between;gap:20px;list-style:none;cursor:pointer;padding:20px 0;font-family:var(--font-display);font-size:24px;font-weight:520;line-height:1.3;color:var(--ink);}
+.assistant-setup>summary::-webkit-details-marker,.workbench-concepts>summary::-webkit-details-marker,.assistant-script>summary::-webkit-details-marker {display:none;}
+.assistant-setup>summary::after,.workbench-concepts>summary::after,.assistant-script>summary::after {content:"+";flex-shrink:0;font-family:var(--font-mono);font-size:22px;color:var(--muted);}
+.assistant-setup[open]>summary::after,.workbench-concepts[open]>summary::after,.assistant-script[open]>summary::after {content:"\2212";}
+@media(hover:hover){.assistant-setup>summary:hover,.workbench-concepts>summary:hover,.assistant-script>summary:hover,.assistant-setup>summary:hover::after,.workbench-concepts>summary:hover::after,.assistant-script>summary:hover::after {color:var(--red);}}
+.assistant-setup[open]>summary,.workbench-concepts[open]>summary,.assistant-script[open]>summary {border-bottom:1px solid var(--faint);margin-bottom:24px;}
 .assistant-setup .door-question {margin-top:0;}
 .student-data-note {margin-top:24px;padding-top:18px;border-top:1px solid var(--faint);max-width:70ch;font-size:15px;color:var(--muted);}
 .use-note {background:transparent;border:0;border-top:2px solid var(--ink);padding:20px 0;}
@@ -109,8 +109,12 @@ h2,h3 {line-height:1.25;}
 #panel-workbench .selected-heading {position:sticky;top:var(--wb-nav-h,61px);z-index:20;align-items:center;margin:0 0 24px;padding:12px 0;background:var(--paper);border-bottom:1px solid var(--faint);}
 #panel-workbench .selected-heading h2 {margin:0;}
 .template-layout {grid-template-columns:minmax(0,auto) minmax(240px,1fr);gap:48px;align-items:start;}
-.template-layout>.use-note {grid-column:2;grid-row:1;position:sticky;top:calc(var(--wb-nav-h,61px) + var(--wb-bar-h,70px) + 24px);}
-.template-layout>.template-rendered {grid-column:1;grid-row:1;}
+.template-layout>.use-note {grid-column:2;grid-row:1 / span 2;position:sticky;top:calc(var(--wb-nav-h,61px) + var(--wb-bar-h,70px) + 24px);}
+/* The document sets the column's width; the card fills it without widening it. */
+.template-layout>.wb-glance {grid-column:1;grid-row:1;width:0;min-width:100%;box-sizing:border-box;}
+.template-layout>.template-rendered {grid-column:1;grid-row:2;}
+/* Concept notes have no card: let the document take the card's row too. */
+.template-layout:has(>.wb-glance[hidden])>.template-rendered {grid-row:1 / span 2;}
 .wb-next-step {max-width:62ch;margin:0 0 28px;padding:20px 24px;background:var(--paper-soft);border:1px solid var(--faint);border-top:2px solid var(--ink);}
 .wb-next-step p {font-size:17px;line-height:1.5;margin:0 0 12px;}
 .wb-next-step .wb-next-lead {font-family:var(--font-display);font-size:22px;line-height:1.35;color:var(--ink);}
@@ -120,7 +124,7 @@ h2,h3 {line-height:1.25;}
 .wb-next-step [data-next-dismiss] {margin-top:4px;}
 @media(max-width:980px){
  .template-layout {grid-template-columns:minmax(0,1fr);gap:24px;}
- .template-layout>.use-note,.template-layout>.template-rendered {grid-column:auto;grid-row:auto;position:static;}
+ .template-layout>.use-note,.template-layout>.template-rendered,.template-layout>.wb-glance {grid-column:auto;grid-row:auto;position:static;}
  #panel-workbench .selected-heading {display:flex;flex-wrap:wrap;gap:10px 16px;}
  #panel-workbench .selected-heading .tool-actions {margin-top:0;}
 }
@@ -275,3 +279,16 @@ h2,h3 {line-height:1.25;}
 .judgment-try [data-try-record] h4 {font-size:19px;margin-top:24px;}
 /* Keep decorative separators out of inactive reading surfaces. */
 .mode-view[hidden] .article-body hr::before {content:none;}
+
+/* What you'll do: the teacher's summary, read before the document. */
+#panel-workbench .wb-glance {margin:0;padding:22px 26px 24px;background:var(--paper-bright);border:1px solid var(--ink);border-top:6px solid var(--red);}
+#panel-workbench .wb-glance h3 {margin:0 0 14px;font-family:var(--font-display);font-size:26px;font-weight:560;line-height:1.2;color:var(--ink);}
+#panel-workbench .wb-glance dl {margin:0;display:grid;gap:12px;}
+#panel-workbench .wb-glance dl>div {display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:16px;align-items:baseline;}
+#panel-workbench .wb-glance dt {font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);}
+#panel-workbench .wb-glance dd {margin:0;font-size:19px;line-height:1.5;color:var(--ink);}
+@media(max-width:640px){#panel-workbench .wb-glance dl>div {grid-template-columns:minmax(0,1fr);gap:2px;}}
+.assistant-script {margin:28px 0;border-top:1px solid var(--faint);border-bottom:1px solid var(--faint);}
+.assistant-script>summary {font-size:20px;padding:16px 0;}
+.template-rendered>.assistant-script:first-child {margin-top:0;}
+.assistant-script .script-tag {margin-left:12px;font-family:var(--font-mono);font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
