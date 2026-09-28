@@ -436,3 +436,34 @@ test("the essay rail shows reading progress in the setting colour", async ({ pag
   const rail = await page.locator('.toc[data-essay-rail="k12-essay"]').evaluate(el => getComputedStyle(el, "::after").backgroundColor);
   expect(rail).toBe(settingColour.k12);
 });
+
+test("Learn opens your setting's page", async ({ page }) => {
+  for (const id of ["pme", "he", "k12"]) {
+    await page.goto(`/?audience=${id}#companion`);
+    await page.locator('[data-mode-tab="overview"]').click();
+    await expect(page.locator(`#panel-${id}`)).toBeVisible();
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+    await expect(page.locator('[data-mode-tab="overview"]')).toHaveAttribute("aria-selected", "true");
+  }
+});
+test("a Learn link that carries a setting opens that setting's page", async ({ page }) => {
+  await page.goto("/?audience=k12#overview");
+  await expect(page.locator("#panel-k12")).toBeVisible();
+  await page.goto("/?audience=he#learn");
+  await expect(page.locator("#panel-he")).toBeVisible();
+});
+test("clearing the setting on a setting page returns to the general Learn page", async ({ page }) => {
+  await page.goto("/?audience=he#he");
+  await page.locator("#lab-audience").selectOption("");
+  await expect(page.locator("#panel-overview")).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-setting", /.+/);
+});
+test("Back after Learn, essay, Learn keeps the setting", async ({ page }) => {
+  await page.goto("/?audience=he#companion");
+  await page.locator('[data-mode-tab="overview"]').click();
+  await page.locator('#panel-he a[data-mode-link="he-essay"]').first().click();
+  await expect(page.locator("#panel-he-essay")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#panel-he")).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-setting", "he");
+});

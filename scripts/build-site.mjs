@@ -1581,6 +1581,11 @@ function smoothBehavior() {
 }
 
 function setMode(mode, shouldScroll = true, push = false) {
+  // Learn is the chosen setting's page; with no setting it is the general page.
+  if (mode === "overview") {
+    const chosen = new URL(location.href).searchParams.get("audience");
+    if (audienceLabels[chosen]) mode = chosen;
+  }
   const url = new URL(location.href);
   if (audienceLabels[mode]) url.searchParams.set("audience", mode);
   if (["he-essay","k12-essay"].includes(mode)) url.searchParams.set("audience",mode.replace("-essay",""));
