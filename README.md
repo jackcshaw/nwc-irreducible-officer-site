@@ -78,6 +78,16 @@ The approved B masthead places the all-navy italic purpose directly below the na
 
 The audience is a labeled selector in the primary navigation row, not a second set of navigation links. On Learn it opens the selected audience view. On other paths it changes the teaching context while preserving the path, discussion claim, and selected document. Both audience selectors synchronize through the same handler.
 
+### Intro reel
+
+A first-time visitor to the home page sees the 15-second reel before the site. It plays muted, with Sound and Skip controls and a red progress rule. When it ends, its red period flies onto the masthead's period and the page takes over. The masthead's Watch the reel control replays it with sound at any time.
+
+The reel does not autoplay for returning visitors (`jl-reel-seen` in localStorage), deep links such as `#workbench`, reduced-motion or data-saver settings, or browsers without `<dialog>`. It steps aside if playback fails or has not started within 8 seconds, and Skip and Escape always close it. Eligibility is decided by a small script in `<head>` (`html.reel-pending`), so the page never flashes before the reel covers it; if scripts fail, the page reveals itself after three seconds.
+
+- Behaviour: `scripts/reel-client.js`. Styles: `styles/reel.css`. Markup: `reelDialog()` and the masthead button in `scripts/build-site.mjs`.
+- Media: `media/reel/` holds the site cut (H.264 MP4 first, VP9 WebM fallback) and a first-frame poster. The build copies them to `assets/reel/` with a content version (`?v=`) so a new cut is never served stale. See `media/reel/README.md` to update the reel.
+- Tests: `tests/alignment/reel.spec.mjs` covers first-visit autoplay, Skip, Escape, sound, suppression, failure and replay. Every other browser spec starts as a returning visitor (`storageState` in `playwright.config.mjs`).
+
 ## Alignment CI
 
 Every PR in this repo, the companion, and the workbench runs the same shared alignment check: build; contract tests; single-source, retired-phrase, and link checks; browser checks.
