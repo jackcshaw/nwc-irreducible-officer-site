@@ -53,7 +53,7 @@ inlineScripts.forEach((script, index) => {
   "One method, different teaching decisions",
   "Strengthening human judgment",
   "Ready for educator testing",
-  "Try a judgment before you read on.",
+  "Or try the judgment first.",
   "Set up a session",
   "See the five-step pilot",
   "Read",
@@ -488,6 +488,18 @@ assert(
   (html.match(/do not continue from a partial read/g) || []).length >= 8,
   "every prompt's partial-read guard should be present",
 );
+
+// Learn by setting: each setting page carries its own exercise with its purpose; the general page asks for a setting.
+const purpose = "Three moves the essay argues for: set your own frame before AI answers, decide what to take from an AI answer, and test whether your frame holds when the situation changes.";
+for (const id of ["pme", "he", "k12"]) {
+  const start = html.indexOf(`id="panel-${id}"`);
+  const panel = html.slice(start, html.indexOf('id="panel-', start + 10));
+  assert(panel.includes(`data-try-audience="${id}"`) && panel.includes(purpose), `${id} setting page should carry its own exercise with the purpose line`);
+}
+assert(!html.includes('data-try="home"'), "the general Learn page should not default to one setting's exercise");
+assert(html.includes('class="audience-paths setting-chooser"'), "the general Learn page should ask readers to choose a setting");
+
+assert(!html.includes("Try a judgment before you read on."), "the exercise heading should offer itself as the alternative to reading first");
 
 // Intro reel: the build ships the site cut in two codecs plus a poster, the
 // dialog points at files that exist, and each URL carries a content version
