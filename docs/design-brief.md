@@ -8,9 +8,16 @@ companion and workbench without embedding those repos inside the site.
 
 ## First Viewport
 
-The first signal is the essay itself: title, subtitle, public status, and the
-start of the reading experience. The site should not feel like a generic
-AI-education landing page.
+A first-time visitor to the home page sees the 15-second Judgment Lab reel
+before the site. It plays muted with sound and skip controls. When it ends,
+its red period flies into the masthead's period and the page takes over.
+Returning visitors, deep links, reduced-motion and data-saver settings go
+straight to the page, and the masthead's Watch the reel control replays it
+with sound.
+
+After the reel, the first signal is the essay itself: title, subtitle, public
+status, and the start of the reading experience. The site should not feel like
+a generic AI-education landing page.
 
 ## Navigation
 

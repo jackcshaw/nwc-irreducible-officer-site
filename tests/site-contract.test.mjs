@@ -500,3 +500,20 @@ assert(!html.includes('data-try="home"'), "the general Learn page should not def
 assert(html.includes('class="audience-paths setting-chooser"'), "the general Learn page should ask readers to choose a setting");
 
 assert(!html.includes("Try a judgment before you read on."), "the exercise heading should offer itself as the alternative to reading first");
+
+// Intro reel: the build ships the site cut in two codecs plus a poster, the
+// dialog points at files that exist, and each URL carries a content version
+// so an updated reel is never served stale from cache.
+const reelDialog = html.match(/<dialog id="reel-dialog"[^>]*>/);
+assert(reelDialog, "the intro reel dialog should be built into the page");
+for (const [attr, minBytes] of [["data-mp4", 500_000], ["data-webm", 500_000], ["data-poster", 10_000]]) {
+  const src = (reelDialog[0].match(new RegExp(`${attr}="([^"]+)"`)) || [])[1];
+  assert(src, `the reel dialog should carry ${attr}`);
+  const file = join(dist, src.split("?")[0]);
+  assert(existsSync(file) && statSync(file).size > minBytes, `${attr} should point at a built reel asset (${src})`);
+  assert(/\?v=[0-9a-f]{10}$/.test(src), `${attr} should carry a content version (${src})`);
+}
+assert(
+  /<header class="lab-masthead"[\s\S]*?data-reel-replay[\s\S]*?<\/header>/.test(html),
+  "the masthead should offer a way to rewatch the reel",
+);
