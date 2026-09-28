@@ -485,3 +485,29 @@ test("the general Learn page offers the three settings instead of one exercise",
   await expect(page.locator("#panel-k12")).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-setting", "k12");
 });
+
+test("the breadcrumb names the page and the setting", async ({ page }) => {
+  const cases = [["/?audience=he#he", "Learn›Higher education"], ["/?audience=he#he-essay", "Learn›Higher education›Essay"], ["/?audience=pme#companion", "Practice›PME"], ["/?audience=k12#workbench", "Design›K–12 · High school"], ["/#essay", "Learn›Essay"]];
+  for (const [url, text] of cases) {
+    await page.goto(url);
+    await expect(page.locator("[data-site-crumb]"), url).toBeVisible();
+    expect((await page.locator("[data-site-crumb]").innerText()).replace(/\s+/g, ""), url).toBe(text.replace(/\s+/g, ""));
+  }
+});
+test("the breadcrumb sits above the essay's edition line and hides where it adds nothing", async ({ page }) => {
+  await page.goto("/?audience=he#he-essay");
+  const crumb = await page.locator("[data-site-crumb]").evaluate(el => el.getBoundingClientRect().top);
+  const published = await page.locator("#panel-he-essay .published").evaluate(el => el.getBoundingClientRect().top);
+  expect(crumb).toBeLessThan(published);
+  await page.goto("/#overview");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+  await page.goto("/?audience=he#sources");
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+  await page.goto("/?audience=he#wb-doc-frame-check");
+  await expect(page.locator(".wb-breadcrumb")).toBeVisible();
+  await expect(page.locator("[data-site-crumb]")).toBeHidden();
+});
+test("the breadcrumb's setting name carries the setting colour", async ({ page }) => {
+  await page.goto("/?audience=pme#pme");
+  expect(await page.locator("[data-site-crumb] .crumb-setting").evaluate(el => getComputedStyle(el).color)).toBe("rgb(110, 31, 40)");
+});

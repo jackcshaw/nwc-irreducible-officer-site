@@ -376,6 +376,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     }).join("")}
 
     <div class="content-frame">
+      <nav class="site-crumb" aria-label="Breadcrumb" data-site-crumb hidden></nav>
       <section class="mode-view is-active" data-mode="overview" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">${overviewHtml}</section>
       ${audiences.map(a => `<section class="mode-view" data-mode="${a.id}" id="panel-${a.id}" role="region" aria-label="${escapeHtml(a.title)}">${buildAudienceMode(a)}</section>`).join("")}
       ${companionEditions.map(a => `<section class="mode-view" data-mode="${a.essayMode}" id="panel-${a.essayMode}" role="region" aria-label="${escapeHtml(a.essayTitle)}">${buildCompanionEssay(a)}</section>`).join("")}
@@ -1416,6 +1417,26 @@ function markSetting(id) {
   const label = document.querySelector("[data-setting-label]");
   if (label) label.hidden = !audienceLabels[id];
 }
+
+// One breadcrumb above the content: the tab, the chosen setting, and "Essay" when reading one.
+// References does not change with the setting, and the workbench tool view has its own trail.
+const crumbTabs = { overview: "Learn", essay: "Learn", "he-essay": "Learn", "k12-essay": "Learn", pme: "Learn", he: "Learn", k12: "Learn", discuss: "Discuss", companion: "Practice", workbench: "Design" };
+function renderSiteCrumb(mode) {
+  const crumb = document.querySelector("[data-site-crumb]");
+  if (!crumb) return;
+  const setting = new URL(location.href).searchParams.get("audience");
+  const option = audienceLabels[setting] && document.querySelector('#lab-audience option[value="' + setting + '"]');
+  const settingName = option ? option.text : "";
+  const tab = crumbTabs[mode];
+  const isEssay = mode === "essay" || mode.endsWith("-essay");
+  const inDoc = mode === "workbench" && document.getElementById("panel-workbench")?.dataset.wbView === "doc";
+  crumb.hidden = !tab || inDoc || (!settingName && !isEssay);
+  if (crumb.hidden) return;
+  const parts = [isEssay ? '<a href="#overview" data-mode-link="overview">' + tab + "</a>" : "<span>" + tab + "</span>"];
+  if (settingName) parts.push('<span class="crumb-setting">' + settingName + "</span>");
+  if (isEssay) parts.push('<span aria-current="page">Essay</span>');
+  crumb.innerHTML = parts.join('<span class="crumb-sep" aria-hidden="true">›</span>');
+}
 // Initial audience application occurs through setMode after client state is initialized.
 const essayRails = Array.from(document.querySelectorAll("[data-essay-rail]"));
 let toc = null;
@@ -1639,6 +1660,7 @@ function setMode(mode, shouldScroll = true, push = false) {
   if (mode !== previousMode || shouldScroll) {
     trackPackageEvent("Surface Viewed", { surface: mode, label: eventLabelFromMode(mode) });
   }
+  renderSiteCrumb(mode);
   invalidateTocGeometry();
 }
 
@@ -1952,6 +1974,7 @@ function selectDocument(item, isFromConcept = false, push = true) {
     const heading = document.getElementById("selected-tool-title");
     if (heading) heading.focus();
   });
+  renderSiteCrumb(activeMode);
 }
 
 // The sticky action bar sits just below the sticky site nav, whose height

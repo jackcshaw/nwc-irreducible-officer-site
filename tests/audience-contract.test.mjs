@@ -45,7 +45,7 @@ for (const id of ["pme","he","k12"]) {
   const context={URL, audienceLabels:{pme:"PME",he:"HE",k12:"high school"},
     get location(){return current;}, history:{pushState(_a,_b,url){current=new URL(url,current);},replaceState(_a,_b,url){current=new URL(url,current);}},
     applyAudience(value){selected=value;}, activeMode:"overview", document:{body:{dataset:{}}}, buttons:[],views:[],
-    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},selectEssayRail(){},ensureWorkbenchData(){return Promise.resolve();}};
+    window:{scrollTo(){}},smoothBehavior(){return "auto";},trackPackageEvent(){},eventLabelFromMode(x){return x;},invalidateTocGeometry(){},selectEssayRail(){},renderSiteCrumb(){},ensureWorkbenchData(){return Promise.resolve();}};
   vm.runInNewContext(routing+';setMode("'+id+'",false);setMode("companion",true,true);',context);
   assert.equal(current.searchParams.get("audience"),id,"Direct audience link loses setting");
   assert.equal(selected,id,"Prompt audience does not follow route");
@@ -203,7 +203,7 @@ for (const a of catalog.filter(a=>a.id!=='pme')) {
   assert.equal((panel.match(/<details/g)||[]).length,(panel.match(/<\/details>/g)||[]).length,'source spine is inside an unclosed <details>'); }
 for(const mode of ['he-essay','k12-essay']) {
  let current=new URL('https://test.example/#'+mode),selected;
- const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){}};
+ const ctx={URL,audienceLabels:{pme:'PME',he:'HE',k12:'high school'},get location(){return current},history:{replaceState(a,b,u){current=new URL(u,current)}},applyAudience(id){selected=id},activeMode:'overview',document:{body:{dataset:{}}},buttons:[],views:[],window:{scrollTo(){}},smoothBehavior(){return 'auto'},trackPackageEvent(){},eventLabelFromMode(x){return x},invalidateTocGeometry(){},selectEssayRail(){},renderSiteCrumb(){}};
  vm.runInNewContext(routing+';setMode("'+mode+'",false);',ctx);
  assert.equal(selected,mode.replace('-essay',''));
  assert.equal(current.searchParams.get('audience'),selected);
