@@ -111,7 +111,7 @@ Before calling work complete:
 - all active repos should be on `main` or an intentional active branch;
 - local branches should track the intended remote branch;
 - `git status -sb` should be clean in each repo;
-- no obsolete remote branches should remain after PR merge;
+- merged branches should be pruned locally (`git branch -d`) and kept on the remote (merge without `--delete-branch`);
 - Downloads should not contain active review files for this project;
 - `/private/tmp` should not contain stale `nwc-*` or `proof-*` scratch artifacts;
 - Proof should not be left with older essay content if it is still in circulation.
