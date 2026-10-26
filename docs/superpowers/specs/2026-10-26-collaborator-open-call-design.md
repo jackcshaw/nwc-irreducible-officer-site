@@ -72,8 +72,10 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
 - `doPost(e)` handles each sign-up:
   - It validates the fields.
   - If the honeypot is filled, it drops the submission while still reporting success.
-  - It ignores a repeat from the same email within ten minutes, so a double submit adds one row.
-  - It appends a row under a script lock.
+  - It ignores an identical repeat within ten minutes, so a double submit adds one row, while a corrected sign-up is kept. A digest of the sign-up keys this.
+  - It accepts at most 20 sign-ups an hour. Past that it answers `busy`, and the site offers email instead, so anonymous volume cannot exhaust Jack's mail.
+  - When the day's mail quota is nearly spent it skips the email, and it marks that, or a failed email, in the Status column.
+  - It appends a row under a script lock. A busy lock or a missing tab is refused cleanly.
   - It emails jshaw@comprendo.com with the submitter as reply-to.
   - It responds with JSON (`{"ok":true}`, or `{"ok":false,"errors":[…]}` with status details) when the request carries `format=json`. Otherwise it serves the confirmation page.
 - **Columns:** Received, Name, Email, Setting, Role and institution, Ways to collaborate, Practice or question, Open to public listing, Source page, Status.

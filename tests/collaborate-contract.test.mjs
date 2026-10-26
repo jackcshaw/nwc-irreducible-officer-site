@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import vm from "node:vm";
 
 // The open call for collaborators: one page, one form, the ways into it, and
 // the public roster that lists only people who agreed separately.
@@ -60,6 +61,20 @@ for (const id of [...call.matchAll(/<(?:input|select|textarea)[^>]*\bid="([^"]+)
 }
 assert(/data-collaborate-success[^>]*hidden/.test(call) && call.includes("Thank you"), "a hidden confirmation waits for a successful sign-up");
 assert(/data-collaborate-fallback[^>]*hidden/.test(call) && /data-collaborate-mailto/.test(call), "a hidden email fallback waits for a failed sign-up");
+
+// The form and the web app agree: every option the form offers, at the form's own
+// length limits, is accepted by the web app's validation.
+const webApp = vm.createContext({});
+vm.runInContext(readFileSync(join(root, "apps-script", "collaborators", "Code.gs"), "utf8"), webApp);
+const maxlength = (name) => Number((call.match(new RegExp(`<(?:input|textarea)[^>]*name="${name}"[^>]*maxlength="(\\d+)"`)) || [])[1]);
+const settingValues = [...call.matchAll(/<option value="([a-z0-9]+)"/g)].map((m) => m[1]);
+const wayValues = [...call.matchAll(/<input type="checkbox" name="ways" value="([a-z]+)"/g)].map((m) => m[1]);
+for (const setting of settingValues) {
+  const params = { name: "n".repeat(maxlength("name")), email: "ada@example.org", setting, role: "r".repeat(maxlength("role")), note: "x".repeat(maxlength("note")) };
+  const checked = webApp.validateSubmission_(params, { ways: wayValues });
+  assert(checked.ok, `the web app should accept setting "${setting}" at the form's length limits (${JSON.stringify(checked.errors)})`);
+  assert(checked.record.ways.split("; ").length === wayValues.length, "the web app should accept every way the form offers");
+}
 
 // The ways in: masthead and footer on every page, the home page, and Discuss.
 const masthead = html.slice(html.indexOf('<header class="lab-masthead"'), html.indexOf("</header>"));

@@ -11,10 +11,17 @@ Use the Google account that should own the list.
 1. **Create the project.** At [script.google.com](https://script.google.com), choose **New project** and name it "Judgment Lab collaborators".
 2. **Paste the code.** Replace the editor's `Code.gs` with this folder's `Code.gs`. Then, in **Project Settings**, tick **Show "appsscript.json" manifest file in editor**, and replace that file with this folder's `appsscript.json`.
 3. **Run `setup`.** Choose `setup` in the function menu, then **Run**, and approve the permissions it asks for. Google warns that the app is unverified because it is your own script; choose **Advanced**, then **Go to Judgment Lab collaborators**. This creates the Sheet in your Drive.
-4. **Deploy.** Choose **Deploy**, then **New deployment**, with the type **Web app**. Set **Execute as** to Me and **Who has access** to Anyone, then **Deploy**.
-5. **Copy the URL.** The web app URL ends in `/exec`. It goes in `content/collaborate.json` as `endpoint`.
+4. **Check that the Sheet is private.** Open "Judgment Lab collaborators" in Drive, choose **Share**, and confirm that **General access** is Restricted. Some organisations share new files by default.
+5. **Deploy.** Choose **Deploy**, then **New deployment**, with the type **Web app**. Set **Execute as** to Me and **Who has access** to Anyone, then **Deploy**.
+6. **Copy the URL.** The web app URL ends in `/exec`. It goes in `content/collaborate.json` as `endpoint`.
 
 Opening the URL in a browser should show "Judgment Lab collaborator sign-ups are running."
+
+## Limits and the Status column
+
+- **The same sign-up twice** within ten minutes lands once. A corrected sign-up is kept as a new row.
+- **More than 20 sign-ups in an hour.** Any further ones are refused, and the site offers those visitors email instead, so a flood of fake sign-ups cannot use up your mail.
+- **Near the end of the day's mail quota,** sign-ups are still saved with Status "New (email skipped: quota)". A sign-up whose email fails says "(email failed)". Check the Sheet if a day seems quiet.
 
 ## Updating the code
 

@@ -53,6 +53,47 @@ test("the call preselects the reader's chosen setting", async ({ page }) => {
   await expect(page.getByLabel("Setting", { exact: true })).toHaveValue("he");
 });
 
+test("a setting chosen elsewhere on the site carries into the call", async ({ page }) => {
+  await page.goto("/#sources");
+  await page.locator("#lab-audience").selectOption("he");
+  await page.locator(".lab-masthead").getByRole("link", { name: /Open call/ }).click();
+  await expect(page.locator("body")).toHaveAttribute("data-active-mode", "collaborate");
+  await expect(page.getByLabel("Setting", { exact: true })).toHaveValue("he");
+});
+
+test("changing the site setting on the call updates an untouched form, never a reader's own choice", async ({ page }) => {
+  await page.goto("/?audience=pme#collaborate");
+  const setting = page.getByLabel("Setting", { exact: true });
+  await expect(setting).toHaveValue("pme");
+  await page.locator("#lab-audience").selectOption("he");
+  await expect(setting).toHaveValue("he");
+  await setting.selectOption("other");
+  await page.locator("#lab-audience").selectOption("k12");
+  await expect(setting).toHaveValue("other");
+});
+
+test("keyboard users can still reach the five paths from the call", async ({ page }) => {
+  await page.goto("/#collaborate");
+  await expect(page.locator('[role="tab"][tabindex="0"]')).toHaveCount(1);
+  await expect(page.locator('[role="tab"][aria-selected="true"]')).toHaveCount(0);
+  await page.locator(".reel-replay").focus();
+  await page.keyboard.press("Tab");
+  expect(await page.evaluate(() => document.activeElement.getAttribute("role"))).toBe("tab");
+});
+
+test("a sign-up that cannot be confirmed in time says it may have gone through", async ({ page }) => {
+  await page.clock.install();
+  await page.goto("/#collaborate");
+  await useEndpoint(page, () => new Promise(() => {})); // the web app never answers
+  await fillSignUp(page);
+  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.clock.fastForward(16000);
+  const fallback = page.locator("[data-collaborate-fallback]");
+  await expect(fallback).toBeVisible();
+  await expect(fallback.locator("[data-fallback-unknown]")).toBeVisible();
+  await expect(fallback.locator("[data-fallback-failed]")).toBeHidden();
+});
+
 test("a complete sign-up posts once and confirms", async ({ page }) => {
   await page.goto("/#collaborate");
   const posts = await useEndpoint(page, ok);
@@ -79,7 +120,8 @@ test("required fields stop an empty sign-up before anything is sent", async ({ p
   const posts = await useEndpoint(page, ok);
   await page.getByRole("button", { name: "Join the open call" }).click();
   expect(await page.getByLabel("Name", { exact: true }).evaluate((el) => el.matches(":invalid"))).toBe(true);
-  await page.waitForTimeout(300);
+  // Native validation stops the submit event, so nothing was ever sent or disabled.
+  await expect(page.getByRole("button", { name: "Join the open call" })).toBeEnabled();
   expect(posts).toHaveLength(0);
   await expect(page.locator("[data-collaborate-success]")).toBeHidden();
 });
@@ -91,6 +133,8 @@ test("a failed sign-up keeps the entries and offers email", async ({ page }) => 
   await page.getByRole("button", { name: "Join the open call" }).click();
   const fallback = page.locator("[data-collaborate-fallback]");
   await expect(fallback).toBeVisible();
+  await expect(fallback.locator("[data-fallback-failed]")).toBeVisible();
+  await expect(fallback.locator("[data-fallback-unknown]")).toBeHidden();
   const href = await fallback.locator("[data-collaborate-mailto]").getAttribute("href");
   expect(href.startsWith("mailto:jshaw@comprendo.com?")).toBe(true);
   const body = new URLSearchParams(href.split("?")[1]).get("body");

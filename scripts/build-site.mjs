@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
 import { extractAtAGlance, collapseFacilitation } from "./at-a-glance.mjs";
+import { renderRoster } from "./collaborate-roster.mjs";
 import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -519,7 +520,6 @@ function buildCollaborateMode() {
   ];
   const collaborateSettings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["other", "Other"]];
   const endpoint = escapeHtml(collaborateConfig.endpoint || "");
-  const roster = collaborators.length ? `<section class="collaborate-roster" data-collaborators aria-labelledby="collaborators-heading"><h2 id="collaborators-heading">Collaborators</h2><ul>${collaborators.map(person => `<li><strong>${escapeHtml(person.name)}</strong>${[person.role, person.setting].filter(Boolean).map(detail => `<span>${escapeHtml(detail)}</span>`).join("")}</li>`).join("")}</ul></section>` : "";
   return `<div class="surface collaborate-surface">
     <section class="surface-hero"><h1>Open call for collaborators</h1><p class="dek">Help find out whether these teaching designs strengthen human judgment.</p><p>Judgment Lab’s designs are proposals, not proven curricula. We’re looking for educators and practitioners in professional military education, higher education and high school to test them with real learners, extend them, and show us where they fail.</p></section>
     <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Four ways to take part</h2><ul>${collaborateWays.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
@@ -538,10 +538,10 @@ function buildCollaborateMode() {
           <div class="action-row"><button class="copy-button primary" type="submit" data-collaborate-submit>Join the open call</button></div>
         </form>
         <div class="collaborate-result" data-collaborate-success hidden tabindex="-1"><h3>Thank you.</h3><p>Jack reads every sign-up and will reply by email.</p></div>
-        <div class="collaborate-result" data-collaborate-fallback hidden tabindex="-1"><h3>That didn’t go through.</h3><p>Your entries are still in the form. You can send them by email instead: <a data-collaborate-mailto href="mailto:jshaw@comprendo.com">email your sign-up to jshaw@comprendo.com</a>.</p></div>
+        <div class="collaborate-result" data-collaborate-fallback hidden tabindex="-1"><div data-fallback-failed><h3>That didn’t go through.</h3><p>Your entries are still in the form.</p></div><div data-fallback-unknown hidden><h3>We couldn’t confirm your sign-up.</h3><p>It may still have reached Jack. To be sure, send it by email as well.</p></div><p><a data-collaborate-mailto href="mailto:jshaw@comprendo.com">Email your sign-up to jshaw@comprendo.com</a></p></div>
       </div>
     </section>
-    ${roster}
+    ${renderRoster(collaborators)}
   </div>`;
 }
 
@@ -1495,6 +1495,7 @@ function applyAudience(id) {
   document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
   document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
   document.getElementById("lab-audience").value = currentWorkbenchAudience;
+  document.dispatchEvent(new CustomEvent("lab:audience", { detail: currentWorkbenchAudience }));
   document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
   document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
   document.querySelectorAll("[data-audience-current]").forEach(el => el.textContent = label || "Choose your setting above");
@@ -1724,10 +1725,13 @@ function setMode(mode, shouldScroll = true, push = false) {
   document.body.dataset.activeMode = mode;
   document.body.dataset.readingEssay = String(["essay","he-essay","k12-essay"].includes(mode));
   selectEssayRail(mode);
+  const tabMode = audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode;
+  const hasTab = buttons.some((button) => button.dataset.modeTab === tabMode);
   buttons.forEach((button) => {
-    const active = button.dataset.modeTab === (audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode);
+    const active = button.dataset.modeTab === tabMode;
     button.setAttribute("aria-selected", String(active));
-    button.tabIndex = active ? 0 : -1;
+    // Pages outside the five paths (the open call) select no tab; Learn stays reachable by keyboard.
+    button.tabIndex = (hasTab ? active : button.dataset.modeTab === "overview") ? 0 : -1;
   });
   views.forEach((view) => {
     view.classList.toggle("is-active", view.dataset.mode === mode);

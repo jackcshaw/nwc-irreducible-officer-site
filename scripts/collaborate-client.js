@@ -8,21 +8,23 @@
   const success = document.querySelector("[data-collaborate-success]");
   const fallback = document.querySelector("[data-collaborate-fallback]");
   const mailto = fallback.querySelector("[data-collaborate-mailto]");
+  const failedNote = fallback.querySelector("[data-fallback-failed]");
+  const unknownNote = fallback.querySelector("[data-fallback-unknown]");
   const setting = form.elements.setting;
   const label = submit.textContent;
   const TIMEOUT_MS = 15000;
 
-  // Start from the setting the reader already chose elsewhere on the site.
-  function presetSetting() {
+  // Follow the setting the reader chose elsewhere on the site until they pick one here.
+  function presetSetting(chosen) {
     if (setting.dataset.touched) return;
-    const chosen = new URL(location.href).searchParams.get("audience");
-    if (["pme", "he", "k12"].includes(chosen)) setting.value = chosen;
+    setting.value = ["pme", "he", "k12"].includes(chosen) ? chosen : "";
   }
   setting.addEventListener("change", () => {
     setting.dataset.touched = "true";
   });
-  window.addEventListener("hashchange", presetSetting);
-  presetSetting();
+  // The site announces every setting change (navigation, the chooser, Back) from applyAudience.
+  document.addEventListener("lab:audience", (event) => presetSetting(event.detail));
+  presetSetting(new URL(location.href).searchParams.get("audience"));
 
   function emailHref() {
     const data = new FormData(form);
@@ -51,7 +53,10 @@
     panel.focus();
   }
 
-  function offerEmail() {
+  // A timed-out request may still have been saved, so it is not reported as a failure.
+  function offerEmail(outcomeUnknown = false) {
+    failedNote.hidden = outcomeUnknown;
+    unknownNote.hidden = !outcomeUnknown;
     mailto.href = emailHref();
     submit.disabled = false;
     submit.textContent = label;
@@ -77,8 +82,8 @@
       if (!result || !result.ok) return offerEmail();
       form.hidden = true;
       show(success);
-    } catch {
-      offerEmail();
+    } catch (error) {
+      offerEmail(error.name === "AbortError");
     } finally {
       clearTimeout(timer);
     }
