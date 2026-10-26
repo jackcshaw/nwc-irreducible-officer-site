@@ -161,7 +161,7 @@ function respond_(result, params) {
     return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
   }
   const message = result.ok
-    ? "<h1>Thanks.</h1><p>Jack Shaw reads every sign-up and will reply by email.</p>"
+    ? "<h1>Thanks.</h1><p>We read every sign-up and will reply by email.</p>"
     : "<h1>Something is missing from your sign-up.</h1><p>Go back and check the form, or email <a href=\"mailto:" + NOTIFY_TO + "\">" + NOTIFY_TO + "</a>.</p>";
   return page_(message + "<p><a href=\"" + SITE + "\">Back to Judgment Lab</a></p>");
 }

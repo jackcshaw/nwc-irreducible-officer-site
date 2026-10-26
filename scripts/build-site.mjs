@@ -493,7 +493,7 @@ function buildOverviewMode() {
       <div><h1>When AI helps,<br>who owns the judgment?</h1><p class="dek">Better work can make human understanding harder to see.</p><p>Explore the argument. Challenge it with others. Test a decision, then design practice that makes the reasoning visible.</p></div>
       <aside class="featured-reading"><h2>The Irreducible Officer</h2><p>The essay that started the Lab: purpose, accountability, and judgment in work shaped by AI.</p><a href="#essay" data-mode-link="essay">Read the essay <span aria-hidden="true">→</span></a><span class="reading-context">The original PME argument, with full companion essays for higher education and high-school educators.</span></aside>
     </section>
-    <p class="open-call-strip"><span>We’re looking for educators to test these designs with their students.</span><a href="#collaborate" data-mode-link="collaborate">Join the open call <span aria-hidden="true">→</span></a></p>
+    <p class="open-call-strip"><span>Help keep human judgment at the forefront of AI.</span><a href="#collaborate" data-mode-link="collaborate">Join the open call <span aria-hidden="true">→</span></a></p>
     <section class="setting-chooser-band" aria-label="Choose your setting"><h2 class="band-label">Choose your setting</h2><p>Each setting has its own essay and a judgment to try in its own case.</p>
       <div class="audience-paths setting-chooser">
         ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this setting →</strong></a>`).join("")}
@@ -515,7 +515,7 @@ function buildOverviewMode() {
 // only people who agreed to it separately (content/collaborators.json).
 function buildCollaborateMode() {
   const ways = [
-    ["pilot", "Pilot with learners", "Run a design with your students or officers and tell us what happened, including what didn’t work."],
+    ["pilot", "Pilot with learners", "Run a design with your students or officers and tell us what happened. None of the designs has been tried in a classroom yet."],
     ["cases", "Contribute cases", "Send a real decision or scenario we can use in Discuss and Practice."],
     ["design", "Design teaching materials", "Build an assignment, assessment or workbench template for your setting with us."],
     ["evidence", "Review the evidence", "Check our claims and sources, and tell us what’s wrong or what we missed."],
@@ -523,13 +523,13 @@ function buildCollaborateMode() {
   const settings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["other", "Other"]];
   const endpoint = escapeHtml(collaborateConfig.endpoint || "");
   return `<div class="surface collaborate-surface">
-    <section class="surface-hero collaborate-hero"><h1>Open call for collaborators</h1><p class="dek">Try these teaching designs with your students and tell us what happens.</p><p>Judgment Lab needs educators in professional military education, higher education and high school to test its designs with real learners, adapt them, and show us where they break. None of them has been tried with students yet.</p>
+    <section class="surface-hero collaborate-hero"><h1>Help keep human judgment at the forefront of AI</h1><p class="dek">AI can now produce work that looks finished. Someone still has to understand it, question it, and answer for the decision.</p><p>Judgment Lab is building a group of educators and practitioners who take that seriously, across military education, universities and high schools. Join the conversation, bring what you’re seeing in your own work, and help us test what actually builds judgment.</p>
       <ul class="collaborate-settings" aria-label="Who it’s for"><li class="setting-pme">Professional military education</li><li class="setting-he">Higher education</li><li class="setting-k12">High school</li></ul>
-      <div class="action-row"><button class="copy-button collaborate-cta" type="button" data-collaborate-jump>Sign up</button><a class="collaborate-email" href="mailto:jshaw@comprendo.com">Or email Jack</a></div></section>
+      <div class="action-row"><button class="copy-button collaborate-cta" type="button" data-collaborate-jump>Join the conversation</button><a class="collaborate-email" href="mailto:jshaw@comprendo.com">Or email us</a></div></section>
     <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Ways to participate</h2><ul>${ways.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
     <aside class="collaborate-gaidfly" aria-labelledby="gaidfly-heading"><h2 id="gaidfly-heading">Defend it out loud</h2><p>G<span class="ai">Ai</span>DFLY is a voice debate partner for strategy education. It takes the other side of your argument for 10 to 15 minutes, then writes a debrief of how you handled the pressure. It never grades. It’s in a closed pilot, so if you want to try it, say so in your sign-up.</p><a href="https://gaidfly.com" target="_blank" rel="noreferrer">See GAiDFLY <span aria-hidden="true">→</span></a></aside>
     <section class="collaborate-join" aria-labelledby="collaborate-form-heading">
-      <div class="collaborate-intro"><h2 id="collaborate-form-heading">Sign up</h2><p>Jack Shaw reads every sign-up and replies by email. You can also write to him directly at <a href="mailto:jshaw@comprendo.com">jshaw@comprendo.com</a>.</p><p class="collaborate-promise">Your details go on a private list Jack keeps for Judgment Lab. We don’t share it, we won’t add you to a mailing list, and we won’t publish your name unless you agree to that separately. To come off the list, email jshaw@comprendo.com.</p></div>
+      <div class="collaborate-intro"><h2 id="collaborate-form-heading">Sign up</h2><p>We read every sign-up and reply by email. You can also write to <a href="mailto:jshaw@comprendo.com">jshaw@comprendo.com</a>.</p><p class="collaborate-promise">Your details stay on a private Judgment Lab list. We won’t share them, add you to a mailing list, or publish your name without asking first. To be removed, email jshaw@comprendo.com.</p></div>
       <div class="collaborate-signup">
         <form class="collaborate-form" data-collaborate-form data-endpoint="${endpoint}" action="${endpoint || "mailto:jshaw@comprendo.com"}" method="post">
           <div class="field"><label for="collaborate-name">Name</label><input id="collaborate-name" name="name" type="text" autocomplete="name" maxlength="120" required></div>
@@ -538,11 +538,11 @@ function buildCollaborateMode() {
           <div class="field"><label for="collaborate-role">Role and institution<span class="optional">Optional</span></label><input id="collaborate-role" name="role" type="text" autocomplete="organization-title" maxlength="160"></div>
           <fieldset class="field"><legend>How do you want to participate?<span class="optional">Optional</span></legend><div class="choices">${ways.map(([id, name]) => `<div class="choice"><input type="checkbox" name="ways" value="${id}" id="collaborate-way-${id}"><label for="collaborate-way-${id}">${name}</label></div>`).join("")}</div></fieldset>
           <div class="field"><label for="collaborate-note">What are you trying, or what are you stuck on?<span class="optional">Optional</span></label><textarea id="collaborate-note" name="note" rows="5" maxlength="1500"></textarea></div>
-          <div class="field choice"><input type="checkbox" name="listing" value="yes" id="collaborate-listing"><label for="collaborate-listing">List me publicly as a collaborator. Jack will check with you first.</label></div>
+          <div class="field choice"><input type="checkbox" name="listing" value="yes" id="collaborate-listing"><label for="collaborate-listing">List me publicly as a collaborator. We’ll confirm with you first.</label></div>
           <div class="collaborate-trap" aria-hidden="true"><label for="collaborate-website">Leave this empty</label><input id="collaborate-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <div class="action-row"><button class="copy-button collaborate-cta" type="submit" data-collaborate-submit>Send</button></div>
         </form>
-        <div class="collaborate-result" data-collaborate-success hidden tabindex="-1"><h3>Thanks.</h3><p>Jack will reply by email.</p></div>
+        <div class="collaborate-result" data-collaborate-success hidden tabindex="-1"><h3>Thanks.</h3><p>We’ll be in touch by email.</p></div>
         <div class="collaborate-result" data-collaborate-fallback hidden tabindex="-1"><div data-fallback-failed><h3>That didn’t go through.</h3><p>Your answers are still in the form.</p></div><div data-fallback-unknown hidden><h3>We couldn’t confirm your sign-up.</h3><p>It may have gone through. To be safe, email it too.</p></div><p><a data-collaborate-mailto href="mailto:jshaw@comprendo.com">Email your sign-up to jshaw@comprendo.com</a></p></div>
       </div>
     </section>

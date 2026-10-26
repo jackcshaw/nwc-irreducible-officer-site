@@ -32,7 +32,8 @@ test("the masthead's open call opens the call from any page", async ({ page }) =
   await page.goto("/#sources");
   await page.locator(".lab-masthead").getByRole("link", { name: /Open call/ }).click();
   await expect(page.locator("body")).toHaveAttribute("data-active-mode", "collaborate");
-  await expect(page.getByRole("heading", { level: 1, name: "Open call for collaborators" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Open call for collaborators" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Help keep human judgment at the forefront of AI" })).toBeVisible();
 });
 
 test("the footer links to the call", async ({ page }) => {
@@ -48,9 +49,9 @@ test("the Discuss invitation opens the same form", async ({ page }) => {
   await expect(form(page)).toBeVisible();
 });
 
-test("Sign up at the top takes the reader straight to the form", async ({ page }) => {
+test("Join the conversation at the top takes the reader straight to the form", async ({ page }) => {
   await page.goto("/#collaborate");
-  await page.locator(".collaborate-hero").getByRole("button", { name: "Sign up" }).click();
+  await page.locator(".collaborate-hero").getByRole("button", { name: "Join the conversation" }).click();
   await expect(page.getByLabel("Name", { exact: true })).toBeFocused();
 });
 

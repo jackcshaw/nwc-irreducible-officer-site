@@ -29,12 +29,12 @@ const call = section("collaborate");
 assert(/<section class="mode-view" data-mode="collaborate" id="panel-collaborate" role="region" aria-label="Open call for collaborators"/.test(html), "the open call should be a page region, not a tab");
 assert((html.match(/role="tab"/g) || []).length === 5, "the five primary paths should be unchanged");
 assert(/const modeNames = \[[^\]]*"collaborate"/.test(html), "#collaborate should be a routable page");
-assert(call.includes("<h1>Open call for collaborators</h1>"), "the page should lead with the open call");
+assert(call.includes("<h1>Help keep human judgment at the forefront of AI</h1>"), "the page should lead with the mission");
 for (const way of ["Pilot with learners", "Contribute cases", "Design teaching materials", "Review the evidence"]) {
   assert(call.includes(way), `the call should describe "${way}"`);
 }
-assert(call.includes("Jack Shaw") && call.includes('href="mailto:jshaw@comprendo.com"'), "the call should name its convener and offer direct email");
-for (const promise of ["replies by email", "private list", "mailing list", "separately", "come off the list"]) {
+assert(call.includes('href="mailto:jshaw@comprendo.com"'), "the call should offer direct email");
+for (const promise of ["reply by email", "private Judgment Lab list", "mailing list", "without asking first", "To be removed"]) {
   assert(call.includes(promise), `the call should state what happens to a sign-up ("${promise}")`);
 }
 
