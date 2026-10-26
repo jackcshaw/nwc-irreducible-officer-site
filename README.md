@@ -98,8 +98,17 @@ Changes that span multiple repos share one branch name and merge in order: compa
 
 `main` is protected and requires this check to pass before merging. On failure, the run uploads `dist` and the Playwright report as artifacts.
 
+### Open call for collaborators
+
+`#collaborate` invites educators and practitioners to pilot with learners, contribute cases, design teaching materials, or review the evidence.
+
+- **The form.** Its one form posts to the Apps Script web app in `apps-script/collaborators/`, which has the deploy steps. Each sign-up adds a row to a private Google Sheet and sends an email to jshaw@comprendo.com.
+- **The endpoint.** `content/collaborate.json` holds the web app's `/exec` URL. Until it is set, a sign-up opens a prefilled email instead.
+- **The public roster.** Nothing is published automatically. The roster is `content/collaborators.json`, edited by hand once a person agrees to be listed.
+- **The links in.** The masthead, the footer, the home page's testing section and Discuss all link to the call.
+
+The design is in `docs/superpowers/specs/2026-10-26-collaborator-open-call-design.md`.
+
 ### Practitioner conversation
 
-The Discuss page pairs the October 26, 2026 Maven session with an invitation to compare practices for strengthening human judgment. “Join by email” opens a draft to Jack Shaw with prompts for setting, practice, observations, and a question. It sends nothing automatically and creates no subscription or public post. The address remains visible for webmail users. The homepage Discuss link leads to this invitation.
-
-The Maven link goes to the official session page; the recording was listed as coming soon on October 26. When it is publicly playable, update the dated status and link label. Private Granola notes and transcript are not published.
+The Discuss page pairs the October 26, 2026 Maven session with an invitation to compare practices, and its button opens the open call. The Maven link goes to the official session page. The recording was listed as coming soon on October 26; when it is publicly playable, update the dated status and the link label. Private Granola notes and the transcript are not published.
