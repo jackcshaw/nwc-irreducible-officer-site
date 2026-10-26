@@ -512,26 +512,26 @@ function buildOverviewMode() {
 // web app in apps-script/collaborators), and the public roster, which lists
 // only people who agreed to it separately (content/collaborators.json).
 function buildCollaborateMode() {
-  const collaborateWays = [
+  const ways = [
     ["pilot", "Pilot with learners", "Run the method or a teaching design with your students or officers, then tell us what happened, including what didn’t work."],
     ["cases", "Contribute cases", "Bring a real decision, example or scenario for Discuss and Practice."],
     ["design", "Design teaching materials", "Co-develop an assignment, assessment or workbench template for your setting."],
     ["evidence", "Review the evidence", "Check the claims, sources and stated limits, and point out corrections or research we’ve missed."],
   ];
-  const collaborateSettings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["other", "Other"]];
+  const settings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["other", "Other"]];
   const endpoint = escapeHtml(collaborateConfig.endpoint || "");
   return `<div class="surface collaborate-surface">
     <section class="surface-hero"><h1>Open call for collaborators</h1><p class="dek">Help find out whether these teaching designs strengthen human judgment.</p><p>Judgment Lab’s designs are proposals, not proven curricula. We’re looking for educators and practitioners in professional military education, higher education and high school to test them with real learners, extend them, and show us where they fail.</p></section>
-    <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Four ways to take part</h2><ul>${collaborateWays.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
+    <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Four ways to take part</h2><ul>${ways.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
     <section class="collaborate-join" aria-labelledby="collaborate-form-heading">
       <div class="collaborate-intro"><h2 id="collaborate-form-heading">Join the open call</h2><p>Convened by Jack Shaw. Prefer to write directly? <a href="mailto:jshaw@comprendo.com">jshaw@comprendo.com</a></p><p class="collaborate-promise">Jack reads every sign-up and replies by email. Your details go to a private list kept only for Judgment Lab collaboration. They are not shared, you won’t be added to a mailing list, and nothing about you is published without your separate agreement. To be removed, email jshaw@comprendo.com.</p></div>
       <div class="collaborate-signup">
         <form class="collaborate-form" data-collaborate-form data-endpoint="${endpoint}" action="${endpoint || "mailto:jshaw@comprendo.com"}" method="post">
           <div class="field"><label for="collaborate-name">Name</label><input id="collaborate-name" name="name" type="text" autocomplete="name" maxlength="120" required></div>
           <div class="field"><label for="collaborate-email">Email</label><input id="collaborate-email" type="email" name="email" autocomplete="email" maxlength="254" required></div>
-          <div class="field"><label for="collaborate-setting">Setting</label><select id="collaborate-setting" name="setting" required><option value="">Choose your setting</option>${collaborateSettings.map(([id, name]) => `<option value="${id}">${name}</option>`).join("")}</select></div>
+          <div class="field"><label for="collaborate-setting">Setting</label><select id="collaborate-setting" name="setting" required><option value="">Choose your setting</option>${settings.map(([id, name]) => `<option value="${id}">${name}</option>`).join("")}</select></div>
           <div class="field"><label for="collaborate-role">Role and institution<span class="optional">Optional</span></label><input id="collaborate-role" name="role" type="text" autocomplete="organization-title" maxlength="160"></div>
-          <fieldset class="field"><legend>How would you like to take part?<span class="optional">Optional</span></legend><div class="choices">${collaborateWays.map(([id, name]) => `<div class="choice"><input type="checkbox" name="ways" value="${id}" id="collaborate-way-${id}"><label for="collaborate-way-${id}">${name}</label></div>`).join("")}</div></fieldset>
+          <fieldset class="field"><legend>How would you like to take part?<span class="optional">Optional</span></legend><div class="choices">${ways.map(([id, name]) => `<div class="choice"><input type="checkbox" name="ways" value="${id}" id="collaborate-way-${id}"><label for="collaborate-way-${id}">${name}</label></div>`).join("")}</div></fieldset>
           <div class="field"><label for="collaborate-note">A practice you're trying, or a question you're working on<span class="optional">Optional</span></label><textarea id="collaborate-note" name="note" rows="5" maxlength="1500"></textarea></div>
           <div class="field choice"><input type="checkbox" name="listing" value="yes" id="collaborate-listing"><label for="collaborate-listing">I’d be glad to be listed publicly as a collaborator. Jack will confirm with you before listing anyone.</label></div>
           <div class="collaborate-trap" aria-hidden="true"><label for="collaborate-website">Leave this empty</label><input id="collaborate-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
@@ -1726,12 +1726,12 @@ function setMode(mode, shouldScroll = true, push = false) {
   document.body.dataset.readingEssay = String(["essay","he-essay","k12-essay"].includes(mode));
   selectEssayRail(mode);
   const tabMode = audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode;
-  const hasTab = buttons.some((button) => button.dataset.modeTab === tabMode);
+  // Pages outside the five paths (the open call) select no tab; Learn stays reachable by keyboard.
+  const focusTab = buttons.some((button) => button.dataset.modeTab === tabMode) ? tabMode : "overview";
   buttons.forEach((button) => {
     const active = button.dataset.modeTab === tabMode;
     button.setAttribute("aria-selected", String(active));
-    // Pages outside the five paths (the open call) select no tab; Learn stays reachable by keyboard.
-    button.tabIndex = (hasTab ? active : button.dataset.modeTab === "overview") ? 0 : -1;
+    button.tabIndex = button.dataset.modeTab === focusTab ? 0 : -1;
   });
   views.forEach((view) => {
     view.classList.toggle("is-active", view.dataset.mode === mode);

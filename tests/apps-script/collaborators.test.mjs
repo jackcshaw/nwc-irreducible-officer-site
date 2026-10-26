@@ -208,11 +208,9 @@ const ada = {
 }
 
 // Only the web app's entry points are public: helpers are private to the script.
-{
-  const env = makeEnv();
-  for (const name of ["validateSubmission", "signUps", "toRow", "notify", "respond", "text", "asText"]) {
-    assert.equal(typeof env.context[name], "undefined", `${name} must end in "_" so the web app does not expose it`);
-  }
+for (const [, name] of code.matchAll(/^function (\w+)\(/gm)) {
+  if (["setup", "doGet", "doPost"].includes(name)) continue;
+  assert.ok(name.endsWith("_"), `${name} must end in "_" so the web app does not expose it`);
 }
 
 // Before setup() has run, sign-ups are refused rather than silently lost.

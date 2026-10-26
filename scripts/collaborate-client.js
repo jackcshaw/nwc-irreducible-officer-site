@@ -11,7 +11,7 @@
   const failedNote = fallback.querySelector("[data-fallback-failed]");
   const unknownNote = fallback.querySelector("[data-fallback-unknown]");
   const setting = form.elements.setting;
-  const label = submit.textContent;
+  const submitLabel = submit.textContent;
   const TIMEOUT_MS = 15000;
 
   // Follow the setting the reader chose elsewhere on the site until they pick one here.
@@ -59,7 +59,7 @@
     unknownNote.hidden = !outcomeUnknown;
     mailto.href = emailHref();
     submit.disabled = false;
-    submit.textContent = label;
+    submit.textContent = submitLabel;
     show(fallback);
   }
 

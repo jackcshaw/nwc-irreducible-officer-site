@@ -8,7 +8,7 @@ const NOTIFY_TO = "jshaw@comprendo.com";
 const SHEET_TITLE = "Judgment Lab collaborators";
 const TAB = "Sign-ups";
 const HEADERS = ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Source page", "Status"];
-const STATUS_COLUMN = 10;
+const STATUS_COLUMN = HEADERS.indexOf("Status") + 1;
 const SETTINGS = { pme: "PME", he: "Higher education", k12: "K–12 · High school", other: "Other" };
 const WAYS = { pilot: "Pilot with learners", cases: "Contribute cases", design: "Design teaching materials", evidence: "Review the evidence" };
 const LIMITS = { name: 120, email: 254, role: 160, note: 1500, page: 300 };
@@ -17,8 +17,6 @@ const HOURLY_CAP = 20; // anonymous sign-ups accepted per hour; past it visitors
 const MAIL_RESERVE = 10; // leave this much of the day's mail quota for Jack's other scripts
 const SITE = "https://judgmentlab.net/#collaborate";
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Apps Script serves these pages inside a frame; links must leave it.
-const PAGE_HEAD = '<base target="_top">';
 
 // Run once from the editor: creates the Sheet and remembers it.
 function setup() {
@@ -35,7 +33,7 @@ function setup() {
 }
 
 function doGet() {
-  return HtmlService.createHtmlOutput(PAGE_HEAD + "<p>Judgment Lab collaborator sign-ups are running. The open call is at <a href=\"" + SITE + "\">judgmentlab.net</a>.</p>").setTitle("Judgment Lab");
+  return page_("<p>Judgment Lab collaborator sign-ups are running. The open call is at <a href=\"" + SITE + "\">judgmentlab.net</a>.</p>");
 }
 
 function doPost(e) {
@@ -165,7 +163,12 @@ function respond_(result, params) {
   const message = result.ok
     ? "<h1>Thank you.</h1><p>Jack Shaw reads every sign-up and will reply by email.</p>"
     : "<h1>Some details need another look.</h1><p>Please go back and check the form, or write to <a href=\"mailto:" + NOTIFY_TO + "\">" + NOTIFY_TO + "</a>.</p>";
-  return HtmlService.createHtmlOutput(PAGE_HEAD + message + "<p><a href=\"" + SITE + "\">Return to Judgment Lab</a></p>").setTitle("Judgment Lab");
+  return page_(message + "<p><a href=\"" + SITE + "\">Return to Judgment Lab</a></p>");
+}
+
+// Apps Script serves these pages inside a frame; links must leave it.
+function page_(body) {
+  return HtmlService.createHtmlOutput('<base target="_top">' + body).setTitle("Judgment Lab");
 }
 
 function text_(value) {
