@@ -515,16 +515,16 @@ function buildOverviewMode() {
 // only people who agreed to it separately (content/collaborators.json).
 function buildCollaborateMode() {
   const ways = [
-    ["pilot", "Pilot with learners", "Run a design with your students or officers and tell us what happened. None of the designs has been tried in a classroom yet."],
+    ["pilot", "Pilot with learners", "Run a design with your students, officers or team and tell us what happened. None of the designs has been tried in a classroom yet."],
     ["cases", "Contribute cases", "Send a real decision or scenario we can use in Discuss and Practice."],
     ["design", "Design teaching materials", "Build an assignment, assessment or workbench template for your setting with us."],
     ["evidence", "Review the evidence", "Check our claims and sources, and tell us what’s wrong or what we missed."],
   ];
-  const settings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["other", "Other"]];
+  const settings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["business", "Business"], ["other", "Other"]];
   const endpoint = escapeHtml(collaborateConfig.endpoint || "");
   return `<div class="surface collaborate-surface">
-    <section class="surface-hero collaborate-hero"><h1>Help keep human judgment at the forefront of AI</h1><p class="dek">AI can now produce work that looks finished. Someone still has to understand it, question it, and answer for the decision.</p><p>Judgment Lab is building a group of educators and practitioners who take that seriously, across military education, universities and high schools. Join the conversation, bring what you’re seeing in your own work, and help us test what actually builds judgment.</p>
-      <ul class="collaborate-settings" aria-label="Who it’s for"><li class="setting-pme">Professional military education</li><li class="setting-he">Higher education</li><li class="setting-k12">High school</li></ul>
+    <section class="surface-hero collaborate-hero"><h1>Help keep human judgment at the forefront of AI</h1><p class="dek">AI can now produce work that looks finished. Someone still has to understand it, question it, and answer for the decision.</p><p>Judgment Lab is building a group of educators, leaders and practitioners who take that seriously, across military education, universities, high schools and business. Join the conversation, bring what you’re seeing in your own work, and help us test what actually builds judgment.</p>
+      <ul class="collaborate-settings" aria-label="Who it’s for"><li class="setting-pme">Professional military education</li><li class="setting-he">Higher education</li><li class="setting-k12">High school</li><li class="setting-business">Business</li></ul>
       <div class="action-row"><button class="copy-button collaborate-cta" type="button" data-collaborate-jump>Join the conversation</button><a class="collaborate-email" href="mailto:jshaw@comprendo.com">Or email us</a></div></section>
     <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Ways to participate</h2><ul>${ways.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
     <aside class="collaborate-gaidfly" aria-labelledby="gaidfly-heading"><h2 id="gaidfly-heading">Defend it out loud</h2><p>G<span class="ai">Ai</span>DFLY is a voice debate partner for strategy education. It takes the other side of your argument for 10 to 15 minutes, then writes a debrief of how you handled the pressure. It never grades. It’s in a closed pilot, so if you want to try it, say so in your sign-up.</p><a href="https://gaidfly.com" target="_blank" rel="noreferrer">See GAiDFLY <span aria-hidden="true">→</span></a></aside>

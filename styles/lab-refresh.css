@@ -296,7 +296,7 @@ h2,h3 {line-height:1.25;}
 
 /* Setting identity: one colour per setting, used only on the chip, the rule above the nav, the breadcrumb, and the essay rail. The red stays the action colour. */
 /* PME takes the NWC nav-bar blue; the Lab already wears NWC crimson (its action red) and navy (its ink). */
-:root {--set-pme:#2f5597;--set-he:#6b3a6b;--set-k12:#8a4e12;}
+:root {--set-pme:#2f5597;--set-he:#6b3a6b;--set-k12:#8a4e12;--set-business:#1e6b5c;}
 html[data-setting=pme] {--setting:var(--set-pme);}
 html[data-setting=he] {--setting:var(--set-he);}
 html[data-setting=k12] {--setting:var(--set-k12);}

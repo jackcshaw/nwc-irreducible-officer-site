@@ -200,6 +200,13 @@ const ada = {
   assert.deepEqual(json(env.post({ ...ada, email: longEmail })), { ok: true });
 }
 
+// Business is a setting like the others.
+{
+  const env = makeEnv();
+  assert.deepEqual(json(env.post({ ...ada, setting: "business" })), { ok: true });
+  assert.equal(env.rows[0][3], "Business");
+}
+
 // Without JavaScript, one ticked box arrives as a single value.
 {
   const env = makeEnv();
