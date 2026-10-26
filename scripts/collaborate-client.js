@@ -26,6 +26,16 @@
   document.addEventListener("lab:audience", (event) => presetSetting(event.detail));
   presetSetting(new URL(location.href).searchParams.get("audience"));
 
+  // The hero's Sign up takes the reader straight to the form.
+  const jump = document.querySelector("[data-collaborate-jump]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (jump) {
+    jump.addEventListener("click", () => {
+      form.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "start" });
+      form.elements.name.focus({ preventScroll: true });
+    });
+  }
+
   function emailHref() {
     const data = new FormData(form);
     const ways = Array.from(form.querySelectorAll('input[name="ways"]:checked'), (box) => box.labels[0].textContent.trim());

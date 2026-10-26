@@ -34,7 +34,7 @@ for (const way of ["Pilot with learners", "Contribute cases", "Design teaching m
   assert(call.includes(way), `the call should describe "${way}"`);
 }
 assert(call.includes("Jack Shaw") && call.includes('href="mailto:jshaw@comprendo.com"'), "the call should name its convener and offer direct email");
-for (const promise of ["replies by email", "private list", "not shared", "mailing list", "separate agreement"]) {
+for (const promise of ["replies by email", "private list", "mailing list", "separately", "come off the list"]) {
   assert(call.includes(promise), `the call should state what happens to a sign-up ("${promise}")`);
 }
 
@@ -59,7 +59,7 @@ for (const id of [...call.matchAll(/<(?:input|select|textarea)[^>]*\bid="([^"]+)
   if (id === "collaborate-website") continue;
   assert(call.includes(`for="${id}"`), `#${id} should have a label`);
 }
-assert(/data-collaborate-success[^>]*hidden/.test(call) && call.includes("Thank you"), "a hidden confirmation waits for a successful sign-up");
+assert(/data-collaborate-success[^>]*hidden/.test(call) && call.includes("Thanks."), "a hidden confirmation waits for a successful sign-up");
 assert(/data-collaborate-fallback[^>]*hidden/.test(call) && /data-collaborate-mailto/.test(call), "a hidden email fallback waits for a failed sign-up");
 
 // The form and the web app agree: every option the form offers, at the form's own
@@ -84,6 +84,11 @@ assert(footer.includes('href="#collaborate"'), "the footer should link to the op
 const home = section("overview");
 assert(/<section class="testing-note">[\s\S]*?href="#collaborate"[\s\S]*?<\/section>/.test(home), "the home page's testing section should open the call");
 assert(home.includes("Open Judgment in Practice →"), "the home page's Discuss card keeps its own purpose");
+const strip = home.indexOf('class="open-call-strip"');
+assert(strip > -1 && strip < home.indexOf('class="setting-chooser-band"') && /class="open-call-strip"[\s\S]*?href="#collaborate"/.test(home), "the home page should offer the call near the top, before the settings");
+assert(/<section class="learning-paths"[\s\S]*?href="#collaborate"[\s\S]*?<h2>Collaborate<\/h2>/.test(home), "Ways to use the Lab should include Collaborate");
+assert(!/not proven curricula/.test(call), "the call should open with what it asks, not a contrast");
+assert(call.includes('href="https://gaidfly.com"'), "the call should link GAiDFLY for practising a defense out loud");
 const discuss = section("discuss");
 assert(discuss.includes('href="#collaborate"'), "the Discuss invitation should open the same form");
 assert(!/Join by email|subject=Join%20the%20Judgment%20Lab%20conversation/.test(discuss), "the email-only sign-up is superseded by the form");

@@ -225,11 +225,11 @@ for (const [, name] of code.matchAll(/^function (\w+)\(/gm)) {
   const env = makeEnv();
   const { format, ...plain } = ada;
   const done = env.post(plain);
-  assert.match(done.html, /Thank you/);
+  assert.match(done.html, /Thanks\./);
   assert.match(done.html, /href="https:\/\/judgmentlab\.net\/#collaborate"/);
   assert.match(done.html, /^<base target="_top">/, "links on the plain page must leave Apps Script's frame");
   const refused = env.post({ name: "<b>x</b>", email: "bad" });
-  assert.match(refused.html, /need another look/);
+  assert.match(refused.html, /Something is missing/);
   assert.doesNotMatch(refused.html, /<b>x<\/b>/, "the page must not echo submitted input");
   assert.match(env.context.doGet().html, /^<base target="_top">[\s\S]*running/);
 }

@@ -25,7 +25,7 @@ async function fillSignUp(page) {
   await page.getByLabel("Setting", { exact: true }).selectOption("pme");
   await page.getByLabel("Pilot with learners").check();
   await page.getByLabel("Review the evidence").check();
-  await page.getByLabel(/A practice you.re trying/).fill("Frame-first critiques in a staff college seminar.");
+  await page.getByLabel(/What are you trying/).fill("Frame-first critiques in a staff college seminar.");
 }
 
 test("the masthead's open call opens the call from any page", async ({ page }) => {
@@ -46,6 +46,40 @@ test("the Discuss invitation opens the same form", async ({ page }) => {
   await page.locator("#panel-discuss").getByRole("link", { name: "Join the open call" }).click();
   await expect(page.locator("body")).toHaveAttribute("data-active-mode", "collaborate");
   await expect(form(page)).toBeVisible();
+});
+
+test("Sign up at the top takes the reader straight to the form", async ({ page }) => {
+  await page.goto("/#collaborate");
+  await page.locator(".collaborate-hero").getByRole("button", { name: "Sign up" }).click();
+  await expect(page.getByLabel("Name", { exact: true })).toBeFocused();
+});
+
+for (const [where, locate] of [
+  ["the strip near the top", (page) => page.locator(".open-call-strip").getByRole("link", { name: /Join the open call/ })],
+  ["the Collaborate path", (page) => page.locator(".learning-paths").getByRole("link", { name: /Collaborate/ })],
+]) {
+  test(`the home page opens the call from ${where}`, async ({ page }) => {
+    await page.goto("/");
+    await locate(page).click();
+    await expect(page.locator("body")).toHaveAttribute("data-active-mode", "collaborate");
+  });
+}
+
+test("a chosen setting colors the Setting field as the site's chooser does", async ({ page }) => {
+  await page.goto("/#collaborate");
+  const setting = page.getByLabel("Setting", { exact: true });
+  await setting.selectOption("he");
+  const colors = await page.evaluate(() => {
+    const select = document.getElementById("collaborate-setting");
+    const plum = getComputedStyle(document.documentElement).getPropertyValue("--set-he").trim();
+    const probe = document.createElement("i");
+    probe.style.color = plum;
+    document.body.append(probe);
+    const expected = getComputedStyle(probe).color;
+    probe.remove();
+    return { background: getComputedStyle(select).backgroundColor, expected };
+  });
+  expect(colors.background).toBe(colors.expected);
 });
 
 test("the call preselects the reader's chosen setting", async ({ page }) => {
@@ -86,7 +120,7 @@ test("a sign-up that cannot be confirmed in time says it may have gone through",
   await page.goto("/#collaborate");
   await useEndpoint(page, () => new Promise(() => {})); // the web app never answers
   await fillSignUp(page);
-  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   await page.clock.fastForward(16000);
   const fallback = page.locator("[data-collaborate-fallback]");
   await expect(fallback).toBeVisible();
@@ -98,10 +132,10 @@ test("a complete sign-up posts once and confirms", async ({ page }) => {
   await page.goto("/#collaborate");
   const posts = await useEndpoint(page, ok);
   await fillSignUp(page);
-  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   const success = page.locator("[data-collaborate-success]");
   await expect(success).toBeVisible();
-  await expect(success).toContainText("Thank you");
+  await expect(success).toContainText("Thanks");
   expect(await success.evaluate((el) => el.contains(document.activeElement))).toBe(true);
   await expect(form(page)).toBeHidden();
   expect(posts).toHaveLength(1);
@@ -118,10 +152,10 @@ test("a complete sign-up posts once and confirms", async ({ page }) => {
 test("required fields stop an empty sign-up before anything is sent", async ({ page }) => {
   await page.goto("/#collaborate");
   const posts = await useEndpoint(page, ok);
-  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   expect(await page.getByLabel("Name", { exact: true }).evaluate((el) => el.matches(":invalid"))).toBe(true);
   // Native validation stops the submit event, so nothing was ever sent or disabled.
-  await expect(page.getByRole("button", { name: "Join the open call" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Send" })).toBeEnabled();
   expect(posts).toHaveLength(0);
   await expect(page.locator("[data-collaborate-success]")).toBeHidden();
 });
@@ -130,7 +164,7 @@ test("a failed sign-up keeps the entries and offers email", async ({ page }) => 
   await page.goto("/#collaborate");
   await useEndpoint(page, (route) => route.fulfill({ status: 500, headers: { "access-control-allow-origin": "*" }, body: "error" }));
   await fillSignUp(page);
-  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   const fallback = page.locator("[data-collaborate-fallback]");
   await expect(fallback).toBeVisible();
   await expect(fallback.locator("[data-fallback-failed]")).toBeVisible();
@@ -141,7 +175,7 @@ test("a failed sign-up keeps the entries and offers email", async ({ page }) => 
   expect(body).toContain("Ada Lovelace");
   expect(body).toContain("Frame-first critiques in a staff college seminar.");
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue("Ada Lovelace");
-  await expect(page.getByRole("button", { name: "Join the open call" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Send" })).toBeEnabled();
 });
 
 test("before the web app is configured, a sign-up offers email instead", async ({ page }) => {
@@ -150,7 +184,7 @@ test("before the web app is configured, a sign-up offers email instead", async (
     document.querySelector("[data-collaborate-form]").dataset.endpoint = "";
   });
   await fillSignUp(page);
-  await page.getByRole("button", { name: "Join the open call" }).click();
+  await page.getByRole("button", { name: "Send" }).click();
   await expect(page.locator("[data-collaborate-fallback]")).toBeVisible();
 });
 
