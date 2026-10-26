@@ -420,7 +420,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </div>
   </main>
 
-  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><a href="#collaborate" data-mode-link="collaborate">Open call for collaborators</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
+  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><div class="footer-links"><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><a href="#collaborate" data-mode-link="collaborate">Open call for collaborators</a></div><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
   ${reelDialog()}
 
@@ -503,7 +503,7 @@ function buildOverviewMode() {
       <a href="#companion" data-mode-link="companion"><h2>Practice</h2><p>Make a judgment before the assistant contributes. See what changes.</p><span>Set up a session →</span></a>
       <a href="#workbench" data-mode-link="workbench"><h2>Design</h2><p>Turn an insight into an assignment, assessment, or reusable teaching method.</p><span>Open the educator workbench →</span></a>
     </section>
-    <section class="testing-note"><h2>Ready for educator testing</h2><p>These teaching designs are proposals to test. A successful conversation does not establish learning gains. Inspect the decisions it records and revise from what happens.</p><p>Test them with your own learners, contribute a case, or check the evidence: the open call for collaborators is how to take part.</p><div class="action-row"><a class="copy-button primary" href="#collaborate" data-mode-link="collaborate">Join the open call</a><a class="quiet-action" href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a></div></section>
+    <section class="testing-note"><h2>Ready for educator testing</h2><p>These teaching designs are proposals to test. A successful conversation does not establish learning gains. Inspect the decisions it records and revise from what happens.</p><p>Test them with your own learners, contribute a case, or check the evidence.</p><div class="action-row"><a class="copy-button primary" href="#collaborate" data-mode-link="collaborate">Join the open call</a><a class="quiet-action" href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a></div></section>
   </div>`;
 }
 
