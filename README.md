@@ -97,3 +97,9 @@ To retire a framing, add a rule to the companion's `alignment/retired-phrases.js
 Changes that span multiple repos share one branch name and merge in order: companion, then workbench, then site.
 
 `main` is protected and requires this check to pass before merging. On failure, the run uploads `dist` and the Playwright report as artifacts.
+
+### Practitioner conversation
+
+The Discuss page pairs the October 26, 2026 Maven session with an invitation to compare practices for strengthening human judgment. “Join by email” opens a draft to Jack Shaw with prompts for setting, practice, observations, and a question. It sends nothing automatically and creates no subscription or public post. The address remains visible for webmail users. The homepage Discuss link leads to this invitation.
+
+The Maven link goes to the official session page; the recording was listed as coming soon on October 26. When it is publicly playable, update the dated status and link label. Private Granola notes and transcript are not published.
