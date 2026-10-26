@@ -12,3 +12,8 @@ cyber-apprenticeship-proof-draft.md
 
 playwright-report/
 test-results/
+
+# Local Impeccable state: critique snapshots and live-session files (config.json stays tracked)
+.impeccable/critique/
+.impeccable/live/
+.playwright-mcp/
