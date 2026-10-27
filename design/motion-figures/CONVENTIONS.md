@@ -1,6 +1,6 @@
 # Motion figure conventions
 
-Shared visual vocabulary for the eight figures. The first figures settle these; later figures reuse them. Each entry says which figure introduced it. "FC" is frame capture (figure 1).
+Shared visual vocabulary for the eight figures. The first figures settle these; later figures reuse them. Each entry says which figure introduced it. "FC" is frame capture (figure 1); "FS" is fluency substitution (figure 2); "PS" is premature synthesis (figure 3).
 
 ## Colour and marks
 
@@ -22,6 +22,20 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 - **Key a colour on screen before it changes** (FC). A small key ("AI-SUPPLIED" with a tinted swatch) points at the tint before the wipe drains it. Show the change centre stage and large.
 - **Contrasts are about ownership, not tool use** (FC). A contrasting person who does it right also works with AI: the AI proposes to them too (grey), and their frame turns red only after they examine the alternatives.
 - **Origin changes keep the content** (FC). When AI-supplied text becomes indistinguishable, the words stay and only the grey band and colour drain to ink. Blank boxes read as deletion.
+- **Drain only when invisibility is the point** (FS). FC drains the AI's grey because its point is that the origin vanishes from the product. When origin isn't hidden, the AI's words stay grey to the end, so nothing reads as hiding authorship.
+- **A disclosure tag** (FS). A product made with AI carries a grey mono "DRAFTED WITH AI" tag through the final frame. It shows the AI's part without making disclosure the question.
+- **Set aside is a dim of the sheet, not the words** (FS). When faculty ask without the paper, the sheet fades into the page and the grey bands lighten to 55%; the words stay at full strength (5.6:1). An 80% opacity dim of the whole paper drops grey-on-band text to 3.6:1.
+- **Set aside can be a move** (PS). When "papers aside" must read as the papers being out of reach, they shrink to 56% and slide out of the people's rows into a strip, slightly tilted. Paths don't cross (the lower paper travels sideways before it rises), and labels fade out and back in rather than sliding across each other. Small text inside the papers fades as they shrink; the titles stay (Serif 19, still 11.5 px at 1,040).
+- **Same argument, own words** (PS). Two papers that must be indistinguishable without looking copied share a title, citations and disclosure, differ in line lengths, and carry a label saying "SAME ARGUMENT, OWN WORDS". A qualifier the better student learned can sit in their paper as one line, with no caption on it.
+- **A source lights up when someone repeats it** (FS), but only where repeating it is the failure, and only after the difference is audible. The band behind the repeated words returns to full strength and a navy underline runs under them, then both fade.
+- **A speech panel is what a person says without the paper** (FS). A rounded paper-bright box with the words in quotation marks. Both people's answers arrive at the same speaking pace.
+- **Show what faculty hear before showing origin** (FS). Spoken answers arrive in plain ink, because colours are invisible in the room. Origin colours (grey band for the AI's words, red for a person's own) come back only after the difference faculty can hear has landed, as part of the turn.
+- **What faculty observe stays ink for everyone** (PS). Sketches and spoken answers are ink for both people to the end, and the difference is in what they say. Process colour (grey AI lines, red own lines) lives only on the students' side.
+- **A connection is a line between two cards** (PS). Dashed grey: the AI proposed it and nobody has taken it up. Solid grey: a person took it up as given. Red: a person drew it, or checked it against the sources before keeping it. Lines run centre to centre under the cards, so only the gaps show.
+- **A card opens when someone reads it closely** (PS). It grows and shows two ink note bars, and closes when that reader leaves. Two people who read equally closely get the same motion at the same pace, so reading depth can't be mistaken for the difference.
+- **A connection that doesn't hold** (PS) gets a red ✕ at its middle and retracts. The ✕ stays at half strength while that map is on screen, so a later absence (the AI drew nothing there) can be pointed at: the ✕ brightens once.
+- **What a person learns is a red italic note with no card** (PS). It appears where they learned it and returns, labelled "WHAT THEY LEARNED", when they use it. No card, so it reads as memory and not as notes brought to an oral check.
+- **Faculty pointing** (PS) is a navy ring drawn around one line, which thickens while the others dim to 40%.
 
 ## Camera
 
@@ -34,7 +48,9 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 
 - Source Serif 4 for captions and titles, Source Sans 3 for labels in the picture (15 units), and IBM Plex Mono for small labels (12 units, never smaller).
 - **Stage:** an SVG with a 960 × 540 viewBox. On the standalone page the figure is up to 1,040 px wide, so 12-unit mono renders at 13 px at 1440.
+- **Narrow stacked stage** (FS). When the words are the figure's content, below 480 px the SVG can give way to a stacked HTML text view of the current beat, driven by the same `render(t)`, with text at 13–16 px. Collapse the SVG (`height: 0; overflow: hidden`) rather than `display: none`, so its text can still be measured.
 - **Legibility rule** (FC). Picture text carries `data-fs` (its size in viewBox units). `MotionFigures.legibility()` hides any text that would render under 11 px and adds `.is-narrow` to the figure. The beat list then shows each beat's "On screen" line, and the caption band carries the words at full size. Shapes and motion stay.
+- **Real words when the words are the point** (FS). FC draws writing as bars. When the failure lives in the wording (fluency), set the real sentences: Serif 20 while they're read, no smaller than 12.4 units once settled, with fixed line breaks if two copies must match line for line.
 
 ## Pacing and captions
 
@@ -46,7 +62,8 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
   - At least 1.5 s of hold follows the last movement.
   - No beat is shorter than twice its caption's reading time.
   - A beat with no movement is allowed when the caption is the event (FC beat 9).
-- **Length.** Figures run 30 to about 85 s. FC is 85.6 s in 11 beats.
+- **Length.** Figures run 30 to about 90 s. FC is 85.6 s in 11 beats; FS is 88.6 s in 9 beats; PS is 90.0 s in 10 beats.
+- **Speech pace** (PS). Spoken words appear at about 3 words a second and hold at least 1.5 s after the last word. Both people speak at the same pace.
 - **Labels arrive with their beat** (FC). A label that says what something is appears by the time that thing settles, never late in the beat.
 - **The setup beat names the situation before anything goes wrong.** The turn beat makes the mechanism visible. The figure ends on the faculty check.
 - **Caption band** (FC). Captions are real text directly under the picture, inside the figure's shot area (`[data-mf-shot]`), so stills, video and the poster include them. A mono counter ("3 / 11") leads each caption. On desktop the band has a fixed minimum height (136 px) sized for the check, so the controls never jump.
@@ -56,6 +73,9 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 ## Final frame, text equivalent, page
 
 - **The final frame is the reduced-motion view, the print view and the poster.** The poster is the shot area (stage plus caption band). Design it first.
+- **A comparison can end as a table** (FS). Rows are steps (their own work, what faculty receive, each question); columns are people, each headed by their red dot and name. Each item appears large first, then settles into its cell, so the final frame reads top to bottom on its own.
+- **Order as a sequence label** (PS). When the difference between two people is the order they worked in, each row carries a compact mono sequence ("READ → AI CONNECTS → WRITES", "READ → TRIES → AI CHECKS → WRITES"), AI steps in grey and the person's decisive step in red, so the final frame carries the cause as well as the test.
+- **Hide empty boxes on narrow screens** (PS). A speech panel or note hides with its words when the legibility rule hides them, so phones show no empty boxes.
 - **Text equivalent** (FC). The beat list is the captions, each with an "On screen" line describing the picture. The lines are always in the accessibility tree, and visible under reduced motion, in print and in narrow views. The SVG and caption band are `aria-hidden`; a visually hidden paragraph summarises the whole figure.
 - **Standalone page** (FC), in this order:
   1. a kicker ("Failure mode 1 of 7");

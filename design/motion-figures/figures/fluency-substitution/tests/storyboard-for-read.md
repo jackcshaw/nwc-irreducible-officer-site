@@ -1,58 +1,84 @@
 # Fluency substitution: storyboard
 
-Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 2, revised after storyboard cold read 1 · October 27, 2026
+Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 4, revised after figure cold read 1 · October 27, 2026
 
 *Cold-read copy. The Intent section is removed.*
 
 ## 2. Scenario
 
-A war-college student must recommend whether to send forces to reassure a threatened ally. The student asks an AI for a draft. It writes a polished paragraph that weighs escalation against the ally's trust and concludes, on balance, that the forces should go, with clear limits. The student reads it closely, cuts one weak sentence and agrees with the rest. A second student first writes a plain note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI write it up and reads that draft just as closely. The two papers are identical, and both are tagged as drafted with AI. With the papers set aside, faculty ask each student why. Both answer, the first in the paper's words. Then faculty ask what if the ally doesn't want troops on its soil. The first student repeats the paper's balancing line. The second keeps the reason and changes the call: send aid and hold exercises instead.
+A war-college student must recommend whether to send forces to reassure a threatened ally. The student asks an AI for a draft. It writes a polished paragraph that weighs escalation against the ally's trust and concludes, on balance, that the forces should go, with clear limits. The student reads it closely, cuts one weak sentence and agrees with the rest. A second student first writes their own call in a plain note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from the note and reads that draft just as closely. The draft matches the first student's paper word for word, and both papers are tagged as drafted with AI. With the papers set aside, faculty ask each student why, and both explain the call clearly. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student repeats the paper's call. The second reworks it from their reason: troops would now cost the ally's trust, so send arms and aid instead.
 
-*Sources.* The task, the paragraph, the note and every answer are constructed for this figure, and the task card says "Example task". *The Irreducible Officer*, Section II, describes the AI's "balanced paragraphs, caveats in the right places, the measured voice of a considered judgment". Section VIII names the student who "revises under challenge rather than retreating to the artifact's language". Section I notes that disclosure doesn't show whose judgment the work holds. The follow-up question is from the oral defense in Section IX. The figure shows no numbers.
+*Sources.* The task, the paragraph, the note and every answer are constructed for this figure, and the task card says "Example task". *The Irreducible Officer*, Section II, describes the AI's "balanced paragraphs, caveats in the right places, the measured voice of a considered judgment". Section VIII names the student who "revises under challenge rather than retreating to the artifact's language". Section I says disclosure doesn't show whose judgment the work holds. The changed fact is a concrete version of the Section IX oral-defense question, "what evidence would change the recommendation". The figure shows no numbers.
 
 ## 3. Cast and grammar
 
-**The colour rule.** Grey is what the AI wrote: both drafts, which stay grey on the papers, and its sentences when a student repeats them. Red is what a student decided or said in their own words (the first student's cut, the second student's note and answers), plus the name labels beside the dots and the note's label. Navy ink is the page: the task, the labels, the questions and the key. A small key in the final frame says grey is "written by AI" and red is "a student's own words".
+**The colour rule.** Grey is what the AI wrote: both drafts, which stay grey on the papers, the sentence the first student cut, and the AI's sentence when a student repeats it. Red is a student's own work (the first student's strike, the second student's note and answers) plus the name labels beside the dots. Navy ink is the page: the task, the labels, the questions and the key. A small key says grey is "written by AI" and red is "a student's own work".
 
-**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-written text, red `#b81b2b`. Type: Source Serif 4 for drafts, notes, answers, questions and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (12 units, never smaller).
+**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-written text, red `#b81b2b`. Type: Source Serif 4 for drafts, the note, answers, questions and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (12 units, never smaller).
 
-**Stage.** An SVG with a 960 × 540 viewBox. One view, no camera moves.
-- *Beats 1–3:* the first student's draft, large, at centre left.
-- *Beats 4–5:* the first paper shrinks into the left column. The second student's note sits at lower centre, and their draft appears large at centre right.
-- *Beats 6–10:* a table with two rows and three columns. Each row is one student: their paper, their answer to "why", and their answer to the changed fact. The questions head the columns.
+**Stage.** An SVG with a 960 × 540 viewBox. One view, no camera moves. The picture builds toward a table.
+- **Label column** (x 16–236): the task card at top, then each row's label as its row fills.
+- **Two student columns:** the first student at x 252–590, the second at x 606–944. Each dot heads its column from beat 4, at y 88, just above the first row.
+- **Rows:**
+  - their own work, not handed in (y 112–190);
+  - what faculty receive (y 200–332);
+  - the first question (y 346–414);
+  - the changed fact (y 424–504).
+- **The key** sits under the student columns (baseline 524).
 
-Positions are viewBox units. Widths of text-sized elements and line breaks come from measured text at build time.
+Before a draft or the note settles into its cell, it appears large: drafts at 85% of the base sheet, centred in the free space, and the note at full size.
+
+Positions are viewBox units. Widths of text-sized elements come from measured text at build time. The paper's line breaks are fixed (below) so the two papers match line for line.
+
+**The paper's lines** (base sheet 460 wide, Serif 20, line height 34; the first student's draft has a sixth line until the cut):
+
+1. Any course must weigh escalation against
+2. the ally's trust. On balance, losing that
+3. trust is the greater risk: the forces
+4. should go, with clear limits to contain
+5. escalation. *(the AI's draft continues: "Either choice carries real")*
+6. *(the AI's draft only: "consequences.")*
 
 | Element | Stands for | How it looks | Where |
 | --- | --- | --- | --- |
-| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 12 "EXAMPLE TASK", then Serif 16 ink over two lines: "Recommend whether to send forces / to reassure a threatened ally." It stays in place throughout | x 656–946, y 24–106 |
-| Red dot | The first student | Solid red circle, radius 5, labelled "Student" (Sans 600 13, red) in beats 1–2 | Starts at (70, 242) |
-| The AI's draft for the first student | The paragraph the AI writes | Paper-bright sheet, hairline border, soft shadow, with a grey mono 12 tag "AI'S DRAFT" above it. Serif 20 grey text on a grey band: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences." | Sheet x 120–580, y 132–386 (six lines, baselines 176–346); after the cut, y 132–352 |
-| The cut | The first student's edit | A red strike through "Either choice carries real consequences."; the sentence then fades, and the sheet's lower edge rises to fit five lines | Lines 5–6 |
-| Paper A | The paper the first student hands in | The same sheet, still grey on its band: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation." The tag becomes navy mono "FIRST STUDENT'S PAPER" followed by grey mono "· DRAFTED WITH AI" | From beat 4: 66% at x 24–328, y 204–349; label baseline (24, 196) |
-| Second red dot | The second student | Solid red circle, radius 5, labelled "Another student" (Sans 600 13, red) in beats 4–5 | Starts at (382, 436) |
-| The note | The second student's own judgment | Paper-bright card, hairline border, with red mono 12 "SECOND STUDENT'S NOTE". Serif 18 red over three lines: "Send them. The ally's trust / matters most, and troops / show we mean it." | x 400–700, y 388–484. In beat 5 it slides up behind the second draft and is hidden |
-| The AI's draft for the second student | The paragraph the AI writes from the note | A sheet the same size, grey tag "AI'S DRAFT", the same 28 grey words on a grey band as paper A | x 380–840, y 132–352 |
-| Paper B | The paper the second student hands in | Identical to paper A, labelled navy "SECOND STUDENT'S PAPER" and grey "· DRAFTED WITH AI" | From beat 6: 66% at x 24–328, y 382–527; label baseline (24, 374) |
-| Faculty header | What faculty receive | Mono 12 600 ink "WHAT FACULTY RECEIVE" | (24, 154) |
-| Set aside | Faculty ask without the paper | Both papers (sheet and words) dim to 70%. Their labels stay full strength | Beats 7–10 |
-| Source brightening | Where a repeated sentence comes from | The sentence on dimmed paper A returns to full strength while the first student says it, then dims again | Beats 7 and 8 |
-| Question 1 | What faculty ask first | Mono 12 ink "FACULTY ASK, PAPERS ASIDE" over Serif italic 17 ink "What do you recommend, and why?" | Column 2 header, x 386–640; baselines 128 and 154 |
-| Question 2 | The changed fact | Mono 12 ink "THEN THEY ASK" over Serif italic 17 ink in two lines: "What if the ally doesn't want / our troops on its soil?" | Column 3 header, x 660–946; baselines 128, 154, 176 |
-| The dots, answering | The two students | The same red dots, each level with its own paper | (372, 276) and (372, 454) |
-| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), small tail on its left. Serif 16. The first student's words are grey on a grey band; the second student's are red | Column 2: x 386–640, rows at y 236–318 and 414–496. Column 3: x 660–946, rows at y 250–304 and 428–482 |
-| Colour key | How to read the colours | Mono 12: a grey band swatch with grey "WRITTEN BY AI", then a red dot with red "A STUDENT'S OWN WORDS" | Baseline (386, 526), from beat 6 |
-| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 10") and the caption in Serif 22 ink. In beat 10: mono 13 ink "FACULTY CHECK" over the question in Serif italic 30, then mono 12 "THEN ASK" with "What evidence would change your recommendation?" in Serif 20. Fixed height on desktop | Under the stage |
+| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 12 "EXAMPLE TASK", then Serif 15 ink over three lines: "Recommend whether to / send forces to reassure / a threatened ally." It stays in place throughout | x 16–236, y 14–106 |
+| First red dot | The first student | Solid red circle, radius 5. Labelled "Student" (Sans 600 13, red) in beats 1–3; from beat 4 it heads its column, labelled "First student" | Starts at (120, 300); from beat 4 at (260, 88) |
+| The AI's draft for the first student | The paragraph the AI writes | Paper-bright sheet, hairline border, soft shadow, with a grey mono tag "AI'S DRAFT" above it. Grey Serif text on a grey band per line: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences." | At 85%: x 300–691, y 212–406 (six lines); after the cut, y 212–377 |
+| The cut | The first student's edit | A red strike through "Either choice carries real consequences." The struck words then lift out of the paper and settle, still struck, as a one-line card in the first column's top row. The card is half see-through mid-flight, so the lines it crosses stay readable | Card: x 252 onward, y 132–168 (Serif 15 grey on a band, red strike) |
+| Paper A | The paper the first student hands in | The same sheet, still grey on its bands, five lines. From beat 3 its tag reads navy "STUDENT'S PAPER" plus grey "· DRAFTED WITH AI", to the end. Label swaps fade the old label out before the new one fades in | From beat 4: 62% at x 252–537, y 212–332; tag baseline 204 |
+| Second red dot | The second student | Solid red circle, radius 5, labelled "Second student" (Sans 600 13, red), at the head of its column | (614, 88) from beat 4 |
+| The note | The second student's own call | Paper-bright card, hairline border. Written at full size under a red mono label "SECOND STUDENT'S NOTE": Serif 20 red over three lines, "Send them. The ally's trust / matters most, and troops / show we mean it." Then it shrinks to 62% into the second column's top row (the label fades) and stays to the end | Large: x 606–944, y 212–330. Settled: x 606–816, y 112–185 |
+| The AI's draft for the second student | The paragraph the AI writes from the note | A sheet the same size, grey tag "AI'S DRAFT", the same five grey lines on bands as paper A | At 85%: x 552–943, y 212–377 |
+| Match sweep | Word for word | A navy hairline runs under each line of the new draft and the same line of paper A at once, 0.16 s a line, then fades | Beat 5 |
+| Paper B | The paper the second student hands in | Identical to paper A, with the same tag, "STUDENT'S PAPER · DRAFTED WITH AI" | From beat 6: 62% at x 606–891, y 212–332 |
+| Row labels | What each row is | Mono 12 ink. Row 1: "THEIR OWN WORK" over "NOT HANDED IN" (weight 500). Row 2: "WHAT FACULTY RECEIVE" | (16, 140) and (16, 156); (16, 236) |
+| Set aside | Faculty ask without the paper | Both papers dim: each sheet fades into the page and its grey bands lighten to 55%. The words and tags stay at full strength, so the text stays readable (5.6:1) | Beats 7–9 |
+| Question 1 | What faculty ask first | Row label: mono 12 "FACULTY ASK" over Serif italic 16 in two lines, "Papers aside: what do you / recommend, and why?" | Mono baseline (16, 362); lines 383, 403 |
+| Question 2 | The changed fact | Row label: mono 12 "THEN ONE FACT CHANGES" over Serif italic 16 in two lines, "What if the ally doesn't want / our troops on its soil?" | Mono baseline (16, 440); lines 461, 481 |
+| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%). Serif 15, two lines, inside quotation marks. Both students' words arrive in plain ink, as faculty hear them, left to right at the same speaking pace. At the turn (beat 9) they take their origin colours: the first student's turn grey on a beige band, the second student's turn red | Row 3: y 350–408. Row 4: y 428–486. First column x 252–590, second x 606–944 |
+| Source highlight | Where the repeated words come from | At the turn (beat 9) only: on paper A, the band behind "On balance, losing that trust is the greater risk: the forces should go" returns to full strength and a navy underline runs under those words. Both fade after about 2.5 s | Paper A, lines 2–4 |
+| Colour key | How to read the colours | Mono 12: a grey band swatch with grey "WRITTEN BY AI" (from beat 2, with the first AI text), then a red dot with red "A STUDENT'S OWN WORK" (from beat 3, with the first strike) | Baseline 524, from x 252 |
+| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 10") and the caption in Serif 22 ink. In beat 10: mono 13 ink "FACULTY CHECK" over the check in Serif italic 30, then directly under it, the same size and style, "Then change one fact. What would you recommend now?" Fixed height on desktop, sized for both lines | Under the stage |
 | Beat list | Text equivalent and navigation | Ten numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
 
 **The answers.**
 
-| | Question 1: "What do you recommend, and why?" | Question 2: "What if the ally doesn't want our troops on its soil?" |
+| | "Papers aside: what do you recommend, and why?" | "What if the ally doesn't want our troops on its soil?" |
 | --- | --- | --- |
-| First student (grey band) | "On balance, losing that trust is the greater risk: the forces should go." (the paper's second sentence, word for word) | "Any course must weigh escalation against the ally's trust." (the paper's first sentence, word for word) |
-| Second student (red) | "Send them. Their trust matters most, and troops show we mean it." | "Then troops would cost their trust. I'd send aid and hold exercises instead." |
+| First student (ink, then grey on the band from the turn) | "On balance, losing that trust is the greater risk: the forces should go." | "On balance, losing that trust is the greater risk: the forces should go." (the same words again) |
+| Second student (ink, then red from the turn) | "Send them. The ally's trust matters most, and troops show we mean it." | "Then troops would cost the ally's trust. I'd send arms and aid instead." |
 
-**Narrow screens.** Any picture text that would render under 11 px is hidden. Each beat's "On screen" line then shows under its caption in the beat list, and the caption band carries the words at full size. The paragraph and answers are this figure's content, so the "On screen" lines quote them in full.
+**Narrow screens.**
+- *From 480 px up,* any picture text that would render under 11 px is hidden, and each beat's "On screen" line shows in the beat list.
+- *Below 480 px,* nearly all picture text would be hidden. The SVG collapses, and a stacked text stage takes its place, driven by the same clock. It shows what the current beat is about, at 13–16 px:
+  - beat 1: the task;
+  - beats 2–3: the AI's draft, then struck and relabelled;
+  - beat 4: the two students' own work, the cut sentence and the note;
+  - beat 5: that row plus the AI's draft from the note, marked "word for word the same";
+  - beat 6: that row plus "What faculty receive";
+  - beats 7–9: the two question rows, each with both students' answers, in ink, then in their colours at the turn;
+  - beat 10: their own work and both question rows.
+- *Throughout:* the colour key sits at the bottom, and the caption band and beat list are as on desktop.
 
 ## 4. Beats
 
@@ -62,8 +88,8 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 - **On screen at the start:** an empty paper stage.
 - **What moves:**
-  1. 1.0–1.6: the task card fades in and rises 6 units at top right.
-  2. 1.6–2.0: the red dot grows in at (70, 242), with its "Student" label.
+  1. 1.0–1.6: the task card fades in and rises 6 units at top left.
+  2. 1.6–2.0: the red dot grows in at (120, 300), with its "Student" label.
   3. 2.0–6.0: hold.
 - **Caption:** "A student gets a task that needs a decision."
 - **Notice:** the red dot is the student. The task asks *whether* to send forces, so the answer has to come down on one side.
@@ -73,135 +99,149 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 - **What moves:**
   1. 7.0–7.4: the red dot pulses once. The student asks.
-  2. 7.4–7.9: a blank sheet fades in at centre left, with the grey tag "AI'S DRAFT" above it.
-  3. 8.0–10.4: the paragraph composes line by line, 0.4 s a line, each line's words arriving in grey on their band.
+  2. 7.4–7.9: a blank sheet fades in at centre (x 300–691, y 212–406), with the grey tag "AI'S DRAFT" above it.
+  3. 8.0–10.4: the paragraph composes line by line, 0.4 s a line, each line's words arriving in grey on their band. With the first line (8.0–8.4), the key's grey half fades in under the stage: a beige swatch and "WRITTEN BY AI".
   4. 10.4–14.7: hold.
 - **Caption:** "The student asks an AI for a draft. It writes a polished recommendation."
 - **Notice:** the paragraph weighs escalation against the ally's trust, says "On balance", makes a call (the forces should go) and adds a caveat (clear limits). It ends on a general line, "Either choice carries real consequences."
 - **Why:** this is the essay's "tone of analytic maturity", large enough to read, and good enough to agree with.
 
-### Beat 3 · 14.7–23.7 s · The student agrees
+### Beat 3 · 14.7–23.5 s · The student agrees
 
 - **What moves:**
   1. 15.7–16.1: the dot moves onto the sheet, to the start of line 1. Its label fades.
-  2. 16.1–20.3: the dot reads along each line, about 0.7 s a line, just under the words. Nothing on the page changes.
-  3. 20.4–21.0: the dot draws a red strike through "Either choice carries real consequences."
-  4. 21.0–21.4: the struck sentence fades, and the sheet's lower edge rises to fit the five lines left.
-  5. 21.5–21.9: the tag becomes navy "FIRST STUDENT'S PAPER" with grey "· DRAFTED WITH AI".
-  6. 21.9–23.7: hold.
+  2. 16.1–19.7: the dot reads along each line, 0.6 s a line, just under the words. Nothing on the page changes.
+  3. 19.8–20.6: the dot draws a red strike through "Either choice carries real consequences." As it starts (20.0–20.4), the key's red half fades in: a red dot and "A STUDENT'S OWN WORK".
+  4. 20.6–20.8: pause.
+  5. 20.8–21.5: the struck words lift out of the paper and settle, still struck, as a one-line card above it, in what becomes the first column's top row. The card is half see-through mid-flight. The sheet's lower edge rises to fit the five lines left.
+  6. 21.6–22.0: the tag "AI'S DRAFT" fades out, then navy "STUDENT'S PAPER" with grey "· DRAFTED WITH AI" fades in. It stays to the end.
+  7. 22.0–23.5: hold.
 - **Caption:** "The student reads closely, cuts a weak line, and agrees with the rest."
-- **Notice:** the student reads every line and cuts the one sentence that says nothing. The rest stays exactly as the AI wrote it, still grey, and the paper is now the student's, labelled as drafted with AI.
+- **Notice:** the student reads every line, then cuts the one sentence that says nothing. The cut stays on screen. The rest stays exactly as the AI wrote it, still grey, and the paper is now the student's, tagged as drafted with AI.
 - **Why:** this is "the student mistakes well-ordered language for well-owned reasoning", shown as a careful, sincere student. The edit is a real judgment about the text.
 
-### Beat 4 · 23.7–32.2 s · Another student writes first
+### Beat 4 · 23.5–32.0 s · A second student writes their own call
 
 - **What moves:**
-  1. 24.7–25.0: the first student's dot fades out.
-  2. 25.0–26.2: paper A and its label shrink to 66% and move into the left column (x 24–328, y 204–349).
-  3. 26.3–26.7: a second red dot grows in at (382, 436), labelled "Another student".
-  4. 26.7–27.1: a blank note card fades in beside it (x 400–700, y 388–484), labelled in red "SECOND STUDENT'S NOTE".
-  5. 27.2–29.2: the dot writes on the card, word by word in red: "Send them. The ally's trust matters most, and troops show we mean it."
-  6. 29.2–32.2: hold.
-- **Caption:** "Another student writes their own judgment first, in plain words."
+  1. 24.5–25.7: paper A shrinks to 62% into the first column (x 252–537, y 212–332), its tag travelling with it. In the same move, the first student's dot rises to the head of the column (260, 88), and its label becomes "First student".
+  2. 25.8–26.2: a second red dot grows in at the head of the second column (614, 88), labelled "Second student".
+  3. 26.3–26.7: a blank note card fades in, large, in the second column (x 606–944, y 212–336), under the red mono label "SECOND STUDENT'S NOTE".
+  4. 26.8–27.2: the dot moves down to the card's first line.
+  5. 27.3–29.3: the dot writes, word by word in red Serif 20: "Send them. The ally's trust matters most, and troops show we mean it."
+  6. 29.4–29.8: the dot returns to the head of its column.
+  7. 29.8–32.0: hold.
+- **Caption:** "A second student writes their own call first, in plain words."
 - **Notice:** the note holds a call, the reason for it, and why troops serve that reason. No AI is involved yet.
 - **Why:** this is the start of what doing it well looks like, shown large.
 
-### Beat 5 · 32.2–43.2 s · The AI writes it up
+### Beat 5 · 32.0–43.4 s · An AI drafts from the note
 
 - **What moves:**
-  1. 33.2–33.5: the second dot pulses once. The student asks.
-  2. 33.5–33.9: a sheet with the grey tag "AI'S DRAFT" fades in above the note, at centre right (x 380–840, y 132–352).
-  3. 34.0–36.0: the AI's paragraph composes line by line in grey, 0.4 s a line. It is word for word the paragraph on paper A.
-  4. 36.1–36.5: the dot moves to the start of line 1.
-  5. 36.5–40.0: the dot reads along each line at the first student's pace, about 0.7 s a line.
-  6. 40.1–40.7: the note slides up behind the sheet and is hidden.
-  7. 40.8–41.2: the tag becomes navy "SECOND STUDENT'S PAPER" with grey "· DRAFTED WITH AI".
-  8. 41.2–43.2: hold.
-- **Caption:** "That student has an AI write it up, then reads it closely."
-- **Notice:** this student's AI use looks like the first student's: a grey draft, a close read, a kept paper with the same tag. The note goes behind the paper, where faculty won't see it.
-- **Why:** both students use an AI the same way on screen. The only difference so far, the note, is now out of sight.
+  1. 33.0–33.8: the note shrinks to 62% and moves up into the second column's top row (x 606–816, y 112–189). Its label fades, and the row label "THEIR OWN WORK / NOT HANDED IN" fades in beside the row (33.6–34.0).
+  2. 34.1–34.4: the second dot pulses once. The student asks.
+  3. 34.4–34.8: a sheet with the grey tag "AI'S DRAFT" fades in below the note, at 85% (x 552–943, y 212–377).
+  4. 34.9–36.9: the AI's paragraph composes line by line in grey, 0.4 s a line. It is the same five lines as paper A.
+  5. 37.0–37.4: the dot moves down to the start of line 1.
+  6. 37.4–40.4: the dot reads along each line at the first student's pace, 0.6 s a line.
+  7. 40.5–41.3: a navy hairline runs under each line of the new draft and the same line of paper A at once, line by line, then fades.
+  8. 41.4–41.8: the tag "AI'S DRAFT" fades out, then navy "STUDENT'S PAPER" with grey "· DRAFTED WITH AI" fades in.
+  9. 41.8–43.4: hold.
+- **Caption:** "An AI drafts from the note. It matches the first student's paper word for word."
+- **Notice:**
+  - The note stays in view above the draft, and the draft says the same thing in polished form.
+  - The hairline pairs each line with the same line of the first paper.
+  - This student's AI use looks like the first student's: a grey draft, a close read, a kept paper with the same tag.
+- **Why:** both students use an AI the same way on screen. The note stays as this student's own work, outside what faculty will receive.
 
-### Beat 6 · 43.2–49.2 s · What faculty receive
+### Beat 6 · 43.4–49.4 s · What faculty receive
 
 - **What moves:**
-  1. 44.2–44.5: the second dot and its label fade out.
-  2. 44.5–45.7: paper B, with the note hidden behind it, shrinks to 66% and moves into the left column under paper A (x 24–328, y 382–527).
-  3. 45.8–46.3: "WHAT FACULTY RECEIVE" fades in above the column.
-  4. 46.4–46.8: the colour key fades in at the bottom right: grey "WRITTEN BY AI", red "A STUDENT'S OWN WORDS".
-  5. 46.8–49.2: hold.
+  1. 44.4–45.6: the new paper shrinks to 62% into the second column (x 606–891, y 212–332), its tag travelling with it. In the same move, the second dot returns to the head of its column.
+  2. 45.7–46.2: the row label "WHAT FACULTY RECEIVE" fades in beside the papers.
+  3. 46.2–49.4: hold.
 - **Caption:** "Faculty receive two identical papers, both drafted with AI."
-- **Notice:** the two papers match word for word and line for line, both grey, both tagged.
+- **Notice:** the papers match line for line, both grey, both tagged. The note and the cut sit in the row above, outside what faculty receive.
 - **Why:** this is the essay's "easier to miss". Nothing on the page can separate the two students.
 
-### Beat 7 · 49.2–64.2 s · Papers aside: why?
+### Beat 7 · 49.4–63.9 s · Papers aside: both explain
 
-- **On screen at the start:** the two papers in the left column; the task card at top right; the key at bottom right; the rest of the right side empty.
+- **On screen at the start:** the table's top two rows, the task card, the key; the bottom two rows empty.
 - **What moves:**
-  1. 50.2–50.8: both papers dim to 70%.
-  2. 51.0–51.6: the first column header fades in and rises 6 units: "FACULTY ASK, PAPERS ASIDE" over "What do you recommend, and why?"
-  3. 51.8–52.2: the two students' dots grow in, each level with its own paper.
-  4. 55.6–56.9: a speech panel opens beside the first student's dot, and grey words on a grey band appear at speaking pace: "On balance, losing that trust is the greater risk: the forces should go." As they appear, the same sentence on paper A returns to full strength.
-  5. 57.0–57.3: that sentence on paper A dims again.
-  6. 57.4–58.6: a speech panel opens beside the second student's dot, and red words appear at the same pace: "Send them. Their trust matters most, and troops show we mean it."
-  7. 58.6–64.2: hold.
-- **Caption:** "Without the papers, both students explain. One uses the paper's words."
-- **Notice:** both give the same recommendation and the same reason, fluently. The first student's answer is the paper's sentence word for word, and the paper shows where it came from. The second student's answer is in their own words.
-- **Why:** the first question doesn't separate them. A fluent answer can pass it, which is why fluency is easy to miss.
+  1. 50.4–51.0: both papers dim: the sheets fade into the page and the grey bands lighten. The words stay readable.
+  2. 51.2–51.8: the third row's label fades in and rises 6 units: "FACULTY ASK" over "Papers aside: what do you recommend, and why?"
+  3. 54.3–55.6: a speech panel opens in the first column, and words appear at speaking pace, in plain ink: "On balance, losing that trust is the greater risk: the forces should go."
+  4. 55.8–57.1: a speech panel opens in the second column, and words appear at the same pace, in plain ink: "Send them. The ally's trust matters most, and troops show we mean it."
+  5. 57.1–63.9: hold.
+- **Caption:** "Without the papers, both explain the call clearly."
+- **Notice:** the same call and the same reason, both fluent, both in the same ink. This is what faculty hear. Nothing in the picture marks either answer.
+- **Why:** the first question doesn't separate them. A fluent, sincere answer can pass it, which is why fluency is easy to miss.
 
-### Beat 8 · 64.2–75.2 s · One fact changes
+### Beat 8 · 63.9–70.4 s · Change one fact
 
 - **What moves:**
-  1. 65.2–68.2: nothing moves while the caption is read.
-  2. 68.2–68.8: the second column header fades in and rises 6 units: "THEN THEY ASK" over "What if the ally doesn't want our troops on its soil?"
-  3. 72.2–73.1: a speech panel opens in that column beside the first student, and grey words appear: "Any course must weigh escalation against the ally's trust." The same sentence on paper A returns to full strength.
-  4. 73.2–73.5: that sentence on paper A dims again.
-  5. 73.5–75.2: hold.
-- **Caption:** "Faculty change one fact. The first student repeats the paper's balancing line."
-- **Notice:** the answer is fluent and measured, and it is the paper's opening sentence. It names no risk as the one that matters now and no course of action.
-- **Why:** this is the turn. Under challenge, the student retreats to the paper's language, and fluency is shown standing in for a decision the student never made.
+  1. 64.9–65.5: as the caption is read, the fourth row's label fades in and rises 6 units: "THEN ONE FACT CHANGES" over "What if the ally doesn't want our troops on its soil?"
+  2. 65.5–70.4: hold while the question is read.
+- **Caption:** "Change one fact."
+- **Notice:** the new fact turns the second student's reason against troops: the ally's trust now argues for keeping them home.
+- **Why:** the separating question is on screen, with the caption, before either student answers.
 
-### Beat 9 · 75.2–83.2 s · The second student reworks the call
+### Beat 9 · 70.4–81.4 s · The two answers (the turn)
 
 - **What moves:**
-  1. 76.2–78.5: nothing moves while the caption is read.
-  2. 78.5–79.8: a speech panel opens beside the second student in the same column, and red words appear: "Then troops would cost their trust. I'd send aid and hold exercises instead."
-  3. 79.8–83.2: hold.
-- **Caption:** "The second student keeps the reason and changes the call."
-- **Notice:** the reason is the same as in the note and the first answer: the ally's trust. Because troops now work against it, the student picks a different course, in plain words.
-- **Why:** this is "revises under challenge", and it is the only place the two students differ.
+  1. 71.4–72.7: as the caption is read, a speech panel opens in the first column, and plain ink words appear: "On balance, losing that trust is the greater risk: the forces should go." They are the same words as the first answer.
+  2. 72.9–74.2: a speech panel opens in the second column, and plain ink words appear: "Then troops would cost the ally's trust. I'd send arms and aid instead."
+  3. 75.4–76.2: all four answers take their origin colours. The first student's two answers turn grey on the beige band, the key's mark for words the AI wrote. The second student's two answers turn red. At the same moment, on paper A, the band behind the repeated words returns to full strength and a navy underline runs under them (75.4–76.0).
+  4. 78.0–78.5: the highlight and underline on paper A fade.
+  5. 78.5–81.4: hold.
+- **Caption:** "One student repeats the paper. The other reworks the call from their reason."
+- **Notice:**
+  - The difference faculty can hear comes first: the first student says the same words again, which still send troops the ally no longer wants. The second keeps the reason and changes the call.
+  - Then the colours show why: the first student's answers were the AI's sentence all along. The second student's were their own.
+- **Why:** this is the turn, and the first place the two students differ. Under challenge one student falls back on the paper's call and the other revises (Section VIII).
 
-### Beat 10 · 83.2–89.9 s · The faculty check
+### Beat 10 · 81.4–88.6 s · The faculty check
 
 - **What moves:**
-  1. 83.2–83.4: caption 9 fades out.
-  2. 83.4–84.0: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the question in large italic.
-  3. 86.7–87.2: below it, smaller, "THEN ASK" and "What evidence would change your recommendation?".
-  4. 87.2–89.9: hold. At 89.9 the player shows Replay and the figure rests on this frame.
-- **Caption:** "Faculty check: Can the student independently explain the judgment in plain speech?" Follow-up: "Then ask: What evidence would change your recommendation?"
-- **Notice:** the picture already shows the check run on two students who handed in the same AI-drafted paper.
+  1. 81.4–81.6: caption 9 fades out.
+  2. 81.6–82.2: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the check in large italic.
+  3. 84.9–85.4: directly under it, at the same size: "Then change one fact. What would you recommend now?"
+  4. 85.4–88.6: hold. At 88.6 the player shows Replay and the figure rests on this frame.
+- **Caption:** "Faculty check: Can the student independently explain the judgment in plain speech?" Then, at the same size: "Then change one fact. What would you recommend now?"
+- **Notice:** the picture above shows both moves: the first question, which both students pass, and the changed fact, which separates them.
 - **Why:** the figure ends on the questions an educator can ask.
 
 ## 5. Final frame
 
-The still at 89.9 s. It is also the reduced-motion view, the print view and the poster (stage plus caption band).
+The still at 88.6 s. It is also the reduced-motion view, the print view and the poster (stage plus caption band).
 
-**Stage:**
-- **Top right:** the task card, "EXAMPLE TASK" over "Recommend whether to send forces to reassure a threatened ally."
-- **Column headers, one row:** "WHAT FACULTY RECEIVE" (left); "FACULTY ASK, PAPERS ASIDE" over "What do you recommend, and why?" (middle); "THEN THEY ASK" over "What if the ally doesn't want our troops on its soil?" (right).
-- **Left column:** two identical papers, both dimmed to 70%, in grey on a grey band: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation." They are labelled "FIRST STUDENT'S PAPER · DRAFTED WITH AI" and "SECOND STUDENT'S PAPER · DRAFTED WITH AI".
-- **Top row (first student):** a red dot. Middle: grey, "On balance, losing that trust is the greater risk: the forces should go." Right: grey, "Any course must weigh escalation against the ally's trust."
-- **Bottom row (second student):** a red dot. Middle: red, "Send them. Their trust matters most, and troops show we mean it." Right: red, "Then troops would cost their trust. I'd send aid and hold exercises instead."
-- **Bottom right:** the key, grey "WRITTEN BY AI" and red "A STUDENT'S OWN WORDS".
+**Stage:** a table.
+- **Label column:**
+  - the task card, "EXAMPLE TASK" over "Recommend whether to send forces to reassure a threatened ally.";
+  - then each row's label: "THEIR OWN WORK / NOT HANDED IN"; "WHAT FACULTY RECEIVE"; "FACULTY ASK" with "Papers aside: what do you recommend, and why?"; "THEN ONE FACT CHANGES" with "What if the ally doesn't want our troops on its soil?".
+- **Column heads:** a red dot and "First student"; a red dot and "Second student".
+- **Their own work:**
+  - First student: the cut sentence, grey on a band with a red strike: "Either choice carries real consequences."
+  - Second student: the red note, "Send them. The ally's trust matters most, and troops show we mean it."
+- **What faculty receive:** two identical papers, set aside (sheets faded, bands lightened), grey on bands, each tagged "STUDENT'S PAPER · DRAFTED WITH AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation."
+- **Faculty ask** (the answers in their origin colours, revealed at the turn):
+  - First student, grey on the band: "On balance, losing that trust is the greater risk: the forces should go."
+  - Second student, red: "Send them. The ally's trust matters most, and troops show we mean it."
+- **One fact changes:**
+  - First student, grey on the band: "On balance, losing that trust is the greater risk: the forces should go."
+  - Second student, red: "Then troops would cost the ally's trust. I'd send arms and aid instead."
+- **Under the columns:** the key, grey "WRITTEN BY AI" and red "A STUDENT'S OWN WORK".
 
 **Caption band:**
 
 > FACULTY CHECK *(navy mono)*
 > *Can the student independently explain the judgment in plain speech?* *(Serif italic, about 30 px)*
-> THEN ASK *(navy mono)* What evidence would change your recommendation? *(Serif, about 20 px)*
+> *Then change one fact. What would you recommend now?* *(the same size and style)*
 
 **In the reduced-motion and print views,** all ten captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
 
-**What the still says alone:** two students handed in the same paper, drafted with AI. Asked why without it, one answered in the paper's sentence and one in their own words. Asked what happens if the ally doesn't want troops, one repeated the paper's balancing line and the other changed course for the same reason. The check below says what to ask.
+**At 390 px** the final frame is the stacked text stage: their own work (the cut sentence and the red note), both question rows with all four answers in their colours, and the key.
+
+**What the still says alone:** two students handed in the same paper, drafted with AI. One cut a line from the AI's draft; the other wrote their own call first. Asked why, both answered well. When one fact changed, the first gave the same answer again and the second changed course for the same reason. The check below says what to ask.
 
 ## 6. Standalone page copy
 
@@ -211,26 +251,26 @@ The still at 89.9 s. It is also the reduced-motion view, the print view and the 
 
 **Setup:**
 
-A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment, and it can be identical to a paper from a student who made the call first. *The Irreducible Officer* calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.
+A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment, and it can be identical to a paper from a student who made the call first. *The Irreducible Officer* calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.
 
-**Figure summary** (visually hidden, for screen readers): An animated figure. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph in grey: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, cuts one weak sentence and keeps the rest. A second student first writes a plain note in red, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI write it up and reads that draft just as closely. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why. The first answers with the paper's sentence; the second answers in their own words. Then faculty ask what if the ally doesn't want troops on its soil. The first student repeats the paper's opening line about weighing escalation against trust. The second says troops would then cost the ally's trust and proposes aid and exercises instead. The figure ends on the faculty check. Each beat is listed below with what is on screen.
+**Figure summary** (visually hidden, for screen readers): An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. That draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student repeats the paper's call, word for word. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.
 
 **Beat list (text equivalent):**
 
-1. **A student gets a task that needs a decision.** *On screen:* a task card appears at the top right: "Example task: Recommend whether to send forces to reassure a threatened ally." A red dot labelled Student appears on the left.
-2. **The student asks an AI for a draft. It writes a polished recommendation.** *On screen:* the dot pulses. A sheet labelled "AI's draft" appears, and a grey paragraph writes itself line by line: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."
-3. **The student reads closely, cuts a weak line, and agrees with the rest.** *On screen:* the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and that sentence disappears. The rest stays grey. The label changes to "First student's paper, drafted with AI".
-4. **Another student writes their own judgment first, in plain words.** *On screen:* the first paper moves to the left. A second red dot labelled Another student writes on a note card in red: "Send them. The ally's trust matters most, and troops show we mean it."
-5. **That student has an AI write it up, then reads it closely.** *On screen:* the dot pulses, and a sheet labelled "AI's draft" fills with the same grey paragraph as the first paper. The dot reads along each line at the same pace. The note slides behind the sheet, and the label changes to "Second student's paper, drafted with AI".
-6. **Faculty receive two identical papers, both drafted with AI.** *On screen:* the second paper moves under the first, under the heading "What faculty receive". The two match word for word. A key appears: grey is written by AI, red is a student's own words.
-7. **Without the papers, both students explain. One uses the paper's words.** *On screen:* both papers dim. "Faculty ask, papers aside: What do you recommend, and why?" appears. The first student says, in grey, "On balance, losing that trust is the greater risk: the forces should go.", and the same sentence lights up on their paper. The second student says, in red, "Send them. Their trust matters most, and troops show we mean it."
-8. **Faculty change one fact. The first student repeats the paper's balancing line.** *On screen:* "Then they ask: What if the ally doesn't want our troops on its soil?" appears. The first student says, in grey, "Any course must weigh escalation against the ally's trust.", and that sentence lights up on their paper.
-9. **The second student keeps the reason and changes the call.** *On screen:* the second student says, in red, "Then troops would cost their trust. I'd send aid and hold exercises instead."
-10. **Faculty check: Can the student independently explain the judgment in plain speech? Then ask: What evidence would change your recommendation?** *On screen:* the questions appear under the picture. The two papers and all four answers stay in view.
+1. **A student gets a task that needs a decision.** *On screen:* a task card appears at the top left: "Example task: Recommend whether to send forces to reassure a threatened ally." A red dot labelled Student appears below it.
+2. **The student asks an AI for a draft. It writes a polished recommendation.** *On screen:* the dot pulses. A sheet labelled "AI's draft" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band "Written by AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."
+3. **The student reads closely, cuts a weak line, and agrees with the rest.** *On screen:* the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student's own work" in red. The struck sentence moves above the paper and stays there. The rest stays grey, and the label changes to "Student's paper, drafted with AI".
+4. **A second student writes their own call first, in plain words.** *On screen:* the first paper moves into a column headed First student. A second red dot heads a column labelled Second student and writes on a large note card in red: "Send them. The ally's trust matters most, and troops show we mean it."
+5. **An AI drafts from the note. It matches the first student's paper word for word.** *On screen:* the note moves into a top row labelled "Their own work, not handed in", beside the first student's cut sentence. The dot pulses, and a sheet labelled "AI's draft" fills with the same grey paragraph as the first paper. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper.
+6. **Faculty receive two identical papers, both drafted with AI.** *On screen:* the second paper moves into its column beside the first, in a row labelled "What faculty receive". Both are tagged "Student's paper, drafted with AI".
+7. **Without the papers, both explain the call clearly.** *On screen:* both papers dim. A row labelled "Faculty ask: Papers aside: what do you recommend, and why?" fills. In plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go." The second student says, "Send them. The ally's trust matters most, and troops show we mean it."
+8. **Change one fact.** *On screen:* a new row appears: "Then one fact changes: What if the ally doesn't want our troops on its soil?"
+9. **One student repeats the paper. The other reworks the call from their reason.** *On screen:* in plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go.", the same words as before. The second student says, "Then troops would cost the ally's trust. I'd send arms and aid instead." Then the answers take their colours: the first student's answers turn grey on a beige band, the mark for words the AI wrote, and those words are underlined on their paper. The second student's answers turn red, their own words.
+10. **Faculty check: Can the student independently explain the judgment in plain speech? Then change one fact. What would you recommend now?** *On screen:* both lines appear under the picture at the same size. The whole table stays in view.
 
 **Faculty check:** Can the student independently explain the judgment in plain speech?
 
-To test it, set the paper aside, ask why, then change one fact. Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.
+Then change one fact. What would you recommend now? Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.
 
 **From the essay** (*The Irreducible Officer*, Section II, What the Problem Looks Like), with its link to Chow et al. (2026):
 
@@ -248,27 +288,31 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 · The task | 0.0–6.0 | 9 | 3.0 | 6.0 | 13 | 1.0 | 1.0 | 4.0 | 6.0 |
-| 2 · The AI drafts | 6.0–14.7 | 13 | 4.3 | 8.7 | 35 | 1.0 | 3.4 | 4.3 | 8.7 |
-| 3 · The student agrees | 14.7–23.7 | 13 | 4.3 | 8.7 | 6 | 1.0 | 6.2 | 1.8 | 9.0 |
-| 4 · Another student writes first | 23.7–32.2 | 10 | 3.3 | 6.7 | 18 | 1.0 | 4.5 | 3.0 | 8.5 |
-| 5 · The AI writes it up | 32.2–43.2 | 12 | 4.0 | 8.0 | 36 | 1.0 | 8.0 | 2.0 | 11.0 |
-| 6 · What faculty receive | 43.2–49.2 | 9 | 3.0 | 6.0 | 10 | 1.0 | 2.6 | 2.4 | 6.0 |
-| 7 · Papers aside: why? | 49.2–64.2 | 11 | 3.7 | 7.3 | 35 | 1.0 | 8.4 | 5.6 | 15.0 |
-| 8 · One fact changes | 64.2–75.2 | 12 | 4.0 | 8.0 | 23 | 1.0 | 8.3 | 1.7 | 11.0 |
-| 9 · The second student reworks the call | 75.2–83.2 | 10 | 3.3 | 6.7 | 13 | 1.0 | 3.6 | 3.4 | 8.0 |
-| 10 · Faculty check | 83.2–89.9 | 10 + 6 follow-up | 3.3 + 2.0 | 6.7 (check) | 0 | 0.0 | 4.0 | 2.7 | 6.7, then rests |
-| **Total** | | **115** | **38.3** | | **189** | | **50.0** | | **89.9** |
+| 2 · The AI drafts | 6.0–14.7 | 13 | 4.3 | 8.7 | 38 | 1.0 | 3.4 | 4.3 | 8.7 |
+| 3 · The student agrees | 14.7–23.5 | 13 | 4.3 | 8.7 | 9 | 1.0 | 6.3 | 1.5 | 8.8 |
+| 4 · A second student writes first | 23.5–32.0 | 11 | 3.7 | 7.3 | 20 | 1.0 | 5.3 | 2.2 | 8.5 |
+| 5 · An AI drafts from the note | 32.0–43.4 | 15 | 5.0 | 10.0 | 41 | 1.0 | 8.8 | 1.6 | 11.4 |
+| 6 · What faculty receive | 43.4–49.4 | 9 | 3.0 | 6.0 | 3 | 1.0 | 1.8 | 3.2 | 6.0 |
+| 7 · Papers aside: both explain | 49.4–63.9 | 8 | 2.7 | 5.3 | 36 | 1.0 | 6.7 | 6.8 | 14.5 |
+| 8 · Change one fact | 63.9–70.4 | 3 | 1.0 | 2.0 | 15 | 1.0 | 0.6 | 4.9 | 6.5 |
+| 9 · The two answers | 70.4–81.4 | 13 | 4.3 | 8.7 | 26 | 1.0 | 7.1 | 2.9 | 11.0 |
+| 10 · Faculty check | 81.4–88.6 | 10 + 9 under it | 3.3 + 3.0 | 6.7 (check) | 0 | 0.0 | 4.0 | 3.2 | 7.2, then rests |
+| **Total** | | **113** | **37.7** | | **201** | | **45.0** | | **88.6** |
 
 Checks:
 - One idea per beat; movements run one after another.
-- Changes a caption names wait until it can be read once: the cut (beat 3, 5.7 s in), the note (beat 4, 3.5 s), the second student's close read (beat 5, 4.3 s), the first answer (beat 7, 6.4 s, after the caption and the question), the changed fact (beat 8, 4.0 s) and the first student's reply to it (beat 8, 8.0 s, after the question), the second student's reply (beat 9, 3.3 s), and the follow-up line (beat 10, 3.3 s after the check).
+- No caption describes something the picture hasn't shown yet:
+  - beat 8's question appears 1.0 s in, with its three-word caption;
+  - beat 9's answers start landing 1.0 s in, with their caption;
+  - beat 9's colour reveal waits until that caption can be read once (5.0 s in).
+- Other changes a caption names also wait until it can be read once: the cut (beat 3, 5.1 s in), the note (beat 4, 3.8 s), the match sweep (beat 5, 8.5 s), the first answers (beat 7, 4.9 s), and the line under the check (beat 10, 3.3 s after the check).
 - Every hold is at least 1.5 s.
 - **In-picture reading.**
-  - The first draft (33 words) is on screen at full size from 8.0 s to 25.0 s, alongside two 13-word captions: 59 words in 17 s, about 3.5 words a second. The paragraph doesn't need a full read here. It returns in beat 5, stays readable at 66% to the end, and beats 7 and 8 light up each sentence as it is repeated.
+  - The first draft (33 words) is on screen at full size from 8.0 s to 24.5 s, alongside two 13-word captions: 59 words in 16.5 s, about 3.6 words a second. It doesn't need a full read here. It returns in beat 5 and stays readable at 62% to the end.
   - Beat 5's draft is the same 28 words, so viewers recognise it more than read it.
-  - Beat 7 carries 46 words (caption, question, two answers) in 15.0 s, 3.1 words a second.
-  - Beat 8 carries 35 words in 11.0 s, 3.2 words a second. The first student's 9-word reply can be read once by the end of the beat, and it stays on screen to the end.
-  - Beat 9 carries 23 words in 8.0 s.
-- Both students read their drafts at the same pace (about 0.7 s a line), and both AI drafts compose at the same speed (0.4 s a line).
-- No camera moves. The two paper moves (beats 4 and 6) are 1.2 s each and eased; reduced motion removes them.
-- Total 89.9 s.
+  - Beat 7 carries 44 words (caption, question, two answers) in 14.5 s, 3.0 words a second.
+  - Beat 8 carries 18 words in 6.5 s.
+  - Beat 9 carries 13 caption words and 26 answer words in 11.0 s. The first student's answer repeats beat 7's, so it is recognised, not reread.
+- Both students read their drafts at the same pace (0.6 s a line), both AI drafts compose at the same speed (0.4 s a line), and both students' answers appear at the same speaking pace.
+- No camera moves. The paper and note moves (beats 4, 5 and 6) are 0.8–1.2 s each and eased; reduced motion removes them.
+- Total 88.6 s.

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluency Substitution</title>
+<meta name="description" content="A teaching figure: two students hand in the same AI-drafted paper, and only changing one fact shows which of them owns the call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Below 480 px the picture's text would render under 11 px, so the stage
+   switches to a stacked text view driven by the same clock. */
+.fs-narrow { display: none; }
+@media (max-width: 480px) {
+	/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
+	#fluency-substitution .mf-stage { height: 0; overflow: hidden; }
+	#fluency-substitution .fs-narrow { display: block; min-height: 320px; padding: 14px 14px 12px; background: var(--paper); }
+}
+.fs-n-sec { margin: 0 0 14px; }
+.fs-n-sec[hidden] { display: none; }
+.fs-n-label { margin: 0 0 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
+.fs-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-band[hidden] { display: none; }
+.fs-n-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.fs-n-small { margin: 6px 0 0; font: 500 13px/1.35 var(--sans); color: var(--muted); }
+.fs-n-item { margin: 0 0 8px; }
+.fs-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.fs-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.fs-n-note { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 16px/1.4 var(--serif); color: var(--red); }
+.fs-n-q { margin: 0 0 8px; font: italic 400 16px/1.35 var(--serif); color: var(--ink); }
+.fs-n-say { margin: 0 0 8px; padding: 8px 10px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.fs-n-txt { font: 400 16px/1.45 var(--serif); padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.fs-n-key-ai { color: var(--stone); }
+.fs-n-key-ai::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: 6px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; vertical-align: -1px; }
+.fs-n-key-own { color: var(--red); }
+.fs-n-key-own::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
+</style>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<p class="fig-kicker">Failure mode 2 of 7</p>
+	<h1>Fluency substitution</h1>
+	<p class="fig-setup">A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment, and it can be identical to a paper from a student who made the call first. <em>The Irreducible Officer</em> calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.</p>
+
+	<figure class="mf" id="fluency-substitution" aria-labelledby="fs-title">
+		<p class="sr-only" id="fs-title">Fluency substitution, an animated figure in ten beats</p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="fs-narrow" data-fs-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the fluency substitution figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:28</span>
+		</div>
+		<figcaption>
+			<p class="sr-only">An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. That draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student repeats the paper's call, word for word. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.</p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="fs-check-h">
+		<h2 id="fs-check-h">Faculty check</h2>
+		<p class="fig-check">Can the student independently explain the judgment in plain speech?</p>
+		<p class="fig-check">Then change one fact. What would you recommend now?</p>
+		<p class="fig-follow">Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.</p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fs-essay-h">
+		<h2 id="fs-essay-h">From the essay</h2>
+		<blockquote class="fig-quote">
+			<p>Fluency substitution is easier to miss. AI produces the tone of analytic maturity (balanced paragraphs, caveats in the right places, the measured voice of a considered judgment) and the student mistakes well-ordered language for well-owned reasoning. Researchers studying AI's effects on student cognition have introduced the concept of epistemic confinement to describe this condition: an illusion of competence while operating entirely within AI-constructed analytical boundaries, where the student believes they are thinking independently while the frame doing the work was never theirs (<a href="https://ojs.aut.ac.nz/pjtel/article/view/246">Chow et al., 2026</a>). In strategy, fluency substitutes for deciding. A paragraph that balances every consideration may never identify which risk actually matters most.</p>
+			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fs-links-h">
+		<h2 id="fs-links-h">Go further</h2>
+		<ul class="fig-links">
+			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=5">Own the decision</a></li>
+			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test fluency substitution with your AI assistant</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
+		</ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="fluency-substitution.js"></script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+/* Fluency substitution: motion figure 2 of 8. Built to storyboard.md (round 3,
+   revised after figure cold read 1).
+   Grey is what the AI wrote, red is a student's own work, navy is ink.
+   The picture builds toward a table: a label column on the left, one column
+   per student, and four rows (their own work, what faculty receive, the first
+   question, the changed fact). The students' answers arrive in plain ink, as
+   faculty hear them; their origin colours come back only after the changed fact.
+   Below 480 px the SVG gives way to a stacked text stage (renderNarrow), so the
+   words stay readable on a phone. Every attribute is a pure function of t, so
+   the runtime can play, scrub, hold (?t=) and export it frame by frame. */
+(() => {
+	const {mount, E, mix, prog, spring, el, set, pathAt, legibility, mixColor, FONT} = MotionFigures;
+	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};
+	const VW = 960;
+
+	// ---- timeline (absolute seconds, from the storyboard) -------------------
+	const T = {
+		card: [1.0, 1.6], dotIn: 1.6,
+		pulseA: [7.0, 7.4], sheetA: [7.4, 7.9], composeA: 8.0, line: 0.4, keyGrey: [8.0, 8.4],
+		enterA: [15.7, 16.1], readA: 16.1, read: 0.6,
+		strike: [19.8, 20.6], keyRed: [20.0, 20.4], lift: [20.8, 21.5], tagA: [21.6, 22.0],
+		cellA: [24.5, 25.7], dotB: 25.8, noteIn: [26.3, 26.7], toNote: [26.8, 27.2], write: [27.3, 29.3], backB: [29.4, 29.8],
+		noteUp: [33.0, 33.8], rowOwn: [33.6, 34.0], pulseB: [34.1, 34.4], sheetB: [34.4, 34.8], composeB: 34.9,
+		toLineB: [37.0, 37.4], readB: 37.4, sweep: [40.5, 41.3], tagB: [41.4, 41.8],
+		cellB: [44.4, 45.6], rowRecv: [45.7, 46.2],
+		dim: [50.4, 51.0], q1: [51.2, 51.8], a1: [54.3, 55.6], b1: [55.8, 57.1],
+		q2: [64.9, 65.5],
+		a2: [71.4, 72.7], b2: [72.9, 74.2], reveal: [75.4, 76.2], bright: [75.4, 76.0], unbright: [78.0, 78.5],
+		check: 81.4, follow: 84.9,
+		end: 88.6,
+	};
+
+	// ---- geometry ----------------------------------------------------------
+	const COL = {a: 252, b: 606, w: 338};
+	// The paper, in its own units: 460 wide, Serif 20, fixed line breaks so both
+	// papers match line for line. Segment keys: s1 first sentence, ans the words
+	// the first student repeats, s2b the rest of the call, cut the sentence the
+	// first student strikes (the AI's draft for the first student only).
+	const P = {w: 460, padX: 22, base: 40, lh: 34, fs: 20, bottom: 18};
+	const LINES = [
+		[['Any course must weigh escalation against', 's1']],
+		[["the ally's trust.", 's1'], [' ', null], ['On balance, losing that', 'ans']],
+		[['trust is the greater risk: the forces', 'ans']],
+		[['should go', 'ans'], [', with clear limits to contain', 's2b']],
+		[['escalation.', 's2b'], [' ', null], ['Either choice carries real', 'cut']],
+		[['consequences.', 'cut']],
+	];
+	const sheetH = (n) => P.base + (n - 1) * P.lh + P.bottom;
+	const baseY = (i) => P.base + P.lh * i;
+	const BIG = 0.85, SMALL = 0.62;
+	const PA = {big: {x: 300, y: 212}, cell: {x: COL.a, y: 212}};
+	const PB = {big: {x: 552, y: 212}, cell: {x: COL.b, y: 212}};
+	const NOTE = {big: {x: COL.b, y: 212}, cell: {x: COL.b, y: 112}, w: 338, h: 118, s: 0.62, fs: 20, x: 16, base: [38, 66, 94]};
+	const NOTE_LINES = ["Send them. The ally's trust", 'matters most, and troops', 'show we mean it.'];
+	const CUT_CARD = {x: COL.a, y: 132, fs: 15};
+	const ROWS = {q1: {top: 350}, q2: {top: 428}};
+	const PANEL = {h: 58, fs: 15, padX: 14, base: [24, 44]};
+	const ANSWERS = {
+		a1: {col: 'a', row: 'q1', grey: true, lines: ['“On balance, losing that trust is the', 'greater risk: the forces should go.”']},
+		b1: {col: 'b', row: 'q1', grey: false, lines: ["“Send them. The ally's trust matters most,", 'and troops show we mean it.”']},
+		a2: {col: 'a', row: 'q2', grey: true, lines: ['“On balance, losing that trust is the', 'greater risk: the forces should go.”']},
+		b2: {col: 'b', row: 'q2', grey: false, lines: ["“Then troops would cost the ally's trust.", "I'd send arms and aid instead.”"]},
+	};
+	const HEAD_Y = 88;
+	const DOT_A = {start: {x: 120, y: 300}, head: {x: COL.a + 8, y: HEAD_Y}};
+	const DOT_B = {head: {x: COL.b + 8, y: HEAD_Y}};
+
+	const root = document.querySelector('#fluency-substitution');
+	const svg = root.querySelector('svg');
+	const defs = el(svg, 'defs');
+	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
+	const stage = el(svg, 'g');
+
+	const text = (parent, x, y, str, {fs, family = FONT.sans, weight = 400, fill = C.ink, anchor = 'start', ls = 0, style, dataFs} = {}) =>
+		el(parent, 'text', {x, y, 'font-family': family, 'font-size': fs, 'font-weight': weight, fill, 'text-anchor': anchor, 'letter-spacing': ls, 'data-fs': dataFs ?? fs, ...(style ? {'font-style': style} : {})}, str);
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
+	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, ...opts});
+	let clipN = 0;
+	const clipGroup = (parent, rects) => {
+		const id = `fs-clip-${clipN++}`;
+		const cp = el(defs, 'clipPath', {id});
+		const nodes = rects.map((r) => el(cp, 'rect', {...r, width: 0}));
+		return {g: el(parent, 'g', {'clip-path': `url(#${id})`}), rects: nodes};
+	};
+
+	// ---- task card (label column, stays put) --------------------------------
+	const card = el(stage, 'g');
+	el(card, 'rect', {x: 16, y: 14, width: 220, height: 92, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
+	mono(card, 28, 34, 'EXAMPLE TASK');
+	['Recommend whether to', 'send forces to reassure', 'a threatened ally.'].forEach((s, i) => serif(card, 28, 56 + 18 * i, s, {fs: 15}));
+
+	// ---- row labels, key ------------------------------------------------------
+	const rowOwn = el(stage, 'g');
+	mono(rowOwn, 16, 140, 'THEIR OWN WORK');
+	mono(rowOwn, 16, 156, 'NOT HANDED IN', {weight: 500});
+	const rowRecv = mono(stage, 16, 236, 'WHAT FACULTY RECEIVE');
+	const q1 = el(stage, 'g');
+	mono(q1, 16, 362, 'FACULTY ASK');
+	['Papers aside: what do you', 'recommend, and why?'].forEach((s, i) => serif(q1, 16, 383 + 20 * i, s, {fs: 16, style: 'italic'}));
+	const q2 = el(stage, 'g');
+	mono(q2, 16, 440, 'THEN ONE FACT CHANGES');
+	["What if the ally doesn't want", 'our troops on its soil?'].forEach((s, i) => serif(q2, 16, 461 + 20 * i, s, {fs: 16, style: 'italic'}));
+	// The key: its grey half arrives with the first AI text, its red half with the first red mark.
+	const keyGrey = el(stage, 'g');
+	el(keyGrey, 'rect', {x: COL.a, y: 513, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
+	mono(keyGrey, COL.a + 26, 524, 'WRITTEN BY AI', {fill: C.grey});
+	const keyRed = el(stage, 'g');
+	el(keyRed, 'circle', {cx: COL.a + 186, cy: 520, r: 5, fill: C.red});
+	mono(keyRed, COL.a + 198, 524, "A STUDENT'S OWN WORK", {fill: C.red});
+
+	// ---- a paper ------------------------------------------------------------------
+	// Built in its own units and placed by a transform. Each line is revealed by
+	// its own clip rect as the AI composes it.
+	const paper = (withCut) => {
+		const g = el(stage, 'g');
+		const shadow = el(g, 'rect', {x: 3, y: 4, width: P.w, rx: 1, fill: C.ink, 'fill-opacity': 0.06});
+		const sheet = el(g, 'rect', {x: 0, y: 0, width: P.w, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
+		const lines = withCut ? LINES : LINES.slice(0, 5).map((l, i) => (i === 4 ? l.slice(0, 1) : l));
+		const clip = clipGroup(g, lines.map((_, i) => ({x: 0, y: baseY(i) - 26, height: P.lh + 2})));
+		const bandLayer = el(clip.g, 'g'), overLayer = el(clip.g, 'g'), textLayer = el(clip.g, 'g');
+		const segs = [];
+		lines.forEach((line, li) => line.forEach(([str, k], si) => {
+			if (!k) return;
+			const prevSpace = si === 0 || !line[si - 1][1];
+			const nextSpace = si === line.length - 1 || !line[si + 1][1];
+			const node = serif(textLayer, 0, baseY(li), str, {fs: P.fs, fill: C.grey, dataFs: P.fs * SMALL});
+			// The highlight for the words the first student repeats (beat 8).
+			const over = k === 'ans' ? el(overLayer, 'rect', {y: baseY(li) - 18, height: 25, rx: 2, fill: C.band, opacity: 0}) : null;
+			const under = k === 'ans' ? el(g, 'line', {y1: baseY(li) + 7, y2: baseY(li) + 7, stroke: C.ink, 'stroke-width': 2.4, opacity: 0}) : null;
+			segs.push({li, si, k, str, node, over, under, padL: prevSpace ? 3 : 0, padR: nextSpace ? 3 : 0});
+		}));
+		const runs = [];
+		const sweep = lines.slice(0, 5).map((_, i) => el(g, 'line', {y1: baseY(i) + 7, y2: baseY(i) + 7, stroke: C.ink, 'stroke-width': 2.4, opacity: 0}));
+		return {g, shadow, sheet, clip, segs, lines, sweep, lineW: [], runs, bandLayer};
+	};
+	const paperA = paper(true);
+	const paperB = paper(false);
+	const strike = [el(paperA.g, 'line', {stroke: C.red, 'stroke-width': 2.6}), el(paperA.g, 'line', {stroke: C.red, 'stroke-width': 2.6})];
+
+	// Tags (outside the scaled groups, so mono stays 12 units).
+	const tag = () => {
+		const ai = mono(stage, 0, 0, "AI'S DRAFT", {fill: C.grey});
+		const kept = mono(stage, 0, 0, '', {});
+		const kInk = el(kept, 'tspan', {fill: C.ink}); kInk.textContent = "STUDENT'S PAPER";
+		const kGrey = el(kept, 'tspan', {fill: C.grey}); kGrey.textContent = ' · DRAFTED WITH AI';
+		return {ai, kept};
+	};
+	const tagA = tag();
+	const tagB = tag();
+
+	// The cut sentence, once lifted out: a one-line card in the first column's top row.
+	const cutCard = el(stage, 'g');
+	const cutBand = el(cutCard, 'rect', {x: 6, y: 9, height: 22, rx: 2, fill: C.band});
+	const cutText = serif(cutCard, 10, 25, 'Either choice carries real consequences.', {fs: CUT_CARD.fs, fill: C.grey});
+	const cutStrike = el(cutCard, 'line', {y1: 20, y2: 20, x1: 8, stroke: C.red, 'stroke-width': 2.2});
+
+	// The second student's note.
+	const note = el(stage, 'g');
+	el(note, 'rect', {x: 0, y: 0, width: NOTE.w, height: NOTE.h, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
+	const noteClip = clipGroup(note, NOTE.base.map((b) => ({x: 0, y: b - 24, height: 30})));
+	const noteText = NOTE_LINES.map((s, i) => serif(noteClip.g, NOTE.x, NOTE.base[i], s, {fs: NOTE.fs, fill: C.red, dataFs: NOTE.fs * NOTE.s}));
+	const noteLabel = mono(stage, COL.b, 204, "SECOND STUDENT'S NOTE", {fill: C.red});
+
+	// Speech panels.
+	const panels = {};
+	for (const [id, a] of Object.entries(ANSWERS)) {
+		const x = COL[a.col], y = ROWS[a.row].top;
+		const g = el(stage, 'g');
+		const box = el(g, 'rect', {x, y, width: COL.w, height: PANEL.h, rx: 8, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.25, 'stroke-width': 1});
+		const clip = clipGroup(g, a.lines.map((_, i) => ({x, y: y + PANEL.base[i] - 15, height: 20})));
+		const lines = a.lines.map((s, i) => {
+			// Ink first, as faculty hear it; the origin colour comes back at the reveal (beat 9).
+			const band = a.grey ? el(clip.g, 'rect', {x: x + PANEL.padX - 3, y: y + PANEL.base[i] - 13.5, height: 19, rx: 2, fill: C.band, opacity: 0}) : null;
+			const node = serif(clip.g, x + PANEL.padX, y + PANEL.base[i], s, {fs: PANEL.fs, fill: C.ink});
+			return {band, node};
+		});
+		panels[id] = {g, box, clip, lines, x, w: [], grey: a.grey};
+	}
+
+	// Dots and their labels.
+	const dotA = el(stage, 'circle', {r: 5, fill: C.red});
+	const dotALabel = text(stage, DOT_A.start.x, DOT_A.start.y + 24, 'Student', {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
+	const headA = text(stage, DOT_A.head.x + 12, HEAD_Y + 5, 'First student', {fs: 13, weight: 600, fill: C.red});
+	const dotB = el(stage, 'circle', {r: 5, fill: C.red});
+	const headB = text(stage, DOT_B.head.x + 12, HEAD_Y + 5, 'Second student', {fs: 13, weight: 600, fill: C.red});
+
+	// ---- measuring and paths ----------------------------------------------------------
+	let dotAAt = () => DOT_A.start, dotBAt = () => DOT_B.head;
+	const world = (pos, s, lx, ly) => ({x: pos.x + s * lx, y: pos.y + s * ly});
+	let cutStart = {x: 0, y: 0}, cutLen = [0, 0], noteW = [], ready = false;
+
+	function measure() {
+		const probe = serif(stage, 0, -100, '', {fs: P.fs});
+		[paperA, paperB].forEach((p) => {
+			p.lines.forEach((line, li) => {
+				const full = line.map(([s]) => s).join('');
+				probe.textContent = full;
+				p.lineW[li] = probe.getComputedTextLength();
+				let idx = 0;
+				line.forEach(([str, k], si) => {
+					const off = idx ? probe.getSubStringLength(0, idx) : 0;
+					const w = probe.getSubStringLength(idx, str.length);
+					idx += str.length;
+					if (!k) return;
+					const seg = p.segs.find((s) => s.li === li && s.si === si);
+					seg.x = P.padX + off; seg.w = w;
+					set(seg.node, {x: seg.x});
+					if (seg.over) set(seg.over, {x: seg.x - seg.padL, width: w + seg.padL + seg.padR});
+					if (seg.under) set(seg.under, {x1: seg.x, x2: seg.x + w});
+				});
+			});
+			// One band per run of words on a line (a run breaks at a space between
+			// sentences, and the cut sentence has its own), so there are no seams.
+			p.lines.forEach((_, li) => {
+				const segsOnLine = p.segs.filter((sg) => sg.li === li);
+				let run = null;
+				segsOnLine.forEach((sg, i) => {
+					const cut = sg.k === 'cut';
+					const joins = run && run.cut === cut && segsOnLine[i - 1].si === sg.si - 1;
+					if (!joins) { run = {cut, li, x0: sg.x, x1: sg.x + sg.w}; p.runs.push(run); } else run.x1 = sg.x + sg.w;
+				});
+			});
+			p.runs.forEach((r) => { r.rect = el(p.bandLayer, 'rect', {x: r.x0 - 3, y: baseY(r.li) - 18, width: r.x1 - r.x0 + 6, height: 25, rx: 2, fill: C.band}); });
+			p.clip.rects.forEach((r, i) => set(r, {x: P.padX - 4}));
+			p.sweep.forEach((l, i) => set(l, {x1: P.padX, x2: P.padX}));
+		});
+		probe.remove();
+		// The strike across the cut sentence (line 5, then line 6).
+		const cuts = paperA.segs.filter((s) => s.k === 'cut');
+		cuts.forEach((c, i) => set(strike[i], {y1: baseY(c.li) - 6.5, y2: baseY(c.li) - 6.5, x1: c.x, x2: c.x}));
+		cutLen = cuts.map((c) => c.w);
+		cutStart = {x: cuts[0].x, y: baseY(cuts[0].li)};
+		const cw = cutText.getComputedTextLength();
+		set(cutBand, {width: cw + 8});
+		set(cutStrike, {x2: 12 + cw});
+		noteW = noteText.map((n) => n.getComputedTextLength());
+		noteClip.rects.forEach((r) => set(r, {x: NOTE.x - 4}));
+		for (const p of Object.values(panels)) {
+			p.w = p.lines.map((l) => l.node.getComputedTextLength());
+			p.lines.forEach((l, i) => { if (l.band) set(l.band, {width: p.w[i] + 6}); });
+			p.clip.rects.forEach((r) => set(r, {x: p.x + PANEL.padX - 4}));
+		}
+
+		// The first student's dot: in, read each line, strike, rest, then up to its column.
+		const segA = [];
+		const lineStart = (pos, i) => world(pos, BIG, P.padX, baseY(i) + 6);
+		const lineEnd = (p, pos, i) => world(pos, BIG, P.padX + p.lineW[i], baseY(i) + 6);
+		segA.push([T.enterA[0], T.enterA[1], DOT_A.start, lineStart(PA.big, 0), E.inOut]);
+		paperA.lines.forEach((_, i) => {
+			const t0 = T.readA + T.read * i;
+			segA.push([t0, t0 + T.read, lineStart(PA.big, i), lineEnd(paperA, PA.big, i)]);
+		});
+		const [c5, c6] = cuts;
+		const split = T.strike[0] + (T.strike[1] - T.strike[0]) * (cutLen[0] / (cutLen[0] + cutLen[1]));
+		const sy5 = baseY(c5.li) - 6.5, sy6 = baseY(c6.li) - 6.5;
+		segA.push([T.strike[0], split, world(PA.big, BIG, c5.x, sy5), world(PA.big, BIG, c5.x + c5.w, sy5)]);
+		segA.push([split, T.strike[1], world(PA.big, BIG, c6.x, sy6), world(PA.big, BIG, c6.x + c6.w, sy6)]);
+		const esc = paperA.segs.find((s) => s.li === 4 && s.k === 's2b');
+		const rest = world(PA.big, BIG, esc.x + esc.w + 8, baseY(4) + 6);
+		segA.push([T.lift[0], T.lift[1], world(PA.big, BIG, c6.x + c6.w, sy6), rest, E.inOut]);
+		segA.push([T.cellA[0], T.cellA[1], rest, DOT_A.head, E.inOutStrong]);
+		dotAAt = pathAt(segA, DOT_A.start);
+
+		// The second student's dot: down to the note, write, back up; later read the draft.
+		const segB = [];
+		const nb = (i) => ({x: NOTE.big.x + NOTE.x, y: NOTE.big.y + NOTE.base[i] + 6});
+		segB.push([T.toNote[0], T.toNote[1], DOT_B.head, nb(0), E.inOut]);
+		const totalW = noteW.reduce((a, b) => a + b, 0);
+		let tw = T.write[0];
+		noteW.forEach((w, i) => {
+			const d = (T.write[1] - T.write[0]) * (w / totalW);
+			segB.push([tw, tw + d, nb(i), {x: nb(i).x + w, y: nb(i).y}]);
+			tw += d;
+		});
+		const noteEnd = {x: nb(2).x + noteW[2], y: nb(2).y};
+		segB.push([T.backB[0], T.backB[1], noteEnd, DOT_B.head, E.inOut]);
+		segB.push([T.toLineB[0], T.toLineB[1], DOT_B.head, lineStart(PB.big, 0), E.inOut]);
+		paperB.lines.forEach((_, i) => {
+			const t0 = T.readB + T.read * i;
+			segB.push([t0, t0 + T.read, lineStart(PB.big, i), lineEnd(paperB, PB.big, i)]);
+		});
+		segB.push([T.cellB[0], T.cellB[1], lineEnd(paperB, PB.big, 4), DOT_B.head, E.inOutStrong]);
+		dotBAt = pathAt(segB, DOT_B.head);
+		noteTiming = (() => { let a = T.write[0]; return noteW.map((w) => { const d = (T.write[1] - T.write[0]) * (w / totalW); const r = [a, a + d]; a += d; return r; }); })();
+		ready = true;
+	}
+	let noteTiming = [];
+
+	// Reveal a set of clip rects line by line across [t0, t1], in proportion to widths.
+	const revealLines = (rects, widths, t, t0, t1, pad = 8) => {
+		const total = widths.reduce((a, b) => a + b, 0);
+		let a = t0;
+		rects.forEach((r, i) => {
+			const d = (t1 - t0) * (widths[i] / total);
+			set(r, {width: (widths[i] + pad) * prog(t, a, a + d)});
+			a += d;
+		});
+	};
+	const place = (g, pos, s) => set(g, {transform: `translate(${pos.x.toFixed(2)} ${pos.y.toFixed(2)}) scale(${s.toFixed(4)})`});
+	const lerpPos = (a, b, k) => ({x: mix(a.x, b.x, k), y: mix(a.y, b.y, k)});
+
+	const render = (t) => {
+		if (!ready) return;
+		// Beat 1: task card, first dot.
+		const ck = prog(t, ...T.card, E.house);
+		set(card, {opacity: ck, transform: `translate(0 ${mix(6, 0, ck).toFixed(2)})`});
+		const pa = dotAAt(t);
+		const growA = spring(t, T.dotIn, {stiffness: 300, damping: 20});
+		const pulseA = Math.sin(Math.PI * prog(t, ...T.pulseA)) * 2.5;
+		set(dotA, {cx: pa.x, cy: pa.y, r: Math.max(0, 5 * growA + pulseA)});
+		set(dotALabel, {opacity: prog(t, T.dotIn, T.dotIn + 0.4) * (1 - prog(t, T.enterA[0], T.enterA[0] + 0.3))});
+		set(headA, {opacity: prog(t, T.cellA[1] - 0.3, T.cellA[1] + 0.1)});
+
+		// Paper A: appears, composes, is cut, shrinks into its cell.
+		const cellA = prog(t, ...T.cellA, E.inOutStrong);
+		const posA = lerpPos(PA.big, PA.cell, cellA), sA = mix(BIG, SMALL, cellA);
+		place(paperA.g, posA, sA);
+		const inA = prog(t, ...T.sheetA, E.house);
+		set(paperA.g, {opacity: inA});
+		const lift = prog(t, ...T.lift, E.inOut);
+		const hA = mix(sheetH(6), sheetH(5), lift);
+		set(paperA.sheet, {height: hA});
+		set(paperA.shadow, {height: hA});
+		paperA.clip.rects.forEach((r, i) => set(r, {width: (paperA.lineW[i] + 10) * prog(t, T.composeA + T.line * i, T.composeA + T.line * (i + 1))}));
+		const sk = prog(t, ...T.strike);
+		const split = cutLen[0] / (cutLen[0] + cutLen[1]);
+		const cuts = paperA.segs.filter((s) => s.k === 'cut');
+		cuts.forEach((c, i) => {
+			const k = i === 0 ? Math.min(1, sk / split) : Math.max(0, (sk - split) / (1 - split));
+			set(strike[i], {x2: c.x + c.w * k, opacity: t < T.lift[0] ? 1 : 0});
+			set(c.node, {opacity: t < T.lift[0] ? 1 : 0});
+		});
+		paperA.runs.forEach((r) => { if (r.cut) set(r.rect, {opacity: t < T.lift[0] ? 1 : 0}); });
+		// The lifted card: from where the cut words sat to the first column's top row.
+		const from = world(PA.big, BIG, cutStart.x - 10 * (BIG * P.fs / CUT_CARD.fs) / BIG, cutStart.y - 25 * (BIG * P.fs / CUT_CARD.fs) / BIG);
+		const cardS = mix(BIG * P.fs / CUT_CARD.fs, 1, lift);
+		place(cutCard, lerpPos(from, {x: CUT_CARD.x, y: CUT_CARD.y}, lift), cardS);
+		// Half see-through mid-flight, so the lines it crosses stay readable.
+		set(cutCard, {opacity: t >= T.lift[0] ? 1 - 0.5 * Math.sin(Math.PI * lift) : 0});
+
+		// Tags.
+		// One label fades out before the next fades in, so they never overlap.
+		const placeTag = (tg, pos) => [tg.ai, tg.kept].forEach((n) => set(n, {x: pos.x, y: pos.y - 8}));
+		const swapTag = (tg, span, shown) => {
+			const mid = (span[0] + span[1]) / 2;
+			set(tg.ai, {opacity: shown * (1 - prog(t, span[0], mid))});
+			set(tg.kept, {opacity: prog(t, mid, span[1])});
+		};
+		placeTag(tagA, posA);
+		swapTag(tagA, T.tagA, inA);
+
+		// Beat 4: the second student and the note.
+		const growB = spring(t, T.dotB, {stiffness: 300, damping: 20});
+		const pulseB = Math.sin(Math.PI * prog(t, ...T.pulseB)) * 2.5;
+		const pb = dotBAt(t);
+		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * growB + pulseB)});
+		set(headB, {opacity: prog(t, T.dotB, T.dotB + 0.4)});
+		const noteIn = prog(t, ...T.noteIn, E.house);
+		const up = prog(t, ...T.noteUp, E.inOutStrong);
+		place(note, lerpPos(NOTE.big, NOTE.cell, up), mix(1, NOTE.s, up));
+		set(note, {opacity: noteIn});
+		set(noteLabel, {opacity: noteIn * (1 - prog(t, T.noteUp[0], T.noteUp[0] + 0.3))});
+		noteClip.rects.forEach((r, i) => set(r, {width: (noteW[i] + 8) * prog(t, ...noteTiming[i])}));
+		set(rowOwn, {opacity: prog(t, ...T.rowOwn)});
+
+		// Beat 5: the AI drafts from the note; the match sweep.
+		const cellB = prog(t, ...T.cellB, E.inOutStrong);
+		const posB = lerpPos(PB.big, PB.cell, cellB), sB = mix(BIG, SMALL, cellB);
+		place(paperB.g, posB, sB);
+		const inB = prog(t, ...T.sheetB, E.house);
+		set(paperB.g, {opacity: inB});
+		set(paperB.sheet, {height: sheetH(5)});
+		set(paperB.shadow, {height: sheetH(5)});
+		paperB.clip.rects.forEach((r, i) => set(r, {width: (paperB.lineW[i] + 10) * prog(t, T.composeB + T.line * i, T.composeB + T.line * (i + 1))}));
+		const sweepOut = 1 - prog(t, ...T.tagB);
+		const step = (T.sweep[1] - T.sweep[0]) / 5;
+		[paperA, paperB].forEach((p) => p.sweep.forEach((l, i) => {
+			const k = prog(t, T.sweep[0] + step * i, T.sweep[0] + step * (i + 1));
+			set(l, {x2: P.padX + p.lineW[i] * k, opacity: k > 0 ? sweepOut : 0});
+		}));
+		placeTag(tagB, posB);
+		swapTag(tagB, T.tagB, inB);
+
+		// Row label (beat 6) and the key (beats 2 and 3).
+		set(rowRecv, {opacity: prog(t, ...T.rowRecv)});
+		set(keyGrey, {opacity: prog(t, ...T.keyGrey)});
+		set(keyRed, {opacity: prog(t, ...T.keyRed)});
+
+		// Beat 7: papers set aside. Sheets and bands fade; the words stay readable.
+		const dim = prog(t, ...T.dim, E.inOut);
+		const bright = prog(t, ...T.bright) - prog(t, ...T.unbright);
+		[paperA, paperB].forEach((p) => {
+			set(p.sheet, {'fill-opacity': 1 - dim});
+			set(p.shadow, {opacity: 1 - dim});
+			p.runs.forEach((r) => { if (!r.cut) set(r.rect, {opacity: mix(1, 0.55, dim)}); });
+			p.segs.forEach((s) => {
+				if (s.over) set(s.over, {opacity: p === paperA ? dim * bright : 0});
+				if (s.under) set(s.under, {opacity: p === paperA ? bright : 0});
+			});
+		});
+		const rise = (g, span) => { const k = prog(t, ...span, E.house); set(g, {opacity: k, transform: `translate(0 ${mix(6, 0, k).toFixed(2)})`}); };
+		rise(q1, T.q1);
+		rise(q2, T.q2);
+
+		// Answers: the panel opens, then the words arrive at speaking pace, in ink.
+		// After the changed fact (beat 9), all four take their origin colours.
+		const rv = prog(t, ...T.reveal, E.inOut);
+		for (const [id, p] of Object.entries(panels)) {
+			const span = T[id];
+			set(p.g, {opacity: prog(t, span[0], span[0] + 0.2)});
+			revealLines(p.clip.rects, p.w, t, span[0] + 0.1, span[1]);
+			p.lines.forEach((l) => {
+				set(l.node, {fill: mixColor(C.ink, p.grey ? C.grey : C.red, rv)});
+				if (l.band) set(l.band, {opacity: rv});
+			});
+		}
+		renderNarrow(t);
+	};
+
+	// ---- the narrow stage (below 480 px) ---------------------------------------------
+	// A stacked text view of the same moments, driven by the same clock: what the
+	// current beat is about, at readable sizes. The SVG is hidden at this width.
+	const narrow = root.querySelector('[data-fs-narrow]');
+	const h = (tag, cls, parent, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; parent.append(n); return n; };
+	const PARA = "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation.";
+	const N = {};
+	const section = (key, label) => { const sec = h('div', 'fs-n-sec', narrow); const lab = label != null ? h('p', 'fs-n-label', sec, label) : null; N[key] = {sec, lab}; return sec; };
+	{
+		const sec = section('task', 'Example task');
+		h('p', 'fs-n-task', sec, 'Recommend whether to send forces to reassure a threatened ally.');
+	}
+	{
+		const sec = section('draftA', "AI's draft");
+		const para = h('p', 'fs-n-ai', sec);
+		h('span', 'fs-n-band', para, PARA);
+		para.append(' ');
+		N.draftA.cut = h('span', 'fs-n-band', para, 'Either choice carries real consequences.');
+	}
+	{
+		const sec = section('own', 'Their own work, not handed in');
+		const a = h('div', 'fs-n-item', sec);
+		h('span', 'fs-n-who', a, 'First student');
+		const cutP = h('p', 'fs-n-ai', a);
+		h('span', 'fs-n-band fs-n-struck', cutP, 'Either choice carries real consequences.');
+		const b = h('div', 'fs-n-item', sec);
+		h('span', 'fs-n-who', b, 'Second student');
+		N.own.a = a; N.own.b = b;
+		N.own.note = h('p', 'fs-n-note', b, "Send them. The ally's trust matters most, and troops show we mean it.");
+	}
+	{
+		const sec = section('draftB', "Second student: AI's draft from the note");
+		const para = h('p', 'fs-n-ai', sec);
+		h('span', 'fs-n-band', para, PARA);
+		N.draftB.same = h('p', 'fs-n-small', sec, "Word for word the same as the first student's paper");
+	}
+	{
+		const sec = section('recv', 'What faculty receive');
+		h('p', 'fs-n-small', sec, 'Two identical papers, both drafted with AI:');
+		const para = h('p', 'fs-n-ai', sec);
+		h('span', 'fs-n-band', para, PARA);
+	}
+	const say = (parent, who, str, grey) => {
+		const box = h('div', 'fs-n-say', parent);
+		h('span', 'fs-n-who', box, who);
+		const txt = h('span', 'fs-n-txt', box, str);
+		return {box, txt, grey};
+	};
+	const A1 = '“On balance, losing that trust is the greater risk: the forces should go.”';
+	{
+		const sec = section('q1', 'Faculty ask');
+		h('p', 'fs-n-q', sec, 'Papers aside: what do you recommend, and why?');
+		N.q1.a = say(sec, 'First student', A1, true);
+		N.q1.b = say(sec, 'Second student', "“Send them. The ally's trust matters most, and troops show we mean it.”", false);
+	}
+	{
+		const sec = section('q2', 'Then one fact changes');
+		h('p', 'fs-n-q', sec, "What if the ally doesn't want our troops on its soil?");
+		N.q2.a = say(sec, 'First student', A1, true);
+		N.q2.b = say(sec, 'Second student', "“Then troops would cost the ally's trust. I'd send arms and aid instead.”", false);
+	}
+	{
+		const sec = section('key', null);
+		sec.classList.add('fs-n-key');
+		N.key.grey = h('span', 'fs-n-key-ai', sec, 'Written by AI');
+		N.key.red = h('span', 'fs-n-key-own', sec, "A student's own work");
+	}
+	const SHOW = [['task'], ['task', 'draftA'], ['draftA'], ['own'], ['own', 'draftB'], ['own', 'recv'], ['q1'], ['q1', 'q2'], ['q1', 'q2'], ['own', 'q1', 'q2']];
+	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
+	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
+	function renderNarrow(t) {
+		const show = new Set(SHOW[beatIndex(t)]);
+		for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
+		fade(N.task.sec, prog(t, ...T.card));
+		N.draftA.lab.textContent = t >= (T.tagA[0] + T.tagA[1]) / 2 ? "Student's paper · drafted with AI" : "AI's draft";
+		fade(N.draftA.sec, prog(t, ...T.sheetA));
+		N.draftA.cut.classList.toggle('fs-n-struck', t >= T.strike[0] + 0.3);
+		N.draftA.cut.hidden = t >= T.lift[1];
+		fade(N.own.a, prog(t, ...T.lift));
+		fade(N.own.note, prog(t, ...T.write));
+		fade(N.draftB.sec, prog(t, ...T.sheetB));
+		fade(N.draftB.same, prog(t, ...T.sweep));
+		const rv = prog(t, ...T.reveal, E.inOut);
+		for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
+			fade(N[q].sec, prog(t, ...T[q]));
+			[N[q].a, N[q].b].forEach((sv, i) => {
+				fade(sv.box, prog(t, T[ids[i]][0], T[ids[i]][1]));
+				sv.txt.style.color = mixColor(C.ink, sv.grey ? C.grey : C.red, rv);
+				sv.txt.style.backgroundColor = sv.grey ? `rgba(222, 213, 196, ${rv.toFixed(3)})` : 'transparent';
+			});
+		}
+		fade(N.key.grey, prog(t, ...T.keyGrey));
+		fade(N.key.red, prog(t, ...T.keyRed));
+	}
+	const narrowQuery = matchMedia('(max-width: 480px)');
+	const syncNarrow = () => { if (narrowQuery.matches) root.classList.add('is-narrow'); };
+	narrowQuery.addEventListener('change', syncNarrow);
+
+	const BEATS = [
+		{at: 0, text: 'A student gets a task that needs a decision.',
+			detail: 'a task card appears at the top left: "Example task: Recommend whether to send forces to reassure a threatened ally." A red dot labelled Student appears below it.'},
+		{at: 6.0, text: 'The student asks an AI for a draft. It writes a polished recommendation.',
+			detail: 'the dot pulses. A sheet labelled "AI\'s draft" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band "Written by AI": "Any course must weigh escalation against the ally\'s trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."'},
+		{at: 14.7, text: 'The student reads closely, cuts a weak line, and agrees with the rest.',
+			detail: 'the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student\'s own work" in red. The struck sentence moves above the paper and stays there. The rest stays grey, and the label changes to "Student\'s paper, drafted with AI".'},
+		{at: 23.5, text: 'A second student writes their own call first, in plain words.',
+			detail: 'the first paper moves into a column headed First student. A second red dot heads a column labelled Second student and writes on a large note card in red: "Send them. The ally\'s trust matters most, and troops show we mean it."'},
+		{at: 32.0, text: "An AI drafts from the note. It matches the first student's paper word for word.",
+			detail: 'the note moves into a top row labelled "Their own work, not handed in", beside the first student\'s cut sentence. The dot pulses, and a sheet labelled "AI\'s draft" fills with the same grey paragraph as the first paper. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper.'},
+		{at: 43.4, text: 'Faculty receive two identical papers, both drafted with AI.',
+			detail: 'the second paper moves into its column beside the first, in a row labelled "What faculty receive". Both are tagged "Student\'s paper, drafted with AI".'},
+		{at: 49.4, text: 'Without the papers, both explain the call clearly.',
+			detail: 'both papers dim. A row labelled "Faculty ask: Papers aside: what do you recommend, and why?" fills. In plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go." The second student says, "Send them. The ally\'s trust matters most, and troops show we mean it."'},
+		{at: 63.9, text: 'Change one fact.',
+			detail: 'a new row appears: "Then one fact changes: What if the ally doesn\'t want our troops on its soil?"'},
+		{at: 70.4, text: 'One student repeats the paper. The other reworks the call from their reason.',
+			detail: 'in plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go.", the same words as before. The second student says, "Then troops would cost the ally\'s trust. I\'d send arms and aid instead." Then the answers take their colours: the first student\'s answers turn grey on a beige band, the mark for words the AI wrote, and those words are underlined on their paper. The second student\'s answers turn red, their own words.'},
+		{at: 81.4, text: 'Faculty check: Can the student independently explain the judgment in plain speech?',
+			list: 'Faculty check: Can the student independently explain the judgment in plain speech? Then change one fact. What would you recommend now?',
+			detail: 'both lines appear under the picture at the same size. The whole table stays in view.',
+			check: {label: 'Faculty check', question: 'Can the student independently explain the judgment in plain speech?', follow: 'Then change one fact. What would you recommend now?', followAt: T.follow}},
+	];
+
+	document.fonts.ready.then(() => {
+		measure();
+		legibility(root, svg, VW, 11);
+		syncNarrow();
+		mount(root, {duration: T.end, render, beats: BEATS});
+	});
+})();
