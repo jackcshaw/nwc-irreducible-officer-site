@@ -1,0 +1,160 @@
+/* Judgment Lab motion figures: shared styles.
+   Grown from concepts-v0/figures.css; v0 class names still work.
+   Tokens match the site's :root. See CONVENTIONS.md. */
+:root {
+	--paper: #f6f1e8;
+	--paper-soft: #fbf8f2;
+	--paper-bright: #fffdfa;
+	--ink: #0a2242;
+	--body: #242a31;
+	--muted: #4d5360;
+	--stone: #5b564f;
+	--stone-faint: #847d74;
+	--faint: #d7d0c4;
+	--rail: #c9c5c0;
+	--navy-line: rgba(8, 35, 70, 0.1);
+	--navy-border: rgba(8, 35, 70, 0.15);
+	--navy-wash: rgba(8, 35, 70, 0.055);
+	--red: #b81b2b;
+	--serif: "Source Serif 4", Georgia, serif;
+	--sans: "Source Sans 3", system-ui, sans-serif;
+	--mono: "IBM Plex Mono", ui-monospace, monospace;
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--body); font-family: var(--serif); }
+
+/* ---- v0 mock page chrome (kept for the concept prototypes) --------------- */
+.mock-bar { border-bottom: 1px solid var(--navy-border); padding: 14px 24px; font: 600 15px/1.2 var(--sans); color: var(--ink); display: flex; gap: 18px; align-items: baseline; }
+.mock-bar b { font-family: var(--serif); font-size: 22px; }
+.mock-bar b i { color: var(--red); font-style: normal; }
+.mock-bar span { color: var(--muted); font-weight: 500; }
+.mock-note { max-width: 800px; margin: 18px auto 0; padding: 0 16px; font: 500 14px/1.45 var(--sans); color: var(--muted); }
+.page { max-width: 800px; margin: 0 auto; padding: 8px 16px 96px; }
+.page h2 { margin: 40px 0 14px; padding-top: 16px; border-top: 1px solid var(--faint); color: var(--ink); font-size: clamp(26px, 2.7vw, 34px); line-height: 1.15; }
+.page p.essay { font-size: 21px; line-height: 1.55; margin: 0 0 20px; }
+.page p.essay.dim { color: var(--muted); }
+
+/* ---- the figure frame: same skin as the essay's .argument-insert ---------- */
+.mf {
+	margin: 34px 0 36px;
+	border: 1px solid var(--navy-border);
+	background: linear-gradient(90deg, rgba(8, 35, 70, 0.045), rgba(8, 35, 70, 0.018));
+	color: var(--body);
+}
+.mf::before { content: ""; display: block; height: 2px; background: linear-gradient(90deg, var(--ink) 0, var(--ink) 78px, var(--red) 78px, var(--red) 106px, transparent 106px); }
+.mf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px 10px 18px; border-bottom: 1px solid var(--navy-line); }
+.mf-label { margin: 0; color: var(--red); font: 600 12px/1.25 var(--mono); letter-spacing: 0.02em; }
+.mf-stage { position: relative; background: var(--paper); }
+.mf-stage svg { display: block; width: 100%; height: auto; }
+
+/* play / pause / replay: always visible, 44px target */
+.mf-toggle, .mf-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 600 15px/1 var(--sans); cursor: pointer; }
+.mf-toggle:focus-visible, .mf-btn:focus-visible, .mf-beats button:focus-visible, .mf-scrub:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.mf-icon { width: 10px; height: 10px; flex: none; background: var(--red); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.mf-toggle[data-state="pause"] .mf-icon { clip-path: none; background: linear-gradient(90deg, var(--red) 0 35%, transparent 35% 65%, var(--red) 65%); }
+.mf-toggle[data-state="replay"] .mf-icon { border-radius: 50%; clip-path: none; }
+@media (hover: hover) { .mf-toggle:hover, .mf-btn:hover { background: var(--ink); color: var(--paper); } }
+
+/* beats: the caption track and the text equivalent at once (v0 grid) */
+.mf-beats { list-style: none; margin: 0; padding: 10px 10px 12px; display: grid; grid-template-columns: repeat(var(--beats, 4), minmax(0, 1fr)); gap: 6px; border-top: 1px solid var(--navy-line); }
+.mf-beats button { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; width: 100%; min-height: 44px; padding: 8px 8px; border: 0; border-top: 2px solid var(--faint); background: none; color: var(--stone-faint); font: 500 15px/1.35 var(--sans); text-align: left; cursor: pointer; transition: color 200ms ease, border-color 200ms ease; }
+.mf-beats button.is-past { color: var(--muted); border-top-color: var(--rail); }
+.mf-beats button[aria-current] { color: var(--ink); border-top-color: var(--red); }
+.mf-n { font: 600 12px/1.6 var(--mono); }
+.mf-beats button[aria-current] .mf-n { color: var(--red); }
+@media (hover: hover) { .mf-beats button:hover { color: var(--ink); } }
+.mf.is-reduced .mf-beats button { color: var(--body); border-top-color: var(--rail); }
+.mf.is-reduced .mf-beats button[aria-current] { border-top-color: var(--red); }
+@media (max-width: 700px) {
+	.mf-beats:not(.is-list) { grid-template-columns: 1fr; }
+	.mf-beats:not(.is-list) button { border-top: 0; border-left: 2px solid var(--faint); }
+	.mf-beats:not(.is-list) button.is-past { border-left-color: var(--rail); }
+	.mf-beats:not(.is-list) button[aria-current] { border-left-color: var(--red); }
+}
+
+/* ---- v1 additions --------------------------------------------------------- */
+
+/* The shot: stage + caption band. Stills, video and the poster capture this. */
+.mf-shot { background: var(--paper); }
+
+/* Caption band: real text directly under the picture. */
+.mf-caption { min-height: calc(2 * 1.35em + 28px); padding: 14px clamp(14px, 2.4vw, 28px); border-top: 1px solid var(--navy-line); font-size: clamp(18px, 1.9vw, 22px); line-height: 1.35; color: var(--ink); background: var(--paper); }
+.mf-cap { margin: 0; display: flex; gap: 14px; align-items: baseline; }
+.mf-count { flex: none; font: 600 12px/1 var(--mono); letter-spacing: 0.06em; color: var(--muted); min-width: 3.4em; }
+.mf-cap-text { max-width: 56ch; }
+.mf-caption.is-check { padding-top: 16px; padding-bottom: 18px; }
+.mf-check p { margin: 0; }
+.mf-check-label { font: 600 13px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
+.mf-check-q { margin-top: 6px !important; font: italic 400 clamp(22px, 2.6vw, 30px)/1.2 var(--serif); color: var(--ink); }
+.mf-follow { margin-top: 10px !important; font: 400 clamp(17px, 1.7vw, 20px)/1.3 var(--serif); color: var(--ink); }
+.mf-follow-label { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; margin-right: 6px; }
+
+/* Controls: play/pause, restart, scrubber, time. */
+.mf-controls { display: flex; align-items: center; gap: 10px; padding: 10px clamp(12px, 2vw, 18px); border-top: 1px solid var(--navy-line); background: var(--paper-soft); }
+.mf-controls .mf-toggle { min-width: 104px; justify-content: center; }
+/* Player chrome is ink: red stays reserved for a person's decisions in the picture. */
+.mf-controls .mf-icon { background: currentColor; }
+.mf-controls .mf-toggle[data-state="pause"] .mf-icon { background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65%); }
+.mf-restart-icon { width: 11px; height: 11px; flex: none; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; }
+.mf-scrub { flex: 1; min-width: 60px; height: 44px; margin: 0; accent-color: var(--ink); background: transparent; cursor: pointer; }
+.mf-time { flex: none; font: 500 13px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 8.5ch; text-align: right; }
+
+/* Vertical beat list with "On screen" details. */
+.mf-beats.is-list { display: block; padding: 6px clamp(8px, 1.6vw, 14px) 12px; counter-reset: none; }
+.mf-beats.is-list li { border-left: 2px solid var(--faint); margin: 0 0 2px; }
+.mf-beats.is-list li:has(button.is-past) { border-left-color: var(--rail); }
+.mf-beats.is-list li:has(button[aria-current]) { border-left-color: var(--ink); }
+.mf-beats.is-list button { border-top: 0; min-height: 40px; padding: 8px 10px; grid-template-columns: 2.2em 1fr; font-size: 16px; color: var(--muted); }
+.mf-beats.is-list button.is-past { color: var(--muted); }
+.mf-beats.is-list button[aria-current] { color: var(--ink); }
+.mf-beats.is-list button[aria-current] .mf-n { color: var(--ink); }
+.mf-beats.is-list button[aria-current] .mf-text { font-weight: 600; }
+.mf-detail { margin: -4px 0 8px; padding: 0 10px 0 calc(2.2em + 18px); font: 400 15px/1.45 var(--sans); color: var(--body); }
+.mf-detail-label { font-weight: 600; color: var(--ink); }
+/* Details are the text equivalent: always in the accessibility tree, shown
+   when the picture can't carry them (reduced motion, narrow, print). */
+.mf:not(.is-reduced):not(.is-narrow) .mf-detail { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mf.is-reduced .mf-beats.is-list button { color: var(--body); }
+
+@media (max-width: 560px) {
+	.mf-controls { flex-wrap: wrap; }
+	.mf-scrub { order: 3; flex-basis: 100%; }
+	.mf-time { margin-left: auto; }
+	.mf-cap { flex-direction: column; gap: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mf-beats button, .mf-toggle, .mf-btn { transition: none; }
+}
+
+/* ---- standalone figure page ----------------------------------------------- */
+.fig-top { border-bottom: 1px solid var(--navy-border); padding: 14px clamp(16px, 3vw, 32px); display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.fig-top a.brand { font: 600 22px/1 var(--serif); color: var(--ink); text-decoration: none; }
+.fig-top a.brand i { color: var(--red); font-style: normal; }
+.fig-top nav { font: 500 14px/1.3 var(--sans); color: var(--muted); }
+.fig-top nav a { color: var(--muted); }
+.fig-page { max-width: 1088px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 24px) 96px; }
+.fig-kicker { margin: 0 0 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fig-page h1 { margin: 0 0 14px; font: 600 clamp(34px, 4.6vw, 52px)/1.05 var(--serif); color: var(--ink); letter-spacing: -0.01em; }
+.fig-setup { max-width: 68ch; margin: 0 0 8px; font-size: clamp(18px, 1.7vw, 21px); line-height: 1.55; color: var(--body); }
+.fig-page .mf { margin: 26px 0 40px; }
+.fig-section { max-width: 72ch; margin: 0 0 36px; }
+.fig-section h2 { margin: 0 0 10px; padding-top: 14px; border-top: 1px solid var(--faint); font: 600 12px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fig-check { margin: 0; font: italic 400 clamp(24px, 2.8vw, 32px)/1.2 var(--serif); color: var(--ink); }
+.fig-follow { margin: 10px 0 0; font-size: 18px; line-height: 1.5; color: var(--body); }
+.fig-quote { margin: 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--ink); font-size: 19px; line-height: 1.55; color: var(--body); }
+.fig-quote cite { display: block; margin-top: 10px; font: 500 14px/1.4 var(--sans); font-style: normal; color: var(--muted); }
+.fig-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font: 500 17px/1.4 var(--sans); }
+.fig-links a { color: var(--ink); text-underline-offset: 3px; }
+.fig-links span { color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Print: the final frame and the full text. */
+@media print {
+	.fig-top nav, .mf-controls { display: none; }
+	.mf .mf-detail { position: static !important; width: auto !important; height: auto !important; clip: auto !important; white-space: normal !important; }
+	.mf, .mf-shot { break-inside: avoid; }
+}
