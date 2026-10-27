@@ -7,7 +7,7 @@
 const NOTIFY_TO = "jshaw@comprendo.com";
 const SHEET_TITLE = "Judgment Lab collaborators";
 const TAB = "Sign-ups";
-const HEADERS = ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Source page", "Status"];
+const HEADERS = ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Newsletter", "Source page", "Status"];
 const STATUS_COLUMN = HEADERS.indexOf("Status") + 1;
 const SETTINGS = { pme: "PME", he: "Higher education", k12: "K–12 · High school", business: "Business", other: "Other" };
 const WAYS = { pilot: "Pilot with learners", cases: "Contribute cases", design: "Design teaching materials", evidence: "Review the evidence" };
@@ -108,6 +108,7 @@ function validateSubmission_(params, multi) {
       ways: ways.map((way) => WAYS[way]).join("; "),
       note,
       listing: text_(params.listing) === "yes" ? "Yes" : "No",
+      newsletter: text_(params.newsletter) === "yes" ? "Yes" : "No",
       page: text_(params.page).slice(0, LIMITS.page),
       test: text_(params.test) === "controlled-check",
     },
@@ -116,7 +117,7 @@ function validateSubmission_(params, multi) {
 
 // A fixed-length key for "this exact sign-up", well inside CacheService's key limit.
 function fingerprint_(r) {
-  const payload = [r.email, r.name, r.setting, r.role, r.ways, r.note, r.listing, r.test].join("\n");
+  const payload = [r.email, r.name, r.setting, r.role, r.ways, r.note, r.listing, r.newsletter, r.test].join("\n");
   return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, payload));
 }
 
@@ -129,7 +130,7 @@ function signUps_() {
 }
 
 function toRow_(r, status) {
-  return [new Date(), r.name, r.email, r.setting, r.role, r.ways, r.note, r.listing, r.page, status].map(asText_);
+  return [new Date(), r.name, r.email, r.setting, r.role, r.ways, r.note, r.listing, r.newsletter, r.page, status].map(asText_);
 }
 
 function notify_(r) {
@@ -146,6 +147,7 @@ function notify_(r) {
       "Role and institution: " + (r.role || "—"),
       "Ways to collaborate: " + (r.ways || "—"),
       "Open to public listing: " + r.listing,
+      "Newsletter: " + r.newsletter,
       "Source page: " + (r.page || "—"),
       "",
       "Practice or question:",

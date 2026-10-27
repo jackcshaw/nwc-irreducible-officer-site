@@ -53,6 +53,7 @@ Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's
 | Ways to collaborate | no | checkboxes for the four ways |
 | A practice you're trying, or a question you're working on | no | up to 1,500 characters |
 | I'd be glad to be listed publicly as a collaborator | no | unticked by default. Jack confirms with the person before listing anyone. |
+| Send me the Judgment Lab newsletter to stay informed about judgment in AI | no | unticked by default. Added October 27 at Jack's request. The newsletter will go out through Resend; ticked sign-ups move to a Resend audience when the first issue is ready. |
 
 A hidden honeypot field catches simple bots.
 
@@ -78,7 +79,7 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
   - It appends a row under a script lock. A busy lock or a missing tab is refused cleanly.
   - It emails jshaw@comprendo.com with the submitter as reply-to.
   - It responds with JSON (`{"ok":true}`, or `{"ok":false,"errors":[…]}` with status details) when the request carries `format=json`. Otherwise it serves the confirmation page.
-- **Columns:** Received, Name, Email, Setting, Role and institution, Ways to collaborate, Practice or question, Open to public listing, Source page, Status.
+- **Columns:** Received, Name, Email, Setting, Role and institution, Ways to collaborate, Practice or question, Open to public listing, Newsletter, Source page, Status.
 - **Deployment (Jack's one step):** in the Google account that should own the list:
   1. Create the project.
   2. Run `setup()` and authorize the Sheets and Mail scopes.

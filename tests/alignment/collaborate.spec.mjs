@@ -133,6 +133,7 @@ test("a complete sign-up posts once and confirms", async ({ page }) => {
   await page.goto("/#collaborate");
   const posts = await useEndpoint(page, ok);
   await fillSignUp(page);
+  await page.getByLabel(/Judgment Lab newsletter/).check();
   await page.getByRole("button", { name: "Send" }).click();
   const success = page.locator("[data-collaborate-success]");
   await expect(success).toBeVisible();
@@ -148,6 +149,7 @@ test("a complete sign-up posts once and confirms", async ({ page }) => {
   expect(sent.get("format")).toBe("json");
   expect(sent.get("page")).toContain("#collaborate");
   expect(sent.get("website")).toBe("");
+  expect(sent.get("newsletter")).toBe("yes");
 });
 
 test("required fields stop an empty sign-up before anything is sent", async ({ page }) => {
@@ -175,6 +177,7 @@ test("a failed sign-up keeps the entries and offers email", async ({ page }) => 
   const body = new URLSearchParams(href.split("?")[1]).get("body");
   expect(body).toContain("Ada Lovelace");
   expect(body).toContain("Frame-first critiques in a staff college seminar.");
+  expect(body).toContain("Newsletter: No");
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue("Ada Lovelace");
   await expect(page.getByRole("button", { name: "Send" })).toBeEnabled();
 });

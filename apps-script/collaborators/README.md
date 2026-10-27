@@ -17,6 +17,10 @@ Use the Google account that should own the list.
 
 Opening the URL in a browser should show "Judgment Lab collaborator sign-ups are running."
 
+## The Newsletter column
+
+The form's newsletter box is unticked by default. A sign-up that ticks it says "Yes" in the Newsletter column. The newsletter itself will go out through Resend: when the first issue is ready, the "Yes" rows move to a Resend audience. Nobody else gets it.
+
 ## Limits and the Status column
 
 - **The same sign-up twice** within ten minutes lands once. A corrected sign-up is kept as a new row.

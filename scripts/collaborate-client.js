@@ -50,6 +50,7 @@
       "Role and institution: " + data.get("role"),
       "Ways to take part: " + ways.join("; "),
       "Open to public listing: " + (data.get("listing") ? "Yes" : "No"),
+      "Newsletter: " + (data.get("newsletter") ? "Yes" : "No"),
       "",
       "A practice I'm trying, or a question I'm working on:",
       data.get("note"),

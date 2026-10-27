@@ -539,6 +539,7 @@ function buildCollaborateMode() {
           <fieldset class="field"><legend>How do you want to participate?<span class="optional">Optional</span></legend><div class="choices">${ways.map(([id, name]) => `<div class="choice"><input type="checkbox" name="ways" value="${id}" id="collaborate-way-${id}"><label for="collaborate-way-${id}">${name}</label></div>`).join("")}</div></fieldset>
           <div class="field"><label for="collaborate-note">What are you trying, or what are you stuck on?<span class="optional">Optional</span></label><textarea id="collaborate-note" name="note" rows="5" maxlength="1500"></textarea></div>
           <div class="field choice"><input type="checkbox" name="listing" value="yes" id="collaborate-listing"><label for="collaborate-listing">List me publicly as a collaborator. We’ll confirm with you first.</label></div>
+          <div class="field choice"><input type="checkbox" name="newsletter" value="yes" id="collaborate-newsletter"><label for="collaborate-newsletter">Send me the Judgment Lab newsletter to stay informed about judgment in AI.</label></div>
           <div class="collaborate-trap" aria-hidden="true"><label for="collaborate-website">Leave this empty</label><input id="collaborate-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <div class="action-row"><button class="copy-button collaborate-cta" type="submit" data-collaborate-submit>Send</button></div>
         </form>

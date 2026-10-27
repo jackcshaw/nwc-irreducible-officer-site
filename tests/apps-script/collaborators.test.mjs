@@ -67,6 +67,7 @@ const ada = {
   role: "Lecturer, Example University",
   note: "Testing AI critiques in a methods seminar.",
   listing: "yes",
+  newsletter: "yes",
   page: "https://judgmentlab.net/#collaborate",
   format: "json",
 };
@@ -79,7 +80,7 @@ const ada = {
   assert.deepEqual(env.created, ["Judgment Lab collaborators"]);
   assert.equal(env.sheet.name, "Sign-ups");
   assert.equal(env.sheet.frozen, 1);
-  assert.deepEqual(env.rows[0], ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Source page", "Status"]);
+  assert.deepEqual(env.rows[0], ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Newsletter", "Source page", "Status"]);
   assert.equal(env.props.get("SHEET_ID"), "sheet-123");
   env.context.setup();
   assert.equal(env.created.length, 1, "setup() must not create a second Sheet");
@@ -100,6 +101,7 @@ const ada = {
     "Pilot with learners; Review the evidence",
     "Testing AI critiques in a methods seminar.",
     "Yes",
+    "Yes",
     "https://judgmentlab.net/#collaborate",
     "New",
   ]);
@@ -110,6 +112,7 @@ const ada = {
   assert.equal(mail.subject, "Judgment Lab collaborator: Ada Lovelace");
   assert.match(mail.body, /Pilot with learners; Review the evidence/);
   assert.match(mail.body, /Testing AI critiques in a methods seminar\./);
+  assert.match(mail.body, /Newsletter: Yes/);
 
   // The exact same sign-up again (address in any case) within the window adds nothing.
   assert.deepEqual(json(env.post({ ...ada, email: "ADA@example.org" }, { ways: ["pilot", "evidence"] })), { ok: true });
@@ -118,6 +121,18 @@ const ada = {
   // A corrected sign-up is a new sign-up, not a duplicate.
   assert.deepEqual(json(env.post({ ...ada, note: "Corrected: a staff college seminar." }, { ways: ["pilot", "evidence"] })), { ok: true });
   assert.equal(env.rows.length, 2, "a corrected resubmission must be kept");
+}
+
+// The newsletter is opt-in: an unticked box records No, and changing it is a new sign-up.
+{
+  const env = makeEnv();
+  const { newsletter, ...withoutNewsletter } = ada;
+  assert.deepEqual(json(env.post(withoutNewsletter)), { ok: true });
+  assert.equal(env.rows[0][8], "No");
+  assert.match(env.mails[0].body, /Newsletter: No/);
+  assert.deepEqual(json(env.post(ada)), { ok: true });
+  assert.equal(env.rows.length, 2, "ticking the newsletter box afterwards must be kept");
+  assert.equal(env.rows[1][8], "Yes");
 }
 
 // The honeypot drops bots while still reporting success.
@@ -154,7 +169,7 @@ const ada = {
 {
   const env = makeEnv();
   json(env.post({ ...ada, test: "controlled-check" }));
-  assert.equal(env.rows[0][9], "Test");
+  assert.equal(env.rows[0].at(-1), "Test");
   assert.equal(env.mails[0].subject, "[TEST] Judgment Lab collaborator: Ada Lovelace");
 }
 
@@ -163,7 +178,7 @@ const ada = {
   const env = makeEnv({ mailFails: true });
   assert.deepEqual(json(env.post(ada)), { ok: true });
   assert.equal(env.rows.length, 1);
-  assert.equal(env.rows[0][9], "New (email failed)", "a sign-up whose email failed must say so in the Sheet");
+  assert.equal(env.rows[0].at(-1), "New (email failed)", "a sign-up whose email failed must say so in the Sheet");
 }
 
 // Anonymous volume is capped: past the hourly cap, sign-ups are refused and nothing is stored.
@@ -180,7 +195,7 @@ const ada = {
   const env = makeEnv({ quota: 5 });
   assert.deepEqual(json(env.post(ada)), { ok: true });
   assert.equal(env.mails.length, 0);
-  assert.equal(env.rows[0][9], "New (email skipped: quota)");
+  assert.equal(env.rows[0].at(-1), "New (email skipped: quota)");
 }
 
 // A busy lock or a renamed tab is refused cleanly instead of throwing.

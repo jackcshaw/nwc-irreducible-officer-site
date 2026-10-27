@@ -55,6 +55,7 @@ field(/<input[^>]*name="role"[^>]*maxlength="160"/, "role and institution is opt
 for (const value of ["pilot", "cases", "design", "evidence"]) field(new RegExp(`<input type="checkbox" name="ways" value="${value}"`), `ways to collaborate offers ${value}`);
 field(/<textarea[^>]*name="note"[^>]*maxlength="1500"/, "the practice or question is optional and bounded");
 field(/<input type="checkbox" name="listing" value="yes"(?![^>]*checked)/, "public listing is an unticked opt-in");
+field(/<input type="checkbox" name="newsletter" value="yes"(?![^>]*checked)[^>]*>\s*<label[^>]*>Send me the Judgment Lab newsletter/, "the newsletter is an unticked opt-in");
 field(/aria-hidden="true"[^>]*>[\s\S]{0,200}<input[^>]*name="website"[^>]*tabindex="-1"[^>]*autocomplete="off"/, "the honeypot is hidden from people and assistive technology");
 for (const id of [...call.matchAll(/<(?:input|select|textarea)[^>]*\bid="([^"]+)"/g)].map((m) => m[1])) {
   if (id === "collaborate-website") continue;
