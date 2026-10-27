@@ -1,6 +1,6 @@
 # Collaborator sign-ups (Google Apps Script)
 
-The open call's form at `judgmentlab.net/#collaborate` posts here. Each sign-up becomes one row in a private Google Sheet, "Judgment Lab collaborators", and one email to jshaw@comprendo.com with the person as reply-to. The Sheet is the list. Nothing is published from it automatically: the public roster on the site is `content/collaborators.json`, edited by hand after each person agrees.
+The open call's form at `judgmentlab.net/#collaborate` posts here. Each sign-up becomes one row in a private Google Sheet, "Judgment Lab collaborators", and one email to jshaw@comprendo.dev with the person as reply-to. The Sheet is the list. Nothing is published from it automatically: the public roster on the site is `content/collaborators.json`, edited by hand after each person agrees.
 
 `tests/apps-script/collaborators.test.mjs` runs this code against stand-ins for the Google services (`npm test`).
 

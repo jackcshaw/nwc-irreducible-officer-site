@@ -14,7 +14,7 @@ Decisions Jack made:
   - contribute cases;
   - design teaching materials;
   - review the evidence.
-- **Sign-ups:** a native form on the site posts to a Google Apps Script web app. The script adds a row to a Google Sheet Jack owns and emails each sign-up to jshaw@comprendo.com.
+- **Sign-ups:** a native form on the site posts to a Google Apps Script web app. The script adds a row to a Google Sheet Jack owns and emails each sign-up to jshaw@comprendo.dev.
 - **Styling:** the page gets an Impeccable pass.
 
 Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's request:
@@ -22,7 +22,7 @@ Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's
 - There is one form and one private Sheet.
 - The Maven practitioner session stays on Discuss as a practitioner perspective, not evidence of learning gains. Its call to action points to the same form.
 - The five primary navigation paths are unchanged.
-- Email to jshaw@comprendo.com remains as the fallback.
+- Email to jshaw@comprendo.dev remains as the fallback.
 
 ## What visitors see
 
@@ -30,9 +30,9 @@ Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's
 
 1. **Heading and pitch.** The Lab's teaching designs are proposals to test. We are looking for educators and practitioners in PME, higher education and high school to test, extend and challenge them.
 2. **Four ways to collaborate,** each with one sentence on what it involves.
-3. **Who convenes it:** Jack Shaw, with jshaw@comprendo.com for anyone who would rather write directly.
+3. **Who convenes it:** Jack Shaw, with jshaw@comprendo.dev for anyone who would rather write directly.
 4. **The sign-up form.**
-5. **What happens next:** Jack reads every sign-up and replies by email. Details stay on a private list for Judgment Lab collaboration. They are not shared, there is no mailing list, and nothing is published without separate agreement. To be removed, email jshaw@comprendo.com.
+5. **What happens next:** Jack reads every sign-up and replies by email. Details stay on a private list for Judgment Lab collaboration. They are not shared, there is no mailing list, and nothing is published without separate agreement. To be removed, email jshaw@comprendo.dev.
 6. **Collaborators:** the curated public roster, hidden while it is empty.
 
 **Entry points:**
@@ -61,7 +61,7 @@ A hidden honeypot field catches simple bots.
 
 - **Sending:** the button is disabled and says so.
 - **Success:** the form is replaced by a confirmation that names the next step (Jack replies by email), and focus moves to it.
-- **Error, timeout or network failure:** the entries stay in the form, and the message offers an email to jshaw@comprendo.com prefilled with them.
+- **Error, timeout or network failure:** the entries stay in the form, and the message offers an email to jshaw@comprendo.dev prefilled with them.
 - **No endpoint configured:** submitting opens that prefilled email. This exists for development only; the site is not released in this state.
 - **Without JavaScript:** the form posts directly to the web app, which answers with a plain confirmation page that links back.
 
@@ -77,7 +77,7 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
   - It accepts at most 20 sign-ups an hour. Past that it answers `busy`, and the site offers email instead, so anonymous volume cannot exhaust Jack's mail.
   - When the day's mail quota is nearly spent it skips the email, and it marks that, or a failed email, in the Status column.
   - It appends a row under a script lock. A busy lock or a missing tab is refused cleanly.
-  - It emails jshaw@comprendo.com with the submitter as reply-to.
+  - It emails jshaw@comprendo.dev with the submitter as reply-to.
   - It responds with JSON (`{"ok":true}`, or `{"ok":false,"errors":[…]}` with status details) when the request carries `format=json`. Otherwise it serves the confirmation page.
 - **Columns:** Received, Name, Email, Setting, Role and institution, Ways to collaborate, Practice or question, Open to public listing, Newsletter, Source page, Status.
 - **Deployment (Jack's one step):** in the Google account that should own the list:
@@ -120,7 +120,7 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
 
 ## Verification and release
 
-1. **Controlled submission.** After Jack deploys, submit one marked test entry. Confirm it reaches the Sheet exactly once and that the notification goes to jshaw@comprendo.com. Then remove the test row, which Sheet version history keeps reversible.
+1. **Controlled submission.** After Jack deploys, submit one marked test entry. Confirm it reaches the Sheet exactly once and that the notification goes to jshaw@comprendo.dev. Then remove the test row, which Sheet version history keeps reversible.
 2. **Release.** The feature PR carries no version bump. A separate release PR sets the version. One deploy by Claude Code, from a clean worktree, verified with the live footer, `release.json` and a hash-compare of every file.
 
 ## Out of scope

@@ -20,8 +20,8 @@ const section = (mode) => {
 };
 const escapeHtml = (value) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-// Configuration: the endpoint is empty until the web app is deployed, then its /exec URL.
-assert(endpoint === "" || /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(endpoint), `content/collaborate.json endpoint should be empty or an Apps Script /exec URL (${endpoint})`);
+// Configuration: the web app is deployed, so a release must carry its /exec URL.
+assert(/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(endpoint), `content/collaborate.json endpoint should be the Apps Script /exec URL (${endpoint || "empty"})`);
 assert(Array.isArray(roster), "content/collaborators.json should be an array");
 
 // The page is a region outside the five primary paths, which stay as they are.
@@ -33,7 +33,7 @@ assert(call.includes("<h1>Help keep human judgment at the forefront of AI</h1>")
 for (const way of ["Pilot with learners", "Contribute cases", "Design teaching materials", "Review the evidence"]) {
   assert(call.includes(way), `the call should describe "${way}"`);
 }
-assert(call.includes('href="mailto:jshaw@comprendo.com"'), "the call should offer direct email");
+assert(call.includes('href="mailto:jshaw@comprendo.dev"'), "the call should offer direct email");
 for (const promise of ["reply by email", "private Judgment Lab list", "mailing list", "without asking first", "To be removed"]) {
   assert(call.includes(promise), `the call should state what happens to a sign-up ("${promise}")`);
 }
@@ -43,7 +43,7 @@ const form = (call.match(/<form[^>]*data-collaborate-form[^>]*>/) || [])[0];
 assert(form, "the call should have the sign-up form");
 assert(form.includes('method="post"'), "the form should post");
 assert(form.includes(`data-endpoint="${endpoint}"`), "the form should carry the configured endpoint");
-assert(form.includes(`action="${endpoint || "mailto:jshaw@comprendo.com"}"`), "without JavaScript the form should still reach the list (or email)");
+assert(form.includes(`action="${endpoint || "mailto:jshaw@comprendo.dev"}"`), "without JavaScript the form should still reach the list (or email)");
 assert((html.match(/<form[^>]*data-collaborate-form/g) || []).length === 1, "there should be exactly one sign-up form on the site");
 const field = (pattern, message) => assert(pattern.test(call), message);
 field(/<input[^>]*name="name"[^>]*required/, "name is required");
@@ -94,7 +94,7 @@ assert(call.includes('href="https://gaidfly.com"'), "the call should link GAiDFL
 const discuss = section("discuss");
 assert(discuss.includes('href="#collaborate"'), "the Discuss invitation should open the same form");
 assert(!/Join by email|subject=Join%20the%20Judgment%20Lab%20conversation/.test(discuss), "the email-only sign-up is superseded by the form");
-assert(discuss.includes('href="mailto:jshaw@comprendo.com"'), "Discuss keeps direct email as a fallback");
+assert(discuss.includes('href="mailto:jshaw@comprendo.dev"'), "Discuss keeps direct email as a fallback");
 assert(discuss.includes('href="https://maven.com/p/7b4117"') && discuss.includes("coming soon"), "the Maven session keeps its official link and dated status");
 
 // The public roster lists only the curated file, and is absent while it is empty.

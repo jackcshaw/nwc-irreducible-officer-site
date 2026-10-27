@@ -56,7 +56,7 @@
       data.get("note"),
     ].join("\n");
     // Mail apps show "+" literally, so spaces are sent as %20.
-    return "mailto:jshaw@comprendo.com?" + new URLSearchParams({ subject: "Judgment Lab open call", body }).toString().replace(/\+/g, "%20");
+    return "mailto:jshaw@comprendo.dev?" + new URLSearchParams({ subject: "Judgment Lab open call", body }).toString().replace(/\+/g, "%20");
   }
 
   function show(panel) {

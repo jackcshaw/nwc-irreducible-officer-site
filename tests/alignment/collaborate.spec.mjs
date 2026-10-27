@@ -5,6 +5,11 @@ import { test, expect } from "@playwright/test";
 const ENDPOINT = "https://script.google.com/macros/s/TEST/exec";
 const form = (page) => page.locator("[data-collaborate-form]");
 
+// The built page carries the live web app's URL; no test may ever post to it.
+test.beforeEach(async ({ page }) => {
+  await page.route(/^https:\/\/script\.google\.com\/macros\/s\/(?!TEST\/)/, (route) => route.abort());
+});
+
 async function useEndpoint(page, respond) {
   const posts = [];
   await page.route(ENDPOINT, async (route) => {
@@ -173,7 +178,7 @@ test("a failed sign-up keeps the entries and offers email", async ({ page }) => 
   await expect(fallback.locator("[data-fallback-failed]")).toBeVisible();
   await expect(fallback.locator("[data-fallback-unknown]")).toBeHidden();
   const href = await fallback.locator("[data-collaborate-mailto]").getAttribute("href");
-  expect(href.startsWith("mailto:jshaw@comprendo.com?")).toBe(true);
+  expect(href.startsWith("mailto:jshaw@comprendo.dev?")).toBe(true);
   const body = new URLSearchParams(href.split("?")[1]).get("body");
   expect(body).toContain("Ada Lovelace");
   expect(body).toContain("Frame-first critiques in a staff college seminar.");

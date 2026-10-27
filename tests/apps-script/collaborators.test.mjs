@@ -107,7 +107,7 @@ const ada = {
   ]);
   assert.equal(env.mails.length, 1);
   const mail = env.mails[0];
-  assert.equal(mail.to, "jshaw@comprendo.com");
+  assert.equal(mail.to, "jshaw@comprendo.dev");
   assert.equal(mail.replyTo, "ada@example.org");
   assert.equal(mail.subject, "Judgment Lab collaborator: Ada Lovelace");
   assert.match(mail.body, /Pilot with learners; Review the evidence/);

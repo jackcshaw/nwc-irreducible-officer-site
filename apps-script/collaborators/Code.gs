@@ -4,7 +4,7 @@
 // README.md). Nothing here is secret: the Sheet's id lives in Script Properties.
 // Helpers end in "_" so the web app does not expose them to client code.
 
-const NOTIFY_TO = "jshaw@comprendo.com";
+const NOTIFY_TO = "jshaw@comprendo.dev";
 const SHEET_TITLE = "Judgment Lab collaborators";
 const TAB = "Sign-ups";
 const HEADERS = ["Received", "Name", "Email", "Setting", "Role and institution", "Ways to collaborate", "Practice or question", "Open to public listing", "Newsletter", "Source page", "Status"];
