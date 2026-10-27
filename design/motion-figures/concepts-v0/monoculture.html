@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turn the Seminar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="figures.css">
+<style>
+.mono-stage { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--paper); perspective: calc(4200px * var(--k, 1)); perspective-origin: 50% 44%; }
+.mono-world { position: absolute; left: 50%; top: 47%; width: 0; height: 0; transform-style: preserve-3d; }
+.mono-tile { position: absolute; display: flex; flex-direction: column; gap: 5px; padding: 8px 8px; border: 1px solid rgba(10,34,66,.35); background: var(--paper-bright); box-shadow: 0 1px 0 rgba(10,34,66,.06); }
+.mono-tile i { display: block; height: 4px; border-radius: 2px; background: #b3aca1; flex: none; }
+.mono-tile.is-dense { gap: 3px; } .mono-tile.is-dense i { height: 3px; }
+.mono-tile.is-bullets i { margin-left: 9px; position: relative; } .mono-tile.is-bullets i::before { content: ""; position: absolute; left: -8px; top: 0; width: 4px; height: 4px; border-radius: 50%; background: var(--stone); }
+.mono-head { display: block; height: 6px; width: 60%; border-radius: 3px; background: var(--ink); flex: none; }
+.mono-chart { display: block; height: 16px; flex: none; background: linear-gradient(90deg, var(--stone) 0 18%, transparent 18% 26%, var(--ink) 26% 44%, transparent 44% 52%, var(--stone) 52% 70%, transparent 70%) bottom / 70% 100% no-repeat; }
+.mono-plane { position: absolute; width: 740px; height: 400px; margin: -200px 0 0 -370px; pointer-events: none; }
+.mono-plane.is-shared { border: 3px solid var(--ink); background: rgba(10,34,66,.04); }
+.mono-plane.is-empty { border: 3px dashed var(--stone); }
+.mono-label { position: absolute; margin: 0; font: 600 calc(11px * var(--k, 1) + 2px)/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.mono-label[data-mono-shared] { left: 50%; top: 4.5%; translate: -50% 0; color: var(--ink); }
+.mono-label[data-mono-empty] { right: 4%; top: 4.5%; color: var(--stone-faint); }
+.mono-check { position: absolute; left: 0; right: 0; bottom: 4.5%; margin: 0; text-align: center; }
+.mono-check span { display: block; margin-bottom: 6px; font: 600 calc(10.5px * var(--k, 1) + 1px)/1 var(--mono); letter-spacing: .16em; color: var(--red); }
+.mono-check q { quotes: none; font: italic 400 calc(21px * var(--k, 1))/1.2 var(--serif); color: var(--ink); background: color-mix(in srgb, var(--paper) 88%, transparent); padding: 2px 8px; }
+</style>
+</head>
+<body>
+<div class="mock-bar"><b>Judgment Lab<i>.</i></b><span>Sketch: a 3D motion figure for institutional monoculture</span></div>
+<p class="mock-note">Throwaway sketch in CSS 3D on the same runtime as the other figures. Add <code>?reduced</code> for the reduced-motion version, or <code>?t=3.6</code> to hold one moment.</p>
+<main class="page">
+	<h2>II. What the Problem Looks Like</h2>
+	<p class="essay"><strong>Institutional monoculture</strong> is the class-level version of the same problem. When many students use similar systems, similar prompts, and similar defaults, the range of strategic frames available to a seminar narrows. AI can create a surface appearance of diversity (different arguments, different structures, different evidence) while reproducing common assumptions at the level of problem definition…</p>
+
+	<figure class="mf" id="monoculture" aria-labelledby="mono-label" style="--beats:4">
+		<div class="mf-head">
+			<p class="mf-label" id="mono-label">Institutional monoculture</p>
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the institutional monoculture figure</span></button>
+		</div>
+		<div class="mf-stage mono-stage" aria-hidden="true">
+			<div class="mono-world"></div>
+			<p class="mono-label" data-mono-shared>One shared frame</p>
+			<p class="mono-label" data-mono-empty>Frames no one chose</p>
+			<p class="mono-check" data-mono-check><span>Faculty check</span><q>What frames are missing across the seminar?</q></p>
+		</div>
+		<figcaption>
+			<span class="sr-only">An animated figure in four steps. Thirty small essay cards, each with a different layout, are spread across the view. The view turns in three dimensions to show the depth at which each essay defines its problem: all thirty sit in a single plane. Four dashed planes appear in front of and behind it, empty. The steps are listed below.</span>
+			<ol class="mf-beats" data-mf-beats></ol>
+		</figcaption>
+	</figure>
+</main>
+<script src="motion.js"></script>
+<script src="monoculture.js"></script>
+</body>
+</html>

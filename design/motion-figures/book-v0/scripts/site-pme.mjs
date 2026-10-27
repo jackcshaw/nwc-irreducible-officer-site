@@ -1,0 +1,10 @@
+import { chromium } from "playwright";
+const out = process.argv[2]; const O = "http://127.0.0.1:5233";
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 }, storageState: { cookies: [], origins: [{ origin: O, localStorage: [{ name: "jl-reel-seen", value: "1" }] }] } });
+const p = await ctx.newPage();
+await p.goto(O + "/#pme"); await p.waitForTimeout(800); await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(300);
+await p.screenshot({ path: `${out}/pme-scrolltop.png` });
+const t = await p.evaluate(() => { const s = document.querySelector("#panel-pme, [data-try=pme]")?.closest("[id^=panel-]"); return { id: s?.id, h1: s?.querySelector("h1")?.textContent, tryTop: Math.round(document.querySelector("[data-try=pme]").getBoundingClientRect().top + scrollY), purpose: document.querySelector("[data-try=pme] .try-purpose")?.textContent }; });
+console.log(JSON.stringify(t));
+await b.close();

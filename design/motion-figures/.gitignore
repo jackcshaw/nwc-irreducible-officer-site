@@ -1,0 +1,7 @@
+# Media stays on disk in this worktree; git keeps storyboards, pages, scripts and reports.
+*.mp4
+*.webm
+*.gif
+*.png
+*.jpg
+ref/

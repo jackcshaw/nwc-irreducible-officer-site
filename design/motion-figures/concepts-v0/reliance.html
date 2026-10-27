@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make the Call</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="figures.css">
+<style>
+/* ---- "Make the call": appropriate reliance, interactive ---------------- */
+.call-step { font: 500 13px/1.2 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.call-body { padding: 22px 22px 26px; background: var(--paper); }
+.call-body h3 { margin: 0 0 8px; color: var(--ink); font: 600 28px/1.15 var(--serif); }
+.call-lede { margin: 0 0 22px; max-width: 64ch; font: 400 18px/1.5 var(--sans); color: var(--body); }
+
+[hidden] { display: none !important; }
+.call-field { position: relative; margin-top: 30px; display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); align-items: stretch; }
+.task { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 18px 18px 16px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.task[data-task="b"] { grid-column: 3; }
+.task-tag { margin: 0; font: 600 12px/1 var(--mono); letter-spacing: .12em; color: var(--stone); text-transform: uppercase; }
+.task-brief { margin: 0; font: 400 18px/1.45 var(--serif); color: var(--ink); min-height: 5.8em; }
+
+/* The AI's answer looks the same on both tasks: that is the point. */
+.ai-draft { display: grid; gap: 7px; padding: 12px 12px 14px; border: 1px solid var(--navy-line); background: var(--paper-soft); }
+.ai-chip { display: flex; justify-content: space-between; font: 600 12px/1 var(--mono); letter-spacing: .08em; color: var(--stone); text-transform: uppercase; }
+.ai-chip b { color: var(--ink); font-weight: 600; }
+.ai-draft i { display: block; height: 6px; border-radius: 3px; background: #a39c91; }
+.ai-draft i:nth-of-type(1) { width: 100%; } .ai-draft i:nth-of-type(2) { width: 100%; } .ai-draft i:nth-of-type(3) { width: 100%; } .ai-draft i:nth-of-type(4) { width: 62%; }
+
+/* Your call: the red dot is the person's judgment. */
+.call-choice { margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.call-choice legend, .q-choice legend { margin-bottom: 8px; padding: 0; font: 600 14px/1.2 var(--sans); color: var(--muted); }
+.call-choice label, .q-choice label { position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 12px; border: 1.5px solid var(--rail); background: var(--paper); font: 600 16px/1.2 var(--sans); color: var(--ink); cursor: pointer; transition: border-color 160ms ease; }
+.call-choice input, .q-choice input { appearance: none; flex: none; width: 16px; height: 16px; margin: 0; border: 1.5px solid var(--stone-faint); border-radius: 50%; display: grid; place-items: center; }
+.call-choice input::after, .q-choice input::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--red); transform: scale(0); transition: transform 260ms var(--ease-out); }
+.call-choice input:checked::after, .q-choice input:checked::after { transform: scale(1); }
+.call-choice input:checked, .q-choice input:checked { border-color: var(--red); }
+.call-choice label:has(input:checked), .q-choice label:has(input:checked) { border-color: var(--ink); }
+.call-choice label:has(input:focus-visible), .q-choice label:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+.call-choice label:has(input:disabled), .q-choice label:has(input:disabled) { cursor: default; }
+.call-choice label:has(input:disabled:not(:checked)), .q-choice label:has(input:disabled:not(:checked)) { opacity: .45; }
+@media (hover: hover) { .call-choice label:hover, .q-choice label:hover { border-color: var(--ink); } }
+
+/* The frontier: invisible until the reveal, then drawn between the tasks. */
+.frontier { position: absolute; z-index: 2; top: -14px; left: 50%; width: 56px; height: calc(100% + 28px); translate: -50% 0; overflow: visible; pointer-events: none; }
+.frontier-h { display: none; }
+.frontier path, .frontier-h path { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.frontier-label { position: absolute; z-index: 2; top: -30px; left: 50%; translate: -50% 0; font: 600 11px/1 var(--mono); letter-spacing: .14em; color: var(--ink); white-space: nowrap; opacity: 0; }
+.zone { margin: 0; font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); opacity: 0; }
+
+.is-revealed .frontier path, .is-revealed .frontier-h path { stroke-dashoffset: 0; }
+.is-revealed .frontier-label, .is-revealed .zone { opacity: 1; }
+.task[data-task="b"]::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(10,34,66,.06) 0 2px, transparent 2px 9px); opacity: 0; pointer-events: none; }
+.is-revealed .task[data-task="b"]::before { opacity: 1; }
+
+/* Results */
+.result { display: grid; grid-template-rows: 0fr; }
+.result > div { overflow: hidden; }
+.is-revealed .result { grid-template-rows: 1fr; }
+.result .stat { margin: 4px 0 2px; font: 600 44px/1 var(--serif); color: var(--ink); font-variant-numeric: lining-nums; }
+.stat small { font: 600 16px/1.2 var(--sans); color: var(--muted); margin-left: 6px; }
+.result p { margin: 8px 0 0; font: 400 16px/1.45 var(--sans); color: var(--body); }
+.verdict { padding-top: 10px; border-top: 1px solid var(--navy-line); font-weight: 600 !important; color: var(--ink) !important; }
+.verdict::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 8px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+
+.bars { display: grid; gap: 8px; margin: 6px 0 2px; }
+.bars-title { margin: 6px 0 0 !important; font: 600 13px/1.2 var(--sans) !important; color: var(--muted) !important; }
+.bar { display: grid; grid-template-columns: 9.5em 1fr 3.4em; align-items: center; gap: 10px; font: 500 14px/1.2 var(--sans); color: var(--body); }
+.bar span:last-child { text-align: right; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bar-track { height: 12px; background: rgba(10,34,66,.06); }
+.bar-fill { display: block; height: 100%; width: var(--v); background: var(--stone); transform-origin: 0 50%; transform: scaleX(0); }
+.bar.is-base .bar-fill { background: var(--ink); }
+.is-revealed .bars-correct .bar-fill, .quality-shown .juxta .bar-fill { transform: scaleX(1); }
+.juxta { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 14px 0 8px; padding: 14px 16px; border: 1px solid var(--navy-line); background: var(--paper-bright); }
+.punch { margin: 10px 0 4px !important; font: 600 20px/1.3 var(--serif) !important; color: var(--ink); }
+
+.call-actions { display: flex; align-items: center; gap: 16px; margin-top: 22px; flex-wrap: wrap; }
+.call-primary, .call-quiet { min-height: 46px; padding: 0 18px; border: 1.5px solid var(--ink); border-radius: 0; background: var(--ink); color: var(--paper); font: 600 16px/1 var(--sans); cursor: pointer; }
+.call-quiet { background: var(--paper); color: var(--ink); }
+.call-primary:disabled { background: var(--paper); color: var(--stone-faint); border-color: var(--rail); cursor: not-allowed; }
+.call-primary:focus-visible, .call-quiet:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.call-hint { margin: 0; font: 500 15px/1.3 var(--sans); color: var(--muted); }
+
+.stage { margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--navy-border); }
+.stage h4 { margin: 0 0 8px; font: 600 22px/1.2 var(--serif); color: var(--ink); }
+.stage > p { margin: 0 0 14px; max-width: 64ch; font: 400 17px/1.5 var(--sans); }
+.q-choice { margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 15em)); gap: 8px; }
+.q-answer { margin-top: 16px; }
+.q-answer .big { margin: 0 0 6px; font: 600 24px/1.25 var(--serif); color: var(--ink); }
+.account { margin: 0 0 16px; padding: 0; list-style: none; display: grid; gap: 8px; }
+.account li { padding-left: 18px; position: relative; font: 400 17px/1.45 var(--sans); }
+.account li::before { content: ""; position: absolute; left: 0; top: .55em; width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.definition { margin: 0 0 14px; padding: 14px 16px; border-left: 3px solid var(--ink); background: var(--paper-bright); font: 400 18px/1.5 var(--serif) !important; color: var(--ink); max-width: none !important; }
+.check { margin: 18px 0 0; font: italic 400 22px/1.3 var(--serif); color: var(--ink); }
+.check span { display: block; margin-bottom: 6px; font: normal 600 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
+.source { margin: 18px 0 0 !important; font: 400 14px/1.45 var(--sans) !important; color: var(--muted); }
+.source a { color: var(--ink); }
+
+/* Motion is opt-in: only when the reader has not asked for less. */
+@media (prefers-reduced-motion: no-preference) {
+	.call:not(.force-reduced) :is(.frontier, .frontier-h) path { transition: stroke-dashoffset 1100ms cubic-bezier(0.65, 0, 0.35, 1); }
+	.call:not(.force-reduced) .frontier-label, .call:not(.force-reduced) .zone { transition: opacity 300ms ease 900ms; }
+	.call:not(.force-reduced) .task[data-task="b"]::before { transition: opacity 500ms ease 900ms; }
+	.call:not(.force-reduced) .result { transition: grid-template-rows 520ms var(--ease-out) 1000ms; }
+	.call:not(.force-reduced) .bar-fill { transition: transform 700ms var(--ease-out) calc(1300ms + var(--i, 0) * 120ms); }
+	.call:not(.force-reduced) .juxta .bar-fill { transition-delay: calc(250ms + var(--i, 0) * 140ms); }
+	.call:not(.force-reduced) .stage.is-entering { animation: stage-in 420ms var(--ease-out) both; }
+}
+@keyframes stage-in { from { opacity: 0; translate: 0 10px; } }
+
+@media (max-width: 700px) {
+	.call-body { padding: 18px 16px 22px; }
+	.call-field { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 56px auto; }
+	.task[data-task="b"] { grid-column: 1; grid-row: 3; }
+	.frontier { display: none; }
+	.frontier-h { display: block; position: relative; z-index: 2; grid-row: 2; grid-column: 1; width: calc(100% + 32px); height: 56px; margin-left: -16px; overflow: visible; pointer-events: none; }
+	.frontier-label { position: static; grid-row: 2; grid-column: 1; justify-self: end; align-self: start; translate: none; margin-top: 4px; }
+	.task-brief { min-height: 0; }
+	.q-choice { grid-template-columns: 1fr; }
+	.bar { grid-template-columns: 7.5em 1fr 3.2em; }
+	.juxta { grid-template-columns: 1fr; gap: 18px; }
+}
+</style>
+</head>
+<body>
+<div class="mock-bar"><b>Judgment Lab<i>.</i></b><span>Prototype: an interactive figure in the essay, Section V</span></div>
+<p class="mock-note">Throwaway prototype. Add <code>?reduced</code> to force the reduced-motion version. Figures are from Dell'Acqua et al. (2023); the task wording is paraphrased from the paper's appendix.</p>
+<main class="page">
+	<h2>V. Appropriate Reliance as a Teachable Competency</h2>
+	<p class="essay dim">The educational target is specific. Students need to predict, with reasonable accuracy, when AI performs well for a given type of task and when it does not, and calibrate their use accordingly.</p>
+	<p class="essay">AI improved performance on some tasks and degraded it on others, and the boundary was not obvious in advance. Tasks that looked similar from the outside differed in whether AI helped or hurt, a finding Dell'Acqua et al. describe as the jagged technological frontier.</p>
+
+	<section class="mf call" id="reliance" aria-labelledby="call-title">
+		<div class="mf-head"><p class="mf-label">Appropriate reliance</p><span class="call-step" data-step-label>Step 1 of 3</span></div>
+		<div class="call-body">
+			<h3 id="call-title">Make the call</h3>
+			<p class="call-lede">Two tasks from one study. 758 consultants at Boston Consulting Group worked realistic consulting tasks, some with GPT-4 and some without. The tasks look alike, and so do the AI's answers. Would you rely on the AI for each one?</p>
+
+			<div class="call-field" data-field>
+				<svg class="frontier" viewBox="0 0 56 600" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M28 0 L20 40 L36 82 L17 124 L35 172 L23 212 L39 262 L15 304 L31 352 L21 392 L37 442 L19 490 L33 542 L26 600"/></svg>
+				<svg class="frontier-h" viewBox="0 0 600 56" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0 28 L40 20 L82 36 L124 17 L172 35 L212 23 L262 39 L304 15 L352 31 L392 21 L442 37 L490 19 L542 33 L600 26"/></svg>
+				<span class="frontier-label" aria-hidden="true">THE FRONTIER</span>
+
+				<article class="task" data-task="a" aria-labelledby="task-a-tag">
+					<p class="zone" data-zone>Inside the frontier</p>
+					<p class="task-tag" id="task-a-tag">Task A</p>
+					<p class="task-brief">A footwear company wants a new product. Segment the market by user, list what each segment needs, and decide which segment matters most.</p>
+					<div class="ai-draft" aria-hidden="true"><span class="ai-chip">AI answer <b>Ready</b></span><i></i><i></i><i></i><i></i></div>
+					<fieldset class="call-choice">
+						<legend>Your call on task A</legend>
+						<label><input type="radio" name="call-a" value="rely"><span>Rely on it</span></label>
+						<label><input type="radio" name="call-a" value="check"><span>Check it first</span></label>
+					</fieldset>
+					<div class="result" data-result><div>
+						<p class="stat">40%+<small>higher quality</small></p>
+						<p>Across the 18 product tasks, which included this one, consultants with AI finished 12.2% more tasks, worked 25.1% faster and turned in work graded more than 40% higher in quality.</p>
+						<p class="verdict" data-verdict></p>
+					</div></div>
+				</article>
+
+				<article class="task" data-task="b" aria-labelledby="task-b-tag">
+					<p class="zone" data-zone>Outside the frontier</p>
+					<p class="task-tag" id="task-b-tag">Task B</p>
+					<p class="task-brief">A clothing company's CEO must back one of three brands. Use the financial spreadsheet and interviews with company insiders to recommend which one.</p>
+					<div class="ai-draft" aria-hidden="true"><span class="ai-chip">AI answer <b>Ready</b></span><i></i><i></i><i></i><i></i></div>
+					<fieldset class="call-choice">
+						<legend>Your call on task B</legend>
+						<label><input type="radio" name="call-b" value="rely"><span>Rely on it</span></label>
+						<label><input type="radio" name="call-b" value="check"><span>Check it first</span></label>
+					</fieldset>
+					<div class="result" data-result><div>
+						<p class="bars-title">Picked the right brand</p>
+						<div class="bars bars-correct">
+							<div class="bar is-base" style="--i:0"><span>Without AI</span><span class="bar-track"><span class="bar-fill" style="--v:84.5%"></span></span><span>84.5%</span></div>
+							<div class="bar" style="--i:1"><span>With GPT-4</span><span class="bar-track"><span class="bar-fill" style="--v:70%"></span></span><span>70%</span></div>
+							<div class="bar" style="--i:2"><span>GPT-4 + prompting overview</span><span class="bar-track"><span class="bar-fill" style="--v:60%"></span></span><span>60%</span></div>
+						</div>
+						
+						<p>The spreadsheet looked complete. The right answer depended on details in the insider interviews.</p>
+						<p class="verdict" data-verdict></p>
+					</div></div>
+				</article>
+			</div>
+
+			<div class="call-actions" data-actions>
+				<button class="call-primary" type="button" data-reveal disabled>Show what happened</button>
+				<p class="call-hint" data-hint>Make a call on both tasks first.</p>
+			</div>
+
+			<div class="stage" data-stage="quality" hidden>
+				<h4>One more call</h4>
+				<p>Graders scored every task B recommendation for quality, on a scale of 1 to 10. Whose recommendations did they score higher?</p>
+				<fieldset class="q-choice">
+					<legend class="sr-only">Whose task B recommendations scored higher for quality?</legend>
+					<label><input type="radio" name="call-q" value="without"><span>Consultants without AI</span></label>
+					<label><input type="radio" name="call-q" value="with"><span>Consultants with AI</span></label>
+				</fieldset>
+				<div class="q-answer" data-q-answer hidden>
+					<p class="big">Consultants with AI, whether their answer was right or wrong.</p>
+					<div class="juxta">
+						<div>
+							<p class="bars-title">Picked the right brand</p>
+							<div class="bars">
+								<div class="bar is-base" style="--i:0"><span>Without AI</span><span class="bar-track"><span class="bar-fill" style="--v:84.5%"></span></span><span>84.5%</span></div>
+								<div class="bar" style="--i:1"><span>With GPT-4</span><span class="bar-track"><span class="bar-fill" style="--v:70%"></span></span><span>70%</span></div>
+								<div class="bar" style="--i:2"><span>GPT-4 + prompting overview</span><span class="bar-track"><span class="bar-fill" style="--v:60%"></span></span><span>60%</span></div>
+							</div>
+						</div>
+						<div>
+							<p class="bars-title">Quality score, change from no AI</p>
+							<div class="bars">
+								<div class="bar is-base" style="--i:3"><span>Without AI</span><span class="bar-track"><span class="bar-fill" style="--v:72%"></span></span><span>—</span></div>
+								<div class="bar" style="--i:4"><span>With GPT-4</span><span class="bar-track"><span class="bar-fill" style="--v:84.9%"></span></span><span>+17.9%</span></div>
+								<div class="bar" style="--i:5"><span>GPT-4 + prompting overview</span><span class="bar-track"><span class="bar-fill" style="--v:90.1%"></span></span><span>+25.1%</span></div>
+							</div>
+						</div>
+					</div>
+					<p class="punch">Rated higher. Right less often.</p>
+					<p>AI lifted the quality scores of wrong answers as well as right ones, so polish was no evidence of a right answer.</p>
+				</div>
+			</div>
+
+			<div class="stage" data-stage="account" hidden>
+				<h4>Your account</h4>
+				<ul class="account" data-account></ul>
+				<p class="definition">Trust is a feeling that a system will perform well. Reliance is the act of accepting its output and acting on it. Appropriate reliance means accepting support when it's warranted, refusing or verifying it when it's not, and being able to give an account of the difference.</p>
+				<p>Both answers looked ready, so the answers couldn't tell you where the line was. The tasks could. Task B turned on evidence the spreadsheet didn't show.</p>
+				<p class="check"><span>Faculty check</span>What evidence justified relying on the system here?</p>
+				<p class="source">Source: Dell'Acqua et al., <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700" target="_blank" rel="noreferrer">Navigating the Jagged Technological Frontier</a>, HBS Working Paper 24-013 (2023). Task A is from the 18 product-development tasks inside the frontier; task B is the brand task designed to fall outside it.</p>
+				<div class="call-actions"><button class="call-quiet" type="button" data-restart>Start over</button></div>
+			</div>
+			<p class="sr-only" aria-live="polite" data-live></p>
+		</div>
+	</section>
+
+	<p class="essay">The distinction between trust and reliance matters here. Trust is a subjective disposition, a feeling of confidence that a system will perform well. Reliance is the observable act of accepting its output and acting on it…</p>
+</main>
+<script>
+(() => {
+	const root = document.querySelector('#reliance');
+	const reduced = () => new URLSearchParams(location.search).has('reduced') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (new URLSearchParams(location.search).has('reduced')) root.classList.add('force-reduced');
+	const $ = (s) => root.querySelector(s);
+	const field = $('[data-field]');
+	const reveal = $('[data-reveal]');
+	const hint = $('[data-hint]');
+	const live = $('[data-live]');
+	const stepLabel = $('[data-step-label]');
+	const quality = $('[data-stage="quality"]');
+	const account = $('[data-stage="account"]');
+	const call = (name) => root.querySelector(`input[name="${name}"]:checked`)?.value;
+	const say = (text) => { live.textContent = ''; requestAnimationFrame(() => (live.textContent = text)); };
+	const show = (stage) => { stage.hidden = false; stage.classList.add('is-entering'); };
+
+	const VERDICT = {
+		a: {rely: 'You relied on it. On these tasks, that paid off.', check: 'You checked first. Reasonable, and it costs time. On these tasks, AI users did better.'},
+		b: {rely: 'You relied on it. This is the task where AI users were right less often.', check: 'You checked first. This is the task that needed it.'},
+	};
+	const ACCOUNT = {
+		a: {rely: 'Task A: you relied on the AI. Warranted: the task was inside the frontier.', check: 'Task A: you checked first. Safe, at a cost in time the AI could have saved.'},
+		b: {rely: 'Task B: you relied on the AI. This is where reliance cost accuracy.', check: 'Task B: you checked first. Warranted: the task was outside the frontier.'},
+	};
+
+	root.addEventListener('change', (e) => {
+		const name = e.target.name;
+		if (name === 'call-a' || name === 'call-b') {
+			const ready = call('call-a') && call('call-b');
+			reveal.disabled = !ready;
+			hint.textContent = ready ? 'Both calls made.' : 'Make a call on both tasks first.';
+		}
+		if (name === 'call-q') {
+			quality.querySelectorAll('input').forEach((i) => (i.disabled = true));
+			const answer = $('[data-q-answer]');
+			answer.hidden = false;
+			void answer.offsetWidth; // start the bars from zero after the answer is displayed
+			root.classList.add('quality-shown');
+			say('Consultants with AI scored higher on quality, whether their answer was right or wrong.');
+			const guessed = call('call-q') === 'with' ? 'You expected graders to favor the AI users. They did, even for wrong answers.' : 'You expected graders to favor consultants without AI. They favored the AI users, even for wrong answers.';
+			const list = $('[data-account]');
+			list.replaceChildren(...[ACCOUNT.a[call('call-a')], ACCOUNT.b[call('call-b')], guessed].map((text) => Object.assign(document.createElement('li'), {textContent: text})));
+			stepLabel.textContent = 'Step 3 of 3';
+			setTimeout(() => show(account), reduced() ? 0 : 1400);
+		}
+	});
+
+	reveal.addEventListener('click', () => {
+		root.querySelectorAll('.call-choice input').forEach((i) => (i.disabled = true));
+		root.querySelectorAll('.task').forEach((task) => {
+			const key = task.dataset.task;
+			task.querySelector('[data-verdict]').textContent = VERDICT[key][call(`call-${key}`)];
+		});
+		field.classList.add('is-revealed');
+		$('[data-actions]').hidden = true;
+		stepLabel.textContent = 'Step 2 of 3';
+		say('Task A was inside the frontier: AI users did better. Task B was outside it: AI users picked the right brand less often.');
+		setTimeout(() => show(quality), reduced() ? 0 : 1900);
+	});
+
+	$('[data-restart]').addEventListener('click', () => {
+		root.querySelectorAll('input').forEach((i) => { i.checked = false; i.disabled = false; });
+		field.classList.remove('is-revealed');
+		root.classList.remove('quality-shown');
+		[quality, account].forEach((s) => { s.hidden = true; s.classList.remove('is-entering'); });
+		$('[data-q-answer]').hidden = true;
+		$('[data-actions]').hidden = false;
+		reveal.disabled = true;
+		hint.textContent = 'Make a call on both tasks first.';
+		stepLabel.textContent = 'Step 1 of 3';
+		root.scrollIntoView({block: 'start', behavior: reduced() ? 'auto' : 'smooth'});
+		root.querySelector('input[name="call-a"]').focus({preventScroll: true});
+	});
+})();
+</script>
+</body>
+</html>
