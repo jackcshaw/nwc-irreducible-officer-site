@@ -40,7 +40,7 @@ Conventions the first figures settle go into [CONVENTIONS.md](CONVENTIONS.md), s
 **Time bound** (added after figure 1, which took about three hours, mostly building the shared runtime):
 - **Storyboard:** up to two cold reads. After the second, concrete caption-level fixes pass without another read and go to the build.
 - **Figure:** up to two cold reads. Final fixes after the second are verified by the orchestrator from the stills.
-- **Overlap:** the next figure's storyboard starts while the previous figure's final fixes are made. Each figure's own loop stays in order, and its lessons go into the next author's brief.
+- **Overlap:** the next figure's storyboard starts once the previous figure's storyboard has passed and its build begins (tightened from "during final fixes" at figure 3, so all eight can be ready by morning). Each figure's own loop stays in order, and its lessons go into the next author's brief.
 
 **Status:** figure 1 (frame capture) done October 27, after two storyboard reads, two figure reads and final fixes checked from the stills.
 
