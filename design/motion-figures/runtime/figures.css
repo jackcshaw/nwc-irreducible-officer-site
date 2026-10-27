@@ -86,10 +86,13 @@ body { margin: 0; background: var(--paper); color: var(--body); font-family: var
 .mf-count { flex: none; font: 600 12px/1 var(--mono); letter-spacing: 0.06em; color: var(--muted); min-width: 3.4em; }
 .mf-cap-text { max-width: 56ch; }
 .mf-caption.is-check { padding-top: 16px; padding-bottom: 18px; }
+/* Fixed height on desktop, sized for the check, so the controls never jump. */
+@media (min-width: 720px) { .mf-caption { min-height: 136px; } }
 .mf-check p { margin: 0; }
 .mf-check-label { font: 600 13px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
 .mf-check-q { margin-top: 6px !important; font: italic 400 clamp(22px, 2.6vw, 30px)/1.2 var(--serif); color: var(--ink); }
 .mf-follow { margin-top: 10px !important; font: 400 clamp(17px, 1.7vw, 20px)/1.3 var(--serif); color: var(--ink); }
+.mf-follow.is-equal { margin-top: 4px !important; font: italic 400 clamp(22px, 2.6vw, 30px)/1.2 var(--serif); }
 .mf-follow-label { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; margin-right: 6px; }
 
 /* Controls: play/pause, restart, scrubber, time. */

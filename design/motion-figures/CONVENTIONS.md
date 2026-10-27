@@ -17,11 +17,17 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 - **The red dot is the person** when there is one person (concepts-v0). Label it in words the first time it appears.
 - **Nothing decorative** (FC). Every mark on the stage stands for something named in the storyboard's cast.
 - **Constructed examples say so on screen** (FC): "EXAMPLE TASK".
+- **Show, don't tell, the contrast** (FC). If a caption describes a second person's process, the picture shows it: a second red dot doing the work, one movement at a time.
+- **What a product rests on sits behind it** (FC). A person's reasoning can be drawn as a strip clipped to the area below the paper. It slides up behind the paper to hide and down to reveal, so asking visibly brings it out.
+- **Key a colour on screen before it changes** (FC). A small key ("AI-SUPPLIED" with a tinted swatch) points at the tint before the wipe drains it. Show the change centre stage and large.
+- **Contrasts are about ownership, not tool use** (FC). A contrasting person who does it right also works with AI: the AI proposes to them too (grey), and their frame turns red only after they examine the alternatives.
+- **Origin changes keep the content** (FC). When AI-supplied text becomes indistinguishable, the words stay and only the grey band and colour drain to ink. Blank boxes read as deletion.
 
 ## Camera
 
 - **The camera is how close we stand** (FC). A push-in narrows what can be seen; a pull-back restores it.
 - **The caption must say whose view it is** (FC). "Up close, it's all they see" makes the close view the student's; "Step back with us" makes the wide view ours. Without that, a pull-back reads as the person gaining distance.
+- **A pan changes which side we look at** (FC). The world can be two panels wide, the person's side and the faculty side. The view pans across while following the thing that travels (FC: the paper). Elements that belong to the viewer, such as the task card, stay put on screen during the pan.
 - Moves are eased (`inOutStrong`), at most 2.5 s, one at a time, and removed under reduced motion.
 
 ## Type and size
@@ -40,10 +46,11 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
   - At least 1.5 s of hold follows the last movement.
   - No beat is shorter than twice its caption's reading time.
   - A beat with no movement is allowed when the caption is the event (FC beat 9).
-- **Length.** Figures run 30 to 75 s. FC is 74.8 s in 10 beats.
+- **Length.** Figures run 30 to about 85 s. FC is 85.6 s in 11 beats.
+- **Labels arrive with their beat** (FC). A label that says what something is appears by the time that thing settles, never late in the beat.
 - **The setup beat names the situation before anything goes wrong.** The turn beat makes the mechanism visible. The figure ends on the faculty check.
-- **Caption band** (FC). Captions are real text directly under the picture, inside the figure's shot area (`[data-mf-shot]`), so stills, video and the poster include them. A mono counter ("3 / 10") leads each caption.
-- **The faculty check is the last caption** (FC). It is styled as the check: a mono "FACULTY CHECK" label over the question in large italic, verbatim from the site's Core Failure Modes table. The picture doesn't repeat it. A smaller follow-up line from the essay may appear after the check can be read once ("Then ask: …").
+- **Caption band** (FC). Captions are real text directly under the picture, inside the figure's shot area (`[data-mf-shot]`), so stills, video and the poster include them. A mono counter ("3 / 11") leads each caption. On desktop the band has a fixed minimum height (136 px) sized for the check, so the controls never jump.
+- **The faculty check is the last caption** (FC). It is styled as the check: a mono "FACULTY CHECK" label over the question in large italic, verbatim from the site's Core Failure Modes table. The picture doesn't repeat it. When the check alone can't separate the cases the figure shows, the separating question sits directly under it at the same size (FC: "Why this frame? What would change it?"). It appears after the check can be read once (`check.follow` with no `followLabel`).
 - **Captions name who does what.** No "X, not Y" openings, slogans or morals. Run the copy through `writing-as-jack`.
 
 ## Final frame, text equivalent, page

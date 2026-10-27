@@ -37,6 +37,13 @@ The chapter mapping is the book proposal's editorial reading (`book-v0/proposal.
 
 Conventions the first figures settle go into [CONVENTIONS.md](CONVENTIONS.md), so later figures reuse the same visual vocabulary.
 
+**Time bound** (added after figure 1, which took about three hours, mostly building the shared runtime):
+- **Storyboard:** up to two cold reads. After the second, concrete caption-level fixes pass without another read and go to the build.
+- **Figure:** up to two cold reads. Final fixes after the second are verified by the orchestrator from the stills.
+- **Overlap:** the next figure's storyboard starts while the previous figure's final fixes are made. Each figure's own loop stays in order, and its lessons go into the next author's brief.
+
+**Status:** figure 1 (frame capture) done October 27, after two storyboard reads, two figure reads and final fixes checked from the stills.
+
 ## Standalone pages
 
 Each figure page works on its own:

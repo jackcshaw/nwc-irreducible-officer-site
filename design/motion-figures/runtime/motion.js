@@ -203,11 +203,19 @@
 				capBody.children[0].textContent = b.check.label;
 				capBody.children[1].textContent = b.check.question;
 				if (b.check.follow) {
+					// With no followLabel, the follow-up is set at the same size as the check.
 					capFollow = document.createElement('p');
-					capFollow.className = 'mf-follow';
-					capFollow.innerHTML = `<span class="mf-follow-label"></span> <span class="mf-follow-q"></span>`;
-					capFollow.children[0].textContent = b.check.followLabel || '';
-					capFollow.children[1].textContent = b.check.follow;
+					capFollow.className = b.check.followLabel ? 'mf-follow' : 'mf-follow is-equal';
+					if (b.check.followLabel) {
+						const fl = document.createElement('span');
+						fl.className = 'mf-follow-label';
+						fl.textContent = b.check.followLabel;
+						capFollow.append(fl, ' ');
+					}
+					const fq = document.createElement('span');
+					fq.className = 'mf-follow-q';
+					fq.textContent = b.check.follow;
+					capFollow.append(fq);
 					capBody.append(capFollow);
 				}
 			} else {
