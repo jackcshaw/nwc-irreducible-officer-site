@@ -1,6 +1,6 @@
 # Frame capture: storyboard
 
-Motion figure 1 of 8 · slug `frame-capture` · storyboard round 3, revised after figure cold reads 1 and 2 · October 27, 2026
+Motion figure 1 of 8 · slug `frame-capture` · storyboard round 3, revised after figure cold reads 1 and 2 and the consistency review · October 28, 2026
 
 *Cold-read copy. The Intent section is removed.*
 
@@ -14,7 +14,7 @@ A war-college student must recommend a response to an adversary's military build
 
 **The colour rule.** Grey is what the AI supplied. Red is what a student decided, plus the labels that name a student or a student's decision; nothing else in the picture is red. Navy ink is the page itself: the task, the labels, and the words students wrote. A dashed outline means nobody has examined a consideration; solid means someone did.
 
-**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band or fill behind AI-supplied text, red `#b81b2b`. Type: Source Serif 4 for titles and captions, Source Sans 3 for consideration labels, IBM Plex Mono for small labels (12 units, never smaller).
+**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band or fill behind AI-supplied text, red `#b81b2b`. Type: Source Serif 4 for titles and captions, Source Sans 3 for consideration labels, IBM Plex Mono for small labels (13 units, never smaller).
 
 **Stage.** An SVG with a 960 × 540 viewBox onto a world two panels wide.
 - *The student's side* (world x 0–960) is in view for beats 1–6.
@@ -24,25 +24,25 @@ Positions below are viewBox units on screen at 1×. Widths of text-sized element
 
 | Element | Stands for | How it looks | Where (on screen at 1×) |
 | --- | --- | --- | --- |
-| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 12 "EXAMPLE TASK", then Serif 16 ink over two lines: "Recommend a response to an / adversary's military buildup." It stays in place on screen through the pan | x 670–946, y 24–106 |
-| Red dot | The first student | Solid red circle, radius 5, labelled "Student" (Sans 600 13, red) in beats 1–3 | Starts at (80, 270) |
+| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 13 "EXAMPLE TASK", then Serif 16 ink over two lines: "Recommend a response to an / adversary's military buildup." It stays in place on screen through the pan | x 670–946, y 24–106 |
+| Red dot | The first student | Solid red circle, radius 5, labelled "Student" (Sans 600 13, red) in beats 1–3. Named again in red, "First student", over the first paper from beat 8 | Starts at (80, 270) |
 | Six considerations | Things that could shape the answer | Sans 600 15 ink labels in chips 30 high, rounded 3, dashed ink outline at 45% | Top row, y 60–90: Past buildups (x 24), Adversary's intent (x 249), Room to negotiate (x 480). Bottom row, y 470–500: Allies' interests (x 24), Domestic politics (x 250), Economic pressure (x 480) |
-| The AI's frame | The frame the AI proposes | Grey corner brackets (stroke 2.6, arms 24) joined by a grey hairline (40%). Mono 12 grey tag "AI'S FRAME" | x 140–510, y 130–410; tag baseline (140, 120) |
+| The AI's frame | The frame the AI proposes | Grey corner brackets (stroke 2.6, arms 24) joined by a grey hairline (40%). Mono 13 grey tag "AI'S FRAME" | x 140–510, y 130–410; tag baseline (140, 120) |
 | The AI's title | The AI's restatement of the problem | Serif 600 18, grey, on a grey-tinted band: "Deter the adversary" | Baseline (162, 160) |
-| The AI's headings | The two considerations the AI built on | "Adversary's intent" and "Allies' interests", moved inside at 85%: grey outline, grey-tinted fill, grey text | (162, 176) and (330, 176) |
+| The AI's headings | The two considerations the AI built on | "Adversary's intent" and "Allies' interests", moved inside at 87%: grey outline, grey-tinted fill, grey text | (162, 176) and (330, 176) |
 | The first student's draft | Their writing | Ink bars at 85%, 4.5 high, in two columns (left x 162–316, right x 330–488) from y 222; later a four-bar ink chart and a thicker conclusion bar | Inside the frame |
-| Draft label | Names the red work | Mono 12 red "STUDENT'S DRAFT 1/2/3" | Right-aligned at (492, 398) |
+| Draft label | Names the red work | Mono 13 red "STUDENT'S DRAFT 1/2/3" | Right-aligned at (492, 398) |
 | Change bars | The first student's revisions | Red bars 2.5 wide in the left margin, drawn by the dot | Margins x 153 and x 321 |
 | Camera | How close we stand, and which side we look at | 1× shows one side. 1.6× (centred on 325, 270) shows only the AI's frame. A pan moves from the student's side to the faculty side | 1.6× in beats 4–5; pan in beat 7 |
 | Paper A | The final copy the first student hands in | Paper-bright sheet with hairline border and soft shadow, holding the frame's contents: title, both headings with their words, rows, chart, conclusion. No red marks (it is the final copy). It arrives centre stage at full size with grey title band, grey headings and grey brackets, which drain and fade; then it moves to its place at 80% | Centre stage: sheet x 250–608, y 150–381. Its place: sheet x 40–326, y 62–247 |
-| Centre label and key | What the copy is, and what the tint means | Mono 12 ink "WHAT FACULTY RECEIVE: THE FINAL COPY" above the centred paper. To its right, a key: a small tinted swatch with a leader line and mono 12 grey "AI-SUPPLIED" | Label baseline (250, 140); key at x 600–760, y 168–180 |
-| Faculty labels | What faculty receive | Mono 12 ink: "WHAT FACULTY RECEIVE" (600) at (40, 34); "FROM THIS STUDENT" at (40, 52); "FROM ANOTHER STUDENT" at (356, 52) | Faculty side |
-| Second red dot | The second student | Solid red circle, radius 5, labelled "Another student" (Sans 600 13, red) in beat 8 | Starts at (500, 440) |
-| The AI's proposal to the second student | The same frame, offered to them | The same six chips at 80% (12-unit labels): Adversary's intent and Allies' interests tinted grey in the top row inside grey brackets tagged "AI'S FRAME", the other four dashed below. When the second dot touches a chip, it turns solid ink with a small red touch mark | Top row y 284; rows below y 334 and 366; x 384–626 |
-| The chosen frame | The second student's frame | The same brackets, turned red, with the tag now red "CHOSEN". The four set aside sit below under a red mono "SET ASIDE" | x 356–642, y 274–318; label at (384, 408) |
+| Centre label and key | What the copy is, and what the tint means | Mono 13 ink "WHAT FACULTY RECEIVE: THE FINAL COPY" above the centred paper. To its right, a key: a small tinted swatch with a leader line and mono 13 grey "AI-SUPPLIED" | Label baseline (250, 140); key at x 600–760, y 168–180 |
+| Faculty labels | What faculty receive, and from whom | Mono 13 ink "WHAT FACULTY RECEIVE" (600) at (40, 34). Under it, mono 13 ink "FROM THIS STUDENT", which becomes red Sans 600 13 "First student" at beat 8. Red Sans 600 13 "Second student" over the second paper from beat 9 | Faculty side, baselines y 34 and 53 |
+| Second red dot | The second student | Solid red circle, radius 5, labelled "Second student" (Sans 600 13, red) in beat 8 | Starts at (500, 440) |
+| The AI's proposal to the second student | The same frame, offered to them | The same six chips at 87% (13-unit labels): Adversary's intent and Allies' interests tinted grey in the top row inside grey brackets tagged "AI'S FRAME", the other four dashed below. When the second dot touches a chip, it turns solid ink with a small red touch mark | Top row y 284; rows below y 334 and 366; x 384–626 |
+| The chosen frame | The second student's frame | The same brackets, turned red, with the tag now red "CHOSEN". The four set aside sit below under a red mono "SET ASIDE" | x 356–656, y 274–320; label at (384, 408) |
 | Paper B | The second student's paper | Identical to paper A, all ink | Sheet x 356–642, y 62–247 |
 | What each can show | What each paper rests on | Two strips, hidden behind the papers until beat 10. *Under paper A:* grey brackets tagged "AI'S FRAME" around the two grey considerations, with the first student's red dot inside. *Under paper B:* the chosen frame, the four set aside and the second student's dot | Strip A x 40–326, y 262–318; strip B x 356–642, y 262–410 |
-| Question | The faculty member's question | Mono 12 ink "FACULTY ASK EACH STUDENT" over Serif italic 24 ink "Why this frame?" | x 670, y 150–190 |
+| Question | The faculty member's question | Mono 13 ink "FACULTY ASK EACH STUDENT" over Serif italic 24 ink "Why this frame?" | x 670, y 150–190 |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11: mono 13 ink "FACULTY CHECK" over the question in Serif italic 30, with "Why this frame? What would change it?" directly under it at the same size. Fixed height on desktop | Under the stage |
 | Beat list | Text equivalent and navigation | Eleven numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
 
@@ -138,66 +138,66 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 - **Notice:** the key says what the tint means before it drains. After the wipe, the title and headings read as the student's own, and once the brackets go nothing shows the frame came from anywhere else.
 - **Why:** "the frame capture is invisible inside the final product", shown big enough to see and labelled so it can't be mistaken for tidying up.
 
-### Beat 8 · 55.3–64.1 s · Another student, also working with AI
+### Beat 8 · 55.3–64.7 s · A second student, also working with AI
 
 - **On screen at the start:** the faculty side, with the task card at top right and paper A at top left. The rest is empty.
 - **What moves:**
-  1. 56.3–56.7: a second red dot grows in at (500, 440), labelled "Another student".
+  1. 56.3–56.8: over the first paper, "FROM THIS STUDENT" fades out and red "First student" fades in. At the same moment a second red dot grows in at (500, 440), labelled "Second student".
   2. 56.8–57.3: the six considerations fade in. Adversary's intent and Allies' interests are tinted grey in the top row; the other four are dashed below.
   3. 57.4–58.0: grey brackets spring around the top two, and the tag "AI'S FRAME" fades in. This is the AI's proposal to the second student, the same frame the first student got.
-  4. 58.2–61.2: the dot visits each consideration in turn, 0.5 s each: the four outside first, then the AI's two. As it touches a chip, the chip turns solid ink and keeps a small red touch mark. The "Another student" label fades as the dot starts.
+  4. 58.2–61.2: the dot visits each consideration in turn, 0.5 s each: the four outside first, then the AI's two. As it touches a chip, the chip turns solid ink and keeps a small red touch mark. The "Second student" label fades as the dot starts.
   5. 61.4–62.0: the dot moves inside the brackets. The brackets turn from grey to red, and the tag changes from "AI'S FRAME" to "CHOSEN".
   6. 62.0–62.4: "SET ASIDE" fades in, in red, under the four.
-  7. 62.4–64.1: hold.
-- **Caption:** "Another student, also working with AI, weighs all six and chooses this frame."
+  7. 62.4–64.7: hold.
+- **Caption:** "A second student, also working with AI, weighs all six and chooses this frame."
 - **Notice:** the second student gets the same AI frame. The difference is that they examine every consideration before taking it, and only then does the frame turn red as theirs.
 - **Why:** this is the contrast the argument rests on. It is about owning the frame; neither student avoids AI.
 
-### Beat 9 · 64.1–70.9 s · The same paper
+### Beat 9 · 64.7–71.5 s · The same paper
 
 - **What moves:**
-  1. 65.1–65.4: the second dot moves up to the top of the empty paper slot.
-  2. 65.4–66.6: the dot runs down the slot's left edge as paper B appears, top to bottom, identical to paper A.
-  3. 66.6–66.9: "FROM ANOTHER STUDENT" fades in above it.
-  4. 66.9–67.2: the dot returns inside the red brackets.
-  5. 67.4–68.3: the whole weighing slides up behind paper B and is hidden.
-  6. 68.3–70.9: hold.
+  1. 65.7–66.0: the second dot moves up to the top of the empty paper slot.
+  2. 66.0–67.2: the dot runs down the slot's left edge as paper B appears, top to bottom, identical to paper A.
+  3. 67.2–67.5: red "Second student" fades in above it.
+  4. 67.5–67.8: the dot returns inside the red brackets.
+  5. 68.0–68.9: the whole weighing slides up behind paper B and is hidden.
+  6. 68.9–71.5: hold.
 - **Caption:** "That student writes the same paper; the weighing doesn't show."
 - **Notice:** two identical papers. The second student's weighing has gone behind the paper, where faculty can't see it.
 - **Why:** the same frame, chosen, gives the same paper, and the paper carries none of the choice.
 
-### Beat 10 · 70.9–78.9 s · Ask each student
+### Beat 10 · 71.5–79.5 s · Ask each student
 
 - **What moves:**
-  1. 71.9–72.4: under the task card, "FACULTY ASK EACH STUDENT" and "Why this frame?" fade in and rise 6 units.
-  2. 72.4–74.9: nothing moves while the caption is read.
-  3. 74.9–75.9: from behind each paper, what it rests on slides down into view.
+  1. 72.5–73.0: under the task card, "FACULTY ASK EACH STUDENT" and "Why this frame?" fade in and rise 6 units.
+  2. 73.0–75.5: nothing moves while the caption is read.
+  3. 75.5–76.5: from behind each paper, what it rests on slides down into view.
      - Under paper A: grey brackets tagged "AI'S FRAME" around the two grey considerations, with the first student's red dot inside. Nothing else.
      - Under paper B: the same frame in red, tagged "CHOSEN", with the second student's dot inside and the four set aside below.
-  4. 75.9–78.9: hold.
+  4. 76.5–79.5: hold.
 - **Caption:** "Ask each student why this frame. One can show what they weighed."
 - **Notice:** the papers stay identical. One student can show only the AI's two; the other can show all six and the choice.
 - **Why:** asking is the only thing that tells the two apart.
 
-### Beat 11 · 78.9–85.6 s · The faculty check
+### Beat 11 · 79.5–86.2 s · The faculty check
 
 - **What moves:**
-  1. 78.9–79.1: caption 10 fades out.
-  2. 79.1–79.7: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the question in large italic.
-  3. 82.5–83.0: directly under it, at the same size, "Why this frame? What would change it?".
-  4. 83.0–85.6: hold. At 85.6 the player shows Replay and the figure rests on this frame.
+  1. 79.5–79.7: caption 10 fades out.
+  2. 79.7–80.3: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the question in large italic.
+  3. 83.1–83.6: directly under it, at the same size, "Why this frame? What would change it?".
+  4. 83.6–86.2: hold. At 86.2 the player shows Replay and the figure rests on this frame.
 - **Caption:** "Faculty check: What problem did the student choose to solve?" Second line, same size: "Why this frame? What would change it?"
 - **Notice:** both papers answer the first question with "Deter the adversary". The second line is what separates the students, and it has equal weight.
 - **Why:** the figure ends on the questions an educator can ask.
 
 ## 5. Final frame
 
-The still at 85.6 s. It is also the reduced-motion view, the print view and the poster (stage plus caption band). It shows the faculty side.
+The still at 86.2 s. It is also the reduced-motion view, the print view and the social-card image (stage plus caption band). It shows the faculty side. The player's waiting frame before play (the runtime's `poster`) is the settled setup at 13.98 s: the task card, the student and the six dashed considerations.
 
 **Stage:**
 - **Top right:** the task card, "EXAMPLE TASK" over "Recommend a response to an adversary's military buildup."
 - **Below the task card:** "FACULTY ASK EACH STUDENT" over "Why this frame?".
-- **Top left:** "WHAT FACULTY RECEIVE", then two identical papers side by side, titled "Deter the adversary", with headings "Adversary's intent" and "Allies' interests", rows, a chart and a conclusion, all in one navy ink. They are labelled "FROM THIS STUDENT" (left) and "FROM ANOTHER STUDENT" (right).
+- **Top left:** "WHAT FACULTY RECEIVE", then two identical papers side by side, titled "Deter the adversary", with headings "Adversary's intent" and "Allies' interests", rows, a chart and a conclusion, all in one navy ink. Each is headed by its student's name in red, "First student" (left) and "Second student" (right).
 - **Under the left paper:** grey brackets tagged "AI'S FRAME" around the two grey considerations, with a red dot inside.
 - **Under the right paper:** the same frame in red, tagged "CHOSEN", around the same two, with a red dot inside. Below them sit Past buildups, Room to negotiate, Domestic politics and Economic pressure, solid with red touch marks, under "SET ASIDE".
 
@@ -219,7 +219,7 @@ The still at 85.6 s. It is also the reduced-motion view, the print view and the 
 
 **Setup:**
 
-A student asks an AI for help with a strategy paper, and the AI proposes a reasonable way to frame the problem. The student works hard from there. *The Irreducible Officer* calls what can happen next frame capture: the first plausible frame becomes the student's frame. The figure runs under a minute and a half; pause it or step through the beats below. The task and the six considerations are a constructed example.
+A student asks an AI for help with a strategy paper, and the AI proposes a reasonable way to frame the problem. The student works hard from there. *The Irreducible Officer* calls what can happen next frame capture: the first plausible frame becomes the student's frame. The task and the six considerations are a constructed example.
 
 **Beat list (text equivalent):**
 
@@ -230,8 +230,8 @@ A student asks an AI for help with a strategy paper, and the AI proposes a reaso
 5. **The student revises twice, adding evidence and a firmer conclusion.** *On screen:* the dot straightens the rows, then adds a chart and a conclusion across both columns. Red change bars mark each revision. The red label reads Student's draft 3.
 6. **Step back with us: every revision stayed inside the AI's frame.** *On screen:* the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets.
 7. **Faculty receive the final copy. Nothing in it shows the frame came from the AI.** *On screen:* a clean final copy of the paper travels to the faculty side and stops in the middle, large, labelled "What faculty receive: the final copy". It is still inside grey brackets, and a key marks its tinted title and headings as "AI-supplied". A wipe crosses it, and the title and headings turn the same ink as the rest, keeping their words. The brackets and the key fade, and the paper moves to the top left, labelled "From this student".
-8. **Another student, also working with AI, weighs all six and chooses this frame.** *On screen:* a second red dot labelled Another student appears. Its AI proposes the same frame: grey brackets tagged "AI's frame" around adversary's intent and allies' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads "Chosen"; the other four go under "Set aside".
-9. **That student writes the same paper; the weighing doesn't show.** *On screen:* the second dot writes a paper identical to the first, labelled "From another student". Then the weighing slides up behind the paper and is hidden.
+8. **A second student, also working with AI, weighs all six and chooses this frame.** *On screen:* the label over the first paper becomes "First student". A second red dot labelled Second student appears. Its AI proposes the same frame: grey brackets tagged "AI's frame" around adversary's intent and allies' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads "Chosen"; the other four go under "Set aside".
+9. **That student writes the same paper; the weighing doesn't show.** *On screen:* the second dot writes a paper identical to the first, labelled "Second student". Then the weighing slides up behind the paper and is hidden.
 10. **Ask each student why this frame. One can show what they weighed.** *On screen:* "Faculty ask each student: Why this frame?" appears. From behind each paper, what it rests on slides into view. Under the first is only the AI's grey frame around its two considerations, with the first student inside. Under the second is the same frame in red, chosen, with the four set aside below.
 11. **Faculty check: What problem did the student choose to solve? Why this frame? What would change it?** *On screen:* the questions appear under the picture, at the same size. The task card's "a response" and the papers' title, "Deter the adversary", are both in view.
 
@@ -260,15 +260,15 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 5 · Revisions | 31.0–38.0 | 10 | 3.3 | 6.7 | 2 | 1.0 | 4.2 | 1.8 | 7.0 |
 | 6 · Step back with us | 38.0–45.3 | 11 | 3.7 | 7.3 | 0 | 1.0 | 2.4 | 3.9 | 7.3 |
 | 7 · What faculty receive | 45.3–55.3 | 14 | 4.7 | 9.3 | 13 | 1.0 | 7.5 | 1.5 | 10.0 |
-| 8 · Another student, also working with AI | 55.3–64.1 | 13 | 4.3 | 8.7 | 7 | 1.0 | 6.1 | 1.7 | 8.8 |
-| 9 · The same paper | 64.1–70.9 | 10 | 3.3 | 6.7 | 3 | 1.0 | 3.2 | 2.6 | 6.8 |
-| 10 · Ask each student | 70.9–78.9 | 12 | 4.0 | 8.0 | 9 | 1.0 | 4.0 | 3.0 | 8.0 |
-| 11 · Faculty check | 78.9–85.6 | 10 + 7 second line | 3.3 + 2.3 | 6.7 (check) | 0 | 0.0 | 4.1 | 2.6 | 6.7, then rests |
-| **Total** | | **129** | **43.0** | | **66** | | **46.7** | | **85.6** |
+| 8 · A second student, also working with AI | 55.3–64.7 | 14 | 4.7 | 9.3 | 9 | 1.0 | 6.1 | 2.3 | 9.4 |
+| 9 · The same paper | 64.7–71.5 | 10 | 3.3 | 6.7 | 3 | 1.0 | 3.2 | 2.6 | 6.8 |
+| 10 · Ask each student | 71.5–79.5 | 12 | 4.0 | 8.0 | 9 | 1.0 | 4.0 | 3.0 | 8.0 |
+| 11 · Faculty check | 79.5–86.2 | 10 + 7 second line | 3.3 + 2.3 | 6.7 (check) | 0 | 0.0 | 4.1 | 2.6 | 6.7, then rests |
+| **Total** | | **130** | **43.3** | | **68** | | **46.7** | | **86.2** |
 
 Checks:
 - One idea per beat; movements run one after another.
 - Changes a caption names wait until it can be read once: the narrowing (beat 3, 3.7 s in), the wipe (beat 7, 4.7 s), hiding the weighing (beat 9, 3.3 s), the reveal (beat 10, 4.0 s) and the second line (beat 11, 3.4 s after the check). In beat 8 the claim (grey to red) comes 6.1 s in.
 - Every hold is at least 1.5 s.
 - The camera moves are 1.9 s in, 2.4 s out and 2.2 s across, all eased and all under 2.5 s; reduced motion removes them.
-- Total 85.6 s.
+- Total 86.2 s.

@@ -86,8 +86,8 @@
 	const card = el(sceneBase, 'g');
 	el(card, 'rect', {x: 24, y: 16, width: 284, height: 84, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
 	mono(card, 40, 37, 'EXAMPLE TASK');
-	const taskP1 = serif(card, 40, 63, 'Part 1 · Ships needed a day', {fs: 15});
-	const taskP2 = serif(card, 40, 85, 'Part 2 · Ships the port takes a day', {fs: 15});
+	const taskP1 = serif(card, 40, 61, 'Part 1 · Ships needed a day', {fs: 16});
+	const taskP2 = serif(card, 40, 81, 'Part 2 · Ships the port takes a day', {fs: 16});
 
 	// ---- reports and callouts ------------------------------------------------
 	const reports = REPORTS.map((r) => {
@@ -201,6 +201,14 @@
 
 	// ---- faculty -----------------------------------------------------------------------------
 	const facLabel = mono(sceneBase, 480, 412, 'FACULTY SEE ONLY THE BRIEFS', {anchor: 'middle'});
+	// The final frame's key: the grey band is the AI's words; red is a student's own work.
+	const key = el(sceneBase, 'g');
+	el(key, 'rect', {x: 372, y: 437, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
+	mono(key, 398, 448, 'WRITTEN BY AI', {fill: C.grey});
+	el(key, 'circle', {cx: 381, cy: 466, r: 5, fill: C.red});
+	mono(key, 398, 470, "A STUDENT'S OWN WORK", {fill: C.red});
+	// Each person named once in red in the final frame, under what they say.
+	const names = [text(sceneBase, 52, 512, 'First student', {fs: 13, weight: 600, fill: C.red}), text(sceneBase, 680, 512, 'Second student', {fs: 13, weight: 600, fill: C.red})];
 	const outlines = ['a', 'b'].map((c) => el(sceneBase, 'rect', {x: COL[c] + 6, width: COLW - 12, height: 76, rx: 6, fill: 'none', stroke: C.ink, 'stroke-width': 1.5}));
 	const speech = (key) => {
 		const s = SPEECH[key], x = s.x, w = 256, y0 = 384, y1 = 490, r = 8;
@@ -230,6 +238,7 @@
 		return {g, ring, c, lab};
 	};
 	const dotA = dot(HOME.a, 'Student');
+	const labA2 = text(sceneBase, HOME.a.x + 12, HOME.a.y + 4, 'First student', {fs: 13, weight: 600, fill: C.red});
 	const dotB = dot(HOME.b, 'Second student');
 	let pathA = () => HOME.a, pathB = () => HOME.b;
 
@@ -309,7 +318,7 @@
 		// The scene dims while the evidence panel is up; at hand-in our side recedes.
 		const dimK = prog(t, ...T.dim) - prog(t, ...T.undim);
 		set(scene, {opacity: 1 - 0.75 * dimK});
-		set(sceneOurs, {opacity: 1 - 0.45 * prog(t, ...T.facLabel)});
+		set(sceneOurs, {opacity: 1 - 0.40 * prog(t, ...T.facLabel)});
 
 		const kc = prog(t, ...T.card, E.house);
 		set(card, {opacity: kc, transform: `translate(0 ${mix(6, 0, kc)})`});
@@ -435,6 +444,10 @@
 			set(d.lab, {opacity: 1 - labelOff});
 		};
 		dotLayer(dotA, pathA(t), prog(t, ...T.dotA, E.house), prog(t, ...T.aLabel), prog(t, ...T.pulseA));
+		// Once there are two, the first is named "First student" while at home; at the end both are named under their answers.
+		set(labA2, {opacity: prog(t, ...T.dotB) * (1 - prog(t, ...T.panels))});
+		set(key, {opacity: prog(t, ...T.facLabel)});
+		names.forEach((n) => set(n, {opacity: prog(t, ...T.panels)}));
 		dotLayer(dotB, pathB(t), prog(t, ...T.dotB, E.house), prog(t, ...T.bLabel), prog(t, ...T.pulseB));
 
 		renderNarrow(t);
@@ -497,7 +510,7 @@
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const row = h('div', 'ur-n-pair', s);
-		const col = (title) => { const c = h('div', 'ur-n-col', row); h('p', 'ur-n-label', c, title); return c; };
+		const col = (title) => { const c = h('div', 'ur-n-col', row); h('p', 'ur-n-name', c, title); return c; };
 		const part = (c, txt, mark) => { const p = h('p', 'ur-n-brief', c); band(p, txt); const m = h('span', 'ur-n-mark', p, mark); return {p, m}; };
 		N.colA = col('First student'); N.colB = col('Second student');
 		N.a1 = part(N.colA, '24 ships a day: 480 tons at 20 each', '✓ Checked');

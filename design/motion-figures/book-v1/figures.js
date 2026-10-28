@@ -9,7 +9,7 @@
 window.BOOK_FIGURES = [
 	{slug: 'frame-capture',             title: 'Frame capture',             chapter: 'frame',     status: 'done'},
 	{slug: 'invisible-delegation',      title: 'Invisible delegation',      chapter: 'frame',     status: 'in progress'},
-	{slug: 'uncalibrated-reliance',     title: 'Uncalibrated reliance',     chapter: 'calibrate', status: 'in progress'},
+	{slug: 'uncalibrated-reliance',     title: 'Uncalibrated reliance',     chapter: 'calibrate', status: 'done'},
 	{slug: 'appropriate-reliance',      title: 'Appropriate reliance',      chapter: 'calibrate', status: 'in progress'},
 	{slug: 'premature-synthesis',       title: 'Premature synthesis',       chapter: 'garden',    status: 'done'},
 	{slug: 'institutional-monoculture', title: 'Institutional monoculture', chapter: 'garden',    status: 'in progress'},

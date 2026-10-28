@@ -27,16 +27,18 @@
 	#uncalibrated-reliance .mf-check-q, #uncalibrated-reliance .mf-follow.is-equal { font-size: 20px; }
 }
 .ur-n-sec { margin: 0 0 8px; }
-.ur-n-label { margin: 0 0 4px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.ur-n-label { margin: 0 0 4px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .ur-n-grey { color: var(--stone); }
 .ur-n-task { margin: 0; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--ink); }
 .ur-n-task .ur-n-label { display: inline; margin: 0 4px 0 0; }
 .ur-n-reports { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 5px; align-items: center; }
-.ur-n-chip { padding: 1px 5px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+.ur-n-chip { padding: 1px 5px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 13px/1.35 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
 .ur-n-chip.is-open { border-color: rgba(10, 34, 66, 0.6); }
 .ur-n-head2 { display: flex; justify-content: space-between; gap: 8px; }
 .ur-n-head { font: 600 13px/1.4 var(--sans); color: var(--ink); }
 .ur-n-off { font-style: italic; color: #5d6b80; }
+.ur-n-name { margin: 0 0 4px; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.ur-n-name::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
 .ur-n-who { float: right; margin-top: 2px; font: 600 13px/1.2 var(--sans); color: var(--red); }
 .ur-n-who::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
 .ur-n-gives { font: 600 12px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
@@ -48,27 +50,27 @@
 .ur-n-calls { margin: 4px 0 0; padding: 2px 8px; border: 1px solid rgba(10, 34, 66, 0.3); background: var(--paper-bright); }
 .ur-n-call { margin: 0; font: 400 13px/1.4 var(--serif); color: var(--ink); }
 .ur-n-call .is-under { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
-.ur-n-tag { margin-left: 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); border-bottom: 1.5px solid var(--ink); white-space: nowrap; }
+.ur-n-tag { margin-left: 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); border-bottom: 1.5px solid var(--ink); white-space: nowrap; }
 .ur-n-ai { display: grid; grid-template-columns: auto 1fr auto; gap: 6px; align-items: baseline; padding: 3px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
-.ur-n-part { font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); white-space: nowrap; }
+.ur-n-part { font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); white-space: nowrap; }
 .ur-n-ans { font: 400 13.5px/1.4 var(--serif); color: var(--stone); }
 .ur-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .ur-n-band.is-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
 .ur-n-ins { color: var(--red); }
-.ur-n-ready { padding: 0 7px; border-radius: 9px; background: var(--stone); color: var(--paper-bright); font: 600 12px/1.5 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
-.ur-n-front { margin: 3px 0; font: 600 12px/1.25 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
+.ur-n-ready { padding: 0 7px; border-radius: 9px; background: var(--stone); color: var(--paper-bright); font: 600 13px/1.45 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.ur-n-front { margin: 3px 0; font: 600 13px/1.25 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
 .ur-n-flabels { display: flex; justify-content: space-between; gap: 6px; letter-spacing: 0; white-space: nowrap; }
 .ur-n-front svg { display: block; width: 100%; height: 10px; }
 .ur-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .ur-n-col { min-width: 0; }
 .ur-n-brief { margin: 0 0 4px; padding: 3px 6px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.35 var(--serif); color: var(--stone); }
-.ur-n-mark { display: block; margin-top: 2px; font: 600 12px/1.25 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--red); }
+.ur-n-mark { display: block; margin-top: 2px; font: 600 13px/1.25 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--red); }
 .ur-n-say { min-width: 0; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
 .ur-n-line { margin: 0 0 2px; font: 400 13px/1.35 var(--serif); color: var(--ink); }
 .ur-n-evidence { position: absolute; left: clamp(12px, 3vw, 24px); right: clamp(12px, 3vw, 24px); top: 50%; transform: translateY(-50%); padding: 12px 14px; border: 1px solid var(--navy-border); background: var(--paper-bright); box-shadow: 3px 4px 0 rgba(10, 34, 66, 0.06); visibility: hidden; }
 .ur-n-ev { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 4px; padding: 4px 0; border-bottom: 1px solid var(--navy-line); font: 400 15px/1.4 var(--sans); color: var(--ink); }
 .ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
-.ur-n-src { margin: 0; font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.ur-n-src { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); }
 </style>
 </head>
 <body>
@@ -80,7 +82,7 @@
 <main class="fig-page">
 	<p class="fig-kicker">Failure mode 4 of 7</p>
 	<h1>Uncalibrated reliance</h1>
-	<p class="fig-setup">A student asks an AI for help with a two-part task. They check its first answer, find it right, and use both. <em>The Irreducible Officer</em> calls what can happen next uncalibrated reliance: the student accepts confident output without knowing whether the task fits the tool. The figure runs about a minute and a half; pause it or step through the beats below. The task, the reports and both students are a constructed example. The research figures come from Dell'Acqua et al. (2023).</p>
+	<p class="fig-setup">A student asks an AI for help with a two-part task. They check its first answer, find it right, and use both. <em>The Irreducible Officer</em> calls what can happen next uncalibrated reliance: the student accepts confident output without knowing whether the task fits the tool. The research figures come from Dell'Acqua et al. (2023), and the task, the reports and both students are a constructed example.</p>
 
 	<figure class="mf" id="uncalibrated-reliance" aria-labelledby="ur-title">
 		<p class="sr-only" id="ur-title">Uncalibrated reliance, an animated figure in twelve beats</p>
@@ -95,7 +97,7 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the uncalibrated reliance figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:31</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:30</span>
 		</div>
 		<figcaption>
 			<p class="sr-only">An animated figure. A red dot stands for a student with an example task in two parts: ships needed a day, and ships the port takes a day. The student gives an AI four reports: two aid reports, a port survey and a harbor log. Copies of all four stay in a small stack labelled given to the AI. The AI answers both in the same form, in grey, each marked ready: "24 ships a day: 480 tons at 20 each" and "20 ships a day: 4 docks at 5 each". The student checks Part 1 against both aid reports, finds it right, and puts both answers into their brief, marking Part 1 checked and Part 2 used as is. A second student gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, last year's port survey, headed capacity, says 4 docks at 5 each, and the harbor log, headed open today, lists docks 1, 3 and 4, with dock 2 closed. The second student notes both, then corrects the estimate to 15 ships from 3 open docks. Part 2 depends on what's open today: the harbor log's docks 1, 3 and 4 are underlined, and the AI's "4 docks at 5 each" is marked capacity. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel shows a field experiment with BCG consultants: on a task outside the jagged frontier, the group without AI was right about 84.5% of the time and the two groups with AI 60% and 70%, and graders still rated the AI users' work higher in quality than the group without AI, regardless of correctness. The students' working marks come off the briefs, the AI's column fades back, and faculty see only the briefs. Faculty point to Part 1 in both: each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
@@ -130,11 +132,11 @@
 	<section class="fig-section" aria-labelledby="ur-links-h">
 		<h2 id="ur-links-h">Go further</h2>
 		<ul class="fig-links">
-			<li><span>Make the call yourself:</span> <a href="../appropriate-reliance/">in the appropriate reliance figure, decide whether to rely on the AI for two tasks from the same study</a></li>
 			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=3">Calibrate the tool</a></li>
 			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test uncalibrated reliance with your AI assistant</a></li>
 			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
 			<li><span>Essay:</span> <a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></li>
+			<li><span>Make the call yourself:</span> <a href="../appropriate-reliance/">in the appropriate reliance figure, decide whether to rely on the AI for two tasks from the same study</a></li>
 		</ul>
 	</section>
 </main>

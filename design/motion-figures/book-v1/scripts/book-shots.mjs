@@ -113,12 +113,13 @@ const spreadOf = (p, slug) => p.evaluate((s) => [...document.querySelectorAll(".
   await p.evaluate((k) => document.querySelector(`.contents [data-go="${k}"]`).click(), id);
   await p.waitForTimeout(1300);
   await p.screenshot({ path: `${out}desktop-1440-in-progress.png` });
-  const rl = await spreadOf(p, "Responsibility laundering");
-  await p.evaluate((k) => document.querySelector(`.contents [data-go="${k}"]`).click(), rl);
+  const ar = await spreadOf(p, "Appropriate reliance");
+  await p.evaluate((k) => document.querySelector(`.contents [data-go="${k}"]`).click(), ar);
   await p.waitForTimeout(1600);
   await p.screenshot({ path: `${out}desktop-1440-in-progress-no-poster.png` });
-  await p.click("[data-next]"); await p.waitForTimeout(1100);
-  await p.click("[data-next]"); await p.waitForTimeout(1100);
+  const end = await spreadOf(p, "→");
+  await p.evaluate((k) => document.querySelector(`.contents [data-go="${k}"]`).click(), end);
+  await p.waitForTimeout(1900);
   await p.screenshot({ path: `${out}desktop-1440-close.png` });
 
   // the flat view: every page, text and links

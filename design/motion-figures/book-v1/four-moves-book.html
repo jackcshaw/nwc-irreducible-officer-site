@@ -176,7 +176,7 @@ blockquote footer a { color: var(--muted); }
 .plate.is-wip { border-style: dashed; border-color: var(--muted); }
 .plate.is-wip::before { background: var(--faint); }
 .plate.is-wip img { opacity: 0.55; filter: grayscale(0.35); }
-.plate.is-wip .poster-type { background: transparent; }
+.plate.is-wip .poster-type { background: transparent; padding-top: 54px; }
 .plate.is-wip .poster-type .q, .plate.is-wip .poster-type .lbl, .plate.is-wip .poster-type .name { color: var(--muted); }
 .wip-badge { position: absolute; left: 12px; top: 14px; z-index: 1; font: 700 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink); padding: 7px 9px 6px; }
 .wip-note { font: 400 15px/1.45 var(--sans) !important; color: var(--body); }
@@ -244,9 +244,6 @@ blockquote footer a { color: var(--muted); }
   .is-book .face.front:not(.cover):hover::before { right: 0; background: linear-gradient(225deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
   .is-book .face.back:not(.endboard):hover::before { left: 0; background: linear-gradient(135deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
   .is-book .face.endboard { box-shadow: none; }
-  /* the essay's words sit at the foot of the failure-mode page, like an epigraph */
-  .is-book .fm-page { display: flex; flex-direction: column; }
-  .is-book .fm-page blockquote { margin: auto 0 0; padding-top: 2px; }
 }
 
 /* narrow: one spread at a time, its two pages stacked, no 3D */
@@ -338,7 +335,7 @@ blockquote footer a { color: var(--muted); }
 <section class="moves" id="moves" aria-labelledby="moves-title">
   <div class="moves-head">
     <h2 id="moves-title">The four moves</h2>
-    <p>The essay ends with four sentences. Each chapter takes one of them, then gives every failure mode it guards against a spread of its own, with a figure that shows the failure happen.</p>
+    <p>The essay ends with four sentences. Each chapter takes one, and every failure mode it guards against gets a spread with a figure.</p>
     <button class="quiet flat-toggle" type="button" data-flat aria-pressed="false">Read as one page</button>
   </div>
 
@@ -588,7 +585,7 @@ blockquote footer a { color: var(--muted); }
           <button type="button" class="btn play" data-play="${f.slug}" aria-label="Play the ${esc(f.title.toLowerCase())} figure here">Play here</button>
           <a class="btn open" href="${src}">Open the figure</a>
         </div>
-        <p class="small">It plays over the book at full size and takes about a minute and a half. On its own page, each beat is also written out, with the essay passage it comes from.</p>
+        <p class="small">It plays over the book at full size. Its own page has every beat in writing and the essay passage it comes from.</p>
       </article>`)
       : h(`
       <article class="face fig-page" data-key="fig-${f.slug}-play" data-title="${esc(f.title)}, the figure (in progress)">
@@ -597,7 +594,7 @@ blockquote footer a { color: var(--muted); }
           <span class="wip-badge">In progress</span>
           <img src="${poster}" alt="" decoding="async" data-poster>
         </div>
-        <p class="wip-note"><b>This figure is still being built.</b> Each figure is storyboarded, read cold by a tester, built at teaching pace and watched cold again. This spread switches on when it passes.</p>
+        <p class="wip-note"><b>This figure is still being built and tested.</b> Its spread switches on when it passes review.</p>
       </article>`);
     // No poster still on disk: the plate shows the figure's last caption instead.
     const img = right.querySelector("[data-poster]");
