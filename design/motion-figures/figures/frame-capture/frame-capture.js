@@ -23,9 +23,9 @@
 		pan: [46.3, 48.5], centreLabel: [48.3, 48.7], key: [48.8, 49.2], wipe: [50.0, 51.4], bracketsA: [51.6, 52.4],
 		toSlot: [52.6, 53.6], slotLabels: [53.4, 53.8],
 		dotB: 56.3, chipsB: [56.8, 57.3], aiB: 57.4, aiTagB: [57.7, 58.0], visit: 58.2, visitStep: 0.5, claim: [61.4, 62.0], aside: [62.0, 62.4],
-		up: [65.1, 65.4], sweep: [65.4, 66.6], labelB: [66.6, 66.9], back: [66.9, 67.2], hideB: [67.4, 68.3],
-		ask: [71.9, 72.4], reveal: [74.9, 75.9],
-		end: 85.6,
+		nameSwap: 56.3, up: [65.7, 66.0], sweep: [66.0, 67.2], labelB: [67.2, 67.5], back: [67.5, 67.8], hideB: [68.0, 68.9],
+		ask: [72.5, 73.0], reveal: [75.5, 76.5],
+		end: 86.2,
 	};
 
 	// ---- geometry: the student's side --------------------------------------
@@ -41,7 +41,7 @@
 	const CHART = {x: 330, step: 19, w: 12, base: 326, h: [20, 13, 28, 17]};
 	const CON = {x: 162, y: 342, w: 326, h: 7};
 	const rowY = (i) => ROW0 + DY * i;
-	const CHIP_H = 30, CHIP_FS = 15, HEAD_S = 0.85, STRIP_S = 0.8;
+	const CHIP_H = 30, CHIP_FS = 15, HEAD_S = 0.87, STRIP_S = 0.87;
 	const CHIPS = [
 		{text: 'Past buildups', x: 24, y: 60, order: 0},
 		{text: "Adversary's intent", x: 249, y: 60, order: 2, head: {x: 162, y: 176}, kept: 0},
@@ -72,7 +72,7 @@
 
 	const text = (parent, x, y, str, {fs, family = FONT.sans, weight = 400, fill = C.ink, anchor = 'start', ls = 0, style} = {}) =>
 		el(parent, 'text', {x, y, 'font-family': family, 'font-size': fs, 'font-weight': weight, fill, 'text-anchor': anchor, 'letter-spacing': ls, 'data-fs': fs, ...(style ? {'font-style': style} : {})}, str);
-	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 13, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
 	const frameMarks = (parent, r, arm, colour, sw) => ({
 		hair: el(parent, 'rect', {x: r.x, y: r.y, width: r.w, height: r.h, fill: 'none', stroke: colour, 'stroke-opacity': 0.4, 'stroke-width': 1}),
 		corners: el(parent, 'path', {d: bracketPath(r, arm), fill: 'none', stroke: colour, 'stroke-width': sw, 'stroke-linecap': 'square'}),
@@ -123,8 +123,10 @@
 	// ---- the faculty side: labels, strips (behind the papers), papers, question --------
 	const deskLabels = el(cam, 'g');
 	mono(deskLabels, DX + 40, 34, 'WHAT FACULTY RECEIVE', {ls: 0.6});
-	mono(deskLabels, DX + 40, 52, 'FROM THIS STUDENT', {weight: 500, ls: 0.6});
-	const labelB = mono(cam, DX + 356, 52, 'FROM ANOTHER STUDENT', {weight: 500, ls: 0.6});
+	const fromThis = mono(deskLabels, DX + 40, 53, 'FROM THIS STUDENT', {weight: 500, ls: 0.6});
+	// Once there are two students, each is named in red, as in the other figures.
+	const nameA = text(cam, DX + 40, 53, 'First student', {fs: 13, weight: 600, fill: C.red});
+	const labelB = text(cam, DX + 356, 53, 'Second student', {fs: 13, weight: 600, fill: C.red});
 
 	// Strip A: what the first student can show (the AI's two, in the AI's frame).
 	// Each strip is clipped to the area below its paper, so it slides out from underneath.
@@ -133,22 +135,22 @@
 	underClip('fc-under-b', DX + 336, 330);
 	const stripA = el(el(cam, 'g', {'clip-path': 'url(#fc-under-a)'}), 'g');
 	mono(stripA, SA.x, 268, "AI'S FRAME", {fill: C.grey});
-	frameMarks(stripA, {x: SA.x, y: 274, w: 286, h: 44}, 12, C.grey, 2.2);
-	el(stripA, 'circle', {cx: SA.x + 14, cy: 296, r: 5, fill: C.red});
+	frameMarks(stripA, {x: SA.x, y: 274, w: 300, h: 46}, 12, C.grey, 2.2);
+	el(stripA, 'circle', {cx: SA.x + 14, cy: 297, r: 5, fill: C.red});
 	const stripAChips = CHIPS.filter((c) => c.head).map((c) => ({...c, ...chip(stripA, c.text, STRIP_S)}));
 
 	// Strip B: the second student's weighing, later what they can show.
 	const stripB = el(el(cam, 'g', {'clip-path': 'url(#fc-under-b)'}), 'g');
 	const aiTagB = mono(stripB, SB.x, 268, "AI'S FRAME", {fill: C.grey});
 	const chosenTag = mono(stripB, SB.x, 268, 'CHOSEN', {fill: C.red});
-	const chosenMarks = frameMarks(stripB, {x: SB.x, y: 274, w: 286, h: 44}, 12, C.grey, 2.2);
+	const chosenMarks = frameMarks(stripB, {x: SB.x, y: 274, w: 300, h: 46}, 12, C.grey, 2.2);
 	const asideLabel = mono(stripB, SB.chipX, 408, 'SET ASIDE', {fill: C.red});
-	const stripBDot = el(stripB, 'circle', {cx: SB.x + 14, cy: 296, r: 5, fill: C.red});
+	const stripBDot = el(stripB, 'circle', {cx: SB.x + 14, cy: 297, r: 5, fill: C.red});
 	const stripBChips = CHIPS.map((c) => ({...c, ...chip(stripB, c.text, STRIP_S)}));
 	stripBChips.forEach((c) => { c.touch = el(c.g, 'circle', {cx: -3, cy: -3, r: 2.6, fill: C.red}); });
 
 	// Papers: the frame's contents, placed by a transform.
-	const PT = {x: 162, y: 162, fs: 21}, PH_FS = 14;
+	const PT = {x: 162, y: 162, fs: 21}, PH_FS = 16.3;
 	const paperBody = (g) => {
 		el(g, 'rect', {x: SHEET.x + 3, y: SHEET.y + 4, width: SHEET.w, height: SHEET.h, fill: C.ink, 'fill-opacity': 0.06});
 		el(g, 'rect', {x: SHEET.x, y: SHEET.y, width: SHEET.w, height: SHEET.h, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
@@ -199,7 +201,7 @@
 	text(ask, DX + 670, 184, 'Why this frame?', {fs: 24, family: FONT.serif, style: 'italic'});
 
 	const dotB = el(cam, 'circle', {r: 5, fill: C.red});
-	const dotBLabel = text(cam, DX + 500, 462, 'Another student', {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
+	const dotBLabel = text(cam, DX + 500, 462, 'Second student', {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
 
 	// ---- paths ---------------------------------------------------------------------------
 	const START = {x: 80, y: 270};
@@ -226,7 +228,7 @@
 	// The second student: visit each grid slot, into the chosen frame, then write.
 	const B_START = {x: DX + 500, y: 440};
 	const bSegs = [];
-	const IN_CHOSEN = {x: SB.x + 14, y: 296};
+	const IN_CHOSEN = {x: SB.x + 14, y: 297};
 	const buildBPath = () => {
 		let prev = B_START;
 		stripBChips.slice().sort((a, b) => a.visit - b.visit).forEach((c) => {
@@ -406,7 +408,7 @@
 		const co = prog(t, T.aiB, T.aiB + 0.06);
 		const claim = prog(t, T.claim[0], T.claim[0] + 0.4);
 		const fc = mixColor(C.grey, C.red, claim);
-		const cr = {x: mix(SB.x - 14, SB.x, aiB), y: mix(262, 274, aiB), w: mix(314, 286, aiB), h: mix(68, 44, aiB)};
+		const cr = {x: mix(SB.x - 14, SB.x, aiB), y: mix(262, 274, aiB), w: mix(328, 300, aiB), h: mix(70, 46, aiB)};
 		set(chosenMarks.corners, {d: bracketPath(cr, 12), opacity: co, stroke: fc});
 		set(chosenMarks.hair, {x: cr.x, y: cr.y, width: cr.w, height: cr.h, opacity: co, stroke: fc});
 		set(aiTagB, {opacity: prog(t, ...T.aiTagB) * (1 - claim)});
@@ -423,6 +425,8 @@
 		set(labelB, {opacity: prog(t, ...T.labelB)});
 
 		set(deskLabels, {opacity: prog(t, ...T.slotLabels)});
+		set(fromThis, {opacity: 1 - prog(t, T.nameSwap, T.nameSwap + 0.25)});
+		set(nameA, {opacity: prog(t, T.nameSwap + 0.25, T.nameSwap + 0.5)});
 		const ak = prog(t, ...T.ask, E.house);
 		set(ask, {opacity: ak, transform: `translate(0 ${mix(6, 0, ak).toFixed(2)})`});
 	};
@@ -442,21 +446,22 @@
 			detail: 'the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets.'},
 		{at: 45.3, text: 'Faculty receive the final copy. Nothing in it shows the frame came from the AI.',
 			detail: 'a clean final copy of the paper travels to the faculty side and stops in the middle, large, labelled "What faculty receive: the final copy". It is still inside grey brackets, and a key marks its tinted title and headings as "AI-supplied". A wipe crosses it, and the title and headings turn the same ink as the rest, keeping their words. The brackets and the key fade, and the paper moves to the top left, labelled "From this student".'},
-		{at: 55.3, text: 'Another student, also working with AI, weighs all six and chooses this frame.',
-			detail: 'a second red dot labelled Another student appears. Its AI proposes the same frame: grey brackets tagged "AI\'s frame" around adversary\'s intent and allies\' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads "Chosen"; the other four go under "Set aside".'},
-		{at: 64.1, text: "That student writes the same paper; the weighing doesn't show.",
-			detail: 'the second dot writes a paper identical to the first, labelled "From another student". Then the weighing slides up behind the paper and is hidden.'},
-		{at: 70.9, text: 'Ask each student why this frame. One can show what they weighed.',
+		{at: 55.3, text: 'A second student, also working with AI, weighs all six and chooses this frame.',
+			detail: 'the label over the first paper becomes "First student". A second red dot labelled Second student appears. Its AI proposes the same frame: grey brackets tagged "AI\'s frame" around adversary\'s intent and allies\' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads "Chosen"; the other four go under "Set aside".'},
+		{at: 64.7, text: "That student writes the same paper; the weighing doesn't show.",
+			detail: 'the second dot writes a paper identical to the first, labelled "Second student". Then the weighing slides up behind the paper and is hidden.'},
+		{at: 71.5, text: 'Ask each student why this frame. One can show what they weighed.',
 			detail: '"Faculty ask each student: Why this frame?" appears. From behind each paper, what it rests on slides into view. Under the first is only the AI\'s grey frame around its two considerations, with the first student inside. Under the second is the same frame in red, chosen, with the four set aside below.'},
-		{at: 78.9, text: 'Faculty check: What problem did the student choose to solve?',
+		{at: 79.5, text: 'Faculty check: What problem did the student choose to solve?',
 			list: 'Faculty check: What problem did the student choose to solve? Why this frame? What would change it?',
 			detail: 'the questions appear under the picture, at the same size. The task card\'s "a response" and the papers\' title, "Deter the adversary", are both in view.',
-			check: {label: 'Faculty check', question: 'What problem did the student choose to solve?', follow: 'Why this frame? What would change it?', followAt: 82.5}},
+			check: {label: 'Faculty check', question: 'What problem did the student choose to solve?', follow: 'Why this frame? What would change it?', followAt: 83.1}},
 	];
 
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
-		mount(root, {duration: T.end, render, beats: BEATS});
+		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
+		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02});
 	});
 })();

@@ -10,15 +10,17 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../runtime/figures.css">
 <style>
-/* Below 480 px the picture's text would render under 11 px, so the stage
-   switches to a stacked text view driven by the same clock (13–16 px). */
+/* Whenever a picture label would render under 11 px (phones, and short windows such
+   as 1280×720, at the runtime's letterboxed scale), the stage switches to a stacked
+   text view driven by the same clock (13–16 px). syncStacked() in the JS sets the class. */
 .ps-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
+#premature-synthesis.is-stacked .mf-stage { height: 0; overflow: hidden; }
+/* Fixed heights (the tallest beat, and the check) so the caption and controls never move. */
+#premature-synthesis.is-stacked .ps-narrow { display: block; min-height: 476px; padding: 12px clamp(12px, 3vw, 24px) 8px; background: var(--paper); }
+#premature-synthesis.is-stacked .mf-caption { min-height: 136px; }
+@media (max-width: 719px) { #premature-synthesis.is-stacked .mf-caption { min-height: 160px; } }
 @media (max-width: 480px) {
-	/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
-	#premature-synthesis .mf-stage { height: 0; overflow: hidden; }
-	/* Fixed heights (the tallest beat, and the check) so the caption and controls never move. */
-	#premature-synthesis .ps-narrow { display: block; min-height: 476px; padding: 12px 12px 8px; background: var(--paper); }
-	#premature-synthesis .mf-caption { min-height: 160px; }
 	#premature-synthesis .mf-check-q, #premature-synthesis .mf-follow.is-equal { font-size: 20px; }
 }
 .ps-n-sec { margin: 0 0 12px; }

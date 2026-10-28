@@ -140,25 +140,25 @@ Two war-college students must recommend when to evacuate civilians from a port c
 - *Phase 2 (beats 2–9), top to bottom:* the note row; the two copies, the first student's in the left column (x 24–468) and the second's in the right (x 492–936); faculty's questions, centred; the speech panels.
 - *Key:* a row along the bottom (baseline 524), from x 24.
 
-**The sheet.** Both copies use one layout, given here in sheet units (base size 444 × 172). In phase 1 the draft is drawn at 1.25 with its top-left at (202, 140), spanning x 202–757, y 140–355. In phase 2 the copies are drawn at 1.0, at (24, 152) and (492, 152), spanning y 152–324.
+**The sheet.** Both copies use one layout, given here in sheet units (base size 444 × 184). In phase 1 the draft is drawn at 1.25 with its top-left at (202, 140), spanning x 202–757, y 140–370. In phase 2 the copies are drawn at 1.0, at (24, 146) and (492, 146), spanning y 146–330.
 - *Margin* x 0–72: the dot, its half and the weight move here. *Text column* x 80–428.
-- *Two rows,* Serif 16 (20 at 1.25), line height 21, fixed breaks so the copies match line for line. Row 1 baselines 40 and 61: "The analysis estimates ships can / carry everyone out." Row 2 baselines 96 and 117: "It is recommended that civilians / wait for ships."
-- *Signature line* at y 150, from x 20 to 300.
-- *The dot at rest* on the line: (36, 145). *The weight:* hangs at x −4 to 76, y 2–32; rests at y 110–140, its lower edge touching the dot.
+- *Two rows,* Serif 17 (21 at 1.25), lines 28 units apart so the reading dot fits between them, fixed breaks so the copies match line for line. Row 1 baselines 40 and 68: "The analysis estimates ships can / carry everyone out." Row 2 baselines 108 and 136: "It is recommended that civilians / wait for ships."
+- *Signature line* at y 166, from x 20 to 300.
+- *The dot at rest* on the line: (36, 161). *The weight:* x −22 to 74; hangs at y −6 to 28; rests at y 122–156, its lower edge touching the dot.
 
 | Element | Stands for | How it looks | Where |
 | --- | --- | --- | --- |
-| Task card | The assignment | Paper-bright strip, hairline ink border (15%): mono 12 "EXAMPLE TASK", then Serif 15 ink "Recommend when to evacuate a port city." on the same line. Stays throughout | x 24–440, y 16–52 |
+| Task card | The assignment | Paper-bright strip, hairline ink border (15%): mono 13 "EXAMPLE TASK", then Serif 15 ink "Recommend when to evacuate a port city." on the same line, the strip sized to its text. Stays throughout | From x 24, y 16–52 |
 | Red dots | The two students | Solid red circles, radius 5, with Sans 600 13 red labels "First student" and "Second student". The labels fade when the dots move onto the copies; the tags name the students from then on | Beats 1–2 at (60, 392) and (528, 392), labels to their right |
 | The draft | What the AI wrote | Paper-bright sheet, hairline ink border, soft shadow. Grey Serif on a grey band, two rows, and an empty signature line | Phase 1, centre |
-| The copies | What each student signs, and what faculty receive | The draft divides into two identical sheets that slide and shrink into the columns. Tags above them, mono 12: navy "FIRST STUDENT" / "SECOND STUDENT" with grey "· DRAFTED WITH AI". Identical to the end | Phase 2; tags at baseline 144 |
-| Signature | A student puts their name to it | A red squiggle the dot draws along the signature line, about 120 units long | Sheet x 52–170, above y 150 |
-| Note row | Each student's own working, not handed in | Mono 12 ink label "THEIR OWN NOTE · NOT HANDED IN" at the row's left. First student's cell: a faint ink "—". Second student's cell: their note, red Serif italic 15 on two lines, "Rests on an open port." / "Harbor reports: normal." Stays to the end | Label baseline (24, 76); cells y 84–124; "—" at (40, 108); note from x 508, baselines 102 and 120 |
+| The copies | What each student signs, and what faculty receive | The draft divides into two identical sheets that slide and shrink into the columns. Tags above them, mono 12: navy "FIRST STUDENT" / "SECOND STUDENT" with grey "· DRAFTED WITH AI". Identical to the end | Phase 2; tags at baseline 138 |
+| Signature | A student puts their name to it | A red squiggle the dot draws along the signature line, about 120 units long; the dot then rests at the line's left end | Sheet x 86–206, above y 166 |
+| Note row | Each student's own working, not handed in | Mono 12 ink label "THEIR OWN NOTE · NOT HANDED IN" at the row's left. First student's cell: a faint ink "—". Second student's cell: their note, red Serif italic 15 on two lines, "Rests on an open port." / "Harbor reports: normal." Stays to the end | Label baseline (24, 74); cells y 80–122, with a hairline across both columns at y 126; "—" at (40, 104); note from x 508, baselines 98 and 116 |
 | Half dot | The part of the call the first student's answers lean on the AI | The first student's dot splits into two red dots, radius 3.5. One stays on the signature line. The other moves up the margin and sits just left of "The analysis estimates" (sheet x 66, y 35). No underline | First copy |
-| Faculty's questions | What faculty ask | Serif italic 17 ink, centred, numbered: "1 · Suppose the port closes. Who made the call to wait?" (beat 5), then under it "2 · Why did you rely on the estimate?" (beat 6) | Centred on x 480; baselines 348 and 368 |
-| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), a short tail up from its top-left corner toward the copy above. Serif 15 ink in quotation marks, in numbered rows ("1 ·", "2 ·") that match the questions, each row two lines high so the rows line up across the panels. Words at about 3 a second. Both stay to the end | First x 24–468, second x 492–936; y 386–494 |
+| Faculty's questions | What faculty ask | Serif italic 17 ink, centred, numbered: "1 · Suppose the port closes. Who made the call to wait?" (beat 5), then under it "2 · Why did you rely on the estimate?" (beat 6) | Centred on x 480; baselines 350 and 370 |
+| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), a short tail up from its top-left corner toward the copy above. The student's name first, red Sans 600 13 ("First student", "Second student"; ID's convention), then Serif 15 ink in quotation marks, in numbered rows ("1 ·", "2 ·") that match the questions, each row two lines high so the rows line up across the panels. Two-line answers are balanced so no word sits alone. Words at about 3 a second. Both stay to the end | First x 24–468, second x 492–936; y 388–502 |
 | Bracket | The answer that accounts for the reliance | A red square bracket drawn down the left edge of the second student's row 2, inside their speech panel. The words stay ink | Second panel, row 2 |
-| The weight | Being answerable for the decision, if it proves wrong | A navy block 80 × 30, its top 4 units narrower on each side (a weight's shape), with paper-coloured mono 12 "ANSWERABLE". Hangs at the top of a copy's margin, falls down it, rests on the dot. One per copy | Sheet x −4 to 76; hangs y 2–32, rests y 110–140 |
+| The weight | Being answerable for the decision, if it proves wrong | A navy block 96 × 34, its top 4 units narrower on each side (a weight's shape), overhanging the copy's left edge, with paper-coloured mono 13 "ANSWERABLE". Hangs at the top of a copy's margin, falls down it, rests on the dot. One per copy | Sheet x −22 to 74; hangs y −6 to 28, rests y 122–156 |
 | Key | How to read the marks | Mono 12: a grey band swatch and grey "WRITTEN BY AI" (beat 2); a red dot and red "A STUDENT'S DECISION" (beat 4) | Baseline 524, from x 24 |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 9") and the caption in Serif 22 ink. In beat 9, mono 13 ink "FACULTY CHECK" over the check in Serif italic 30, then directly under it at the same size and style, the move line. Fixed height on desktop, sized for both lines | Under the stage |
 | Beat list | Text equivalent and navigation | Nine numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
@@ -327,7 +327,9 @@ The still at 89.9 s. It is also the reduced-motion view, the print view and the 
 
 **What the still says alone:** two students signed the same AI-drafted recommendation, and a weight marked "answerable" rests on each. Only the second made a note before signing, and it wasn't handed in. Asked who made the call and why they relied on the estimate, one leans on the AI and says it seemed solid; the other names the assumption, why they accepted it and what they didn't check. The lines under the picture say what to ask.
 
-**Runtime poster** (shown while the figure waits to play): beat 2 settled (18.0 s), with the task, both students and their two copies of the draft.
+**Runtime poster** (shown while the figure waits to play): beat 2 settled (18.08 s), with the task, both students and their two copies of the draft.
+
+**Built** (October 28, 2026): `index.html` and `responsibility-laundering.js` on the shared runtime. Mono labels are 13 units, so the drawn stage survives the viewport fit at 1280 × 720 and switches to the stacked stage only below a 0.846 scale. The stacked stage measures 838 px with the check and controls at 390 px wide, the same in every beat.
 
 ## 6. Standalone page copy
 

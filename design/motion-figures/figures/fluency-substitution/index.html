@@ -10,39 +10,46 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../runtime/figures.css">
 <style>
-/* Below 480 px the picture's text would render under 11 px, so the stage
-   switches to a stacked text view driven by the same clock. */
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock
+   (.is-stacked, set by syncStacked). Its height is fixed at its tallest moment for
+   the current width, and the caption band has a fixed height, so the controls
+   never move. */
 .fs-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
+#fluency-substitution.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#fluency-substitution.is-stacked .fs-narrow { display: block; padding: 12px clamp(12px, 3vw, 24px) 8px; background: var(--paper); overflow: hidden; }
+#fluency-substitution.is-stacked .fs-narrow > .fs-n-sec { max-width: 760px; }
+#fluency-substitution.is-stacked .mf-caption { height: 136px; overflow: hidden; }
+@media (max-width: 719px) { #fluency-substitution.is-stacked .mf-caption { height: 166px; } }
 @media (max-width: 480px) {
-	/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
-	#fluency-substitution .mf-stage { height: 0; overflow: hidden; }
-	#fluency-substitution .fs-narrow { display: block; min-height: 300px; padding: 12px 12px 8px; background: var(--paper); }
+	#fluency-substitution.is-stacked .mf-caption { height: 160px; }
 	/* The final frame, check and controls fit an 844 px phone screen. */
 	#fluency-substitution .mf-check-q, #fluency-substitution .mf-follow.is-equal { font-size: 20px; }
 }
 .fs-n-sec { margin: 0 0 10px; }
 .fs-n-sec[hidden] { display: none; }
-.fs-n-label { margin: 0 0 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.fs-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
 .fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
 .fs-n-sm { font-size: 13px; line-height: 1.55; }
 .fs-n-tile { padding: 6px 8px; border: 1px solid var(--navy-border); }
 .fs-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fs-n-cell { min-width: 0; }
-.fs-n-act { margin: 0 0 3px; font: 600 12px/1.3 var(--sans); color: var(--red); }
+.fs-n-act { margin: 0 0 3px; font: 600 13px/1.3 var(--sans); color: var(--red); }
 .fs-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .fs-n-band[hidden] { display: none; }
 .fs-n-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
 .fs-n-small { margin: 6px 0 0; font: 500 13px/1.35 var(--sans); color: var(--muted); }
 .fs-n-item { margin: 0 0 8px; }
-.fs-n-who { display: block; margin: 0 0 3px; font: 600 12px/1.2 var(--sans); color: var(--red); }
+.fs-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
 .fs-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
 .fs-n-note { margin: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--red); }
 .fs-n-q { margin: 0 0 6px; font: italic 400 15px/1.35 var(--serif); color: var(--ink); }
 .fs-n-say { min-width: 0; padding: 5px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
 .fs-n-txt { font: 400 14px/1.4 var(--serif); }
 .fs-n-seg { padding: 1px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .fs-n-key-ai { color: var(--stone); }
 .fs-n-key-ai::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: 6px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; vertical-align: -1px; }
 .fs-n-key-own { color: var(--red); }
@@ -58,7 +65,7 @@
 <main class="fig-page">
 	<p class="fig-kicker">Failure mode 2 of 7</p>
 	<h1>Fluency substitution</h1>
-	<p class="fig-setup">A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose a second student, who made the call first, hands in the very same paper. <em>The Irreducible Officer</em> calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.</p>
+	<p class="fig-setup">A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose a second student, who made the call first, hands in the very same paper. <em>The Irreducible Officer</em> calls the risk fluency substitution: polished analysis stands in for owned reasoning. Not every student who agrees with an AI fails this way. The task, the paper and all the answers are a constructed example.</p>
 
 	<figure class="mf" id="fluency-substitution" aria-labelledby="fs-title">
 		<p class="sr-only" id="fs-title">Fluency substitution, an animated figure in ten beats</p>
@@ -85,7 +92,7 @@
 		<h2 id="fs-check-h">Faculty check</h2>
 		<p class="fig-check">Can the student independently explain the judgment in plain speech?</p>
 		<p class="fig-check">Then change one fact. What would you recommend now?</p>
-		<p class="fig-follow">Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.</p>
+		<p class="fig-follow">Both students in the figure explain the call clearly without the paper. The second line separates them. Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.</p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="fs-essay-h">

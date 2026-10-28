@@ -86,9 +86,9 @@
 
 	// ---- task card (label column, stays put) --------------------------------
 	const card = el(stage, 'g');
-	el(card, 'rect', {x: 16, y: 14, width: 220, height: 92, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
+	el(card, 'rect', {x: 16, y: 14, width: 220, height: 96, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
 	mono(card, 28, 34, 'EXAMPLE TASK');
-	['Recommend whether to', 'send forces to reassure', 'a threatened ally.'].forEach((s, i) => serif(card, 28, 56 + 18 * i, s, {fs: 15}));
+	['Recommend whether to', 'send forces to reassure', 'a threatened ally.'].forEach((s, i) => serif(card, 28, 56 + 20 * i, s, {fs: 16}));
 
 	// ---- row labels, key ------------------------------------------------------
 	const rowOwn = el(stage, 'g');
@@ -544,9 +544,40 @@
 		fade(N.key.grey, prog(t, ...T.keyGrey));
 		fade(N.key.red, prog(t, ...T.keyRed));
 	}
-	const narrowQuery = matchMedia('(max-width: 480px)');
-	const syncNarrow = () => { if (narrowQuery.matches) root.classList.add('is-narrow'); };
-	narrowQuery.addEventListener('change', syncNarrow);
+	// The stacked stage keeps one height for the whole run at the current width: the
+	// tallest of its beat layouts. Measured whenever the width changes.
+	let sizedFor = 0;
+	const sizeNarrow = () => {
+		const w = narrow.clientWidth;
+		if (!w || w === sizedFor) return;
+		sizedFor = w;
+		narrow.style.height = '';
+		let tallest = 0;
+		const cutHidden = N.draftA.cut.hidden;
+		N.draftA.cut.hidden = false;
+		SHOW.forEach((keys) => {
+			const show = new Set(keys);
+			for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
+			tallest = Math.max(tallest, narrow.scrollHeight);
+		});
+		N.draftA.cut.hidden = cutHidden;
+		narrow.style.height = `${Math.ceil(tallest)}px`;
+	};
+	// The stacked stage takes over whenever the smallest picture text (12-unit mono)
+	// would render under 11 px at the runtime's letterboxed scale.
+	const MIN_FS = 12;
+	const syncStacked = () => {
+		const r = svg.getBoundingClientRect();
+		if (!r.width) return;
+		const scale = r.height ? Math.min(r.width / VW, r.height / (VW * 540 / 960)) : r.width / VW;
+		const stacked = MIN_FS * scale < 11;
+		root.classList.toggle('is-stacked', stacked);
+		if (stacked) {
+			sizeNarrow();
+			const scrub = root.querySelector('[data-mf-scrub]');
+			renderNarrow(scrub ? +scrub.value || 0 : 0);
+		}
+	};
 
 	const BEATS = [
 		{at: 0, text: 'A student gets a task that needs a decision.',
@@ -576,7 +607,9 @@
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
-		syncNarrow();
-		mount(root, {duration: T.end, render, beats: BEATS});
+		new ResizeObserver(syncStacked).observe(svg);
+		syncStacked();
+		// Poster: the settled setup (the task and the student) while the figure waits to play.
+		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
 	});
 })();

@@ -11,22 +11,25 @@ const U = `${ROOT}/book-v1/four-moves-book.html`;
 const out = new URL("../shots/", import.meta.url).pathname;
 const essay = readFileSync(new URL("../../../../content/the-irreducible-officer.md", import.meta.url), "utf8");
 const b = await chromium.launch();
-const report = { errors: [] };
+const report = { errors: [], missing: new Set() };
 const norm = (s) => s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim();
 
 async function open(url, opts = {}) {
   const c = await b.newContext({ viewport: { width: 1440, height: 900 }, ...opts });
   const p = await c.newPage();
-  p.on("console", (m) => m.type() === "error" && report.errors.push(`${url}: ${m.text()}`));
+  // A 404 for a poster still is expected: that plate shows the figure's last caption instead.
+  p.on("response", (r) => r.status() === 404 && report.missing.add(r.url().replace(ROOT, "")));
+  p.on("console", (m) => m.type() === "error" && !m.text().startsWith("Failed to load resource") && report.errors.push(`${url}: ${m.text()}`));
   p.on("pageerror", (e) => report.errors.push(`${url}: ${e.message}`));
   await p.goto(url);
   await p.evaluate(() => document.fonts.ready);
   await p.waitForTimeout(300);
   return [c, p];
 }
+// Desktop: the section heading, the book and its controls in one view. Phone: the book.
 const toBook = (p) => p.evaluate(() => {
-  const r = document.querySelector(".book").getBoundingClientRect();
-  scrollTo(0, scrollY + r.top - 24);
+  const el = innerWidth > 1100 ? document.querySelector(".moves-head") : document.querySelector(".book");
+  scrollTo(0, scrollY + el.getBoundingClientRect().top - 14);
 });
 const overflow = (p) => p.evaluate(() => [...document.querySelectorAll(".face[data-page]")]
   .map((f) => ({ page: f.dataset.page, over: f.scrollHeight - f.clientHeight })).filter((x) => x.over > 1));
@@ -208,9 +211,9 @@ for (const width of [1280, 1101]) {
       await p.waitForTimeout(200);
     }
     if (k === 2) { await toBook(p); await p.screenshot({ path: `${out}phone-390-move1.png` }); }
-    await p.click("[data-next]");
-    await p.waitForTimeout(150);
+    if (k < n - 1) { await p.click("[data-next]"); await p.waitForTimeout(150); }
   }
+  report.phoneNextDisabledAtEnd = await p.evaluate(() => document.querySelector("[data-next]").disabled);
   await p.click("[data-flat]");
   await p.waitForTimeout(200);
   report.phoneFlatOverflowX = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -218,4 +221,5 @@ for (const width of [1280, 1101]) {
 }
 
 await b.close();
+report.missing = [...report.missing];
 console.log(JSON.stringify(report, null, 1));

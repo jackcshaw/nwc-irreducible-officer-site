@@ -53,7 +53,7 @@ a { color: var(--ink); text-underline-offset: 3px; text-decoration-thickness: 1p
 .moves { max-width: 1104px; margin: 0 auto; padding: 40px 16px 64px; }
 .moves-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; align-items: end; margin-bottom: 26px; }
 .moves-head h2 { font: 560 clamp(30px, 3.2vw, 40px)/1.15 var(--serif); color: var(--ink); margin: 0; letter-spacing: -0.01em; }
-.moves-head p { grid-column: 1; font: 400 19px/1.5 var(--serif); margin: 0; max-width: 60ch; color: var(--body); }
+.moves-head p { grid-column: 1; font: 400 19px/1.5 var(--serif); margin: 0; max-width: 72ch; color: var(--body); }
 .moves-head .flat-toggle { grid-column: 2; grid-row: 1 / span 2; align-self: end; }
 .quiet { font: 500 15px/1 var(--sans); color: var(--ink); background: transparent; border: 1px solid var(--navy-line); padding: 10px 14px; cursor: pointer; }
 .quiet:hover { border-color: var(--ink); }
@@ -115,12 +115,12 @@ blockquote footer a { color: var(--muted); }
 
 /* contents: chapters, with their figures under each */
 .contents { list-style: none; margin: 4px 0 14px; padding: 0; }
-.contents > li { border-bottom: 1px solid var(--navy-line); padding-bottom: 6px; }
+.contents > li { border-bottom: 1px solid var(--navy-line); padding-bottom: 5px; }
 .contents > li:last-child { padding-bottom: 0; }
-.contents button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; width: 100%; padding: 10px 2px 4px; cursor: pointer; font: 400 19px/1.25 var(--serif); color: var(--ink); }
-.contents > li:last-child > button { padding-bottom: 10px; }
+.contents button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; width: 100%; padding: 8px 2px 3px; cursor: pointer; font: 400 19px/1.25 var(--serif); color: var(--ink); }
+.contents > li:last-child > button { padding-bottom: 9px; }
 .contents ol { list-style: none; margin: 0; padding: 0; }
-.contents ol button { padding: 3px 2px; font: 400 15px/1.3 var(--sans); color: var(--body); }
+.contents ol button { padding: 2px; font: 400 15px/1.3 var(--sans); color: var(--body); }
 .contents .n { font: 600 12px/1.9 var(--sans); color: var(--red); letter-spacing: 0.08em; }
 .contents ol .n { line-height: 1.3; }
 .contents .pg { font: 500 13px/1.9 var(--sans); color: var(--muted); }
@@ -145,13 +145,13 @@ blockquote footer a { color: var(--muted); }
 .routes span { display: block; font: 400 14px/1.4 var(--sans); color: var(--muted); margin-top: 3px; }
 
 /* --- failure-mode spread: left page --- */
-.fm-title { font: 560 clamp(28px, 2.7vw, 34px)/1.1 var(--serif); color: var(--ink); margin: 0 0 4px; letter-spacing: -0.012em; }
-.fm-page h4 { font: 600 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin: 20px 0 8px; }
-.fm-page .wrong { font: 400 19px/1.42 var(--serif); color: var(--ink); margin: 0; }
+.fm-title { font: 560 clamp(30px, 3vw, 38px)/1.08 var(--serif); color: var(--ink); margin: 0 0 6px; letter-spacing: -0.015em; }
+.fm-page h4 { font: 600 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin: 22px 0 9px; }
+.fm-page .wrong { font: 400 20px/1.42 var(--serif); color: var(--ink); margin: 0; }
 .fm-page .check { margin: 0; padding-left: 14px; border-left: 2px solid var(--ink); }
-.fm-page .check p { font: italic 400 19px/1.36 var(--serif); color: var(--ink); margin: 0; }
+.fm-page .check p { font: italic 400 20px/1.36 var(--serif); color: var(--ink); margin: 0; }
 .fm-page .check p + p { margin-top: 6px; }
-.fm-page blockquote { margin-top: 22px; }
+.fm-page blockquote { margin-top: 24px; }
 
 /* --- failure-mode spread: right page, the figure --- */
 .plate { position: relative; margin: 0 0 16px; background: var(--paper); border: 1px solid var(--navy-border); }
@@ -244,6 +244,9 @@ blockquote footer a { color: var(--muted); }
   .is-book .face.front:not(.cover):hover::before { right: 0; background: linear-gradient(225deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
   .is-book .face.back:not(.endboard):hover::before { left: 0; background: linear-gradient(135deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
   .is-book .face.endboard { box-shadow: none; }
+  /* the essay's words sit at the foot of the failure-mode page, like an epigraph */
+  .is-book .fm-page { display: flex; flex-direction: column; }
+  .is-book .fm-page blockquote { margin: auto 0 0; padding-top: 2px; }
 }
 
 /* narrow: one spread at a time, its two pages stacked, no 3D */
@@ -300,7 +303,8 @@ blockquote footer a { color: var(--muted); }
 .plate-where { flex: 1; min-width: 0; margin: 0; font: 400 15px/1.25 var(--sans); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .plate-where b { font: 600 16px/1.25 var(--sans); color: var(--ink); margin-right: 10px; }
 .plate-bar a, .plate-bar button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font: 600 15px/1 var(--sans); color: var(--ink); background: none; border: 0; text-decoration: none; cursor: pointer; }
-.plate-bar a::after { content: "\2197"; font-weight: 500; }
+.plate-bar a { gap: 0; }
+.plate-bar a::after { content: "\2197"; font-weight: 500; margin-left: 6px; }
 .plate-bar a:hover, .plate-bar button:hover { text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 4px; }
 .plate-close { border-left: 1px solid var(--navy-line) !important; }
 .plate-close span { font-size: 18px; line-height: 1; }
@@ -360,8 +364,8 @@ blockquote footer a { color: var(--muted); }
             <p class="runhead"><span>The four moves</span></p>
             <h3 class="move-title" style="font-size:30px" data-heading>Four judgments that stay with a person</h3>
             <p class="lead">AI can draft, search, compare and recommend. Four judgments still belong to the person who will answer for the work.</p>
-            <p>Each move opens a chapter. Its first two pages say what the move asks, then name the failures it guards against, the question an educator can ask, and the evidence worth keeping.</p>
-            <p>Each failure mode then gets a spread. The left page says what goes wrong and what faculty can ask. The right page holds a short figure that shows it happening. Play it here, or open it on its own page.</p>
+            <p>Each move opens a chapter with two pages: what the move asks, the failures it guards against, what an educator can ask, and the evidence worth keeping.</p>
+            <p>Each failure mode then gets a spread. The left page says what goes wrong and what faculty can ask. The right page holds a short figure that shows it happening.</p>
             <p>The order matters. A learner who never framed the problem has nothing to calibrate against and nothing to own.</p>
             <p class="small">The essay was written for the National War College. Judgment Lab adapts the same moves for higher education and high school as designs to test. The examples in the figures are constructed.</p>
           </article>
@@ -520,7 +524,7 @@ blockquote footer a { color: var(--muted); }
 <dialog class="plate-dialog" data-dialog aria-labelledby="plate-title">
   <div class="plate-bar">
     <p class="plate-where" id="plate-title"><b data-dialog-title></b><span data-dialog-move></span></p>
-    <a href="#" data-dialog-open>Open<span>&nbsp;the figure</span></a>
+    <a href="#" data-dialog-open>Open<span>&nbsp;the&nbsp;figure</span></a>
     <button type="button" class="plate-close" data-dialog-close>Close<span aria-hidden="true">&times;</span></button>
   </div>
   <div class="plate-frame">

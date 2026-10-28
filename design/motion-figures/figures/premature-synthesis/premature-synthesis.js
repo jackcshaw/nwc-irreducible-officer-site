@@ -123,7 +123,7 @@
 	// ---- task card --------------------------------------------------------------
 	const task = el(stage, 'g');
 	el(task, 'rect', {x: 656, y: 24, width: 290, height: 82, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-	mono(task, 672, 46, 'EXAMPLE TASK', {fill: C.ink, 'fill-opacity': 0.65});
+	mono(task, 672, 46, 'EXAMPLE TASK');
 	serif(task, 672, 72, 'Using the six readings, explain', {fs: 16});
 	serif(task, 672, 92, 'when a blockade works.', {fs: 16});
 
@@ -207,9 +207,10 @@
 		return n;
 	};
 	const rowLab = [el(facLayer, 'g'), el(facLayer, 'g')];
-	mono(rowLab[0], 24, 280, 'FIRST STUDENT');
+	// Students are named in red, as the dots are (and as on the phone stage).
+	text(rowLab[0], 24, 280, 'First student', {fs: 13, weight: 600, fill: C.red});
 	seq(rowLab[0], 24, 300, [['READ → ', C.ink], ['AI CONNECTS', C.grey], [' → WRITES', C.ink]]);
-	mono(rowLab[1], 24, 446, 'SECOND STUDENT');
+	text(rowLab[1], 24, 446, 'Second student', {fs: 13, weight: 600, fill: C.red});
 	seq(rowLab[1], 24, 466, [['READ → ', C.ink], ['TRIES', C.red], [' → ', C.ink], ['AI CHECKS', C.grey], [' → WRITES', C.ink]]);
 
 	const sketches = [0, 1].map((row) => {
@@ -523,7 +524,8 @@
 				const a = t0 + 0.4 + 0.2 * i + 0.05;
 				drawLine(l.node, l.s, prog(t, a, a + 0.15));
 				const main = l.k === '2-5';
-				set(l.node, {opacity: (t >= a ? 1 : 0) * (main ? 1 : mix(1, 0.4, pointK)), 'stroke-width': main ? mix(1.6, 4, pointK) : 1.6});
+				// While faculty point, the other lines stay navy and only thin, so nothing reads as AI grey.
+				set(l.node, {opacity: t >= a ? 1 : 0, 'stroke-width': main ? mix(1.6, 4, pointK) : mix(1.6, 1.1, pointK)});
 			});
 			const rp = row ? pulse(t, T.ringPulseB) : 0;
 			set(sk.ring, {opacity: pointK > 0 ? 1 : 0, r: 16 + 3 * rp, 'stroke-width': 1.5 + rp, 'stroke-dasharray': RING_LEN.toFixed(2), 'stroke-dashoffset': (RING_LEN * (1 - pointK)).toFixed(2)});
@@ -710,10 +712,23 @@
 		measure();
 		legibility(root, svg, VW, 11);
 		// At narrow widths the text stage replaces the picture, so the beat list shows its "On screen" lines.
-		const narrowQuery = matchMedia('(max-width: 480px)');
-		const syncNarrow = () => { if (narrowQuery.matches) root.classList.add('is-narrow'); };
-		narrowQuery.addEventListener('change', syncNarrow);
-		syncNarrow();
+		// The stacked text stage takes over whenever the smallest picture text (mono 12)
+		// would render under 11 px at the runtime's letterboxed scale: phones, and short
+		// windows such as 1280×720, where the capped stage would otherwise lose labels.
+		const syncStacked = () => {
+			const r = svg.getBoundingClientRect();
+			if (!r.width) return;
+			const scale = r.height ? Math.min(r.width / VW, r.height / 540) : r.width / VW;
+			const stacked = 12 * scale < 11;
+			if (stacked) root.classList.add('is-narrow');
+			if (stacked !== root.classList.contains('is-stacked')) {
+				root.classList.toggle('is-stacked', stacked);
+				const scrub = root.querySelector('[data-mf-scrub]');
+				renderNarrow(scrub ? +scrub.value || 0 : 0);
+			}
+		};
+		new ResizeObserver(syncStacked).observe(svg);
+		syncStacked();
 		const syncScale = () => { const r = svg.getBoundingClientRect(); if (r.width) pxPerUnit = Math.min(r.width / VW, r.height ? r.height / 540 : Infinity); };
 		new ResizeObserver(syncScale).observe(svg);
 		syncScale();

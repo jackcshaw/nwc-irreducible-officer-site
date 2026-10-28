@@ -1,6 +1,6 @@
 # Premature synthesis: storyboard
 
-Motion figure 3 of 8 · slug `premature-synthesis` · storyboard round 5, revised after figure cold read 2 (passed with final fixes) · October 27, 2026
+Motion figure 3 of 8 · slug `premature-synthesis` · storyboard round 6, revised after the cross-figure consistency review (CONSISTENCY.md) · October 27, 2026
 
 *Cold-read copy. The Intent section is removed.*
 
@@ -39,12 +39,12 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 | Paper B | The second student's paper | The same title, tags and grey note as paper A, with different line lengths (their own wording). Labelled "SECOND STUDENT'S PAPER" | Sheet x 24–300, y 362–526; label baseline (24, 354) |
 | Header | What faculty receive | Mono 12 600 ink "WHAT FACULTY RECEIVE", then mono 12 500 ink "SAME ARGUMENT, OWN WORDS" | Beat 6: one line at (24, 140), the two parts joined by a centred dot. Beats 7–10: two lines at (372, 44) and (372, 62). During the move aside it fades out above the papers and back in beside them |
 | Set aside | Faculty ask without the papers | Both papers shrink to 56% and slide up into a strip at the top left, tilted −2° and +1.5°; paper B travels right before it rises, so it never crosses paper A. Their labels, tags and notes fade as they shrink. A grey mono 12 line appears beside them: "BOTH SAY AI HELPED" | Paper A at (24, 24), paper B at (196, 24); grey line (372, 80) |
-| Row labels | Who each row is, and in what order they worked | Mono 12 600 ink "FIRST STUDENT" / "SECOND STUDENT", and under each a mono 12 500 sequence: "READ → AI CONNECTS → WRITES" with "AI CONNECTS" grey; "READ → TRIES → AI CHECKS → WRITES" with "TRIES" red and "AI CHECKS" grey | Row 1: (24, 280), (24, 300). Row 2: (24, 446), (24, 466) |
+| Row labels | Who each row is, and in what order they worked | Red Sans 600 13 "First student" / "Second student", and under each a mono 12 500 sequence: "READ → AI CONNECTS → WRITES" with "AI CONNECTS" grey; "READ → TRIES → AI CHECKS → WRITES" with "TRIES" red and "AI CHECKS" grey | Row 1: (24, 280), (24, 300). Row 2: (24, 446), (24, 466) |
 | The dots, answering | The two students | The same red dots, one in each row, beside the sketch | (310, 289) and (310, 455) |
 | Question 1 | What faculty ask first | Mono 12 ink "FACULTY ASK, PAPERS ASIDE" over Serif italic 17 ink "Sketch how the readings connect." | Baselines (350, 160) and (350, 184) |
 | Sketches | What each student draws without the paper | Six paper-bright circles (radius 11, ink border 1.2) with mono 12 numbers, placed as the cards were at 42% scale, joined by five ink lines (1.6) | Row 1 nodes: 1 (380, 226), 4 (380, 289), 6 (380, 352), 3 (481, 258), 2 (560, 226), 5 (560, 352). Row 2: the same, 166 lower |
 | Question 2 | Faculty point to one connection | Mono 12 ink "THEN THEY ASK" over Serif italic 17 ink in two lines: "What evidence would change / this connection?" | Baselines (620, 160), (620, 184), (620, 204) |
-| Faculty pointer | Which connection faculty mean | On both sketches the line 2–5 thickens to 4, the other four lines dim to 40%, and a navy ring (radius 16, stroke 1.5) circles the middle of 2–5 | Rings at (560, 289) and (560, 455) |
+| Faculty pointer | Which connection faculty mean | On both sketches the line 2–5 thickens to 4, the other four lines thin to 1.1 and stay navy, and a navy ring (radius 16, stroke 1.5) circles the middle of 2–5 | Rings at (560, 289) and (560, 455) |
 | Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), small tail on its left. Serif 16 ink for both students, inside quotation marks. Words appear left to right at about 3 words a second | x 620–946. Row 1 y 226–286; row 2 y 392–452 (two lines each) |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 10") and the caption in Serif 22 ink. In beat 10: mono 13 ink "FACULTY CHECK" over the check in Serif italic 30, then directly under it at the same size and style, "Point to one connection. What evidence would change it?" Fixed height on desktop | Under the stage |
 | Beat list | Text equivalent and navigation | Ten numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
@@ -60,7 +60,7 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 
 **Line geometry.** Lines run centre to centre and are drawn under the cards, so only the gap between cards shows. Card centres: 1 (422, 180), 4 (422, 330), 6 (422, 480), 3 (662, 255), 2 (850, 180), 5 (850, 480). The line 2–5 runs straight down the right side, with nothing crossing it. The line 1–2 runs along the top, under the note.
 
-**Narrow screens.** Below 480 px a stacked text stage on the same clock replaces the picture (the SVG is collapsed, not removed), with text at 13–16 px. Each beat shows the sections it is about: the task and the six readings (beat 1); the AI's map as link chips, dashed until taken up, with 2–5 marked as the main claim's (2–3); the first paper; the second student's red chips, the struck 1–2 and the note, then the AI's map with 3–4 checked (4–5); both papers under "Same argument, own words" (6); the papers set aside and each student's order and sketch (7); the question, both answers word by word, and "What they learned" (8–10). The narrow stage is fixed at 476 px and the caption band at 160 px, so nothing below them moves. The beat list's "On screen" lines show as well, and the caption band carries the captions at full size.
+**Narrow screens and short windows.** Whenever mono 12 would render under 11 px at the letterboxed scale (phones, and windows like 1280×720), a stacked text stage on the same clock replaces the picture (the SVG is collapsed, not removed), with text at 13–16 px. Each beat shows the sections it is about: the task and the six readings (beat 1); the AI's map as link chips, dashed until taken up, with 2–5 marked as the main claim's (2–3); the first paper; the second student's red chips, the struck 1–2 and the note, then the AI's map with 3–4 checked (4–5); both papers under "Same argument, own words" (6); the papers set aside and each student's order and sketch (7); the question, both answers word by word, and "What they learned" (8–10). The narrow stage is fixed at 476 px and the caption band at 160 px, so nothing below them moves. The beat list's "On screen" lines show as well, and the caption band carries the captions at full size.
 
 ## 4. Beats
 
@@ -173,7 +173,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 - **What moves:**
   1. 61.9–62.5: the question header fades in and rises 6 units: "THEN THEY ASK" over "What evidence would change this connection?"
-  2. 62.7–63.3: on both sketches, the line from 2 to 5 thickens, the other four lines dim, and a navy ring circles its middle.
+  2. 62.7–63.3: on both sketches, the line from 2 to 5 thickens, the other four lines thin, and a navy ring circles its middle.
   3. 66.2–71.2: a speech panel opens in the top row, and the first student's words appear at about 3 words a second: "In Reading 1, trade went overland. I don't see how that bears on this."
   4. 71.2–72.7: hold.
 - **Caption:** "Faculty ask about the main connection. The first student recalls Reading 1 but can't apply it."
@@ -209,8 +209,8 @@ The still at 90.0 s. It is also the reduced-motion view, the print view and the 
 **Stage:**
 - **Top strip:** two small tilted papers, both titled "Blockades work when the navy holds the sea." Beside them: "WHAT FACULTY RECEIVE", "SAME ARGUMENT, OWN WORDS", and in grey "BOTH SAY AI HELPED". At top right, the task card: "EXAMPLE TASK" over "Using the six readings, explain when a blockade works."
 - **Column headers:** "FACULTY ASK, PAPERS ASIDE" over "Sketch how the readings connect."; "THEN THEY ASK" over "What evidence would change this connection?"
-- **Top row:** "FIRST STUDENT", "READ → AI CONNECTS → WRITES" (AI step in grey); a red dot; a sketch of six numbered points and five lines, with 2–5 thick and ringed; and the answer, in ink: "In Reading 1, trade went overland. I don't see how that bears on this."
-- **Bottom row:** "SECOND STUDENT", "READ → TRIES → AI CHECKS → WRITES" ("TRIES" in red, the AI step in grey); a red dot; the same sketch with the same line ringed; the answer, in ink: "An overland route, like Reading 1's. Then my main claim no longer holds."; and under it, in red, "WHAT THEY LEARNED" and a small ✕ before "In Reading 1, trade went overland through a neighbour."
+- **Top row:** "First student" in red, "READ → AI CONNECTS → WRITES" (AI step in grey); a red dot; a sketch of six numbered points and five lines, with 2–5 thick and ringed; and the answer, in ink: "In Reading 1, trade went overland. I don't see how that bears on this."
+- **Bottom row:** "Second student" in red, "READ → TRIES → AI CHECKS → WRITES" ("TRIES" in red, the AI step in grey); a red dot; the same sketch with the same line ringed; the answer, in ink: "An overland route, like Reading 1's. Then my main claim no longer holds."; and under it, in red, "WHAT THEY LEARNED" and a small ✕ before "In Reading 1, trade went overland through a neighbour."
 
 **Caption band:**
 

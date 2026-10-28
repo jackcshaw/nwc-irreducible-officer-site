@@ -51,7 +51,7 @@
 	const WT = {x: -22, w: 96, h: 34, hang: -6, rest: 122};
 	const HALF = {x: 66, y: 35};
 	const NOTE = {x: 508, ys: [98, 116], lines: ['Rests on an open port.', 'Harbor reports: normal.'], dot: {x: 496, y: 93}};
-	const PANEL = {y0: 388, y1: 494, w: 444, rows: [[411, 430], [456, 475]], textDx: 34};
+	const PANEL = {y0: 388, y1: 502, w: 444, name: 406, rows: [[426, 445], [469, 488]], textDx: 34};
 	const SPEECH = {
 		a: {rows: [{n: '1', str: '“I signed it. The analysis estimated the ships could do it.”', at: T.a1, open: T.aPanel},
 			{n: '2', str: '“It was the AI’s estimate. It seemed solid.”', at: T.a2, open: T.aRow2}]},
@@ -129,6 +129,7 @@
 		const g = el(sceneBase, 'g');
 		const box = el(g, 'path', {d: `M${x + r} ${y0}H${x + 18}L${x + 24} ${y0 - 8}L${x + 30} ${y0}H${x + w - r}Q${x + w} ${y0} ${x + w} ${y0 + r}V${y1 - r}Q${x + w} ${y1} ${x + w - r} ${y1}H${x + r}Q${x} ${y1} ${x} ${y1 - r}V${y0 + r}Q${x} ${y0} ${x + r} ${y0}Z`,
 			fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.25});
+		text(g, x + 14, PANEL.name, col === 'a' ? 'First student' : 'Second student', {fs: 13, weight: 600, fill: C.red});
 		const rows = SPEECH[col].rows.map((row, ri) => {
 			const num = mono(g, x + 14, PANEL.rows[ri][0], row.n);
 			const lineEls = PANEL.rows[ri].map((y) => serif(g, x + PANEL.textDx, y, '', {fs: 15}));
