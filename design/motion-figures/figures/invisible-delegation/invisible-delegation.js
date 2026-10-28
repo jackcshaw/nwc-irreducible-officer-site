@@ -1,11 +1,13 @@
-/* Invisible delegation: motion figure 5 of 8. Built to storyboard.md (round 4,
-   revised after figure cold read 1).
+/* Invisible delegation: motion figure 5 of 8. Built to storyboard.md (round 5,
+   revised after figure cold read 2).
    Grey is what the AI supplied, red is a student's decision, navy is ink.
    Each student has a block: their name and dot, their paper and the AI's notes
    at left, then a ledger in three lanes: THE STUDENT DECIDES, REQUESTS, THE AI
    DECIDES. The first student's plain requests carry each decision card across
    into the AI's lane. The second student starts from the rubric, writes each
-   decision before its request, and asks with words that point back to it.
+   decision on its card before the request (real words: what they decided), and
+   asks with words that point back to it. Both get the same notes; the second
+   student judges them against those decisions and turns one down.
    Key evidence (notes, ticks, the struck note and its reason, UNSAID lines) is
    set at 15 units, so it renders at 13 px or more on any drawn stage.
    Whenever any picture label would render under 11 px (a stage narrower than
@@ -19,33 +21,38 @@
 
 	// ---- timeline (absolute seconds, from the storyboard) -------------------
 	const T = {
+		// beat 1: the draft and the three decisions
 		card: [1.0, 1.6], dotA: [1.7, 2.1], paperA: [2.2, 2.8], rubric: [3.0, 3.4],
-		ledgerA: [9.7, 10.3], cardsA: 10.5, cardStep: 0.45, cardDur: 0.35, slotsA: [12.0, 12.4],
-		// first student: three requests
-		bubA: [[18.1, 18.5], [30.3, 30.7], [35.7, 36.1]],
-		carryA: [[21.0, 23.4], [32.4, 33.8], [36.2, 37.6]],
-		backA: [[23.5, 24.0], [33.9, 34.4], [37.7, 38.2]],
-		notesA: [24.1, 24.5], tickA: [[25.0, 25.15], [25.65, 25.8], [26.35, 26.5]], draftA2: [26.5, 26.8], revA: [26.8, 27.1],
-		headA: [34.5, 34.9], workA3: [35.0, 35.6], paraA: [38.3, 38.7], workA4: [38.8, 39.6],
-		// the turn
-		pulseQ: [42.5, 43.0], key: [45.4, 45.8], uns: [[45.9, 46.3], [46.4, 46.8], [46.9, 47.3]], pulseCards: [47.5, 48.1],
-		// second student: the rubric
-		moveA: [51.6, 52.8], blockB: [52.9, 53.5], rubricUp: [54.3, 54.9], rubricHi: [54.9, 55.4], rubricBack: [59.0, 59.4],
-		// second student: decision, then request, three times
-		downB: [61.3, 61.8],
-		writeB: [[61.8, 62.3], [63.75, 64.25], [65.7, 66.2]],
-		bubB: [[62.45, 62.8], [64.4, 64.75], [66.35, 66.7]],
-		settleB: [[62.9, 63.5], [64.85, 65.45], [66.8, 67.4]],
-		// second student: the same notes, one turned down
-		notesB: [70.2, 70.6], tickB: [[71.1, 71.3], [71.9, 72.1]], strikeB: [73.4, 73.8], reasonB: [74.0, 74.7], revB: [74.8, 75.1],
-		headB: [75.2, 75.6], workB3: [75.7, 76.3], paraB: [76.4, 76.8], workB4: [76.9, 77.5],
-		// faculty
-		dim: [80.0, 81.0], fac: [83.0, 83.5], panelA: [83.7, 84.1], wordsA: [84.1, 87.8], panelB: [88.1, 88.5], wordsB: [88.5, 92.5],
-		check: 94.0, undim: [97.5, 98.5], follow: 98.7, end: 101.6,
+		ledgerA: [3.6, 4.2], cardsA: 4.4, cardStep: 0.45, cardDur: 0.35, slotsA: [5.9, 6.3],
+		// beats 2-3: first student, three requests
+		toRowA: [[10.5, 10.9], [21.8, 22.1]],
+		bubA: [[10.9, 11.3], [22.1, 22.5], [27.5, 27.9]],
+		carryA: [[12.8, 15.2], [24.2, 25.6], [28.0, 29.4]],
+		backA: [[15.3, 15.8], [25.7, 26.2], [29.5, 30.0]],
+		notesA: [15.9, 16.3], toNotesA: [16.4, 16.8], tickA: [[16.8, 16.95], [17.45, 17.6], [18.1, 18.25]], draftA2: [18.3, 18.6], revA: [18.6, 18.9], homeA: [18.9, 19.3],
+		headA: [26.3, 26.7], workA3: [26.8, 27.4], paraA: [30.1, 30.5], workA4: [30.6, 31.4],
+		// beat 4: the turn
+		pulseQ: [33.9, 34.4], key: [34.5, 34.9], uns: [[35.0, 35.4], [35.5, 35.9], [36.0, 36.4]], pulseCards: [36.6, 37.2],
+		// beat 5: second student, the rubric
+		moveA: [42.6, 43.8], blockB: [43.9, 44.5], rubricUp: [45.3, 45.9], rubricHi: [45.9, 46.4], rubricBack: [49.9, 50.3],
+		// beat 6: decision, then request, three times
+		downB: [51.5, 52.0],
+		writeB: [[52.2, 53.1], [54.4, 55.3], [56.6, 57.5]],
+		bubB: [[53.2, 53.5], [55.4, 55.7], [57.6, 57.9]],
+		settleB: [[53.6, 54.1], [55.8, 56.3], [58.0, 58.5]],
+		homeB6: [58.5, 58.8],
+		// beat 7: the same notes, judged against the decisions
+		notesB: [61.3, 61.7], toNotesB: [61.8, 62.2], tickB: [[62.2, 62.4], [63.0, 63.2]], strikeB: [65.0, 65.4], pulseCrit: [65.0, 65.6], reasonB: [65.55, 66.2], revB: [66.3, 66.6],
+		headB: [66.7, 67.1], workB3: [67.2, 67.8], paraB: [67.9, 68.3], workB4: [68.4, 69.0],
+		// beat 8: faculty
+		dim: [71.5, 72.5], fac: [72.6, 73.1], panelA: [73.3, 73.7], wordsA: [73.7, 77.4], panelB: [77.7, 78.1], wordsB: [78.1, 82.1],
+		// beat 9: the check
+		check: 83.6, undim: [85.6, 86.6], follow: 87.0, end: 90.5,
 	};
 
+
 	// ---- geometry (block-local; a block's top is Y) ---------------------------
-	const Y = {a0: 168, a1: 108, b: 330};
+	const Y = {a0: 168, a1: 108, b: 320};
 	const X = {own: 178, req: 346, ai: 558, div1: 338, div2: 552};
 	const CW = 154, CH = 30, CARRY = X.ai - X.own;
 	const rowY = (k) => 44 + 58 * k; // card top
@@ -56,7 +63,10 @@
 	const UNSAID = ['against your criteria', 'for your argument', 'as you define it'];
 	const REQ_B = [['Give me feedback', 'against my criteria'], ['Suggest a better structure', 'for my argument'], ['Make it more strategic,', 'as I define it']];
 	const NOTES = ['Tighter opening', 'Add the costs', 'Be more decisive'];
-	const REASON = 'if the evidence is';
+	const REASON = 'evidence too thin';
+	// What the second student writes on each card: the decision itself.
+	const DECIDED = [['Evidence must back', 'the call'], ['Lead with the call,', 'then its evidence'], ['Serves the ally’s', 'long-term interest']];
+	const BH = 54; // a written card's height
 	const NOTE_Y = [133, 151, 169];
 	const SPEECH = {
 		a: {name: 'First student', lines: ['“The AI’s notes, I', 'suppose. I worked through', 'what it flagged.”']},
@@ -89,14 +99,15 @@
 
 	// ---- task card (top band) ------------------------------------------------
 	const card = el(topLayer, 'g');
-	el(card, 'rect', {x: 24, y: 14, width: 400, height: 84, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
+	el(card, 'rect', {x: 24, y: 14, width: 400, height: 78, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
 	mono(card, 40, 34, 'EXAMPLE TASK');
-	serif(card, 40, 58, 'Recommend whether to keep a forward base.', {fs: 16});
-	const rubricWash = el(topLayer, 'rect', {x: 32, y: 63, height: 30, rx: 3, fill: C.ink, 'fill-opacity': 0});
+	serif(card, 40, 56, 'Recommend whether to keep a forward base.', {fs: 16});
+	const RUB = {x: 40, y: 78};
+	const rubricWash = el(topLayer, 'rect', {x: 32, y: 57, height: 30, rx: 3, fill: C.ink, 'fill-opacity': 0});
 	const rubric = el(topLayer, 'g');
-	mono(rubric, 40, 84, 'RUBRIC ·');
-	const rubricText = serif(rubric, 108, 84, 'Evidence must back the call.', {fs: 15, style: 'italic'});
-	const rubricLine = el(rubric, 'line', {x1: 108, y1: 89, x2: 108, y2: 89, stroke: C.ink, 'stroke-width': 1.6});
+	mono(rubric, 40, RUB.y, 'RUBRIC ·');
+	const rubricText = serif(rubric, 108, RUB.y, 'Evidence must back the call.', {fs: 16, style: 'italic'});
+	const rubricLine = el(rubric, 'line', {x1: 108, y1: RUB.y + 5, x2: 108, y2: RUB.y + 5, stroke: C.ink, 'stroke-width': 1.6});
 
 	// ---- a student's block -----------------------------------------------------
 	const ROWS_A = [[54, 47, 58, 50, 43, 56, 36], [54, 52, 45, 50, 54, 56, 36], [27, 49, 52, 27, 47, 56, 36], [27, 52, 49, 27, 50, 58, 58]];
@@ -124,15 +135,15 @@
 		mono(o.rev, 104, 66, 'WITH AI', {fill: C.grey});
 		// The AI's notes, worked through by the student.
 		o.notes = el(g, 'g');
-		el(o.notes, 'rect', {x: 24, y: 100, width: 150, height: 100, rx: 2, fill: C.band, 'fill-opacity': 0.75, stroke: C.grey, 'stroke-opacity': 0.5});
-		mono(o.notes, 30, 115, "AI'S NOTES", {fill: C.grey});
-		o.noteText = NOTES.map((s, i) => serif(o.notes, 46, NOTE_Y[i], s, {fs: 15, fill: C.grey}));
-		o.ticks = NOTES.map((s, i) => text(o.notes, 29, NOTE_Y[i], '✓', {fs: 15, weight: 600, fill: C.ink}));
+		el(o.notes, 'rect', {x: 24, y: 100, width: 144, height: 100, rx: 2, fill: C.band, 'fill-opacity': 0.75, stroke: C.grey, 'stroke-opacity': 0.5});
+		mono(o.notes, 29, 115, "AI'S NOTES", {fill: C.grey});
+		o.noteText = NOTES.map((s, i) => serif(o.notes, 44, NOTE_Y[i], s, {fs: 15, fill: C.grey}));
+		o.ticks = NOTES.map((s, i) => text(o.notes, 28, NOTE_Y[i], '✓', {fs: 15, weight: 600, fill: C.ink}));
 		if (!isA) {
 			o.strike = el(o.notes, 'line', {stroke: C.red, 'stroke-width': 1.8});
 			const c = clip(o.notes);
 			o.reasonClip = c.rect;
-			o.reason = serif(c.g, 46, 189, REASON, {fs: 15, style: 'italic', fill: C.red});
+			o.reason = serif(c.g, 44, 189, REASON, {fs: 15, style: 'italic', fill: C.red});
 		}
 		// The ledger (dims when faculty ask).
 		o.led = el(g, 'g');
@@ -154,8 +165,14 @@
 			const c = el(o.led, 'g', {opacity: 0});
 			const rect = el(c, 'rect', {x: X.own, y: rowY(k), width: CW, height: CH, rx: 3, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.45, 'stroke-dasharray': '4 3', 'stroke-width': 1.2});
 			const label = text(c, X.own + 9, rowY(k) + 18, LABELS[k], {fs: 13, weight: 600});
-			const bar = el(c, 'rect', {x: X.own + 9, y: rowY(k) + 23, height: 2.5, width: 0, fill: C.grey});
-			return {c, rect, label, bar};
+			const bar = isA ? el(c, 'rect', {x: X.own + 9, y: rowY(k) + 23, height: 2.5, width: 0, fill: C.grey}) : null;
+			const lines = isA ? [] : DECIDED[k].map((ln, li) => {
+				const cl = clip(c);
+				const tx = serif(cl.g, X.own + 9, rowY(k) + 35 + 15 * li, ln, {fs: 14.5, style: 'italic', fill: C.red});
+				set(cl.rect, {x: X.own + 4, y: rowY(k) + 22 + 15 * li, height: 18, width: 0});
+				return {clip: cl.rect, tx, w: 140};
+			});
+			return {c, rect, label, bar, lines};
 		});
 		// Requests: quote lines in the middle lane.
 		o.quotes = [0, 1, 2].map((k) => {
@@ -184,13 +201,13 @@
 			el(o.key, 'rect', {x: 424, y: 2, width: 14, height: 11, fill: 'none', stroke: C.grey, 'stroke-width': 1.3, 'stroke-dasharray': '3 2'});
 			mono(o.key, 444, 12, 'LEFT UNSAID', {fs: 13, ls: 0.5});
 		} else {
-			o.pointers = [0, 1, 2].map((k) => el(o.led, 'path', {d: `M${X.req - 2} ${qY(k) + 13}C${X.req - 6} ${qY(k) + 13} ${X.req - 6} ${rowY(k) + 15} ${X.own + CW + 3} ${rowY(k) + 15}`, fill: 'none', stroke: C.red, 'stroke-width': 1.3, 'marker-end': 'url(#id-arrow)'}));
+			o.pointers = [0, 1, 2].map((k) => el(o.led, 'path', {d: `M${X.req - 2} ${qY(k) + 13}C${X.req - 6} ${qY(k) + 13} ${X.req - 6} ${rowY(k) + BH / 2} ${X.own + CW + 3} ${rowY(k) + BH / 2}`, fill: 'none', stroke: C.red, 'stroke-width': 1.3, 'marker-end': 'url(#id-arrow)'}));
 		}
 		// Request bubbles (moving; drawn above the ledger).
 		o.bubbles = [0, 1, 2].map((k) => {
 			const b = el(g, 'g', {opacity: 0});
 			const shape = el(b, 'path', {fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.3, 'stroke-width': 1.2});
-			const t = serif(b, X.own + 10, rowY(k) - 10, '', {fs: 14});
+			const t = serif(b, isA ? X.own + 10 : X.req + 12, isA ? rowY(k) - 10 : rowY(k) + 22, '', {fs: 14});
 			if (isA) t.textContent = REQ_A[k];
 			else { el(t, 'tspan', {}, REQ_B[k][0] + ' '); el(t, 'tspan', {fill: C.red}, REQ_B[k][1]); }
 			if (isA) el(b, 'rect', {x: X.own + 20, y: rowY(k) - 4, width: 3, height: 7, fill: C.ink, 'fill-opacity': 0.6});
@@ -233,9 +250,15 @@
 		for (const o of [A, B]) {
 			o.bubbles.forEach((b, k) => {
 				const tw = W(b.t);
-				b.w = Math.max(tw + 22, o.isA ? CW + 14 : 0);
-				set(b.shape, {d: bubblePath(X.own, rowY(k) - 28, b.w, 26)});
-				set(b.t, {x: X.own + (b.w - tw) / 2});
+				if (o.isA) {
+					b.w = Math.max(tw + 22, CW + 14);
+					set(b.shape, {d: bubblePath(X.own, rowY(k) - 28, b.w, 26)});
+					set(b.t, {x: X.own + (b.w - tw) / 2});
+				} else {
+					b.w = tw + 24;
+					set(b.shape, {d: bubblePath(X.req + 2, rowY(k) + 4, b.w, 26)});
+					set(b.t, {x: X.req + 14});
+				}
 			});
 			o.quotes.forEach((q) => set(q.wash, {width: W(q.t1) + 6}));
 			if (o.unsaid) o.unsaid.forEach((u) => {
@@ -243,45 +266,50 @@
 				set(u.box, {x: bx, width: W(u.t) + 8});
 				set(u.t, {x: bx + 4});
 			});
+			o.cards.forEach((c) => c.lines.forEach((l) => { l.w = W(l.tx) + 4; }));
 			if (o.strike) {
 				o.strikeW = W(o.noteText[2]);
 				o.reasonW = W(o.reason);
-				set(o.reasonClip, {x: 44, y: 175, height: 20, width: 0});
+				set(o.reasonClip, {x: 42, y: 175, height: 20, width: 0});
 			}
 		}
 		S.rubricW = W(rubricText);
 		// Dot paths (block-local).
 		const N = (i) => ({x: 16, y: NOTE_Y[i] - 5});
-		const R = (k) => ({x: 168, y: rowY(k) - 15});
+		const R = (k) => ({x: 173, y: rowY(k) - 15}); // beside a first-student bubble
 		const Ptop = {x: 60, y: 34}, Pbot = {x: 60, y: 86};
 		const tk = T.tickA;
 		A.path = pathAt([
-			[17.7, 18.1, HOME, R(0), E.inOut],
-			[24.6, tk[0][0], R(0), N(0), E.inOut], [25.5, tk[1][0], N(0), N(1), E.inOut], [26.2, tk[2][0], N(1), N(2), E.inOut],
-			[T.revA[1], T.revA[1] + 0.4, N(2), HOME, E.inOut],
-			[30.0, 30.3, HOME, R(1), E.inOut],
+			[T.toRowA[0][0], T.toRowA[0][1], HOME, R(0), E.inOut],
+			[T.toNotesA[0], T.toNotesA[1], R(0), N(0), E.inOut], [tk[0][1] + 0.35, tk[1][0], N(0), N(1), E.inOut], [tk[1][1] + 0.35, tk[2][0], N(1), N(2), E.inOut],
+			[T.homeA[0], T.homeA[1], N(2), HOME, E.inOut],
+			[T.toRowA[1][0], T.toRowA[1][1], HOME, R(1), E.inOut],
 			[T.workA3[0], T.workA3[0] + 0.15, R(1), Ptop, E.inOut], [T.workA3[0] + 0.15, T.workA3[1] - 0.15, Ptop, Pbot, E.inOut], [T.workA3[1] - 0.15, T.workA3[1], Pbot, R(2), E.inOut],
 			[T.workA4[0], T.workA4[0] + 0.15, R(2), Ptop, E.inOut], [T.workA4[0] + 0.15, T.workA4[1] - 0.2, Ptop, Pbot, E.inOut], [T.workA4[1] - 0.2, T.workA4[1], Pbot, HOME, E.inOut],
 		], HOME);
-		// The second student goes to the rubric up the left margin, and back.
-		const m0 = {x: 12, y: 0}, m1 = {x: 12, y: 84 - Y.b}, rub = {x: 30, y: 80 - Y.b}, m2 = {x: 12, y: 16};
-		const cS = (k) => ({x: X.own + 12, y: rowY(k) + 15}), cE = (k) => ({x: X.own + CW - 14, y: rowY(k) + 15});
+		// The second student goes to the rubric up the left margin, and back; then writes
+		// each card (two lines) and asks from the card's edge.
+		const m0 = {x: 12, y: 0}, m1 = {x: 12, y: RUB.y - Y.b}, rub = {x: 30, y: RUB.y - 4 - Y.b}, m2 = {x: 12, y: 16};
+		const L = (k, li, end) => ({x: X.own + (end ? CW - 14 : 12), y: rowY(k) + 30 + 15 * li});
+		const RB = (k) => ({x: X.own + CW + 5, y: rowY(k) + 17});
 		const wB = T.writeB, bB = T.bubB, ru = T.rubricUp, dn = T.downB;
 		const segs = [
 			[ru[0], ru[0] + 0.1, HOME, m0, E.inOut], [ru[0] + 0.1, ru[1] - 0.1, m0, m1, E.inOut], [ru[1] - 0.1, ru[1], m1, rub, E.inOut],
-			[dn[0], dn[0] + 0.1, rub, m1, E.inOut], [dn[0] + 0.1, dn[1] - 0.15, m1, m2, E.inOut], [dn[1] - 0.15, dn[1], m2, cS(0), E.inOut],
+			[dn[0], dn[0] + 0.1, rub, m1, E.inOut], [dn[0] + 0.1, dn[1] - 0.15, m1, m2, E.inOut], [dn[1] - 0.15, dn[1], m2, L(0, 0, false), E.inOut],
 		];
 		[0, 1, 2].forEach((k) => {
-			if (k) segs.push([wB[k][0] - 0.15, wB[k][0], R(k - 1), cS(k), E.inOut]);
-			segs.push([wB[k][0], wB[k][1], cS(k), cE(k)], [wB[k][1], bB[k][0], cE(k), R(k), E.inOut]);
+			const [w0, w1] = wB[k], mid = w0 + (w1 - w0) * 0.5;
+			if (k) segs.push([w0 - 0.2, w0, RB(k - 1), L(k, 0, false), E.inOut]);
+			segs.push([w0 + 0.05, mid - 0.05, L(k, 0, false), L(k, 0, true)], [mid - 0.05, mid + 0.05, L(k, 0, true), L(k, 1, false), E.inOut], [mid + 0.05, w1, L(k, 1, false), L(k, 1, true)]);
+			segs.push([w1, bB[k][0], L(k, 1, true), RB(k), E.inOut]);
 		});
 		const ny = (i) => NOTE_Y[i] - 5;
 		segs.push(
-			[T.settleB[2][1], T.settleB[2][1] + 0.3, R(2), HOME, E.inOut],
-			[70.7, T.tickB[0][0], HOME, N(0), E.inOut], [71.7, T.tickB[1][0], N(0), N(1), E.inOut],
-			[73.2, T.strikeB[0], N(1), {x: 44, y: ny(2)}, E.inOut], [T.strikeB[0], T.strikeB[1], {x: 44, y: ny(2)}, {x: 166, y: ny(2)}],
-			[T.strikeB[1], T.reasonB[0], {x: 166, y: ny(2)}, {x: 46, y: 184}, E.inOut], [T.reasonB[0], T.reasonB[1], {x: 46, y: 184}, {x: 168, y: 184}],
-			[T.workB3[0], T.workB3[0] + 0.2, {x: 168, y: 184}, Ptop, E.inOut], [T.workB3[0] + 0.2, T.workB3[1], Ptop, Pbot, E.inOut],
+			[T.homeB6[0], T.homeB6[1], RB(2), HOME, E.inOut],
+			[T.toNotesB[0], T.toNotesB[1], HOME, N(0), E.inOut], [T.tickB[0][1] + 0.4, T.tickB[1][0], N(0), N(1), E.inOut],
+			[T.strikeB[0] - 0.2, T.strikeB[0], N(1), {x: 42, y: ny(2)}, E.inOut], [T.strikeB[0], T.strikeB[1], {x: 42, y: ny(2)}, {x: 164, y: ny(2)}],
+			[T.strikeB[1], T.reasonB[0], {x: 164, y: ny(2)}, {x: 44, y: 184}, E.inOut], [T.reasonB[0], T.reasonB[1], {x: 44, y: 184}, {x: 160, y: 184}],
+			[T.workB3[0], T.workB3[0] + 0.2, {x: 160, y: 184}, Ptop, E.inOut], [T.workB3[0] + 0.2, T.workB3[1], Ptop, Pbot, E.inOut],
 			[T.workB4[0], T.workB4[0] + 0.15, Pbot, Ptop, E.inOut], [T.workB4[0] + 0.15, T.workB4[1] - 0.2, Ptop, Pbot, E.inOut], [T.workB4[1] - 0.2, T.workB4[1], Pbot, HOME, E.inOut],
 		);
 		B.path = pathAt(segs, HOME);
@@ -325,7 +353,7 @@
 		set(card, {opacity: kc, transform: `translate(0 ${mix(6, 0, kc)})`});
 		const hi = prog(t, ...T.rubricHi, E.house) - prog(t, ...T.rubricBack, E.inOut);
 		const sc = 1 + 0.3 * hi;
-		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(40 84) scale(${sc}) translate(-40 -84)`});
+		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(${RUB.x} ${RUB.y}) scale(${sc}) translate(${-RUB.x} ${-RUB.y})`});
 		set(rubricWash, {'fill-opacity': 0.09 * hi, width: (108 - 40 + (S.rubricW || 196)) * sc + 14});
 		const kr = prog(t, ...T.rubricHi, E.inOut);
 		set(rubricLine, {x2: 108 + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - 0.6 * prog(t, ...T.rubricBack) : 0});
@@ -370,7 +398,7 @@
 			// Back: from the AI's lane to the quote line in the requests lane, fading out.
 			const dx = CARRY * carry - (CARRY - (X.req - X.own)) * back;
 			const dy = (qY(k) - (rowY(k) - 10)) * back;
-			set(b.b, {opacity: grow * (1 - back), transform: bubbleTransform(k, dx, dy, grow)});
+			set(b.b, {opacity: grow * Math.max(0, 1 - 2 * back), transform: bubbleTransform(k, dx, dy, grow)});
 		});
 		renderDot(A, t, prog(t, ...T.dotA, E.house), T.bubA.map((s) => s[0]));
 
@@ -391,11 +419,15 @@
 		B.aiSlots.forEach((s) => set(s, {opacity: 1}));
 		B.ownSlots.forEach((s) => set(s, {opacity: 0}));
 		B.cards.forEach((c, k) => {
-			const w = prog(t, ...T.writeB[k]);
+			const [w0, w1] = T.writeB[k];
+			const w = prog(t, w0, w1);
+			const grow = prog(t, w0, w0 + 0.25, E.house);
+			const pulse = k === 0 ? bump(t, ...T.pulseCrit) : 0;
 			set(c.c, {opacity: 1});
-			set(c.rect, {fill: C.bright, stroke: w > 0 ? C.red : C.ink, 'stroke-opacity': w > 0 ? 1 : 0.45, 'stroke-dasharray': w > 0 ? 'none' : '4 3', 'stroke-width': w > 0 ? 1.6 : 1.2});
+			set(c.rect, {height: mix(CH, BH, grow), fill: C.bright, stroke: w > 0 ? C.red : C.ink, 'stroke-opacity': w > 0 ? 1 : 0.45, 'stroke-dasharray': w > 0 ? 'none' : '4 3', 'stroke-width': (w > 0 ? 1.6 : 1.2) + 1.6 * pulse});
 			set(c.label, {fill: mixColor(C.ink, C.red, Math.min(1, w * 2))});
-			set(c.bar, {width: 64 * w, fill: C.red});
+			const mid = w0 + (w1 - w0) * 0.5;
+			c.lines.forEach((l, li) => set(l.clip, {width: l.w * (li ? prog(t, mid + 0.05, w1) : prog(t, w0 + 0.05, mid - 0.05))}));
 		});
 		B.quotes.forEach((q, k) => set(q.q, {opacity: prog(t, (T.settleB[k][0] + T.settleB[k][1]) / 2, T.settleB[k][1])}));
 		B.pointers.forEach((p, k) => {
@@ -406,7 +438,7 @@
 			const [g0, g1] = T.bubB[k], [s0, s1] = T.settleB[k];
 			const grow = prog(t, g0, g1, E.house);
 			const settle = prog(t, s0, s1, E.inOut);
-			set(b.b, {opacity: grow * (1 - settle), transform: bubbleTransform(k, (X.req - X.own) * settle, (qY(k) - (rowY(k) - 10)) * settle, grow)});
+			set(b.b, {opacity: grow * Math.max(0, 1 - 2 * settle), transform: `translate(${X.req} ${rowY(k) + 17}) scale(${mix(0.85, 1, grow)}) translate(${-X.req} ${-(rowY(k) + 17)})`});
 		});
 		renderDot(B, t, prog(t, ...T.blockB, E.house), T.bubB.map((s) => s[0]));
 
@@ -471,8 +503,9 @@
 				if (isA) { uns = h('p', 'id-n-uns', cell, 'Unsaid'); h('span', 'id-n-ghost', uns, UNSAID[k]); }
 				const chip = h('p', 'id-n-chip', cell);
 				const who2 = h('b', null, chip, 'Undecided');
-				h('span', null, chip, LABELS[k]);
-				return {cell, q, uns, chip, who: who2};
+				const label = h('span', null, chip, LABELS[k]);
+				const decided = isA ? null : h('i', 'id-n-decided', chip, DECIDED[k].join(' '));
+				return {cell, q, uns, chip, who: who2, label, decided};
 			});
 			c.say = h('p', 'id-n-say', c.el, SPEECH[key].lines.join(' '));
 			return c;
@@ -534,6 +567,10 @@
 			const own = t >= T.writeB[k][0];
 			c.chip.classList.toggle('is-own', own);
 			c.who.textContent = own ? 'Student decides' : 'Undecided';
+			// Once written, the chip shows the decision itself in place of its name.
+			c.decided.hidden = !own;
+			c.label.hidden = own;
+			c.chip.classList.toggle('is-pulse', k === 0 && t >= T.pulseCrit[0] && t < T.pulseCrit[1]);
 			vis(c.q, t >= T.bubB[k][0]);
 		});
 		vis(b.say, t >= T.panelB[0]);
@@ -566,27 +603,25 @@
 	};
 
 	const BEATS = [
-		{at: 0, text: 'A student wants to improve a draft strategy paper.',
-			detail: 'a task card at the top left: "Example task. Recommend whether to keep a forward base. Rubric: evidence must back the call." A red dot labelled First student appears with a draft paper.'},
-		{at: 8.7, text: 'Improving it takes many decisions. We\'ll track three.',
-			detail: 'a ledger in three lanes: "The student decides", "Requests" and "The AI decides". Three dashed cards in the student\'s lane: "The criteria", "How the argument runs" and "What \'strategic\' means". The AI\'s lane shows three empty slots.'},
-		{at: 16.7, text: 'The student asks an AI for feedback. The request carries the criteria across.',
+		{at: 0, text: 'A student wants to improve a draft paper. We\'ll track three decisions it needs.',
+			detail: 'a task card at the top left: "Example task. Recommend whether to keep a forward base. Rubric: evidence must back the call." A red dot labelled First student appears with a draft paper. Beside it, a ledger in three lanes: "The student decides", "Requests" and "The AI decides". Three dashed cards, still undecided, sit in the student\'s lane: "The criteria", "How the argument runs" and "What \'strategic\' means". The AI\'s lane shows three empty slots.'},
+		{at: 9.5, text: 'The student asks an AI for feedback. The request carries the criteria across.',
 			detail: 'a speech bubble, "Give me feedback", clips onto the criteria card, and the two travel slowly across into the AI\'s lane, where the card turns grey. The request settles in the middle lane. The AI\'s notes appear under the paper: "Tighter opening", "Add the costs", "Be more decisive". The student ticks all three: draft 2, revised with AI.'},
-		{at: 29.0, text: 'Then for a better structure, and a more strategic version.',
+		{at: 20.8, text: 'Then for a better structure, and a more strategic version.',
 			detail: '"Suggest a better structure" carries "How the argument runs" across, and "Make it more strategic" carries "What \'strategic\' means". Both turn grey in the AI\'s lane. The AI\'s grey headings and paragraph appear in the paper, and the student revises to draft 4.'},
-		{at: 41.1, text: 'Each request left out whose standard to use. The AI used its own.',
+		{at: 32.9, text: 'Each request left out whose standard to use. The AI used its own.',
 			detail: 'a key appears, "Left unsaid". Under each request, a line marked "unsaid" with the words in a dashed box: against your criteria; for your argument; as you define it. The three grey cards pulse.'},
-		{at: 50.6, text: 'A second student, with the same task, starts from the rubric.',
+		{at: 41.6, text: 'A second student, with the same task, starts from the rubric.',
 			detail: 'the first student\'s ledger moves up, and a second student appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, "Evidence must back the call", grows larger and is highlighted.'},
-		{at: 58.0, text: 'Before each request, the second student writes the decision down.',
-			detail: 'the dot writes in the criteria card, which turns red, then asks, "Give me feedback against my criteria," with a red pointer back to the card. It writes in "How the argument runs" and asks, "Suggest a better structure for my argument." It writes in "What \'strategic\' means" and asks, "Make it more strategic, as I define it." All three cards stay red in the student\'s lane; the AI\'s lane stays empty.'},
-		{at: 69.2, text: 'Both get the same AI notes. The second student turns one down.',
-			detail: 'the same notes appear under the second paper: "Tighter opening", "Add the costs", "Be more decisive". The student ticks the first two and strikes "Be more decisive" in red, writing underneath: "if the evidence is". The same grey headings and paragraph appear in this paper, up to draft 4.'},
-		{at: 79.0, text: 'Faculty have only the papers. They ask each student about the standard.',
-			detail: 'the ledgers and notes fade; the two papers stay, both at draft 4 and marked "Revised with AI". "Faculty ask each student: Better by whose standard?" appears. The first student says, "The AI\'s notes, I suppose. I worked through what it flagged." The second says, "Mine, set first from the rubric: does the evidence back my call?"'},
-		{at: 94.0, text: 'Faculty check: What did the AI decide for the student?',
+		{at: 48.9, text: 'Before each request, the second student writes the decision down.',
+			detail: 'the dot writes on the criteria card, which turns red: "Evidence must back the call." Then it asks, "Give me feedback against my criteria," with a red pointer back to the card. It writes "Lead with the call, then its evidence" on "How the argument runs" and asks, "Suggest a better structure for my argument." It writes "Serves the ally\'s long-term interest" on "What \'strategic\' means" and asks, "Make it more strategic, as I define it." All three cards stay red in the student\'s lane; the AI\'s lane stays empty.'},
+		{at: 60.3, text: 'Both get the same AI notes. The second student judges them against their decisions.',
+			detail: 'the same notes appear under the second paper: "Tighter opening", "Add the costs", "Be more decisive". The student ticks the first two. The criteria card pulses as the student strikes "Be more decisive" in red and writes underneath: "evidence too thin". The same grey headings and paragraph appear in this paper, up to draft 4.'},
+		{at: 70.5, text: 'Faculty have only the papers. They ask each student about the standard.',
+			detail: 'the ledgers and notes fade; the two papers stay, both at draft 4 and marked "Revised with AI". "Faculty ask: Better by whose standard?" appears. The first student says, "The AI\'s notes, I suppose. I worked through what it flagged." The second says, "Mine, set first from the rubric: does the evidence back my call?"'},
+		{at: 83.6, text: 'Faculty check: What did the AI decide for the student?',
 			list: 'Faculty check: What did the AI decide for the student? To find out, ask each student: better by whose standard?',
-			detail: 'both lines appear under the picture at the same size, and the ledgers and notes return: the first student\'s three decisions in the AI\'s lane, the second student\'s three in their own.',
+			detail: 'both lines appear under the picture at the same size, and the ledgers and notes return: the first student\'s three decisions in the AI\'s lane, the second student\'s three in their own, in their words.',
 			check: {label: 'Faculty check', question: 'What did the AI decide for the student?', follow: 'To find out, ask each student: better by whose standard?', followAt: T.follow}},
 	];
 
@@ -595,6 +630,6 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02});
+		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
 	});
 })();

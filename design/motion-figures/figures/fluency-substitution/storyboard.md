@@ -1,6 +1,6 @@
 # Fluency substitution: storyboard
 
-Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 5, revised after figure cold read 2 · October 27, 2026
+Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 6, revised after the cross-figure consistency review · October 28, 2026
 
 Starting point: `concepts-v0/proposal.md` §2.2, "Strip the fluency" (8 s, not built). This version keeps its mechanism: take the fluency away and see what judgment is left. Faculty do the taking away by setting the paper aside, asking why, and then changing one fact. Both students use an AI and hand in the same polished paper, so the difference can only show off the page. Frame capture's shared runtime, conventions and test lessons apply throughout.
 
@@ -53,7 +53,7 @@ Related:
 9. *The AI ignored the second student's note.* The note stays on screen above the draft, the draft says the same thing in polished form, and the caption says plainly that the draft matches the first paper word for word.
 10. *The note was thrown away.* The note moves into its own row, "Their own work, not handed in", and stays to the end.
 11. *The AI wrote a bad paragraph.* It reaches a defensible call with a sensible caveat.
-12. *Every student who agrees with an AI will fail this way.* The page setup says the figure shows the risk the essay names.
+12. *Every student who agrees with an AI will fail this way.* The page setup says, "Not every student who agrees with an AI fails this way."
 
 **Lessons from frame capture, applied.**
 
@@ -81,6 +81,14 @@ Related:
   - The key's red reads "a student's own work".
   - "Set aside" fades the sheets and lightens the bands, and the words stay at full strength (5.6:1).
   - The narrow-screen spec says what stays on the stage.
+
+**Changes after the consistency review** (`../../CONSISTENCY.md`, fluency substitution items 1–7):
+- *Poster.* The stage shows beat 1 settled (5.98 s: the task and the student) before play.
+- *Stacked stage at short windows.* The stage switches to the stacked text view whenever its 12-unit mono would render under 11 px at the runtime's letterboxed scale (`syncStacked`, as in figures 4, 5 and 7). At 1280×720 the stage is stacked, so no label vanishes; at 1440×900 it is the full picture.
+- *Controls never move.* The stacked stage takes the height of its tallest beat layout at the current width. The caption band is fixed at 136 px stacked on desktop, 166 px below 720 px and 160 px below 480 px. Measured control travel during the run is 0 px at 1440×900, 1280×720, 600×900 and 390×844. At 390×844 the whole player measures 815 px.
+- *Stacked-stage labels at 13 px* (letter-spacing 0.04em), as in premature synthesis.
+- *Task card at Serif 16 on a 20-unit step,* as in figures 1, 3 and 5. It stays top left.
+- *Page.* The setup loses "pause it" and its hedge becomes "Not every student who agrees with an AI fails this way." The check section adds "Both students in the figure explain the call clearly without the paper. The second line separates them."
 
 **Changes after figure cold read 2** (`tests/figure-read-2.md` and the orchestrator's notes):
 - *The first student's own-work cell.* A red label now says what the student did, "Cut one sentence from the AI's draft:", above the struck sentence. The row label "Their own work, not handed in" appears in beat 6, when the papers are handed in.
@@ -165,7 +173,7 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
 
 | Element | Stands for | How it looks | Where |
 | --- | --- | --- | --- |
-| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 12 "EXAMPLE TASK", then Serif 15 ink over three lines: "Recommend whether to / send forces to reassure / a threatened ally." It stays in place throughout | x 16–236, y 14–106 |
+| Task card | The assignment | Paper-bright card, hairline ink border (15%). Mono 12 "EXAMPLE TASK", then Serif 16 ink over three lines on a 20-unit step (56, 76, 96): "Recommend whether to / send forces to reassure / a threatened ally." It stays in place throughout | x 16–236, y 14–110 |
 | First red dot | The first student | Solid red circle, radius 5. Labelled "Student" (Sans 600 13, red) in beats 1–3; from beat 4 it heads its column, labelled "First student" | Starts at (120, 300); from beat 4 at (260, 88) |
 | The AI's draft for the first student | The paragraph the AI writes | Paper-bright sheet, hairline border, soft shadow, with a grey mono tag "AI'S DRAFT" above it. Grey Serif text on a grey band per line: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences." | At 85%: x 300–691, y 212–406 (six lines); after the cut, y 212–377 |
 | The cut | The first student's edit | A red strike through "Either choice carries real consequences." The struck words then lift out of the paper and settle, still struck, as a one-line card in the first column's top row, under a red Sans 600 13 label: "Cut one sentence from the AI's draft:". The card is half see-through mid-flight, so the lines it crosses stay readable | Label baseline (258, 132); card from x 252, y 140–176 (Serif 15 grey on a band, red strike) |
@@ -192,17 +200,21 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
 | First student (ink, then grey on the band from the turn) | "On balance, losing that trust is the greater risk: the forces should go." | "On balance, losing that trust is still the greater risk. The forces should go." (the paper's call in the paper's words; only "still" is the student's own) |
 | Second student (ink, then red from the turn) | "Send them. The ally's trust matters most, and troops show we mean it." | "Then troops would cost the ally's trust. I'd send arms and aid instead." |
 
-**Narrow screens.**
-- *From 480 px up,* any picture text that would render under 11 px is hidden, and each beat's "On screen" line shows in the beat list.
-- *Below 480 px,* nearly all picture text would be hidden. The SVG collapses, and a stacked text stage takes its place, driven by the same clock. It shows what the current beat is about, at 13–16 px:
+**Short windows and phones.**
+- *Trigger.* Whenever the stage's smallest text (12-unit mono) would render under 11 px at the runtime's letterboxed scale, the SVG collapses and a stacked text stage takes its place, driven by the same clock (`.is-stacked`, set by `syncStacked`). That covers a 1280×720 laptop window as well as phones. At 1440×900 the full picture shows.
+- *What the stacked stage shows, at 13–16 px:*
   - beat 1: the task;
   - beats 2–3: the AI's draft, then struck and relabelled;
   - beat 4: the two students' own work, side by side: "Cut one sentence from the AI's draft" over the struck sentence, and the note;
   - beat 5: that row plus the AI's draft from the note, with "Suppose it matches the first student's paper word for word";
   - beat 6: that row plus a compact tile, "Both handed in this paper", which stays to the end;
-  - beats 7–9: the paper tile and the two question rows, each with both students' answers side by side, in ink and then in their colours at the turn;
-  - beat 10: the paper tile and both question rows. With the check and the controls this measures 804 px, which fits an 844 px phone. The check is set at 20 px at this width.
-- *Throughout:* the colour key sits at the bottom, and the caption band and beat list are as on desktop.
+  - beats 7–9: the paper tile and the two question rows, each with both students' answers side by side, in ink, then in their colours at the turn;
+  - beat 10: the paper tile and both question rows.
+- *Fixed heights, so the controls never move.*
+  - The stacked stage takes the height of its tallest beat layout at the current width.
+  - The caption band is fixed at 136 px stacked on desktop, 166 px below 720 px and 160 px below 480 px. The check is set at 20 px below 480 px.
+  - At 390×844 the whole player measures 815 px, which fits the screen.
+- *Throughout:* the colour key sits at the bottom of the stacked stage. Its labels, the names and the section labels are 13 px.
 
 ## 4. Beats
 
@@ -336,7 +348,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 ## 5. Final frame
 
-The still at 88.6 s. It is also the reduced-motion view, the print view and the poster (stage plus caption band).
+The still at 88.6 s. It is also the reduced-motion view and the print view. Before play, the stage shows a separate poster: beat 1 settled (5.98 s), the task card and the student.
 
 **Stage:** a table.
 - **Label column:**
@@ -363,7 +375,7 @@ The still at 88.6 s. It is also the reduced-motion view, the print view and the 
 
 **In the reduced-motion and print views,** all ten captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
 
-**At 390 px** the final frame is the stacked text stage: the "Both handed in this paper" tile, both question rows with the two students' answers side by side in their colours, and the key. With the check and the controls it fits an 844 px screen.
+**In the stacked stage** (a 1280×720 window or a phone), the final frame is the "Both handed in this paper" tile, both question rows with the two students' answers side by side in their colours, and the key. At 390×844, with the check and the controls, it measures 815 px.
 
 **What the still says alone:** two students handed in the same paper, drafted with AI. One cut a line from the AI's draft; the other wrote their own call first. Asked why, both answered well. When one fact changed, the first stayed with the paper's call in its words, and the second changed course for the same reason. The check below says what to ask.
 
@@ -375,7 +387,7 @@ The still at 88.6 s. It is also the reduced-motion view, the print view and the 
 
 **Setup:**
 
-A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose a second student, who made the call first, hands in the very same paper. *The Irreducible Officer* calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.
+A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose a second student, who made the call first, hands in the very same paper. *The Irreducible Officer* calls the risk fluency substitution: polished analysis stands in for owned reasoning. Not every student who agrees with an AI fails this way. The task, the paper and all the answers are a constructed example.
 
 **Figure summary** (visually hidden, for screen readers): An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. Suppose that draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student tries, and stays with the paper's call in its own words: on balance, losing that trust is still the greater risk, so the forces should go. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.
 
@@ -394,7 +406,9 @@ A student asks an AI to draft a strategy recommendation, reads it closely and ag
 
 **Faculty check:** Can the student independently explain the judgment in plain speech?
 
-Then change one fact. What would you recommend now? Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.
+Then change one fact. What would you recommend now?
+
+Both students in the figure explain the call clearly without the paper. The second line separates them. Section VIII of the essay looks for the student who "revises under challenge rather than retreating to the artifact's language". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.
 
 **From the essay** (*The Irreducible Officer*, Section II, What the Problem Looks Like), with its link to Chow et al. (2026):
 
