@@ -399,16 +399,14 @@
 		p.append('Recommend when to evacuate a port city.');
 	}
 	{
-		const s = h('div', 'rl-n-sec rl-n-pair', body);
-		N.names = ['First student', 'Second student'].map((n) => h('p', 'rl-n-label rl-n-red', s, `● ${n}`));
-	}
-	{
-		const s = N.noteSec = h('div', 'rl-n-sec rl-n-rel', body);
-		N.noteLabel = h('p', 'rl-n-label', s, 'Their own note · not handed in');
-		N.dontSee = h('p', 'rl-n-over', s, 'Faculty don’t see this');
+		const s = N.noteSec = h('div', 'rl-n-sec', body);
 		const pair = N.notePair = h('div', 'rl-n-pair', s);
-		N.none = h('p', 'rl-n-none', h('div', 'rl-n-col', pair), '—');
-		const note = h('p', 'rl-n-note', h('div', 'rl-n-col', pair));
+		const left = h('div', 'rl-n-col rl-n-rel', pair);
+		N.noteLabel = h('p', 'rl-n-label', left, 'Their own note · not handed in →');
+		N.dontSee = h('p', 'rl-n-over', left, 'Faculty don’t see this');
+		N.none = N.noteLabel;
+		const noteCol = N.noteCol = h('div', 'rl-n-col', pair);
+		const note = h('p', 'rl-n-note', noteCol);
 		N.noteWords = NOTE.lines.join(' ').split(' ').map((wd, i) => h('span', null, note, (i ? ' ' : '') + wd));
 	}
 	{
@@ -419,8 +417,9 @@
 			return el(svgN, 'path', {d: SQUIGGLE, fill: 'none', stroke: C.red, 'stroke-width': 4, 'stroke-linecap': 'round', pathLength: 1, 'stroke-dasharray': 1, 'stroke-dashoffset': 1});
 		};
 		const cardN = (col) => {
-			const c = h('div', 'rl-n-card', pair);
-			h('p', 'rl-n-tag rl-n-grey', c, 'Drafted with AI');
+			const colEl = h('div', 'rl-n-col', pair);
+			const name = h('p', 'rl-n-label rl-n-red rl-n-name', colEl, col === 'a' ? '● First student' : '● Second student');
+			const c = h('div', 'rl-n-card', colEl);
 			const reader = h('span', 'rl-n-reader', c);
 			const r1 = h('p', 'rl-n-row', c);
 			const half = col === 'a' ? h('span', 'rl-n-half', c) : null;
@@ -435,7 +434,7 @@
 			const squig = sq(sig);
 			const chip = h('span', 'rl-n-chip', sig, 'Answerable');
 			const drop = h('span', 'rl-n-drop', c);
-			return {c, reader, r1, r2, half, theAnalysis, di, squig, sig, chip, drop};
+			return {c, name, reader, r1, r2, half, theAnalysis, di, squig, sig, chip, drop};
 		};
 		N.cards = {a: cardN('a'), b: cardN('b')};
 		N.frame = h('div', 'rl-n-frame', s);
@@ -472,12 +471,13 @@
 	function renderNarrow(t) {
 		if (!root.classList.contains('is-stacked')) return;
 		op(N.task, prog(t, ...T.card));
-		N.names.forEach((n) => op(n, prog(t, ...T.dots)));
+		Object.values(N.cards).forEach((cd) => op(cd.name, prog(t, ...T.dots)));
 		const kAsk = prog(t, ...T.dimNote) - prog(t, ...T.restore);
-		op(N.noteLabel, prog(t, ...T.noteLabel) * (1 - 0.8 * kAsk));
-		op(N.none, prog(t, ...T.noteLabel) * (1 - kAsk));
-		op(N.notePair, 1 - 0.8 * kAsk);
-		op(N.dontSee, kAsk);
+		// While faculty look, "Faculty don't see this" takes the label's place: the label
+		// fades out before the overlay fades in (and back), so the two never overlap.
+		op(N.noteLabel, prog(t, ...T.noteLabel) * Math.max(0, 1 - 2 * kAsk));
+		op(N.noteCol, 1 - 0.8 * kAsk);
+		op(N.dontSee, Math.max(0, 2 * kAsk - 1));
 		op(N.frame, prog(t, ...T.frame) * (1 - prog(t, ...T.restore)));
 		const nW = N.noteWords.length;
 		N.noteWords.forEach((w, i) => { const ti = T.note[0] + ((T.note[1] - T.note[0]) * i) / nW; op(w, prog(t, ti, ti + 0.15)); });
@@ -541,6 +541,7 @@
 	}
 	// The stacked stage takes over whenever the smallest picture text would render
 	// under 11 px at the runtime's letterboxed scale.
+	let player = null;
 	const syncStacked = () => {
 		const r = svg.getBoundingClientRect();
 		if (!r.width) return;
@@ -548,8 +549,8 @@
 		const stacked = MONO * scale < 11;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
-			const scrub = root.querySelector('[data-mf-scrub]');
-			renderNarrow(scrub ? +scrub.value || 0 : 0);
+			// Figure time (the player's clock includes the opening name card).
+			renderNarrow(player ? player.time() : 0);
 		}
 	};
 
@@ -581,6 +582,10 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02});
+		// Poster: beat 1 settled (the task and the two students). Nameplate: the opening name
+		// card, the corner plate and the name and definition above the check.
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02,
+			nameplate: {name: 'Responsibility laundering', kicker: 'Failure mode 7 of 7', definition: 'The model’s recommendation makes agency feel shared, or easier to defend.'}});
+		syncStacked();
 	});
 })();

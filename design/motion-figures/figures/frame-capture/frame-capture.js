@@ -645,7 +645,7 @@
 		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
 		// Nameplate: the opening name card, the corner plate and the final name and definition.
 		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02,
-			nameplate: {name: 'Frame capture', kicker: 'Failure mode 1 of 7', definition: "The first plausible frame becomes the student's frame."}});
+			nameplate: {name: 'Frame capture', kicker: 'Failure mode 1 of 7', definition: "The first plausible frame becomes the working frame, unexamined."}});
 		syncStacked();
 	});
 })();

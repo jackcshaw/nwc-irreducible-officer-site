@@ -19,11 +19,25 @@
 #responsibility-laundering.is-stacked .mf-stage { height: 0; overflow: hidden; }
 #responsibility-laundering.is-stacked .rl-narrow { display: block; padding: 6px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
 #responsibility-laundering.is-stacked .mf-caption { height: 136px; overflow: hidden; }
-@media (max-width: 719px) { #responsibility-laundering.is-stacked .mf-caption { height: 160px; } }
-@media (max-width: 480px) {
-	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 20px; }
+@media (max-width: 719px) { #responsibility-laundering.is-stacked .mf-caption { height: 194px; } #responsibility-laundering.is-stacked .mf-caption.is-check { padding-top: 10px; padding-bottom: 10px; } }
+/* The final caption (name and definition over the check) must stay inside the runtime's
+   144 px desktop band, or the viewport fit at 1280 x 720 would drop to the stacked stage.
+   The long name wraps in its label column, and the check is set a little smaller. */
+@media (min-width: 720px) {
+	#responsibility-laundering .mf-check.has-final { grid-template-columns: min-content minmax(0, 1fr); }
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: clamp(22px, 2.4vw, 27px); }
+	#responsibility-laundering.is-stacked .mf-caption { height: 188px; }
 }
-.rl-n-sec { margin: 0 0 3px; }
+/* The opening name card is one line (the runtime sets it nowrap); this name is long, so on
+   phones it scales with the width to keep about 16 px clear on each side. */
+@media (max-width: 559px) { #responsibility-laundering .mf-namecard-n { font-size: clamp(22px, calc((100vw - 70px) / 11.3), 34px); } }
+@media (max-width: 480px) {
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 18px; }
+	#responsibility-laundering .mf-final-def { font-size: 15px; }
+}
+.rl-n-sec { margin: 0 0 2px; }
+.rl-n-name { margin: 0 0 3px; }
+.rl-n-stack { padding-top: 7px; }
 .rl-n-label { margin: 0 0 4px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
 .rl-n-grey { color: var(--stone); }
 .rl-n-red { color: var(--red); }
@@ -35,17 +49,17 @@
 .rl-n-note { margin: 0; font: italic 400 13px/1.35 var(--serif); color: var(--red); }
 .rl-n-none { margin: 0; font: 400 14px/1.4 var(--serif); color: rgba(10, 34, 66, 0.45); }
 .rl-n-stack { position: relative; }
-.rl-n-draft { position: absolute; inset: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-draft { position: absolute; inset: calc(7px + 1.6em) 0 0 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
 .rl-n-card { position: relative; min-width: 0; padding: 4px 7px 5px 19px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
 .rl-n-rel { position: relative; }
-.rl-n-over { position: absolute; left: 0; top: 2.1em; max-width: calc(50% - 10px); margin: 0; padding: 0 4px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); opacity: 0; }
-.rl-n-frame { position: absolute; inset: -4px -4px -3px -4px; border: 1.5px solid var(--ink); border-radius: 6px; pointer-events: none; opacity: 0; }
+.rl-n-over { position: absolute; left: 0; top: 0; margin: 0; padding: 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); opacity: 0; }
+.rl-n-frame { position: absolute; inset: 1px -4px -3px -4px; border: 1.5px solid var(--ink); border-radius: 6px; pointer-events: none; opacity: 0; }
 .rl-n-framelabel { position: absolute; left: 8px; top: -9px; padding: 0 5px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .rl-n-drop { position: absolute; left: 3px; width: 12px; height: 16px; background: var(--ink); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); visibility: hidden; }
 .rl-n-reader { position: absolute; left: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); visibility: hidden; }
 .is-outlined { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 2px; white-space: nowrap; }
 .rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
-.rl-n-row { position: relative; margin: 0 0 3px; font: 400 13px/1.4 var(--serif); color: var(--stone); }
+.rl-n-row { position: relative; margin: 0 0 2px; font: 400 13px/1.32 var(--serif); color: var(--stone); }
 .rl-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .rl-n-sig svg { flex: 0 1 auto; min-width: 0; }
 .rl-n-sig { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; border-top: 1px solid rgba(10, 34, 66, 0.3); padding-top: 3px; }
@@ -58,9 +72,9 @@
 .rl-n-half { position: absolute; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 1.8px dashed rgba(91, 86, 79, 0); background: transparent; }
 .rl-n-q { margin: 0 0 2px; font: italic 400 14px/1.35 var(--serif); color: var(--ink); }
 .rl-n-say { min-width: 0; padding: 3px 7px 2px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
-.rl-n-line { margin: 0 0 2px; padding-left: 7px; border-left: 2px solid transparent; font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.rl-n-line { margin: 0 0 2px; padding-left: 7px; border-left: 2px solid transparent; font: 400 13px/1.22 var(--serif); color: var(--ink); }
 .rl-n-line.is-marked { border-left-color: var(--red); }
-.rl-n-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.rl-n-key { display: flex; flex-wrap: wrap; gap: 2px 14px; margin: 2px 0 0; font: 600 12px/1.25 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
 .rl-n-key .sw { display: inline-block; width: 14px; height: 9px; margin-right: 5px; background: #ded5c4; vertical-align: -0.5px; }
 .rl-n-key .rg { display: inline-block; width: 10px; height: 10px; margin-right: 5px; box-sizing: border-box; border-radius: 50%; border: 1.6px dashed var(--stone); vertical-align: -1px; }
 .rl-n-key .rd { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
@@ -78,7 +92,7 @@
 	<p class="fig-setup">Suppose two students give an AI the same prompt, get the same draft, and sign it as written. <em>The Irreducible Officer</em> calls the risk responsibility laundering: a recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The figure runs about a minute and a half. The task, the draft and both students are a constructed example.</p>
 
 	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
-		<p class="sr-only" id="rl-title">Responsibility laundering, an animated figure in nine beats</p>
+		<p class="sr-only" id="rl-title">Responsibility laundering, an animated figure in nine beats after its name card</p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -90,10 +104,10 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the responsibility laundering figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:33</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:36</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Today's harbor reports: normal." Then they sign. While faculty ask, the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two identical copies. Faculty ask each student: "Suppose the port closes. Who made this call?" The first says, "I signed it. The analysis said ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on it?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures." Then the note returns. "The analysis" is outlined in the first student's answer and on their copy, and the first student's dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "reason handed to the AI", where it stays. A red bracket marks the second student's answer, their own reason; their dot stays whole. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences, and rest on each student's dot at the signature. The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure, "Responsibility laundering", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Today's harbor reports: normal." Then they sign. While faculty ask, the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two identical copies. Faculty ask each student: "Suppose the port closes. Who made this call?" The first says, "I signed it. The analysis said ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on it?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures." Then the note returns. "The analysis" is outlined in the first student's answer and on their copy, and the first student's dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "reason handed to the AI", where it stays. A red bracket marks the second student's answer, their own reason; their dot stays whole. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences, and rest on each student's dot at the signature. The figure ends on the name and its definition, "The model’s recommendation makes agency feel shared, or easier to defend.", above the faculty check. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

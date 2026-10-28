@@ -473,6 +473,9 @@
 		NR.fac = h('p', 'id-n-fac', narrow);
 		h('b', null, NR.fac, 'Faculty ask');
 		NR.fac.append('Better by whose standard?');
+		// One key for the cells, in place of a tag on every chip.
+		NR.key = h('p', 'id-n-keys', narrow);
+		NR.keyItems = [['is-open', 'Undecided'], ['is-ai', 'AI decides'], ['is-own', 'Student decides'], ['is-uns', 'Left unsaid']].map(([cls, txt]) => h('span', cls, NR.key, txt));
 		const grid = h('div', 'id-n-grid', narrow);
 		const column = (key) => {
 			const isA = key === 'a';
@@ -493,7 +496,6 @@
 			});
 			if (!isA) c.reason = h('p', 'id-n-reason', c.notes, REASON);
 			c.ledger = h('div', 'id-n-ledger', c.el);
-			if (isA) c.key = h('p', 'id-n-key', c.ledger, 'Left unsaid');
 			c.cells = [0, 1, 2].map((k) => {
 				const cell = h('div', 'id-n-cell', c.ledger);
 				const q = h('p', 'id-n-q', cell);
@@ -502,10 +504,9 @@
 				let uns = null;
 				if (isA) { uns = h('p', 'id-n-uns', cell, 'Unsaid'); h('span', 'id-n-ghost', uns, UNSAID[k]); }
 				const chip = h('p', 'id-n-chip', cell);
-				const who2 = h('b', null, chip, 'Undecided');
 				const label = h('span', null, chip, LABELS[k]);
 				const decided = isA ? null : h('i', 'id-n-decided', chip, DECIDED[k].join(' '));
-				return {cell, q, uns, chip, who: who2, label, decided};
+				return {cell, q, uns, chip, label, decided};
 			});
 			c.say = h('p', 'id-n-say', c.el, SPEECH[key].lines.join(' '));
 			return c;
@@ -535,14 +536,15 @@
 		a.noteEls.forEach((n, i) => vis(n.tick, t >= T.tickA[i][0]));
 		vis(a.ledger, t >= T.ledgerA[0]);
 		fade(a.ledger, ledOp);
-		vis(a.key, t >= T.key[0]);
+		vis(NR.key, t >= T.ledgerA[0]);
+		vis(NR.keyItems[2], t >= T.blockB[0]);
+		vis(NR.keyItems[3], t >= T.key[0]);
 		a.cells.forEach((c, k) => {
 			const [c0, c1] = T.carryA[k];
 			const carry = prog(t, c0, c1, E.inOutStrong);
 			const crossed = t >= c1 - 0.4;
 			vis(c.chip, t >= T.cardsA + k * T.cardStep);
 			c.chip.classList.toggle('is-ai', crossed);
-			c.who.textContent = crossed ? 'AI decides' : 'Undecided';
 			c.chip.style.transform = `translateX(${(carry > 0 && carry < 1 ? 40 * Math.sin(Math.PI * carry) : 0).toFixed(1)}px)`;
 			// The request shows when it is asked, before its decision crosses.
 			vis(c.q, t >= T.bubA[k][0]);
@@ -566,7 +568,6 @@
 		b.cells.forEach((c, k) => {
 			const own = t >= T.writeB[k][0];
 			c.chip.classList.toggle('is-own', own);
-			c.who.textContent = own ? 'Student decides' : 'Undecided';
 			// Once written, the chip shows the decision itself in place of its name.
 			c.decided.hidden = !own;
 			c.label.hidden = own;
@@ -578,8 +579,11 @@
 	// The narrow stage keeps the height of its tallest moment, so the caption band and
 	// controls never move while it plays.
 	let fitWidth = 0;
+	let player = null;
+	// The figure's own time (the scrubber shows player time, which includes the name card).
+	const figTime = () => (player ? player.time() : 0);
 	const fitNarrow = () => {
-		const now = +root.querySelector('[data-mf-scrub]').value || 0;
+		const now = figTime();
 		narrow.style.minHeight = '0px';
 		let max = 0;
 		for (let t = 0; t <= T.end; t += 0.5) { renderNarrow(t); max = Math.max(max, narrow.scrollHeight); }
@@ -596,7 +600,7 @@
 		const stacked = 12 * scale < 11;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
-			renderNarrow(+root.querySelector('[data-mf-scrub]').value || 0);
+			renderNarrow(figTime());
 		}
 		const w = Math.round(root.getBoundingClientRect().width);
 		if (stacked && w !== fitWidth) { fitWidth = w; fitNarrow(); }
@@ -630,6 +634,11 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
+		// Poster: the setup settled (task, student, rubric, the three open decisions).
+		// Nameplate: the opening name card, the corner plate, and the name and definition above the check.
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02,
+			nameplate: {name: 'Invisible delegation', kicker: 'Failure mode 5 of 7', definition: 'A request for help hands over criteria, structure, or meaning.'}});
+		fitWidth = 0;
+		syncStacked();
 	});
 })();

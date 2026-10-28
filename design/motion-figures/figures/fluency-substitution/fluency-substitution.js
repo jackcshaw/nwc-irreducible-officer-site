@@ -483,8 +483,12 @@
 	}
 	{
 		const sec = section('paper', 'Both handed in this paper');
-		const para = h('p', 'fs-n-ai fs-n-sm fs-n-tile', sec);
+		// The border sits on the tile; the clamp sits on the paragraph inside it, so a
+		// clamped line can't show through the tile's padding.
+		const tile = h('div', 'fs-n-tile', sec);
+		const para = h('p', 'fs-n-ai fs-n-sm', tile);
 		h('span', 'fs-n-band', para, PARA);
+		N.paper.tile = para;
 	}
 	const say = (parent, who, segs) => {
 		const box = h('div', 'fs-n-say', parent);
@@ -521,6 +525,10 @@
 		const show = new Set(SHOW[beatIndex(t)]);
 		for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
 		fade(N.task.sec, prog(t, ...T.card));
+		// Once the papers are set aside (beat 7), the shared paper shrinks to a two-line
+		// tile, and to one line when the fact changes (beat 8), so the phone player fits.
+		N.paper.tile.classList.toggle('is-clamped', t >= BEATS[6].at);
+		N.paper.tile.classList.toggle('is-one-line', t >= BEATS[7].at);
 		N.draftA.lab.textContent = t >= (T.tagA[0] + T.tagA[1]) / 2 ? "Student's paper · drafted with AI" : "AI's draft";
 		fade(N.draftA.sec, prog(t, ...T.sheetA));
 		N.draftA.cut.classList.toggle('fs-n-struck', t >= T.strike[0] + 0.3);
@@ -553,19 +561,17 @@
 		sizedFor = w;
 		narrow.style.height = '';
 		let tallest = 0;
-		const cutHidden = N.draftA.cut.hidden;
-		N.draftA.cut.hidden = false;
-		SHOW.forEach((keys) => {
-			const show = new Set(keys);
-			for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
+		// Each beat's settled layout (and the draft before the cut), measured in turn.
+		[T.composeA + 3, ...BEATS.map((b, i) => (i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : T.end))].forEach((at) => {
+			renderNarrow(at);
 			tallest = Math.max(tallest, narrow.scrollHeight);
 		});
-		N.draftA.cut.hidden = cutHidden;
 		narrow.style.height = `${Math.ceil(tallest)}px`;
 	};
 	// The stacked stage takes over whenever the smallest picture text (12-unit mono)
 	// would render under 11 px at the runtime's letterboxed scale.
 	const MIN_FS = 12;
+	let player = null;
 	const syncStacked = () => {
 		const r = svg.getBoundingClientRect();
 		if (!r.width) return;
@@ -573,9 +579,9 @@
 		const stacked = MIN_FS * scale < 11;
 		root.classList.toggle('is-stacked', stacked);
 		if (stacked) {
+			root.classList.add('is-narrow');
 			sizeNarrow();
-			const scrub = root.querySelector('[data-mf-scrub]');
-			renderNarrow(scrub ? +scrub.value || 0 : 0);
+			renderNarrow(player ? player.time() : 0); // figure time, not player time
 		}
 	};
 
@@ -608,8 +614,10 @@
 		measure();
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
-		syncStacked();
 		// Poster: the settled setup (the task and the student) while the figure waits to play.
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
+		// Nameplate: the opening name card, the corner plate and the final name and definition.
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02,
+			nameplate: {name: 'Fluency substitution', kicker: 'Failure mode 2 of 7', definition: 'Polished analysis stands in for owned reasoning.'}});
+		syncStacked();
 	});
 })();

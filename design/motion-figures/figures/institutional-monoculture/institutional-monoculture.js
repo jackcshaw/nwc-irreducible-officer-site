@@ -442,9 +442,9 @@
 		NR.b = run('b');
 		NR.b.head = h('p', 'im-n-frame', NR.b.board, 'One imagined spread');
 		NR.b.groups = GOALS.map((g) => {
-			const d = h('div', 'im-n-group', NR.b.board);
+			const d = h('p', 'im-n-group', NR.b.board);
 			h('b', null, d, g.label.charAt(0) + g.label.slice(1).toLowerCase());
-			d.items = g.who.map((i) => h('span', null, d, LINES_B[i]));
+			d.append(g.who.map((i) => LINES_B[i]).join(' · '));
 			return d;
 		});
 	}
@@ -458,6 +458,7 @@
 		show(NR.ctxP, t < T.lift);
 		NR.ctx.forEach((s, j) => vis(s, t >= T.ctx + T.ctxStep * j));
 		vis(NR.ai, t >= T.panel[0]);
+		show(NR.ai, t < T.askOut[0]);
 		NR.ai.classList.toggle('is-pulse', near(t, T.req, 1.6) || near(t, T.send, 1.2) || near(t, T.callout[0], 0.8));
 		show(NR.open, t >= T.callout[0] && t < T.send);
 		show(NR.asks, t >= T.ask[0] && t < T.askOut[0]);
@@ -504,9 +505,9 @@
 			g.style.borderColor = t >= T.brackets[0] ? '' : 'transparent';
 		});
 	}
-	let fitWidth = 0;
+	let fitWidth = 0, player = null;
 	const fitNarrow = () => {
-		const now = +root.querySelector('[data-mf-scrub]').value || 0;
+		const now = player ? player.time() : 0;
 		narrow.style.minHeight = '0px';
 		let max = 0;
 		for (let t = 0; t <= T.end; t += 0.5) { renderNarrow(t); max = Math.max(max, narrow.scrollHeight); }
@@ -522,7 +523,7 @@
 		const stacked = root.getBoundingClientRect().width < 480;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
-			renderNarrow(+root.querySelector('[data-mf-scrub]').value || 0);
+			renderNarrow(player ? player.time() : 0);
 		}
 		const w = Math.round(root.getBoundingClientRect().width);
 		if (stacked && w !== fitWidth) { fitWidth = w; fitNarrow(); }
@@ -560,6 +561,7 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(root);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: AT[3] - 0.02});
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: AT[3] - 0.02,
+			nameplate: {name: 'Institutional monoculture', kicker: 'Failure mode 6 of 7', definition: 'Shared systems and defaults narrow the range of frames a group considers.'}});
 	});
 })();

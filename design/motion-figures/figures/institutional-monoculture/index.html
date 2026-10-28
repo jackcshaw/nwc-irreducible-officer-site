@@ -21,10 +21,11 @@
 /* Laptop windows: a compact caption band (one line for the check's second line) gives
    the picture the height, so it scales to fit with every label at 11 px or more. */
 @media (min-width: 720px) and (max-height: 860px) {
-	#institutional-monoculture { --mf-chrome: 196px; }
-	#institutional-monoculture .mf-caption { min-height: 112px; padding-top: 10px; padding-bottom: 10px; font-size: 19px; }
-	#institutional-monoculture .mf-caption.is-check { padding-top: 10px; padding-bottom: 10px; }
-	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 22px; }
+	#institutional-monoculture { --mf-chrome: 166px; }
+	#institutional-monoculture .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#institutional-monoculture .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 20px; }
+	#institutional-monoculture .mf-final-def { font-size: 15px; }
 }
 
 /* The picture stays whenever the figure is 480 px wide or more; narrower, the stage
@@ -34,7 +35,7 @@
 #institutional-monoculture.is-stacked .im-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 4px; background: var(--paper); }
 @media (max-width: 480px) {
 	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 18px; }
-	#institutional-monoculture .mf-caption { min-height: 144px; padding-top: 10px; padding-bottom: 10px; }
+	#institutional-monoculture .mf-caption { min-height: 220px; padding-top: 10px; padding-bottom: 10px; }
 }
 .im-narrow p { margin: 0; }
 .im-n-task { margin: 0 0 6px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.35 var(--serif); color: var(--ink); }
@@ -51,8 +52,8 @@
 .im-n-seq .g { color: var(--stone); }
 .im-n-seq .r { color: var(--red); }
 /* One row of ten papers, big enough to watch change; the one changing pulses. */
-.im-n-grid { display: grid; grid-template-columns: repeat(10, 24px); gap: 6px; padding-top: 8px; }
-.im-n-paper { position: relative; display: block; width: 24px; height: 31px; border: 1px solid rgba(10, 34, 66, 0.25); background: var(--paper-bright); transition: box-shadow 160ms ease; }
+.im-n-grid { display: grid; grid-template-columns: repeat(10, 22px); gap: 6px; padding-top: 8px; }
+.im-n-paper { position: relative; display: block; width: 22px; height: 27px; border: 1px solid rgba(10, 34, 66, 0.25); background: var(--paper-bright); transition: box-shadow 160ms ease; }
 .im-n-paper.is-pulse { box-shadow: 0 0 0 2px var(--ink); }
 .im-n-paper .ln { position: absolute; left: 3px; top: 4px; width: 12px; height: 2.5px; background: var(--ink); opacity: 0; }
 .im-n-paper .body { position: absolute; left: 3px; right: 3px; top: 10px; bottom: 3px; background: repeating-linear-gradient(180deg, rgba(10, 34, 66, 0.7) 0 2px, transparent 2px 5px); opacity: 0; }
@@ -80,9 +81,8 @@
 .im-n-lines li.is-read::before { background: var(--ink); }
 .im-n-lines.is-open { border-color: transparent; }
 .im-n-lines.is-ai { border-color: var(--stone); }
-.im-n-group { margin: 0 0 4px; padding: 2px 8px 4px; border: 1.5px solid var(--ink); font: 400 13px/1.3 var(--serif); color: var(--ink); }
-.im-n-group b { display: block; font: 600 12px/1.4 var(--mono); text-transform: uppercase; color: var(--ink); }
-.im-n-group span { display: inline-block; margin-right: 12px; }
+.im-n-group { margin: 0 0 4px !important; padding: 2px 8px 3px; border: 1.5px solid var(--ink); font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.im-n-group b { margin-right: 6px; font: 600 12px/1.3 var(--mono); text-transform: uppercase; color: var(--ink); }
 </style>
 </head>
 <body>
@@ -109,10 +109,10 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the institutional monoculture figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:36</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:39</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. Ten red dots stand for ten students in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each student asks an AI for an outline, and ten grey outlines come back in the same pattern. Each student writes their own paper, in ten different layouts, all marked "All drafted with AI". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled "One frame: counter the rival". A grey card comes out of the AI box: every outline opened with "Counter the rival's influence". A grey line runs from it to the bracket, which turns grey, with a grey tag: "AI's frame". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading "One imagined spread". Each student writes the problem in red first, then asks the AI to challenge it ("What did you assume? What else could it be?"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten students in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each student asks an AI for an outline, and ten grey outlines come back in the same pattern. Each student writes their own paper, in ten different layouts, all marked "All drafted with AI". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled "One frame: counter the rival". A grey card comes out of the AI box: every outline opened with "Counter the rival's influence". A grey line runs from it to the bracket, which turns grey, with a grey tag: "AI's frame". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading "One imagined spread". Each student writes the problem in red first, then asks the AI to challenge it ("What did you assume? What else could it be?"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

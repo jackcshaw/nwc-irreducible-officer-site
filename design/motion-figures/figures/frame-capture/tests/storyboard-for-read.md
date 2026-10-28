@@ -230,7 +230,7 @@ The still at 86.2 s figure time (89.2 s player time). It is also the reduced-mot
 
 **Caption band:**
 
-> FRAME CAPTURE *(navy mono)* The first plausible frame becomes the student's frame. *(Serif, about 19 px)*
+> FRAME CAPTURE *(navy mono)* The first plausible frame becomes the working frame, unexamined. *(Serif, about 19 px)*
 > FACULTY CHECK *(navy mono)*
 > *What problem did the student choose to solve?* *(Serif italic, about 30 px)*
 > *Why this frame? What would change it?* *(Serif italic, same size as the line above)*

@@ -610,8 +610,7 @@
 		const stacked = MONO * scale < 11;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
-			const scrub = root.querySelector('[data-mf-scrub]');
-			renderNarrow(scrub ? +scrub.value || 0 : 0);
+			renderNarrow(api ? api.time() : 0);
 		}
 	};
 
@@ -640,11 +639,14 @@
 			check: {label: 'Faculty check', question: 'What evidence justified relying on the system here?', follow: 'Point to each part. Was the evidence about that part?', followAt: T.follow}},
 	];
 
+	let api = null;
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02});
+		api = mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02,
+			nameplate: {name: 'Uncalibrated reliance', kicker: 'Failure mode 4 of 7', definition: 'Confident output is accepted without knowing whether the task fits the tool.'}});
+		if (root.classList.contains('is-stacked')) renderNarrow(api.time());
 	});
 })();

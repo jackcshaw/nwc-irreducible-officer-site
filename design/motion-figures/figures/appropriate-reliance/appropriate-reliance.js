@@ -643,7 +643,8 @@
 		const key = `${resolved.g1}${resolved.g2}`;
 		if (key === lockState) return;
 		lockState = key;
-		[...root.querySelectorAll('[data-mf-beats] > li')].forEach((li, i) => {
+		// The name card (beat 0, added by the runtime) is never locked.
+		[...root.querySelectorAll('[data-mf-beats] > li:not(.mf-namebeat)')].forEach((li, i) => {
 			const locked = (i >= 3 && !resolved.g1) || (i >= 8 && !resolved.g2);
 			li.classList.toggle('is-locked', locked);
 			const b = li.querySelector('button');
@@ -706,8 +707,9 @@
 		if (calls[GKEY[g]]) { pass(false); return; }
 		if (prompt) prompt.hidden = false;
 		say('Make your call first, or skip this question.');
-		const inputs = [...hitsets[g].querySelectorAll('input')];
-		inputs[0].focus({preventScroll: true});
+		// Bring the options into view if they aren't (on a phone, above the sticky caption
+		// band), then focus the first one.
+		presentGate(g);
 	};
 	function showPicture() {
 		const stacked = root.classList.contains('is-stacked');
@@ -717,9 +719,12 @@
 	// First view: until the first question is answered, the picture is capped so the
 	// question and Continue fit on screen with it, without moving the page.
 	let fitOn = false;
+	// While it's capped, the caption band is compact too (.ar-firstq): it holds only the
+	// question until then, and takes its full height when the cap lifts.
 	function fitFirstView() {
 		if (testMode) return;
-		const top = root.getBoundingClientRect().top + scrollY;
+		root.classList.add('ar-firstq');
+		const top = root.querySelector('.mf-stage').getBoundingClientRect().top + scrollY; // below the plate strip
 		const chrome = root.querySelector('.ar-capwrap').offsetHeight + root.querySelector('.mf-controls').offsetHeight + 6;
 		const avail = Math.floor(innerHeight - top - chrome);
 		svg.style.maxHeight = `${Math.max(120, avail)}px`;
@@ -728,6 +733,7 @@
 	function releaseFit() {
 		if (!fitOn) return;
 		fitOn = false;
+		root.classList.remove('ar-firstq');
 		svg.style.maxHeight = '';
 	}
 	addEventListener('resize', () => { if (fitOn) fitFirstView(); });
@@ -803,13 +809,12 @@
 	const printQ = document.querySelector('[data-ar-printq]');
 	let beforePrint = null;
 	addEventListener('beforeprint', () => {
-		const f = window.__motionFigures && window.__motionFigures[ID];
-		if (!f || !printQ) return;
-		const scrub = root.querySelector('[data-mf-scrub]');
-		beforePrint = {t: scrub ? +scrub.value : 0, reached, open: after ? after.open : false, autoOpened, resolved: {...resolved}};
+		if (!api || !printQ) return;
+		// Figure time throughout (api.time and api.seek), so the name card's offset doesn't apply.
+		beforePrint = {t: api.time(), reached, open: after ? after.open : false, autoOpened, resolved: {...resolved}};
 		resolved.g1 = resolved.g2 = true;
 		lockState = '';
-		f.seek(GATES[0].at);
+		api.seek(GATES[0].at);
 		printQ.querySelector('[data-ar-printq-svg]').replaceChildren(svg.cloneNode(true));
 		if (after) after.open = true;
 	});
@@ -863,6 +868,9 @@
 		quietOpen = true; // a ?t= hold past a question opens it without moving the page
 		api = mount(root, {
 			duration: T.end, render, beats: BEATS, poster: GATES[0].at, gates: GATES, reducedAt: GATES[0].at,
+			// The name card adds 3 s of player time before the figure's own t = 0; every time
+			// here (gates, locks, poster, reducedAt, api.seek) stays in figure time.
+			nameplate: {name: 'Appropriate reliance', kicker: 'The skill', definition: "Accept AI support where it's warranted, check or refuse it where it isn't, and be able to say why."},
 			lockedAt: () => (!resolved.g1 ? GATES[0].at : !resolved.g2 ? GATES[1].at : null),
 			onResume: (i) => resolve(i),
 			onGatePlay,
@@ -876,7 +884,7 @@
 		});
 		quietOpen = false;
 		// Each beat-list entry carries a placeholder shown while it is locked.
-		for (const btn of root.querySelectorAll('[data-mf-beats] > li > button')) {
+		for (const btn of root.querySelectorAll('[data-mf-beats] > li:not(.mf-namebeat) > button')) {
 			const ph = document.createElement('span');
 			ph.className = 'ar-locked';
 			ph.textContent = 'Make your call to see this.';
@@ -886,5 +894,24 @@
 		syncLocks();
 		// The figure opens on the first question, live, in every view but the ?t= hold.
 		if (!testMode) { quietOpen = true; api.openGate(0); quietOpen = false; }
+		// The runtime has added the nameplate strip above the stage: fit the first view again
+		// and settle the stage's layout now, so no later relayout redraws over the card.
+		if (fitOn) { fitFirstView(); syncStacked(); }
+		// The name card shows over that question, then settles into the corner once the
+		// figure is in view (1.2 s, then a 0.8 s move). The question is live underneath, and
+		// any touch, click, key, wheel or focus in the figure puts the card in its corner at
+		// once, so it never delays focus or covers the options while the reader acts.
+		if (!testMode && !reducedNow()) {
+			api.introCard();
+			const settleNow = () => { if (root.dataset.mfCard) api.settleCard(0, 0); };
+			for (const ev of ['pointerdown', 'keydown', 'wheel', 'focusin']) root.addEventListener(ev, settleNow, {passive: true});
+			const io = new IntersectionObserver((entries) => {
+				const e = entries[0];
+				if (e.intersectionRatio < 0.5 && e.intersectionRect.height < innerHeight * 0.5) return;
+				io.disconnect();
+				if (root.dataset.mfCard) api.settleCard(1.2, 0.8);
+			}, {threshold: [0, 0.25, 0.5, 0.75, 1]});
+			io.observe(shot);
+		}
 	});
 })();

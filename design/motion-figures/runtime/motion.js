@@ -39,7 +39,8 @@
    respects lockedAt; window.__motionFigures[id].seek(t) is the export hook and
    ignores it, so scripts can render every frame. mount()
    returns {play, pause, seek, redraw, resume, openGate, gateOpen, time}
-   (time(): the figure's current time); figures
+   (time(): the figure's current time), plus introCard and settleCard with a
+   nameplate (below); figures
    without these fields behave exactly as before.
 
    A playing figure pauses when its shot (or, for a v0 figure, its root) is
@@ -61,6 +62,10 @@
    render(t), beats, poster, gates, lockedAt, reducedAt and api.seek stay in
    figure time, while ?t=, the scrubber and window.__motionFigures[id]
    (duration, beats, settle, seek) are in player time (figure time + card).
+   A figure that opens on a live moment (appropriate reliance opens on its
+   first question) can show the card over that moment instead: api.introCard()
+   sets it large over the frame on screen, api.settleCard(hold, move) moves it
+   into the corner on the wall clock, and any draw ends it at once.
    Without nameplate, nothing changes.
 
    Test hooks: ?t=4.2 (or ?t=1:04.2) renders that moment and holds; ?reduced
@@ -335,7 +340,9 @@
 			const b = beats[i];
 			// Deterministic fades, drawn from t like the picture.
 			// While the name card waits large over the poster, the caption band stays quiet.
-			const k = waiting ? 0 : b.check ? prog(time, b.at + 0.2, b.at + 0.8, E.house) : prog(time, b.at, b.at + 0.3);
+			// So does it while a card intro holds the card over a live moment (introCard, below).
+			const quiet = waiting ? 0 : introK != null ? prog(introK, 0.6, 1) : 1;
+			const k = quiet * (b.check ? prog(time, b.at + 0.2, b.at + 0.8, E.house) : prog(time, b.at, b.at + 0.3));
 			capBody.style.opacity = k.toFixed(3);
 			capBody.style.transform = b.check ? `translateY(${mix(8, 0, k).toFixed(2)}px)` : '';
 			if (capFollow) {
@@ -347,6 +354,7 @@
 		// ---- nameplate: a reserved strip with "NAME · 1 OF 7", and the opening card ----
 		const shot = root.querySelector('[data-mf-shot]');
 		let P = null;
+		let introK = null, introRaf = 0;
 		if (plate && shot) {
 			root.classList.add('has-nameplate');
 			const bar = document.createElement('div');
@@ -376,7 +384,7 @@
 		// Drawn from t like the picture: k = 0 is the large card, k = 1 the plate in its corner.
 		function drawPlate(time) {
 			if (!P) return;
-			const k = waiting ? 0 : prog(time, HOLD, C, E.inOutStrong);
+			const k = waiting ? 0 : introK != null ? introK : prog(time, HOLD, C, E.inOutStrong);
 			P.tag.style.opacity = prog(k, 0.8, 1).toFixed(3);
 			if (k >= 1) { P.card.style.visibility = 'hidden'; P.scrim.style.visibility = 'hidden'; return; }
 			P.card.style.visibility = 'visible';
@@ -397,8 +405,46 @@
 			P.ck.style.opacity = (1 - prog(k, 0, 0.4)).toFixed(3);
 		}
 
+		// Card intro, for a figure that opens on a live moment instead of playing from the
+		// start (appropriate reliance opens on its first question): introCard(k = 0) sets the
+		// card over the frame on screen, k = 0 large, with the caption band quiet;
+		// settleCard(hold, move) holds it, then moves it into the corner on the wall clock
+		// (settleCard(0, 0) puts it there at once). Any draw (play, seek, scrub, a gate, a
+		// redraw) ends the intro with the plate in its corner. Neither changes t.
+		const endIntro = () => {
+			cancelAnimationFrame(introRaf);
+			introRaf = 0;
+			if (introK == null) return;
+			introK = null;
+			delete root.dataset.mfCard;
+		};
+		const drawCard = () => { drawCaption(t, beatAt(t)); drawPlate(t); };
+		const introCard = (k = 0) => {
+			if (!P) return;
+			endIntro();
+			waiting = false;
+			introK = clamp(k, 0, 1);
+			root.dataset.mfCard = 'intro';
+			drawCard();
+		};
+		const settleCard = (hold = HOLD, move = C - HOLD) => {
+			if (introK == null) return;
+			cancelAnimationFrame(introRaf);
+			const from = introK, t0 = performance.now();
+			const step = (now) => {
+				const e = (now - t0) / 1000;
+				introK = e < hold ? from : move > 0 ? mix(from, 1, prog(e, hold, hold + move, E.inOutStrong)) : 1;
+				if (introK >= 1) { endIntro(); drawCard(); return; }
+				drawCard();
+				introRaf = requestAnimationFrame(step);
+			};
+			if (hold <= 0 && move <= 0) { endIntro(); drawCard(); return; }
+			introRaf = requestAnimationFrame(step);
+		};
+
 		const draw = (time, force = false, hold = false) => {
 			if (!hold) waiting = false;
+			endIntro();
 			let target = clamp(time, 0, duration);
 			// An unanswered gate can't be passed: the playhead stops there and the gate opens.
 			const lockFig = !force && figure.lockedAt ? figure.lockedAt() : null;
@@ -524,8 +570,8 @@
 
 		// Test and export hook: seek to any moment without the clock.
 		const seek = (time) => { pause(); draw(time + C); };
-		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t)};
-		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C};
+		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t), introCard, settleCard};
+		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C, introCard, settleCard};
 
 		// Pause when scrolled away: once less than a quarter of the shot is in view, a playing
 		// figure pauses and shows Play. It doesn't resume by itself (the reader may be reading

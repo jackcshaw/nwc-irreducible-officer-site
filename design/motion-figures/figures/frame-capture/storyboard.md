@@ -93,7 +93,7 @@ Related:
 
 - *Beat 0, the name card (0.0–3.0 s player time).* "Frame capture", with "FAILURE MODE 1 OF 7" above it, sits large and centred over the stage for 2 s. Over 1 s it then moves and shrinks into the top-left corner. The caption band stays quiet. Before play, the waiting view shows this card over the poster.
 - *The plate.* "FRAME CAPTURE · 1 OF 7" stays in a reserved 23 px strip above the stage's top-left corner in every beat and view: drawn stage, stacked stage, reduced motion, print, stills and video. Because the strip is reserved, it never covers the picture.
-- *Final frame.* The caption band reads "FRAME CAPTURE: The first plausible frame becomes the student's frame." (PLAN.md's "What goes wrong", verbatim), then "FACULTY CHECK" beside the question, then the follow-up. Labels sit on the left and words on the right, so the band grows only 8 px on desktop. Frame capture keeps its drawn stage at 1280 × 720 (13-unit text renders at 11.1 px).
+- *Final frame.* The caption band reads "FRAME CAPTURE: The first plausible frame becomes the working frame, unexamined." (the role-neutral definition Jack approved, from `../../NAMEPLATE-DEFINITIONS.md`), then "FACULTY CHECK" beside the question, then the follow-up. Labels sit on the left and words on the right, so the band grows only 8 px on desktop. Frame capture keeps its drawn stage at 1280 × 720 (13-unit text renders at 11.1 px).
 - *Timing.* The figure's own clock is unchanged; the player adds the 3.0 s card, so the total is 89.2 s. Section 4 gives figure times; add 3.0 for player time, ?t= and the scrubber. The pacing table gives both.
 - *Phones.* The caption band holds 222 px (the check with the name and definition). Stacked beats 6 and 11 no longer repeat the task card (it stays in beats 1–3 and 7), so the player fits at 780 px on a 390 × 844 screen.
 
@@ -334,7 +334,7 @@ The still at 86.2 s figure time (89.2 s player time). It is also the reduced-mot
 
 **Caption band:**
 
-> FRAME CAPTURE *(navy mono)* The first plausible frame becomes the student's frame. *(Serif, about 19 px)*
+> FRAME CAPTURE *(navy mono)* The first plausible frame becomes the working frame, unexamined. *(Serif, about 19 px)*
 > FACULTY CHECK *(navy mono)*
 > *What problem did the student choose to solve?* *(Serif italic, about 30 px)*
 > *Why this frame? What would change it?* *(Serif italic, same size as the line above)*

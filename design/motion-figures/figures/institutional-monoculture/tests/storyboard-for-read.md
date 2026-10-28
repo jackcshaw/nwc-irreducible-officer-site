@@ -52,7 +52,9 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 | Goal brackets | The goals faculty judge the imagined problems set | Navy brackets with mono 13 labels: "COUNTER THE RIVAL" (3 lines), "BACK THE PARTNER" (4), "SECURE OUR NEEDS" (3) | Labels at (column + 8, Y + 22); brackets from Y + 28 |
 | "ALL DRAFTED WITH AI" | Each run's disclosure | Grey mono 13, under the grid. Stays | Large: (40, 432). Compact: (24, Y + 176) |
 | Sequence labels | The order each run worked in | Mono 13: seminar "AI OUTLINE → WRITE" ("AI OUTLINE" grey, "WRITE" ink), beside "The seminar" from beat 3 and under it from beat 8; imagined seminar "DEFINE PROBLEM → AI CHALLENGES → WRITE" ("DEFINE PROBLEM" red, "AI CHALLENGES" grey) | (24, Y + 28) |
-| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11: mono 13 ink "FACULTY CHECK" over the check in Serif italic 30, then directly under it at the same size and style, "Line up each paper's problem, then ask what other frames the task could take." Fixed height on desktop | Under the stage |
+| Name card (beat 0) | Which failure mode this is | Drawn by the runtime: "FAILURE MODE 6 OF 7" (mono 13, muted) over "Institutional monoculture" (Serif 600, about 52 px), centred over the stage on a paper scrim for 2 s, then moving and shrinking into the plate over 1 s. The caption band stays quiet. Before play, the waiting view shows the card over the poster (beat 3 settled) | Centre of the stage, then the plate |
+| Plate | The name, throughout | "INSTITUTIONAL MONOCULTURE · 6 OF 7", mono 12 ink, in a 23 px strip above the stage's top-left corner, in every beat and view (drawn stage, stacked stage, reduced motion, print, stills, video). It never covers the picture | Above the stage |
+| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11 the runtime sets the name ("INSTITUTIONAL MONOCULTURE", mono 13) beside the definition ("Shared systems and defaults narrow the range of frames a group considers."), then "FACULTY CHECK" beside the check in Serif italic, with "Line up each paper's problem, then ask what other frames the task could take." directly under it at the same size and style. Fixed heights: 176 px (tall desktop), 92 px (laptop windows), 220 px (phones) | Under the stage |
 | Beat list | Text equivalent and navigation | Eleven numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
 
 **The problem lines.**
@@ -81,7 +83,14 @@ The first seminar's lines share a goal and not a word: "rival" appears in three,
 
 ## 4. Beats
 
-Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (caption words + new picture words) ÷ 3 + 1.5 s (section 7).
+Times below are the figure's own clock. The player adds the runtime's 3.0 s name card in front (beat 0), so player time is 3.0 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (caption words + new picture words) ÷ 3 + 1.5 s (section 7).
+
+### Beat 0 · player 0.0–3.0 s · The name card
+
+- **On screen:** "Institutional monoculture", with "FAILURE MODE 6 OF 7" above it, large and centred over an empty stage for 2 s; over 1 s it moves and shrinks into the plate above the stage's top-left corner, where it stays. Drawn by the runtime.
+- **Caption:** none; the caption band stays quiet.
+- **Notice:** the figure names the failure mode before anything happens.
+- **Why:** Jack's standard for all eight figures, so the viewer always knows which named failure mode is on screen.
 
 ### Beat 1 · 0.0–10.9 s · A seminar, one task
 
@@ -205,7 +214,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 ## 5. Final frame
 
-The still at 96.3 s. It is also the reduced-motion view, the print view and the poster (stage plus caption band).
+The still at 96.3 s on the figure's clock (99.3 s in the player). It is also the reduced-motion view, the print view and the poster (stage plus caption band).
 
 **Stage:**
 - **Top left:** the grey AI panel, marked "AI".
@@ -214,13 +223,15 @@ The still at 96.3 s. It is also the reduced-motion view, the print view and the 
 - **Upper block:** red "The seminar" over "AI OUTLINE → WRITE" ("AI OUTLINE" grey). Ten small papers in ten different layouts, each with a red dot, an ink first line and a navy tick; "ALL DRAFTED WITH AI". At right, under "ONE FRAME" and "COUNTER THE RIVAL": a grey bracket around ten ink lines, "Outbid rival lenders" through "Replace rival cables", with the grey "AI'S FRAME" pill beside its top. In the open space to its right, "FACULTY ASK" over a dashed, empty bracket with a "?".
 - **Lower block:** red "Same seminar, imagined" over "DEFINE PROBLEM → AI CHALLENGES → WRITE". Ten small papers, just as varied, each with a red dot, a red first line, a small grey speech bubble and a navy tick; "ALL DRAFTED WITH AI". At right, under "ONE IMAGINED SPREAD", three navy brackets of ink lines: "COUNTER THE RIVAL" (outbid rival lenders, block rival ports, outshout their media), "BACK THE PARTNER" (ease its debts, grow export jobs, back fair elections, fund its plans) and "SECURE OUR NEEDS" (keep port access, secure mineral supplies, protect undersea cables).
 
+**Plate:** "INSTITUTIONAL MONOCULTURE · 6 OF 7" in the strip above the stage's top-left corner.
+
 **Caption band:**
 
-> FACULTY CHECK *(navy mono)*
-> *What frames are missing across the seminar?* *(Serif italic, about 30 px)*
+> INSTITUTIONAL MONOCULTURE *(navy mono)* · Shared systems and defaults narrow the range of frames a group considers. *(Serif)*
+> FACULTY CHECK *(navy mono)* · *What frames are missing across the seminar?* *(Serif italic, about 30 px)*
 > *Line up each paper's problem, then ask what other frames the task could take.* *(Serif italic, same size as the line above)*
 
-**In the reduced-motion and print views,** all eleven captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
+**In the reduced-motion and print views,** the name card is beat 0 of the list, and all eleven captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
 
 **At 390 px** the final frame is the stacked text stage: the task, the AI chip, the first seminar's glyphs with its frame row ("One frame: counter the rival", the "AI's frame" pill and the dashed "?"), the imagined seminar's glyphs with its heading and three goal groups, then the check and the controls.
 
@@ -236,10 +247,11 @@ The still at 96.3 s. It is also the reduced-motion view, the print view and the 
 
 Ten students in a seminar each use an AI to help write the same strategy paper. Each writes their own, and each paper holds up when read alone. *The Irreducible Officer* calls what can still go wrong institutional monoculture: shared systems and defaults narrow the range of frames available to the class. The seminar, the task and the papers are a constructed example.
 
-**Figure summary** (visually hidden, for screen readers): An animated figure. Ten red dots stand for ten students in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each student asks an AI for an outline, and ten grey outlines come back in the same pattern. Each student writes their own paper, in ten different layouts, all marked "All drafted with AI". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled "One frame: counter the rival". A grey card comes out of the AI box: every outline opened with "Counter the rival's influence". A grey line runs from it to the bracket, which turns grey, with a grey tag: "AI's frame". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading "One imagined spread". Each student writes the problem in red first, then asks the AI to challenge it ("What did you assume? What else could it be?"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the faculty check. Each beat is listed below with what is on screen.
+**Figure summary** (visually hidden, for screen readers): An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten students in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each student asks an AI for an outline, and ten grey outlines come back in the same pattern. Each student writes their own paper, in ten different layouts, all marked "All drafted with AI". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled "One frame: counter the rival". A grey card comes out of the AI box: every outline opened with "Counter the rival's influence". A grey line runs from it to the bracket, which turns grey, with a grey tag: "AI's frame". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading "One imagined spread". Each student writes the problem in red first, then asks the AI to challenge it ("What did you assume? What else could it be?"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the faculty check. Each beat is listed below with what is on screen.
 
 **Beat list (text equivalent):**
 
+0. **Institutional monoculture · Failure mode 6 of 7** *On screen:* the name appears large over the stage, then moves into the corner, where it stays throughout. (Added by the runtime.)
 1. **Ten students in a seminar get one task.** *On screen:* A task card appears at the top right: "Example task. Recommend a strategy for partner Country A." Ten blank papers appear in two rows of five, each with a red dot, labelled "The seminar". Under a line on the card, the context appears one item at a time: our trade, its ports, election, minerals, a rival's loans.
 2. **Each asks an AI for an outline. They come back alike.** *On screen:* A grey box marked AI appears at the top left. A small mark travels from each red dot up to it, and ten grey outlines drop back into the papers, all in the same pattern.
 3. **Each writes their own paper. Each holds up when faculty read it.** *On screen:* Each dot writes over its outline, and each paper turns to ink in its own layout: headings, bullets, a chart, a table, dense text, two columns, a numbered list, a pull quote, a timeline, a map. "AI outline, write" and "All drafted with AI" appear. A navy ring steps across the papers and leaves a tick on each.
@@ -282,6 +294,7 @@ Reading time is caption words ÷ 3. Picture words are words new in that beat; la
 
 | Beat | Time (s) | Caption words | Picture words (new) | Required (s) | 2× caption (s) | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 · The name card | player 0.0–3.0 | 0 | 7 (kicker 5, name 2) | 3.8 | 0 | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 | 3.0 (runtime standard, the same in all eight figures) |
 | 1 · A seminar, one task | 0.0–10.9 | 8 | 20 (EXAMPLE TASK 2, task 7, context 9, "The seminar" 2) | 10.8 | 5.3 | 1.0 | 5.9 | 4.0 | 10.9 |
 | 2 · The outlines come back alike | 10.9–18.3 | 11 | 1 ("AI") | 5.5 | 7.3 | 1.0 | 4.2 | 2.2 | 7.4 |
 | 3 · Their own papers | 18.3–26.3 | 12 | 7 ("ALL DRAFTED WITH AI" 4, "AI OUTLINE → WRITE" 3) | 7.8 | 8.0 | 1.0 | 5.1 | 1.9 | 8.0 |
@@ -293,14 +306,14 @@ Reading time is caption words ÷ 3. Picture words are words new in that beat; la
 | 9 · The AI challenges each frame | 66.1–74.3 | 9 | 11 (the AI's questions 9, "AI CHALLENGES" 2) | 8.2 | 6.0 | 1.0 | 5.1 | 2.1 | 8.2 |
 | 10 · Lined up again | 74.3–87.8 | 9 | 27 (seven new lines 21, two new goal labels 6) | 13.5 | 6.0 | 1.0 | 6.4 | 6.1 | 13.5 |
 | 11 · Faculty check | 87.8–96.3 | 7 + 14 second line | 0 | 8.5 | 4.7 (check) | 0.0 | 3.8 | 4.7 | 8.5, then rests |
-| **Total** | | **110** | **120** | | | **12.0** | **47.7** | **36.6** | **96.3** |
+| **Total** | | **110** | **127** | | | **12.0** | **50.7** | **36.6** | **96.3 figure, 99.3 player** |
 
 Checks:
-- Every beat meets its required time on the clock, including beat 11, which no longer leans on the rest after the figure ends.
+- Beats 1–11 meet their required time on the clock, including beat 11, which no longer leans on the rest after the figure ends. Beat 0 is the runtime's standard 3.0 s card for all eight figures; its seven words are a name and kicker that stay on screen in the plate, and its definition is read again under the check.
 - One idea per beat; movements run one after another. A row of ten (dots, requests, outlines, bubbles, papers, ticks, lines) runs as one staggered movement.
 - Changes a caption names wait until it can be read once: the outlines (beat 2, 3.7 s in), faculty's reading (beat 3, 4.0 s), the problem lines (beat 4, 2.0 s), the bracket (beat 5, 3.0 s), the trace line, grey bracket and pill (beat 6, 2.5 s), the faculty's question (beat 7, 3.0 s), the red lines (beat 8, 3.0 s), the AI's question card (beat 9, 3.0 s), the groups (beat 10, 3.0 s), and the second line under the check (beat 11, 3.0 s).
 - Lead-ins the caption's first clause describes start early: the requests (beat 2), the writing (beat 3), the first-line outlines (beat 4), the reading marks (beat 5), the AI's card (beat 6), the block move and the imagined seminar's arrival (beat 8), the red copies going up (beat 9), and the ticks on the imagined papers (beat 10).
 - Every hold is at least 1.5 s. Beat 7 has no movement until its question, which is the event its caption names.
 - Every settled picture label renders at 11 px or more at 1366 × 657 and 1280 × 720, counting scaled groups (`scripts/figure-shots.mjs`, `minRenderedTextPx…`). The AI's card keeps its full size in the compact layout for this reason.
 - No camera moves. The first seminar moves once and dims (beat 8), then returns (beat 10). Reduced motion shows the final frame.
-- Total 96.3 s. Final verification found six beats short of the reading rule at 97.7 s; tighter captions and labels meet it in every beat while taking 1.4 s off the total.
+- Total 96.3 s on the figure's clock, 99.3 s in the player with the name card. Final verification found six beats short of the reading rule at 97.7 s; tighter captions and labels meet it in every beat while taking 1.4 s off the total.

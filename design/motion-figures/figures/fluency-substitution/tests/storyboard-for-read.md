@@ -1,6 +1,6 @@
 # Fluency substitution: storyboard
 
-Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 6, revised after the cross-figure consistency review · October 28, 2026
+Motion figure 2 of 8 · slug `fluency-substitution` · storyboard round 7, with the nameplate · October 28, 2026
 
 *Cold-read copy. The Intent section is removed.*
 
@@ -76,12 +76,12 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
   - beat 4: the two students' own work, side by side: "Cut one sentence from the AI's draft" over the struck sentence, and the note;
   - beat 5: that row plus the AI's draft from the note, with "Suppose it matches the first student's paper word for word";
   - beat 6: that row plus a compact tile, "Both handed in this paper", which stays to the end;
-  - beats 7–9: the paper tile and the two question rows, each with both students' answers side by side, in ink, then in their colours at the turn;
-  - beat 10: the paper tile and both question rows.
+  - beats 7–9: the paper tile, shortened to two lines at beat 7 and one line from beat 8, and the two question rows, each with both students' answers side by side, in ink, then in their colours at the turn;
+  - beat 10: the one-line paper tile and both question rows.
 - *Fixed heights, so the controls never move.*
   - The stacked stage takes the height of its tallest beat layout at the current width.
-  - The caption band is fixed at 136 px stacked on desktop, 166 px below 720 px and 160 px below 480 px. The check is set at 20 px below 480 px.
-  - At 390×844 the whole player measures 815 px, which fits the screen.
+  - The caption band is held at the last caption's height: 174 px on desktop (stacked or drawn), 212 px below 720 px and 220 px below 480 px. The check is set at 20 px below 480 px.
+  - At 390 × 844 the whole player, including the nameplate strip, measures 825 px, which fits the screen.
 - *Throughout:* the colour key sits at the bottom of the stacked stage. Its labels, the names and the section labels are 13 px.
 
 ## 4. Beats
@@ -216,7 +216,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 ## 5. Final frame
 
-The still at 88.6 s. It is also the reduced-motion view and the print view. Before play, the stage shows a separate poster: beat 1 settled (5.98 s), the task card and the student.
+The still at 88.6 s figure time (91.6 s player time). It is also the reduced-motion view and the print view. Before play, the waiting view shows the name card over the poster: beat 1 settled (5.98 s figure time), the task card and the student. The corner plate, "FLUENCY SUBSTITUTION · 2 OF 7", sits in its strip above the stage throughout.
 
 **Stage:** a table.
 - **Label column:**
@@ -235,13 +235,13 @@ The still at 88.6 s. It is also the reduced-motion view and the print view. Befo
   - Second student, red: "Then troops would cost the ally's trust. I'd send arms and aid instead."
 - **Under the columns:** the key, grey "WRITTEN BY AI" and red "A STUDENT'S OWN WORK".
 
-**Caption band:**
+**Caption band** (labels in a left column, words on the right; stacked below 560 px):
 
-> FACULTY CHECK *(navy mono)*
-> *Can the student independently explain the judgment in plain speech?* *(Serif italic, about 30 px)*
+> FLUENCY SUBSTITUTION *(navy mono)* · Polished analysis stands in for owned reasoning. *(Serif)*
+> FACULTY CHECK *(navy mono)* · *Can the student independently explain the judgment in plain speech?* *(Serif italic, about 30 px)*
 > *Then change one fact. What would you recommend now?* *(the same size and style)*
 
-**In the reduced-motion and print views,** all ten captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
+**In the reduced-motion and print views,** the name and definition sit above the check, and the beat list (beat 0, the name card, then all ten captions with their "On screen" lines) is readable below the controls. Clicking a beat shows its settled still.
 
 **In the stacked stage** (a 1280×720 window or a phone), the final frame is the "Both handed in this paper" tile, both question rows with the two students' answers side by side in their colours, and the key. At 390×844, with the check and the controls, it measures 815 px.
 
@@ -261,6 +261,7 @@ A student asks an AI to draft a strategy recommendation, reads it closely and ag
 
 **Beat list (text equivalent):**
 
+0. **Fluency substitution · Failure mode 2 of 7.** *On screen:* the name, "Fluency substitution", appears large over the stage with "Failure mode 2 of 7" above it, then moves into the top-left corner, where it stays. *(Added by the runtime.)*
 1. **A student gets a task that needs a decision.** *On screen:* a task card appears at the top left: "Example task: Recommend whether to send forces to reassure a threatened ally." A red dot labelled Student appears below it.
 2. **The student asks an AI for a draft. It writes a polished recommendation.** *On screen:* the dot pulses. A sheet labelled "AI's draft" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band "Written by AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."
 3. **The student reads closely, cuts a weak line, and agrees with the rest.** *On screen:* the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student's own work" in red. The struck sentence moves above the paper, under a red label: "Cut one sentence from the AI's draft". The rest stays grey, and the label changes to "Student's paper, drafted with AI".
@@ -291,8 +292,11 @@ Both students in the figure explain the call clearly without the paper. The seco
 
 Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and every total is at least twice the caption's reading time. Label words are new words inside the picture; motion includes any wait for the caption to be read once.
 
+Times are figure time; the player adds the 3 s name card in front (beat 0), so player time is figure time plus 3 s.
+
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 · Name card | player 0.0–3.0 | 0 (band quiet) | — | — | 6 | 0.0 | 1.0 (move) | 2.0 (hold first) | 3.0 |
 | 1 · The task | 0.0–6.0 | 9 | 3.0 | 6.0 | 13 | 1.0 | 1.0 | 4.0 | 6.0 |
 | 2 · The AI drafts | 6.0–14.7 | 13 | 4.3 | 8.7 | 38 | 1.0 | 3.4 | 4.3 | 8.7 |
 | 3 · The student agrees | 14.7–23.5 | 13 | 4.3 | 8.7 | 16 | 1.0 | 6.3 | 1.5 | 8.8 |
@@ -303,7 +307,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 8 · Change one fact | 63.9–70.4 | 3 | 1.0 | 2.0 | 15 | 1.0 | 0.6 | 4.9 | 6.5 |
 | 9 · The two answers | 70.4–81.4 | 14 | 4.7 | 9.3 | 27 | 1.0 | 7.1 | 2.9 | 11.0 |
 | 10 · Faculty check | 81.4–88.6 | 10 + 9 under it | 3.3 + 3.0 | 6.7 (check) | 0 | 0.0 | 4.0 | 3.2 | 7.2, then rests |
-| **Total** | | **114** | **38.0** | | **209** | | **45.0** | | **88.6** |
+| **Total** | | **114** | **38.0** | | **215** | | **46.0** | | **88.6 figure, 91.6 player** |
 
 Checks:
 - One idea per beat; movements run one after another.

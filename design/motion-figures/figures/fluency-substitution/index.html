@@ -18,22 +18,27 @@
 .fs-narrow { display: none; }
 /* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
 #fluency-substitution.is-stacked .mf-stage { height: 0; overflow: hidden; }
-#fluency-substitution.is-stacked .fs-narrow { display: block; padding: 12px clamp(12px, 3vw, 24px) 8px; background: var(--paper); overflow: hidden; }
+#fluency-substitution.is-stacked .fs-narrow { display: block; padding: 10px clamp(12px, 3vw, 24px) 4px; background: var(--paper); overflow: hidden; }
 #fluency-substitution.is-stacked .fs-narrow > .fs-n-sec { max-width: 760px; }
-#fluency-substitution.is-stacked .mf-caption { height: 136px; overflow: hidden; }
-@media (max-width: 719px) { #fluency-substitution.is-stacked .mf-caption { height: 166px; } }
+/* The last caption (name, definition, check) measures 172 px on desktop, 212 px
+   below 720 px and 219 px at 390 px, so the band is held at that height throughout. */
+@media (min-width: 720px) { #fluency-substitution .mf-caption { min-height: 174px; } }
+#fluency-substitution.is-stacked .mf-caption { height: 174px; overflow: hidden; }
+@media (max-width: 719px) { #fluency-substitution.is-stacked .mf-caption { height: 212px; } }
 @media (max-width: 480px) {
-	#fluency-substitution.is-stacked .mf-caption { height: 160px; }
+	#fluency-substitution.is-stacked .mf-caption { height: 220px; }
 	/* The final frame, check and controls fit an 844 px phone screen. */
 	#fluency-substitution .mf-check-q, #fluency-substitution .mf-follow.is-equal { font-size: 20px; }
 }
-.fs-n-sec { margin: 0 0 10px; }
+.fs-n-sec { margin: 0 0 8px; }
 .fs-n-sec[hidden] { display: none; }
 .fs-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
 .fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
 .fs-n-sm { font-size: 13px; line-height: 1.55; }
 .fs-n-tile { padding: 6px 8px; border: 1px solid var(--navy-border); }
+.fs-n-tile .is-clamped { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fs-n-tile .is-one-line { -webkit-line-clamp: 1; }
 .fs-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fs-n-cell { min-width: 0; }
 .fs-n-act { margin: 0 0 3px; font: 600 13px/1.3 var(--sans); color: var(--red); }
@@ -83,7 +88,7 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:28</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. Suppose that draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student tries, and stays with the paper's call in its own words: on balance, losing that trust is still the greater risk, so the forces should go. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure that opens on its name, Fluency substitution, failure mode 2 of 7, and builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. Suppose that draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student tries, and stays with the paper's call in its own words: on balance, losing that trust is still the greater risk, so the forces should go. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the name and its definition, "Polished analysis stands in for owned reasoning.", then the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

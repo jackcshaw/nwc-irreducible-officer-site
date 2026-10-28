@@ -1,6 +1,6 @@
 # Invisible delegation: storyboard
 
-Motion figure 5 of 8 · slug `invisible-delegation` · storyboard round 5, revised after figure cold read 2 (passed with final fixes) · October 28, 2026
+Motion figure 5 of 8 · slug `invisible-delegation` · storyboard round 6: round 5 plus the shared nameplate · October 28, 2026
 
 Starting point: `concepts-v0/proposal.md` §2.5, "What crossed over" (8.5 s, not built). This version keeps v0's mechanism: a ledger of decisions, and ordinary requests that carry cards across it. It uses three of the essay's four request pairs, the three the site names (criteria, structure, meaning). The ledger has three lanes: what the student decides, what the student asked, and what the AI decides. Each of the first student's requests visibly carries a decision card across into the AI's lane. The turn shows what each request left unsaid: whose standard to use. The AI used its own. A second student, with the same task and rubric, starts from the rubric and writes each decision down before its request, with words that point back to it. That habit is the one difference. It shows in their working: they turn down one AI note that doesn't serve the rubric. Faculty can't see the ledger or the notes. They ask a question each student can answer honestly, and the answers show whose standard the help followed. The shared runtime and `CONVENTIONS.md` apply throughout.
 
@@ -50,6 +50,20 @@ Related:
 10. *Faculty can see delegation in the paper, or knew the answer.* The ledgers and notes dim when faculty ask, and both students get the same open question.
 11. *Never accept an AI's criteria.* The page copy carries the lab's fair objection: an assistant can legitimately propose criteria; the trouble starts when a student accepts them without seeing how they relate to the task.
 
+**The nameplate** (standard for all eight figures, at Jack's request: anchor each figure in its name). The figure passes the runtime's `nameplate` option:
+- name "Invisible delegation";
+- kicker "Failure mode 5 of 7";
+- definition "A request for help hands over criteria, structure, or meaning." (from `NAMEPLATE-DEFINITIONS.md`).
+
+The player opens on beat 0, the name card: 3 s, a 2 s hold, then a 1 s move into the corner. The plate "Invisible delegation · 5 of 7" stays in a reserved strip above the stage in every view. The final caption sets the name and definition directly above the faculty check, and the reduced-motion and print views show them.
+
+Player time is figure time plus the card: 93.5 s. Every time in this storyboard is figure time, so beat 1 starts at player 3.0 s.
+- *At 390 × 844,* the caption band is fixed at the final caption's height (184 px). The controls stay on one row, with Restart shown as its icon. The whole player measures 840 px, and the controls never move.
+- *At 1280 × 720,* the stacked stage is used, and the player measures 677 px.
+- *At 1440 × 900,* the drawn stage is used.
+
+In every case the plate strip is clear of content.
+
 **Changes after figure cold read 2** (`tests/figure-read-2.md` and the orchestrator's notes):
 - *The second student's decisions have content.* Writing a card now adds two red lines to it:
   - "Evidence must back the call" (from the rubric);
@@ -98,7 +112,7 @@ Related:
 - *A third, middle-path student* who asks the AI to propose criteria, then checks them against the task. It would make the figure about two contrasts. The page copy carries it.
 - *The fourth pair* ("counterarguments"). The page quotes the whole paragraph.
 
-**Running time.** 90.5 s in 9 beats (frame capture 85.6 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 94.7 s).
+**Running time.** 90.5 s in 9 beats, plus the 3 s name card: 93.5 s of player time (frame capture 85.6 s before its card, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 94.7 s).
 
 **Book link target.** `../../book-v0/four-moves-book.html?spread=2` (Move 1, Frame the problem) until `book-v1/` exists.
 
@@ -147,7 +161,11 @@ The colour rule, palette, stage and elements are as in round 4 (lanes, cards, em
 
 ## 4. Beats
 
-Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second.
+Times are figure seconds; add 3.0 for player time. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second.
+
+### Beat 0 · player 0.0–3.0 s · The name card
+- **On screen:** "Failure mode 5 of 7" over "Invisible delegation", large and centred over the poster (the settled setup). It holds 2 s, then moves and shrinks over 1 s into the plate, "Invisible delegation · 5 of 7", in the strip above the stage's top-left corner, where it stays. The caption band is quiet.
+- **Why:** it anchors the figure in its name before anything happens.
 
 ### Beat 1 · 0.0–9.5 s · The draft and three decisions
 - **Moves:**
@@ -230,12 +248,12 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 - **Caption:** "Faculty have only the papers. They ask each student about the standard."
 
 ### Beat 9 · 83.6–90.5 s · The faculty check
-- **Moves:** 83.8–84.4 the check rises. 85.6–86.6 the ledgers and notes return. 87.0–87.5 the second line, at the same size, 3.4 s after the check. Rest 3.0 s.
-- **Caption:** "Faculty check: What did the AI decide for the student?" / "To find out, ask each student: better by whose standard?"
+- **Moves:** 83.8–84.4 the last caption rises: "INVISIBLE DELEGATION" beside the definition, then "FACULTY CHECK" beside the check. 85.6–86.6 the ledgers and notes return. 87.0–87.5 the second line, at the same size, 3.4 s after the check. Rest 3.0 s.
+- **Caption:** "Invisible delegation: A request for help hands over criteria, structure, or meaning." / "Faculty check: What did the AI decide for the student?" / "To find out, ask each student: better by whose standard?"
 
 ## 5. Final frame
 
-The still at 90.5 s, as in round 4, except:
+The still at figure 90.5 s (player 93.5 s), as in round 4, with the plate above the stage and the name and definition above the check, except:
 - the second student's cards carry their decisions in red: "Evidence must back the call", "Lead with the call, then its evidence" and "Serves the ally's long-term interest";
 - the struck note reads "Be more decisive" over "evidence too thin".
 
@@ -249,6 +267,7 @@ As in round 4. The check paragraph now reads: "In the figure, both students have
 
 | Beat | Time (s) | Caption words | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- |
+| 0 · Name card | player 0.0–3.0 | 0 (name and kicker, 6 words) | 2.0 | 3.0 |
 | 1 · The draft and three decisions | 0.0–9.5 | 14 | 3.2 | 9.5 |
 | 2 · Feedback | 9.5–20.8 | 13 | 1.5 | 11.3 |
 | 3 · Structure and strategy | 20.8–32.9 | 10 | 1.5 | 12.1 |
@@ -258,6 +277,6 @@ As in round 4. The check paragraph now reads: "In the figure, both students have
 | 7 · Judged against the decisions | 60.3–70.5 | 14 | 1.5 | 10.2 |
 | 8 · Faculty ask | 70.5–83.6 | 12 | 1.5 | 13.1 |
 | 9 · Faculty check | 83.6–90.5 | 8 + 10 | 3.0 | 6.9, then rests |
-| **Total** | | **115** | | **90.5** |
+| **Total** | | **115** | | **90.5 figure, 93.5 player** |
 
 Every beat is at least twice its caption's reading time, and every hold is at least 1.5 s. Captions change only with the picture. Spoken words appear at about 3 words a second. The setup beat no longer holds for every on-screen label: the task card, lane headings and card names stay on screen to the end, and the tester found the old holds static.

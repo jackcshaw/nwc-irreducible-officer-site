@@ -1,6 +1,6 @@
 # Premature synthesis: storyboard
 
-Motion figure 3 of 8 · slug `premature-synthesis` · storyboard round 6, revised after the cross-figure consistency review (CONSISTENCY.md) · October 27, 2026
+Motion figure 3 of 8 · slug `premature-synthesis` · storyboard round 7, with the nameplate standard (all eight figures) · October 27, 2026
 
 Starting point: `concepts-v0/proposal.md` §2.3, "Pull the lines" (8.5 s, not built). This version keeps its mechanism: take the lines away and ask for them back. It applies the lessons of figures 1 and 2. Both students read the same readings just as closely, both use an AI, both hand in a paper with the same argument, and both can redraw the same lines without it. The only difference is order: one asks the AI to connect the readings first; the other tries the connections first, and one doesn't hold. Both students know the fact behind that connection. Only the one who tried it can apply it when faculty point to the main connection and ask what evidence would change it. Frame capture's shared runtime and conventions apply throughout.
 
@@ -50,6 +50,11 @@ Related:
 10. *A good student finds the AI's errors.* The second student keeps every line the AI drew.
 11. *The question is a trick.* "What evidence would change this connection?" is Section IX's oral-defense question asked of one connection, and the second student answers it plainly.
 12. *This is fluency substitution again.* The first student isn't repeating the paper's sentences. What they lack is what the connection rests on.
+
+**Nameplate** (standard for all eight figures, at Jack's request: "anchor each figure in the stated name to help recall"):
+- The runtime's `nameplate` option: name "Premature synthesis", kicker "Failure mode 3 of 7", definition "The model connects the material before anyone has built the map." (from `NAMEPLATE-DEFINITIONS.md`).
+- Beat 0, a 3 s name card, comes before beat 1; player time is figure time plus 3 s (93.0 s in all). The strip above the stage reads "PREMATURE SYNTHESIS · 3 OF 7" throughout, and the last caption sets the name and definition beside "FACULTY CHECK".
+- The phone caption band is fixed at 222 px (the measured final caption) and the stacked desktop band at 144 px; the narrow stage is 466 px. Players: 816 px at 1440×900, 698 px at 1280×720, 830 px at 390×844, with the controls still.
 
 **Changes after the consistency review** (`../../CONSISTENCY.md`, PS items 1–4):
 - *Students named in red.* The row names are red Sans 600 13, "First student" and "Second student", as the dots, the phone stage and the colour rule have it. The sequences under them stay mono.
@@ -188,6 +193,12 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 ## 4. Beats
 
 Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
+
+### Beat 0 · name card (3.0 s before figure time 0)
+
+- **On screen:** the poster (beat 1 settled) faint behind the name card: "FAILURE MODE 3 OF 7" over "Premature synthesis", large and centred.
+- **What moves:** the card holds 2 s, then moves and shrinks into the strip above the stage's top-left corner over 1 s, where it reads "PREMATURE SYNTHESIS · 3 OF 7" for the rest of the figure. The caption band is quiet.
+- **Why:** the figure opens on the name it is about, so a teacher can recall which failure mode they watched. Times below are figure time; the player adds 3 s.
 
 ### Beat 1 · 0.0–6.8 s · Six readings
 
@@ -335,8 +346,11 @@ The still at 90.0 s. It is also the reduced-motion view, the print view and the 
 - **Top row:** "First student" in red, "READ → AI CONNECTS → WRITES" (AI step in grey); a red dot; a sketch of six numbered points and five lines, with 2–5 thick and ringed; and the answer, in ink: "In Reading 1, trade went overland. I don't see how that bears on this."
 - **Bottom row:** "Second student" in red, "READ → TRIES → AI CHECKS → WRITES" ("TRIES" in red, the AI step in grey); a red dot; the same sketch with the same line ringed; the answer, in ink: "An overland route, like Reading 1's. Then my main claim no longer holds."; and under it, in red, "WHAT THEY LEARNED" and a small ✕ before "In Reading 1, trade went overland through a neighbour."
 
+**Strip above the stage:** "PREMATURE SYNTHESIS · 3 OF 7" (navy mono).
+
 **Caption band:**
 
+> PREMATURE SYNTHESIS *(navy mono)* · The model connects the material before anyone has built the map. *(Serif)*
 > FACULTY CHECK *(navy mono)*
 > *Can the student explain why these connections matter?* *(Serif italic, about 30 px)*
 > *Point to one connection. What evidence would change it?* *(Serif italic, same size as the line above)*
@@ -395,6 +409,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 · Name card | (−3.0)–0.0 | 0 | 0 | 0 | 5 | 0 | 1.0 | 2.0 | 3.0 |
 | 1 · Six readings | 0.0–6.8 | 10 | 3.3 | 6.7 | 24 | 1.0 | 3.6 | 2.2 | 6.8 |
 | 2 · The AI connects them | 6.8–15.5 | 13 | 4.3 | 8.7 | 2 | 1.0 | 5.4 | 2.3 | 8.7 |
 | 3 · The map makes sense | 15.5–24.7 | 13 | 4.3 | 8.7 | 17 | 1.0 | 6.7 | 1.5 | 9.2 |
@@ -405,7 +420,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 8 · What evidence would change it? | 60.9–72.7 | 16 | 5.3 | 10.7 | 23 | 1.0 | 9.3 | 1.5 | 11.8 |
 | 9 · The second student applies it | 72.7–83.3 | 11 | 3.7 | 7.3 | 16 | 1.0 | 8.1 | 1.5 | 10.6 |
 | 10 · Faculty check | 83.3–90.0 | 8 + 9 second line | 2.7 + 3.0 | 5.3 (check) | 0 | 0.0 | 3.8 | 2.9 | 6.7, then rests |
-| **Total** | | **129** | **43.0** | | **129** | | **62.4** | | **90.0** |
+| **Total** | | **129** | **43.0** | | **134** | | **63.4** | | **93.0** (90.0 figure + 3.0 card) |
 
 Checks:
 - One idea per beat; movements run one after another.
@@ -422,4 +437,4 @@ Checks:
   - Beat 9 carries 27 new words (caption, label, answer) in 10.6 s; the returning note repeats beat 4.
 - Both AI sweeps take 1.2 s. The papers' move aside takes 1.2 s, eased.
 - No camera moves. Reduced motion shows the final frame.
-- Total 90.0 s.
+- Total 93.0 s in the player: the 3.0 s name card, then 90.0 s of figure time.

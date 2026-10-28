@@ -1,6 +1,6 @@
 # Appropriate reliance: storyboard
 
-Motion figure 8 of 8 · slug `appropriate-reliance` · storyboard round 5, revised after figure cold read 2 · October 28, 2026
+Motion figure 8 of 8 · slug `appropriate-reliance` · storyboard round 5, revised after figure cold read 2, with the nameplate · October 28, 2026
 *Cold-read copy. The Intent section is removed.*
 
 ## 2. Scenario
@@ -46,7 +46,7 @@ You have time to check one of two tasks from Dell'Acqua et al.'s 2023 field expe
 | 2 | Skip | "No call made" on row 2 | Suggestion only |
 
 **Interaction.**
-- *Opening and first view.* The figure opens on question 1, live. Until it's answered, the picture is capped so the question and Continue fit on screen with it; the page doesn't scroll on load. After Continue the cap lifts and the picture is brought into view (on a phone, the top of the cards).
+- *Opening and first view.* The figure opens on question 1, live, with the name card over it: "THE SKILL" above "Appropriate reliance", large, over a pale scrim. Once the figure is in view the card holds 1.2 s, then moves into the top-left corner (0.8 s), where "APPROPRIATE RELIANCE · THE SKILL" stays in a strip above the stage in every view. The caption band and Continue fade in as it settles; any touch, key or focus in the figure settles it at once. Until question 1 is answered, the picture is capped so the question and Continue fit on screen with it; the page doesn't scroll on load. After Continue the cap lifts and the picture is brought into view (on a phone, the top of the cards).
 - *Controls.* At a question, the drawn options are real radio buttons (labels over each drawn pill or chip, visible focus ring; arrows move, Enter continues). Continue and Skip sit at the caption band's bottom right; Tab goes options, Continue, Skip, player.
 - *Play at a question.* With no call, it shows "Make your call first, or skip this question." and focuses the first option; with a call, it continues. Only Skip records "No call made".
 - *No passing an unanswered question.* Scrubber, End, beat clicks, seeks and `?t=` stop at it and open it.
@@ -56,7 +56,11 @@ You have time to check one of two tasks from Dell'Acqua et al.'s 2023 field expe
 
 ## 4. Beats
 
-Times are absolute seconds on the no-call path. The caption changes first (0.3 s fade); nothing moves for the first second; a change the caption is about waits until the caption can be read once, except a lead-in its first clause describes; each beat holds its caption plus new picture words at 3 words a second or less.
+Times are absolute seconds on the no-call path, on the figure's own clock; the player adds the 3 s name card before 0.0, so its scrubber and `?t=` read 3 s more. The caption changes first (0.3 s fade); nothing moves for the first second; a change the caption is about waits until the caption can be read once, except a lead-in its first clause describes; each beat holds its caption plus new picture words at 3 words a second or less.
+
+### Beat 0 · the name card (3 s before 0.0)
+- **Moves:** in play from the start, "THE SKILL" and "Appropriate reliance" hold large over the opening (2 s), then move into the top-left strip (1 s). At load the card shows over question 1 instead (see Interaction). Under reduced motion the plate is in place and the card doesn't move.
+- **Caption:** none; the band stays quiet.
 
 ### Beat 1 · 0.0–15.0 s · Two tasks
 - **Moves:** card A and its lines (1.0–2.2); the source line (2.4–2.8); card B and its lines (4.0–5.4); hold.
@@ -104,17 +108,17 @@ Times are absolute seconds on the no-call path. The caption changes first (0.3 s
 
 ## 5. Final frame
 
-The still at 117.9 s on the no-call path (the end of play, reduced motion's last step and the second printed page); the poster and first frame are question 1. Card A: task; "WHAT THE EVIDENCE SUGGESTS · No hidden facts: a weak answer shows when read."; the AI's answer; row 1 (faded pill, "RELY ON IT", "A CHECK HERE LEAVES TASK B UNCHECKED"); row 2 (three faded pills with "TASK B: READ-THROUGH ONLY" and "LAUNCH SLIPS A WEEK", "RELY ON IT · READ IT BEFORE IT'S BUILT"); the inside numbers. Card B: task with "insider interviews" underlined; "THE DECIDING DETAILS WERE IN THE INTERVIEWS / THE SPREADSHEET ONLY LOOKED COMPLETE"; the AI's answer; row 1 (faded pill, "WORK IT FROM THE INTERVIEWS, THEN COMPARE"); 84.5%, 70.6%, 60% and the bracket. The frontier between; the budget and the key below; in a branch, the reader's red marks and "No call made". Caption band: FACULTY CHECK / the check / the move line at the same size.
+The still at 117.9 s on the no-call path (120.9 s in the player; the end of play, reduced motion's last step and the second printed page); the poster and first frame are question 1, with the name card over it. Above the stage, the strip: "APPROPRIATE RELIANCE · THE SKILL". Card A: task; "WHAT THE EVIDENCE SUGGESTS · No hidden facts: a weak answer shows when read."; the AI's answer; row 1 (faded pill, "RELY ON IT", "A CHECK HERE LEAVES TASK B UNCHECKED"); row 2 (three faded pills with "TASK B: READ-THROUGH ONLY" and "LAUNCH SLIPS A WEEK", "RELY ON IT · READ IT BEFORE IT'S BUILT"); the inside numbers. Card B: task with "insider interviews" underlined; "THE DECIDING DETAILS WERE IN THE INTERVIEWS / THE SPREADSHEET ONLY LOOKED COMPLETE"; the AI's answer; row 1 (faded pill, "WORK IT FROM THE INTERVIEWS, THEN COMPARE"); 84.5%, 70.6%, 60% and the bracket. The frontier between; the budget and the key below; in a branch, the reader's red marks and "No call made". Caption band, in two columns (stacked on phones): "APPROPRIATE RELIANCE" beside the definition, "Accept AI support where it's warranted, check or refuse it where it isn't, and be able to say why."; then FACULTY CHECK beside the check, with the move line under it at the same size.
 
 **What the still says alone:** with time for one check, two tasks got the same finished AI answer. AI helped on the segmentation and hurt on the brand pick, whose deciding details were in the interviews, while graders rated the wrong answers well. For a first draft, rely on Task A and work Task B from the interviews. Once the segmentation goes straight into the launch plan, still rely on it, but read it before it's built; Task B keeps the check, and the other options' costs are written beside them.
 
 ## 6. Standalone page copy
 
-**Kicker / title / lede:** "The competency" / "Appropriate reliance" / "You have time to check one of two AI answers. Decide where the check goes, then see what the study found."
+**Kicker / title / lede:** "The skill" / "Appropriate reliance" / "You have time to check one of two AI answers. Decide where the check goes, then see what the study found."
 
 **Faculty check** (visible): the check and the move line.
 
-**How this figure works** (visible, below the check): "Appropriate reliance means accepting AI support when it's warranted, checking or refusing it when it's not, and being able to say why. Checking takes time, so the figure gives you two tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning."
+**How this figure works** (visible, below the check): "Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning."
 
 **Disclosure "After you make your call"** (locked, "make or skip both calls to open this", until both questions are done; opens itself at the check; prints after the figure):
 - *What a good answer says* (labelled as the figure's reasoning): the check belongs on Task B, whose deciding details were in the interviews and whose wrong answers were still rated higher; Task A is inside the frontier and, the figure reads, has no hidden facts, so as a first draft it goes without a check; in the launch plan it is still inside the frontier, so the call is still to rely on it, but someone must read it carefully before it's built; moving the check leaves Task B to a read-through; asking for a week is defensible and slips the launch a week.
@@ -123,12 +127,13 @@ The still at 117.9 s on the no-call path (the end of play, reduced motion's last
 
 **Hidden summary:** part 1 (setup and question 1); part 2 after question 1 (results, Task B's fact, what the evidence suggests about Task A, the first suggested call, question 2); part 3 after question 2 (the second suggested call and the other options' costs).
 
-**Beat list:** the captions above, each with its "On screen" line; locked entries read "Make your call to see this."
+**Beat list:** beat 0, "Appropriate reliance · The skill" (the name card; never locked), then the captions above, each with its "On screen" line; locked entries read "Make your call to see this."
 
 ## 7. Pacing table
 
 | Beat | Time (s) | Caption words | Picture words | Reading (s) | Lead (s) | Motion (s) | Hold (s) | Total (s) | Question |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 · Name card | 3.0 s before 0.0 | 0 | 4 | 1.3 | 0 | 1.0 | 2.0 | 3.0 (player only) | |
 | 1 · Two tasks | 0.0–15.0 | 5 | 39 | 14.7 | 1.0 | 4.4 | 9.6 | 15.0 | |
 | 2 · The AI answers both | 15.0–21.7 | 10 | 3 | 4.3 | 1.0 | 2.8 | 2.9 | 6.7 | |
 | 3 · One check | 21.7–31.7 | 8 | 22 | 10.0 | 1.0 | 2.8 | 6.2 | 10.0 | Opens 25.5; resumes 30.2 |
@@ -139,6 +144,6 @@ The still at 117.9 s on the no-call path (the end of play, reduced motion's last
 | 8 · One thing changes | 83.2–96.2 | 13 | 25 | 12.7 | 1.0 | 3.8 | 8.2 | 13.0 | Opens 88.0; resumes 94.7 |
 | 9 · The call | 96.2–108.2 | 18 | 16 | 11.3 | 1.0 | 7.4 | 3.6 | 12.0 | |
 | 10 · Faculty check | 108.2–117.9 | 15 + 9 | 0 | 8.0 | 0.2 | 5.7 | 4.0 | 9.7, then rests | |
-| **Total** | | **138** | **196** | | | | | **117.9** | |
+| **Total** | | **138** | **200** | | | | | **117.9 (120.9 with the card)** | |
 
 Checks: every caption-named change waits until the caption can be read once (beat 6's Task A line at 5.1 s, beat 8's pills at 4.3 s, beat 9's tag at 6.0 s); every hold is at least 1.5 s; one movement at a time; nothing reveals a call before it's made. A reader who answers question 1 at load watches about 81 s plus decision time.

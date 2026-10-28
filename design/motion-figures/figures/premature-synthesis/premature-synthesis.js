@@ -708,6 +708,7 @@
 			check: {label: 'Faculty check', question: 'Can the student explain why these connections matter?', follow: 'Point to one connection. What evidence would change it?', followAt: T.follow}},
 	];
 
+	let player = null;
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
@@ -723,8 +724,8 @@
 			if (stacked) root.classList.add('is-narrow');
 			if (stacked !== root.classList.contains('is-stacked')) {
 				root.classList.toggle('is-stacked', stacked);
-				const scrub = root.querySelector('[data-mf-scrub]');
-				renderNarrow(scrub ? +scrub.value || 0 : 0);
+				// Figure time (the scrubber is in player time, which adds the name card).
+				renderNarrow(player ? player.time() : 0);
 			}
 		};
 		new ResizeObserver(syncStacked).observe(svg);
@@ -733,6 +734,8 @@
 		new ResizeObserver(syncScale).observe(svg);
 		syncScale();
 		// Poster: beat 1 settled (the task, the six readings and the student), so the waiting stage isn't empty.
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
+		// The nameplate opens on the name, keeps it in the corner strip, and ends on the definition.
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02,
+			nameplate: {name: 'Premature synthesis', kicker: 'Failure mode 3 of 7', definition: 'The model connects the material before anyone has built the map.'}});
 	});
 })();

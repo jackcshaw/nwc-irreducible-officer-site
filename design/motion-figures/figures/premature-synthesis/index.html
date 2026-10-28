@@ -17,9 +17,11 @@
 /* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
 #premature-synthesis.is-stacked .mf-stage { height: 0; overflow: hidden; }
 /* Fixed heights (the tallest beat, and the check) so the caption and controls never move. */
-#premature-synthesis.is-stacked .ps-narrow { display: block; min-height: 476px; padding: 12px clamp(12px, 3vw, 24px) 8px; background: var(--paper); }
-#premature-synthesis.is-stacked .mf-caption { min-height: 136px; }
-@media (max-width: 719px) { #premature-synthesis.is-stacked .mf-caption { min-height: 160px; } }
+#premature-synthesis.is-stacked .ps-narrow { display: block; min-height: 466px; padding: 8px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
+/* The last caption carries the name and definition above the check: 144 px on desktop,
+   222 px on phones (measured at 390 px), fixed from the start. */
+#premature-synthesis.is-stacked .mf-caption { min-height: 144px; }
+@media (max-width: 719px) { #premature-synthesis.is-stacked .mf-caption { min-height: 222px; } }
 @media (max-width: 480px) {
 	#premature-synthesis .mf-check-q, #premature-synthesis .mf-follow.is-equal { font-size: 20px; }
 }

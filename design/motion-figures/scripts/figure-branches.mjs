@@ -30,6 +30,9 @@ async function open(query, opts = {}) {
   return [c, p];
 }
 const pad = (i) => String(i).padStart(2, "0");
+// An element still of a shot taller than the window is stitched from several scrolls, so a
+// sticky caption band or controls would land mid-picture: set them static first.
+const unstick = (p) => p.evaluate(() => { for (const el of document.querySelectorAll("figure *")) if (getComputedStyle(el).position === "sticky") el.style.position = "static"; });
 
 // Each branch: chosen beats settled, then the final frame.
 for (const [name, calls] of Object.entries(cfg.branches)) {
@@ -58,6 +61,7 @@ for (const g of cfg.gates) {
     for (const sel of (cfg.gateSteps || {})[g] || []) { await p.locator(sel).click(); await p.waitForTimeout(150); }
     await p.evaluate(([id, g]) => window.__motionFigures[id].openGate(g), [slug, g]);
     await p.waitForTimeout(150);
+    await unstick(p);
     const file = `gate-${g + 1}-open${suffix}.png`;
     await p.locator("[data-mf-shot]").screenshot({ path: out + file });
     made.push(file);
@@ -74,6 +78,7 @@ for (const g of cfg.gates) {
   const [c, p] = await open("t=0", { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3 });
   await p.evaluate((id) => { const f = window.__motionFigures[id]; f.seek(f.duration); }, slug);
   await p.waitForTimeout(120);
+  await unstick(p);
   await p.locator("[data-mf-shot]").screenshot({ path: `${out}final-390.png` });
   await p.locator("figure").screenshot({ path: `${out}player-390-final.png` });
   made.push("final-390.png", "player-390-final.png");
