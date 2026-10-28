@@ -72,6 +72,13 @@ Each must pass the same frame-first tests as the PME versions:
 
 **Effort:** roughly 1.5 to 2 days of agent time, mostly the seven new scenarios and their cold reads. The weekly usage limit is the main schedule risk; it paused the loop once.
 
+## Jack's decisions (October 28)
+
+- **Business edition, workplace cast, as the default** for standalone pages and articles: agreed ("I think that's right").
+- **Role-neutral one-line definitions for the nameplate:** approved.
+- **Classroom cast:** build after the business edition.
+- **Examples:** Jack asked for examples straight from the research, so any business or nonprofit reader sees themselves. A research-mapping pass ([BUSINESS-EXAMPLES.md](BUSINESS-EXAMPLES.md)) proposes a study-grounded scenario per figure, labelled "Illustration based on…", with a fictional fallback, for Jack to pick before building.
+
 ## Decisions for Jack
 
 1. Approve the role-neutral one-line definitions (wording to come with the pilot).
