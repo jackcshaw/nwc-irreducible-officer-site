@@ -34,7 +34,17 @@
 .ur-n-reports { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 5px; align-items: center; }
 .ur-n-chip { padding: 1px 5px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
 .ur-n-chip.is-open { border-color: rgba(10, 34, 66, 0.6); }
-.ur-n-head { display: flex; justify-content: space-between; gap: 8px; }
+.ur-n-head2 { display: flex; justify-content: space-between; gap: 8px; }
+.ur-n-head { font: 600 13px/1.4 var(--sans); color: var(--ink); }
+.ur-n-off { font-style: italic; color: #5d6b80; }
+.ur-n-who { float: right; margin-top: 2px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.ur-n-who::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
+.ur-n-gives { font: 600 12px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
+.ur-n-stack { display: inline-grid; }
+.ur-n-stack > span { grid-area: 1 / 1; }
+.ur-n-ai.is-looked { border-color: var(--stone); }
+.ur-n-ready { display: inline-block; transform-origin: center; }
+.is-pointed { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 3px; }
 .ur-n-calls { margin: 4px 0 0; padding: 2px 8px; border: 1px solid rgba(10, 34, 66, 0.3); background: var(--paper-bright); }
 .ur-n-call { margin: 0; font: 400 13px/1.4 var(--serif); color: var(--ink); }
 .ur-n-call .is-under { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
@@ -85,10 +95,10 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the uncalibrated reliance figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:53</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:31</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. A red dot stands for a student with an example task in two parts: ships needed a day, and ships the port takes a day. The student gives an AI four reports: two aid reports, a port survey and a harbor log. Copies of all four stay in a small stack labelled given to the AI. The AI answers both in the same form, in grey, each marked ready: "24 ships a day: 480 tons at 20 each" and "20 ships a day: 4 docks at 5 each". The student checks Part 1 against both aid reports, finds it right, and puts both answers into their brief, marking Part 1 checked and Part 2 used as is. A second student gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, the port survey says 4 docks at 5 ships each, but the harbor log says dock 2 is closed for repairs, so the second student corrects the estimate to 15 ships from 3 open docks. The AI worked from capacity, and Part 2 depends on what's open today: the AI's "4 docks at 5 each" is marked capacity, and the harbor log's line is marked open today. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable and doesn't follow how tasks look. A panel shows a field experiment with BCG consultants: on a task outside the jagged frontier, the group without AI was right about 84.5% of the time and the two groups with AI 60% and 70%, and graders still rated the AI users' work higher in quality, regardless of correctness. The students' working marks come off the briefs, the AI's column fades back, and faculty see only the briefs. Faculty point to Part 1 in both: each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure. A red dot stands for a student with an example task in two parts: ships needed a day, and ships the port takes a day. The student gives an AI four reports: two aid reports, a port survey and a harbor log. Copies of all four stay in a small stack labelled given to the AI. The AI answers both in the same form, in grey, each marked ready: "24 ships a day: 480 tons at 20 each" and "20 ships a day: 4 docks at 5 each". The student checks Part 1 against both aid reports, finds it right, and puts both answers into their brief, marking Part 1 checked and Part 2 used as is. A second student gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, last year's port survey, headed capacity, says 4 docks at 5 each, and the harbor log, headed open today, lists docks 1, 3 and 4, with dock 2 closed. The second student notes both, then corrects the estimate to 15 ships from 3 open docks. Part 2 depends on what's open today: the harbor log's docks 1, 3 and 4 are underlined, and the AI's "4 docks at 5 each" is marked capacity. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel shows a field experiment with BCG consultants: on a task outside the jagged frontier, the group without AI was right about 84.5% of the time and the two groups with AI 60% and 70%, and graders still rated the AI users' work higher in quality than the group without AI, regardless of correctness. The students' working marks come off the briefs, the AI's column fades back, and faculty see only the briefs. Faculty point to Part 1 in both: each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

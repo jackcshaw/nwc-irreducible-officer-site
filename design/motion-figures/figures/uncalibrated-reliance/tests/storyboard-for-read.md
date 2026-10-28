@@ -1,6 +1,6 @@
 # Uncalibrated reliance: storyboard
 
-Motion figure 4 of 8 · slug `uncalibrated-reliance` · storyboard round 4, revised after figure cold read 1 · October 28, 2026
+Motion figure 4 of 8 · slug `uncalibrated-reliance` · storyboard round 5, revised after figure cold read 2 (passed with final fixes) · October 28, 2026
 
 *Cold-read copy. The Intent section is removed.*
 
@@ -43,7 +43,7 @@ A war-college student must estimate two things for relief planners: how many sup
 | Faculty outlines | Which part faculty mean | Navy rounded outlines around the same part in both briefs, moving from Part 1 to Part 2 | x 30–302 and 658–930 |
 | Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border, tail toward the dot; two rows, "1 ·" and "2 ·", Serif 15 ink, words at about 3 a second | x 52–308 and 680–936, y 386–490 |
 | Caption band | The words for each beat | Mono counter and Serif 22 caption; in beat 10 the check and the move line at the same size | Under the stage |
-| Beat list | Text equivalent | Twelve captions with "On screen" lines | Under the controls |
+| Beat list | Text equivalent | Ten captions with "On screen" lines | Under the controls |
 
 **The answers.**
 
@@ -56,98 +56,90 @@ A war-college student must estimate two things for relief planners: how many sup
 
 ## 4. Beats
 
-Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first or main clause describes. Each beat holds its caption plus new picture words at 3 words a second or less.
+Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. Each caption is readable at 3 words a second with at least 1.5 s of hold after the last movement. A change the caption is about waits until the caption can be read once, except a lead-in its first or main clause describes, and the study's bars, which start as the panel lands.
 
-### Beat 1 · 0.0–7.7 s · The task
+### Beat 1 · 0.0–8.6 s · The task and the reports
 
-- **What moves:** 1.0–1.6 the task card fades in and rises 6 units, showing "EXAMPLE TASK"; 1.8–2.2 "Part 1 · Ships needed a day" fades in; 3.0–3.4 "Part 2 · Ships the port takes a day"; 3.6–4.0 the red dot grows in at (36, 456) with its "Student" label; hold.
-- **Caption:** "A student gets a two-part task."
-- **Notice:** both parts ask for ships a day.
-- **Why:** the setup, with both parts looking alike from the start.
+- **What moves:** 1.0–1.6 the task card fades in; 1.7–2.1 "Part 1 · Ships needed a day"; 2.2–2.6 "Part 2 · Ships the port takes a day"; 2.7–3.0 the red dot, "Student"; 4.0–5.1 four reports fade in one at a time; 5.2–5.5 the dot pulses; 5.5–6.3 a grey copy of each report slides into a stack above the AI's column; 6.3–6.7 "GIVEN TO THE AI"; hold.
+- **Caption:** "A student gets a two-part task and gives an AI four reports."
+- **Notice:** both parts ask for ships a day. The AI gets every report, including the harbor log. On a phone, the student appears as a red "Student" marker beside the task.
+- **Why:** merged from round 4's first two beats, which dragged.
 
-### Beat 2 · 7.7–14.0 s · The reports go to the AI
+### Beat 2 · 8.6–15.6 s · Equal confidence
 
-- **What moves:** 8.7–10.1 four reports fade in across the top right, one at a time; 10.2–10.6 the dot pulses; 10.6–11.4 a grey copy slides from each report into a small stack above the AI's column, where it stays; 11.5–11.9 "GIVEN TO THE AI" appears beside the stack; hold.
-- **Caption:** "The student gives an AI four reports."
-- **Notice:** the AI gets every report, including the harbor log, and the stack stays on screen to the end.
-- **Why:** the AI's later miss isn't missing input.
-
-### Beat 3 · 14.0–24.0 s · Equal confidence
-
-- **What moves:** 15.0–15.4 "AI'S ANSWERS"; 15.4–16.0 two cards rise together; 16.1–16.9 both first lines write in at once ("24 ships a day:", "20 ships a day:"); 17.1–17.9 both second lines ("480 tons at 20 each", "4 docks at 5 each"); 19.1–19.5 a grey "READY" pill on both at the same moment; hold.
+- **What moves:** 9.6–10.0 "AI'S ANSWERS"; 10.0–10.6 two cards rise together; 10.7–11.5 both first lines write in at once; 11.7–12.5 both second lines; 12.7–13.1 a grey "READY" pill on both at the same moment; hold 2.5 s.
 - **Caption:** "It answers both with equal confidence."
 - **Notice:** same form, same flat statement, same tag.
-- **Why:** "the output is confident", with nothing to tell the answers apart.
 
-### Beat 4 · 24.0–32.0 s · The first student checks Part 1
+### Beat 3 · 15.6–23.1 s · The first student checks Part 1
 
-- **What moves:** 25.0–25.6 the "Student" label fades as the dot moves to the first aid report; 25.6–26.2 it opens; 26.2–26.6 the dot moves to the second; 26.6–27.2 it opens; 28.0–28.7 a sheet labelled "FIRST STUDENT'S BRIEF" fades in as Part 1 slides into it; 28.8–29.2 the dot writes "✓ CHECKED" in red; 29.2–29.5 the dot steps 40 units clear; hold 2.5 s.
+- **What moves:** 16.6–17.2 the dot moves to the first aid report; 17.2–17.8 it opens; 17.8–18.2 to the second; 18.2–18.8 it opens; 19.6–20.3 "FIRST STUDENT'S BRIEF" fades in as Part 1 slides into it; 20.4–20.8 "✓ CHECKED"; 20.8–21.1 the dot steps clear; hold.
 - **Caption:** "The student checks Part 1 against the two aid reports. It's right."
-- **Notice:** the check is real, and it is a check of Part 1 only. The closing question depends on it.
-- **Why:** split from round 3's beat 4 so this check has its own beat and hold. The reading is the lead-in the first sentence describes; the brief arrives 4.0 s in.
+- **Notice:** a real check, of Part 1 only. The closing question depends on it.
 
-### Beat 5 · 32.0–40.1 s · And uses Part 2 as is
+### Beat 4 · 23.1–30.3 s · And uses Part 2
 
-- **What moves:** 33.0–33.6 the "READY" pill on the AI's Part 2 swells and settles; 36.0–36.6 Part 2 slides into the first brief, the dot following; 36.6–37.0 the dot writes "USED AS IS"; 37.0–37.3 the dot steps 40 units clear and waits; 38.0–38.5 the aid reports close and the dot returns to its place; hold.
-- **Caption:** "Part 2 looks just as sure, so they use it as is."
+- **What moves:** 24.1–24.7 the "READY" pill on the AI's Part 2 swells and settles (on a phone, the Part 2 row's tag swells and its border darkens); 24.9–25.5 the dot moves down to the Part 2 row; 26.4–27.0 Part 2 slides into the first brief; 27.0–27.4 "USED AS IS"; 27.4–27.7 the dot steps clear; 28.3–28.8 the aid reports close and the dot goes home; hold.
+- **Caption:** "Part 2 looks just as sure, so they use it."
 - **Notice:** the reason is the look of the answer and the Part 1 check. The port reports stay closed.
-- **Why:** trust earned on one part becomes reliance on the other. Part 2 goes in 4.0 s in.
+- **Why:** the lead-in is shorter than round 4's, and something moves every second.
 
-### Beat 6 · 40.1–48.8 s · Another student checks each part
+### Beat 5 · 30.3–37.6 s · Another student checks each part
 
-- **What moves:** 41.1–41.5 a second red dot, "Second student"; 41.5–41.9 an empty sheet, "SECOND STUDENT'S BRIEF"; 42.0–42.4 the dot pulses and both "READY" pills blink; 42.5–43.1 the dot moves to the first aid report; 43.1–43.7 it opens; 43.7–44.1 to the second; 44.1–44.7 it opens; 44.9–45.6 Part 1 slides into the second brief; 45.7–46.1 "✓ CHECKED"; 46.1–46.4 the dot steps clear; 46.2–46.7 the aid reports close; hold.
-- **Caption:** "Another student, with the same AI answers, checks each part at its source."
-- **Notice:** the same answers, the same reports, the same reading pace, the same mark.
-- **Why:** the habit is stated before any reveal.
+- **What moves:** 31.3–31.7 a second red dot, "Second student"; 31.7–32.1 an empty sheet, "SECOND STUDENT'S BRIEF"; 32.2–32.6 the dot pulses and both "READY" pills blink; 32.7–33.3 the dot moves between the two aid reports; 33.3–33.9 both open at once; 34.1–34.8 Part 1 slides into the second brief; 34.9–35.3 "✓ CHECKED"; 35.6–36.1 the aid reports close; hold.
+- **Caption:** "Another student, with the same answers, checks each at its source."
+- **Notice:** the same answers and the same Part 1 check, in one move. The habit is stated before any reveal.
+- **Why:** shortened from round 4, where this repeated beat 3 move for move.
 
-### Beat 7 · 48.8–57.5 s · That student checks Part 2 too
+### Beat 6 · 37.6–48.6 s · That student checks Part 2 too (the crux)
 
-- **What moves:** 49.8–50.3 the dot moves to the port survey; 50.3–50.9 its callout opens, "4 docks, 5 ships each", and stays open; 50.9–51.3 the dot moves to the harbor log; 51.3–52.1 its callout opens, "Dock 2: closed for repairs.", and stays open; 52.2–52.8 Part 2 slides into the second brief; 52.9–53.2 the dot strikes "20"; 53.2–53.5 writes "15"; 53.65–53.8 strikes "4"; 53.8–54.1 writes "3 open"; 54.2–54.6 "✓ CHECKED"; 54.6–54.9 the dot steps clear; 55.5–56.0 it returns to its place; hold.
+- **What moves:**
+  1. 38.6–39.1 the dot moves to the port survey.
+  2. 39.1–39.7 its callout opens: "CAPACITY / 4 docks, 5 each / (survey, last year)".
+  3. 39.7–40.1 in the empty middle of the second brief, large: "PORT REPORTS" and "Survey: 4 docks, 5 ships each."
+  4. 40.3–40.7 the dot moves to the harbor log.
+  5. 40.7–41.3 its callout opens: "OPEN TODAY / Docks 1, 3, 4", and set apart in muted italic, "✕ Dock 2: closed".
+  6. 41.3–41.7 the note adds, large: "Log: dock 2 closed for repairs."
+  7. 41.7–43.2 nothing moves while the note is read.
+  8. 43.2–43.8 Part 2 slides into the second brief.
+  9. 43.9–44.2 the dot strikes "20"; 44.2–44.5 writes "15".
+  10. 44.7–45.0 strikes "4"; 45.0–45.3 writes "3 open".
+  11. 45.5–45.9 "✓ CHECKED"; 45.9–46.2 the dot steps clear; 46.6–47.1 it goes home; hold.
 - **Caption:** "That student checks Part 2 against the port reports, and corrects it."
-- **Notice:** the survey agrees with the AI; the harbor log doesn't. The AI's wording stays. The first brief still says 20.
-- **Why:** the independent check, made before the error travels. Both sources stay on screen to the end.
+- **Notice:** the reason for the red "15" is on screen, large, for 2 s before the 15 appears. The harbor log can't be misread: its heading lists the docks open today, and the closed dock sits apart. The first brief still says 20.
+- **Why:** cold read 2 found this, the crux, the fastest beat. It is 2.3 s longer, one movement at a time, with the reading note set large.
 
-### Beat 8 · 57.5–65.5 s · The reason
+### Beat 7 · 48.6–58.4 s · The reason and the jagged frontier
 
-- **What moves:** 58.5–59.0 a navy underline runs under the AI's "4 docks at 5 each" and "CAPACITY" appears beside it; 61.5–62.0 "Dock 2: closed" in the harbor log is underlined and "OPEN TODAY" appears under it; hold.
-- **Caption:** "The AI worked from capacity. Part 2 depends on what's open today."
-- **Notice:** the AI's figure is the survey's capacity; the real number depends on the one report that says what's open today.
-- **Why:** the reason Part 2 sits outside, as a pattern that travels to other tasks, before the frontier is named.
+- **What moves:** 49.6–50.1 "Docks 1, 3, 4" in the harbor log is underlined; 50.3–50.8 the AI's "4 docks at 5 each" is underlined and marked "CAPACITY"; 54.3–55.7 an irregular navy line draws between the AI's two cards; 55.7–56.1 "INSIDE THE FRONTIER" above it, "OUTSIDE THE FRONTIER" below; 56.3–56.9 the two cards, alike in form, pulse together; hold.
+- **Caption:** "Part 2 depends on what's open today. A jagged frontier marks where an AI stops being reliable."
+- **Notice:** the AI's figure is last year's capacity; the answer depends on what's open today. The term is defined here, before the study uses it, and the line stays uncovered for 3.7 s after it is drawn.
+- **Why:** merged from round 4's beats 8 and 9, which held still for most of 18 s.
 
-### Beat 9 · 65.5–76.2 s · The jagged frontier
+### Beat 8 · 58.4–67.9 s · The study
 
-- **What moves:** 66.5–67.9 an irregular navy line draws across the AI column, between its two cards; 67.9–68.3 "INSIDE THE FRONTIER" above it and "OUTSIDE THE FRONTIER" below; 70.8–71.4 the two cards, alike in form, pulse together; hold 4.8 s.
-- **Caption:** "A jagged frontier marks where an AI stops being reliable. It doesn't follow how tasks look."
-- **Notice:** the line falls between two answers that look alike. The term is defined here, before the study uses it.
-- **Why:** cold read 1 found "frontier" used before it was explained. This beat explains it and holds the line on screen for more than 7 s before anything covers it.
+- **What moves:** 59.4–59.8 the scene dims; 59.8–60.4 the panel rises; 60.5–61.1 the "Without AI" bar grows to about 84.5%; 61.2–61.8 the two "With AI" bars to 60% and 70%; 62.0–62.5 a bracket; 62.5–62.9 "Rated higher in quality than without AI, regardless of correctness"; hold 5.0 s.
+- **Caption:** "In a field experiment, consultants with AI got a task outside the frontier right less often."
+- **Notice:** "a task", as in the source. Both AI groups fall short and were still rated higher.
+- **Why:** the bars start as the panel lands; round 4 left the panel empty for 3 s.
 
-### Beat 10 · 76.2–90.5 s · The study
+### Beat 9 · 67.9–83.9 s · Faculty point to each part
 
-- **What moves:** 77.2–77.7 the scene dims to 25%; 77.7–78.3 the evidence panel rises centre stage with its title, row labels and source; 80.9–81.5 the "Without AI" bar grows to about 84.5%; 81.6–82.2 the two "With AI" bars grow to 60% and 70%; 82.5–83.0 a bracket draws beside them; 83.0–83.4 "Graders still rated these higher in quality, regardless of correctness" appears; hold.
-- **Caption:** "In a field experiment, consultants with AI were right less often outside the frontier."
-- **Notice:** both AI groups fall short of the group without AI, and their work was still rated higher. This is a study of consultants, not the port task.
-- **Why:** evidence that look-alike tasks can differ, and that polish doesn't show it. The bars start 4.7 s in.
-
-### Beat 11 · 90.5–106.5 s · Faculty point to each part
-
-- **What moves:** 91.5–92.0 the panel fades and the scene returns; 92.1–92.7 the working marks lift off both briefs; 92.7–93.2 "FACULTY SEE ONLY THE BRIEFS" fades in, and the reports, the AI's column and the frontier fade back to 55%; 95.2–95.7 navy outlines around Part 1 in both briefs; 95.8–96.2 both speech panels open; 96.2–97.2 "1 · The aid reports." (first student); 97.4–98.4 "1 · The aid reports." (second); 98.7–99.2 the outlines move to Part 2; 99.4–102.4 "2 · Part 1 checked out, so I trusted the rest."; 102.7–105.0 "2 · The harbor log. One dock is closed."; hold.
+- **What moves:** 68.9–69.4 the panel fades and the scene returns; 69.5–70.1 the working marks and the second student's note lift off both briefs; 70.1–70.6 "FACULTY SEE ONLY THE BRIEFS", and the reports, the AI's column and the frontier fade back to 55% (the two port callouts stay at full strength); 72.6–73.1 navy outlines around Part 1 in both briefs (on a phone, outlines around the Part 1 boxes); 73.2–73.6 both speech panels open; 73.6–74.6 "1 · The aid reports."; 74.8–75.8 "1 · The aid reports."; 76.1–76.6 the outlines move to Part 2; 76.8–79.8 "2 · Part 1 checked out, so I trusted the rest."; 80.1–82.4 "2 · The harbor log. One dock is closed."; hold.
 - **Caption:** "Faculty point to each part in turn and ask what justified relying on it."
-- **Notice:** faculty see only the briefs. On Part 1 the answers match; on Part 2 one student's evidence is about Part 1, the other's about Part 2.
-- **Why:** the essay's "what evidence would justify that delegation", part by part. The outlines start 4.7 s in.
 
-### Beat 12 · 106.5–113.2 s · The faculty check
+### Beat 10 · 83.9–90.6 s · The faculty check
 
-- **What moves:** 106.5–106.7 caption 11 fades out; 106.7–107.3 "FACULTY CHECK" and the question rise; 109.8–110.3 directly under it, at the same size, "Point to each part. Was the evidence about that part?"; hold; the figure rests here.
+- **What moves:** 83.9–84.1 caption 9 fades; 84.1–84.7 the check rises; 87.2–87.7 "Point to each part. Was the evidence about that part?" at the same size; hold; the figure rests here.
 - **Caption:** "Faculty check: What evidence justified relying on the system here?" Second line, same size: "Point to each part. Was the evidence about that part?"
-- **Why:** the figure ends on the check and the move.
 
 ## 5. Final frame
 
-The still at 113.2 s; also the reduced-motion view and the print view. The poster (shown while the figure waits to play) is beat 1 settled.
+The still at 90.6 s; also the reduced-motion view and the print view. The poster (shown while the figure waits to play) is beat 1 settled.
 
 **Stage:**
 - **Top left:** the task card: "EXAMPLE TASK · Part 1 · Ships needed a day · Part 2 · Ships the port takes a day".
-- **Top right:** the four reports, both port callouts open: the survey's "4 docks, 5 ships each" and the harbor log's "Dock 2: closed for repairs.", with "Dock 2: closed" underlined and marked "OPEN TODAY". The copies' stack, "GIVEN TO THE AI", sits above the AI's column. The reports, the AI's column and the frontier are faded back to 55%.
+- **Top right:** the four reports, both port callouts open at full strength: the survey's "CAPACITY / 4 docks, 5 each / (survey, last year)" and the harbor log's "OPEN TODAY / Docks 1, 3, 4" (underlined) with "✕ Dock 2: closed" set apart. The copies' stack, "GIVEN TO THE AI", sits above the AI's column. The report tabs, the AI's column and the frontier are faded back to 55%.
 - **Columns,** Part 1 above, Part 2 below:
   - *Left,* "FIRST STUDENT'S BRIEF": both parts in the AI's grey text; Part 2 reads "20 ships a day: 4 docks at 5 each". No marks.
   - *Centre,* "AI'S ANSWERS": both cards with "READY" pills; "4 docks at 5 each" underlined, "CAPACITY". Between the cards, the irregular frontier with "INSIDE THE FRONTIER" and "OUTSIDE THE FRONTIER".
@@ -171,18 +163,16 @@ The still at 113.2 s; also the reduced-motion view and the print view. The poste
 
 **Beat list (text equivalent):**
 
-1. **A student gets a two-part task.** *On screen:* a task card appears at the top left: "Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day." A red dot labelled Student appears below.
-2. **The student gives an AI four reports.** *On screen:* four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled "Given to the AI", where it stays.
-3. **It answers both with equal confidence.** *On screen:* two answer cards labelled "AI's answers" write in together, in grey on a beige band. Part 1: "24 ships a day: 480 tons at 20 each." Part 2: "20 ships a day: 4 docks at 5 each." Each gets the same grey "Ready" tag at the same moment.
-4. **The student checks Part 1 against the two aid reports. It's right.** *On screen:* the dot opens both aid reports. A sheet labelled "First student's brief" appears, Part 1 slides into it, and the dot marks it "Checked" in red.
-5. **Part 2 looks just as sure, so they use it as is.** *On screen:* the "Ready" tag on the AI's Part 2 pulses. Part 2 slides into the first brief, and the dot marks it "Used as is". The aid reports close.
-6. **Another student, with the same AI answers, checks each part at its source.** *On screen:* a second red dot labelled Second student and an empty sheet labelled "Second student's brief" appear. The dot pulses and both "Ready" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked "Checked".
-7. **That student checks Part 2 against the port reports, and corrects it.** *On screen:* the dot opens the port survey, "4 docks, 5 ships each", then the harbor log, "Dock 2: closed for repairs." Both stay open. Part 2 slides into the second brief. The dot strikes out "20" and "4" in red and writes "15" and "3 open", so it reads "15 ships a day: 3 open docks at 5 each", and marks it "Checked". The first brief still says 20.
-8. **The AI worked from capacity. Part 2 depends on what's open today.** *On screen:* the AI's "4 docks at 5 each" is underlined and marked "Capacity". The harbor log's "Dock 2: closed" is underlined and marked "Open today".
-9. **A jagged frontier marks where an AI stops being reliable. It doesn't follow how tasks look.** *On screen:* an uneven line is drawn between the AI's two answer cards, labelled "Inside the frontier" above and "Outside the frontier" below. Then the two cards, alike in form, pulse together.
-10. **In a field experiment, consultants with AI were right less often outside the frontier.** *On screen:* the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: "Graders still rated these higher in quality, regardless of correctness." Source: Dell'Acqua et al. (2023), BCG consultants, HBS working paper 24-013.
-11. **Faculty point to each part in turn and ask what justified relying on it.** *On screen:* the panel goes. The red marks lift off both briefs, the reports and the AI's column fade back, and "Faculty see only the briefs" appears. Part 1 is outlined in both briefs, and each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed."
-12. **Faculty check: What evidence justified relying on the system here? Point to each part. Was the evidence about that part?** *On screen:* both lines appear under the picture at the same size. The briefs, both answers, the AI's answers, the frontier and the harbor log stay in view.
+1. **A student gets a two-part task and gives an AI four reports.** *On screen:* a task card appears at the top left: "Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day." A red dot labelled Student appears below. Four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled "Given to the AI", where it stays.
+2. **It answers both with equal confidence.** *On screen:* two answer cards labelled "AI's answers" write in together, in grey on a beige band. Part 1: "24 ships a day: 480 tons at 20 each." Part 2: "20 ships a day: 4 docks at 5 each." Each gets the same grey "Ready" tag at the same moment.
+3. **The student checks Part 1 against the two aid reports. It's right.** *On screen:* the dot opens both aid reports. A sheet labelled "First student's brief" appears, Part 1 slides into it, and the dot marks it "Checked" in red.
+4. **Part 2 looks just as sure, so they use it.** *On screen:* the "Ready" tag on the AI's Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first brief, and the dot marks it "Used as is". The aid reports close.
+5. **Another student, with the same answers, checks each at its source.** *On screen:* a second red dot labelled Second student and an empty sheet labelled "Second student's brief" appear. The dot pulses and both "Ready" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked "Checked".
+6. **That student checks Part 2 against the port reports, and corrects it.** *On screen:* the dot opens the port survey, headed "Capacity": "4 docks, 5 each". Its note appears large in the second brief: "Survey: 4 docks, 5 ships each." The dot opens the harbor log, headed "Open today": "Docks 1, 3, 4", and set apart, "Dock 2: closed". Its note appears: "Log: dock 2 closed for repairs." After a pause, Part 2 slides into the second brief. The dot strikes out "20" and writes "15", strikes out "4" and writes "3 open", so it reads "15 ships a day: 3 open docks at 5 each", and marks it "Checked". The first brief still says 20.
+7. **Part 2 depends on what's open today. A jagged frontier marks where an AI stops being reliable.** *On screen:* the harbor log's "Docks 1, 3, 4" is underlined. The AI's "4 docks at 5 each" is underlined and marked "Capacity". Then an uneven line is drawn between the AI's two answer cards, labelled "Inside the frontier" above and "Outside the frontier" below, and the two cards, alike in form, pulse together.
+8. **In a field experiment, consultants with AI got a task outside the frontier right less often.** *On screen:* the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: "Rated higher in quality than without AI, regardless of correctness." Source: Dell'Acqua et al. (2023), BCG consultants, HBS working paper 24-013.
+9. **Faculty point to each part in turn and ask what justified relying on it.** *On screen:* the panel goes. The red marks and the second student's note lift off both briefs, the reports and the AI's column fade back, and "Faculty see only the briefs" appears. Part 1 is outlined in both briefs, and each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed."
+10. **Faculty check: What evidence justified relying on the system here? Point to each part. Was the evidence about that part?** *On screen:* both lines appear under the picture at the same size. The briefs, both answers, the AI's answers, the frontier and the harbor log stay in view.
 
 **Faculty check:** What evidence justified relying on the system here?
 **Point to each part. Was the evidence about that part?** (same size)
@@ -197,29 +187,24 @@ Both students give the same reason for Part 1. For Part 2, the first student's e
 
 ## 7. Pacing table
 
-Reading is caption words plus new picture words, ÷ 3. Every beat is at least that long, at least twice its caption's reading time, and holds at least 1.5 s after its last movement.
+Reading is caption words ÷ 3. Every beat holds at least 1.5 s after its last movement.
 
 | Beat | Time (s) | Caption words | Picture words | Reading (s) | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 · The task | 0.0–7.7 | 6 | 17 | 7.7 | 1.0 | 3.0 | 3.7 | 7.7 |
-| 2 · Reports to the AI | 7.7–14.0 | 7 | 12 | 6.3 | 1.0 | 3.2 | 2.1 | 6.3 |
-| 3 · Equal confidence | 14.0–24.0 | 6 | 24 | 10.0 | 1.0 | 4.5 | 4.5 | 10.0 |
-| 4 · Checks Part 1 | 24.0–32.0 | 12 | 5 | 5.7 | 1.0 | 4.5 | 2.5 | 8.0 |
-| 5 · Uses Part 2 as is | 32.0–40.1 | 12 | 3 | 5.0 | 1.0 | 5.5 | 1.6 | 8.1 |
-| 6 · Checks each part | 40.1–48.8 | 13 | 7 | 6.7 | 1.0 | 5.6 | 2.1 | 8.7 |
-| 7 · Checks Part 2 too | 48.8–57.5 | 12 | 14 | 8.7 | 1.0 | 6.2 | 1.5 | 8.7 |
-| 8 · The reason | 57.5–65.5 | 12 | 3 | 5.0 | 1.0 | 3.5 | 3.5 | 8.0 |
-| 9 · The jagged frontier | 65.5–76.2 | 16 | 6 | 7.3 | 1.0 | 4.9 | 4.8 | 10.7 |
-| 10 · The study | 76.2–90.5 | 14 | 29 | 14.3 | 1.0 | 6.2 | 7.1 | 14.3 |
-| 11 · Faculty point to each part | 90.5–106.5 | 14 | 31 | 15.0 | 1.0 | 13.5 | 1.5 | 16.0 |
-| 12 · Faculty check | 106.5–113.2 | 8 + 10 | 0 | 6.0 | 0.0 | 3.8 | 2.9 | 6.7, then rests |
-| **Total** | | **142** | **151** | | | **64.4** | | **113.2** |
+| 1 · The task and the reports | 0.0–8.6 | 12 | 29 | 4.0 | 1.0 | 5.7 | 1.9 | 8.6 |
+| 2 · Equal confidence | 8.6–15.6 | 6 | 24 | 2.0 | 1.0 | 3.5 | 2.5 | 7.0 |
+| 3 · Checks Part 1 | 15.6–23.1 | 12 | 5 | 4.0 | 1.0 | 4.5 | 2.0 | 7.5 |
+| 4 · Uses Part 2 | 23.1–30.3 | 10 | 3 | 3.3 | 1.0 | 4.7 | 1.5 | 7.2 |
+| 5 · Checks each part | 30.3–37.6 | 11 | 7 | 3.7 | 1.0 | 4.8 | 1.5 | 7.3 |
+| 6 · Checks Part 2 too | 37.6–48.6 | 12 | 36 | 4.0 | 1.0 | 8.5 | 1.5 | 11.0 |
+| 7 · The reason and the frontier | 48.6–58.4 | 17 | 7 | 5.7 | 1.0 | 7.3 | 1.5 | 9.8 |
+| 8 · The study | 58.4–67.9 | 16 | 29 | 5.3 | 1.0 | 3.5 | 5.0 | 9.5 |
+| 9 · Faculty point to each part | 67.9–83.9 | 14 | 31 | 4.7 | 1.0 | 13.5 | 1.5 | 16.0 |
+| 10 · Faculty check | 83.9–90.6 | 8 + 10 | 0 | 6.0 | 0.0 | 3.8 | 2.9 | 6.7, then rests |
+| **Total** | | **128** | **171** | | | **59.8** | | **90.6** |
 
 Checks:
-- Changes a caption names wait until it can be read once: the "READY" pills (beat 3), Part 1 into the first brief (beat 4, 4.0 s in), Part 2 into it (beat 5, 4.0 s), the correction (beat 7, 4.1 s), "OPEN TODAY" (beat 8, 4.0 s), the paired pulse (beat 9, 5.3 s), the bars (beat 10, 4.7 s), the outlines (beat 11, 4.7 s), the move line (beat 12, 3.3 s after the check).
-- The frontier is on screen, uncovered, for 9.3 s (66.5–75.8) before the scene dims for the panel.
-- Both students read the aid reports with the same motion and timing (0.6, 0.6, 0.4, 0.6 s).
-- The second student's work is done before the reason and the frontier appear.
-- Every hold is at least 1.5 s; one movement at a time.
-- No camera moves; the scene dims once for the panel and our side recedes once at hand-in. Reduced motion shows the final frame.
-- **Phone:** the stacked stage and the caption band have fixed heights, so the caption and controls stay put through the whole run (measured at 390, 768, 900 and 1280 px wide). The player is 833 px tall at 390 × 844, final frame included.
+- The longest stillness is the 1.5 s pause on the second student's reading note (beat 6) and the 5.0 s panel hold (beat 8); beats 7–8 together hold still for about 8 s of 19, against 16 of 25 in round 4.
+- The second student's reason for "15" is on screen, large, from 41.3 s; the 15 appears at 44.2 s.
+- Both port callouts stay open, at full strength, to the end.
+- **Phone:** the caption and controls stay put through the whole run (measured at 390, 768, 900 and 1280 px wide), and the player is 833 px tall at 390 × 844, final frame included.

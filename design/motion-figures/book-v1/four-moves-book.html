@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Four Moves</title>
+<meta name="description" content="The four moves from The Irreducible Officer as a book: a chapter per move, and a spread with a teaching figure for each failure mode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Prototype v1: "The four moves" as a CSS 3D book, with the motion figures inside it.
+   v0's book (book-v0/four-moves-book.html) plus one spread per failure mode.
+   The figure spreads are built from figures.js; see NOTES.md for the embedding.
+   Wide screens get page turns; at 1100px and below, one spread at a time. */
+:root {
+  --paper: #f6f1e8;
+  --paper-bright: #fffdfa;
+  --page: #fdfaf3;
+  --ink: #0a2242;
+  --body: #242a31;
+  --muted: #4d5360;
+  --faint: #d7d0c4;
+  --red: #b81b2b;
+  --navy-line: rgba(8, 35, 70, 0.12);
+  --navy-border: rgba(8, 35, 70, 0.18);
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: "Source Sans 3", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --turn: 900ms;
+  --turn-ease: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --page-w: min(520px, calc((100vw - 96px) / 2));
+  --page-h: calc(var(--page-w) * 1.25);
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--body); font-family: var(--serif); -webkit-font-smoothing: antialiased; }
+a { color: var(--ink); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* --- context strip (approximates the site's masthead so the book is seen in place) --- */
+.proto-note { font: 500 13px/1.4 var(--sans); color: var(--muted); background: #efe8db; border-bottom: 1px solid var(--faint); padding: 8px 16px; text-align: center; margin: 0; }
+.mast { max-width: 1104px; margin: 0 auto; padding: 26px 16px 0; }
+.mast .brand { font: 520 40px/1.1 var(--serif); letter-spacing: -0.03em; color: var(--ink); margin: 0; }
+.mast .brand span { color: var(--red); }
+.mast .purpose { font: italic 400 20px/1.35 var(--serif); color: var(--ink); margin: 6px 0 18px; }
+.tabs { display: flex; gap: 30px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--faint); padding: 0 16px; max-width: 1136px; margin: 0 auto; font: 400 18px/1 var(--sans); color: var(--ink); overflow-x: auto; }
+.tabs span { padding: 15px 0 13px; border-bottom: 3px solid transparent; white-space: nowrap; }
+.tabs span:first-child { font-weight: 600; border-bottom-color: var(--red); }
+
+/* --- the section --- */
+.moves { max-width: 1104px; margin: 0 auto; padding: 40px 16px 64px; }
+.moves-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; align-items: end; margin-bottom: 26px; }
+.moves-head h2 { font: 560 clamp(30px, 3.2vw, 40px)/1.15 var(--serif); color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+.moves-head p { grid-column: 1; font: 400 19px/1.5 var(--serif); margin: 0; max-width: 60ch; color: var(--body); }
+.moves-head .flat-toggle { grid-column: 2; grid-row: 1 / span 2; align-self: end; }
+.quiet { font: 500 15px/1 var(--sans); color: var(--ink); background: transparent; border: 1px solid var(--navy-line); padding: 10px 14px; cursor: pointer; }
+.quiet:hover { border-color: var(--ink); }
+.flat-toggle { display: none; }
+.has-js .flat-toggle { display: inline-block; }
+
+/* ===== BASE (no JS / read as one page): a plain document of pages ===== */
+.book { position: relative; }
+.stage, .leaf { position: relative; }
+.face { position: relative; background: var(--paper-bright); border: 1px solid var(--faint); padding: 32px 36px 44px; margin: 0 0 16px; }
+.face.blank { display: none; }
+.book:not(.is-book) .face { max-width: 760px; }
+.book-nav { display: none; }
+
+/* ===== shared page typography ===== */
+.runhead { display: flex; justify-content: space-between; gap: 12px; font: 600 10.5px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin: 0 0 22px; }
+.folio { position: absolute; bottom: 18px; font: 500 12px/1 var(--sans); color: var(--muted); }
+.face.back .folio { left: 36px; }
+.face.front .folio { right: 36px; }
+.kicker { font: 600 11.5px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin: 0 0 12px; }
+.move-title { font: 560 clamp(30px, 3vw, 40px)/1.08 var(--serif); color: var(--ink); margin: 0 0 14px; letter-spacing: -0.015em; }
+.move-title b, .dot { color: var(--red); font-weight: inherit; }
+.lead { font: 400 19px/1.46 var(--serif); color: var(--ink); margin: 0 0 16px; }
+:where(.face) p { margin: 0 0 12px; font-size: 16.5px; line-height: 1.5; }
+blockquote { margin: 16px 0 14px; padding: 2px 0 2px 16px; border-left: 3px solid var(--red); }
+blockquote p { font: italic 400 18.5px/1.42 var(--serif) !important; color: var(--ink); margin: 0 0 6px !important; }
+blockquote footer { font: 500 12.5px/1.4 var(--sans); color: var(--muted); }
+blockquote footer a { color: var(--muted); }
+.mark { display: block; height: 66px; width: auto; margin: 4px 0 16px; overflow: visible; }
+
+.practice h3 { font: 600 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin: 18px 0 8px; }
+.practice h3:first-of-type { margin-top: 0; }
+.practice .fm { margin: 0 0 8px; font-size: 16px; line-height: 1.42; }
+.practice .fm strong { color: var(--ink); font-weight: 650; }
+.practice .ask { font: italic 400 17px/1.4 var(--serif); color: var(--ink); margin: 0 0 6px; padding-left: 14px; position: relative; }
+.practice .ask::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+.practice .keep { font-size: 16px; line-height: 1.45; }
+.pilot { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--navy-line); }
+.pilot .step { font: 600 11px/1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.pilot p { margin: 0; font-size: 15px; line-height: 1.42; color: var(--body); }
+
+/* a failure mode's name, linked to its spread */
+.to-fig { all: unset; cursor: pointer; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+.to-fig:hover { text-decoration-color: var(--red); }
+.to-fig:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.ladder { list-style: none; margin: 4px 0 2px; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--navy-line); }
+.ladder li { padding: 8px 9px 9px; border-right: 1px solid var(--navy-line); font: 400 13px/1.3 var(--sans); color: var(--muted); }
+.ladder li:last-child { border-right: 0; background: rgba(184, 27, 43, 0.06); }
+.ladder b { display: block; font: 600 13.5px/1.2 var(--sans); color: var(--ink); margin-bottom: 3px; }
+.ladder li:last-child b { color: var(--red); }
+
+.friction { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 14px 0 0; border-top: 1px solid var(--navy-line); }
+.friction div { padding: 10px 12px 0 0; }
+.friction div + div { padding-left: 14px; border-left: 1px solid var(--navy-line); }
+.friction h3 { font: 600 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 6px; color: var(--muted); }
+.friction div + div h3 { color: var(--red); }
+.friction p { font-size: 15px !important; line-height: 1.4 !important; margin: 0 !important; }
+
+/* contents: chapters, with their figures under each */
+.contents { list-style: none; margin: 4px 0 14px; padding: 0; }
+.contents > li { border-bottom: 1px solid var(--navy-line); padding-bottom: 6px; }
+.contents > li:last-child { padding-bottom: 0; }
+.contents button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; width: 100%; padding: 10px 2px 4px; cursor: pointer; font: 400 19px/1.25 var(--serif); color: var(--ink); }
+.contents > li:last-child > button { padding-bottom: 10px; }
+.contents ol { list-style: none; margin: 0; padding: 0; }
+.contents ol button { padding: 3px 2px; font: 400 15px/1.3 var(--sans); color: var(--body); }
+.contents .n { font: 600 12px/1.9 var(--sans); color: var(--red); letter-spacing: 0.08em; }
+.contents ol .n { line-height: 1.3; }
+.contents .pg { font: 500 13px/1.9 var(--sans); color: var(--muted); }
+.contents ol .pg { line-height: 1.5; }
+.contents .wip { font: 600 10px/1 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-left: 8px; white-space: nowrap; }
+.contents button:hover .t { text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 4px; }
+.contents button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.small { font: 400 14px/1.45 var(--sans) !important; color: var(--muted); }
+
+.map { width: 100%; border-collapse: collapse; margin: 0 0 14px; font: 400 15px/1.35 var(--sans); }
+.map th { text-align: left; font: 400 17px/1.25 var(--serif); color: var(--ink); padding: 9px 10px 9px 0; vertical-align: top; width: 34%; border-top: 1px solid var(--navy-line); }
+.map .n { display: inline-block; width: 22px; font: 600 12px/1 var(--sans); color: var(--red); }
+.map td { padding: 9px 0; color: var(--body); border-top: 1px solid var(--navy-line); vertical-align: top; }
+.map td .to-fig { color: var(--body); }
+.face .closing-line { font: 500 24px/1.34 var(--serif); color: var(--ink); margin: 6px 0 0; }
+.closing-line span { display: block; }
+.routes { list-style: none; margin: 4px 0 14px; padding: 0; }
+.routes li { border-top: 1px solid var(--navy-line); padding: 11px 0; }
+.routes a { font: 500 18px/1.3 var(--serif); color: var(--ink); text-decoration: none; }
+.routes a::after { content: " \2192"; color: var(--red); }
+.routes a:hover { text-decoration: underline; text-decoration-color: var(--red); }
+.routes span { display: block; font: 400 14px/1.4 var(--sans); color: var(--muted); margin-top: 3px; }
+
+/* --- failure-mode spread: left page --- */
+.fm-title { font: 560 clamp(28px, 2.7vw, 34px)/1.1 var(--serif); color: var(--ink); margin: 0 0 4px; letter-spacing: -0.012em; }
+.fm-page h4 { font: 600 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin: 20px 0 8px; }
+.fm-page .wrong { font: 400 19px/1.42 var(--serif); color: var(--ink); margin: 0; }
+.fm-page .check { margin: 0; padding-left: 14px; border-left: 2px solid var(--ink); }
+.fm-page .check p { font: italic 400 19px/1.36 var(--serif); color: var(--ink); margin: 0; }
+.fm-page .check p + p { margin-top: 6px; }
+.fm-page blockquote { margin-top: 22px; }
+
+/* --- failure-mode spread: right page, the figure --- */
+.plate { position: relative; margin: 0 0 16px; background: var(--paper); border: 1px solid var(--navy-border); }
+.plate::before { content: ""; display: block; height: 2px; background: linear-gradient(90deg, var(--ink) 0, var(--ink) 78px, var(--red) 78px, var(--red) 106px, transparent 106px); }
+.plate img { display: block; width: 100%; height: auto; }
+.plate.is-live { cursor: pointer; }
+.plate.is-live::after { content: ""; position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5.5v13l11-6.5z' fill='%23f6f1e8'/%3E%3C/svg%3E") 55% 50% / 28px no-repeat; opacity: 0; transform: scale(0.92); transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out); pointer-events: none; }
+@media (hover: hover) { .plate.is-live:hover::after { opacity: 0.92; transform: scale(1); } }
+/* a typographic stand-in when the poster still isn't on disk: the figure's last caption */
+.poster-type { aspect-ratio: 2076 / 1442; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 20px; background: var(--paper); }
+.poster-type .lbl { font: 600 11px/1.2 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); margin: 0 0 6px; }
+.poster-type .q { font: italic 400 19px/1.25 var(--serif); color: var(--ink); margin: 0; }
+.poster-type .q + .q { margin-top: 4px; }
+.poster-type .name { font: 560 22px/1.1 var(--serif); color: var(--ink); margin: 0 0 auto; }
+.plate-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
+.btn { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 16px; font: 600 15px/1 var(--sans); color: var(--ink); background: var(--paper-bright); border: 1px solid var(--navy-border); text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.btn.play { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.play::before { content: ""; width: 10px; height: 11px; background: currentColor; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.btn.open::after { content: "\2197"; font-weight: 500; }
+/* in progress: dashed means nobody has taken it up yet */
+.plate.is-wip { border-style: dashed; border-color: var(--muted); }
+.plate.is-wip::before { background: var(--faint); }
+.plate.is-wip img { opacity: 0.55; filter: grayscale(0.35); }
+.plate.is-wip .poster-type { background: transparent; }
+.plate.is-wip .poster-type .q, .plate.is-wip .poster-type .lbl, .plate.is-wip .poster-type .name { color: var(--muted); }
+.wip-badge { position: absolute; left: 12px; top: 14px; z-index: 1; font: 700 11px/1 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); background: var(--paper-bright); border: 1px solid var(--ink); padding: 7px 9px 6px; }
+.wip-note { font: 400 15px/1.45 var(--sans) !important; color: var(--body); }
+.wip-note b { color: var(--ink); font-weight: 600; }
+
+/* cover */
+.face.cover { background: var(--ink); color: var(--paper); border-color: var(--ink); display: flex; flex-direction: column; }
+.cover .imprint { font: 600 11px/1 var(--sans); letter-spacing: 0.22em; text-transform: uppercase; color: rgba(246, 241, 232, 0.72); margin: 6px 0 0; }
+.cover h3 { font: 520 clamp(40px, 4.4vw, 56px)/1.04 var(--serif); letter-spacing: -0.025em; color: var(--paper); margin: auto 0 26px; }
+.cover .lines { font: italic 400 21px/1.5 var(--serif); color: var(--paper); margin: 0 0 auto; }
+.cover .lines span { display: block; }
+.cover .lines b { color: #e2394a; font-weight: inherit; }
+.cover .rule { width: 56px; height: 3px; background: var(--red); margin: 0 0 22px; }
+.cover .from { font: 400 14px/1.45 var(--sans) !important; color: rgba(246, 241, 232, 0.78); margin: 26px 0 0 !important; }
+.cover .hint { font: 500 14px/1 var(--sans) !important; color: var(--paper); margin: 18px 0 0 !important; opacity: 0.9; }
+.book:not(.is-book) .cover .hint { display: none; }
+.cover .hint::after { content: " \2192"; color: #e2394a; }
+.face.endboard { background: var(--ink); border-color: var(--ink); }
+
+/* ===== BOOK MODE ===== */
+.is-book .book-nav { display: flex; }
+.is-book .face.blank { display: block; }
+
+@media (min-width: 1101px) {
+  .is-book { display: flex; flex-direction: column; align-items: center; }
+  .is-book .viewport { width: calc(var(--page-w) * 2); height: var(--page-h); position: relative; }
+  .is-book .stage {
+    position: absolute; inset: 0;
+    transition: transform calc(var(--turn) * 0.9) var(--turn-ease);
+  }
+  .is-book[data-spread="0"] .stage { transform: translateX(-25%); }
+  .is-book .leaves { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; }
+  .is-book .leaf {
+    position: absolute; inset: 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transform: perspective(3200px) rotateY(0deg);
+    transition: transform var(--turn) var(--turn-ease);
+    cursor: pointer;
+  }
+  .is-book .leaf.turned { transform: perspective(3200px) rotateY(-180deg); }
+  .is-book .face {
+    position: absolute; inset: 0; margin: 0; overflow: hidden;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border: 0; padding: 30px 38px 46px 40px;
+    background-color: var(--page);
+  }
+  .is-book .face.back { transform: rotateY(180deg); padding: 30px 40px 46px 38px; }
+  /* gutter shading: right pages darken toward the spine on their left edge, left pages on their right */
+  .is-book .face.front:not(.cover) { background-image: linear-gradient(90deg, rgba(10,34,66,0.10), rgba(10,34,66,0) 9%), linear-gradient(180deg, #fffdf8, var(--page)); box-shadow: inset -1px 0 0 var(--faint); }
+  .is-book .face.back:not(.endboard) { background-image: linear-gradient(270deg, rgba(10,34,66,0.10), rgba(10,34,66,0) 9%), linear-gradient(180deg, #fffdf8, var(--page)); box-shadow: inset 1px 0 0 var(--faint); }
+  .is-book .face.cover { padding: 46px 46px 40px 52px; background-color: var(--ink); background-image: linear-gradient(90deg, rgba(0,0,0,0.28), rgba(0,0,0,0) 5%, rgba(255,255,255,0.05) 6%, rgba(0,0,0,0) 12%); }
+  /* light that moves across a page while it turns */
+  .is-book .face::after { content: ""; position: absolute; inset: 0; pointer-events: none; transition: opacity var(--turn) var(--turn-ease); }
+  .is-book .face.front::after { background: linear-gradient(90deg, rgba(10,34,66,0.22), rgba(10,34,66,0.04)); opacity: 0; }
+  .is-book .face.back::after { background: linear-gradient(270deg, rgba(10,34,66,0.22), rgba(10,34,66,0.04)); opacity: 1; }
+  .is-book .leaf.turned .face.front::after { opacity: 1; }
+  .is-book .leaf.turned .face.back::after { opacity: 0; }
+  /* the open book's base: board edges and a shadow on the table */
+  .is-book .base { position: absolute; top: 0; bottom: 0; pointer-events: none; transition: opacity 300ms; }
+  .is-book .base.right { left: 50%; right: 0; box-shadow: 0 18px 40px -18px rgba(10,34,66,0.45), 4px 0 0 -1px #e9e1d2, 6px 1px 0 -1px var(--faint), 8px 2px 0 -1px #e9e1d2; }
+  .is-book .base.left { left: 0; right: 50%; box-shadow: 0 18px 40px -18px rgba(10,34,66,0.45), -4px 0 0 -1px #e9e1d2, -6px 1px 0 -1px var(--faint), -8px 2px 0 -1px #e9e1d2; opacity: 1; }
+  .is-book[data-spread="0"] .base.left { opacity: 0; }
+  .is-book .face.front:not(.cover):hover::before, .is-book .face.back:hover::before { content: ""; position: absolute; top: 0; width: 34px; height: 34px; pointer-events: none; }
+  .is-book .face.front:not(.cover):hover::before { right: 0; background: linear-gradient(225deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
+  .is-book .face.back:not(.endboard):hover::before { left: 0; background: linear-gradient(135deg, var(--paper) 50%, rgba(10,34,66,0.16) 50%, rgba(10,34,66,0.02)); }
+  .is-book .face.endboard { box-shadow: none; }
+}
+
+/* narrow: one spread at a time, its two pages stacked, no 3D */
+@media (max-width: 1100px) {
+  .is-book .face:not(.is-current) { display: none !important; }
+  .is-book .face { margin: 0; border-bottom: 0; padding: 26px 20px 44px; }
+  .is-book .face.is-current + .face.is-current, .is-book .leaf + .leaf .face.front.is-current { border-top: 1px dashed var(--faint); }
+  .is-book .viewport { border-bottom: 1px solid var(--faint); max-width: 760px; margin: 0 auto; }
+  .is-book .face.cover { min-height: 420px; padding: 34px 24px 30px; }
+  .is-book .folio { bottom: 16px; }
+  .is-book .face.back .folio { left: 20px; }
+  .is-book .face.front .folio { right: 20px; }
+  .moves-head { grid-template-columns: 1fr; }
+  .moves-head .flat-toggle { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 8px; }
+  .ladder { grid-template-columns: 1fr 1fr; }
+  .ladder li:nth-child(2) { border-right: 0; }
+  .ladder li:nth-child(-n+2) { border-bottom: 1px solid var(--navy-line); }
+}
+@media (max-width: 480px) {
+  .face { padding: 26px 20px 44px; }
+  .runhead { flex-wrap: wrap; }
+  .fm-page .check p, .fm-page .wrong { font-size: 18px; }
+  .poster-type .q { font-size: 16px; }
+}
+
+/* the control bar under the book */
+.book-nav { align-items: center; justify-content: space-between; gap: 12px; margin-top: 26px; width: calc(var(--page-w) * 2); font-family: var(--sans); }
+.book-nav .turn { font: 600 15px/1 var(--sans); color: var(--ink); background: var(--paper-bright); border: 1px solid var(--navy-line); min-width: 44px; min-height: 44px; padding: 0 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.book-nav .turn:hover:not(:disabled) { border-color: var(--ink); }
+.book-nav .turn:disabled { opacity: 0.38; cursor: default; }
+.book-nav .turn.next { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.book-nav .where { flex: 1; text-align: center; font: 500 15px/1.3 var(--sans); color: var(--ink); min-width: 0; margin: 0; }
+.book-nav .where b { color: var(--red); font-weight: 600; margin-right: 6px; }
+.book-nav .jump { display: flex; gap: 6px; justify-content: center; margin-top: 8px; }
+.book-nav .jump button { all: unset; box-sizing: border-box; width: 28px; height: 28px; display: grid; place-items: center; font: 600 12px/1 var(--sans); color: var(--muted); border: 1px solid var(--navy-line); border-radius: 50%; cursor: pointer; }
+.book-nav .jump button[aria-current] { background: var(--red); border-color: var(--red); color: #fff; }
+.book-nav .jump button.in-chapter:not([aria-current]) { border-color: var(--red); color: var(--red); }
+.book-nav .jump button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.book-nav .mid { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+@media (max-width: 1100px) {
+  .book-nav { position: sticky; bottom: 0; width: auto; margin: 0 -16px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--faint); box-shadow: 0 -8px 16px -12px rgba(10,34,66,0.25); z-index: 5; }
+  .book-nav .jump { display: none; }
+  .book-nav .turn .label { display: none; }
+  .book-nav .where { font-size: 14px; }
+}
+
+/* ===== the figure, playing over the open book ===== */
+.plate-dialog { width: min(1120px, calc(100vw - 32px)); height: calc(100vh - 32px); height: calc(100svh - 32px); max-width: none; max-height: none; margin: auto; padding: 0; border: 1px solid var(--navy-border); background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px -24px rgba(10, 34, 66, 0.6); overflow: hidden; }
+.plate-dialog[open] { display: flex; flex-direction: column; animation: plate-in 240ms var(--ease-out); }
+.plate-dialog::backdrop { background: rgba(10, 34, 66, 0.6); animation: backdrop-in 240ms var(--ease-out); }
+@keyframes plate-in { from { opacity: 0; transform: translateY(10px) scale(0.985); } }
+@keyframes backdrop-in { from { opacity: 0; } }
+.plate-bar { flex: none; display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 2px 4px 2px 18px; border-bottom: 1px solid var(--navy-line); background: var(--paper-bright); }
+.plate-where { flex: 1; min-width: 0; margin: 0; font: 400 15px/1.25 var(--sans); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plate-where b { font: 600 16px/1.25 var(--sans); color: var(--ink); margin-right: 10px; }
+.plate-bar a, .plate-bar button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font: 600 15px/1 var(--sans); color: var(--ink); background: none; border: 0; text-decoration: none; cursor: pointer; }
+.plate-bar a::after { content: "\2197"; font-weight: 500; }
+.plate-bar a:hover, .plate-bar button:hover { text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 4px; }
+.plate-close { border-left: 1px solid var(--navy-line) !important; }
+.plate-close span { font-size: 18px; line-height: 1; }
+.plate-frame { position: relative; flex: 1; min-height: 0; }
+.plate-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: var(--paper); visibility: hidden; }
+.plate-dialog.is-ready iframe { visibility: visible; }
+.plate-loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; font: 500 15px/1 var(--sans); color: var(--muted); }
+@media (max-width: 700px), (max-height: 760px) {
+  .plate-dialog { width: 100vw; height: 100vh; height: 100dvh; border: 0; }
+  .plate-where span { display: none; }
+}
+@media (max-width: 420px) { .plate-bar a { padding: 0 8px; } .plate-bar a span { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .is-book .leaf, .is-book .stage, .is-book .face::after, .is-book .base { transition: none !important; }
+  .plate-dialog[open], .plate-dialog::backdrop { animation: none; }
+  .plate.is-live::after { transition: none; }
+}
+.reduce-motion .is-book .leaf, .reduce-motion .is-book .stage, .reduce-motion .is-book .face::after, .reduce-motion .is-book .base { transition: none !important; }
+.reduce-motion .plate-dialog[open], .reduce-motion .plate-dialog::backdrop { animation: none; }
+</style>
+</head>
+<body>
+<p class="proto-note">Prototype for Jack · the four moves book, v1, with the motion figures · not the live site</p>
+<header class="mast" aria-hidden="true">
+  <p class="brand">Judgment Lab<span>.</span></p>
+  <p class="purpose">Strengthening human judgment in AI-enabled work.</p>
+</header>
+<nav class="tabs" aria-hidden="true"><span>Learn</span><span>Discuss</span><span>Practice</span><span>Design</span><span>References</span></nav>
+
+<section class="moves" id="moves" aria-labelledby="moves-title">
+  <div class="moves-head">
+    <h2 id="moves-title">The four moves</h2>
+    <p>The essay ends with four sentences. Each chapter takes one of them, then gives every failure mode it guards against a spread of its own, with a figure that shows the failure happen.</p>
+    <button class="quiet flat-toggle" type="button" data-flat aria-pressed="false">Read as one page</button>
+  </div>
+
+  <div class="book" data-book data-spread="0">
+    <div class="viewport">
+      <div class="stage">
+        <div class="base left" aria-hidden="true"></div>
+        <div class="base right" aria-hidden="true"></div>
+        <!-- The pages below are written in reading order. The script adds a spread
+             per figure from figures.js, then binds the pages into leaves. -->
+        <div class="leaves" data-pages>
+
+          <article class="face cover" data-key="cover" data-title="Cover">
+            <p class="imprint">Judgment Lab</p>
+            <h3>The four moves</h3>
+            <div class="rule" aria-hidden="true"></div>
+            <p class="lines"><span>Frame the problem<b>.</b></span><span>Calibrate the tool<b>.</b></span><span>Refuse the garden path<b>.</b></span><span>Own the decision<b>.</b></span></p>
+            <p class="from">From the closing line of <em>The Irreducible Officer</em>, with a figure for each failure mode.</p>
+            <p class="hint" aria-hidden="true">Open the book</p>
+          </article>
+
+          <article class="face" data-key="howto" data-title="How to read this">
+            <p class="runhead"><span>The four moves</span></p>
+            <h3 class="move-title" style="font-size:30px" data-heading>Four judgments that stay with a person</h3>
+            <p class="lead">AI can draft, search, compare and recommend. Four judgments still belong to the person who will answer for the work.</p>
+            <p>Each move opens a chapter. Its first two pages say what the move asks, then name the failures it guards against, the question an educator can ask, and the evidence worth keeping.</p>
+            <p>Each failure mode then gets a spread. The left page says what goes wrong and what faculty can ask. The right page holds a short figure that shows it happening. Play it here, or open it on its own page.</p>
+            <p>The order matters. A learner who never framed the problem has nothing to calibrate against and nothing to own.</p>
+            <p class="small">The essay was written for the National War College. Judgment Lab adapts the same moves for higher education and high school as designs to test. The examples in the figures are constructed.</p>
+          </article>
+
+          <article class="face" data-key="contents" data-title="Contents">
+            <p class="runhead"><span></span><span>Contents</span></p>
+            <h3 class="move-title" style="font-size:30px">Contents</h3>
+            <ol class="contents" data-contents>
+              <li>Frame the problem.</li><li>Calibrate the tool.</li><li>Refuse the garden path.</li><li>Own the decision.</li>
+            </ol>
+            <p class="small">Turn pages with the buttons below the book, the arrow keys, or a click on a page.</p>
+          </article>
+
+          <!-- Chapter 1 -->
+          <article class="face" data-key="move-frame" data-title="Move 1, Frame the problem">
+            <p class="runhead"><span>The four moves</span><span>Section IV</span></p>
+            <p class="kicker">Move 1 of 4</p>
+            <h3 class="move-title" data-heading>Frame the problem<b>.</b></h3>
+            <svg class="mark" viewBox="0 0 150 66" aria-hidden="true"><rect x="22" y="12" width="104" height="42" fill="none" stroke="#0a2242" stroke-opacity=".25" stroke-dasharray="3 4"/><rect x="40" y="6" width="96" height="54" fill="none" stroke="#0a2242" stroke-opacity=".18" stroke-dasharray="3 4"/><path d="M8 18V4h14M128 4h14v14M142 48v14h-14M22 62H8V48" fill="none" stroke="#b81b2b" stroke-width="3" stroke-linecap="square"/><circle cx="142" cy="62" r="5" fill="#b81b2b"/></svg>
+            <p class="lead">Decide what problem you are solving, why it matters, and what would count as a good answer. Do it before AI hands you a structure.</p>
+            <blockquote><p>&ldquo;The framing is where the judgment lives.&rdquo;</p><footer><a href="https://judgmentlab.net/#iv-purpose-as-the-irreducible-human-act">Section IV, Purpose as the Irreducible Human Act</a></footer></blockquote>
+            <p>A tightly bounded prompt makes the hard choices for the learner, and that kind of structure is where AI works best. Ask learners to set the frame first.</p>
+          </article>
+          <article class="face practice" data-key="practice-frame" data-title="Frame the problem in practice">
+            <p class="runhead"><span></span><span>Frame the problem &middot; in practice</span></p>
+            <h3>Guards against</h3>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="frame-capture">Frame capture</button>.</strong> The first plausible frame becomes the student&rsquo;s frame.</p>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="invisible-delegation">Invisible delegation</button>.</strong> A request for help transfers criteria, structure, or meaning.</p>
+            <h3>Ask</h3>
+            <p class="ask">What problem did the student choose to solve?</p>
+            <p class="ask">What did the AI decide for the student?</p>
+            <h3>Keep as evidence</h3>
+            <p class="keep">A one-page frame: the problem, key assumptions, criteria for success, the evidence standard, and the role AI played.</p>
+            <div class="pilot"><span class="step">Pilot step 1</span><p>Unaided frame. Students frame the problem without AI, scored on completion.</p></div>
+          </article>
+
+          <!-- Chapter 2 -->
+          <article class="face" data-key="move-calibrate" data-title="Move 2, Calibrate the tool">
+            <p class="runhead"><span>The four moves</span><span>Section V</span></p>
+            <p class="kicker">Move 2 of 4</p>
+            <h3 class="move-title" data-heading>Calibrate the tool<b>.</b></h3>
+            <svg class="mark" viewBox="0 0 220 70" aria-hidden="true"><path d="M63 64a52 52 0 0 1 104 0" fill="none" stroke="#0a2242" stroke-opacity=".3" stroke-width="2"/><g stroke="#0a2242" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"><path d="M72.5 46.4L63.3 42.6"/><path d="M97.4 21.5L93.6 12.3"/><path d="M132.6 21.5L136.4 12.3"/><path d="M157.5 46.4L166.7 42.6"/></g><g font-family="'Source Sans 3', sans-serif" font-size="10.5" font-weight="600" fill="#4d5360" letter-spacing=".08em"><text x="58" y="40" text-anchor="end">ACCEPT</text><text x="90" y="8" text-anchor="middle">CHECK</text><text x="141" y="8" text-anchor="middle">REVISE</text><text x="172" y="40">REFUSE</text></g><path d="M115 64L98.2 23.4" stroke="#b81b2b" stroke-width="3" stroke-linecap="round"/><circle cx="115" cy="64" r="6" fill="#b81b2b"/></svg>
+            <p class="lead">Learn where AI tends to be strong and where it tends to fail on this kind of task. Then decide what to accept, check, revise, or refuse.</p>
+            <blockquote><p>&ldquo;Students need to predict, with reasonable accuracy, when AI performs well for a given type of task and when it does not, and calibrate their use accordingly.&rdquo;</p><footer><a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></footer></blockquote>
+          </article>
+          <article class="face practice" data-key="practice-calibrate" data-title="Calibrate the tool in practice">
+            <p class="runhead"><span></span><span>Calibrate the tool &middot; in practice</span></p>
+            <h3>Guards against</h3>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="uncalibrated-reliance">Uncalibrated reliance</button>.</strong> The student accepts confident output without knowing whether the task fits the tool.</p>
+            <h3>Ask</h3>
+            <p class="ask">What evidence justified relying on the system here?</p>
+            <h3>What counts</h3>
+            <ol class="ladder">
+              <li><b>Trust</b>A feeling about the system</li>
+              <li><b>Use</b>AI appeared in the work</li>
+              <li><b>Reliance decision</b>A choice you can question</li>
+              <li><b><button type="button" class="to-fig" data-to-figure="appropriate-reliance">Appropriate reliance</button></b>The choice fits the task, risk and evidence</li>
+            </ol>
+            <h3>Keep as evidence</h3>
+            <p class="keep">Which outputs the learner accepted, modified, rejected, verified, or kept AI away from, with a reason for each.</p>
+            <div class="pilot"><span class="step">Pilot step 2</span><p>AI challenge. Students ask AI to attack their frame and record what they accepted, rejected and changed.</p></div>
+          </article>
+
+          <!-- Chapter 3 -->
+          <article class="face" data-key="move-garden" data-title="Move 3, Refuse the garden path">
+            <p class="runhead"><span>The four moves</span><span>Section VI</span></p>
+            <p class="kicker">Move 3 of 4</p>
+            <h3 class="move-title" data-heading>Refuse the garden path<b>.</b></h3>
+            <svg class="mark" viewBox="0 0 220 66" aria-hidden="true"><circle cx="10" cy="56" r="5" fill="#0a2242"/><path d="M14 54C60 40 70 64 110 50s50-30 96-26" fill="none" stroke="#0a2242" stroke-opacity=".35" stroke-width="2.5" stroke-dasharray="1 0"/><path d="M196 18l12 6-12 7" fill="none" stroke="#0a2242" stroke-opacity=".35" stroke-width="2.5"/><path d="M118 34l18 26" stroke="#b81b2b" stroke-width="3" stroke-linecap="round"/><path d="M14 54L70 8" fill="none" stroke="#b81b2b" stroke-width="3" stroke-linecap="round"/><circle cx="72" cy="7" r="5" fill="#b81b2b"/></svg>
+            <p class="lead">A garden path is work a fluent template answer can finish. Set problems where the template answer is wrong, or where several frames hold up and the learner must defend one.</p>
+            <blockquote><p>&ldquo;If instructors do not decide which friction matters, AI will decide by default.&rdquo;</p><footer><a href="https://judgmentlab.net/#vi-friction-as-developmental-design">Section VI, Friction as Developmental Design</a></footer></blockquote>
+            <div class="friction"><div><h3>Let AI remove</h3><p>Formatting, search, repetitive drafting, clerical assembly.</p></div><div><h3>Protect</h3><p>Initial framing, failed synthesis, seminar challenge, revision that changes the argument.</p></div></div>
+          </article>
+          <article class="face practice" data-key="practice-garden" data-title="Refuse the garden path in practice">
+            <p class="runhead"><span></span><span>Refuse the garden path &middot; in practice</span></p>
+            <h3>Guards against</h3>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="premature-synthesis">Premature synthesis</button>.</strong> The model connects material before the student has built the map.</p>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="institutional-monoculture">Institutional monoculture</button>.</strong> Shared systems and defaults narrow the range of frames available to the class.</p>
+            <h3>Ask</h3>
+            <p class="ask">Can the student explain why these connections matter?</p>
+            <p class="ask">What frames are missing across the seminar?</p>
+            <h3>Keep as evidence</h3>
+            <p class="keep">A diagnosis of a polished, misframed AI assessment: the hidden frame, the assumptions behind it, the missing evidence, and the point where it fails.</p>
+            <div class="pilot"><span class="step">Pilot steps 3&ndash;4</span><p>Misframed assessment, then diagnosis and revision. The flaw sits in the frame, where it is hardest to see.</p></div>
+          </article>
+
+          <!-- Chapter 4 -->
+          <article class="face" data-key="move-own" data-title="Move 4, Own the decision">
+            <p class="runhead"><span>The four moves</span><span>Section VII</span></p>
+            <p class="kicker">Move 4 of 4</p>
+            <h3 class="move-title" data-heading>Own the decision<b>.</b></h3>
+            <svg class="mark" viewBox="0 0 120 66" aria-hidden="true"><circle cx="33" cy="33" r="28" fill="none" stroke="#0a2242" stroke-opacity=".22" stroke-width="2"/><circle cx="33" cy="33" r="16" fill="#b81b2b"/><path d="M72 33h40" stroke="#0a2242" stroke-opacity=".3" stroke-width="2"/><path d="M72 22h28M72 44h34" stroke="#0a2242" stroke-opacity=".18" stroke-width="2"/></svg>
+            <p class="lead">AI can shape the work that leads to a decision. A person answers for the decision itself.</p>
+            <blockquote><p>&ldquo;AI can compress the work before a decision. It cannot own what follows.&rdquo;</p><footer><a href="https://judgmentlab.net/#vii-accountability-is-structural">Section VII, Accountability Is Structural</a></footer></blockquote>
+            <p>Learners should be able to say why they accepted an output, why they rejected one, and why the recommendation is still theirs.</p>
+          </article>
+          <article class="face practice" data-key="practice-own" data-title="Own the decision in practice">
+            <p class="runhead"><span></span><span>Own the decision &middot; in practice</span></p>
+            <h3>Guards against</h3>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="responsibility-laundering">Responsibility laundering</button>.</strong> The model&rsquo;s recommendation makes agency feel distributed or easier to defend.</p>
+            <p class="fm"><strong><button type="button" class="to-fig" data-to-figure="fluency-substitution">Fluency substitution</button>.</strong> Polished analysis stands in for owned reasoning.</p>
+            <h3>Ask</h3>
+            <p class="ask">Who owns the recommendation if it proves wrong?</p>
+            <p class="ask">Can the student independently explain the judgment in plain speech?</p>
+            <h3>Keep as evidence</h3>
+            <p class="keep">A short oral defense: what AI got wrong, what it made easier, where reliance fit and where it was refused, what changed between the first frame and the last, and what evidence would change the recommendation.</p>
+            <div class="pilot"><span class="step">Pilot step 5</span><p>Oral defense. This is where ownership of the frame shows, or fails to.</p></div>
+          </article>
+
+          <!-- Closing -->
+          <article class="face" data-key="closing" data-title="All four moves">
+            <p class="runhead"><span>The four moves</span><span>Section XI</span></p>
+            <h3 class="move-title" style="font-size:30px" data-heading>All four, in order</h3>
+            <p class="closing-line"><span>Frame the problem.</span><span>Calibrate the tool.</span><span>Refuse the garden path.</span><span>Own the decision<b class="dot">.</b></span></p>
+            <p class="kicker" style="margin-top:22px">Seven failure modes, four moves</p>
+            <table class="map">
+              <caption class="sr-only">The seven failure modes and the competency, grouped by the move that guards against each</caption>
+              <tbody data-map>
+                <tr><th scope="row"><span class="n">1</span>Frame</th><td>Frame capture, invisible delegation</td></tr>
+                <tr><th scope="row"><span class="n">2</span>Calibrate</th><td>Uncalibrated reliance; appropriate reliance</td></tr>
+                <tr><th scope="row"><span class="n">3</span>Garden path</th><td>Premature synthesis, institutional monoculture</td></tr>
+                <tr><th scope="row"><span class="n">4</span>Own</th><td>Responsibility laundering, fluency substitution</td></tr>
+              </tbody>
+            </table>
+          </article>
+          <article class="face" data-key="routes" data-title="Where to try them">
+            <p class="runhead"><span></span><span>Try a move</span></p>
+            <h3 class="move-title" style="font-size:30px">Try one now</h3>
+            <ul class="routes">
+              <li><a href="https://judgmentlab.net/#pme">Try the judgment in your setting</a><span>A short scripted case. Set your frame, examine an AI contribution, then change a condition.</span></li>
+              <li><a href="https://judgmentlab.net/#companion">Test a failure mode with your assistant</a><span>Bring the essay to ChatGPT, Claude or Gemini. One question at a time.</span></li>
+              <li><a href="https://judgmentlab.net/#ix-a-foundation-pilot">See the five-step pilot</a><span>The four moves inside one existing assignment.</span></li>
+              <li><a href="https://judgmentlab.net/#xi-conclusion">Read where the moves come from</a><span>Section XI of <em>The Irreducible Officer</em>.</span></li>
+            </ul>
+            <p class="small">These teaching designs are proposals to test. A successful session shows what happened in it. It does not establish learning gains.</p>
+          </article>
+
+        </div>
+      </div>
+    </div>
+    <noscript><p class="small">The failure-mode spreads and their figures need JavaScript. Each figure also has its own page in <a href="../index.html">the figures index</a>.</p></noscript>
+
+    <div class="book-nav" role="group" aria-label="Turn pages">
+      <button class="turn prev" type="button" data-prev aria-label="Previous pages"><span aria-hidden="true">&larr;</span><span class="label">Back</span></button>
+      <div class="mid">
+        <p class="where" data-where><b>Cover</b>The four moves</p>
+        <div class="jump" role="group" aria-label="Go to a move" data-jump></div>
+      </div>
+      <button class="turn next" type="button" data-next aria-label="Next pages"><span class="label">Next</span><span aria-hidden="true">&rarr;</span></button>
+    </div>
+    <p class="sr-only" aria-live="polite" data-live></p>
+  </div>
+</section>
+
+<!-- "Play here": the figure's own page, trimmed to its player, over the open book. -->
+<dialog class="plate-dialog" data-dialog aria-labelledby="plate-title">
+  <div class="plate-bar">
+    <p class="plate-where" id="plate-title"><b data-dialog-title></b><span data-dialog-move></span></p>
+    <a href="#" data-dialog-open>Open<span>&nbsp;the figure</span></a>
+    <button type="button" class="plate-close" data-dialog-close>Close<span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="plate-frame">
+    <p class="plate-loading" aria-hidden="true">Loading the figure&hellip;</p>
+    <iframe data-dialog-frame title="Figure"></iframe>
+  </div>
+</dialog>
+
+<script src="figures.js"></script>
+<script>
+(() => {
+  const book = document.querySelector("[data-book]");
+  const FIGURES = window.BOOK_FIGURES || [];
+  const COPY = window.BOOK_FIGURE_COPY || {};
+  if (!book) return;
+  const params = new URLSearchParams(location.search);
+  const forceReduced = params.has("reduced");
+  if (forceReduced) document.documentElement.classList.add("reduce-motion");
+  document.documentElement.classList.add("has-js");
+
+  const CHAPTERS = [
+    { key: "frame", n: 1, title: "Frame the problem", short: "Frame" },
+    { key: "calibrate", n: 2, title: "Calibrate the tool", short: "Calibrate" },
+    { key: "garden", n: 3, title: "Refuse the garden path", short: "Garden path" },
+    { key: "own", n: 4, title: "Own the decision", short: "Own" },
+  ];
+  const FIG_DIR = "../figures/";
+  const isOn = (f) => f.status === "done";
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const h = (html) => { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; };
+  const pagesEl = book.querySelector("[data-pages]");
+  const page = (key) => pagesEl.querySelector(`[data-key="${key}"]`);
+
+  // ---- a spread per figure, from figures.js ------------------------------------
+  function figureSpread(f, ch, i, count) {
+    const c = COPY[f.slug] || {};
+    const competency = !!c.looks;
+    const where = `${ch.title} &middot; ${i + 1} of ${count}`;
+    const left = h(`
+      <article class="face fm-page" data-key="fig-${f.slug}" data-title="${esc(f.title)}${isOn(f) ? "" : " (in progress)"}">
+        <p class="runhead"><span>${esc(ch.title)}</span><span>${c.section ? esc(c.section.label.split(",")[0]) : ""}</span></p>
+        <p class="kicker">${competency ? "The competency" : "Failure mode"}</p>
+        <h3 class="fm-title" data-heading>${esc(f.title)}</h3>
+        <h4>${competency ? "What it looks like" : "What goes wrong"}</h4>
+        <p class="wrong">${esc(c.looks || c.wrong || "")}</p>
+        <h4>Faculty check</h4>
+        <div class="check"><p>${esc(c.check || "")}</p>${c.follow ? `<p>${esc(c.follow)}</p>` : ""}</div>
+        ${c.quote ? `<blockquote><p>&ldquo;${esc(c.quote)}&rdquo;</p><footer><a href="${c.section.href}">${esc(c.section.label)}</a></footer></blockquote>` : ""}
+      </article>`);
+    const src = `${FIG_DIR}${f.slug}/index.html`;
+    const poster = `${FIG_DIR}${f.slug}/shots/final.png`;
+    const typePoster = `<div class="poster-type"><p class="name">${esc(f.title)}</p><p class="lbl">Faculty check</p><p class="q">${esc(c.check || "")}</p>${c.follow ? `<p class="q">${esc(c.follow)}</p>` : ""}</div>`;
+    const right = isOn(f)
+      ? h(`
+      <article class="face fig-page" data-key="fig-${f.slug}-play" data-title="${esc(f.title)}, the figure">
+        <p class="runhead"><span></span><span>${where}</span></p>
+        <div class="plate is-live" data-play="${f.slug}">
+          <img src="${poster}" alt="The last frame of the ${esc(f.title.toLowerCase())} figure, ending on the faculty check." decoding="async" data-poster>
+        </div>
+        <div class="plate-actions">
+          <button type="button" class="btn play" data-play="${f.slug}" aria-label="Play the ${esc(f.title.toLowerCase())} figure here">Play here</button>
+          <a class="btn open" href="${src}">Open the figure</a>
+        </div>
+        <p class="small">It plays over the book at full size and takes about a minute and a half. On its own page, each beat is also written out, with the essay passage it comes from.</p>
+      </article>`)
+      : h(`
+      <article class="face fig-page" data-key="fig-${f.slug}-play" data-title="${esc(f.title)}, the figure (in progress)">
+        <p class="runhead"><span></span><span>${where}</span></p>
+        <div class="plate is-wip">
+          <span class="wip-badge">In progress</span>
+          <img src="${poster}" alt="" decoding="async" data-poster>
+        </div>
+        <p class="wip-note"><b>This figure is still being built.</b> Each figure is storyboarded, read cold by a tester, built at teaching pace and watched cold again. This spread switches on when it passes.</p>
+      </article>`);
+    // No poster still on disk: the plate shows the figure's last caption instead.
+    const img = right.querySelector("[data-poster]");
+    img.addEventListener("error", () => img.replaceWith(h(typePoster)), { once: true });
+    return [left, right];
+  }
+
+  // ---- reading order: cover, intro, then each chapter and its figures, then the close
+  const spreads = [{ right: page("cover"), tag: "Cover", title: "The four moves" }];
+  spreads.push({ left: page("howto"), right: page("contents"), tag: "Pages 1–2", title: "How to read this, and contents" });
+  CHAPTERS.forEach((ch) => {
+    ch.first = spreads.length;
+    spreads.push({ left: page(`move-${ch.key}`), right: page(`practice-${ch.key}`), tag: `Move ${ch.n} of 4`, title: ch.title, chapter: ch.key });
+    const figs = FIGURES.filter((f) => f.chapter === ch.key);
+    figs.forEach((f, i) => {
+      const [left, right] = figureSpread(f, ch, i, figs.length);
+      f.spread = spreads.length;
+      spreads.push({ left, right, tag: `Move ${ch.n} · ${i + 1} of ${figs.length}`, title: f.title + (isOn(f) ? "" : " (in progress)"), chapter: ch.key, figure: f.slug });
+    });
+  });
+  const last = spreads.length;
+  spreads.push({ left: page("closing"), right: page("routes"), tag: `Pages ${2 * last - 1}–${2 * last}`, title: "All four, and where to try them" });
+
+  // ---- bind the pages into leaves: leaf k carries spread k's right page and, on its back, spread k+1's left
+  const endboard = h(`<div class="face back endboard blank" aria-hidden="true"></div>`);
+  pagesEl.textContent = "";
+  const leaves = spreads.map((s, k) => {
+    const leaf = document.createElement("div");
+    leaf.className = "leaf";
+    leaf.dataset.leaf = k;
+    s.right.classList.add("front");
+    leaf.append(s.right);
+    const back = spreads[k + 1] ? spreads[k + 1].left : endboard;
+    back.classList.add("back");
+    leaf.append(back);
+    pagesEl.append(leaf);
+    return leaf;
+  });
+  // page numbers: the cover is page 0; spread k holds pages 2k-1 (left) and 2k (right)
+  spreads.forEach((s, k) => {
+    [[s.left, 2 * k - 1], [s.right, 2 * k]].forEach(([face, n]) => {
+      if (!face) return;
+      face.dataset.page = n;
+      face.dataset.spreadOf = k;
+      face.setAttribute("aria-label", n === 0 ? face.dataset.title : `Page ${n}: ${face.dataset.title}`);
+      if (n > 0) face.insertAdjacentHTML("beforeend", `<span class="folio">${n}</span>`);
+    });
+    const head = s.left && s.left.querySelector("[data-heading]");
+    if (head) { head.dataset.heading = k; head.tabIndex = -1; }
+  });
+
+  // ---- contents, the closing map, the move dots and links to figures ---------------
+  const figBtn = (f) => `<button type="button" class="to-fig" data-go="${f.spread}">${esc(f.title)}</button>`;
+  book.querySelector("[data-contents]").innerHTML = CHAPTERS.map((ch) => {
+    const figs = FIGURES.filter((f) => f.chapter === ch.key);
+    return `<li><button type="button" data-go="${ch.first}"><span class="n">${ch.n}</span><span class="t">${ch.title}.</span><span class="pg">${2 * ch.first - 1}</span></button>
+      <ol>${figs.map((f) => `<li><button type="button" data-go="${f.spread}"><span class="n"></span><span class="t">${esc(f.title)}${isOn(f) ? "" : `<span class="wip">In progress</span>`}</span><span class="pg">${2 * f.spread - 1}</span></button></li>`).join("")}</ol></li>`;
+  }).join("") + `<li><button type="button" data-go="${last}"><span class="n">&rarr;</span><span class="t">All four, and where to try them</span><span class="pg">${2 * last - 1}</span></button></li>`;
+  book.querySelector("[data-map]").innerHTML = CHAPTERS.map((ch) => {
+    const figs = FIGURES.filter((f) => f.chapter === ch.key);
+    return `<tr><th scope="row"><span class="n">${ch.n}</span>${ch.short}</th><td>${figs.map(figBtn).join(", ")}</td></tr>`;
+  }).join("");
+  book.querySelector("[data-jump]").innerHTML = CHAPTERS.map((ch) => `<button type="button" data-go="${ch.first}" data-chapter="${ch.key}" aria-label="Move ${ch.n}: ${ch.title}">${ch.n}</button>`).join("");
+  book.querySelectorAll("[data-to-figure]").forEach((b) => {
+    const f = FIGURES.find((x) => x.slug === b.dataset.toFigure);
+    if (f) b.dataset.go = f.spread; else b.replaceWith(document.createTextNode(b.textContent));
+  });
+
+  // ---- the book ----------------------------------------------------------------------
+  book.classList.add("is-book");
+  const faces = [...book.querySelectorAll(".face")];
+  const MAX = leaves.length - 1;              // the last leaf is never turned
+  const reduceQuery = matchMedia("(prefers-reduced-motion: reduce)");
+  const reduced = () => forceReduced || reduceQuery.matches;
+  const narrow = matchMedia("(max-width: 1100px)");
+  const where = book.querySelector("[data-where]");
+  const live = book.querySelector("[data-live]");
+  const prev = book.querySelector("[data-prev]");
+  const next = book.querySelector("[data-next]");
+  const flatBtn = document.querySelector("[data-flat]");
+  let spread = 0, settleTimer = 0;
+
+  const turnMs = () => parseFloat(getComputedStyle(book).getPropertyValue("--turn")) || 900;
+  const pagesOf = (k) => (k === 0 ? [0] : [2 * k - 1, 2 * k]);
+
+  function stackZ() {
+    // turned leaves pile up on the left (last turned on top); unturned on the right (next to turn on top)
+    leaves.forEach((leaf, i) => { leaf.style.zIndex = i < spread ? String(i + 1) : String(leaves.length - i); });
+  }
+
+  function remember() {
+    // Keep the spread in the address, so reload and Back from a figure's page return here.
+    const url = new URL(location.href);
+    ["figure", "move"].forEach((k) => url.searchParams.delete(k));
+    if (spread) url.searchParams.set("spread", spread); else url.searchParams.delete("spread");
+    try { history.replaceState(history.state, "", url); } catch (err) { /* file:// in some browsers */ }
+  }
+
+  function render(from, { announce = true } = {}) {
+    book.dataset.spread = String(spread);
+    const current = pagesOf(spread);
+    const isBook = book.classList.contains("is-book");
+    faces.forEach((face) => {
+      if (!face.hasAttribute("data-page")) return;
+      const on = current.includes(Number(face.dataset.page));
+      face.classList.toggle("is-current", on);
+      face.toggleAttribute("inert", !on && isBook);
+    });
+    const s = spreads[spread];
+    where.innerHTML = `<b>${s.tag}</b>${esc(s.title)}`;
+    if (announce) live.textContent = `${s.tag}: ${s.title}.`;
+    prev.disabled = spread === 0;
+    next.disabled = spread === MAX;
+    book.querySelectorAll(".jump [data-go]").forEach((b) => {
+      const inChapter = b.dataset.chapter === s.chapter;
+      if (Number(b.dataset.go) === spread) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+      b.classList.toggle("in-chapter", inChapter);
+    });
+
+    const animate = from !== undefined && from !== spread && !reduced() && !narrow.matches;
+    const moving = [];
+    if (from !== undefined) {
+      if (spread > from) for (let i = from; i < spread; i++) moving.push(i);
+      else for (let i = from - 1; i >= spread; i--) moving.push(i);
+    }
+    clearTimeout(settleTimer);
+    if (!animate) {
+      leaves.forEach((leaf, i) => { leaf.style.transitionDelay = ""; leaf.classList.toggle("turned", i < spread); });
+      stackZ();
+      return;
+    }
+    // riffle: each moving leaf rises above both stacks for its turn, later leaves above earlier ones
+    const stagger = Math.min(90, 720 / moving.length);
+    moving.forEach((i, n) => {
+      const leaf = leaves[i];
+      leaf.style.zIndex = String(100 + n);
+      leaf.style.transitionDelay = `${n * stagger}ms`;
+      leaf.classList.toggle("turned", i < spread);
+    });
+    settleTimer = setTimeout(() => {
+      leaves.forEach((leaf) => { leaf.style.transitionDelay = ""; });
+      stackZ();
+    }, turnMs() + moving.length * stagger + 40);
+  }
+
+  function go(k, { focusHeading = false } = {}) {
+    k = Math.max(0, Math.min(MAX, k));
+    if (k === spread) return;
+    const from = spread;
+    spread = k;
+    render(from);
+    remember();
+    if (focusHeading) {
+      const head = book.querySelector(`[data-heading="${k}"]`);
+      if (head) setTimeout(() => head.focus({ preventScroll: true }), reduced() || narrow.matches ? 0 : 60);
+    }
+    if (narrow.matches) {
+      const top = book.getBoundingClientRect().top + scrollY - 12;
+      if (scrollY > top) scrollTo({ top, behavior: reduced() ? "auto" : "smooth" });
+    }
+  }
+
+  prev.addEventListener("click", () => go(spread - 1));
+  next.addEventListener("click", () => go(spread + 1));
+  book.addEventListener("click", (e) => {
+    const play = e.target.closest("[data-play]");
+    if (play) { openFigure(play.dataset.play, e.target.closest("button") || play.parentElement.querySelector("button.play")); return; }
+    const jump = e.target.closest("[data-go]");
+    if (jump) {
+      const k = Number(jump.dataset.go);
+      if (!book.classList.contains("is-book")) {
+        const head = book.querySelector(`[data-heading="${k}"]`);
+        if (head) { head.scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" }); head.focus({ preventScroll: true }); }
+        return;
+      }
+      go(k, { focusHeading: !jump.closest(".book-nav") });
+      return;
+    }
+    if (narrow.matches || !book.classList.contains("is-book")) return;
+    if (e.target.closest("a, button, summary, input, textarea, select")) return;
+    const face = e.target.closest(".face");
+    if (!face) return;
+    if (face.classList.contains("front")) go(spread + 1); else go(spread - 1);
+  });
+  book.closest(".moves").addEventListener("keydown", (e) => {
+    if (!book.classList.contains("is-book") || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.target.closest("input, textarea, select")) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); go(spread + 1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(spread - 1); }
+  });
+
+  // swipe between spreads on touch screens
+  let sx = null, sy = null;
+  book.addEventListener("pointerdown", (e) => { if (e.pointerType === "touch") { sx = e.clientX; sy = e.clientY; } });
+  book.addEventListener("pointerup", (e) => {
+    if (sx === null) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy; sx = sy = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(spread + (dx < 0 ? 1 : -1));
+  });
+
+  // "Read as one page" flattens the book into the base document
+  function setFlat(flat) {
+    flatBtn.setAttribute("aria-pressed", String(flat));
+    flatBtn.textContent = flat ? "Read as a book" : "Read as one page";
+    book.classList.toggle("is-book", !flat);
+    faces.forEach((f) => f.removeAttribute("inert"));
+    if (!flat) render(undefined, { announce: false });
+  }
+  flatBtn.addEventListener("click", () => setFlat(flatBtn.getAttribute("aria-pressed") !== "true"));
+  narrow.addEventListener("change", () => render(undefined, { announce: false }));
+
+  // ---- "Play here": the figure's standalone page, trimmed to its player ------------
+  const dialog = document.querySelector("[data-dialog]");
+  const frame = dialog.querySelector("[data-dialog-frame]");
+  const dTitle = dialog.querySelector("[data-dialog-title]");
+  const dMove = dialog.querySelector("[data-dialog-move]");
+  const dOpen = dialog.querySelector("[data-dialog-open]");
+  let opener = null, readyTimer = 0;
+  // Hide the page around the figure. These are the standalone page's documented
+  // parts (CONVENTIONS.md, "Standalone page"); the beat list stays as the text equivalent.
+  const EMBED_CSS = `
+    .fig-top, .fig-kicker, .fig-page > h1, .fig-setup, .fig-section { display: none !important; }
+    .fig-page { max-width: none !important; padding: 0 0 24px !important; }
+    .fig-page .mf { margin: 0 !important; border-left: 0; border-right: 0; border-top: 0; }`;
+
+  function openFigure(slug, from) {
+    const f = FIGURES.find((x) => x.slug === slug);
+    if (!f || !isOn(f)) return;
+    const ch = CHAPTERS.find((c) => c.key === f.chapter);
+    opener = from || document.activeElement;
+    const src = `${FIG_DIR}${slug}/index.html${forceReduced ? "?reduced" : ""}#${slug}`;
+    dTitle.textContent = f.title;
+    dMove.textContent = `Move ${ch.n} · ${ch.title}`;
+    dOpen.href = `${FIG_DIR}${slug}/index.html`;
+    frame.title = `${f.title}, an animated figure`;
+    dialog.classList.remove("is-ready");
+    frame.src = src;
+    dialog.showModal();
+    dialog.querySelector("[data-dialog-close]").focus();
+    clearTimeout(readyTimer);
+    readyTimer = setTimeout(() => dialog.classList.add("is-ready"), 2500);
+  }
+  frame.addEventListener("load", () => {
+    if (!dialog.open || frame.src === "about:blank") return;
+    try {
+      const doc = frame.contentDocument;
+      const style = doc.createElement("style");
+      style.textContent = EMBED_CSS;
+      doc.head.append(style);
+      frame.contentWindow.scrollTo(0, 0);
+      // Escape inside the figure closes the plate too.
+      doc.addEventListener("keydown", (e) => { if (e.key === "Escape") dialog.close(); });
+      const toggle = doc.querySelector("[data-mf-toggle]");
+      if (toggle) toggle.focus({ preventScroll: true });
+    } catch (err) {
+      // Opened from file://: the page can't be trimmed, so the #slug fragment scrolls to the figure.
+    }
+    clearTimeout(readyTimer);
+    dialog.classList.add("is-ready");
+  });
+  dialog.querySelector("[data-dialog-close]").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener("close", () => {
+    frame.src = "about:blank";
+    dialog.classList.remove("is-ready");
+    if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
+  });
+
+  // ---- deep links for review: ?spread=5, ?figure=frame-capture, ?move=calibrate, ?flat, ?play
+  let start = Number(params.get("spread")) || 0;
+  const fig = FIGURES.find((f) => f.slug === params.get("figure"));
+  const mv = CHAPTERS.find((c) => c.key === params.get("move"));
+  if (fig) start = fig.spread; else if (mv) start = mv.first;
+  if (start > 0 && start <= MAX) spread = start;
+  render(undefined, { announce: false });
+  if (params.has("flat")) setFlat(true);
+  if (fig && params.has("play")) openFigure(fig.slug, book.querySelector(`button[data-play="${fig.slug}"]`));
+})();
+</script>
+</body>
+</html>

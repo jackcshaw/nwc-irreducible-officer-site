@@ -1,5 +1,5 @@
-/* Uncalibrated reliance: motion figure 4 of 8. Built to storyboard.md (round 4,
-   revised after figure cold read 1).
+/* Uncalibrated reliance: motion figure 4 of 8. Built to storyboard.md (round 5,
+   revised after figure cold read 2).
    Grey is what the AI supplied, red is a student's decision, navy is ink.
    Three columns: the first student's brief, the AI's answers, the second
    student's brief, with Part 1 in the upper row and Part 2 in the lower row.
@@ -16,35 +16,32 @@
 
 	// ---- timeline (absolute seconds, from the storyboard) -------------------
 	const T = {
-		// 1 · the task
-		card: [1.0, 1.6], p1: [1.8, 2.2], p2: [3.0, 3.4], dotA: [3.6, 4.0],
-		// 2 · the reports go to the AI
-		reports: 8.7, reportStep: 0.37, reportDur: 0.3, pulseA: [10.2, 10.6], copies: 10.6, stackLabel: [11.5, 11.9],
-		// 3 · equal confidence
-		aiHead: [15.0, 15.4], cards: [15.4, 16.0], line1: [16.1, 16.9], line2: [17.1, 17.9], ready: [19.1, 19.5],
-		// 4 · the first student checks Part 1
-		aLabel: [25.0, 25.3], aOpen1: [25.6, 26.2], aOpen2: [26.6, 27.2], sheetA: [28.0, 28.7], markA1: [28.8, 29.2],
-		// 5 · and uses Part 2 as is
-		readyPulse: [33.0, 33.6], slideA2: [36.0, 36.6], markA2: [36.6, 37.0], aClose: [38.0, 38.5],
-		// 6 · the second student checks each part: Part 1
-		dotB: [41.1, 41.5], sheetB: [41.5, 41.9], pulseB: [42.0, 42.4], bLabel: [42.5, 42.8], bOpen1: [43.1, 43.7], bOpen2: [44.1, 44.7],
-		slideB1: [44.9, 45.6], markB1: [45.7, 46.1], bClose: [46.2, 46.7],
-		// 7 · and Part 2
-		survey: [50.3, 50.9], log: [51.3, 52.1], slideB2: [52.2, 52.8],
-		strike20: [52.9, 53.2], ins15: [53.2, 53.5], strike4: [53.65, 53.8], ins3: [53.8, 54.1], markB2: [54.2, 54.6],
-		// 8 · the reason
-		capacity: [58.5, 59.0], openToday: [61.5, 62.0],
-		// 9 · the frontier
-		frontier: [66.5, 67.9], fLabels: [67.9, 68.3], together: [70.8, 71.4],
-		// 10 · the study
-		dim: [77.2, 77.7], panel: [77.7, 78.3], bar1: [80.9, 81.5], bars2: [81.6, 82.2], bracket: [82.5, 83.0], bracketText: [83.0, 83.4],
-		// 11 · faculty
-		undim: [91.5, 92.0], marksOff: [92.1, 92.7], facLabel: [92.7, 93.2], outline: [95.2, 95.7], panels: [95.8, 96.2],
-		a1: [96.2, 97.2], b1: [97.4, 98.4], outlineMove: [98.7, 99.2], a2: [99.4, 102.4], b2: [102.7, 105.0],
-		// 12 · the check
-		check: 106.5, follow: 109.8, end: 113.2,
+		// 1 · the task and the reports
+		card: [1.0, 1.6], p1: [1.7, 2.1], p2: [2.2, 2.6], dotA: [2.7, 3.0],
+		reports: 4.0, reportStep: 0.28, reportDur: 0.3, pulseA: [5.2, 5.5], copies: 5.5, stackLabel: [6.3, 6.7],
+		// 2 · equal confidence
+		aiHead: [9.6, 10.0], cards: [10.0, 10.6], line1: [10.7, 11.5], line2: [11.7, 12.5], ready: [12.7, 13.1],
+		// 3 · the first student checks Part 1
+		aLabel: [16.6, 16.9], aOpen1: [17.2, 17.8], aOpen2: [18.2, 18.8], sheetA: [19.6, 20.3], markA1: [20.4, 20.8],
+		// 4 · and uses Part 2
+		readyPulse: [24.1, 24.7], aLook: [24.9, 25.5], slideA2: [26.4, 27.0], markA2: [27.0, 27.4], aClose: [28.3, 28.8],
+		// 5 · the second student checks each part: Part 1
+		dotB: [31.3, 31.7], sheetB: [31.7, 32.1], pulseB: [32.2, 32.6], bLabel: [32.7, 33.0], bOpen: [33.3, 33.9],
+		slideB1: [34.1, 34.8], markB1: [34.9, 35.3], bClose: [35.6, 36.1],
+		// 6 · and Part 2, slowly
+		survey: [39.1, 39.7], slot1: [39.7, 40.1], log: [40.7, 41.3], slot2: [41.3, 41.7], slideB2: [43.2, 43.8],
+		strike20: [43.9, 44.2], ins15: [44.2, 44.5], strike4: [44.7, 45.0], ins3: [45.0, 45.3], markB2: [45.5, 45.9], bHome: [46.6, 47.1],
+		// 7 · the reason and the frontier
+		openToday: [49.6, 50.1], capacity: [50.3, 50.8], frontier: [54.3, 55.7], fLabels: [55.7, 56.1], together: [56.3, 56.9],
+		// 8 · the study
+		dim: [59.4, 59.8], panel: [59.8, 60.4], bar1: [60.5, 61.1], bars2: [61.2, 61.8], bracket: [62.0, 62.5], bracketText: [62.5, 62.9],
+		// 9 · faculty
+		undim: [68.9, 69.4], marksOff: [69.5, 70.1], facLabel: [70.1, 70.6], outline: [72.6, 73.1], panels: [73.2, 73.6],
+		a1: [73.6, 74.6], b1: [74.8, 75.8], outlineMove: [76.1, 76.6], a2: [76.8, 79.8], b2: [80.1, 82.4],
+		// 10 · the check
+		check: 83.9, follow: 87.2, end: 90.6,
 	};
-	const BEAT_AT = [0, 7.7, 14.0, 24.0, 32.0, 40.1, 48.8, 57.5, 65.5, 76.2, 90.5, 106.5];
+	const BEAT_AT = [0, 8.6, 15.6, 23.1, 30.3, 37.6, 48.6, 58.4, 67.9, 83.9];
 
 	// ---- geometry ----------------------------------------------------------
 	const COL = {a: 24, ai: 338, b: 652}, COLW = 284;
@@ -55,9 +52,10 @@
 	const HOME = {a: {x: 36, y: 456}, b: {x: 664, y: 456}};
 	const READ = REPORTS.map((r) => ({x: r.x - 7, y: 38}));
 	const ANS = {p1: ['24 ships a day:', '480 tons at 20 each'], p2: ['20 ships a day:', '4 docks at 5 each']};
+	const Q = (s) => '“' + s + '”';
 	const SPEECH = {
-		a: {x: 52, rows: [{n: '1', lines: ['“The aid reports.”'], at: T.a1}, {n: '2', lines: ['“Part 1 checked out, so I', 'trusted the rest.”'], at: T.a2}]},
-		b: {x: 680, rows: [{n: '1', lines: ['“The aid reports.”'], at: T.b1}, {n: '2', lines: ['“The harbor log.', 'One dock is closed.”'], at: T.b2}]},
+		a: {x: 52, rows: [{n: '1', lines: [Q('The aid reports.')], at: T.a1}, {n: '2', lines: ['“Part 1 checked out, so I', 'trusted the rest.”'], at: T.a2}]},
+		b: {x: 680, rows: [{n: '1', lines: [Q('The aid reports.')], at: T.b1}, {n: '2', lines: ['“The harbor log.', 'One dock is closed.”'], at: T.b2}]},
 	};
 	const FRONTIER = [[330, 252], [344, 243], [356, 259], [371, 246], [380, 262], [398, 240], [414, 266], [432, 249], [446, 256], [460, 238], [475, 268], [494, 250], [508, 245], [521, 261], [538, 253], [552, 239], [566, 264], [584, 248], [598, 257], [612, 242], [630, 253]];
 
@@ -67,6 +65,7 @@
 	el(svg, 'rect', {width: VW, height: VH, fill: C.paper});
 	const scene = el(svg, 'g');
 	const sceneOurs = el(scene, 'g');   // the AI's column, the reports and our marks: recede at hand-in
+	const sceneSrc = el(scene, 'g');    // the port callouts: the source behind "3 open" stays at full strength
 	const sceneBase = el(scene, 'g');   // the students' side: task, briefs, dots, faculty
 	const layer = el(svg, 'g');
 
@@ -81,6 +80,7 @@
 		return {g: el(parent, 'g', {'clip-path': `url(#${id})`}), rect};
 	};
 	const bump = (t, t0, t1) => Math.sin(Math.PI * prog(t, t0, t1));
+	const muted = mixColor(C.ink, C.paper, 0.3);
 
 	// ---- task card ----------------------------------------------------------
 	const card = el(sceneBase, 'g');
@@ -97,16 +97,18 @@
 		const bars = [el(g, 'rect', {x: r.x + 22, y: 52, width: 92, height: 3, fill: C.ink, 'fill-opacity': 0.7}), el(g, 'rect', {x: r.x + 22, y: 60, width: 64, height: 3, fill: C.ink, 'fill-opacity': 0.7})];
 		return {g, rect, bars};
 	});
-	// Both port callouts stay open once opened, so the source of "3 open" stays on screen.
-	const callout = (x, lines) => {
-		const g = el(sceneOurs, 'g');
+	// Each port report opens to a heading and its lines, and stays open. The harbor log
+	// says what is open today; the closed dock sits apart in muted italic.
+	const callout = (x, heading, lines) => {
+		const g = el(sceneSrc, 'g');
 		el(g, 'path', {d: `M${x + 18} 56V60`, stroke: C.ink, 'stroke-opacity': 0.3});
 		el(g, 'rect', {x, y: 60, width: RW, height: 52, rx: 2, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.3});
-		const ts = lines.map((s, i) => serif(g, x + 8, 75 + 15 * i, s, {fs: 13}));
+		mono(g, x + 8, 74, heading);
+		const ts = lines.map(([s, style], i) => serif(g, x + 8, 89 + 15 * i, s, style === 'off' ? {fs: 13, style: 'italic', fill: muted} : {fs: 13}));
 		return {g, ts};
 	};
-	const surveyC = callout(652, ['4 docks,', '5 ships each']);
-	const logC = callout(800, ['Dock 2: closed', 'for repairs.']);
+	const surveyC = callout(652, 'CAPACITY', [['4 docks, 5 each'], ['(survey, last year)', 'off']]);
+	const logC = callout(800, 'OPEN TODAY', [['Docks 1, 3, 4'], ['✕ Dock 2: closed', 'off']]);
 	const copies = REPORTS.map(() => el(sceneOurs, 'rect', {width: 40, height: 24, rx: 2, fill: C.band, stroke: C.grey, 'stroke-opacity': 0.5, opacity: 0}));
 	const stackLabel = mono(sceneOurs, 448, 102, 'GIVEN TO THE AI', {anchor: 'end', fill: C.grey});
 
@@ -134,11 +136,10 @@
 	};
 	const ai = {p1: aiCard('p1'), p2: aiCard('p2')};
 
-	// Beat 8: the AI worked from capacity; the real number depends on what's open today.
+	// Beat 7: the AI worked from capacity; the real number depends on what's open today.
 	const capLine = el(sceneOurs, 'line', {stroke: C.ink, 'stroke-width': 1.6});
 	const capTag = mono(sceneOurs, 0, 360, 'CAPACITY');
-	const openLine = el(sceneOurs, 'line', {stroke: C.ink, 'stroke-width': 1.6});
-	const openTag = mono(sceneOurs, 808, 106, 'OPEN TODAY');
+	const openLine = el(sceneSrc, 'line', {stroke: C.ink, 'stroke-width': 1.6});
 
 	// ---- the frontier ------------------------------------------------------------------
 	const frontier = el(sceneOurs, 'path', {d: 'M' + FRONTIER.map((p) => p.join(' ')).join('L'), fill: 'none', stroke: C.ink, 'stroke-width': 1.8, 'stroke-linejoin': 'round'});
@@ -179,6 +180,12 @@
 			s2: el(g, 'line', {stroke: C.red, 'stroke-width': 2}),
 		};
 	})();
+	// What the second student reads in the port reports, set large in the empty middle of
+	// their sheet before they correct anything. A working note: it lifts off at hand-in.
+	const slot = el(sceneBase, 'g');
+	const slotLabel = mono(slot, COL.b + 16, 232, 'PORT REPORTS');
+	const slotL1 = serif(slot, COL.b + 16, 255, 'Survey: 4 docks, 5 ships each.', {fs: 16});
+	const slotL2 = serif(slot, COL.b + 16, 277, 'Log: dock 2 closed for repairs.', {fs: 16});
 
 	// Working marks: what each student did with each part, written by their dot.
 	const markEl = (col, key, str) => {
@@ -241,7 +248,7 @@
 	}));
 	const bracket = el(panel, 'path', {d: 'M610 274H620V316H610', fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
 	const bracketText = el(panel, 'g');
-	['Graders still rated these', 'higher in quality,', 'regardless of correctness'].forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
+	['Rated higher in quality', 'than without AI,', 'regardless of correctness'].forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
 	text(panel, 128, 380, "DELL'ACQUA ET AL. (2023) · BCG CONSULTANTS · HBS WORKING PAPER 24-013", {fs: MONO, family: FONT.mono, weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)});
 
 	// ---- measure (after fonts load) -------------------------------------------------------
@@ -259,7 +266,7 @@
 		set(capLine, {x1: cap.x, y1: 364, x2: cap.x, y2: 364});
 		set(capTag, {x: cap.x + cap.w + 10});
 		S.openW = W(logC.ts[0]);
-		set(openLine, {x1: 808, y1: 78, x2: 808, y2: 78});
+		set(openLine, {x1: 808, y1: 92, x2: 808, y2: 92});
 		fLen = frontier.getTotalLength();
 		set(frontier, {'stroke-dasharray': fLen});
 		// Dot targets: just left of each mark, then a step clear of it.
@@ -274,17 +281,17 @@
 			[T.aOpen1[1], T.aOpen2[0], READ[0], READ[1], E.inOut],
 			[T.sheetA[0], T.sheetA[1], READ[1], A1, E.inOut],
 			[T.markA1[1], T.markA1[1] + 0.3, A1, away(A1), E.inOut],
-			[T.slideA2[0], T.slideA2[1], away(A1), A2, E.inOut],
+			[T.aLook[0], T.aLook[1], away(A1), away(A2), E.inOut],
+			[T.slideA2[0], T.slideA2[1], away(A2), A2, E.inOut],
 			[T.markA2[1], T.markA2[1] + 0.3, A2, away(A2), E.inOut],
 			[T.aClose[0], T.aClose[1], away(A2), HOME.a, E.inOut],
 		], HOME.a);
 		pathB = pathAt([
-			[T.bLabel[0], T.bOpen1[0], HOME.b, READ[0], E.inOut],
-			[T.bOpen1[1], T.bOpen2[0], READ[0], READ[1], E.inOut],
+			[T.bLabel[0], T.bOpen[0], HOME.b, READ[1], E.inOut],
 			[T.slideB1[0], T.slideB1[1], READ[1], B1, E.inOut],
 			[T.markB1[1], T.markB1[1] + 0.3, B1, away(B1), E.inOut],
 			[T.survey[0] - 0.5, T.survey[0], away(B1), READ[2], E.inOut],
-			[T.survey[1], T.log[0], READ[2], READ[3], E.inOut],
+			[T.log[0] - 0.4, T.log[0], READ[2], READ[3], E.inOut],
 			[T.slideB2[0], T.slideB2[1], READ[3], {x: bx - 6, y: y1}, E.inOut],
 			[T.strike20[0], T.strike20[1], {x: bx - 6, y: y1}, {x: bx + w20, y: y1}],
 			[T.ins15[0], T.ins15[1], {x: bx + w20, y: y1}, {x: bx + w20 + w15, y: y1}],
@@ -293,7 +300,7 @@
 			[T.ins3[0], T.ins3[1], {x: bx + w4, y: y2}, {x: bx + w4 + w3, y: y2}],
 			[T.ins3[1], T.markB2[0], {x: bx + w4 + w3, y: y2}, B2, E.inOut],
 			[T.markB2[1], T.markB2[1] + 0.3, B2, away(B2), E.inOut],
-			[T.markB2[1] + 0.9, T.markB2[1] + 1.4, away(B2), HOME.b, E.inOut],
+			[T.bHome[0], T.bHome[1], away(B2), HOME.b, E.inOut],
 		], HOME.b);
 	}
 
@@ -311,8 +318,8 @@
 
 		// Reports: appear, open when read, close when the reader leaves.
 		const open = [
-			Math.max(prog(t, ...T.aOpen1) - prog(t, ...T.aClose), prog(t, ...T.bOpen1) - prog(t, ...T.bClose)),
-			Math.max(prog(t, ...T.aOpen2) - prog(t, ...T.aClose), prog(t, ...T.bOpen2) - prog(t, ...T.bClose)),
+			Math.max(prog(t, ...T.aOpen1) - prog(t, ...T.aClose), prog(t, ...T.bOpen) - prog(t, ...T.bClose)),
+			Math.max(prog(t, ...T.aOpen2) - prog(t, ...T.aClose), prog(t, ...T.bOpen) - prog(t, ...T.bClose)),
 			prog(t, ...T.survey), prog(t, ...T.log),
 		];
 		reports.forEach((r, i) => {
@@ -373,29 +380,30 @@
 		editLine(secB2.l1, T.strike20, T.ins15, secB2.s1, S.strike ? S.strike.y1 : 337);
 		editLine(secB2.l2, T.strike4, T.ins3, secB2.s2, S.strike ? S.strike.y2 : 355);
 
-		// Working marks, written left to right; they lift off at hand-in.
+		// Working marks and the reading note, written while working; they lift off at hand-in.
 		const off = prog(t, ...T.marksOff, E.inOut);
 		for (const [id, m] of Object.entries(marks)) {
 			const span = {a1: T.markA1, a2: T.markA2, b1: T.markB1, b2: T.markB2}[id];
 			set(m.rect, {width: (m.w + 6) * prog(t, ...span)});
 			set(m.g, {opacity: 1 - off, transform: `translate(0 ${-6 * off})`});
 		}
+		set(slot, {opacity: 1 - off, transform: `translate(0 ${-6 * off})`});
+		set(slotLabel, {opacity: prog(t, ...T.slot1)});
+		set(slotL1, {opacity: prog(t, ...T.slot1)});
+		set(slotL2, {opacity: prog(t, ...T.slot2)});
 
-		// Beat 8: why Part 2 sits outside.
+		// Beat 7: why Part 2 sits outside, then the frontier.
+		const kOpen = prog(t, ...T.openToday, E.inOut);
+		set(openLine, {x2: 808 + (S.openW || 0) * kOpen, opacity: kOpen > 0 ? 1 : 0});
 		const kCap = prog(t, ...T.capacity, E.inOut);
 		const cap = ai.p2.lines[1];
 		set(capLine, {x2: cap.x + cap.w * kCap, opacity: kCap > 0 ? 1 : 0});
 		set(capTag, {opacity: prog(t, T.capacity[0] + 0.2, T.capacity[1])});
-		const kOpen = prog(t, ...T.openToday, E.inOut);
-		set(openLine, {x2: 808 + (S.openW || 0) * kOpen, opacity: kOpen > 0 ? 1 : 0});
-		set(openTag, {opacity: prog(t, T.openToday[0] + 0.2, T.openToday[1])});
-
-		// Beat 9: the frontier, in its own beat.
 		set(frontier, {'stroke-dashoffset': fLen * (1 - prog(t, ...T.frontier, E.inOut)), opacity: t >= T.frontier[0] ? 1 : 0});
 		set(fIn, {opacity: prog(t, ...T.fLabels)});
 		set(fOut, {opacity: prog(t, ...T.fLabels)});
 
-		// Beat 10: the study, centre stage.
+		// Beat 8: the study, centre stage.
 		const kP = prog(t, ...T.panel, E.house);
 		set(panel, {opacity: kP * (1 - prog(t, ...T.undim)), transform: `translate(0 ${mix(10, 0, kP)})`});
 		bars.forEach((b, i) => {
@@ -406,7 +414,7 @@
 		set(bracket, {opacity: prog(t, ...T.bracket)});
 		set(bracketText, {opacity: prog(t, ...T.bracketText)});
 
-		// Beat 11: faculty see only the briefs, and point to each part in turn.
+		// Beat 9: faculty see only the briefs, and point to each part in turn.
 		set(facLabel, {opacity: prog(t, ...T.facLabel)});
 		const kOut = prog(t, ...T.outline), kMove = prog(t, ...T.outlineMove, E.inOut);
 		outlines.forEach((o) => set(o, {y: mix(ROW.p1 - 4, ROW.p2 - 4, kMove), opacity: kOut}));
@@ -448,21 +456,24 @@
 		N.p1 = h('span', null, p, 'Part 1 · Ships needed a day. ');
 		N.p2 = h('span', null, p, 'Part 2 · Ships the port takes a day.');
 		N.task = s;
+		N.who = h('span', 'ur-n-who', p, 'Student');
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const p = h('p', 'ur-n-reports', s);
 		N.rep = ['2 aid reports', 'Port survey', 'Harbor log'].map((l) => h('span', 'ur-n-chip', p, l));
 		const calls = N.calls = h('div', 'ur-n-calls', s);
-		N.survey = h('p', 'ur-n-call', calls, 'Port survey: 4 docks, 5 ships each.');
+		N.survey = h('p', 'ur-n-call', calls);
+		h('b', 'ur-n-head', N.survey, 'Survey (last year) · capacity: ');
+		N.survey.append('4 docks, 5 each.');
 		N.log = h('p', 'ur-n-call', calls);
-		N.log.append('Harbor log: ');
-		N.logLine = h('span', null, N.log, 'Dock 2: closed for repairs.');
-		N.open = h('span', 'ur-n-tag', N.log, 'Open today');
+		h('b', 'ur-n-head', N.log, 'Harbor log · open today: ');
+		N.logLine = h('span', null, N.log, 'docks 1, 3, 4.');
+		N.closed = h('p', 'ur-n-call ur-n-off', calls, '✕ Dock 2: closed for repairs.');
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
-		const head = h('p', 'ur-n-label ur-n-grey ur-n-head', s);
+		const head = h('p', 'ur-n-label ur-n-grey ur-n-head2', s);
 		N.aiHead = h('span', null, head, "AI's answers");
 		N.given = h('span', null, head, 'Given all four reports');
 		const item = (key, txt) => {
@@ -492,13 +503,18 @@
 		N.a1 = part(N.colA, '24 ships a day: 480 tons at 20 each', '✓ Checked');
 		N.a2 = part(N.colA, '20 ships a day: 4 docks at 5 each', 'Used as is');
 		N.b1 = part(N.colB, '24 ships a day: 480 tons at 20 each', '✓ Checked');
+		// The original and the corrected text share one cell, so swapping them never changes the height.
 		const p = h('p', 'ur-n-brief', N.colB);
-		N.b20 = band(p, '20');
-		N.b15 = h('span', 'ur-n-ins', p, ' 15');
-		band(p, ' ships a day: ');
-		N.b4 = band(p, '4');
-		N.b3 = h('span', 'ur-n-ins', p, ' 3 open');
-		band(p, ' docks at 5 each');
+		const stack = h('span', 'ur-n-stack', p);
+		N.bOrig = h('span', null, stack);
+		band(N.bOrig, '20 ships a day: 4 docks at 5 each');
+		N.bEdit = h('span', null, stack);
+		band(N.bEdit, '20').classList.add('is-struck');
+		h('span', 'ur-n-ins', N.bEdit, ' 15');
+		band(N.bEdit, ' ships a day: ');
+		band(N.bEdit, '4').classList.add('is-struck');
+		h('span', 'ur-n-ins', N.bEdit, ' 3 open');
+		band(N.bEdit, ' docks at 5 each');
 		N.b2 = {p, m: h('span', 'ur-n-mark', p, '✓ Checked')};
 	}
 	{
@@ -515,7 +531,7 @@
 		const o = h('div', 'ur-n-evidence', narrow);
 		h('p', 'ur-n-label', o, 'Right answers on a task outside the jagged frontier');
 		N.ev = [['Without AI', 'about 84.5%'], ['With AI, two groups', '60% and 70%']].map(([a, b]) => { const r = h('p', 'ur-n-ev', o); h('span', null, r, a); h('b', null, r, b); return r; });
-		N.evq = h('p', 'ur-n-evq', o, 'Graders still rated these higher in quality, regardless of correctness.');
+		N.evq = h('p', 'ur-n-evq', o, 'Rated higher in quality than without AI, regardless of correctness.');
 		h('p', 'ur-n-src', o, 'Dell’Acqua et al. (2023) · BCG consultants · HBS working paper 24-013');
 		N.evidence = o;
 	}
@@ -529,22 +545,25 @@
 		op(N.task, prog(t, ...T.card));
 		op(N.p1, prog(t, ...T.p1));
 		op(N.p2, prog(t, ...T.p2));
+		op(N.who, prog(t, ...T.dotA));
 		N.rep.forEach((c, i) => {
 			const t0 = T.reports + (i ? i + 1 : 0) * T.reportStep;
 			op(c, prog(t, t0, t0 + T.reportDur));
-			c.classList.toggle('is-open', i === 0 ? (t >= T.aOpen1[0] && t < T.aClose[1]) || (t >= T.bOpen1[0] && t < T.bClose[1]) : t >= (i === 1 ? T.survey[0] : T.log[0]));
+			c.classList.toggle('is-open', i === 0 ? (t >= T.aOpen1[0] && t < T.aClose[1]) || (t >= T.bOpen[0] && t < T.bClose[1]) : t >= (i === 1 ? T.survey[0] : T.log[0]));
 		});
-		op(N.given, prog(t, ...T.stackLabel));
 		op(N.calls, prog(t, ...T.survey));
 		op(N.survey, prog(t, ...T.survey));
 		op(N.log, prog(t, ...T.log));
+		op(N.closed, prog(t, ...T.log));
 		N.logLine.classList.toggle('is-under', t >= T.openToday[0]);
-		op(N.open, prog(t, ...T.openToday));
 		op(N.aiHead, prog(t, ...T.aiHead));
+		op(N.given, prog(t, ...T.stackLabel));
 		op(N.ai1.r, prog(t, ...T.cards));
 		op(N.ai2.r, prog(t, ...T.cards));
 		op(N.ai1.ready, prog(t, ...T.ready));
 		op(N.ai2.ready, prog(t, ...T.ready));
+		N.ai2.ready.style.transform = `scale(${(1 + 0.25 * bump(t, ...T.readyPulse)).toFixed(3)})`;
+		N.ai2.r.classList.toggle('is-looked', t >= T.readyPulse[0] && t < T.slideA2[1]);
 		op(N.cap, prog(t, ...T.capacity));
 		op(N.front, prog(t, ...T.frontier));
 		op(N.colA, prog(t, ...T.sheetA));
@@ -555,10 +574,13 @@
 		op(N.b2.p, prog(t, ...T.slideB2));
 		const off = 1 - prog(t, ...T.marksOff);
 		[[N.a1.m, T.markA1], [N.a2.m, T.markA2], [N.b1.m, T.markB1], [N.b2.m, T.markB2]].forEach(([m, span]) => op(m, prog(t, ...span) * off));
-		N.b20.classList.toggle('is-struck', t >= T.strike20[1]);
-		N.b4.classList.toggle('is-struck', t >= T.strike4[1]);
-		N.b15.style.visibility = t >= T.ins15[0] ? 'visible' : 'hidden';
-		N.b3.style.visibility = t >= T.ins3[0] ? 'visible' : 'hidden';
+		const edited = t >= T.ins15[0];
+		N.bOrig.style.visibility = edited ? 'hidden' : 'visible';
+		N.bEdit.style.visibility = edited ? 'visible' : 'hidden';
+		// Faculty point to the part they ask about.
+		const onP1 = t >= T.outline[0] && t < T.outlineMove[0], onP2 = t >= T.outlineMove[0];
+		[N.a1.p, N.b1.p].forEach((n) => n.classList.toggle('is-pointed', onP1));
+		[N.a2.p, N.b2.p].forEach((n) => n.classList.toggle('is-pointed', onP2));
 		op(N.ev[0], prog(t, ...T.bar1));
 		op(N.ev[1], prog(t, ...T.bars2));
 		op(N.evq, prog(t, ...T.bracketText));
@@ -581,29 +603,25 @@
 	};
 
 	const BEATS = [
-		{at: BEAT_AT[0], text: 'A student gets a two-part task.',
-			detail: 'a task card appears at the top left: "Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day." A red dot labelled Student appears below.'},
-		{at: BEAT_AT[1], text: 'The student gives an AI four reports.',
-			detail: 'four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled "Given to the AI", where it stays.'},
-		{at: BEAT_AT[2], text: 'It answers both with equal confidence.',
+		{at: BEAT_AT[0], text: 'A student gets a two-part task and gives an AI four reports.',
+			detail: 'a task card appears at the top left: "Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day." A red dot labelled Student appears below. Four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled "Given to the AI", where it stays.'},
+		{at: BEAT_AT[1], text: 'It answers both with equal confidence.',
 			detail: 'two answer cards labelled "AI\'s answers" write in together, in grey on a beige band. Part 1: "24 ships a day: 480 tons at 20 each." Part 2: "20 ships a day: 4 docks at 5 each." Each gets the same grey "Ready" tag at the same moment.'},
-		{at: BEAT_AT[3], text: 'The student checks Part 1 against the two aid reports. It\'s right.',
+		{at: BEAT_AT[2], text: 'The student checks Part 1 against the two aid reports. It\'s right.',
 			detail: 'the dot opens both aid reports. A sheet labelled "First student\'s brief" appears, Part 1 slides into it, and the dot marks it "Checked" in red.'},
-		{at: BEAT_AT[4], text: 'Part 2 looks just as sure, so they use it as is.',
-			detail: 'the "Ready" tag on the AI\'s Part 2 pulses. Part 2 slides into the first brief, and the dot marks it "Used as is". The aid reports close.'},
-		{at: BEAT_AT[5], text: 'Another student, with the same AI answers, checks each part at its source.',
+		{at: BEAT_AT[3], text: 'Part 2 looks just as sure, so they use it.',
+			detail: 'the "Ready" tag on the AI\'s Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first brief, and the dot marks it "Used as is". The aid reports close.'},
+		{at: BEAT_AT[4], text: 'Another student, with the same answers, checks each at its source.',
 			detail: 'a second red dot labelled Second student and an empty sheet labelled "Second student\'s brief" appear. The dot pulses and both "Ready" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked "Checked".'},
-		{at: BEAT_AT[6], text: 'That student checks Part 2 against the port reports, and corrects it.',
-			detail: 'the dot opens the port survey, "4 docks, 5 ships each", then the harbor log, "Dock 2: closed for repairs." Both stay open. Part 2 slides into the second brief. The dot strikes out "20" and "4" in red and writes "15" and "3 open", so it reads "15 ships a day: 3 open docks at 5 each", and marks it "Checked". The first brief still says 20.'},
-		{at: BEAT_AT[7], text: 'The AI worked from capacity. Part 2 depends on what\'s open today.',
-			detail: 'the AI\'s "4 docks at 5 each" is underlined and marked "Capacity". The harbor log\'s "Dock 2: closed" is underlined and marked "Open today".'},
-		{at: BEAT_AT[8], text: 'A jagged frontier marks where an AI stops being reliable. It doesn\'t follow how tasks look.',
-			detail: 'an uneven line is drawn between the AI\'s two answer cards, labelled "Inside the frontier" above and "Outside the frontier" below. Then the two cards, alike in form, pulse together.'},
-		{at: BEAT_AT[9], text: 'In a field experiment, consultants with AI were right less often outside the frontier.',
-			detail: 'the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: "Graders still rated these higher in quality, regardless of correctness." Source: Dell\'Acqua et al. (2023), BCG consultants, HBS working paper 24-013.'},
-		{at: BEAT_AT[10], text: 'Faculty point to each part in turn and ask what justified relying on it.',
-			detail: 'the panel goes. The red marks lift off both briefs, the reports and the AI\'s column fade back, and "Faculty see only the briefs" appears. Part 1 is outlined in both briefs, and each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed."'},
-		{at: BEAT_AT[11], text: 'Faculty check: What evidence justified relying on the system here?',
+		{at: BEAT_AT[5], text: 'That student checks Part 2 against the port reports, and corrects it.',
+			detail: 'the dot opens the port survey, headed "Capacity": "4 docks, 5 each". Its note appears large in the second brief: "Survey: 4 docks, 5 ships each." The dot opens the harbor log, headed "Open today": "Docks 1, 3, 4", and set apart, "Dock 2: closed". Its note appears: "Log: dock 2 closed for repairs." After a pause, Part 2 slides into the second brief. The dot strikes out "20" and writes "15", strikes out "4" and writes "3 open", so it reads "15 ships a day: 3 open docks at 5 each", and marks it "Checked". The first brief still says 20.'},
+		{at: BEAT_AT[6], text: 'Part 2 depends on what\'s open today. A jagged frontier marks where an AI stops being reliable.',
+			detail: 'the harbor log\'s "Docks 1, 3, 4" is underlined. The AI\'s "4 docks at 5 each" is underlined and marked "Capacity". Then an uneven line is drawn between the AI\'s two answer cards, labelled "Inside the frontier" above and "Outside the frontier" below, and the two cards, alike in form, pulse together.'},
+		{at: BEAT_AT[7], text: 'In a field experiment, consultants with AI got a task outside the frontier right less often.',
+			detail: 'the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: "Rated higher in quality than without AI, regardless of correctness." Source: Dell\'Acqua et al. (2023), BCG consultants, HBS working paper 24-013.'},
+		{at: BEAT_AT[8], text: 'Faculty point to each part in turn and ask what justified relying on it.',
+			detail: 'the panel goes. The red marks and the second student\'s note lift off both briefs, the reports and the AI\'s column fade back, and "Faculty see only the briefs" appears. Part 1 is outlined in both briefs, and each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed."'},
+		{at: BEAT_AT[9], text: 'Faculty check: What evidence justified relying on the system here?',
 			list: 'Faculty check: What evidence justified relying on the system here? Point to each part. Was the evidence about that part?',
 			detail: 'both lines appear under the picture at the same size. The briefs, both answers, the AI\'s answers, the frontier and the harbor log stay in view.',
 			check: {label: 'Faculty check', question: 'What evidence justified relying on the system here?', follow: 'Point to each part. Was the evidence about that part?', followAt: T.follow}},

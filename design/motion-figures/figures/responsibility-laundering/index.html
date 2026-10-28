@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsibility Laundering</title>
+<meta name="description" content="A teaching figure: two students sign the same AI-drafted recommendation, and faculty find out who can account for it by asking why they relied on the AI's estimate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock. Its
+   layout is fixed from the first frame (sections only fade in), and the caption band
+   has a fixed height, so the controls never move. */
+.rl-narrow { display: none; position: relative; }
+/* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
+#responsibility-laundering.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#responsibility-laundering.is-stacked .rl-narrow { display: block; padding: 8px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
+#responsibility-laundering.is-stacked .mf-caption { height: 136px; overflow: hidden; }
+@media (max-width: 719px) { #responsibility-laundering.is-stacked .mf-caption { height: 166px; } }
+@media (max-width: 480px) {
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 20px; }
+}
+.rl-n-sec { margin: 0 0 6px; }
+.rl-n-label { margin: 0 0 4px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
+.rl-n-grey { color: var(--stone); }
+.rl-n-red { color: var(--red); }
+.rl-n-task { margin: 0; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--ink); }
+.rl-n-task .rl-n-label { display: inline; margin: 0 6px 0 0; }
+.rl-n-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.rl-n-pair > * { min-width: 0; }
+.rl-n-col { min-width: 0; }
+.rl-n-note { margin: 0; min-height: 2.8em; font: italic 400 13.5px/1.4 var(--serif); color: var(--red); }
+.rl-n-none { margin: 0; font: 400 14px/1.4 var(--serif); color: rgba(10, 34, 66, 0.45); }
+.rl-n-stack { position: relative; }
+.rl-n-draft { position: absolute; inset: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-card { min-width: 0; padding: 4px 7px 5px 11px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
+.rl-n-row { position: relative; margin: 0 0 3px; font: 400 13px/1.4 var(--serif); color: var(--stone); }
+.rl-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.rl-n-sig svg { flex: 0 1 auto; min-width: 0; }
+.rl-n-sig { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; border-top: 1px solid rgba(10, 34, 66, 0.3); padding-top: 3px; }
+.rl-n-dot { position: relative; width: 10px; height: 10px; flex: none; }
+.rl-n-dot i { position: absolute; top: 1.5px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.rl-n-dot i:first-child { left: 1.5px; }
+.rl-n-dot i:last-child { left: 1.5px; }
+.rl-n-squiggle { font: italic 400 15px/1 var(--serif); color: var(--red); letter-spacing: -0.04em; }
+.rl-n-chip { margin-left: auto; padding: 1px 4px; background: var(--ink); color: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.rl-n-half { position: absolute; left: -9px; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.rl-n-q { margin: 0 0 2px; font: italic 400 14px/1.35 var(--serif); color: var(--ink); }
+.rl-n-say { min-width: 0; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.rl-n-line { margin: 0 0 2px; padding-left: 7px; border-left: 2px solid transparent; font: 400 13px/1.35 var(--serif); color: var(--ink); }
+.rl-n-line.is-marked { border-left-color: var(--red); }
+.rl-n-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.rl-n-key .sw { display: inline-block; width: 14px; height: 9px; margin-right: 5px; background: #ded5c4; vertical-align: -0.5px; }
+.rl-n-key .rd { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
+</style>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<p class="fig-kicker">Failure mode 7 of 7</p>
+	<h1>Responsibility laundering</h1>
+	<p class="fig-setup">Suppose two students give an AI the same prompt, get the same draft, and sign it as written. <em>The Irreducible Officer</em> calls the risk responsibility laundering: a recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The figure runs about a minute and a half. The task, the draft and both students are a constructed example.</p>
+
+	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
+		<p class="sr-only" id="rl-title">Responsibility laundering, an animated figure in nine beats</p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="rl-narrow" data-rl-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the responsibility laundering figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:29</span>
+		</div>
+		<figcaption>
+			<p class="sr-only">An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose both give an AI the same prompt and get the same draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Harbor reports: normal." Then they sign. Faculty, who see only the identical papers, ask each student: "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures." Then the first student's dot splits, and half of it moves beside "The analysis estimates". A red bracket marks the second student's answer about why they relied on the estimate. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences. The first collects the half dot and rests on the first student, whose halves rejoin; the second rests on the second student. The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="rl-check-h">
+		<h2 id="rl-check-h">Faculty check</h2>
+		<p class="fig-check">Who owns the recommendation if it proves wrong?</p>
+		<p class="fig-check">Name one way it could prove wrong. Ask why they relied on it.</p>
+		<p class="fig-follow">Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and what they didn't check. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's failure-mode lab makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by <a href="../uncalibrated-reliance/">uncalibrated reliance</a>.</p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-essay-h">
+		<h2 id="rl-essay-h">From the essay</h2>
+		<blockquote class="fig-quote">
+			<p>Responsibility laundering is the final danger. A recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The analysis lands with the apparent weight of objectivity. But AI does not become accountable for the recommendation. The human remains responsible for the final judgment. When the recommendation proves wrong, shaped by assumptions no one examined and optimizing toward a target no one explicitly chose, the question of who chose the frame does not have a satisfying answer.</p>
+			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 18px">
+			<p>… A human recommendation brings context with it. Experience, incentives, reputation, and the way a person answers when pressed all travel with the recommendation. A commander can weigh those signals. A model carries none of them and can still sound equally confident. It can support a judgment, but it cannot provide the human presence that makes accountability clear to subordinates, partners, or commanders who will live with the result.</p>
+			<p>First-person ownership matters in the classroom. The student should be able to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. Students are practicing the accountability structure their professional roles will require.</p>
+			<cite><em>The Irreducible Officer</em>, Section VII, Accountability Is Structural</cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-links-h">
+		<h2 id="rl-links-h">Go further</h2>
+		<ul class="fig-links">
+			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=5">Own the decision</a></li>
+			<li><span>In the same chapter:</span> <a href="../fluency-substitution/">Fluency substitution</a></li>
+			<li><span>Was the reliance justified?</span> <a href="../uncalibrated-reliance/">Uncalibrated reliance</a></li>
+			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test responsibility laundering with your AI assistant</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#vii-accountability-is-structural">Section VII, Accountability Is Structural</a></li>
+		</ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="responsibility-laundering.js"></script>
+</body>
+</html>
