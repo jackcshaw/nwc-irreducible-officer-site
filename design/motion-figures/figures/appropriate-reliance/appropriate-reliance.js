@@ -1,5 +1,5 @@
-/* Appropriate reliance: motion figure 8 of 8. Built to storyboard.md (round 4,
-   revised after figure cold read 1).
+/* Appropriate reliance: motion figure 8 of 8. Built to storyboard.md (round 5,
+   revised after figure cold read 2).
    The one interactive figure: the reader decides where one check goes, the study's
    results split the two tasks, then one condition changes and the reader calls again.
    Grey is what the AI supplied, red is the reader, navy is ink.
@@ -29,31 +29,31 @@
 		frontier: [32.7, 34.3], fLabels: [34.3, 34.7], inTitle: [36.7, 37.1], n1: [37.5, 37.9], n2: [38.1, 38.5], n3: [38.7, 39.1],
 		// 5 · outside the frontier
 		dim: [44.7, 45.2], panel: [45.2, 45.8], bar1: [47.1, 47.7], bars2: [47.9, 48.5], bracket: [49.1, 49.6], bracketText: [49.6, 50.0], settle: [54.0, 55.2],
-		// 6 · what set them apart
-		tagA1: [57.7, 58.3], tagA2: [58.3, 58.7], tagB1: [60.7, 61.3], tagB2: [61.5, 61.9],
+		// 6 · what set them apart: Task B's study fact first, then what the evidence suggests about A
+		tagB1: [57.7, 58.3], tagB2: [58.5, 58.9], tagA1: [61.8, 62.2], tagA2: [62.4, 62.8],
 		// 7 · the suggested call
-		key: [69.2, 69.6], fade1: [69.8, 70.2], sugA: [70.7, 71.1], noteA: [71.5, 71.9], sugB: [73.2, 73.6], call1Off: [73.8, 74.2],
-		// 8 · one thing changes (question 2 at 86.0)
-		cond2: [82.2, 82.6], pills2: [85.5, 86.0],
-		// 9 · the call changes
-		fade2: [94.2, 94.6], sug2: [99.2, 99.6], note2: [100.0, 100.4], call2Off: [100.6, 101.0],
+		key: [71.2, 71.6], fade1: [71.8, 72.2], sugA: [72.7, 73.1], noteA: [73.5, 73.9], sugB: [75.2, 75.6], call1Off: [75.8, 76.2],
+		// 8 · one thing changes (question 2 at 88.0)
+		cond2: [84.2, 84.6], pills2: [87.5, 88.0],
+		// 9 · the call
+		fade2: [97.2, 97.6], sug2: [102.2, 102.6], noteMove: [103.0, 103.4], noteAsk: [103.6, 104.0], call2Off: [104.2, 104.6],
 		// 10 · the check
-		follow: 110.4, end: 114.9,
+		follow: 113.4, end: 117.9,
 	};
-	const BEAT_AT = [0, 15.0, 21.7, 31.7, 43.7, 56.7, 68.2, 81.2, 93.2, 105.2];
-	const GATES = [{at: 25.5, resumeAt: 30.2}, {at: 86.0, resumeAt: 91.7}];
+	const BEAT_AT = [0, 15.0, 21.7, 31.7, 43.7, 56.7, 70.2, 83.2, 96.2, 108.2];
+	const GATES = [{at: 25.5, resumeAt: 30.2}, {at: 88.0, resumeAt: 94.7}];
 	const GKEY = ['g1', 'g2'];
 
 	// ---- the reader's calls ------------------------------------------------------
 	// g1: which task gets the one check ('a' | 'b'); g2: Task A in the launch plan
 	// ('rely' | 'move' | 'time'). A question is resolved once the reader continues or
-	// skips it; a skip is recorded and shown as "No call made". ?t= is the test and
-	// export hook: there every question counts as passed. ?calls=g1:a,g2:move preloads
-	// calls, and g1:skip records a skip.
+	// skips it; only the explicit Skip records "No call made". ?t= holds a moment but
+	// still stops at an unanswered question; the runtime's window seek hook is the
+	// export path. ?calls=g1:a,g2:move preloads calls for stills, and g1:skip a skip.
 	const params = new URLSearchParams(location.search);
 	const testMode = params.has('t');
 	const calls = {g1: null, g2: null};
-	const resolved = {g1: testMode, g2: testMode};
+	const resolved = {g1: false, g2: false};
 	const skipped = {g1: false, g2: false};
 	if (params.has('calls')) for (const kv of params.get('calls').split(',')) {
 		const [k, v] = kv.split(':');
@@ -68,16 +68,17 @@
 		b1pre: 'Use a spreadsheet and ', b1mark: 'insider interviews', b1post: ' to', b2: 'pick the brand a clothing firm should back.',
 		cond1: "IF IT'S YOUR TEAM'S FIRST DRAFT", cond2: 'IF IT GOES STRAIGHT INTO THE LAUNCH PLAN',
 		band: 'TIME FOR ONE CHECK · A CHECK: WORK IT YOURSELF, THEN COMPARE',
-		tagA1: 'NO HIDDEN FACTS', tagA2: 'A WEAK ANSWER SHOWS WHEN READ',
+		tagA1: 'WHAT THE EVIDENCE SUGGESTS', tagA2: 'No hidden facts: a weak answer shows when read.',
 		tagB1: 'THE DECIDING DETAILS WERE IN THE INTERVIEWS', tagB2: 'THE SPREADSHEET ONLY LOOKED COMPLETE',
 		sugA: 'RELY ON IT', noteA: 'A CHECK HERE LEAVES TASK B UNCHECKED',
 		sugB: 'WORK IT FROM THE INTERVIEWS, THEN COMPARE',
-		sug2: 'ASK FOR A WEEK TO CHECK BOTH', note2: 'MOVING IT LEAVES TASK B TO A READ-THROUGH',
+		sug2: "RELY ON IT · READ IT BEFORE IT'S BUILT", noteMove: 'TASK B: READ-THROUGH ONLY', noteAsk: 'LAUNCH SLIPS A WEEK',
+		rely2: 'Rely on it, after a careful read', ask2: 'Ask for a week to check both',
 		inTitle: 'WITH AI, ACROSS TASKS INSIDE THE FRONTIER',
 		outTitle: 'RIGHT ANSWERS ON TASK B', bracket: 'Rated higher in quality, right or wrong',
 		keySug: 'SUGGESTED CALL · REASONED FROM THE RESULTS',
 	};
-	const moveLabel = () => (calls.g1 === 'a' ? 'Keep my check here' : 'Move my check here');
+	const moveLabel = () => (calls.g1 === 'a' ? 'Keep my check here' : calls.g1 === 'b' ? 'Move my check here' : 'Put my check here');
 	const movedFromB = () => calls.g1 === 'b' && calls.g2 === 'move';
 
 	// ---- geometry ----------------------------------------------------------------------
@@ -99,6 +100,11 @@
 	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: MONO, family: FONT.mono, weight: 600, ls: 0.4, ...opts});
 	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, fs: 18, ...opts});
 	const sans600 = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 13, weight: 600, ...opts});
+	// Answer text exists in the DOM only once it is revealed: render(t) fills each of these
+	// from t (empty before its moment), so find-in-page, innerText and a printed page's text
+	// layer can't give a call away, and Start over (t = 0) clears them again.
+	const LAZY = [];
+	const lazy = (node, str, at) => { LAZY.push([node, str, at]); return node; };
 
 	// ---- top band -------------------------------------------------------------------------
 	const srcLine = mono(scene, 24, 18, S.src);
@@ -167,32 +173,33 @@
 	const noteA = mono(scene, 40, 294, S.noteA);
 	const sugB = tag(scene, 520, 262, S.sugB);
 
-	// Row 2 on card A: the launch plan.
+	// Row 2 on card A: the launch plan. The pills stack, each cost note beside its pill.
 	const cond2 = mono(scene, 40, 316, S.cond2);
-	// The launch-plan condition is long, so row 2's "Your call" sits beside the last pill.
-	const yourCall2 = sans600(scene, 440, 368.5, 'Your call', {fill: C.red, anchor: 'end'});
+	const yourCall2 = sans600(scene, 440, 340.5, 'Your call', {fill: C.red, anchor: 'end'});
 	const r2 = {
-		rely: pill(scene, 40, 324, 94, 24, 'Rely on it'),
-		move: pill(scene, 142, 324, 146, 24, 'Move my check here'),
-		time: pill(scene, 40, 352, 200, 24, 'Ask for a week to check both'),
+		rely: pill(scene, 40, 324, 220, 24, S.rely2),
+		move: pill(scene, 40, 352, 150, 24, 'Move my check here'),
+		time: pill(scene, 40, 380, 200, 24, S.ask2),
 	};
-	const sug2 = tag(scene, 40, 384, S.sug2);
-	const note2 = mono(scene, 40, 416, S.note2);
+	const noteMove = mono(scene, 0, 368.5, S.noteMove);
+	const noteAsk = mono(scene, 0, 396.5, S.noteAsk);
+	const sug2 = tag(scene, 40, 410, S.sug2);
 
 	// Card A's evidence slot: the study, inside the frontier.
-	const inRule = el(scene, 'line', {x1: 40, y1: 423, x2: 440, y2: 423, stroke: C.ink, 'stroke-opacity': 0.15});
-	const inTitle = mono(scene, 40, 436, S.inTitle);
+	const inRule = el(scene, 'line', {x1: 40, y1: 435, x2: 440, y2: 435, stroke: C.ink, 'stroke-opacity': 0.15});
+	const inTitle = mono(scene, 40, 449, S.inTitle);
 	const outRule = el(scene, 'line', {x1: 520, y1: 302, x2: 920, y2: 302, stroke: C.ink, 'stroke-opacity': 0.15});
-	const nums = [['12.2%', 'more tasks', 40], ['25.1%', 'faster', 176], ['40%+', 'higher quality', 312]].map(([n, l, x]) => {
-		const g = el(scene, 'g');
-		serif(g, x, 456, n, {fs: 20, weight: 600});
-		text(g, x, 469.5, l, {fs: 13});
-		return g;
+	const nums = [['12.2%', ' more tasks', 40], ['25.1%', ' faster', 172], ['40%+', ' higher quality', 290]].map(([n, l, x]) => {
+		const t = serif(scene, x, 468, '', {fs: 17, weight: 600});
+		el(t, 'tspan', {}, n);
+		el(t, 'tspan', {'font-family': FONT.sans, 'font-size': 13, 'font-weight': 400}, l);
+		return t;
 	});
 
-	// Pattern tags: what set the tasks apart.
-	const tagA1 = mono(scene, 40, 136, S.tagA1);
-	const tagA2 = mono(scene, 40, 151, S.tagA2);
+	// What set the tasks apart: Task B's line is the study's; Task A's is reasoning, so it
+	// sits under its own label in italic serif.
+	const tagA1 = mono(scene, 40, 136, S.tagA1, {weight: 500});
+	const tagA2 = serif(scene, 40, 153, S.tagA2, {fs: 15, style: 'italic'});
 	const underB = el(scene, 'line', {stroke: C.ink, 'stroke-width': 1.5});
 	const tagB1 = mono(scene, 520, 136, S.tagB1);
 	const tagB2 = mono(scene, 520, 151, S.tagB2);
@@ -224,22 +231,40 @@
 	const bracket = el(evB, 'path', {d: `M${BAR.x} 392V397H${BAR.x + 70.6 * BAR.k}V392`, fill: 'none', stroke: C.ink, 'stroke-width': 1.5});
 	const bracketText = serif(evB, BAR.x + 35.3 * BAR.k, 415, S.bracket, {fs: 15, style: 'italic', anchor: 'middle'});
 
+	// What each piece of revealed text says, and the moment it may exist.
+	lazy(fIn, 'INSIDE THE FRONTIER', T.fLabels[0]);
+	lazy(fOut, 'OUTSIDE THE FRONTIER', T.fLabels[0]);
+	lazy(inTitle, S.inTitle, T.inTitle[0]);
+	nums.forEach((n, i) => { for (const sp of n.children) lazy(sp, sp.textContent, [T.n1, T.n2, T.n3][i][0]); });
+	for (const n of evB.querySelectorAll('text')) lazy(n, n.textContent, T.panel[0]);
+	lazy(tagA1, S.tagA1, T.tagA1[0]); lazy(tagA2, S.tagA2, T.tagA2[0]);
+	lazy(tagB1, S.tagB1, T.tagB1[0]); lazy(tagB2, S.tagB2, T.tagB2[0]);
+	lazy(keySugT, S.keySug, T.key[0]);
+	lazy(sugA.t, S.sugA, T.sugA[0]); lazy(noteA, S.noteA, T.noteA[0]); lazy(sugB.t, S.sugB, T.sugB[0]);
+	lazy(cond2, S.cond2, T.cond2[0]);
+	lazy(r2.rely.t, S.rely2, T.pills2[0]); lazy(r2.move.t, moveLabel, T.pills2[0]); lazy(r2.time.t, S.ask2, T.pills2[0]);
+	lazy(sug2.t, S.sug2, T.sug2[0]); lazy(noteMove, S.noteMove, T.noteMove[0]); lazy(noteAsk, S.noteAsk, T.noteAsk[0]);
+	const fillLazy = (t) => {
+		for (const [n, str, at] of LAZY) {
+			const want = t >= at - 1e-6 ? (typeof str === 'function' ? str() : str) : '';
+			if (n.textContent !== want) n.textContent = want;
+		}
+	};
+
 	// ---- measure (after fonts load) -------------------------------------------------------
 	const W = (node) => node.getComputedTextLength();
 	const layout = {};
 	function measure() {
+		fillLazy(Infinity); // measure with every text present; render(t) then empties what isn't revealed
 		const fitPill = (p, extra = 37) => { p.w = Math.ceil(W(p.t) + extra); set(p.rect, {width: p.w}); };
 		fitPill(r2.rely);
-		r2.move.t.textContent = 'Keep my check here';
-		const keepW = W(r2.move.t);
-		r2.move.t.textContent = 'Move my check here';
-		r2.move.w = Math.ceil(Math.max(keepW, W(r2.move.t)) + 37);
-		const moveX = r2.rely.x + r2.rely.w + 8;
-		for (const n of r2.move.g.querySelectorAll('circle')) set(n, {cx: moveX + 14});
-		set(r2.move.rect, {x: moveX, width: r2.move.w});
-		set(r2.move.t, {x: moveX + 27});
-		r2.move.x = moveX;
+		let moveW = 0;
+		for (const w of ['Keep my check here', 'Put my check here', 'Move my check here']) { r2.move.t.textContent = w; moveW = Math.max(moveW, W(r2.move.t)); }
+		r2.move.w = Math.ceil(moveW + 37);
+		set(r2.move.rect, {width: r2.move.w});
 		fitPill(r2.time);
+		set(noteMove, {x: r2.move.x + r2.move.w + 10});
+		set(noteAsk, {x: r2.time.x + r2.time.w + 10});
 		for (const tg of [sugA, sugB, sug2]) set(tg.rect, {width: Math.ceil(W(tg.t) + 14)});
 		set(keySugSw, {x: 936 - W(keySugT) - 24});
 		const b1 = taskB1.getStartPositionOfChar(S.b1pre.length).x;
@@ -250,9 +275,9 @@
 		// Layout check: every line inside its card (exposed for the check scripts).
 		const right = (n) => n.getBBox().x + n.getBBox().width;
 		layout.overflow = [
-			[taskA1, 456], [tagA2, 456], [noteA, 456], [note2, 456], [inTitle, 456], [cond2, 456],
+			[taskA1, 456], [tagA2, 456], [noteA, 456], [noteMove, 456], [noteAsk, 456], [inTitle, 456], [cond2, 456], [nums[2], 456],
 			[taskB1, 936], [taskB2, 936], [tagB1, 936], [tagB2, 936], [bracketText, 936], [bars[0].t, 936],
-			[sugA.rect, 456], [sugB.rect, 936], [sug2.rect, 456], [r2.move.rect, 456], [r2.time.rect, 456], [srcLine, 960],
+			[sugA.rect, 456], [sugB.rect, 936], [sug2.rect, 456], [r2.rely.rect, 456], [r2.time.rect, 456], [srcLine, 960],
 		].filter(([n, lim]) => right(n) > lim - 8).map(([n]) => n.textContent || 'rect');
 		window.__arLayout = layout;
 	}
@@ -273,6 +298,7 @@
 	};
 	const render = (t, info = {}) => {
 		curGate = info.gate ?? -1;
+		fillLazy(t);
 		const dimK = prog(t, ...T.dim) - prog(t, ...T.settle);
 		set(scene, {opacity: 1 - 0.75 * dimK});
 
@@ -351,13 +377,14 @@
 		set(cond2, {opacity: prog(t, ...T.cond2)});
 		const kF2 = prog(t, ...T.fade2, E.inOut);
 		callLabel(yourCall2, kP2, prog(t, ...T.call2Off), skipped.g2);
-		if (r2.move.t.textContent !== moveLabel()) r2.move.t.textContent = moveLabel();
 		for (const [id, p] of Object.entries(r2)) drawPill(p, kP2, calls.g2 === id, kF2);
 		set(sug2.g, {opacity: prog(t, ...T.sug2)});
-		set(note2, {opacity: prog(t, ...T.note2)});
+		set(noteMove, {opacity: prog(t, ...T.noteMove)});
+		set(noteAsk, {opacity: prog(t, ...T.noteAsk)});
 
 		renderNarrow(t);
 		track(t);
+		follow(t);
 		syncUI();
 	};
 
@@ -393,9 +420,9 @@
 			n.t1.append(S.b1post + ' ');
 			n.t2 = h('span', null, task, S.b2);
 		}
-		n.pat = h('p', 'ar-n-pat', n.card, null, '2');
-		n.pat1 = h('span', null, n.pat, k === 'a' ? 'No hidden facts. ' : 'The deciding details were in the interviews. ');
-		n.pat2 = h('span', null, n.pat, k === 'a' ? 'A weak answer shows when read.' : 'The spreadsheet only looked complete.');
+		n.pat = h('p', k === 'a' ? 'ar-n-pat is-reasoning' : 'ar-n-pat', n.card, null, '2');
+		n.pat1 = h('span', k === 'a' ? 'ar-n-plabel' : null, n.pat, k === 'a' ? 'What the evidence suggests ' : 'The deciding details were in the interviews. ');
+		n.pat2 = h('span', null, n.pat, k === 'a' ? 'No hidden facts: a weak answer shows when read.' : 'The spreadsheet only looked complete.');
 		n.ai = h('div', 'ar-n-ai', n.card);
 		const aiHead = h('p', 'ar-n-aihead', n.ai);
 		h('span', null, aiHead, "AI's answer");
@@ -417,14 +444,13 @@
 			h('span', null, n.cond2, 'If it goes straight into the launch plan');
 			n.yc2 = h('span', 'ar-n-yc', n.cond2, 'Your call');
 			n.opts2 = {};
-			for (const [id, label] of [['rely', 'Rely on it'], ['move', 'Move my check here'], ['time', 'Ask for a week to check both']]) {
+			for (const [id, label, note] of [['rely', S.rely2, ''], ['move', 'Move my check here', 'Task B: read-through only'], ['time', S.ask2, 'Launch slips a week']]) {
 				const o = h('div', 'ar-n-opt', n.card, null, '2');
 				h('span', 'ar-n-radio', o);
-				n.opts2[id] = {o, label: h('span', null, o, label)};
+				n.opts2[id] = {o, label: h('span', null, o, label), note: note ? h('p', 'ar-n-note', n.card, note, '3') : null};
 			}
 			n.sug2p = h('p', 'ar-n-sugp', n.card, null, '3');
-			n.sug2 = h('span', 'ar-n-sug', n.sug2p, 'Ask for a week to check both');
-			n.note2 = h('p', 'ar-n-note', n.card, 'Moving it leaves Task B to a read-through', '3');
+			n.sug2 = h('span', 'ar-n-sug', n.sug2p, "Rely on it · read it before it's built");
 			n.ev = h('div', 'ar-n-ev', n.card, null, '2');
 			n.evTitle = h('p', 'ar-n-evtitle', n.ev, 'With AI, across tasks inside the frontier');
 			n.nums = [['12.2%', 'more tasks'], ['25.1%', 'faster'], ['40%+', 'higher quality']].map(([a, b]) => { const p = h('p', 'ar-n-num', n.ev); h('b', null, p, a); p.append(' ' + b); return p; });
@@ -530,7 +556,8 @@
 			op(o.o, kP2 * (isChosen ? 1 : mix(1, 0.4, kF2)));
 			o.o.classList.toggle('is-chosen', isChosen);
 		}
-		op(N.a.sug2p, prog(t, ...T.sug2)); op(N.a.note2, prog(t, ...T.note2));
+		op(N.a.sug2p, prog(t, ...T.sug2));
+		op(N.a.opts2.move.note, prog(t, ...T.noteMove)); op(N.a.opts2.time.note, prog(t, ...T.noteAsk));
 	}
 	// The stacked stage takes over whenever the smallest picture text would render under
 	// 11 px at the runtime's letterboxed scale.
@@ -547,6 +574,31 @@
 		} else if (curGate >= 0) positionHits(curGate);
 	};
 
+	// ---- phones: the caption and controls stay at the bottom, and while the figure plays the
+	// page follows the action, gently, so the part each caption is about is in view.
+	const controlsEl = root.querySelector('.mf-controls');
+	const capwrap = root.querySelector('.ar-capwrap');
+	const stickyOn = () => root.classList.contains('is-stacked') && matchMedia('(max-width: 719px)').matches;
+	const stickyH = () => (stickyOn() ? capwrap.offsetHeight + controlsEl.offsetHeight : 0);
+	const syncStickyVar = () => root.style.setProperty('--ar-ctrl-h', `${controlsEl.offsetHeight}px`);
+	function bringIntoView(el, smooth = true) {
+		const r = el.getBoundingClientRect();
+		const top = 8, bottom = innerHeight - stickyH() - 8;
+		let dy = 0;
+		if (r.top < top) dy = r.top - top;
+		else if (r.bottom > bottom) dy = Math.min(r.bottom - bottom, r.top - top);
+		if (Math.abs(dy) > 2) scrollBy({top: dy, behavior: smooth && !reducedNow() ? 'smooth' : 'auto'});
+	}
+	let followT = 0;
+	const FOLLOW = () => [[BEAT_AT[3], N.a.flab], [T.inTitle[0], N.a.ev], [BEAT_AT[4], N.panel], [BEAT_AT[5], N.b.pat], [T.tagA1[0], N.a.pat],
+		[BEAT_AT[6], N.a.sug], [T.sugB[0], N.b.sug], [BEAT_AT[7], N.a.cond2], [BEAT_AT[8], N.a.sug2p]];
+	function follow(t) {
+		const prev = followT;
+		followT = t;
+		if (!stickyOn() || root.dataset.state !== 'playing' || t <= prev || t - prev > 1) return;
+		for (const [at, el] of FOLLOW()) if (prev < at && t >= at) { requestAnimationFrame(() => bringIntoView(el)); break; }
+	}
+
 	// ---- questions, controls and the text equivalent ---------------------------------------
 	const hitsets = [...root.querySelectorAll('[data-ar-gate]')];
 	const gatebar = root.querySelector('[data-ar-gatebar]');
@@ -556,6 +608,8 @@
 	const live = root.querySelector('[data-ar-live]');
 	const sums = [root.querySelector('[data-ar-sum2]'), root.querySelector('[data-ar-sum3]')];
 	const after = document.getElementById('ar-after');
+	const afterLocked = document.querySelector('[data-ar-after-locked]');
+	const prompt = root.querySelector('[data-ar-prompt]');
 	let autoOpened = false;
 	// The drawn element each option's hit target sits over, in each mode.
 	const target = (gate, value) => {
@@ -597,12 +651,15 @@
 		});
 		sums[0].hidden = !resolved.g1;
 		sums[1].hidden = !resolved.g2;
+		// The page copy that explains both answers stays shut until both questions are done.
+		if (after) after.hidden = !(resolved.g1 && resolved.g2);
+		if (afterLocked) afterLocked.hidden = resolved.g1 && resolved.g2;
 	}
 	const say = (msg) => { live.textContent = ''; requestAnimationFrame(() => { live.textContent = msg; }); };
-	const ASK = [
+	const ASK = (i) => [
 		'Question 1. You have time to check one of the two tasks. Choose Task A or Task B, then press Enter or Continue. You can also skip the question.',
-		'Question 2. Now your segmentation goes straight into the launch plan. For Task A, choose Rely on it, ' + 'Move my check here, or Ask for a week to check both, then press Enter or Continue.',
-	];
+		'Question 2. Now your segmentation goes straight into the launch plan. For Task A, choose Rely on it after a careful read, ' + `${moveLabel()}, or Ask for a week to check both, then press Enter or Continue.`,
+	][i];
 	const verdict1 = () => {
 		const base = 'Suggested call, reasoned from the results: rely on Task A, and work Task B yourself from the interviews, then compare. A check on Task A leaves Task B unchecked.';
 		if (calls.g1 === 'a') return base + ' You checked Task A and relied on Task B.';
@@ -610,8 +667,8 @@
 		return base + ' You made no call.';
 	};
 	const verdict2 = () => {
-		const base = 'Suggested call: ask for a week to check both. A miss on Task A now gets built, and Task B still needs its check. Moving the one check leaves Task B to a read-through.';
-		const mine = {rely: ' You chose to rely on it.', move: ` You chose: ${moveLabel().toLowerCase()}.`, time: ' You chose to ask for a week to check both.'}[calls.g2];
+		const base = "Suggested call: Task A is still inside the frontier, so rely on it, and read it before it's built. Task B needs the check. Moving the check leaves Task B to a read-through only; asking for a week slips the launch a week.";
+		const mine = {rely: ' You chose to rely on it after a careful read.', move: ` You chose: ${moveLabel().toLowerCase()}.`, time: ' You chose to ask for a week to check both.'}[calls.g2];
 		return base + (mine || ' You made no call.');
 	};
 	function track(t) {
@@ -630,21 +687,57 @@
 		const g = curGate;
 		if (g < 0 || !api) return;
 		if (skip) calls[GKEY[g]] = null;
+		if (prompt) prompt.hidden = true;
+		if (g === 0) releaseFit();
 		if (reducedNow()) {
 			resolve(g);
 			if (g === 0) api.openGate(1);
 			else { api.seek(T.end); if (after) after.open = true; toggle.focus(); }
 		} else {
 			api.resume(g);
-			toggle.focus();
+			toggle.focus({preventScroll: true});
+			// After the first question the picture carries the next beats: bring the cards
+			// into view (on a phone, the top of the stacked stage).
+			if (g === 0) requestAnimationFrame(() => showPicture());
 		}
 	};
+	// Play at a question asks for the call; only Skip passes it without one.
+	const onGatePlay = (g) => {
+		if (calls[GKEY[g]]) { pass(false); return; }
+		if (prompt) prompt.hidden = false;
+		say('Make your call first, or skip this question.');
+		const inputs = [...hitsets[g].querySelectorAll('input')];
+		inputs[0].focus({preventScroll: true});
+	};
+	function showPicture() {
+		const stacked = root.classList.contains('is-stacked');
+		const r = (stacked ? narrow : shot).getBoundingClientRect();
+		if (r.top < 0 || r.top > 80) scrollBy({top: r.top - 8, behavior: reducedNow() ? 'auto' : 'smooth'});
+	}
+	// First view: until the first question is answered, the picture is capped so the
+	// question and Continue fit on screen with it, without moving the page.
+	let fitOn = false;
+	function fitFirstView() {
+		if (testMode) return;
+		const top = root.getBoundingClientRect().top + scrollY;
+		const chrome = root.querySelector('.ar-capwrap').offsetHeight + root.querySelector('.mf-controls').offsetHeight + 6;
+		const avail = Math.floor(innerHeight - top - chrome);
+		svg.style.maxHeight = `${Math.max(120, avail)}px`;
+		fitOn = true;
+	}
+	function releaseFit() {
+		if (!fitOn) return;
+		fitOn = false;
+		svg.style.maxHeight = '';
+	}
+	addEventListener('resize', () => { if (fitOn) fitFirstView(); });
 	btnContinue.addEventListener('click', () => pass(false));
 	btnSkip.addEventListener('click', () => pass(true));
 	hitsets.forEach((fs, i) => {
 		fs.addEventListener('change', (e) => {
 			if (!e.target.matches('input')) return;
 			calls[GKEY[i]] = e.target.value;
+			if (prompt) prompt.hidden = true;
 			if (api) api.redraw();
 		});
 		// Enter on a chosen option continues.
@@ -658,6 +751,16 @@
 	// option. At load the first question is open without moving the page.
 	let quietOpen = false;
 	function presentGate(i) {
+		if (stickyOn()) {
+			// Continue sits in the sticky caption; bring the options into the space above it.
+			const opts = [...hitsets[i].querySelectorAll('[data-ar-opt]')];
+			const box = opts.map((e) => e.getBoundingClientRect());
+			const first = {getBoundingClientRect: () => ({top: Math.min(...box.map((r) => r.top)), bottom: Math.max(...box.map((r) => r.bottom))})};
+			bringIntoView(first, false);
+			const inputs = [...hitsets[i].querySelectorAll('input')];
+			(inputs.find((x) => x.checked) || inputs[0]).focus({preventScroll: true});
+			return;
+		}
 		const els = [...hitsets[i].querySelectorAll('[data-ar-opt]'), gatebar];
 		const rects = els.map((e) => e.getBoundingClientRect());
 		const top = Math.min(...rects.map((r) => r.top)), bottom = Math.max(...rects.map((r) => r.bottom));
@@ -670,16 +773,22 @@
 		else if (bottom - top + 2 * m > innerHeight) dy = top - m;
 		else if (top < m) dy = top - m;
 		else if (bottom > innerHeight - m) dy = bottom - (innerHeight - m);
-		if (dy) scrollBy({top: dy, behavior: reducedNow() ? 'auto' : 'smooth'});
+		if (dy) scrollBy({top: dy, behavior: 'auto'});
 		const inputs = [...hitsets[i].querySelectorAll('input')];
 		(inputs.find((x) => x.checked) || inputs[0]).focus({preventScroll: true});
 	}
 	// Start over clears the calls (registered before the runtime's own restart handler).
 	root.querySelector('[data-mf-replay]').addEventListener('click', () => {
 		calls.g1 = calls.g2 = null;
-		resolved.g1 = resolved.g2 = testMode;
+		resolved.g1 = resolved.g2 = false;
 		skipped.g1 = skipped.g2 = false;
 		reached = 0; lastT = 0;
+		// Nothing a reader heard or unlocked stays behind: empty the live region, re-hide the
+		// summary parts and the page copy, and re-lock the beat list.
+		live.textContent = '';
+		lockState = '';
+		syncLocks();
+		if (prompt) prompt.hidden = true;
 	});
 	// Under reduced motion, a beat-list click on a question opens that question.
 	root.querySelector('[data-mf-beats]').addEventListener('click', (e) => {
@@ -699,6 +808,7 @@
 		const scrub = root.querySelector('[data-mf-scrub]');
 		beforePrint = {t: scrub ? +scrub.value : 0, reached, open: after ? after.open : false, autoOpened, resolved: {...resolved}};
 		resolved.g1 = resolved.g2 = true;
+		lockState = '';
 		f.seek(GATES[0].at);
 		printQ.querySelector('[data-ar-printq-svg]').replaceChildren(svg.cloneNode(true));
 		if (after) after.open = true;
@@ -728,14 +838,14 @@
 			detail: 'an uneven line is drawn down between the cards, labelled "Inside the frontier" over Task A and "Outside the frontier" over Task B. On Task A\'s card: with AI, across tasks inside the frontier, 12.2% more tasks, 25.1% faster, more than 40% higher quality.'},
 		{at: BEAT_AT[4], text: 'On Task B, consultants with AI were right less often. Graders still rated their work higher.',
 			detail: 'the picture dims and a panel rises: right answers on Task B. Without AI, 84.5%. GPT-4 alone, 70.6%. GPT-4 plus a prompt-engineering overview, 60%. A bracket under the two GPT-4 bars: "Rated higher in quality, right or wrong." The panel settles onto Task B\'s card.'},
-		{at: BEAT_AT[5], text: 'Task A had no hidden facts. Task B\'s were in the interviews.',
-			detail: 'under Task A: "No hidden facts. A weak answer shows when read." In Task B, "insider interviews" is underlined, with "The deciding details were in the interviews. The spreadsheet only looked complete."'},
+		{at: BEAT_AT[5], text: 'Task B\'s deciding details were in the interviews. For Task A, the evidence suggests none.',
+			detail: 'in Task B, "insider interviews" is underlined, with "The deciding details were in the interviews. The spreadsheet only looked complete." Then under Task A, labelled "What the evidence suggests": "No hidden facts: a weak answer shows when read."'},
 		{at: BEAT_AT[6], text: 'The evidence suggests relying on Task A and working Task B yourself from the interviews.',
 			detail: 'a key at bottom right: "Suggested call · reasoned from the results". The options you didn\'t choose fade. Task A gets a navy "Rely on it" tag, with the note "A check here leaves Task B unchecked". Task B gets "Work it from the interviews, then compare". Your choice stays in red.'},
 		{at: BEAT_AT[7], text: 'Now your segmentation goes straight into the launch plan. What about Task A?',
-			detail: 'a second line appears on Task A: "If it goes straight into the launch plan", with three buttons: "Rely on it", "Move my check here" and "Ask for a week to check both". The figure waits for your choice. If you move your check from Task B, Task B\'s mark turns to a ring that says "Check moved to Task A".'},
-		{at: BEAT_AT[8], text: 'Same task, same side of the frontier. Now a miss gets built, and Task B still needs its check.',
-			detail: 'the options you didn\'t choose fade. Task A\'s second line gets a navy tag, "Ask for a week to check both", with the note "Moving it leaves Task B to a read-through".'},
+			detail: 'a second line appears on Task A: "If it goes straight into the launch plan", with three buttons: "Rely on it, after a careful read", "Move my check here" and "Ask for a week to check both". The figure waits for your choice. If you move your check from Task B, Task B\'s mark turns to a ring that says "Check moved to Task A".'},
+		{at: BEAT_AT[8], text: 'Still inside the frontier: rely on it, and read it before it\'s built. Task B needs the check.',
+			detail: 'the options you didn\'t choose fade. Beside "Move my check here": "Task B: read-through only". Beside "Ask for a week to check both": "Launch slips a week". Task A\'s second line gets a navy tag: "Rely on it. Read it before it\'s built."'},
 		{at: BEAT_AT[9], text: 'Faculty check: What evidence justified relying on the system here, and what would have changed the call?',
 			list: 'Faculty check: What evidence justified relying on the system here, and what would have changed the call? Change one condition and ask for the call again.',
 			detail: 'both lines under the picture at the same size. Both tasks, both answers, the frontier, the evidence and every suggested call stay in view.',
@@ -744,21 +854,27 @@
 
 	document.fonts.ready.then(() => {
 		measure();
+		fitFirstView();
+		syncStickyVar();
+		addEventListener('resize', syncStickyVar);
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
+		quietOpen = true; // a ?t= hold past a question opens it without moving the page
 		api = mount(root, {
 			duration: T.end, render, beats: BEATS, poster: GATES[0].at, gates: GATES, reducedAt: GATES[0].at,
-			lockedAt: () => (testMode ? null : !resolved.g1 ? GATES[0].at : !resolved.g2 ? GATES[1].at : null),
+			lockedAt: () => (!resolved.g1 ? GATES[0].at : !resolved.g2 ? GATES[1].at : null),
 			onResume: (i) => resolve(i),
+			onGatePlay,
 			onGate: (i, via) => {
 				if (quietOpen) return;
-				say(ASK[i]);
+				say(ASK(i));
 				// A drag on the scrubber keeps its focus; every other way in focuses the options.
 				if (via === 'lock' && document.activeElement && document.activeElement.matches('[data-mf-scrub]')) return;
 				presentGate(i);
 			},
 		});
+		quietOpen = false;
 		// Each beat-list entry carries a placeholder shown while it is locked.
 		for (const btn of root.querySelectorAll('[data-mf-beats] > li > button')) {
 			const ph = document.createElement('span');
@@ -768,7 +884,7 @@
 		}
 		lockState = '';
 		syncLocks();
-		// The figure opens on the first question, live, in every view but the test hook.
+		// The figure opens on the first question, live, in every view but the ?t= hold.
 		if (!testMode) { quietOpen = true; api.openGate(0); quietOpen = false; }
 	});
 })();

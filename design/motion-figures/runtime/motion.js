@@ -34,7 +34,10 @@
    return the time of a gate the reader hasn't answered: no seek, scrub or beat
    click passes it (the gate opens there instead), and play() does nothing
    while a gate is open. onGate(i, via) says how the gate opened ('play',
-   'lock' or 'api'); onResume(i) runs before resume() moves on. mount()
+   'lock' or 'api'); onResume(i) runs before resume() moves on; onGatePlay(i)
+   replaces what Play does at an open gate (default: resume). The ?t= hold
+   respects lockedAt; window.__motionFigures[id].seek(t) is the export hook and
+   ignores it, so scripts can render every frame. mount()
    returns {play, pause, seek, redraw, resume, openGate, gateOpen}; figures
    without these fields behave exactly as before.
 
@@ -273,10 +276,10 @@
 			}
 		};
 
-		const draw = (time) => {
+		const draw = (time, force = false) => {
 			let target = clamp(time, 0, duration);
 			// An unanswered gate can't be passed: the playhead stops there and the gate opens.
-			const lock = figure.lockedAt ? figure.lockedAt() : null;
+			const lock = !force && figure.lockedAt ? figure.lockedAt() : null;
 			const wasOpen = gateOpen;
 			let lockGate = -1;
 			if (lock != null && target > lock + 0.001) {
@@ -353,7 +356,8 @@
 			play();
 		};
 
-		if (toggle) toggle.addEventListener('click', () => (gateOpen >= 0 ? resume() : playing ? pause() : play()));
+		const atGate = () => (figure.onGatePlay ? figure.onGatePlay(gateOpen) : resume());
+		if (toggle) toggle.addEventListener('click', () => (gateOpen >= 0 ? atGate() : playing ? pause() : play()));
 		if (replay) replay.addEventListener('click', () => { draw(0); play(); });
 		if (scrub) {
 			scrub.min = 0;
@@ -389,7 +393,7 @@
 		// Test and export hook: seek to any moment without the clock.
 		const seek = (time) => { pause(); draw(time); };
 		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen};
-		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek, resume, openGate, gates: gates.map((g) => g.at)};
+		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at)};
 
 		// Pause when scrolled away: once less than a quarter of the shot is in view, a playing
 		// figure pauses and shows Play. It doesn't resume by itself (the reader may be reading

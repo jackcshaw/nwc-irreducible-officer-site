@@ -13,10 +13,17 @@
 [hidden] { display: none !important; }
 .fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
 
+/* ---- a compact top, so the first question, the picture and Continue fit on screen */
+.ar-page { padding-top: 16px; }
+.ar-page h1 { margin-bottom: 4px; font-size: clamp(28px, 3vw, 38px); }
+.ar-lede { margin: 0; font-size: 18px; line-height: 1.45; color: var(--body); }
+.ar-page .mf { margin-top: 12px; }
+
 /* ---- gates: hit targets over the drawn options, and Continue / Skip ---------- */
 #appropriate-reliance .mf-shot { position: relative; }
 .ar-capwrap { position: relative; }
-.ar-gatebar { position: absolute; right: clamp(14px, 2.4vw, 28px); bottom: 12px; z-index: 3; display: flex; gap: 8px; }
+.ar-gatebar { position: absolute; right: clamp(14px, 2.4vw, 28px); bottom: 12px; z-index: 3; display: flex; gap: 8px; align-items: center; }
+.ar-prompt { font: 600 14px/1.2 var(--sans); color: var(--ink); }
 .ar-continue, .ar-skip { min-height: 40px; padding: 0 16px; border: 1.5px solid var(--ink); border-radius: 0; font: 600 15px/1 var(--sans); cursor: pointer; }
 .ar-continue { background: var(--ink); color: var(--paper); }
 .ar-continue:disabled { background: var(--paper); color: var(--stone-faint); border-color: var(--rail); cursor: not-allowed; }
@@ -45,6 +52,12 @@
 #appropriate-reliance.is-stacked .mf-stage { height: 0; overflow: hidden; }
 #appropriate-reliance.is-stacked .ar-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 8px; background: var(--paper); }
 #appropriate-reliance.is-stacked .mf-caption { height: 136px; overflow: hidden; }
+/* On phones the stacked stage is taller than the screen, so the caption band and the
+   controls stay at the bottom while it scrolls (the figure follows the action in play). */
+@media (max-width: 719px) {
+	#appropriate-reliance.is-stacked .ar-capwrap { position: sticky; bottom: var(--ar-ctrl-h, 120px); z-index: 4; box-shadow: 0 -1px 0 var(--navy-line); }
+	#appropriate-reliance.is-stacked .mf-controls { position: sticky; bottom: 0; z-index: 5; }
+}
 /* 182 px on phones: the check plus the move line, measured at 390 px. */
 @media (max-width: 719px) { #appropriate-reliance.is-stacked .mf-caption { height: 182px; } }
 /* The check is longer than the family's others: one line at desktop widths, so the caption
@@ -75,6 +88,8 @@
 .ar-n-task { margin: 2px 0 4px; font: 400 14px/1.35 var(--serif); color: var(--ink); }
 .ar-n-mark.is-under { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
 .ar-n-pat { margin: 0 0 6px; }
+.ar-n-pat.is-reasoning { font: italic 400 14px/1.35 var(--serif); letter-spacing: 0; text-transform: none; }
+.ar-n-plabel { display: block; font: 500 13px/1.3 var(--mono); font-style: normal; letter-spacing: 0.01em; text-transform: uppercase; }
 .ar-n-ai { margin: 0 0 6px; }
 .ar-n-aihead { margin: 0 0 3px; display: flex; justify-content: space-between; align-items: center; gap: 4px; color: var(--stone); }
 .ar-n-ready { padding: 0 6px; border-radius: 8px; background: var(--stone); color: var(--paper-bright); }
@@ -116,6 +131,7 @@
 
 /* ---- the page: spoilers sit behind a disclosure until the figure reaches its check */
 .ar-after { max-width: 72ch; margin: 0 0 36px; border-top: 1px solid var(--faint); }
+.ar-after-locked { max-width: 72ch; margin: 0 0 36px; padding: 14px 0 0; border-top: 1px solid var(--faint); font: 600 12px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone-faint); }
 .ar-after > summary { padding: 14px 0 6px; cursor: pointer; font: 600 12px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .ar-after > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .ar-after h3 { margin: 18px 0 8px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
@@ -126,7 +142,8 @@
 	.ar-printq-cap { margin: 10px 0 0; font: 400 20px/1.35 var(--serif); color: var(--ink); }
 	#appropriate-reliance.is-stacked .mf-stage { height: auto; overflow: visible; }
 	#appropriate-reliance .ar-narrow, .ar-hits, .ar-gatebar, .ar-showall { display: none !important; }
-	.ar-after > summary { display: none; }
+	.ar-after > summary, .ar-after-locked { display: none; }
+	.ar-after { display: block !important; }
 }
 </style>
 </head>
@@ -136,10 +153,10 @@
 	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
 </header>
 
-<main class="fig-page">
+<main class="fig-page ar-page">
 	<p class="fig-kicker">The competency</p>
 	<h1>Appropriate reliance</h1>
-	<p class="fig-setup">Appropriate reliance means accepting AI support when it's warranted, checking or refusing it when it's not, and being able to say why. Checking takes time, so this figure gives you two tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can also skip either question and let it play.</p>
+	<p class="ar-lede">You have time to check one of two AI answers. Decide where the check goes, then see what the study found.</p>
 
 	<div class="ar-printq" data-ar-printq aria-hidden="true">
 		<p class="fig-kicker">The question</p>
@@ -162,14 +179,15 @@
 				</fieldset>
 				<fieldset class="ar-hitset" data-ar-gate="1" hidden>
 					<legend class="sr-only">If your segmentation goes straight into the launch plan, Task A</legend>
-					<label class="ar-hit" data-ar-opt="rely"><input type="radio" name="ar-g2" value="rely"><span class="sr-only">Rely on it</span></label>
-					<label class="ar-hit" data-ar-opt="move"><input type="radio" name="ar-g2" value="move"><span class="sr-only" data-ar-movelabel>Move my check here</span></label>
+					<label class="ar-hit" data-ar-opt="rely"><input type="radio" name="ar-g2" value="rely"><span class="sr-only">Rely on it, after a careful read</span></label>
+					<label class="ar-hit" data-ar-opt="move"><input type="radio" name="ar-g2" value="move"><span class="sr-only" data-ar-movelabel>Put my check here</span></label>
 					<label class="ar-hit" data-ar-opt="time"><input type="radio" name="ar-g2" value="time"><span class="sr-only">Ask for a week to check both</span></label>
 				</fieldset>
 			</div>
 			<div class="ar-capwrap">
 				<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
 				<div class="ar-gatebar" data-ar-gatebar hidden>
+					<span class="ar-prompt" data-ar-prompt hidden>Make your call first, or skip this question.</span>
 					<button class="ar-continue" type="button" data-ar-continue disabled>Continue</button>
 					<button class="ar-skip" type="button" data-ar-skip>Skip this question</button>
 				</div>
@@ -179,13 +197,13 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the appropriate reliance figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Start over</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:25 / 1:54</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:25 / 1:57</span>
 		</div>
 		<p class="sr-only" aria-live="polite" data-ar-live></p>
 		<figcaption>
 			<p class="sr-only" data-ar-sum1>An interactive figure with two tasks from a 2023 field experiment with BCG consultants. Task A: segment the footwear industry market based on users. Task B: use a spreadsheet and insider interviews to pick the brand a clothing firm should back. An AI answers both in the same form, each marked ready, and both answers will go into your team's first draft. You have time to check one task; a check means working it yourself, then comparing with the AI's answer. You choose which task gets the check and rely on the AI for the other. The rest of this description, and the rest of the beat list, appear after you answer or skip each question.</p>
-			<p class="sr-only" data-ar-sum2 hidden>After the first question: a jagged line, the frontier, is drawn between the tasks: Task A inside, Task B outside. On tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster, at more than 40% higher quality. On Task B, consultants without AI were right 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus a prompt-engineering overview 60%, and graders rated the AI users' work higher in quality, right or wrong. Task A had no hidden facts: a weak answer shows when read. Task B's deciding details were in the interviews; the spreadsheet only looked complete. The suggested call, reasoned from the results, is to rely on Task A, since a check there leaves Task B unchecked, and to work Task B from the interviews yourself, then compare. Then your segmentation goes straight into the launch plan, and you choose again for Task A: rely on it, move your check to it, or ask for a week to check both.</p>
-			<p class="sr-only" data-ar-sum3 hidden>After the second question: the suggested call is to ask for a week to check both. A miss on Task A now gets built, and Task B still needs its check; moving the one check would leave Task B to a read-through, and graders reading the recommendations rated AI users' work higher, right or wrong. The figure ends on the faculty check.</p>
+			<p class="sr-only" data-ar-sum2 hidden>After the first question: a jagged line, the frontier, is drawn between the tasks: Task A inside, Task B outside. On tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster, at more than 40% higher quality. On Task B, consultants without AI were right 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus a prompt-engineering overview 60%, and graders rated the AI users' work higher in quality, right or wrong. Task B's deciding details were in the interviews; the spreadsheet only looked complete. For Task A, the evidence suggests no hidden facts: a weak answer shows when read. The suggested call, reasoned from the results, is to rely on Task A, since a check there leaves Task B unchecked, and to work Task B from the interviews yourself, then compare. Then your segmentation goes straight into the launch plan, and you choose again for Task A: rely on it after a careful read, move or put your check there, or ask for a week to check both.</p>
+			<p class="sr-only" data-ar-sum3 hidden>After the second question: the suggested call is to rely on Task A and read it before it's built: it is still inside the frontier and a weak answer shows on a careful read. Task B needs the check. Moving the check leaves Task B to a read-through only; asking for a week to check both slips the launch a week. The figure ends on the faculty check.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
@@ -196,12 +214,18 @@
 		<p class="fig-check">Change one condition and ask for the call again.</p>
 	</section>
 
-	<details class="ar-after" id="ar-after">
+	<section class="fig-section" aria-labelledby="ar-how-h">
+		<h2 id="ar-how-h">How this figure works</h2>
+		<p class="fig-follow">Appropriate reliance means accepting AI support when it's warranted, checking or refusing it when it's not, and being able to say why. Checking takes time, so the figure gives you two tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning.</p>
+	</section>
+
+	<p class="ar-after-locked" data-ar-after-locked>After you make your call: make or skip both calls to open this.</p>
+	<details class="ar-after" id="ar-after" hidden>
 		<summary>After you make your call: what a good answer says, the evidence, the tasks</summary>
 		<h3>What a good answer says</h3>
-		<p class="fig-follow">A good answer says where the check went and why. This is the figure's reasoning from the study's results; the study itself didn't test checking, a time budget, or what the work was for. Task A had no hidden facts, so a weak segmentation shows when you read it, and the study found it inside the frontier. As a first draft, it can go without a check. Task B looked just as finished, but its deciding details were in the interviews, and the spreadsheet only looked complete. Graders rated the AI users' recommendations higher whether or not they were right, so a read-through wouldn't show a miss. That's where the one check belongs, and it starts from the interviews. When the segmentation goes straight into the launch plan, a miss there gets built, and Task B still needs its check. Both now need a real check, so asking for a week is worth what it costs. Moving the one check would leave Task B to a read-through, and graders reading the recommendations rated AI users' work higher, right or wrong. Changing one condition and asking again shows whether the student has a reason for the call.</p>
+		<p class="fig-follow">A good answer says where the check went and why. This is the figure's reasoning from the study's results; the study itself didn't test checking, a time budget, or what the work was for. Task B's deciding details were in the interviews, and the spreadsheet only looked complete. Graders rated the AI users' recommendations higher whether or not they were right, so a read-through wouldn't show a miss. That's where the one check belongs, and it starts from the interviews. Task A is the kind of work the study found inside the frontier, and the figure reads it as having no hidden facts: a weak segmentation shows when read. As a first draft it can go without a check. When the segmentation goes straight into the launch plan, it is still inside the frontier, so the call is still to rely on it, but now someone has to read it carefully before it's built. Moving the one check would leave Task B, the risky task, to a read-through; asking for a week to check both is defensible, and it slips the launch a week. Changing one condition and asking again shows whether the student has a reason for the call.</p>
 		<h3>Evidence</h3>
-		<p class="fig-follow">Dell'Acqua et al., <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700">Navigating the Jagged Technological Frontier</a>, HBS working paper 24-013 (2023). In the field experiment, 758 BCG consultants were split between two sets of tasks and randomly assigned to work without AI, with GPT-4, or with GPT-4 plus a prompt-engineering overview. On the tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster and at more than 40% higher quality. On the task chosen to fall outside it, consultants without AI were right about 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus the overview 60%: in the working paper's words, "19 percentage points less likely to produce correct solutions." Graders still rated the AI users' recommendations higher in quality "regardless of the correctness of their answer."</p>
+		<p class="fig-follow">Dell'Acqua et al., <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700">Navigating the Jagged Technological Frontier</a>, HBS working paper 24-013 (2023). In the field experiment, 758 BCG consultants were split between two sets of tasks and randomly assigned to work without AI, with GPT-4, or with GPT-4 plus a prompt-engineering overview. On the tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster and at more than 40% higher quality. On the task chosen to fall outside it, consultants without AI were right about 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus the overview 60%: in the working paper's words, with the two AI groups pooled, "19 percentage points less likely to produce correct solutions." Graders still rated the AI users' recommendations higher in quality "regardless of the correctness of their answer."</p>
 		<h3>About the tasks</h3>
 		<p class="fig-follow">The tasks inside the frontier were 18 product-development questions for a fictional footwear company. Consultants generated ideas for a new shoe, segmented the market by users, listed the steps to launch it, and wrote a press release and a persuasive memo. On the task built to fall outside the frontier, consultants told a fictional clothing company's CEO which of its brands to invest in, working from a spreadsheet of financial data and interviews with company insiders. The spreadsheet was designed to look complete, but the deciding details were in the interviews, and the authors designed the task so that GPT-4 would get it wrong. In the study each consultant worked one set of tasks; the choice of where to spend one check, and the launch-plan condition, are this figure's. The task wording on screen is paraphrased. The frontier moves as models change; this is where it sat in 2023, with GPT-4.</p>
 	</details>

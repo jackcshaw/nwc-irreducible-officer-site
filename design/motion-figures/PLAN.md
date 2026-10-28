@@ -49,6 +49,7 @@ Figure 4 (uncalibrated reliance) done October 28: two storyboard reads, two figu
 Figure 5 (invisible delegation) done October 28: two storyboard reads, two figure reads, final fixes checked by a verifier agent (90 seconds after a trim from 102).
 Figure 7 (responsibility laundering) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents (93 seconds).
 Figure 6 (institutional monoculture) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents (96 seconds; flat, not 3D).
+Figure 8 (appropriate reliance) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents. Interactive: opens on a live question, a one-check budget, answers locked until each call (79–118 seconds depending on choices). All eight figures done.
 
 ## Standalone pages
 
