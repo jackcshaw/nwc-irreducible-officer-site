@@ -40,6 +40,10 @@
 		// 10 · the check
 		follow: 113.4, end: 117.9,
 	};
+	// The card's progress (0 large, 1 in its corner) from which question 1's options fade in:
+	// by then it has moved clear of them at every size (checked at 1440 × 900, 1366 × 768,
+	// 1280 × 720 and 390 × 844).
+	const CARD_CLEAR = 0.9;
 	const BEAT_AT = [0, 15.0, 21.7, 31.7, 43.7, 56.7, 70.2, 83.2, 96.2, 108.2];
 	const GATES = [{at: 25.5, resumeAt: 30.2}, {at: 88.0, resumeAt: 94.7}];
 	const GKEY = ['g1', 'g2'];
@@ -296,8 +300,13 @@
 		if (node.textContent !== want) node.textContent = want;
 		set(node, wasSkipped ? {fill: C.ink, opacity: 0.7 * kIn} : {fill: C.red, opacity: kIn * (1 - kOff)});
 	};
+	// While the name card holds over question 1 at load (info.card, from the runtime's card
+	// intro), the options stay out: they fade in only as the card reaches its corner, so the
+	// card never covers them.
+	let cardHold = 1;
 	const render = (t, info = {}) => {
 		curGate = info.gate ?? -1;
+		cardHold = info.card == null ? 1 : prog(info.card, CARD_CLEAR, 1);
 		fillLazy(t);
 		const dimK = prog(t, ...T.dim) - prog(t, ...T.settle);
 		set(scene, {opacity: 1 - 0.75 * dimK});
@@ -320,7 +329,7 @@
 
 		// 3 · one check: the budget, the condition, the pills; the reader's marks.
 		set(bandLine, {opacity: prog(t, ...T.band)});
-		const kP1 = prog(t, ...T.pills1), kF1 = prog(t, ...T.fade1, E.inOut), kP2 = prog(t, ...T.pills2);
+		const kP1 = prog(t, ...T.pills1) * cardHold, kF1 = prog(t, ...T.fade1, E.inOut), kP2 = prog(t, ...T.pills2);
 		for (const k of ['a', 'b']) {
 			const r = r1[k];
 			set(r.cond, {opacity: prog(t, ...T.cond1)});
@@ -505,7 +514,7 @@
 		op(N.a.card, prog(t, ...T.cardA)); op(N.b.card, prog(t, ...T.cardB));
 		op(N.a.t1, prog(t, ...T.a1)); op(N.a.t2, prog(t, ...T.a2));
 		op(N.b.t1, prog(t, ...T.b1)); op(N.b.t2, prog(t, ...T.b2));
-		const kF1 = prog(t, ...T.fade1), kP1 = prog(t, ...T.pills1), kP2 = prog(t, ...T.pills2);
+		const kF1 = prog(t, ...T.fade1), kP1 = prog(t, ...T.pills1) * cardHold, kP2 = prog(t, ...T.pills2);
 		for (const k of ['a', 'b']) {
 			const n = N[k];
 			op(n.flab, prog(t, ...T.fLabels));
@@ -870,7 +879,7 @@
 			duration: T.end, render, beats: BEATS, poster: GATES[0].at, gates: GATES, reducedAt: GATES[0].at,
 			// The name card adds 3 s of player time before the figure's own t = 0; every time
 			// here (gates, locks, poster, reducedAt, api.seek) stays in figure time.
-			nameplate: {name: 'Appropriate reliance', kicker: 'The skill', definition: "Accept AI support where it's warranted, check or refuse it where it isn't, and be able to say why."},
+			nameplate: {name: 'Appropriate reliance', kicker: 'The skill', definition: 'Accept AI support where it’s warranted, check or refuse it where it isn’t, and be able to say why.'},
 			lockedAt: () => (!resolved.g1 ? GATES[0].at : !resolved.g2 ? GATES[1].at : null),
 			onResume: (i) => resolve(i),
 			onGatePlay,

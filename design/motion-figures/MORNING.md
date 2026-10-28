@@ -5,6 +5,7 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 ## Where it stands
 
 - **Done (8 of 8):** frame capture, fluency substitution, premature synthesis, uncalibrated reliance, invisible delegation, institutional monoculture, responsibility laundering, appropriate reliance. Each passed two storyboard cold reads and two figure cold reads; a separate verifier checked the final fixes. All eight are switched on in the book.
+- **Nameplate (added October 28):** every figure opens on its failure mode's name, keeps it in the corner throughout, and closes with the name and a role-neutral definition above the check ([NAMEPLATE-DEFINITIONS.md](NAMEPLATE-DEFINITIONS.md)). It's verified on all eight ([NAMEPLATE-VERIFY.md](NAMEPLATE-VERIFY.md)).
 - **Appropriate reliance** is interactive: it opens on a live question, gives you one check to spend, and locks every answer until you make your call.
 - **Consistency:** a cross-figure review matched all figures on posters, red "First student" and "Second student" labels, a stacked text view whenever labels would fall under 11px, fixed control heights on phones, and reading pace (every caption at 3 words per second plus a 1.5-second hold). See [CONSISTENCY.md](CONSISTENCY.md).
 - **Running times:** 86–96 seconds; appropriate reliance runs about 79–118 seconds depending on choices.

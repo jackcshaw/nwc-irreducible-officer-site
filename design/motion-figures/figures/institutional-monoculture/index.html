@@ -18,6 +18,8 @@
 #institutional-monoculture { --mf-chrome: 268px; }
 @media (min-width: 720px) { #institutional-monoculture .mf-caption { min-height: 176px; } }
 @media (max-width: 719px) { #institutional-monoculture { --mf-chrome: 290px; } }
+/* Phones: the opening card's name scales to fit the stage (25 characters at about 11.2 em). */
+@media (max-width: 559px) { #institutional-monoculture .mf-namecard-n { font-size: clamp(22px, calc((100vw - 70px) / 11.3), 34px); } }
 /* Laptop windows: a compact caption band (one line for the check's second line) gives
    the picture the height, so it scales to fit with every label at 11 px or more. */
 @media (min-width: 720px) and (max-height: 860px) {

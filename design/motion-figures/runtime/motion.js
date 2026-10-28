@@ -65,7 +65,9 @@
    A figure that opens on a live moment (appropriate reliance opens on its
    first question) can show the card over that moment instead: api.introCard()
    sets it large over the frame on screen, api.settleCard(hold, move) moves it
-   into the corner on the wall clock, and any draw ends it at once.
+   into the corner on the wall clock, and any draw ends it at once. During the
+   intro, render(t, info) gets info.card, the card's progress (0 large, 1 in
+   its corner), so the figure can hold back what the card would cover.
    Without nameplate, nothing changes.
 
    Test hooks: ?t=4.2 (or ?t=1:04.2) renders that moment and holds; ?reduced
@@ -418,7 +420,10 @@
 			introK = null;
 			delete root.dataset.mfCard;
 		};
-		const drawCard = () => { drawCaption(t, beatAt(t)); drawPlate(t); };
+		// The figure renders each intro frame too, with info.card = the card's k (0 large,
+		// rising to 1 in its corner; null once it has settled), so it can hold back anything
+		// the large card would cover until the card has moved off it.
+		const drawCard = () => { figure.render(toFig(t), {gate: gateOpen, card: introK}); drawCaption(t, beatAt(t)); drawPlate(t); };
 		const introCard = (k = 0) => {
 			if (!P) return;
 			endIntro();
