@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invisible Delegation</title>
+<meta name="description" content="A teaching figure: ordinary requests for AI help can hand over the criteria, the argument and what 'strategic' means. Faculty find out by asking each student whose standard the help followed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (a stage narrower than
+   880 px), the stage switches to a stacked text view driven by the same clock. */
+.fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
+.id-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its width so it can still be measured. */
+#invisible-delegation.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#invisible-delegation.is-stacked .id-narrow { display: block; padding: 6px clamp(10px, 3vw, 24px) 3px; background: var(--paper); }
+@media (max-width: 480px) {
+	/* The final frame, check and controls fit an 844 px phone screen. */
+	#invisible-delegation .mf-check-q, #invisible-delegation .mf-follow.is-equal { font-size: 19px; }
+	#invisible-delegation .mf-caption { min-height: 132px; padding-top: 10px; padding-bottom: 10px; }
+}
+.id-narrow p { margin: 0; }
+.id-n-task { margin: 0 0 4px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.35 var(--serif); color: var(--ink); }
+.id-n-task b { margin-right: 4px; font: 600 12px/1 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.id-n-rubric span { font-style: italic; }
+.id-n-rubric.is-consulted span { text-decoration: underline; text-decoration-color: rgba(10, 34, 66, 0.45); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.id-n-fac { margin: 0 0 4px !important; font: italic 400 16px/1.3 var(--serif); color: var(--ink); }
+.id-n-fac b { margin-right: 6px; font: 600 12px/1.3 var(--mono); font-style: normal; letter-spacing: 0.05em; text-transform: uppercase; }
+.id-n-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.id-n-col { min-width: 0; }
+.id-n-who { display: flex; justify-content: space-between; gap: 6px; margin: 0 0 1px !important; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.id-n-who .id-n-draft { font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.id-n-who > span:first-child::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.id-n-paper { display: flex; flex-wrap: wrap; gap: 0 8px; margin: 0 0 3px !important; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.id-n-draft { color: var(--ink); }
+.id-n-rev { color: var(--stone); }
+.id-n-notes { position: relative; margin: 8px 0 4px; padding: 7px 6px 3px; background: rgba(222, 213, 196, 0.6); border: 1px solid rgba(91, 86, 79, 0.35); font: 400 13px/1.3 var(--serif); color: var(--stone); }
+.id-n-notes b { position: absolute; top: -8px; left: 4px; padding: 0 3px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.id-n-note i { display: inline-block; width: 1.1em; font-style: normal; color: var(--ink); }
+.id-n-note.is-struck span { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.id-n-reason { padding-left: 1.1em; font-style: italic; color: var(--red); }
+.id-n-key { display: flex; align-items: center; gap: 5px; margin: 0 0 2px !important; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.id-n-key::before { content: ""; flex: none; width: 13px; height: 9px; border: 1.5px dashed var(--stone); }
+.id-n-cell { margin: 0 0 3px; }
+.id-n-q { font: italic 400 14px/1.25 var(--serif); color: var(--ink); }
+.id-n-q .is-red { color: var(--red); }
+.id-n-uns { margin: 1px 0 0 !important; font: 600 12px/1.45 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
+.id-n-ghost { display: inline-block; margin-left: 4px; padding: 0 4px; border: 1.5px dashed var(--stone); font: italic 400 12px/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--stone); }
+.id-n-chip { margin: 2px 0 0 !important; padding: 1px 6px 2px; border: 1.5px dashed rgba(10, 34, 66, 0.45); background: var(--paper-bright); font: 600 13px/1.25 var(--sans); color: var(--ink); }
+.id-n-chip b { display: block; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
+.id-n-chip.is-ai { border: 1.5px solid var(--stone); background: #ded5c4; color: var(--stone); }
+.id-n-chip.is-ai b { color: var(--stone); }
+.id-n-chip.is-own { border: 1.5px solid var(--red); color: var(--red); }
+.id-n-chip.is-own b { color: var(--red); }
+.id-n-say { margin: 3px 0 0 !important; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); font: 400 14px/1.3 var(--serif); color: var(--ink); }
+</style>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<p class="fig-kicker">Failure mode 5 of 7</p>
+	<h1>Invisible delegation</h1>
+	<p class="fig-setup">A student asks an AI for feedback on a draft paper, then a better structure, then a more strategic version, and revises after each. <em>The Irreducible Officer</em> calls what can happen next invisible delegation: a request for help transfers criteria, structure or meaning, and the student doesn't notice. The task, the rubric, the requests and both students are a constructed example.</p>
+
+	<figure class="mf" id="invisible-delegation" aria-labelledby="id-title">
+		<p class="sr-only" id="id-title">Invisible delegation, an animated figure in nine beats</p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="id-narrow" data-id-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the invisible delegation figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:36</span>
+		</div>
+		<figcaption>
+			<p class="sr-only">An animated figure. A red dot stands for a student improving a draft strategy paper, for an example task: recommend whether to keep a forward base. The task card carries a rubric: evidence must back the call. Beside the paper is a ledger in three lanes: "The student decides", "Requests" and "The AI decides". Three decisions start in the student's lane as dashed cards: the criteria, how the argument runs, and what "strategic" means. The student asks an AI, "Give me feedback." The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back ("Tighten the opening", "Add a cost estimate", "Sound more decisive"), and the student ticks all three and revises. The student then asks, "Suggest a better structure," and "Make it more strategic." Each request carries a card across, and the student revises to draft 4. Then, under each request, a dashed line marked "unsaid" shows what it left out: against your criteria, for your argument, as you define it. A second student, with the same task and rubric, checks the rubric, writes each decision in red in their own lane first, and then asks: "Give me feedback against my criteria," "Suggest a better structure for my argument," "Make it more strategic, as I define it." Their cards stay in their lane. They get the same notes, tick two, and strike "Sound more decisive" with the reason "only if the evidence is". Their paper gets the same AI help. Faculty, who have only the two papers, both marked "Revised with AI", ask each student, "Better by whose standard?" The first says, "The AI's notes, I suppose. I worked through what it flagged." The second says, "Mine, set first from the rubric: does the evidence back my call?" The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="id-check-h">
+		<h2 id="id-check-h">Faculty check</h2>
+		<p class="fig-check">What did the AI decide for the student?</p>
+		<p class="fig-check">To find out, ask each student: better by whose standard?</p>
+		<p class="fig-follow">A student who didn't notice what they handed over can honestly answer the first question with "nothing". The second line is a question they can answer, and the answer shows whose standard the help followed. In the figure, both students have the same rubric. The first followed the AI's notes. The second set their criteria from the rubric before asking, and turned down a note that didn't serve it. The essay's own pairs give the follow-ups: feedback against which criteria, a better structure for which argument, more strategic in what sense. The companion's failure-mode lab adds a fair objection: an assistant can legitimately propose criteria. The trouble starts when a student accepts them without seeing how they relate to the task.</p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="id-essay-h">
+		<h2 id="id-essay-h">From the essay</h2>
+		<blockquote class="fig-quote">
+			<p>Invisible delegation occurs when the student does not notice which parts of the work they have handed over. Asking for "feedback" may delegate criteria. Asking for "a better structure" may delegate the argument. Asking for "counterarguments" may delegate the range of imaginable objections. Asking for "a more strategic version" may delegate the meaning of strategic. The language of assistance hides the transfer of judgment. The student believes they are working; the model has already done the framing.</p>
+			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 18px">
+			<p>Minimal-context prompting inherits the model's frame almost entirely. Structured prompting with explicit purpose and evaluation criteria moves the human contribution upstream.</p>
+			<cite><em>The Irreducible Officer</em>, Section V, Appropriate Reliance as a Teachable Competency</cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="id-links-h">
+		<h2 id="id-links-h">Go further</h2>
+		<ul class="fig-links">
+			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=2">Frame the problem</a></li>
+			<li><span>In the same chapter:</span> <a href="../frame-capture/">Frame capture</a></li>
+			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test invisible delegation with your AI assistant</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></li>
+		</ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="invisible-delegation.js"></script>
+</body>
+</html>
