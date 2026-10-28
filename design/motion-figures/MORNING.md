@@ -4,10 +4,10 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 
 ## Where it stands
 
-- **Done (8 of 8):** frame capture, fluency substitution, premature synthesis, uncalibrated reliance, invisible delegation, institutional monoculture, responsibility laundering, appropriate reliance. Each passed two storyboard cold reads and two figure cold reads; a separate verifier checked the final fixes. All seven are switched on in the book.
+- **Done (8 of 8):** frame capture, fluency substitution, premature synthesis, uncalibrated reliance, invisible delegation, institutional monoculture, responsibility laundering, appropriate reliance. Each passed two storyboard cold reads and two figure cold reads; a separate verifier checked the final fixes. All eight are switched on in the book.
 - **Appropriate reliance** is interactive: it opens on a live question, gives you one check to spend, and locks every answer until you make your call.
 - **Consistency:** a cross-figure review matched all figures on posters, red "First student" and "Second student" labels, a stacked text view whenever labels would fall under 11px, fixed control heights on phones, and reading pace (every caption at 3 words per second plus a 1.5-second hold). See [CONSISTENCY.md](CONSISTENCY.md).
-- **Running times:** 86–96 seconds; appropriate reliance runs about 79–115 seconds depending on choices.
+- **Running times:** 86–96 seconds; appropriate reliance runs about 79–118 seconds depending on choices.
 
 ## Also ready to read
 
