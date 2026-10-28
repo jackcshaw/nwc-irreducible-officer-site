@@ -72,10 +72,11 @@
 	const P = {w: 276, h: 164, padX: 16, title: [28, 52], barH: 4.5, tagX: 262};
 	const PAR_Y = [[64, 72, 80], [92, 100, 108], [120, 128, 136]];
 	const TAG_Y = [68, 96, 124];
-	const TAGS = ['2 · 5', '3 · 4 · 5', '1 · 4 · 6'];
+	// The first paragraph carries the main claim; its tag says so.
+	const TAGS = ['MAIN · 2 · 5', '3 · 4 · 5', '1 · 4 · 6'];
 	const TAG_LINES = [['2-5'], ['3-4', '3-5'], ['1-4', '4-6']];
 	// Same argument, own words: the same rows, different line lengths.
-	const WIDTHS = {a: [[156, 168, 104], [156, 160, 88], [156, 170, 126]], b: [[150, 176, 120], [156, 144, 118], [148, 176, 96]]};
+	const WIDTHS = {a: [[140, 168, 104], [156, 160, 88], [156, 170, 126]], b: [[134, 176, 120], [156, 144, 118], [148, 176, 96]]};
 	const PAPER_AT = {a: {x: 24, y: 176}, b: {x: 24, y: 362}};
 	const ASIDE = {a: {x: 24, y: 24, r: -2}, b: {x: 196, y: 24, r: 1.5}, s: 0.56};
 	// Faculty side.
@@ -83,10 +84,10 @@
 	const node = (row, id) => ({x: SK.x0 + (centre(id).x - 422) * SK.s, y: SK.top[row] + (centre(id).y - 180) * SK.s});
 	const DOT_ROW = [{x: 310, y: 289}, {x: 310, y: 455}];
 	const PANEL = {x: 620, w: 326, padX: 14, fs: 16, rows: [
-		{y: 226, h: 82, base: [24, 46, 68], lines: ['“In Reading 1, they found another', "supplier. I don't see how that", 'bears on this.”']},
-		{y: 392, h: 60, base: [24, 46], lines: ['“Another supplier, as in Reading 1. My', 'main claim rests on there being none.”']},
+		{y: 226, h: 60, base: [24, 46], lines: ['“In Reading 1, trade went overland.', "I don't see how that bears on this.”"]},
+		{y: 392, h: 60, base: [24, 46], lines: ["“An overland route, like Reading 1's.", "Then my main claim no longer holds.”"]},
 	]};
-	const NOTE_LINES = ['In Reading 1, the country found', 'another supplier.'];
+	const NOTE_LINES = ['In Reading 1, trade went', 'overland through a neighbour.'];
 
 	const root = document.querySelector('#premature-synthesis');
 	const svg = root.querySelector('svg');
@@ -168,7 +169,7 @@
 		const shadow = el(g, 'rect', {x: 3, y: 4, width: P.w, height: P.h, rx: 1, fill: C.ink, 'fill-opacity': 0.06});
 		el(g, 'rect', {x: 0, y: 0, width: P.w, height: P.h, rx: 1, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
 		// Titles are shown or hidden by render (they shrink with the paper), so no data-fs.
-		const title = ['Blockades work once', 'supplies run out.'].map((s, i) => {
+		const title = ['Blockades work when', 'the navy holds the sea.'].map((s, i) => {
 			const c = clipRect(g, {x: P.padX - 2, y: P.title[i] - 18, height: 24});
 			return {...c, n: serif(c.g, P.padX, P.title[i], s, {fs: 19, weight: 600, dataFs: false}), w: 0};
 		});
@@ -580,8 +581,8 @@
 	const paperBlock = (parent, who) => {
 		const box = h('div', 'ps-n-paper', parent);
 		h('span', 'ps-n-who', box, who);
-		h('p', 'ps-n-ptitle', box, 'Blockades work once supplies run out.');
-		h('p', 'ps-n-tags', box, 'Cites 2 · 5 (main claim), 3 · 4 · 5, 1 · 4 · 6');
+		h('p', 'ps-n-ptitle', box, 'Blockades work when the navy holds the sea.');
+		h('p', 'ps-n-tags', box, 'Main claim: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6');
 		h('p', 'ps-n-ai', box, 'AI helped connect the readings');
 		return box;
 	};
@@ -594,7 +595,7 @@
 		const row = h('div', 'ps-n-links', sec);
 		N.mapB.chips = redB.map((l) => chip(row, LINK(l.k), 'is-own'));
 		N.mapB.try = chip(row, '1–2', 'is-own is-try');
-		N.mapB.note = h('p', 'ps-n-note', sec, 'In Reading 1, the country found another supplier.');
+		N.mapB.note = h('p', 'ps-n-note', sec, 'In Reading 1, trade went overland through a neighbour.');
 		const ai = h('div', 'ps-n-links', sec);
 		N.mapB.aiLabel = h('span', 'ps-n-inline', ai, 'AI’s map: the same five lines.');
 		N.mapB.c34 = chip(ai, '3–4', 'is-ai');
@@ -611,7 +612,7 @@
 		h('p', 'ps-n-small', sec, 'Papers set aside: same argument, own words. Both say AI helped.');
 	}
 	{
-		const sec = section('rows', 'Faculty ask, papers aside: Sketch how the readings connect.');
+		const sec = section('rows', 'Faculty ask, papers aside: sketch it');
 		const row = (who, parts) => {
 			const r = h('div', 'ps-n-row', sec);
 			h('span', 'ps-n-who', r, who);
@@ -631,12 +632,12 @@
 		N.q2.b = say('Second student');
 		const l = h('div', 'ps-n-learned', sec);
 		h('span', 'ps-n-llabel', l, 'What they learned');
-		h('p', 'ps-n-lnote', l, '✕ In Reading 1, the country found another supplier.');
+		h('p', 'ps-n-lnote', l, '✕ In Reading 1, trade went overland through a neighbour.');
 		N.q2.learned = l;
 	}
 	const ANS = [PANEL.rows[0].lines.join(' '), PANEL.rows[1].lines.join(' ')];
 	const words = (str, k) => { const w = str.split(' '); return w.slice(0, Math.ceil(w.length * k)).join(' '); };
-	const SHOW = [['task', 'readings'], ['readings', 'mapA'], ['mapA', 'paperA'], ['readings', 'mapB'], ['mapB'], ['papers'], ['aside', 'rows'], ['rows', 'q2'], ['q2'], ['aside', 'rows', 'q2']];
+	const SHOW = [['task', 'readings'], ['readings', 'mapA'], ['mapA', 'paperA'], ['readings', 'mapB'], ['mapB'], ['papers'], ['aside', 'rows'], ['rows', 'q2'], ['q2'], ['rows', 'q2']];
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
 	function renderNarrow(t) {
@@ -686,9 +687,9 @@
 		{at: 6.8, text: 'The student reads all six closely, then asks an AI to connect them.',
 			detail: 'the dot visits each card, and each opens to show notes. The dot pulses. Five dashed grey lines appear all at once, labelled "AI\'s map", joining 1 to 4, 4 to 6, 3 to 4, 3 to 5 and 2 to 5.'},
 		{at: 15.5, text: 'The map makes sense to the student, who writes the paper from it.',
-			detail: 'the dot follows each grey line, and each turns solid. The dot writes a paper on the left, labelled "First student\'s paper" and titled "Blockades work once supplies run out." As the title appears, the line from 2 to 5 turns heavy. The three paragraphs cite readings 2 and 5; 3, 4 and 5; and 1, 4 and 6. A grey note at the foot says "AI helped connect the readings".'},
+			detail: 'the dot follows each grey line, and each turns solid. The dot writes a paper on the left, labelled "First student\'s paper" and titled "Blockades work when the navy holds the sea." As the title appears, the line from 2 to 5 turns heavy. The first paragraph, tagged "Main", cites readings 2 and 5; the others cite 3, 4 and 5, and 1, 4 and 6. A grey note at the foot says "AI helped connect the readings".'},
 		{at: 24.7, text: 'A second student reads them just as closely, then tries connections first. One doesn\'t hold.',
-			detail: 'the grey lines and the first dot leave, and the cards close. A second red dot labelled Second student visits each card the same way, and each opens to show notes. The dot draws four red lines: 2 to 5, 3 to 5, 1 to 4 and 4 to 6. It draws a fifth, from 1 to 2, and goes back to both cards. A red cross appears on that line, with a red note: "In Reading 1, the country found another supplier." The line pulls back; the cross and the note stay.'},
+			detail: 'the grey lines and the first dot leave, and the cards close. A second red dot labelled Second student visits each card the same way, and each opens to show notes. The dot draws four red lines: 2 to 5, 3 to 5, 1 to 4 and 4 to 6. It draws a fifth, from 1 to 2, and goes back to both cards. A red cross appears on that line, with a red note: "In Reading 1, trade went overland through a neighbour." The line pulls back; the cross and the note stay.'},
 		{at: 36.4, text: 'That student then asks an AI too and checks its map against their own.',
 			detail: 'the dot pulses. The AI\'s map appears in grey dashes, the same five lines it drew for the first student. Four lie on the red lines and merge into them. The cross brightens: no line appears there. The fifth line, 3 to 4, is new: the dot checks cards 3 and 4, and the line turns red.'},
 		{at: 45.7, text: 'That student writes their own paper. Both make the same argument.',
@@ -696,9 +697,9 @@
 		{at: 53.0, text: 'Without the papers, both students sketch the same connections.',
 			detail: 'the papers shrink and slide up into a strip at the top left, next to "Both say AI helped". "Faculty ask, papers aside: Sketch how the readings connect." appears. Each row is labelled: "First student: read, AI connects, writes" and "Second student: read, tries, AI checks, writes". Each student draws six numbered points joined by the same five lines, in the same ink.'},
 		{at: 60.9, text: 'Faculty ask about the main connection. The first student recalls Reading 1 but can\'t apply it.',
-			detail: '"Then they ask: What evidence would change this connection?" appears, and on both sketches the line from 2 to 5 is ringed. The first student says: "In Reading 1, they found another supplier. I don\'t see how that bears on this."'},
+			detail: '"Then they ask: What evidence would change this connection?" appears, and on both sketches the line from 2 to 5 is ringed. The first student says: "In Reading 1, trade went overland. I don\'t see how that bears on this."'},
 		{at: 72.7, text: 'The second student applies it, from the connection that didn\'t hold.',
-			detail: 'in the second student\'s row, "What they learned" appears in red over the note: "In Reading 1, the country found another supplier." The second student says: "Another supplier, as in Reading 1. My main claim rests on there being none."'},
+			detail: 'in the second student\'s row, "What they learned" appears in red over the note: "In Reading 1, trade went overland through a neighbour." The second student says: "An overland route, like Reading 1\'s. Then my main claim no longer holds."'},
 		{at: 83.3, text: 'Faculty check: Can the student explain why these connections matter?',
 			list: 'Faculty check: Can the student explain why these connections matter? Point to one connection. What evidence would change it?',
 			detail: 'the questions appear under the picture at the same size. The set-aside papers, the row labels, the sketches, both answers and the note stay in view.',
@@ -713,9 +714,10 @@
 		const syncNarrow = () => { if (narrowQuery.matches) root.classList.add('is-narrow'); };
 		narrowQuery.addEventListener('change', syncNarrow);
 		syncNarrow();
-		const syncScale = () => { const w = svg.getBoundingClientRect().width; if (w) pxPerUnit = w / VW; };
+		const syncScale = () => { const r = svg.getBoundingClientRect(); if (r.width) pxPerUnit = Math.min(r.width / VW, r.height ? r.height / 540 : Infinity); };
 		new ResizeObserver(syncScale).observe(svg);
 		syncScale();
-		mount(root, {duration: T.end, render, beats: BEATS});
+		// Poster: beat 1 settled (the task, the six readings and the student), so the waiting stage isn't empty.
+		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[1].at - 0.02});
 	});
 })();

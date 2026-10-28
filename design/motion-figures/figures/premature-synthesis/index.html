@@ -16,7 +16,9 @@
 @media (max-width: 480px) {
 	/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
 	#premature-synthesis .mf-stage { height: 0; overflow: hidden; }
-	#premature-synthesis .ps-narrow { display: block; min-height: 300px; padding: 12px 12px 8px; background: var(--paper); }
+	/* Fixed heights (the tallest beat, and the check) so the caption and controls never move. */
+	#premature-synthesis .ps-narrow { display: block; min-height: 476px; padding: 12px 12px 8px; background: var(--paper); }
+	#premature-synthesis .mf-caption { min-height: 160px; }
 	#premature-synthesis .mf-check-q, #premature-synthesis .mf-follow.is-equal { font-size: 20px; }
 }
 .ps-n-sec { margin: 0 0 12px; }
@@ -67,7 +69,7 @@
 <main class="fig-page">
 	<p class="fig-kicker">Failure mode 3 of 7</p>
 	<h1>Premature synthesis</h1>
-	<p class="fig-setup">A student reads six readings closely, then asks an AI to connect them for a seminar paper. The AI draws a sound map of how they fit, and the student writes a good paper from it. <em>The Irreducible Officer</em> calls the risk premature synthesis: the model connects material before the student has built the map. The figure runs about a minute and a half; pause it or step through the beats below. The task, the readings and every answer are a constructed example.</p>
+	<p class="fig-setup">A student reads six readings closely, then asks an AI to connect them for a seminar paper. The map is sound, and the student writes a good paper from it. <em>The Irreducible Officer</em> calls the risk premature synthesis: the model connects material before the student has built the map. The task and answers are a constructed example.</p>
 
 	<figure class="mf" id="premature-synthesis" aria-labelledby="ps-title">
 		<p class="sr-only" id="ps-title">Premature synthesis, an animated figure in ten beats</p>
@@ -85,7 +87,7 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:30</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. A red dot stands for a student with an example task: using six readings, explain when a blockade works. Six reading cards sit unconnected: a northern blockade, an island blockade, trade routes, allies split, a long blockade and coercion theory. The student reads each card closely, then asks an AI to connect them, and the AI draws five grey connections at once. The student follows each one and writes a paper titled "Blockades work once supplies run out", whose main claim rests on the connection between readings 2 and 5, with a note that AI helped connect the readings. A second student reads each card just as closely, then draws four connections of their own. They try a fifth, between readings 1 and 2, check both readings and drop it, noting: "In Reading 1, the country found another supplier." That student then asks an AI, which draws the same five connections. Four match, and the student checks the fifth, between readings 3 and 4, before keeping it. The second student writes their own paper with the same argument. Faculty put both papers aside and ask each student to sketch how the readings connect; both sketch the same map. The first student's row reads "read, AI connects, writes"; the second's reads "read, tries, AI checks, writes". Faculty point to the connection between readings 2 and 5 and ask what evidence would change it. The first student says, "In Reading 1, they found another supplier. I don't see how that bears on this." The second student, remembering what they learned, says, "Another supplier, as in Reading 1. My main claim rests on there being none." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure. A red dot stands for a student with an example task: using six readings, explain when a blockade works. Six reading cards sit unconnected: a northern blockade, an island blockade, trade routes, allies split, a long blockade and coercion theory. The student reads each card closely, then asks an AI to connect them, and the AI draws five grey connections at once. The student follows each one and writes a paper titled "Blockades work when the navy holds the sea", whose main claim rests on the connection between readings 2 and 5, with a note that AI helped connect the readings. A second student reads each card just as closely, then draws four connections of their own. They try a fifth, between readings 1 and 2, check both readings and drop it, noting: "In Reading 1, trade went overland through a neighbour." That student then asks an AI, which draws the same five connections. Four match, and the student checks the fifth, between readings 3 and 4, before keeping it. The second student writes their own paper with the same argument. Faculty put both papers aside and ask each student to sketch how the readings connect; both sketch the same map. The first student's row reads "read, AI connects, writes"; the second's reads "read, tries, AI checks, writes". Faculty point to the connection between readings 2 and 5 and ask what evidence would change it. The first student says, "In Reading 1, trade went overland. I don't see how that bears on this." The second student, remembering what they learned, says, "An overland route, like Reading 1's. Then my main claim no longer holds." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

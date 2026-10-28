@@ -79,6 +79,13 @@ body { margin: 0; background: var(--paper); color: var(--body); font-family: var
 
 /* The shot: stage + caption band. Stills, video and the poster capture this. */
 .mf-shot { background: var(--paper); }
+/* The player fits the viewport: when the stage, caption band and controls are first
+   in view they fit together, so the stage's height is capped by what the caption band
+   and controls need (--mf-chrome). The SVG letterboxes inside its box (viewBox meet),
+   and legibility() measures the letterboxed scale. */
+:root { --mf-chrome: 228px; }
+@media (max-width: 719px) { :root { --mf-chrome: 250px; } }
+.mf-shot .mf-stage svg { max-height: calc(100vh - var(--mf-chrome)); max-height: calc(100svh - var(--mf-chrome)); }
 
 /* Caption band: real text directly under the picture. */
 .mf-caption { min-height: calc(2 * 1.35em + 28px); padding: 14px clamp(14px, 2.4vw, 28px); border-top: 1px solid var(--navy-line); font-size: clamp(18px, 1.9vw, 22px); line-height: 1.35; color: var(--ink); background: var(--paper); }

@@ -44,6 +44,7 @@ Conventions the first figures settle go into [CONVENTIONS.md](CONVENTIONS.md), s
 
 **Status:** figure 1 (frame capture) done October 27, after two storyboard reads, two figure reads and final fixes checked from the stills.
 Figure 2 (fluency substitution) done October 27: two storyboard reads, two figure reads, final fixes checked from the stills.
+Figure 3 (premature synthesis) done October 28: two storyboard reads, two figure reads, final fixes checked from the stills. Its author also fixed the shared runtime: the player fits the viewport, autoplay waits until the caption band and controls are visible, and arrow keys step 1 second.
 
 ## Standalone pages
 

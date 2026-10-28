@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncalibrated Reliance</title>
+<meta name="description" content="A teaching figure: two AI answers look equally sure, a student checks one and relies on the other, and faculty find the difference by asking about each part.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (a stage narrower than
+   880 px), the stage switches to a stacked text view driven by the same clock. */
+.fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
+.ur-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its width so it can still be measured. */
+#uncalibrated-reliance.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#uncalibrated-reliance.is-stacked .ur-narrow { display: block; min-height: 320px; padding: 12px clamp(12px, 3vw, 24px) 8px; background: var(--paper); }
+@media (max-width: 480px) {
+	/* The final frame, check and controls fit an 844 px phone screen. */
+	#uncalibrated-reliance .mf-check-q, #uncalibrated-reliance .mf-follow.is-equal { font-size: 20px; }
+}
+.ur-n-sec { margin: 0 0 10px; }
+.ur-n-sec[hidden] { display: none; }
+.ur-n-label { margin: 0 0 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.ur-n-task { padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.ur-n-task p { margin: 0; font: 400 15px/1.45 var(--serif); color: var(--ink); }
+.ur-n-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ur-n-chip { padding: 4px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.ur-n-chip.is-open { border-color: rgba(10, 34, 66, 0.6); }
+.ur-n-call { margin: 6px 0 0; padding: 4px 8px; border: 1px solid rgba(10, 34, 66, 0.3); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--ink); }
+.ur-n-call[hidden] { display: none; }
+.ur-n-tag { display: inline-block; margin-left: 8px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); border-bottom: 1.5px solid var(--ink); }
+.ur-n-ai { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.ur-n-part { font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone); }
+.ur-n-ans { font: 400 14px/1.4 var(--serif); color: var(--stone); }
+.ur-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ur-n-band.is-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.ur-n-ins { color: var(--red); }
+.ur-n-ins[hidden] { display: none; }
+.ur-n-ready { padding: 1px 8px; border-radius: 9px; background: var(--stone); color: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.ur-n-front { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 4px 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+.ur-n-front svg { display: block; width: 100%; height: 10px; }
+.ur-n-front[hidden] { display: none; }
+.ur-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ur-n-col { min-width: 0; }
+.ur-n-brief { margin: 0 0 4px; padding: 4px 7px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.4 var(--serif); color: var(--stone); }
+.ur-n-mark[hidden] { display: none; }
+.ur-n-mark { display: block; margin-top: 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--red); }
+.ur-n-ev { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 4px; padding: 4px 0; border-bottom: 1px solid var(--navy-line); font: 400 15px/1.4 var(--sans); color: var(--ink); }
+.ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
+.ur-n-src { margin: 0; font: 500 12px/1.4 var(--mono); color: var(--muted); }
+.ur-n-say { min-width: 0; padding: 6px 8px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.ur-n-who { display: block; margin: 0 0 4px; font: 600 12px/1.2 var(--sans); color: var(--red); }
+.ur-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.ur-n-line { margin: 0 0 3px; font: 400 13px/1.4 var(--serif); color: var(--ink); }
+</style>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<p class="fig-kicker">Failure mode 4 of 7</p>
+	<h1>Uncalibrated reliance</h1>
+	<p class="fig-setup">A student asks an AI for help with a two-part task. They check its first answer, find it right, and use both. <em>The Irreducible Officer</em> calls what can happen next uncalibrated reliance: the student accepts confident output without knowing whether the task fits the tool. The figure runs about a minute and a half; pause it or step through the beats below. The task, the reports and both students are a constructed example. The research figures come from Dell'Acqua et al. (2023).</p>
+
+	<figure class="mf" id="uncalibrated-reliance" aria-labelledby="ur-title">
+		<p class="sr-only" id="ur-title">Uncalibrated reliance, an animated figure in ten beats</p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="ur-narrow" data-ur-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the uncalibrated reliance figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:34</span>
+		</div>
+		<figcaption>
+			<p class="sr-only">An animated figure. A red dot stands for a student with an example task in two parts: ships needed a day, and ships the port takes a day. The student gives an AI four reports: two aid reports, a port survey and a harbor log. The AI answers both in the same form, in grey, each marked ready: "24 ships a day: 480 tons at 20 each" and "20 ships a day: 4 docks at 5 each". The student checks Part 1 against both aid reports, finds it right, and puts both answers into their brief, marking Part 1 checked and Part 2 used as is. A second student gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, the port survey says 4 docks at 5 ships each, but the harbor log says dock 2 is closed for repairs, so the second student corrects the estimate to 15 ships from 3 open docks. On the page both parts look the same, but the AI worked from capacity and Part 2 depends on what's open today. An uneven line, the frontier, is drawn between the AI's answers, with Part 1 inside and Part 2 outside. A panel shows a field experiment with BCG consultants: on a task outside the jagged frontier, the group without AI was right 84.5% of the time and the two groups with AI 60% and 70%, and graders rated the AI users' work higher in quality. The students' working marks come off the briefs, and faculty see only the briefs. Faculty point to Part 1 in both: each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed." The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="ur-check-h">
+		<h2 id="ur-check-h">Faculty check</h2>
+		<p class="fig-check">What evidence justified relying on the system here?</p>
+		<p class="fig-check">Point to each part. Was the evidence about that part?</p>
+		<p class="fig-follow">Both students give the same reason for Part 1. For Part 2, the first student's evidence is about Part 1 and the second student's is about Part 2. The edge between the two parts doesn't show on the page; the second student found it by checking each part against the reports it rests on. Section II of the essay asks students to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required.</p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-essay-h">
+		<h2 id="ur-essay-h">From the essay</h2>
+		<blockquote class="fig-quote">
+			<p>Uncalibrated reliance begins with a reasonable impulse: AI is useful, the output is confident, and parts of the task feel tedious. The problem is that AI performance is uneven in ways that are not always visible from the outside. Tasks that look similar may differ significantly in whether AI helps or hurts. Appropriate reliance requires the student to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required before discovering the error downstream.</p>
+			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 18px">
+			<p>The distinction between trust and reliance matters here. Trust is a subjective disposition, a feeling of confidence that a system will perform well. Reliance is the observable act of accepting its output and acting on it. Appropriate reliance is harder and more discriminating: accepting support when it is warranted, refusing or verifying when it is not, and being able to give an account of the difference (<a href="https://arxiv.org/abs/2604.23896">Raees &amp; Papangelis, 2026</a>).</p>
+			<cite><em>The Irreducible Officer</em>, Section V, Appropriate Reliance as a Teachable Competency</cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-evidence-h">
+		<h2 id="ur-evidence-h">Evidence</h2>
+		<p class="fig-follow">Dell'Acqua et al., <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700">Navigating the Jagged Technological Frontier</a>, HBS working paper 24-013 (2023). On a task chosen to fall outside the frontier, consultants without AI were right about 84.5% of the time and the two AI groups 60% and 70%: in the working paper's words, "19 percentage points less likely to produce correct solutions." Graders still rated the AI users' recommendations higher in quality "regardless of the correctness of their answer."</p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-links-h">
+		<h2 id="ur-links-h">Go further</h2>
+		<ul class="fig-links">
+			<li><span>Make the call yourself:</span> <a href="../appropriate-reliance/">in the appropriate reliance figure, decide whether to rely on the AI for two tasks from the same study</a></li>
+			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=3">Calibrate the tool</a></li>
+			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test uncalibrated reliance with your AI assistant</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
+			<li><span>Essay:</span> <a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></li>
+		</ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="uncalibrated-reliance.js"></script>
+</body>
+</html>

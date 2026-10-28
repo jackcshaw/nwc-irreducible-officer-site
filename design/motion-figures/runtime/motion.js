@@ -8,7 +8,7 @@
    figure can be played, paused, scrubbed, jumped to a beat, held at a fixed
    time, or rendered frame by frame to video. Captions are drawn from t too.
 
-   The runtime plays a figure once when half its picture is in view, then rests on
+   The runtime plays a figure once its picture, caption band and controls are in view, then rests on
    its final frame. The final frame carries the idea by itself: it is the
    reduced-motion view, the print view and the poster.
 
@@ -22,7 +22,8 @@
      [data-mf-replay]   restart button
 
    Beat fields: {at, text, list?, detail?, check?: {label, question,
-   followLabel?, follow?, followAt?}}.
+   followLabel?, follow?, followAt?}}. Figure fields: {duration, render, beats,
+   poster?} (poster: a time shown while the figure waits to play).
 
    Test hooks: ?t=4.2 renders that moment and holds; ?reduced forces the
    reduced-motion path; window.__motionFigures[id].seek(t) for export. */
@@ -120,9 +121,12 @@
 	function legibility(root, svg, viewWidth, minPx = 11) {
 		const nodes = [...svg.querySelectorAll('[data-fs]')];
 		const apply = () => {
-			const w = svg.getBoundingClientRect().width;
-			if (!w) return;
-			const scale = w / viewWidth;
+			const r = svg.getBoundingClientRect();
+			if (!r.width) return;
+			// The stage can be capped in height (figures.css), so the picture may be
+			// letterboxed: the drawing scale is the smaller of the two fits.
+			const vb = svg.viewBox && svg.viewBox.baseVal;
+			const scale = vb && vb.width && r.height ? Math.min(r.width / vb.width, r.height / vb.height) : r.width / viewWidth;
 			let hidden = 0;
 			for (const n of nodes) {
 				const small = +n.dataset.fs * scale < minPx;
@@ -174,7 +178,10 @@
 			return button;
 		});
 
-		let t = 0, playing = false, prev = 0, raf = 0, shown = -1;
+		let t = 0, playing = false, prev = 0, raf = 0, shown = -1, started = false;
+		// Optional poster: while a figure waits to play, it shows this settled moment
+		// instead of an empty first frame. Play still starts from 0.
+		const poster = figure.poster;
 		let capBody = null, capFollow = null;
 
 		const label = (text) => {
@@ -269,6 +276,8 @@
 			else raf = requestAnimationFrame(tick);
 		};
 		const play = () => {
+			if (!started && poster != null && t === poster) t = 0;
+			started = true;
 			if (t >= duration) t = 0;
 			playing = true;
 			prev = performance.now();
@@ -323,17 +332,29 @@
 		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(+params.get('t')); label('Play'); return; }
 		if (isReduced()) { root.classList.add('is-reduced'); draw(duration); label('Play'); return; }
 
-		draw(0);
+		draw(poster ?? 0);
 		label('Play');
 		if (root.dataset.mfAutoplay === 'off') return;
-		// Autoplay keys on the picture (the shot: stage plus caption band), not the whole
-		// figure, whose beat list can be too tall ever to be mostly in view. v0 figures
-		// without a shot fall back to the root, as before.
-		const watched = root.querySelector('[data-mf-shot]') || root.querySelector('.mf-stage') || root;
+		// Autoplay waits until the picture, its caption band and the controls can all be
+		// seen: half the shot (stage plus caption band) in view, and the caption band and
+		// controls fully in view. figures.css caps the stage height so the three fit the
+		// viewport together. A v0 figure without a shot keys on its root at 60%, as before.
+		const shotEl = root.querySelector('[data-mf-shot]');
+		if (!shotEl) {
+			const io = new IntersectionObserver((entries) => {
+				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(); }
+			}, {threshold: 0.6});
+			io.observe(root);
+			return;
+		}
+		const ctrlEl = root.querySelector('.mf-controls');
+		const need = [[shotEl, 0.5], [caption, 0.98], [ctrlEl, 0.98]].filter(([n]) => n);
+		const ratio = new Map(need.map(([n]) => [n, 0]));
 		const io = new IntersectionObserver((entries) => {
-			if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(); }
-		}, {threshold: watched === root ? 0.6 : 0.5});
-		io.observe(watched);
+			entries.forEach((e) => ratio.set(e.target, e.intersectionRatio));
+			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); play(); }
+		}, {threshold: [0, 0.25, 0.5, 0.75, 0.98, 1]});
+		need.forEach(([n]) => io.observe(n));
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};

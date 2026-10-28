@@ -1,6 +1,6 @@
 # Motion figure conventions
 
-Shared visual vocabulary for the eight figures. The first figures settle these; later figures reuse them. Each entry says which figure introduced it. "FC" is frame capture (figure 1); "FS" is fluency substitution (figure 2); "PS" is premature synthesis (figure 3).
+Shared visual vocabulary for the eight figures. The first figures settle these; later figures reuse them. Each entry says which figure introduced it. "FC" is frame capture (figure 1); "FS" is fluency substitution (figure 2); "PS" is premature synthesis (figure 3); "UR" is uncalibrated reliance (figure 4).
 
 ## Colour and marks
 
@@ -36,6 +36,13 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 - **A connection that doesn't hold** (PS) gets a red ✕ at its middle and retracts. The ✕ stays at half strength while that map is on screen, so a later absence (the AI drew nothing there) can be pointed at: the ✕ brightens once.
 - **What a person learns is a red italic note with no card** (PS). It appears where they learned it and returns, labelled "WHAT THEY LEARNED", when they use it. No card, so it reads as memory and not as notes brought to an oral check.
 - **Faculty pointing** (PS) is a navy ring drawn around one line, which thickens while the others dim to 40%.
+- **Faculty pointing at a section of text** (UR) is a navy rounded outline around that part in each product. It can move from part to part, so faculty visibly ask about each part in turn instead of going straight to the one that went wrong.
+- **A "READY" tag** (UR, shared with figure 8). A filled grey pill on an AI answer means the tool presented it as finished. Right and wrong answers carry identical tags at the same moment, so "equal confidence" is something on screen, not only in the caption. AI answers state their numbers flatly (no "About").
+- **Working marks come off at hand-in** (UR). What a person did with each part ("✓ CHECKED", "USED AS IS") is written by their dot as red mono 12 tags on their own product while they work. Before faculty look, the marks lift 6 units and fade under "FACULTY SEE ONLY THE BRIEFS", so the faculty question isn't answered by the paper.
+- **Giving the AI material** (UR). Small grey-banded copies slide from each source into a stack beside the AI's column and stay to the end, so later frames still show what the AI was given.
+- **A source opens to its relevant line** (UR) in a paper-bright callout under its card. A callout that only confirms closes when the reader moves on; the one that matters stays open.
+- **The jagged frontier** (UR, labels shared with figure 8). An irregular navy line with uneven teeth, drawn only between the look-alike items it separates (never a level divider across the stage), labelled "INSIDE THE FRONTIER" and "OUTSIDE THE FRONTIER". It appears only after the people have worked, and its reason is on screen first as navy pattern marks (UR: "CAPACITY" under the AI's figure, "OPEN TODAY" on the source that has the current number). "Outside" is kept for the frontier; the caption says "on the page" for how things look.
+- **An evidence panel** (UR). A study's numbers rise centre stage on a paper-bright panel while the scene dims to 25%, then the scene returns. Equal-height ink bars, values exactly as in the source spine, groups the spine doesn't distinguish kept in one labelled row ("WITH AI · TWO GROUPS"), a mono source line, and a bracket for a finding without a number ("Graders rated higher in quality").
 
 ## Camera
 
@@ -49,6 +56,7 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 - Source Serif 4 for captions and titles, Source Sans 3 for labels in the picture (15 units), and IBM Plex Mono for small labels (12 units, never smaller).
 - **Stage:** an SVG with a 960 × 540 viewBox. On the standalone page the figure is up to 1,040 px wide, so 12-unit mono renders at 13 px at 1440.
 - **Narrow stacked stage** (FS; PS reuses it). When the words are the figure's content, below 480 px the SVG can give way to a stacked HTML text view of the current beat, driven by the same `render(t)`, with text at 13–16 px. Collapse the SVG (`height: 0; overflow: hidden`) rather than `display: none`, so its text can still be measured. Each beat shows the sections it is about (a `SHOW` list per beat), and spoken answers appear word by word on the same clock. PS's stage carries the reading names, both maps as link chips (dashed grey, solid grey, red, struck), both papers, each student's order, both answers and the "What they learned" note. Keep the comparison's anchor in view throughout (FS: a "Both handed in this paper" tile), put people side by side as on desktop, and make the final frame, check and controls fit an 844 px screen.
+- **Stacked whenever a label would vanish** (UR). Mono 12 drops under the 11 px rule on any stage narrower than 880 px, which includes tablets and narrow desktop windows. UR switches to the stacked stage whenever the smallest picture text would render under 11 px (a ResizeObserver on the SVG toggles `.is-stacked` on the figure), not only below 480 px, so no drawn stage ever loses its labels. The runtime's legibility rule still adds `.is-narrow`, so the beat list shows its "On screen" lines.
 - **Legibility rule** (FC). Picture text carries `data-fs` (its size in viewBox units). `MotionFigures.legibility()` hides any text that would render under 11 px and adds `.is-narrow` to the figure. The beat list then shows each beat's "On screen" line, and the caption band carries the words at full size. Shapes and motion stay.
 - **Real words when the words are the point** (FS). FC draws writing as bars. When the failure lives in the wording (fluency), set the real sentences: Serif 20 while they're read, no smaller than 12.4 units once settled, with fixed line breaks if two copies must match line for line.
 
@@ -62,7 +70,8 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
   - At least 1.5 s of hold follows the last movement.
   - No beat is shorter than twice its caption's reading time.
   - A beat with no movement is allowed when the caption is the event (FC beat 9).
-- **Length.** Figures run 30 to about 90 s. FC is 85.6 s in 11 beats; FS is 88.6 s in 9 beats; PS is 90.0 s in 10 beats.
+- **Length.** Figures run 30 to about 90 s. FC is 85.6 s in 11 beats; FS is 88.6 s in 9 beats; PS is 90.0 s in 10 beats; UR is 94.7 s in 10 beats, over the guide because of a reading budget of caption plus new picture words at 3 words a second and a second faculty question.
+- **Reading budget** (UR, from cold reads). A beat must hold its caption plus the new words in the picture at 3 words a second or less, not only its caption. A setup can be split (task, then sources) to stay inside it.
 - **Speech pace** (PS). Spoken words appear at about 3 words a second and hold at least 1.5 s after the last word. Both people speak at the same pace.
 - **Labels arrive with their beat** (FC). A label that says what something is appears by the time that thing settles, never late in the beat.
 - **The setup beat names the situation before anything goes wrong.** The turn beat makes the mechanism visible. The figure ends on the faculty check.
@@ -92,7 +101,7 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward compatible with them: a v0 figure (toggle button plus beat grid) mounts unchanged.
 
 - **A figure is `render(t)`,** a pure function of time. Captions and their fades are drawn from `t` too, so seeking gives identical frames for export.
-- **`MotionFigures.mount(root, {duration, render, beats})`.** Each beat is `{at, text, list?, detail?, check?}`. `check` is `{label, question, followLabel?, follow?, followAt?}`.
+- **`MotionFigures.mount(root, {duration, render, beats, poster?})`.** Each beat is `{at, text, list?, detail?, check?}`. `check` is `{label, question, followLabel?, follow?, followAt?}`.
 - **Optional hooks inside the root:**
   - `[data-mf-toggle]` (Play/Pause/Replay);
   - `[data-mf-replay]` (Restart);
@@ -105,7 +114,10 @@ Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward comp
   - `pathAt(segs, start)` for a mark's piecewise path;
   - `legibility(root, svg, viewWidth, minPx)`.
 - **Behaviour:**
-  - The figure plays once when 50% of its shot (`[data-mf-shot]`: stage plus caption band) is in view (PS; it was 60% of the whole figure, and a long beat list kept that from ever happening on phones or at 1280×720). A v0 figure without a shot still keys on its root at 60%. `data-mf-autoplay="off"` disables autoplay.
+  - **The player fits the viewport** (PS, shared; applies to every figure with a shot). `figures.css` caps the stage SVG at `100svh − --mf-chrome` (228 px on desktop, 250 px below 720 px wide: what the caption band and controls need), so the stage, caption band and controls fit together when first in view. The SVG letterboxes inside its box, and `legibility()` measures the letterboxed scale (`min` of the width and height fits). A figure with its own narrow stage should give it a fixed height (its tallest beat) and fix the caption band's height on phones, so the controls never move.
+  - **Autoplay waits for the whole player** (PS, shared). The figure plays once when half its shot (`[data-mf-shot]`) is in view and its caption band and controls are fully in view. Before PS it was 60% of the whole figure, which a long beat list kept from ever happening on phones or at 1280×720. A v0 figure without a shot still keys on its root at 60%. `data-mf-autoplay="off"` disables autoplay.
+  - **Poster** (PS, optional). `mount(root, {…, poster: seconds})` shows that settled moment while the figure waits to play, so the first view isn't an empty stage; play still starts from 0. PS uses beat 1 settled. Figures without `poster` are unchanged.
+  - **Setup copy** (PS). Keep the paragraph above the figure short (about four sentences), and don't tell readers to "pause it" before the controls are on screen.
   - On the scrubber, arrow keys move 1 s and Shift+arrow 5 s (PS; the 0.05 s step stays for dragging). Home, End, PageUp and PageDown keep the browser's behaviour.
   - Reduced motion (`prefers-reduced-motion` or `?reduced`) shows the final frame, and beat clicks jump between settled stills.
   - `?t=12.5` holds a moment.
