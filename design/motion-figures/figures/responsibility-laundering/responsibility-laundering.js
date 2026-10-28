@@ -19,26 +19,26 @@
 		// 1 · the task
 		card: [1.0, 1.6], dots: [2.0, 2.4],
 		// 2 · same prompt, same draft
-		pulse: [7.4, 7.8], sheet: [7.8, 8.3], row1: [8.8, 9.6], keyGrey: [8.8, 9.2], row2: [11.4, 12.2], sigLine: [12.4, 12.7],
-		divide: [13.4, 14.6], tags: [14.7, 15.1],
-		// 3 · both read it closely
-		onto: [19.4, 19.8], read: [[19.8, 20.8], [20.8, 21.8], [22.1, 23.1], [23.1, 24.1]],
+		pulse: [8.4, 8.8], sheet: [8.8, 9.3], row1: [9.8, 10.6], row2: [12.4, 13.2], sigLine: [13.4, 13.7],
+		divide: [14.4, 15.6], tags: [15.7, 16.1],
+		// 3 · both read it closely (the key's grey entry arrives as they start reading)
+		keyGrey: [20.4, 20.8], onto: [20.4, 20.8], read: [[20.8, 21.8], [21.8, 22.8], [23.1, 24.1], [24.1, 25.1]],
 		// 4 · the first signs; the second notes first
-		aToSig: [26.6, 27.0], aSign: [27.0, 27.8], keyRed: [27.2, 27.6],
-		bUp: [30.3, 30.7], noteLabel: [30.3, 30.7], note: [30.7, 33.1], bDown: [35.2, 35.6], bSign: [35.6, 36.4],
-		// 5 · faculty see only the papers, and ask who made the call
-		dimNote: [38.9, 39.4], frame: [39.5, 40.1], frameLabel: [39.9, 40.3],
-		q1: [40.5, 41.1], aPanel: [42.4, 42.8], a1: [42.8, 45.0], bPanel: [46.5, 46.9], b1: [46.9, 48.7],
-		// 6 · then they ask why (answers type at about 5 words a second; each stays readable at 3 a second)
-		q2: [53.5, 54.1], aRow2: [54.3, 54.7], a2: [54.7, 56.3], bRow2: [56.4, 56.8], b2: [56.8, 60.8],
+		aToSig: [27.6, 28.0], aSign: [28.0, 28.8], keyRed: [28.2, 28.6],
+		bUp: [31.3, 31.7], noteLabel: [31.3, 31.7], note: [31.7, 34.1], bDown: [36.2, 36.6], bSign: [36.6, 37.4],
+		// 5 · faculty see only the papers, and ask each student who made the call
+		dimNote: [39.9, 40.4], frame: [40.5, 41.1], frameLabel: [40.9, 41.3],
+		q1: [41.5, 42.1], aPanel: [43.2, 43.6], a1: [43.6, 45.6], bPanel: [46.9, 47.3], b1: [47.3, 49.1],
+		// 6 · then why (answers type at about 5 words a second; each stays readable at 3 a second)
+		q2: [54.5, 55.1], aRow2: [55.6, 56.0], a2: [56.0, 57.6], bRow2: [58.7, 59.1], b2: [59.1, 62.7],
 		// 7 · the turn
-		restore: [66.0, 66.6], aPulse: [67.0, 67.4], outlines: [68.7, 69.2], split: [69.4, 70.6], keyHanded: [70.2, 70.6], bPulse: [70.8, 71.2], bracket: [71.2, 72.0],
+		restore: [68.1, 68.7], aPulse: [69.1, 69.5], outlines: [70.8, 71.3], split: [71.3, 72.5], keyHanded: [72.1, 72.5], bPulse: [72.6, 73.0], bracket: [73.0, 73.8],
 		// 8 · suppose it proves wrong
-		weights: [75.0, 75.4], aFall: [77.5, 78.9], aRest: [78.9, 79.3], bFall: [79.5, 80.5], bRest: [80.5, 80.8],
+		weights: [76.3, 76.7], aFall: [78.8, 80.2], aRest: [80.2, 80.6], bFall: [80.8, 81.8], bRest: [81.8, 82.1],
 		// 9 · the check
-		check: 82.7, follow: 85.6, end: 89.9,
+		check: 84.0, follow: 86.9, end: 92.9,
 	};
-	const BEAT_AT = [0, 6.4, 18.4, 25.6, 37.9, 52.2, 65.0, 74.0, 82.7];
+	const BEAT_AT = [0, 7.4, 19.4, 26.6, 38.9, 53.5, 67.1, 75.3, 84.0];
 
 	// ---- geometry (stage units; the sheets use their own units) --------------
 	const BIG = {x: 202, y: 140, s: 1.25};
@@ -54,12 +54,12 @@
 	const NOTE = {x: 508, ys: [98, 116], lines: ['Rests on an open port.', 'Today’s harbor reports: normal.'], dot: {x: 496, y: 93}};
 	const PANEL = {y0: 388, y1: 510, w: 444, name: 404, rows: [[422, 440], [462, 480, 498]], textDx: 34};
 	const SPEECH = {
-		a: {rows: [{n: '1', str: '“I signed it. The analysis estimated the ships could do it.”', at: T.a1, open: T.aPanel},
+		a: {rows: [{n: '1', str: '“I signed it. The analysis said ships could do it.”', at: T.a1, open: T.aPanel},
 			{n: '2', str: '“It was the AI’s estimate. It seemed solid.”', at: T.a2, open: T.aRow2}]},
 		b: {rows: [{n: '1', str: '“I did. I chose to rely on the estimate.”', at: T.b1, open: T.bPanel},
-			{n: '2', str: '“It assumes an open port. Today’s harbor reports looked normal, so I accepted it. I should have checked for closures.”', at: T.b2, open: T.bRow2}]},
+			{n: '2', str: '“It assumes an open port. Today’s reports looked normal, so I accepted it. I should have checked for closures.”', at: T.b2, open: T.bRow2}]},
 	};
-	const Q = ['1 · Suppose the port closes. Who made the call to wait?', '2 · Why did you rely on the estimate?'];
+	const Q = ['1 · Suppose the port closes. Who made this call?', '2 · Why did you rely on it?'];
 
 	const root = document.querySelector('#responsibility-laundering');
 	const svg = root.querySelector('svg');
@@ -423,7 +423,7 @@
 			h('p', 'rl-n-tag rl-n-grey', c, 'Drafted with AI');
 			const reader = h('span', 'rl-n-reader', c);
 			const r1 = h('p', 'rl-n-row', c);
-			const half = col === 'a' ? h('span', 'rl-n-half', r1) : null;
+			const half = col === 'a' ? h('span', 'rl-n-half', c) : null;
 			const b1 = h('span', 'rl-n-band', r1);
 			const theAnalysis = h('span', null, b1, 'The analysis');
 			b1.append(' estimates ships can carry everyone out.');
@@ -507,9 +507,25 @@
 		}
 		// Beat 7: the first student's dot halves; the other half becomes a dashed grey ring
 		// before "The analysis", and stays.
-		N.cards.a.half.style.visibility = t >= T.split[0] ? 'visible' : 'hidden';
-		op(N.cards.a.half, prog(t, ...T.split));
-		N.cards.a.di.style.transform = t >= T.split[0] ? 'scale(0.7)' : '';
+		{
+			const cd = N.cards.a, hf = cd.half;
+			const on = t >= T.split[0];
+			hf.style.visibility = on ? 'visible' : 'hidden';
+			cd.di.style.transform = on ? 'scale(0.7)' : '';
+			if (on) {
+				// From the signature dot, up the card's left edge, to just left of "The analysis".
+				const k = prog(t, ...T.split, E.inOut);
+				const turn = prog(t, T.split[0] + 0.6, T.split[1]);
+				const dotN = cd.di.parentNode, from = {x: dotN.offsetLeft + dotN.offsetWidth / 2, y: dotN.offsetTop + dotN.offsetHeight / 2};
+				const to = {x: 3, y: cd.r1.offsetTop + 9};
+				const size = mix(7, 12, turn);
+				hf.style.left = `${(mix(from.x, to.x + 6, k) - size / 2).toFixed(1)}px`;
+				hf.style.top = `${(mix(from.y, to.y, k) - size / 2).toFixed(1)}px`;
+				hf.style.width = hf.style.height = `${size.toFixed(1)}px`;
+				hf.style.background = turn < 1 ? `rgba(184, 27, 43, ${(1 - turn).toFixed(3)})` : 'transparent';
+				hf.style.borderColor = `rgba(91, 86, 79, ${turn.toFixed(3)})`;
+			}
+		}
 		const outlined = t >= T.outlines[0];
 		N.cards.a.theAnalysis.classList.toggle('is-outlined', outlined);
 		if (N.sayAnalysis) N.sayAnalysis.classList.toggle('is-outlined', outlined);
@@ -539,18 +555,18 @@
 	};
 
 	const BEATS = [
-		{at: BEAT_AT[0], text: 'Two students get the same task.',
+		{at: BEAT_AT[0], text: 'Two students, one task.',
 			detail: 'a task card appears at the top left: "Example task: Recommend when to evacuate a port city." Two red dots appear, labelled First student and Second student.'},
-		{at: BEAT_AT[1], text: 'Suppose both give an AI the same prompt and get the same draft.',
-			detail: 'both dots pulse. A sheet fills at the centre in grey on a beige band, and a key below names that band "Written by AI": "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." It divides into two identical copies, labelled "First student, drafted with AI" and "Second student, drafted with AI".'},
+		{at: BEAT_AT[1], text: 'Suppose the same prompt gives both the same AI draft.',
+			detail: 'both dots pulse. A sheet fills at the centre in grey on a beige band: "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." It divides into two identical copies, labelled "First student\'s copy, drafted with AI" and "Second student\'s copy, drafted with AI".'},
 		{at: BEAT_AT[2], text: 'Both students read it closely and agree.',
-			detail: 'both dots read along every line of their copies, at the same pace and at the same time. Nothing changes.'},
+			detail: 'a key below names the beige band "Written by AI". Both dots read along every line of their copies, at the same pace and at the same time. Nothing changes.'},
 		{at: BEAT_AT[3], text: 'The first student signs. The second notes what the estimate rests on, then signs.',
 			detail: 'the first dot signs in red, and the key adds "A student\'s decision" in red. The second dot moves above its copy, into a row labelled "Their own note, not handed in", and writes a red note: "Rests on an open port. Today\'s harbor reports: normal." The first student\'s cell shows a dash. Then the second dot signs. The note stays.'},
-		{at: BEAT_AT[4], text: 'Faculty ask who made the call.',
-			detail: 'the note row dims under "Faculty don\'t see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."'},
-		{at: BEAT_AT[5], text: 'Then they ask why.',
-			detail: '"2. Why did you rely on the estimate?" The first student says, "It was the AI\'s estimate. It seemed solid." The second says, "It assumes an open port. Today\'s harbor reports looked normal, so I accepted it. I should have checked for closures."'},
+		{at: BEAT_AT[4], text: 'Faculty ask each student.',
+			detail: 'the note row dims under "Faculty don\'t see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made this call?" The first student says, "I signed it. The analysis said ships could do it." The second says, "I did. I chose to rely on the estimate."'},
+		{at: BEAT_AT[5], text: 'They ask why.',
+			detail: '"2. Why did you rely on it?" The first student says, "It was the AI\'s estimate. It seemed solid." The second says, "It assumes an open port. Today\'s reports looked normal, so I accepted it. I should have checked for closures."'},
 		{at: BEAT_AT[6], text: 'The first gives the AI\'s reason. The second gives their own.',
 			detail: 'the frame goes and the note returns. "The analysis" is outlined in the first student\'s answer and on their copy. The first student\'s dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "Reason handed to the AI". It stays. A red bracket marks the second student\'s second answer, their own reason; their dot stays whole.'},
 		{at: BEAT_AT[7], text: 'Suppose it proves wrong. The AI can\'t answer for it. Both students will.',

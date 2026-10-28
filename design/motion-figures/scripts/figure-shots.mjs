@@ -50,6 +50,35 @@ async function open(url, opts = {}) {
   report.figureWidth1440 = await p.evaluate(() => Math.round(document.querySelector("svg").getBoundingClientRect().width));
   await c.close();
 }
+// Rendered text size, counting scaled groups: font-size × the element's screen scale
+// (getScreenCTM), for every visible picture text at each beat's settled moment.
+// data-fs alone misses text inside a scaled <g>. Checked at 1440 and two laptop windows.
+for (const [w, h] of [[1440, 1000], [1366, 657], [1280, 720]]) {
+  const [c, p] = await open(`${base}?t=0`, { viewport: { width: w, height: h }, deviceScaleFactor: 1 });
+  const stacked = await p.evaluate(() => !!document.querySelector(".is-stacked"));
+  let min = Infinity, where = "";
+  if (!stacked) {
+    const n = await p.evaluate((id) => window.__motionFigures[id].beats.length, slug);
+    for (let i = 0; i <= n; i++) {
+      const r = await p.evaluate(([id, i]) => {
+        const f = window.__motionFigures[id];
+        f.seek(i < f.beats.length ? f.settle(i) : f.duration);
+        const op = (el) => { let o = 1; for (let e = el; e && e.tagName !== "svg"; e = e.parentElement) { const a = e.getAttribute("opacity"); if (a != null) o *= +a; const cs = getComputedStyle(e); if (cs.display === "none" || cs.visibility === "hidden") return 0; } return o; };
+        let m = Infinity, txt = "";
+        for (const t of document.querySelectorAll("svg text")) {
+          if (t.getAttribute("visibility") === "hidden" || op(t) < 0.05 || !t.textContent.trim()) continue;
+          const ctm = t.getScreenCTM(); if (!ctm) continue;
+          const px = parseFloat(t.getAttribute("font-size")) * Math.hypot(ctm.a, ctm.b);
+          if (px < m) { m = px; txt = t.textContent.trim().slice(0, 32); }
+        }
+        return { m, txt };
+      }, [slug, i]);
+      if (r.m < min) { min = r.m; where = `beat ${i + 1}: "${r.txt}"`; }
+    }
+  }
+  report[`minRenderedTextPx${w}x${h}`] = stacked ? "stacked" : `${min.toFixed(1)} (${where})`;
+  await c.close();
+}
 // Full page at 1440, final frame (reduced), for the record.
 {
   const [c, p] = await open(`${base}?reduced`);

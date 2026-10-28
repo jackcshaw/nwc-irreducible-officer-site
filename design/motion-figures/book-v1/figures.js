@@ -13,7 +13,7 @@ window.BOOK_FIGURES = [
 	{slug: 'appropriate-reliance',      title: 'Appropriate reliance',      chapter: 'calibrate', status: 'in progress'},
 	{slug: 'premature-synthesis',       title: 'Premature synthesis',       chapter: 'garden',    status: 'done'},
 	{slug: 'institutional-monoculture', title: 'Institutional monoculture', chapter: 'garden',    status: 'in progress'},
-	{slug: 'responsibility-laundering', title: 'Responsibility laundering', chapter: 'own',       status: 'in progress'},
+	{slug: 'responsibility-laundering', title: 'Responsibility laundering', chapter: 'own',       status: 'done'},
 	{slug: 'fluency-substitution',      title: 'Fluency substitution',      chapter: 'own',       status: 'done'},
 ];
 

@@ -47,6 +47,7 @@ Figure 2 (fluency substitution) done October 27: two storyboard reads, two figur
 Figure 3 (premature synthesis) done October 28: two storyboard reads, two figure reads, final fixes checked from the stills. Its author also fixed the shared runtime: the player fits the viewport, autoplay waits until the caption band and controls are visible, and arrow keys step 1 second.
 Figure 4 (uncalibrated reliance) done October 28: two storyboard reads, two figure reads, final fixes checked by a verifier agent (91 seconds after a trim from 113).
 Figure 5 (invisible delegation) done October 28: two storyboard reads, two figure reads, final fixes checked by a verifier agent (90 seconds after a trim from 102).
+Figure 7 (responsibility laundering) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents (93 seconds).
 
 ## Standalone pages
 

@@ -416,7 +416,7 @@
 		const shotEl = root.querySelector('[data-mf-shot]');
 		if (!shotEl) {
 			const io = new IntersectionObserver((entries) => {
-				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(); }
+				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); if (!started) play(); }
 			}, {threshold: 0.6});
 			io.observe(root);
 			return api;
@@ -426,7 +426,9 @@
 		const ratio = new Map(need.map(([n]) => [n, 0]));
 		const io = new IntersectionObserver((entries) => {
 			entries.forEach((e) => ratio.set(e.target, e.intersectionRatio));
-			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); play(); }
+			// Autoplay only if nobody has played yet: once the reader has started (or paused)
+			// the figure, scrolling it into view never restarts it.
+			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); if (!started) play(); }
 		}, {threshold: [0, 0.25, 0.5, 0.75, 0.98, 1]});
 		need.forEach(([n]) => io.observe(n));
 		return api;

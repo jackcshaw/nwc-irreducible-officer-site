@@ -3,8 +3,23 @@
     "check-a-rely": "g1:a,g2:rely",
     "check-b-move": "g1:b,g2:move",
     "check-a-keep": "g1:a,g2:move",
-    "check-b-time": "g1:b,g2:time"
+    "check-b-time": "g1:b,g2:time",
+    "skipped": "g1:skip,g2:skip"
   },
-  "beats": [3, 7, 8, 9],
-  "gates": [0, 1]
+  "beats": [
+    3,
+    7,
+    8,
+    9
+  ],
+  "gates": [
+    0,
+    1
+  ],
+  "gateSteps": {
+    "1": [
+      "[data-ar-gate=\"0\"] [data-ar-opt=\"b\"]",
+      "[data-ar-continue]"
+    ]
+  }
 }

@@ -30,7 +30,7 @@
 		// 5 · outside the frontier
 		dim: [44.7, 45.2], panel: [45.2, 45.8], bar1: [47.1, 47.7], bars2: [47.9, 48.5], bracket: [49.1, 49.6], bracketText: [49.6, 50.0], settle: [54.0, 55.2],
 		// 6 · what set them apart
-		tagA1: [57.7, 58.3], tagA2: [58.3, 58.7], tagB1: [60.5, 61.1], tagB2: [61.3, 61.7],
+		tagA1: [57.7, 58.3], tagA2: [58.3, 58.7], tagB1: [60.7, 61.3], tagB2: [61.5, 61.9],
 		// 7 · the suggested call
 		key: [69.2, 69.6], fade1: [69.8, 70.2], sugA: [70.7, 71.1], noteA: [71.5, 71.9], sugB: [73.2, 73.6], call1Off: [73.8, 74.2],
 		// 8 · one thing changes (question 2 at 86.0)
@@ -48,13 +48,18 @@
 	// g1: which task gets the one check ('a' | 'b'); g2: Task A in the launch plan
 	// ('rely' | 'move' | 'time'). A question is resolved once the reader continues or
 	// skips it; a skip is recorded and shown as "No call made". ?t= is the test and
-	// export hook: there every question counts as passed. ?calls=g1:a,g2:move preloads.
+	// export hook: there every question counts as passed. ?calls=g1:a,g2:move preloads
+	// calls, and g1:skip records a skip.
 	const params = new URLSearchParams(location.search);
 	const testMode = params.has('t');
 	const calls = {g1: null, g2: null};
 	const resolved = {g1: testMode, g2: testMode};
 	const skipped = {g1: false, g2: false};
-	if (params.has('calls')) for (const kv of params.get('calls').split(',')) { const [k, v] = kv.split(':'); if (k in calls && v) calls[k] = v; }
+	if (params.has('calls')) for (const kv of params.get('calls').split(',')) {
+		const [k, v] = kv.split(':');
+		if (!(k in calls) || !v) continue;
+		if (v === 'skip') skipped[k] = true; else calls[k] = v;
+	}
 
 	// ---- copy ------------------------------------------------------------------------
 	const S = {
@@ -63,7 +68,7 @@
 		b1pre: 'Use a spreadsheet and ', b1mark: 'insider interviews', b1post: ' to', b2: 'pick the brand a clothing firm should back.',
 		cond1: "IF IT'S YOUR TEAM'S FIRST DRAFT", cond2: 'IF IT GOES STRAIGHT INTO THE LAUNCH PLAN',
 		band: 'TIME FOR ONE CHECK · A CHECK: WORK IT YOURSELF, THEN COMPARE',
-		tagA1: 'NO HIDDEN FACTS', tagA2: 'A WEAK ANSWER SHOWS WHEN YOU READ IT',
+		tagA1: 'NO HIDDEN FACTS', tagA2: 'A WEAK ANSWER SHOWS WHEN READ',
 		tagB1: 'THE DECIDING DETAILS WERE IN THE INTERVIEWS', tagB2: 'THE SPREADSHEET ONLY LOOKED COMPLETE',
 		sugA: 'RELY ON IT', noteA: 'A CHECK HERE LEAVES TASK B UNCHECKED',
 		sugB: 'WORK IT FROM THE INTERVIEWS, THEN COMPARE',
@@ -164,7 +169,8 @@
 
 	// Row 2 on card A: the launch plan.
 	const cond2 = mono(scene, 40, 316, S.cond2);
-	const yourCall2 = sans600(scene, 440, 316, 'Your call', {fill: C.red, anchor: 'end'});
+	// The launch-plan condition is long, so row 2's "Your call" sits beside the last pill.
+	const yourCall2 = sans600(scene, 440, 368.5, 'Your call', {fill: C.red, anchor: 'end'});
 	const r2 = {
 		rely: pill(scene, 40, 324, 94, 24, 'Rely on it'),
 		move: pill(scene, 142, 324, 146, 24, 'Move my check here'),
@@ -389,7 +395,7 @@
 		}
 		n.pat = h('p', 'ar-n-pat', n.card, null, '2');
 		n.pat1 = h('span', null, n.pat, k === 'a' ? 'No hidden facts. ' : 'The deciding details were in the interviews. ');
-		n.pat2 = h('span', null, n.pat, k === 'a' ? 'A weak answer shows when you read it.' : 'The spreadsheet only looked complete.');
+		n.pat2 = h('span', null, n.pat, k === 'a' ? 'A weak answer shows when read.' : 'The spreadsheet only looked complete.');
 		n.ai = h('div', 'ar-n-ai', n.card);
 		const aiHead = h('p', 'ar-n-aihead', n.ai);
 		h('span', null, aiHead, "AI's answer");
@@ -656,8 +662,12 @@
 		const rects = els.map((e) => e.getBoundingClientRect());
 		const top = Math.min(...rects.map((r) => r.top)), bottom = Math.max(...rects.map((r) => r.bottom));
 		const m = 12;
+		const whole = shot.getBoundingClientRect();
 		let dy = 0;
-		if (bottom - top + 2 * m > innerHeight) dy = top - m;
+		// Show the whole picture when it fits; otherwise at least the options and Continue.
+		if (whole.height + 2 * m <= innerHeight && (whole.top < m || whole.bottom > innerHeight - m)) dy = whole.top - m;
+		else if (whole.height + 2 * m <= innerHeight) dy = 0;
+		else if (bottom - top + 2 * m > innerHeight) dy = top - m;
 		else if (top < m) dy = top - m;
 		else if (bottom > innerHeight - m) dy = bottom - (innerHeight - m);
 		if (dy) scrollBy({top: dy, behavior: reducedNow() ? 'auto' : 'smooth'});
@@ -719,7 +729,7 @@
 		{at: BEAT_AT[4], text: 'On Task B, consultants with AI were right less often. Graders still rated their work higher.',
 			detail: 'the picture dims and a panel rises: right answers on Task B. Without AI, 84.5%. GPT-4 alone, 70.6%. GPT-4 plus a prompt-engineering overview, 60%. A bracket under the two GPT-4 bars: "Rated higher in quality, right or wrong." The panel settles onto Task B\'s card.'},
 		{at: BEAT_AT[5], text: 'Task A had no hidden facts. Task B\'s were in the interviews.',
-			detail: 'under Task A: "No hidden facts. A weak answer shows when you read it." In Task B, "insider interviews" is underlined, with "The deciding details were in the interviews. The spreadsheet only looked complete."'},
+			detail: 'under Task A: "No hidden facts. A weak answer shows when read." In Task B, "insider interviews" is underlined, with "The deciding details were in the interviews. The spreadsheet only looked complete."'},
 		{at: BEAT_AT[6], text: 'The evidence suggests relying on Task A and working Task B yourself from the interviews.',
 			detail: 'a key at bottom right: "Suggested call · reasoned from the results". The options you didn\'t choose fade. Task A gets a navy "Rely on it" tag, with the note "A check here leaves Task B unchecked". Task B gets "Work it from the interviews, then compare". Your choice stays in red.'},
 		{at: BEAT_AT[7], text: 'Now your segmentation goes straight into the launch plan. What about Task A?',

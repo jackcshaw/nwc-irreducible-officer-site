@@ -3,7 +3,8 @@
 // plus each question with its controls open, and a 390px final still.
 // usage: node figure-branches.mjs <slug> [port]   (serve motion-figures/ first)
 // The presets live in figures/<slug>/branches.json:
-//   {"branches": {"name": "g1:a,g2:rely", …}, "beats": [7, 9], "gates": [0, 1]}
+//   {"branches": {"name": "g1:a,g2:rely", …}, "beats": [7, 9], "gates": [0, 1],
+//    "gateSteps": {"1": ["selector to click", …]}}
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
 import { mkdirSync, readFileSync } from "node:fs";
 
@@ -47,15 +48,26 @@ for (const [name, calls] of Object.entries(cfg.branches)) {
   made.push(`branch-${name}-final.png`);
   await c.close();
 }
-// Each question with its controls open (as a reader sees it when the figure waits).
+// Each question with its controls open (as a reader sees it when the figure waits),
+// at 1440 and at 390 (the stacked stage, shot area and the whole player).
 for (const g of cfg.gates) {
-  const [c, p] = await open("t=0");
-  await p.evaluate(([id, g]) => window.__motionFigures[id].openGate(g), [slug, g]);
-  await p.waitForTimeout(120);
-  const file = `gate-${g + 1}-open.png`;
-  await p.locator("[data-mf-shot]").screenshot({ path: out + file });
-  made.push(file);
-  await c.close();
+  for (const [w, h, dsf, suffix] of [[1440, 1000, 2, ""], [390, 844, 3, "-390"]]) {
+    // Reach the question the way a reader does (no ?t= test hook, so locks apply): the
+    // optional steps in branches.json answer the earlier questions first.
+    const [c, p] = await open("", { viewport: { width: w, height: h }, deviceScaleFactor: dsf });
+    for (const sel of (cfg.gateSteps || {})[g] || []) { await p.locator(sel).click(); await p.waitForTimeout(150); }
+    await p.evaluate(([id, g]) => window.__motionFigures[id].openGate(g), [slug, g]);
+    await p.waitForTimeout(150);
+    const file = `gate-${g + 1}-open${suffix}.png`;
+    await p.locator("[data-mf-shot]").screenshot({ path: out + file });
+    made.push(file);
+    if (suffix) {
+      const pf = `player-390-gate-${g + 1}.png`;
+      await p.locator("figure").screenshot({ path: out + pf });
+      made.push(pf);
+    }
+    await c.close();
+  }
 }
 // The final frame at 390px (the stacked stage), and the player as a phone sees it.
 {

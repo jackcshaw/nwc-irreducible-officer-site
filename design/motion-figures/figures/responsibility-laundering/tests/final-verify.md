@@ -77,3 +77,73 @@ At 89.9 s the caption shows "Faculty check", "Who owns the recommendation if it 
 - **Label sizes at 1280×720.** The smallest SVG label renders at 11.84 px (13 units × 0.911), and the smallest HTML text at 12 px (the "5 / 9" counter). No SVG text is hidden by `legibility`.
 - **Controls at 390×844.** The controls stay 722.6 px from the figure top across the full 0.1 s sweep and during real playback from seven start points. The caption band is a fixed 160 px, with no clipping in any beat. The stacked stage is a fixed 560 px.
 - **Setup.** No "pause" anywhere in the page or the JS.
+
+## Re-verify
+
+October 28, 2026. Report only. I appended this section and didn't edit anything else.
+
+**Method.** I served `design/motion-figures/` on 127.0.0.1:5341 (stopped afterwards) and used Playwright 1.63 at 1440×900 and 390×844. Beat times are from the live runtime (`__motionFigures[...].beats`, `duration`), and they match `T`/`BEAT_AT` in the JS and the storyboard. For each beat I swept 0.1 s steps and collected every text item that became readable (effective opacity ≥ 0.5, typed words included), in the SVG at 1440 and in the stacked stage at 390. The word counts are from that rendered text, not from the storyboard table. At 390 I tracked the half dot every 0.1 s (0.02 s where it meets the text) and took screenshots at 3× and 4×. I ran a full 0.1 s overlap sweep (930 steps) and checked the final frame by seek, by `?t=92.9` and with reduced motion.
+
+| # | Item | Result |
+| --- | --- | --- |
+| 1 | Reading pace | **FAIL, narrowly: beat 2 at 390 only** (0.17 s short). Desktop passes every beat. |
+| 2 | Split dot at 390 | **PASS** |
+| 3 | No overlaps at 390 (spot check) | **PASS** |
+| 4 | Final frame | **PASS**, unchanged |
+
+### 1. Reading pace: desktop PASS, 390 FAIL on beat 2
+
+The rule: beat length ≥ (caption words + new on-screen words) ÷ 3 + 1.5 s. I used the storyboard's counting rule: repeated names aren't counted, question numbers aren't counted, and the two copy tags count once. A note row that only returns from 20% (beat 7) isn't counted as new.
+
+| Beat | Span (s) | Length | Caption | On screen (as rendered) | Needed | Spare |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0.0–7.4 | 7.4 | 4 | 13 (task card 9, two names 4) | 7.17 | +0.23 |
+| 2 | 7.4–19.4 | 12.0 | 10 | 20 at 1440 (draft 16, tags "copy · drafted with AI" 4); 22 at 390 (draft label "One AI draft" 3, draft 16, card tag "Drafted with AI" 3) | 11.50 at 1440; 12.17 at 390 | +0.50 at 1440; **−0.17 at 390** |
+| 3 | 19.4–26.6 | 7.2 | 7 | 3 (key) | 4.83 | +2.37 |
+| 4 | 26.6–38.9 | 12.3 | 14 | 18 (key 3, note label 6, note 9) | 12.17 | +0.13 |
+| 5 | 38.9–53.5 | 14.6 | 4 | 34 (overlays 4 + 3, Q1 8, answers 10 + 9) | 14.17 | +0.43 |
+| 6 | 53.5–67.1 | 13.6 | 3 | 33 (Q2 6, answers 8 + **19**) | 13.50 | +0.10 |
+| 7 | 67.1–75.3 | 8.2 | 11 | 5 (key) | 6.83 | +1.37 |
+| 8 | 75.3–84.0 | 8.7 | 13 | 1 ("Answerable") | 6.17 | +2.53 |
+| 9 | 84.0–92.9, then rests | 8.9 | 8 + **13** move line | 2 ("Faculty check") | 9.17 | −0.27 before the rest; passes because the figure stops on this frame |
+
+- **Total.** 92.9 s, shown as "1:32" (the runtime floors seconds). This matches the expected 93 s.
+- **Beat 2 at 390.** The stacked stage labels the draft "One AI draft" (fades in 8.8–9.3 s) on top of the card tags, so the beat carries 32 words, not the desktop's 30. It needs 12.17 s against 12.0 s.
+- **Storyboard miscounts.** The second student's answer 2 is 19 words, not 18. Beat 6 still passes, with 0.1 s spare. The move line "Name one way it could prove wrong. Ask why they relied on it." is 13 words, not 12. With 13, beat 9's timed 8.9 s is 0.27 s short. The move line alone gets 6.0 s (86.9–92.9) against the 5.83 s it needs, and the player then rests on the frame, so nothing is cut off.
+- **Sensitive to counting.** Beat 2 at 1440 fails if both tags are counted in full (38 words, 14.17 s needed). Beat 5 at 1440 fails if the speech panels' "First student" / "Second student" headers are counted (42 words, 15.5 s needed). The 390 panels have no headers.
+- **No truncation.** All 19 words of the long answer render on its three lines at 1440. They render whole at 390 too.
+
+### 2. Split dot at 390: PASS
+
+- **71.3–71.5 s.** The first card's signature dot scales to 70% (7 → 5 px), and a second 7 px red dot separates from it. At 71.5 s the two are stacked.
+- **71.5–72.5 s.** The half travels about 118 px up the card's left edge, from (24.9, 151.3) to (10, 33) in card coordinates. It passes "for ships.", "It is recommended" and "estimates ships can" on the way, which is visible in every frame.
+- **71.9–72.5 s.** On the way it grows to 12 px. The red fill fades out and a dashed rgb(91, 86, 79) border fades in.
+- **Where it ends.** It settles as a hollow grey dashed ring at x 4–16, y 27–39. That is 6 px left of the outlined "The analysis" (x 22–99.6, y 23.6–40.6) and centred on its line.
+- **Key and final frame.** "Reason handed to the AI" fades in at 72.1–72.5 s. The ring stays to 92.9 s.
+- **Minor.** At 71.68–71.86 s the red half passes behind the left edge of row 2's beige band ("that civilians wait", "for ships."), so up to about 5 of its 7 px are hidden for about 0.2 s. It covers no glyph, because the rows paint above it.
+
+### 3. No overlaps at 390: PASS (spot check)
+
+The full sweep found no text-on-text or mark-on-text overlap except planned crossfades:
+
+- **Divide (14.5–15.5 s).** The draft lies over the cards.
+- **Note row (40.0–40.3 and 68.2–68.6 s).** "Faculty don't see this" lies over the "—".
+- **Half dot (71.7–71.8 s).** The box test also flagged the half's tuck behind the row 2 band, described in item 2.
+
+Across the whole sweep, the controls stayed 722.6 px from the figure top, the caption band never clipped, and nothing overflowed the stacked stage. I didn't test mark-on-mark (the falling weight over the ring, which the first report recorded as designed).
+
+### 4. Final frame: PASS, unchanged
+
+At 92.9 s (by seek, by `?t=92.9` and with reduced motion), at both 390 and 1440, the caption reads as follows:
+
+- **Label.** "Faculty check", in IBM Plex Mono 13 px.
+- **Check.** "Who owns the recommendation if it proves wrong?", verbatim.
+- **Follow-up.** "Name one way it could prove wrong. Ask why they relied on it.", with the class `mf-follow is-equal`.
+- **Size and style.** The check and the follow-up are both Source Serif 4, italic, weight 400 and opacity 1: 20 px at 390 and 30 px at 1440. The caption is not clipped.
+
+At 390 the stacked stage shows the following:
+
+- **Marks.** The dashed ring, the first student's dot at 70%, both "Answerable" chips, and the note.
+- **Words.** All four answers and both questions.
+- **Annotations.** Both "The analysis" outlines, the bracket mark, and all three key entries.
+- **Gone.** The frame and "Faculty don't see this".
