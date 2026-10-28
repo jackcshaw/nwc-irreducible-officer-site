@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion figures review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0a2242; --red:#b81b2b; --paper:#f6f1e8; --line:#d9d1c3; --muted:#4f5a6b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:17px/1.55 "Source Serif 4", Georgia, serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 38px; line-height: 1.15; margin: 0 0 8px; }
+  h1 .dot { color: var(--red); }
+  .dek { max-width: 46rem; color: var(--muted); margin: 0 0 32px; }
+  table { width:100%; border-collapse: collapse; font-family: "Source Sans 3", system-ui, sans-serif; font-size: 16px; }
+  th, td { text-align:left; padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  td.n { color: var(--muted); width: 2.5rem; }
+  .name a { color: var(--ink); font-weight: 600; text-decoration-color: var(--red); }
+  .check { font-family: "Source Serif 4", Georgia, serif; font-style: italic; color: var(--muted); }
+  .status { white-space: nowrap; font-weight: 600; }
+  .status.done { color: var(--ink); }
+  .status.done::before { content: "● "; color: var(--red); }
+  .status.wip { color: var(--muted); }
+  .links a { color: var(--muted); margin-right: 10px; white-space: nowrap; }
+  .note { margin-top: 32px; font-family: "Source Sans 3", system-ui, sans-serif; color: var(--muted); font-size: 15px; }
+  @media (max-width: 700px) { .check, th.check-h { display: none; } td, th { padding: 10px 6px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Motion figures<span class="dot">.</span></h1>
+  <p class="dek">The seven failure modes and appropriate reliance as teaching figures. Each was storyboarded, read cold by a tester who didn't know the intent, rebuilt at teaching pace, and watched cold again. Open a figure to play it. Its storyboard and test reports sit beside it.</p>
+  <table>
+    <thead><tr><th>#</th><th>Figure</th><th class="check-h">Faculty check</th><th>Status</th><th>Files</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p class="note">See <a href="MORNING.md">MORNING.md</a> for what passed, what was flagged, and the decisions waiting for Jack. Previews (MP4) and stills live in each figure's <code>shots/</code> folder on disk; they aren't committed to git.</p>
+</main>
+<script>
+  // Update a figure's status here as the loop finishes it.
+  const figures = [
+    ["frame-capture", "Frame capture", "What problem did the student choose to solve?", "done"],
+    ["fluency-substitution", "Fluency substitution", "Can the student independently explain the judgment in plain speech?", "done"],
+    ["premature-synthesis", "Premature synthesis", "Can the student explain why these connections matter?", "done"],
+    ["uncalibrated-reliance", "Uncalibrated reliance", "What evidence justified relying on the system here?", "Built · figure test"],
+    ["invisible-delegation", "Invisible delegation", "What did the AI decide for the student?", "Storyboard · round 2"],
+    ["institutional-monoculture", "Institutional monoculture", "What frames are missing across the seminar?", "Storyboard"],
+    ["responsibility-laundering", "Responsibility laundering", "Who owns the recommendation if it proves wrong?", "Next"],
+    ["appropriate-reliance", "Appropriate reliance", "What evidence justified relying on the system here, and what would have changed the call?", "Next"],
+  ];
+  const rows = document.getElementById("rows");
+  figures.forEach(([slug, name, check, status], i) => {
+    const done = status === "done";
+    const built = done || status.startsWith("Built");
+    const base = "figures/" + slug + "/";
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td class="n">' + (i + 1) + '</td>' +
+      '<td class="name">' + (built ? '<a href="' + base + 'index.html">' + name + '</a>' : name) + '</td>' +
+      '<td class="check">' + check + '</td>' +
+      '<td class="status ' + (done ? "done" : "wip") + '">' + (done ? "Done" : status) + '</td>' +
+      '<td class="links">' +
+        (status === "Next" ? "" : '<a href="' + base + 'storyboard.md">Storyboard</a><a href="' + base + 'tests/">Tests</a>') +
+        (built ? '<a href="' + base + 'shots/' + slug + '.mp4">Preview</a>' : "") +
+      '</td>';
+    rows.appendChild(tr);
+  });
+</script>
+</body>
+</html>
