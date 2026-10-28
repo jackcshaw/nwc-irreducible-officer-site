@@ -32,7 +32,7 @@ Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's
 2. **Four ways to collaborate,** each with one sentence on what it involves.
 3. **Who convenes it:** Jack Shaw, with jshaw@comprendo.dev for anyone who would rather write directly.
 4. **The sign-up form.**
-5. **What happens next:** Jack reads every sign-up and replies by email. Details stay on a private list for Judgment Lab collaboration. They are not shared, there is no mailing list, and nothing is published without separate agreement. To be removed, email jshaw@comprendo.dev.
+5. **What happens next:** Jack reads every sign-up and replies by email. Details stay on a private list for Judgment Lab collaboration. They are not shared, nothing is published without separate agreement, and the newsletter goes only to people who tick its box. To be removed, email jshaw@comprendo.dev.
 6. **Collaborators:** the curated public roster, hidden while it is empty.
 
 **Entry points:**
@@ -48,7 +48,7 @@ Alignment with the Codex draft (PR #34), agreed between the two agents at Jack's
 | --- | --- | --- |
 | Name | yes | up to 120 characters |
 | Email | yes | `type=email`; checked again on the server |
-| Setting | yes | PME, Higher education, K–12 · High school, or Other. Preselected from the site's chosen setting when there is one. |
+| Setting | yes | PME, Higher education, K–12 · High school, Business, or Other. Preselected from the site's chosen setting when there is one. |
 | Role and institution | no | up to 160 characters |
 | Ways to collaborate | no | checkboxes for the four ways |
 | A practice you're trying, or a question you're working on | no | up to 1,500 characters |
@@ -92,7 +92,7 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
 
 ## Configuration
 
-`content/collaborate.json` holds `endpoint`, the web app's `/exec` URL. A contract test requires a `https://script.google.com/macros/s/…/exec` URL whenever it is set.
+`content/collaborate.json` holds `endpoint`, the web app's `/exec` URL. The web app is deployed, so a contract test requires a `https://script.google.com/macros/s/…/exec` URL and refuses to release without one.
 
 ## Testing
 
@@ -125,7 +125,6 @@ The code lives in `apps-script/collaborators/`: `Code.gs`, `appsscript.json` and
 
 ## Out of scope
 
-- A mailing list.
 - Automatic publication of sign-ups.
 - Analytics events.
 - Changes to the five primary paths.

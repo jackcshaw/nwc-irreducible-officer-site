@@ -34,16 +34,17 @@ for (const way of ["Pilot with learners", "Contribute cases", "Design teaching m
   assert(call.includes(way), `the call should describe "${way}"`);
 }
 assert(call.includes('href="mailto:jshaw@comprendo.dev"'), "the call should offer direct email");
-for (const promise of ["reply by email", "private Judgment Lab list", "mailing list", "without asking first", "To be removed"]) {
+for (const promise of ["reply by email", "private Judgment Lab list", "without asking first", "only if you tick the box", "To be removed"]) {
   assert(call.includes(promise), `the call should state what happens to a sign-up ("${promise}")`);
 }
+assert(!/add you to a mailing list/.test(call), "the promise must not deny the newsletter the form offers");
 
 // One form, posting to the web app (or, before it is configured, to email).
 const form = (call.match(/<form[^>]*data-collaborate-form[^>]*>/) || [])[0];
 assert(form, "the call should have the sign-up form");
 assert(form.includes('method="post"'), "the form should post");
 assert(form.includes(`data-endpoint="${endpoint}"`), "the form should carry the configured endpoint");
-assert(form.includes(`action="${endpoint || "mailto:jshaw@comprendo.dev"}"`), "without JavaScript the form should still reach the list (or email)");
+assert(form.includes(`action="${endpoint}"`), "without JavaScript the form should still post to the list");
 assert((html.match(/<form[^>]*data-collaborate-form/g) || []).length === 1, "there should be exactly one sign-up form on the site");
 const field = (pattern, message) => assert(pattern.test(call), message);
 field(/<input[^>]*name="name"[^>]*required/, "name is required");
@@ -106,4 +107,4 @@ if (roster.length === 0) {
   for (const person of roster) assert(rosterSection.includes(escapeHtml(person.name)), `the roster should list ${person.name}`);
 }
 
-console.log(`collaborate contract passed: one form, ${endpoint ? "live endpoint" : "no endpoint yet"}, four entry points, roster of ${roster.length}`);
+console.log(`collaborate contract passed: one form, live endpoint, four entry points, roster of ${roster.length}`);

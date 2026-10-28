@@ -103,7 +103,7 @@ Changes that span multiple repos share one branch name and merge in order: compa
 `#collaborate` invites educators and practitioners to pilot with learners, contribute cases, design teaching materials, or review the evidence.
 
 - **The form.** Its one form posts to the Apps Script web app in `apps-script/collaborators/`, which has the deploy steps. Each sign-up adds a row to a private Google Sheet and sends an email to jshaw@comprendo.dev.
-- **The endpoint.** `content/collaborate.json` holds the web app's `/exec` URL. Until it is set, a sign-up opens a prefilled email instead.
+- **The endpoint.** `content/collaborate.json` holds the web app's `/exec` URL, and the contract test refuses to release without it. If a sign-up fails or times out, the page offers a prefilled email instead.
 - **The public roster.** Nothing is published automatically. The roster is `content/collaborators.json`, edited by hand once a person agrees to be listed.
 - **The links in.** The masthead, the footer, the home page's testing section and Discuss all link to the call.
 
