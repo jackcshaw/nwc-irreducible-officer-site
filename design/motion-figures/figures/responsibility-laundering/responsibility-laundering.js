@@ -22,23 +22,23 @@
 		pulse: [7.4, 7.8], sheet: [7.8, 8.3], row1: [10.7, 11.5], keyGrey: [10.7, 11.1], row2: [12.9, 13.7], sigLine: [13.9, 14.2],
 		divide: [14.5, 15.7], tags: [15.8, 16.2],
 		// 3 · both read it closely
-		onto: [19.1, 19.5], read: [[19.5, 20.5], [20.5, 21.5], [21.8, 22.8], [22.8, 23.8]],
+		onto: [19.4, 19.8], read: [[19.8, 20.8], [20.8, 21.8], [22.1, 23.1], [23.1, 24.1]],
 		// 4 · the first signs; the second notes first
-		aToSig: [26.3, 26.7], aSign: [26.7, 27.5], keyRed: [26.9, 27.3],
-		bUp: [30.0, 30.4], noteLabel: [30.0, 30.4], note: [30.4, 32.8], bDown: [34.9, 35.3], bSign: [35.3, 36.1],
+		aToSig: [26.6, 27.0], aSign: [27.0, 27.8], keyRed: [27.2, 27.6],
+		bUp: [30.3, 30.7], noteLabel: [30.3, 30.7], note: [30.7, 33.1], bDown: [35.2, 35.6], bSign: [35.6, 36.4],
 		// 5 · faculty see only the papers, and ask who made the call
-		dimNote: [38.6, 39.1], frame: [39.2, 39.8], frameLabel: [39.6, 40.0],
-		q1: [40.2, 40.8], aPanel: [42.0, 42.4], a1: [42.4, 46.1], bPanel: [46.3, 46.7], b1: [46.7, 49.7],
+		dimNote: [38.9, 39.4], frame: [39.5, 40.1], frameLabel: [39.9, 40.3],
+		q1: [40.5, 41.1], aPanel: [42.3, 42.7], a1: [42.7, 46.4], bPanel: [46.6, 47.0], b1: [47.0, 50.0],
 		// 6 · then they ask why
-		q2: [53.2, 53.8], aRow2: [54.0, 54.4], a2: [54.4, 57.1], bRow2: [57.3, 57.7], b2: [57.7, 64.4],
+		q2: [53.5, 54.1], aRow2: [54.3, 54.7], a2: [54.7, 57.4], bRow2: [57.6, 58.0], b2: [58.0, 64.7],
 		// 7 · the turn
-		restore: [67.2, 67.8], aPulse: [68.2, 68.6], outlines: [71.2, 71.7], split: [71.9, 73.1], bPulse: [73.3, 73.7], bracket: [73.7, 74.5],
+		restore: [67.5, 68.1], aPulse: [68.5, 68.9], outlines: [71.5, 72.0], split: [72.2, 73.4], bPulse: [73.6, 74.0], bracket: [74.0, 74.8],
 		// 8 · suppose it proves wrong
-		weights: [77.5, 77.9], aFall: [80.8, 82.2], aRest: [82.2, 82.6], bFall: [82.8, 83.8], bRest: [83.8, 84.1],
+		weights: [77.8, 78.2], aFall: [81.1, 82.5], aRest: [82.5, 82.9], bFall: [83.1, 84.1], bRest: [84.1, 84.4],
 		// 9 · the check
-		check: 85.6, follow: 88.5, end: 92.8,
+		check: 85.9, follow: 88.8, end: 93.1,
 	};
-	const BEAT_AT = [0, 6.4, 18.1, 25.3, 37.6, 51.9, 66.2, 76.5, 85.6];
+	const BEAT_AT = [0, 6.4, 18.4, 25.6, 37.9, 52.2, 66.5, 76.8, 85.9];
 
 	// ---- geometry (stage units; the sheets use their own units) --------------
 	const BIG = {x: 202, y: 140, s: 1.25};

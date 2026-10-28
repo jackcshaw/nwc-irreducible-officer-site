@@ -163,7 +163,9 @@
 	const note2 = mono(scene, 40, 416, S.note2);
 
 	// Card A's evidence slot: the study, inside the frontier.
+	const inRule = el(scene, 'line', {x1: 40, y1: 423, x2: 440, y2: 423, stroke: C.ink, 'stroke-opacity': 0.15});
 	const inTitle = mono(scene, 40, 436, S.inTitle);
+	const outRule = el(scene, 'line', {x1: 520, y1: 302, x2: 920, y2: 302, stroke: C.ink, 'stroke-opacity': 0.15});
 	const nums = [['12.2%', 'more tasks', 40], ['25.1%', 'faster', 176], ['40%+', 'higher quality', 312]].map(([n, l, x]) => {
 		const g = el(scene, 'g');
 		serif(g, x, 456, n, {fs: 20, weight: 600});
@@ -293,6 +295,8 @@
 		set(fIn, {opacity: prog(t, ...T.fLabels)});
 		set(fOut, {opacity: prog(t, ...T.fLabels)});
 		set(inTitle, {opacity: prog(t, ...T.inTitle)});
+		set(inRule, {opacity: prog(t, ...T.inTitle)});
+		set(outRule, {opacity: prog(t, ...T.settle)});
 		nums.forEach((n, i) => set(n, {opacity: prog(t, ...[T.n1, T.n2, T.n3][i])}));
 
 		// 5 · Task B's evidence, centre stage, then into its slot.

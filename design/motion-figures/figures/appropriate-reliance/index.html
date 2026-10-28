@@ -40,6 +40,9 @@
 #appropriate-reliance.is-stacked .ar-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 8px; background: var(--paper); }
 #appropriate-reliance.is-stacked .mf-caption { height: 136px; overflow: hidden; }
 @media (max-width: 719px) { #appropriate-reliance.is-stacked .mf-caption { height: 166px; } }
+/* The check is longer than the family's others: one line at desktop widths, so the caption
+   band keeps its 136 px and the controls don't move at the last beat. */
+#appropriate-reliance .mf-check-q, #appropriate-reliance .mf-follow.is-equal { font-size: clamp(20px, 2.1vw, 23px); }
 @media (max-width: 480px) {
 	#appropriate-reliance .mf-check-q, #appropriate-reliance .mf-follow.is-equal { font-size: 20px; }
 	.ar-gatebar { bottom: 10px; }
