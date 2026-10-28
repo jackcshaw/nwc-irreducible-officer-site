@@ -43,6 +43,7 @@ Conventions the first figures settle go into [CONVENTIONS.md](CONVENTIONS.md), s
 - **Overlap:** the next figure's storyboard starts once the previous figure's storyboard has passed and its build begins (tightened from "during final fixes" at figure 3, so all eight can be ready by morning). Each figure's own loop stays in order, and its lessons go into the next author's brief.
 
 **Status:** figure 1 (frame capture) done October 27, after two storyboard reads, two figure reads and final fixes checked from the stills.
+Figure 2 (fluency substitution) done October 27: two storyboard reads, two figure reads, final fixes checked from the stills.
 
 ## Standalone pages
 

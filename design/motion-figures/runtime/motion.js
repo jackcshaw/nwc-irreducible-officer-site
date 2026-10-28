@@ -8,7 +8,7 @@
    figure can be played, paused, scrubbed, jumped to a beat, held at a fixed
    time, or rendered frame by frame to video. Captions are drawn from t too.
 
-   The runtime plays a figure once when it is mostly in view, then rests on
+   The runtime plays a figure once when half its picture is in view, then rests on
    its final frame. The final frame carries the idea by itself: it is the
    reduced-motion view, the print view and the poster.
 
@@ -291,6 +291,16 @@
 			scrub.max = duration;
 			scrub.step = 0.05;
 			scrub.addEventListener('input', () => { pause(); draw(+scrub.value); label(t >= duration ? 'Replay' : 'Play'); });
+			// Arrow keys move 1 s (Shift: 5 s). The fine step stays for dragging; Home, End
+			// and Page keys keep the browser's behaviour.
+			scrub.addEventListener('keydown', (e) => {
+				const dir = {ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1}[e.key];
+				if (!dir) return;
+				e.preventDefault();
+				pause();
+				draw(t + dir * (e.shiftKey ? 5 : 1));
+				label(t >= duration ? 'Replay' : 'Play');
+			});
 		}
 		list.addEventListener('click', (e) => {
 			const b = e.target.closest('[data-beat]');
@@ -316,10 +326,14 @@
 		draw(0);
 		label('Play');
 		if (root.dataset.mfAutoplay === 'off') return;
+		// Autoplay keys on the picture (the shot: stage plus caption band), not the whole
+		// figure, whose beat list can be too tall ever to be mostly in view. v0 figures
+		// without a shot fall back to the root, as before.
+		const watched = root.querySelector('[data-mf-shot]') || root.querySelector('.mf-stage') || root;
 		const io = new IntersectionObserver((entries) => {
 			if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(); }
-		}, {threshold: 0.6});
-		io.observe(root);
+		}, {threshold: watched === root ? 0.6 : 0.5});
+		io.observe(watched);
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};

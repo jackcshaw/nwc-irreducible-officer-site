@@ -26,7 +26,7 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 - **A disclosure tag** (FS). A product made with AI carries a grey mono "DRAFTED WITH AI" tag through the final frame. It shows the AI's part without making disclosure the question.
 - **Set aside is a dim of the sheet, not the words** (FS). When faculty ask without the paper, the sheet fades into the page and the grey bands lighten to 55%; the words stay at full strength (5.6:1). An 80% opacity dim of the whole paper drops grey-on-band text to 3.6:1.
 - **Set aside can be a move** (PS). When "papers aside" must read as the papers being out of reach, they shrink to 56% and slide out of the people's rows into a strip, slightly tilted. Paths don't cross (the lower paper travels sideways before it rises), and labels fade out and back in rather than sliding across each other. Small text inside the papers fades as they shrink; the titles stay (Serif 19, still 11.5 px at 1,040).
-- **Same argument, own words** (PS). Two papers that must be indistinguishable without looking copied share a title, citations and disclosure, differ in line lengths, and carry a label saying "SAME ARGUMENT, OWN WORDS". A qualifier the better student learned can sit in their paper as one line, with no caption on it.
+- **Same argument, own words** (PS). Two papers that must be indistinguishable without looking copied share a title, citations and disclosure, differ only in line lengths, and carry a label saying "SAME ARGUMENT, OWN WORDS". Don't let either paper carry what the better student learned (a qualifier line was tried and removed after PS's figure read 1): the caption says "same argument", and the oral test is the point.
 - **A source lights up when someone repeats it** (FS), but only where repeating it is the failure, and only after the difference is audible. The band behind the repeated words returns to full strength and a navy underline runs under them, then both fade.
 - **A speech panel is what a person says without the paper** (FS). A rounded paper-bright box with the words in quotation marks. Both people's answers arrive at the same speaking pace.
 - **Show what faculty hear before showing origin** (FS). Spoken answers arrive in plain ink, because colours are invisible in the room. Origin colours (grey band for the AI's words, red for a person's own) come back only after the difference faculty can hear has landed, as part of the turn.
@@ -48,7 +48,7 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 
 - Source Serif 4 for captions and titles, Source Sans 3 for labels in the picture (15 units), and IBM Plex Mono for small labels (12 units, never smaller).
 - **Stage:** an SVG with a 960 × 540 viewBox. On the standalone page the figure is up to 1,040 px wide, so 12-unit mono renders at 13 px at 1440.
-- **Narrow stacked stage** (FS). When the words are the figure's content, below 480 px the SVG can give way to a stacked HTML text view of the current beat, driven by the same `render(t)`, with text at 13–16 px. Collapse the SVG (`height: 0; overflow: hidden`) rather than `display: none`, so its text can still be measured.
+- **Narrow stacked stage** (FS; PS reuses it). When the words are the figure's content, below 480 px the SVG can give way to a stacked HTML text view of the current beat, driven by the same `render(t)`, with text at 13–16 px. Collapse the SVG (`height: 0; overflow: hidden`) rather than `display: none`, so its text can still be measured. Each beat shows the sections it is about (a `SHOW` list per beat), and spoken answers appear word by word on the same clock. PS's stage carries the reading names, both maps as link chips (dashed grey, solid grey, red, struck), both papers, each student's order, both answers and the "What they learned" note. Keep the comparison's anchor in view throughout (FS: a "Both handed in this paper" tile), put people side by side as on desktop, and make the final frame, check and controls fit an 844 px screen.
 - **Legibility rule** (FC). Picture text carries `data-fs` (its size in viewBox units). `MotionFigures.legibility()` hides any text that would render under 11 px and adds `.is-narrow` to the figure. The beat list then shows each beat's "On screen" line, and the caption band carries the words at full size. Shapes and motion stay.
 - **Real words when the words are the point** (FS). FC draws writing as bars. When the failure lives in the wording (fluency), set the real sentences: Serif 20 while they're read, no smaller than 12.4 units once settled, with fixed line breaks if two copies must match line for line.
 
@@ -73,6 +73,7 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 ## Final frame, text equivalent, page
 
 - **The final frame is the reduced-motion view, the print view and the poster.** The poster is the shot area (stage plus caption band). Design it first.
+- **Say what a person did, not only what they marked** (FS). A struck AI sentence alone reads as the person's writing; a red label ("Cut one sentence from the AI's draft:") says it was a cut.
 - **A comparison can end as a table** (FS). Rows are steps (their own work, what faculty receive, each question); columns are people, each headed by their red dot and name. Each item appears large first, then settles into its cell, so the final frame reads top to bottom on its own.
 - **Order as a sequence label** (PS). When the difference between two people is the order they worked in, each row carries a compact mono sequence ("READ → AI CONNECTS → WRITES", "READ → TRIES → AI CHECKS → WRITES"), AI steps in grey and the person's decisive step in red, so the final frame carries the cause as well as the test.
 - **Hide empty boxes on narrow screens** (PS). A speech panel or note hides with its words when the legibility rule hides them, so phones show no empty boxes.
@@ -104,7 +105,8 @@ Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward comp
   - `pathAt(segs, start)` for a mark's piecewise path;
   - `legibility(root, svg, viewWidth, minPx)`.
 - **Behaviour:**
-  - The figure plays once at 60% visibility; `data-mf-autoplay="off"` disables this.
+  - The figure plays once when 50% of its shot (`[data-mf-shot]`: stage plus caption band) is in view (PS; it was 60% of the whole figure, and a long beat list kept that from ever happening on phones or at 1280×720). A v0 figure without a shot still keys on its root at 60%. `data-mf-autoplay="off"` disables autoplay.
+  - On the scrubber, arrow keys move 1 s and Shift+arrow 5 s (PS; the 0.05 s step stays for dragging). Home, End, PageUp and PageDown keep the browser's behaviour.
   - Reduced motion (`prefers-reduced-motion` or `?reduced`) shows the final frame, and beat clicks jump between settled stills.
   - `?t=12.5` holds a moment.
   - Printing draws the final frame.

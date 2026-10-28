@@ -16,24 +16,32 @@
 @media (max-width: 480px) {
 	/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
 	#fluency-substitution .mf-stage { height: 0; overflow: hidden; }
-	#fluency-substitution .fs-narrow { display: block; min-height: 320px; padding: 14px 14px 12px; background: var(--paper); }
+	#fluency-substitution .fs-narrow { display: block; min-height: 300px; padding: 12px 12px 8px; background: var(--paper); }
+	/* The final frame, check and controls fit an 844 px phone screen. */
+	#fluency-substitution .mf-check-q, #fluency-substitution .mf-follow.is-equal { font-size: 20px; }
 }
-.fs-n-sec { margin: 0 0 14px; }
+.fs-n-sec { margin: 0 0 10px; }
 .fs-n-sec[hidden] { display: none; }
 .fs-n-label { margin: 0 0 6px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
 .fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
 .fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
+.fs-n-sm { font-size: 13px; line-height: 1.55; }
+.fs-n-tile { padding: 6px 8px; border: 1px solid var(--navy-border); }
+.fs-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fs-n-cell { min-width: 0; }
+.fs-n-act { margin: 0 0 3px; font: 600 12px/1.3 var(--sans); color: var(--red); }
 .fs-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .fs-n-band[hidden] { display: none; }
 .fs-n-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
 .fs-n-small { margin: 6px 0 0; font: 500 13px/1.35 var(--sans); color: var(--muted); }
 .fs-n-item { margin: 0 0 8px; }
-.fs-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.fs-n-who { display: block; margin: 0 0 3px; font: 600 12px/1.2 var(--sans); color: var(--red); }
 .fs-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
-.fs-n-note { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 16px/1.4 var(--serif); color: var(--red); }
-.fs-n-q { margin: 0 0 8px; font: italic 400 16px/1.35 var(--serif); color: var(--ink); }
-.fs-n-say { margin: 0 0 8px; padding: 8px 10px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
-.fs-n-txt { font: 400 16px/1.45 var(--serif); padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-note { margin: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--red); }
+.fs-n-q { margin: 0 0 6px; font: italic 400 15px/1.35 var(--serif); color: var(--ink); }
+.fs-n-say { min-width: 0; padding: 5px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.fs-n-txt { font: 400 14px/1.4 var(--serif); }
+.fs-n-seg { padding: 1px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
 .fs-n-key-ai { color: var(--stone); }
 .fs-n-key-ai::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: 6px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; vertical-align: -1px; }
@@ -50,7 +58,7 @@
 <main class="fig-page">
 	<p class="fig-kicker">Failure mode 2 of 7</p>
 	<h1>Fluency substitution</h1>
-	<p class="fig-setup">A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment, and it can be identical to a paper from a student who made the call first. <em>The Irreducible Officer</em> calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.</p>
+	<p class="fig-setup">A student asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose a second student, who made the call first, hands in the very same paper. <em>The Irreducible Officer</em> calls the risk fluency substitution: polished analysis stands in for owned reasoning. The figure shows that risk; it isn't what happens to every student who agrees with an AI. It runs about a minute and a half; pause it or step through the beats below. The task, the paper and all the answers are a constructed example.</p>
 
 	<figure class="mf" id="fluency-substitution" aria-labelledby="fs-title">
 		<p class="sr-only" id="fs-title">Fluency substitution, an animated figure in ten beats</p>
@@ -68,7 +76,7 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:28</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. That draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student repeats the paper's call, word for word. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure that builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, "Send them. The ally's trust matters most, and troops show we mean it.", then has an AI draft from it. Suppose that draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student tries, and stays with the paper's call in its own words: on balance, losing that trust is still the greater risk, so the forces should go. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>

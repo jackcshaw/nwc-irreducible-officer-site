@@ -69,13 +69,13 @@
 	const HOME_A = {x: 312, y: 258}, HOME_B = {x: 312, y: 444};
 	const X_AT = {x: 636, y: 180};
 	// Papers, in sheet-local units, placed by a transform.
-	const P = {w: 276, h: 172, padX: 16, title: [28, 52], barH: 4.5, tagX: 262};
-	const PAR_Y = [[66, 74, 82], [100, 108, 116], [128, 136, 144]];
-	const TAG_Y = [70, 104, 132];
-	const QUAL_Y = 90;
+	const P = {w: 276, h: 164, padX: 16, title: [28, 52], barH: 4.5, tagX: 262};
+	const PAR_Y = [[64, 72, 80], [92, 100, 108], [120, 128, 136]];
+	const TAG_Y = [68, 96, 124];
 	const TAGS = ['2 · 5', '3 · 4 · 5', '1 · 4 · 6'];
 	const TAG_LINES = [['2-5'], ['3-4', '3-5'], ['1-4', '4-6']];
-	const WIDTHS = {a: [[156, 168, 104], [156, 160, 88], [156, 170, 126]], b: [[150, 176, null], [156, 144, 118], [148, 176, 96]]};
+	// Same argument, own words: the same rows, different line lengths.
+	const WIDTHS = {a: [[156, 168, 104], [156, 160, 88], [156, 170, 126]], b: [[150, 176, 120], [156, 144, 118], [148, 176, 96]]};
 	const PAPER_AT = {a: {x: 24, y: 176}, b: {x: 24, y: 362}};
 	const ASIDE = {a: {x: 24, y: 24, r: -2}, b: {x: 196, y: 24, r: 1.5}, s: 0.56};
 	// Faculty side.
@@ -177,13 +177,8 @@
 			return w == null ? null : {w, node: el(g, 'rect', {x: P.padX, y, width: 0, height: P.barH, rx: 1, fill: C.ink, 'fill-opacity': 0.82})};
 		}));
 		const tags = TAGS.map((s, i) => mono(g, P.tagX, TAG_Y[i], s, {weight: 500, ls: 0, anchor: 'end', opacity: 0}));
-		let qual = null;
-		if (which === 'b') {
-			const c = clipRect(g, {x: P.padX - 2, y: QUAL_Y - 13, height: 18});
-			qual = {...c, n: serif(c.g, P.padX, QUAL_Y, 'unless another supplier steps in.', {fs: 14, style: 'italic'}), w: 0};
-		}
-		const aiNote = mono(g, P.padX, 162, 'AI HELPED CONNECT THE READINGS', {fill: C.grey, ls: 0.4, opacity: 0});
-		return {g, shadow, title, bars, tags, qual, aiNote};
+		const aiNote = mono(g, P.padX, 154, 'AI HELPED CONNECT THE READINGS', {fill: C.grey, ls: 0.4, opacity: 0});
+		return {g, shadow, title, bars, tags, aiNote};
 	};
 	const papers = {a: paper('a'), b: paper('b')};
 	const paperLabel = {
@@ -272,7 +267,6 @@
 		noteClips.forEach((c) => { c.w = c.n.getComputedTextLength(); set(c.rect, {x: X_AT.x - c.w / 2 - 3}); });
 		for (const p of Object.values(papers)) {
 			p.title.forEach((tl) => { tl.w = tl.n.getComputedTextLength(); });
-			if (p.qual) p.qual.w = p.qual.n.getComputedTextLength();
 		}
 		panels.forEach((p) => p.lines.forEach((l) => { l.w = l.n.getComputedTextLength(); }));
 		head2X = 24 + head1.getComputedTextLength() + 10;
@@ -301,7 +295,7 @@
 				a += d;
 			});
 			paraSpans.forEach((span, pi) => {
-				const items = p.bars[pi].map((b, bi) => (b ? {x0: P.padX, x1: P.padX + b.w, y: PAR_Y[pi][bi] + 2} : {x0: P.padX, x1: P.padX + p.qual.w, y: QUAL_Y - 5}));
+				const items = p.bars[pi].map((b, bi) => ({x0: P.padX, x1: P.padX + b.w, y: PAR_Y[pi][bi] + 2}));
 				const dur = (span[1] - span[0]) * 0.86;
 				const lens = items.map((it) => it.x1 - it.x0), L = lens.reduce((s, v) => s + v, 0);
 				let b = span[0];
@@ -485,21 +479,19 @@
 			reveal(p.title, t, ...titleSpan, 6);
 			const titleVisible = 19 * s * pxPerUnit >= 11;
 			p.title.forEach((tl) => set(tl.n, {visibility: titleVisible ? 'visible' : 'hidden'}));
-			const small = 1 - asideK; // tags, qualifier and AI note leave as the paper shrinks
+			const small = 1 - asideK; // tags and AI note leave as the paper shrinks
 			paraSpans.forEach((span, pi) => {
 				const items = p.bars[pi];
 				const dur = (span[1] - span[0]) * 0.86;
-				const lens = items.map((b) => (b ? b.w : p.qual.w)), L = lens.reduce((a, v) => a + v, 0);
+				const lens = items.map((b) => b.w), L = lens.reduce((a, v) => a + v, 0);
 				let a = span[0];
 				items.forEach((b, bi) => {
 					const d = dur * (lens[bi] / L);
-					if (b) set(b.node, {width: b.w * prog(t, a, a + d)});
-					else set(p.qual.rect, {width: (p.qual.w + 6) * prog(t, a, a + d)});
+					set(b.node, {width: b.w * prog(t, a, a + d)});
 					a += d;
 				});
 				set(p.tags[pi], {opacity: prog(t, span[0] + dur, span[1] + 0.05) * small});
 			});
-			if (p.qual) set(p.qual.n, {opacity: small});
 			set(p.aiNote, {opacity: prog(t, ...aiSpan) * small});
 		};
 		writePaper('a', T.sheetA, T.titleA, [0, 1, 2].map((i) => [T.parasA + T.para * i, T.parasA + T.para * (i + 1)]), T.aiNoteA);
@@ -558,7 +550,135 @@
 			const g = spring(t, T.rows[0], {stiffness: 300, damping: 20});
 			set(d, {cx: p.x, cy: p.y, r: Math.max(0, 5 * g)});
 		});
+		renderNarrow(t);
 	};
+
+	// ---- the narrow stage (below 480 px) ---------------------------------------------
+	// A stacked text view of the same moments, driven by the same clock, at 13–16 px.
+	// The SVG is collapsed at this width (see index.html).
+	const narrow = root.querySelector('[data-ps-narrow]');
+	const h = (tag, cls, parent, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; parent.append(n); return n; };
+	const N = {};
+	const section = (k, label) => { const sec = h('div', 'ps-n-sec', narrow); if (label) h('p', 'ps-n-label', sec, label); N[k] = {sec}; return sec; };
+	const chip = (parent, txt, cls) => h('span', `ps-n-chip ${cls}`, parent, txt);
+	const LINK = (k) => k.replace('-', '–');
+	{
+		const sec = section('task', 'Example task');
+		h('p', 'ps-n-task', sec, 'Using the six readings, explain when a blockade works.');
+	}
+	{
+		const sec = section('readings', 'Six readings');
+		const grid = h('div', 'ps-n-cards', sec);
+		N.readings.cards = IDS.map((id) => { const c = h('span', 'ps-n-card', grid); h('b', null, c, id); c.append(' ' + CARDS[id].title); return c; });
+	}
+	{
+		const sec = section('mapA', "First student: the AI's map");
+		const row = h('div', 'ps-n-links', sec);
+		N.mapA.chips = linesA.map((l) => chip(row, LINK(l.k), 'is-ai'));
+		N.mapA.main = h('p', 'ps-n-small', sec, 'The paper’s main claim rests on 2–5.');
+	}
+	const paperBlock = (parent, who) => {
+		const box = h('div', 'ps-n-paper', parent);
+		h('span', 'ps-n-who', box, who);
+		h('p', 'ps-n-ptitle', box, 'Blockades work once supplies run out.');
+		h('p', 'ps-n-tags', box, 'Cites 2 · 5 (main claim), 3 · 4 · 5, 1 · 4 · 6');
+		h('p', 'ps-n-ai', box, 'AI helped connect the readings');
+		return box;
+	};
+	{
+		const sec = section('paperA', null);
+		N.paperA.box = paperBlock(sec, 'First student’s paper');
+	}
+	{
+		const sec = section('mapB', 'Second student: own connections first');
+		const row = h('div', 'ps-n-links', sec);
+		N.mapB.chips = redB.map((l) => chip(row, LINK(l.k), 'is-own'));
+		N.mapB.try = chip(row, '1–2', 'is-own is-try');
+		N.mapB.note = h('p', 'ps-n-note', sec, 'In Reading 1, the country found another supplier.');
+		const ai = h('div', 'ps-n-links', sec);
+		N.mapB.aiLabel = h('span', 'ps-n-inline', ai, 'AI’s map: the same five lines.');
+		N.mapB.c34 = chip(ai, '3–4', 'is-ai');
+		N.mapB.match = h('p', 'ps-n-small', sec, 'Four match their own. Nothing at 1–2. They check 3–4, then keep it.');
+	}
+	{
+		const sec = section('papers', 'What faculty receive · same argument, own words');
+		const pair = h('div', 'ps-n-pair', sec);
+		N.papers.a = paperBlock(pair, 'First student');
+		N.papers.b = paperBlock(pair, 'Second student');
+	}
+	{
+		const sec = section('aside', null);
+		h('p', 'ps-n-small', sec, 'Papers set aside: same argument, own words. Both say AI helped.');
+	}
+	{
+		const sec = section('rows', 'Faculty ask, papers aside: Sketch how the readings connect.');
+		const row = (who, parts) => {
+			const r = h('div', 'ps-n-row', sec);
+			h('span', 'ps-n-who', r, who);
+			const o = h('p', 'ps-n-order', r);
+			parts.forEach(([txt, cls]) => h('span', cls, o, txt));
+			const sk = h('p', 'ps-n-sketch', r, 'Sketch: 1–4 · 4–6 · 3–4 · 3–5 · 2–5');
+			return {r, sk};
+		};
+		N.rows.a = row('First student', [['Read → ', null], ['AI connects', 'is-ai'], [' → writes', null]]);
+		N.rows.b = row('Second student', [['Read → ', null], ['tries', 'is-own'], [' → ', null], ['AI checks', 'is-ai'], [' → writes', null]]);
+	}
+	{
+		const sec = section('q2', 'Then they ask, pointing to 2–5');
+		h('p', 'ps-n-q', sec, 'What evidence would change this connection?');
+		const say = (who) => { const b = h('div', 'ps-n-say', sec); h('span', 'ps-n-who', b, who); return h('span', 'ps-n-txt', b, ''); };
+		N.q2.a = say('First student');
+		N.q2.b = say('Second student');
+		const l = h('div', 'ps-n-learned', sec);
+		h('span', 'ps-n-llabel', l, 'What they learned');
+		h('p', 'ps-n-lnote', l, '✕ In Reading 1, the country found another supplier.');
+		N.q2.learned = l;
+	}
+	const ANS = [PANEL.rows[0].lines.join(' '), PANEL.rows[1].lines.join(' ')];
+	const words = (str, k) => { const w = str.split(' '); return w.slice(0, Math.ceil(w.length * k)).join(' '); };
+	const SHOW = [['task', 'readings'], ['readings', 'mapA'], ['mapA', 'paperA'], ['readings', 'mapB'], ['mapB'], ['papers'], ['aside', 'rows'], ['rows', 'q2'], ['q2'], ['aside', 'rows', 'q2']];
+	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
+	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
+	function renderNarrow(t) {
+		if (!narrow) return;
+		const show = new Set(SHOW[beatIndex(t)]);
+		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k);
+		fade(N.task.sec, prog(t, ...T.card));
+		const studentB = t >= T.fadeA[1];
+		N.readings.cards.forEach((c, i) => {
+			const id = IDS[i], a = T.cardsIn + T.cardStep * i;
+			fade(c, prog(t, a, a + 0.3));
+			c.classList.toggle('is-read', openAmount(t, studentB ? T.readB : T.readA, id, studentB ? null : T.fadeA) > 0.5);
+		});
+		N.mapA.chips.forEach((c, i) => {
+			fade(c, prog(t, ...T.sweepA));
+			c.classList.toggle('is-taken', t >= T.traceA + T.trace * (i + 1));
+			c.classList.toggle('is-main', linesA[i].k === '2-5' && t >= T.heavyA[0]);
+		});
+		fade(N.mapA.main, prog(t, ...T.heavyA));
+		fade(N.paperA.box, prog(t, ...T.sheetA));
+		N.mapB.chips.forEach((c, i) => fade(c, prog(t, T.redB + T.redStep * i, T.redB + T.redStep * (i + 1))));
+		fade(N.mapB.try, prog(t, ...T.try12));
+		N.mapB.try.classList.toggle('is-struck', t >= T.x[0]);
+		fade(N.mapB.note, prog(t, ...T.note));
+		fade(N.mapB.aiLabel, prog(t, ...T.sweepB));
+		fade(N.mapB.c34, prog(t, ...T.sweepB));
+		N.mapB.c34.classList.toggle('is-own', t >= T.red34[0]);
+		N.mapB.c34.classList.toggle('is-ai', t < T.red34[0]);
+		fade(N.mapB.match, prog(t, ...T.merge));
+		fade(N.papers.a, 1);
+		fade(N.papers.b, prog(t, ...T.sheetB));
+		fade(N.rows.sec, prog(t, ...T.rows));
+		fade(N.rows.a.sk, prog(t, T.sketchA, T.sketchA + 1.4));
+		fade(N.rows.b.sk, prog(t, T.sketchB, T.sketchB + 1.4));
+		fade(N.q2.sec, prog(t, ...T.q2));
+		const ka = prog(t, T.ansA[0] + 0.15, T.ansA[1]), kb = prog(t, T.ansB[0] + 0.15, T.ansB[1]);
+		N.q2.a.textContent = words(ANS[0], ka);
+		N.q2.b.textContent = words(ANS[1], kb);
+		N.q2.a.parentNode.hidden = ka <= 0;
+		N.q2.b.parentNode.hidden = kb <= 0;
+		fade(N.q2.learned, prog(t, ...T.learned));
+	}
 
 	const BEATS = [
 		{at: 0, text: 'A student must connect six readings in a seminar paper.',
@@ -572,7 +692,7 @@
 		{at: 36.4, text: 'That student then asks an AI too and checks its map against their own.',
 			detail: 'the dot pulses. The AI\'s map appears in grey dashes, the same five lines it drew for the first student. Four lie on the red lines and merge into them. The cross brightens: no line appears there. The fifth line, 3 to 4, is new: the dot checks cards 3 and 4, and the line turns red.'},
 		{at: 45.7, text: 'That student writes their own paper. Both make the same argument.',
-			detail: 'the dot writes a second paper under the first, labelled "Second student\'s paper", with the same title, citations and grey note, lines of different lengths, and one line in its first paragraph: "unless another supplier steps in." The cards, lines and note leave. "What faculty receive. Same argument, own words." appears above the two papers.'},
+			detail: 'the dot writes a second paper under the first, labelled "Second student\'s paper", with the same title, citations and grey note, and lines of different lengths. The cards, lines and note leave. "What faculty receive. Same argument, own words." appears above the two papers.'},
 		{at: 53.0, text: 'Without the papers, both students sketch the same connections.',
 			detail: 'the papers shrink and slide up into a strip at the top left, next to "Both say AI helped". "Faculty ask, papers aside: Sketch how the readings connect." appears. Each row is labelled: "First student: read, AI connects, writes" and "Second student: read, tries, AI checks, writes". Each student draws six numbered points joined by the same five lines, in the same ink.'},
 		{at: 60.9, text: 'Faculty ask about the main connection. The first student recalls Reading 1 but can\'t apply it.',
@@ -588,6 +708,11 @@
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
+		// At narrow widths the text stage replaces the picture, so the beat list shows its "On screen" lines.
+		const narrowQuery = matchMedia('(max-width: 480px)');
+		const syncNarrow = () => { if (narrowQuery.matches) root.classList.add('is-narrow'); };
+		narrowQuery.addEventListener('change', syncNarrow);
+		syncNarrow();
 		const syncScale = () => { const w = svg.getBoundingClientRect().width; if (w) pxPerUnit = w / VW; };
 		new ResizeObserver(syncScale).observe(svg);
 		syncScale();

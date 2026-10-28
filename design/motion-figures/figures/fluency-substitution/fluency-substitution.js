@@ -1,5 +1,5 @@
 /* Fluency substitution: motion figure 2 of 8. Built to storyboard.md (round 3,
-   revised after figure cold read 1).
+   revised after figure cold reads 1 and 2).
    Grey is what the AI wrote, red is a student's own work, navy is ink.
    The picture builds toward a table: a label column on the left, one column
    per student, and four rows (their own work, what faculty receive, the first
@@ -18,11 +18,11 @@
 		card: [1.0, 1.6], dotIn: 1.6,
 		pulseA: [7.0, 7.4], sheetA: [7.4, 7.9], composeA: 8.0, line: 0.4, keyGrey: [8.0, 8.4],
 		enterA: [15.7, 16.1], readA: 16.1, read: 0.6,
-		strike: [19.8, 20.6], keyRed: [20.0, 20.4], lift: [20.8, 21.5], tagA: [21.6, 22.0],
+		strike: [19.8, 20.6], keyRed: [20.0, 20.4], lift: [20.8, 21.5], cutLabel: [21.5, 21.9], tagA: [21.6, 22.0],
 		cellA: [24.5, 25.7], dotB: 25.8, noteIn: [26.3, 26.7], toNote: [26.8, 27.2], write: [27.3, 29.3], backB: [29.4, 29.8],
-		noteUp: [33.0, 33.8], rowOwn: [33.6, 34.0], pulseB: [34.1, 34.4], sheetB: [34.4, 34.8], composeB: 34.9,
+		noteUp: [33.0, 33.8], pulseB: [34.1, 34.4], sheetB: [34.4, 34.8], composeB: 34.9,
 		toLineB: [37.0, 37.4], readB: 37.4, sweep: [40.5, 41.3], tagB: [41.4, 41.8],
-		cellB: [44.4, 45.6], rowRecv: [45.7, 46.2],
+		cellB: [44.4, 45.6], rowRecv: [45.7, 46.2], rowOwn: [45.7, 46.2],
 		dim: [50.4, 51.0], q1: [51.2, 51.8], a1: [54.3, 55.6], b1: [55.8, 57.1],
 		q2: [64.9, 65.5],
 		a2: [71.4, 72.7], b2: [72.9, 74.2], reveal: [75.4, 76.2], bright: [75.4, 76.0], unbright: [78.0, 78.5],
@@ -52,14 +52,15 @@
 	const PB = {big: {x: 552, y: 212}, cell: {x: COL.b, y: 212}};
 	const NOTE = {big: {x: COL.b, y: 212}, cell: {x: COL.b, y: 112}, w: 338, h: 118, s: 0.62, fs: 20, x: 16, base: [38, 66, 94]};
 	const NOTE_LINES = ["Send them. The ally's trust", 'matters most, and troops', 'show we mean it.'];
-	const CUT_CARD = {x: COL.a, y: 132, fs: 15};
+	const CUT_CARD = {x: COL.a, y: 140, fs: 15};
 	const ROWS = {q1: {top: 350}, q2: {top: 428}};
 	const PANEL = {h: 58, fs: 15, padX: 14, base: [24, 44]};
+	// Answer lines as segments: 'ai' marks the AI's words, 'own' the student's own.
 	const ANSWERS = {
-		a1: {col: 'a', row: 'q1', grey: true, lines: ['“On balance, losing that trust is the', 'greater risk: the forces should go.”']},
-		b1: {col: 'b', row: 'q1', grey: false, lines: ["“Send them. The ally's trust matters most,", 'and troops show we mean it.”']},
-		a2: {col: 'a', row: 'q2', grey: true, lines: ['“On balance, losing that trust is the', 'greater risk: the forces should go.”']},
-		b2: {col: 'b', row: 'q2', grey: false, lines: ["“Then troops would cost the ally's trust.", "I'd send arms and aid instead.”"]},
+		a1: {col: 'a', row: 'q1', lines: [[['\u201COn balance, losing that trust is the', 'ai']], [['greater risk: the forces should go.\u201D', 'ai']]]},
+		b1: {col: 'b', row: 'q1', lines: [[["\u201CSend them. The ally's trust matters most,", 'own']], [['and troops show we mean it.\u201D', 'own']]]},
+		a2: {col: 'a', row: 'q2', lines: [[['\u201COn balance, losing that trust is', 'ai'], [' ', null], ['still', 'own'], [' ', null], ['the', 'ai']], [['greater risk. The forces should go.\u201D', 'ai']]]},
+		b2: {col: 'b', row: 'q2', lines: [[["\u201CThen troops would cost the ally's trust.", 'own']], [["I'd send arms and aid instead.\u201D", 'own']]]},
 	};
 	const HEAD_Y = 88;
 	const DOT_A = {start: {x: 120, y: 300}, head: {x: COL.a + 8, y: HEAD_Y}};
@@ -153,6 +154,8 @@
 	const cutBand = el(cutCard, 'rect', {x: 6, y: 9, height: 22, rx: 2, fill: C.band});
 	const cutText = serif(cutCard, 10, 25, 'Either choice carries real consequences.', {fs: CUT_CARD.fs, fill: C.grey});
 	const cutStrike = el(cutCard, 'line', {y1: 20, y2: 20, x1: 8, stroke: C.red, 'stroke-width': 2.2});
+	// Says plainly what the first student did: the struck words are the AI's.
+	const cutLabel = text(stage, COL.a + 6, 132, "Cut one sentence from the AI's draft:", {fs: 13, weight: 600, fill: C.red});
 
 	// The second student's note.
 	const note = el(stage, 'g');
@@ -168,13 +171,18 @@
 		const g = el(stage, 'g');
 		const box = el(g, 'rect', {x, y, width: COL.w, height: PANEL.h, rx: 8, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.25, 'stroke-width': 1});
 		const clip = clipGroup(g, a.lines.map((_, i) => ({x, y: y + PANEL.base[i] - 15, height: 20})));
-		const lines = a.lines.map((s, i) => {
-			// Ink first, as faculty hear it; the origin colour comes back at the reveal (beat 9).
-			const band = a.grey ? el(clip.g, 'rect', {x: x + PANEL.padX - 3, y: y + PANEL.base[i] - 13.5, height: 19, rx: 2, fill: C.band, opacity: 0}) : null;
-			const node = serif(clip.g, x + PANEL.padX, y + PANEL.base[i], s, {fs: PANEL.fs, fill: C.ink});
-			return {band, node};
+		const bandLayer = el(clip.g, 'g');
+		// Ink first, as faculty hear it; the origin colours come back at the reveal (beat 9).
+		const lines = a.lines.map((segs, i) => {
+			const node = serif(clip.g, x + PANEL.padX, y + PANEL.base[i], '', {fs: PANEL.fs, fill: C.ink});
+			const parts = segs.map(([str, k]) => {
+				const ts = el(node, 'tspan', {}, str);
+				const band = k === 'ai' ? el(bandLayer, 'rect', {y: y + PANEL.base[i] - 13.5, height: 19, rx: 2, fill: C.band, opacity: 0}) : null;
+				return {str, k, ts, band};
+			});
+			return {node, parts, full: segs.map(([str]) => str).join('')};
 		});
-		panels[id] = {g, box, clip, lines, x, w: [], grey: a.grey};
+		panels[id] = {g, box, clip, lines, x, w: []};
 	}
 
 	// Dots and their labels.
@@ -237,7 +245,15 @@
 		noteClip.rects.forEach((r) => set(r, {x: NOTE.x - 4}));
 		for (const p of Object.values(panels)) {
 			p.w = p.lines.map((l) => l.node.getComputedTextLength());
-			p.lines.forEach((l, i) => { if (l.band) set(l.band, {width: p.w[i] + 6}); });
+			p.lines.forEach((l) => {
+				let idx = 0;
+				l.parts.forEach((pt) => {
+					const off = idx ? l.node.getSubStringLength(0, idx) : 0;
+					const w = l.node.getSubStringLength(idx, pt.str.length);
+					idx += pt.str.length;
+					if (pt.band) set(pt.band, {x: p.x + PANEL.padX + off - 3, width: w + 6});
+				});
+			});
 			p.clip.rects.forEach((r) => set(r, {x: p.x + PANEL.padX - 4}));
 		}
 
@@ -256,6 +272,10 @@
 		segA.push([T.strike[0], split, world(PA.big, BIG, c5.x, sy5), world(PA.big, BIG, c5.x + c5.w, sy5)]);
 		segA.push([split, T.strike[1], world(PA.big, BIG, c6.x, sy6), world(PA.big, BIG, c6.x + c6.w, sy6)]);
 		const esc = paperA.segs.find((s) => s.li === 4 && s.k === 's2b');
+		// After the cut, the first paper's last line ends at "escalation."
+		paperA.sweepW = paperA.lineW.slice(0, 5);
+		paperA.sweepW[4] = esc.x + esc.w - P.padX;
+		paperB.sweepW = paperB.lineW.slice(0, 5);
 		const rest = world(PA.big, BIG, esc.x + esc.w + 8, baseY(4) + 6);
 		segA.push([T.lift[0], T.lift[1], world(PA.big, BIG, c6.x + c6.w, sy6), rest, E.inOut]);
 		segA.push([T.cellA[0], T.cellA[1], rest, DOT_A.head, E.inOutStrong]);
@@ -337,6 +357,7 @@
 		place(cutCard, lerpPos(from, {x: CUT_CARD.x, y: CUT_CARD.y}, lift), cardS);
 		// Half see-through mid-flight, so the lines it crosses stay readable.
 		set(cutCard, {opacity: t >= T.lift[0] ? 1 - 0.5 * Math.sin(Math.PI * lift) : 0});
+		set(cutLabel, {opacity: prog(t, ...T.cutLabel)});
 
 		// Tags.
 		// One label fades out before the next fades in, so they never overlap.
@@ -372,11 +393,11 @@
 		set(paperB.sheet, {height: sheetH(5)});
 		set(paperB.shadow, {height: sheetH(5)});
 		paperB.clip.rects.forEach((r, i) => set(r, {width: (paperB.lineW[i] + 10) * prog(t, T.composeB + T.line * i, T.composeB + T.line * (i + 1))}));
-		const sweepOut = 1 - prog(t, ...T.tagB);
+		const sweepOut = 1 - prog(t, T.cellB[0], T.cellB[0] + 0.4); // holds until the paper moves
 		const step = (T.sweep[1] - T.sweep[0]) / 5;
 		[paperA, paperB].forEach((p) => p.sweep.forEach((l, i) => {
 			const k = prog(t, T.sweep[0] + step * i, T.sweep[0] + step * (i + 1));
-			set(l, {x2: P.padX + p.lineW[i] * k, opacity: k > 0 ? sweepOut : 0});
+			set(l, {x2: P.padX + p.sweepW[i] * k, opacity: k > 0 ? sweepOut : 0});
 		}));
 		placeTag(tagB, posB);
 		swapTag(tagB, T.tagB, inB);
@@ -409,22 +430,27 @@
 			const span = T[id];
 			set(p.g, {opacity: prog(t, span[0], span[0] + 0.2)});
 			revealLines(p.clip.rects, p.w, t, span[0] + 0.1, span[1]);
-			p.lines.forEach((l) => {
-				set(l.node, {fill: mixColor(C.ink, p.grey ? C.grey : C.red, rv)});
-				if (l.band) set(l.band, {opacity: rv});
-			});
+			p.lines.forEach((l) => l.parts.forEach((pt) => {
+				if (!pt.k) return;
+				set(pt.ts, {fill: mixColor(C.ink, pt.k === 'ai' ? C.grey : C.red, rv)});
+				if (pt.band) set(pt.band, {opacity: rv});
+			}));
 		}
 		renderNarrow(t);
 	};
 
 	// ---- the narrow stage (below 480 px) ---------------------------------------------
 	// A stacked text view of the same moments, driven by the same clock: what the
-	// current beat is about, at readable sizes. The SVG is hidden at this width.
+	// current beat is about, at readable sizes. The SVG is collapsed at this width.
+	// From beat 6 on, one compact tile keeps the shared paper in view; answers sit
+	// in two columns, first student on the left, as on desktop.
 	const narrow = root.querySelector('[data-fs-narrow]');
 	const h = (tag, cls, parent, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; parent.append(n); return n; };
 	const PARA = "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation.";
 	const N = {};
 	const section = (key, label) => { const sec = h('div', 'fs-n-sec', narrow); const lab = label != null ? h('p', 'fs-n-label', sec, label) : null; N[key] = {sec, lab}; return sec; };
+	const pair = (parent) => h('div', 'fs-n-pair', parent);
+	const spans = (parent, segs) => segs.map(([str, k]) => ({k, node: h('span', k ? `fs-n-seg fs-n-${k}` : 'fs-n-seg', parent, str)}));
 	{
 		const sec = section('task', 'Example task');
 		h('p', 'fs-n-task', sec, 'Recommend whether to send forces to reassure a threatened ally.');
@@ -438,45 +464,49 @@
 	}
 	{
 		const sec = section('own', 'Their own work, not handed in');
-		const a = h('div', 'fs-n-item', sec);
+		const row = pair(sec);
+		const a = h('div', 'fs-n-cell', row);
 		h('span', 'fs-n-who', a, 'First student');
-		const cutP = h('p', 'fs-n-ai', a);
+		h('p', 'fs-n-act', a, "Cut one sentence from the AI's draft:");
+		const cutP = h('p', 'fs-n-ai fs-n-sm', a);
 		h('span', 'fs-n-band fs-n-struck', cutP, 'Either choice carries real consequences.');
-		const b = h('div', 'fs-n-item', sec);
+		const b = h('div', 'fs-n-cell', row);
 		h('span', 'fs-n-who', b, 'Second student');
-		N.own.a = a; N.own.b = b;
+		N.own.a = a;
 		N.own.note = h('p', 'fs-n-note', b, "Send them. The ally's trust matters most, and troops show we mean it.");
 	}
 	{
 		const sec = section('draftB', "Second student: AI's draft from the note");
 		const para = h('p', 'fs-n-ai', sec);
 		h('span', 'fs-n-band', para, PARA);
-		N.draftB.same = h('p', 'fs-n-small', sec, "Word for word the same as the first student's paper");
+		N.draftB.same = h('p', 'fs-n-small', sec, "Suppose it matches the first student's paper word for word.");
 	}
 	{
-		const sec = section('recv', 'What faculty receive');
-		h('p', 'fs-n-small', sec, 'Two identical papers, both drafted with AI:');
-		const para = h('p', 'fs-n-ai', sec);
+		const sec = section('paper', 'Both handed in this paper');
+		const para = h('p', 'fs-n-ai fs-n-sm fs-n-tile', sec);
 		h('span', 'fs-n-band', para, PARA);
 	}
-	const say = (parent, who, str, grey) => {
+	const say = (parent, who, segs) => {
 		const box = h('div', 'fs-n-say', parent);
 		h('span', 'fs-n-who', box, who);
-		const txt = h('span', 'fs-n-txt', box, str);
-		return {box, txt, grey};
+		const txt = h('span', 'fs-n-txt', box);
+		return {box, parts: spans(txt, segs)};
 	};
-	const A1 = '“On balance, losing that trust is the greater risk: the forces should go.”';
+	const A1 = [['“On balance, losing that trust is the greater risk: the forces should go.”', 'ai']];
+	const A2 = [['“On balance, losing that trust is', 'ai'], [' ', null], ['still', 'own'], [' ', null], ['the greater risk. The forces should go.”', 'ai']];
 	{
 		const sec = section('q1', 'Faculty ask');
 		h('p', 'fs-n-q', sec, 'Papers aside: what do you recommend, and why?');
-		N.q1.a = say(sec, 'First student', A1, true);
-		N.q1.b = say(sec, 'Second student', "“Send them. The ally's trust matters most, and troops show we mean it.”", false);
+		const row = pair(sec);
+		N.q1.a = say(row, 'First student', A1);
+		N.q1.b = say(row, 'Second student', [["“Send them. The ally's trust matters most, and troops show we mean it.”", 'own']]);
 	}
 	{
 		const sec = section('q2', 'Then one fact changes');
 		h('p', 'fs-n-q', sec, "What if the ally doesn't want our troops on its soil?");
-		N.q2.a = say(sec, 'First student', A1, true);
-		N.q2.b = say(sec, 'Second student', "“Then troops would cost the ally's trust. I'd send arms and aid instead.”", false);
+		const row = pair(sec);
+		N.q2.a = say(row, 'First student', A2);
+		N.q2.b = say(row, 'Second student', [["“Then troops would cost the ally's trust. I'd send arms and aid instead.”", 'own']]);
 	}
 	{
 		const sec = section('key', null);
@@ -484,7 +514,7 @@
 		N.key.grey = h('span', 'fs-n-key-ai', sec, 'Written by AI');
 		N.key.red = h('span', 'fs-n-key-own', sec, "A student's own work");
 	}
-	const SHOW = [['task'], ['task', 'draftA'], ['draftA'], ['own'], ['own', 'draftB'], ['own', 'recv'], ['q1'], ['q1', 'q2'], ['q1', 'q2'], ['own', 'q1', 'q2']];
+	const SHOW = [['task'], ['task', 'draftA'], ['draftA'], ['own'], ['own', 'draftB'], ['own', 'paper'], ['paper', 'q1'], ['paper', 'q1', 'q2'], ['paper', 'q1', 'q2'], ['paper', 'q1', 'q2']];
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
 	function renderNarrow(t) {
@@ -501,11 +531,14 @@
 		fade(N.draftB.same, prog(t, ...T.sweep));
 		const rv = prog(t, ...T.reveal, E.inOut);
 		for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
-			fade(N[q].sec, prog(t, ...T[q]));
+			fade(N[q].sec, q === 'q1' ? prog(t, ...T.q1) : prog(t, ...T.q2));
 			[N[q].a, N[q].b].forEach((sv, i) => {
 				fade(sv.box, prog(t, T[ids[i]][0], T[ids[i]][1]));
-				sv.txt.style.color = mixColor(C.ink, sv.grey ? C.grey : C.red, rv);
-				sv.txt.style.backgroundColor = sv.grey ? `rgba(222, 213, 196, ${rv.toFixed(3)})` : 'transparent';
+				sv.parts.forEach((pt) => {
+					if (!pt.k) return;
+					pt.node.style.color = mixColor(C.ink, pt.k === 'ai' ? C.grey : C.red, rv);
+					pt.node.style.backgroundColor = pt.k === 'ai' ? `rgba(222, 213, 196, ${rv.toFixed(3)})` : 'transparent';
+				});
 			});
 		}
 		fade(N.key.grey, prog(t, ...T.keyGrey));
@@ -521,19 +554,19 @@
 		{at: 6.0, text: 'The student asks an AI for a draft. It writes a polished recommendation.',
 			detail: 'the dot pulses. A sheet labelled "AI\'s draft" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band "Written by AI": "Any course must weigh escalation against the ally\'s trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."'},
 		{at: 14.7, text: 'The student reads closely, cuts a weak line, and agrees with the rest.',
-			detail: 'the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student\'s own work" in red. The struck sentence moves above the paper and stays there. The rest stays grey, and the label changes to "Student\'s paper, drafted with AI".'},
+			detail: 'the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student\'s own work" in red. The struck sentence moves above the paper, under a red label: "Cut one sentence from the AI\'s draft". The rest stays grey, and the label changes to "Student\'s paper, drafted with AI".'},
 		{at: 23.5, text: 'A second student writes their own call first, in plain words.',
 			detail: 'the first paper moves into a column headed First student. A second red dot heads a column labelled Second student and writes on a large note card in red: "Send them. The ally\'s trust matters most, and troops show we mean it."'},
-		{at: 32.0, text: "An AI drafts from the note. It matches the first student's paper word for word.",
-			detail: 'the note moves into a top row labelled "Their own work, not handed in", beside the first student\'s cut sentence. The dot pulses, and a sheet labelled "AI\'s draft" fills with the same grey paragraph as the first paper. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper.'},
+		{at: 32.0, text: "An AI drafts from the note. Suppose it matches the first paper word for word.",
+			detail: 'the note moves into the top row, beside the first student\'s cut sentence. The dot pulses, and a sheet labelled "AI\'s draft" fills with a grey paragraph. Suppose it is the same as the first paper, word for word. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper.'},
 		{at: 43.4, text: 'Faculty receive two identical papers, both drafted with AI.',
-			detail: 'the second paper moves into its column beside the first, in a row labelled "What faculty receive". Both are tagged "Student\'s paper, drafted with AI".'},
+			detail: 'the second paper moves into its column beside the first, in a row labelled "What faculty receive"; the top row is labelled "Their own work, not handed in". Both papers are tagged "Student\'s paper, drafted with AI".'},
 		{at: 49.4, text: 'Without the papers, both explain the call clearly.',
 			detail: 'both papers dim. A row labelled "Faculty ask: Papers aside: what do you recommend, and why?" fills. In plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go." The second student says, "Send them. The ally\'s trust matters most, and troops show we mean it."'},
 		{at: 63.9, text: 'Change one fact.',
 			detail: 'a new row appears: "Then one fact changes: What if the ally doesn\'t want our troops on its soil?"'},
-		{at: 70.4, text: 'One student repeats the paper. The other reworks the call from their reason.',
-			detail: 'in plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go.", the same words as before. The second student says, "Then troops would cost the ally\'s trust. I\'d send arms and aid instead." Then the answers take their colours: the first student\'s answers turn grey on a beige band, the mark for words the AI wrote, and those words are underlined on their paper. The second student\'s answers turn red, their own words.'},
+		{at: 70.4, text: "One student stays with the paper's call. The other reworks it from their reason.",
+			detail: 'in plain ink, the first student says, "On balance, losing that trust is still the greater risk. The forces should go." The second student says, "Then troops would cost the ally\'s trust. I\'d send arms and aid instead." Then the answers take their colours: the first student\'s words turn grey on a beige band, the mark for words the AI wrote, except "still", which turns red; the paper\'s matching words are underlined. The second student\'s answers turn red, their own words.'},
 		{at: 81.4, text: 'Faculty check: Can the student independently explain the judgment in plain speech?',
 			list: 'Faculty check: Can the student independently explain the judgment in plain speech? Then change one fact. What would you recommend now?',
 			detail: 'both lines appear under the picture at the same size. The whole table stays in view.',
