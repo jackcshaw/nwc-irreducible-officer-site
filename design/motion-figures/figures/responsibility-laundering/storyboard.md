@@ -1,16 +1,16 @@
 # Responsibility laundering: storyboard
 
-Motion figure 7 of 8 · slug `responsibility-laundering` · storyboard round 4, revised after storyboard cold read 2 (passed with fixes) · October 28, 2026
+Motion figure 7 of 8 · slug `responsibility-laundering` · storyboard round 5, revised after figure cold read 1 · October 28, 2026
 
-Starting point: `concepts-v0/proposal.md` §2.7, "Who signs" (8.5 s, not built). This version keeps v0's mechanism: the red dot splits as agency spreads into the AI's wording, and when the recommendation proves wrong a navy weight comes down and the pieces snap back into one dot on the signature line. It applies the lessons of figures 1–5. As a stated supposition, two students give an AI the same prompt and get the same draft. Both read it equally closely and sign it as written, so faculty receive identical papers. The one difference is a habit: before signing, the second student notes what the AI's estimate rests on, in a note they don't hand in. Faculty name one way the call could go wrong, ask who made it, then ask why each student relied on the estimate. Only the second can say. The split dot pictures the first student's answer; a red bracket marks the second student's answer. A weight labelled "ANSWERABLE" rests on both. The shared runtime and `CONVENTIONS.md` apply throughout.
+Starting point: `concepts-v0/proposal.md` §2.7, "Who signs" (8.5 s, not built). This version keeps v0's mechanism: the red dot splits as agency spreads into the AI's wording, and when the recommendation proves wrong a navy weight comes down and the pieces snap back into one dot on the signature line. It applies the lessons of figures 1–5. As a stated supposition, two students give an AI the same prompt and get the same draft. Both read it equally closely and sign it as written, so faculty receive identical papers. The one difference is a habit: before signing, the second student notes what the AI's estimate rests on, in a note they don't hand in. Faculty name one way the call could go wrong, ask who made it, then ask why each student relied on the estimate. Only the second can say. While faculty ask, a frame marks what faculty see and the note row dims. Then part of the first student's dot splits off beside the AI's phrase their answers lean on, and stays; a red bracket marks the second student's answer. A weight labelled "ANSWERABLE" rests on both. The shared runtime and `CONVENTIONS.md` apply throughout.
 
 ## 1. Intent
 
 *The cold-read tester does not see this section.*
 
-**The point.** Two students can sign the same AI-drafted recommendation. If it proves wrong, both answer for it; the AI can't. Only one may be able to account for it. Accounting for it means saying why you relied on the AI: what its estimate assumed (an open port), and why you accepted that (the harbor reports looked normal). That answer is hard to give without having asked before signing, and the second student's note shows they did. A student who didn't ask can still sincerely say "I signed it", and then lean on the AI's wording: "The analysis estimated the ships could do it." "It was the AI's estimate. It seemed solid." The paper can't show the difference. Faculty find it by naming one way the recommendation could prove wrong and asking why the student relied on it.
+**The point.** Two students can sign the same AI-drafted recommendation. If it proves wrong, both answer for it; the AI can't. Only one may be able to account for it. Accounting for it means saying why you relied on the AI: what its estimate assumed (an open port), why you accepted that (today's harbor reports looked normal), and the check you should have made, right or wrong. That answer is hard to give without having asked before signing, and the second student's note shows they did. A student who didn't ask can still sincerely say "I signed it", and then lean on the AI's wording: "The analysis estimated the ships could do it." "It was the AI's estimate. It seemed solid." The paper can't show the difference. Faculty find it by naming one way the recommendation could prove wrong and asking why the student relied on it.
 
-**What a first-time educator should be able to say afterwards.** "Suppose two students gave an AI the same prompt and got the same draft: the analysis estimates ships can carry everyone out, and it is recommended that civilians wait for ships. Both read it closely and agreed. The first signed. The second first noted what the estimate rested on, an open port, and that the harbor reports looked normal, then signed. That note wasn't handed in, so faculty got two identical papers. They asked: suppose the port closes, who made the call to wait? The first said, 'I signed it. The analysis estimated the ships could do it.' The second said, 'I did. I chose to rely on the estimate.' Then: why did you rely on it? The first said, 'It was the AI's estimate. It seemed solid.' The second said it assumed an open port, the harbor reports looked normal so they accepted it, and they didn't check for closures. If it proves wrong, the AI can't answer for it and both students will, but only the second can say why they relied on it. So I'd ask who owns the recommendation if it proves wrong: name one way it could go wrong, and ask why they relied on it."
+**What a first-time educator should be able to say afterwards.** "Suppose two students gave an AI the same prompt and got the same draft: the analysis estimates ships can carry everyone out, and it is recommended that civilians wait for ships. Both read it closely and agreed. The first signed. The second first noted what the estimate rested on, an open port, and that the harbor reports looked normal, then signed. That note wasn't handed in, so faculty got two identical papers. They asked: suppose the port closes, who made the call to wait? The first said, 'I signed it. The analysis estimated the ships could do it.' The second said, 'I did. I chose to rely on the estimate.' Then: why did you rely on it? The first said, 'It was the AI's estimate. It seemed solid.' The second said it assumed an open port, today's harbor reports looked normal so they accepted it, and they should have checked for closures. If it proves wrong, the AI can't answer for it and both students will. Only the second can account for the call, gap included; being able to say what it rested on, right or wrong, is different from having been right. So I'd ask who owns the recommendation if it proves wrong: name one way it could go wrong, and ask why they relied on it."
 
 **Faculty check** (verbatim from the site's Core Failure Modes table): *Who owns the recommendation if it proves wrong?* The final frame adds, directly under it and at the same size, the move the figure makes: *Name one way it could prove wrong. Ask why they relied on it.*
 
@@ -47,13 +47,22 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 4. *Using AI is the failure.* Both sign the same AI draft, both papers say "Drafted with AI", and the second student says they chose to rely on its estimate.
 5. *The AI's analysis was wrong.* Nothing goes wrong in the figure. Faculty's question begins "Suppose", and so does the caption that brings the weights.
 6. *The first student was careless or evasive.* They read every line at the same pace as the second student and agree. Their answers are true and use the draft's own words.
-7. *The second student is the careful one, so this is about checking.* Their check was partial: they didn't check for closures, and they say so. The page links to uncalibrated reliance for whether the reliance was justified.
+7. *The second student is just as negligent, so why are they the model?* Their answer is a reasoned decision plus a named gap: "Today's harbor reports looked normal, so I accepted it. I should have checked for closures." Beat 7's caption says the second student "accounts for the call, right or wrong", and the page says accounting for a call means saying what it rested on, right or wrong. Whether the reliance was justified is uncalibrated reliance's check, linked on the page.
 8. *The signature is the evidence.* Both sign. The weight rests on both. Only the answers separate them (the lab's review note).
 9. *The weight is blame.* It is labelled "ANSWERABLE", the essay's word, and rests on both students equally to the end.
 10. *An AI can share the responsibility.* Beat 8: each weight passes the AI's sentences without stopping. On the first copy it picks up the half dot from beside "The analysis estimates" and carries it back to the student.
 11. *Faculty knew what would go wrong.* They name one plausible way, the port closing, and ask both students the same two questions.
 12. *The check alone separates them.* It doesn't: both would say they own it. The line under it, "Ask why they relied on it", is the question that did. Flagged for Jack.
 13. *This is about legal liability.* The figure and page say only who answers for the recommendation.
+
+**Changes after figure cold read 1** (`tests/figure-read-1.md` and the orchestrator's notes):
+- *What faculty see is shown.* While faculty ask (beats 5–6), the note row dims to 20% under "FACULTY DON'T SEE THIS", and a navy frame labelled "WHAT FACULTY SEE" goes round the two copies. Beat 7 removes the frame and brings the note back, since by then it explains the second answer. Beat 5's caption is now "Faculty ask who made the call."; the frame says the rest.
+- *Being able to account for a call isn't the same as being right.* The second answer is a reasoned decision plus the gap: "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures." The note reads "Today's harbor reports: normal." so it no longer sounds like a closure check. Beat 7's caption is "The first leans on the AI. The second accounts for the call, right or wrong."
+- *The split carries its meaning and stays.* "The analysis" is outlined in navy in the first student's answer 1 and on their copy. Then a red dot of radius 7.5 (16 px at desktop) splits off the first student's dot and settles beside "The analysis estimates". The weight passes it and rests on the student's own dot, so the split stays in the final frame. At 390 px the split-off dot is 11 px and stays too.
+- *At 390 px the motion is there too.* The "Answerable" chips fall from the top row, past the AI's sentences, to the signature row. A reading marker steps down each card in beat 3. "What faculty see" and "Faculty don't see this" appear over the stacked stage while faculty ask.
+- *CONSISTENCY.md.* The poster is beat 1 settled (task and people, before the AI acts). The copies' tags name things ("FIRST STUDENT'S COPY · DRAFTED WITH AI"); people are named in red (dot labels and speech panels). The task text is Serif 16. The key swatch is 18 × 12 and the key dot radius 5. Page links follow book, Practice, essay, then the two related figures, and the lab is linked.
+- *Smaller.* The "THEIR OWN NOTE · NOT HANDED IN" label appears as the second student's dot moves up, before the note is written. The second answer's panel row has room for three lines. Beat 2 holds 0.3 s longer to stay within the reading budget.
+- *Total:* 93.1 s in 9 beats (round 4: 89.9 s). The two rounds of answers, the "what faculty see" frame and the turn's linking outlines account for the extra time.
 
 **Changes after storyboard cold read 2** (`tests/storyboard-read-2.md` and the orchestrator's notes):
 - *The bracket belongs to what the student says.* It marks the second student's answer to "Why did you rely on the estimate?" in their speech panel. Nothing red or first-person sits on or under a handed-in paper.
@@ -99,12 +108,13 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 - *Showing the port actually close.* It would make the AI wrong and the figure about error.
 - *Asking the check verbatim on stage.* "Who owns the recommendation?" invites "I do" from both.
 
-**Running time.** 89.9 s in 9 beats (frame capture 85.6 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 94.7 s, invisible delegation 96.1 s).
+**Running time.** 93.1 s in 9 beats (frame capture 86.2 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 90.6 s, invisible delegation 101.6 s, institutional monoculture 90.5 s). Over the 90 s guide by 3 s, for the two rounds of answers and the frame that shows what faculty see.
 
 **Book link target.** `../../book-v0/four-moves-book.html?spread=5` (Move 4, Own the decision) until `book-v1/` exists.
 
 **Conventions this figure would add** (to `CONVENTIONS.md` after the build):
-- *A person's part split by what they say.* After an answer that leans a call on the AI, the person's dot splits in two (radius 3.5 each): one half stays put, the other moves to sit just beside the AI phrase the answer leans on. No underline. The halves rejoin when the call comes back to the person.
+- *A person's part split by what they say.* After an answer that leans a call on the AI, a red dot of radius 7.5 (16 px at desktop) splits off the person's dot and settles just left of the AI phrase the answer leans on, after navy outlines link that phrase in the answer and on the paper. No underline. It stays to the final frame; the weight passes it.
+- *What faculty see.* While faculty ask, a navy frame labelled "WHAT FACULTY SEE" goes round the products, and any row of the person's own working dims to 20% under "FACULTY DON'T SEE THIS". Both go when the viewer's view returns.
 - *A red bracket beside a spoken answer* marks the answer that accounts for a decision. It sits in the speech panel, never on a product.
 - *The weight.* A navy block labelled "ANSWERABLE" that falls down a paper's margin and rests on the dot at the signature line, the dot holding it up. It rests on everyone who signs, so it marks who answers for a recommendation, not who failed. It always arrives with "Suppose".
 - *Nothing red or first-person on or under a handed-in product.* A person's own working sits in a separate row labelled "not handed in" (extends FS's row); red underlines read as a teacher's corrections.
@@ -114,14 +124,14 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 
 **Open questions for Jack.**
 - **The check's wording.** Asked "Who owns the recommendation if it proves wrong?", both students would say "I do", and the first already says "I signed it". The question that separates them is the one under it: "Ask why they relied on it." Should the site's check carry that, for example "Who owns the recommendation if it proves wrong, and why did they rely on it?"
-- **The second student admits they didn't check for closures.** It keeps the figure about accounting for reliance rather than checking, and it shows that owning a call includes owning its gaps. It may read as a weakness in the model student.
+- **The second student names the check they should have made.** "I should have checked for closures" keeps the figure about accounting for reliance, and beat 7's caption says "right or wrong". It may still read as a weakness in the model student.
 - **"ANSWERABLE" on the weight** is the essay's word. The weight could still read as a burden dropped on the students; it rests on both.
 - **The stakes.** An evacuation of civilians, chosen because "proves wrong" is easy to picture.
 - **The chapter mapping** (Own the decision, shared with fluency substitution) is the book proposal's, and still provisional.
 
 ## 2. Scenario
 
-Two war-college students must recommend when to evacuate civilians from a port city. Suppose both give an AI the same prompt and get the same draft: "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Both read it closely and agree. The first signs it. The second first writes a note they won't hand in: the estimate rests on an open port, and the harbor reports look normal. Then they sign. Faculty receive two identical papers, both drafted with AI. They ask each student, "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then they ask, "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures." If the recommendation proves wrong, the AI can't answer for it, and both students will.
+Two war-college students must recommend when to evacuate civilians from a port city. Suppose both give an AI the same prompt and get the same draft: "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Both read it closely and agree. The first signs it. The second first writes a note they won't hand in: the estimate rests on an open port, and today's harbor reports look normal. Then they sign. Faculty receive two identical papers, both drafted with AI. They ask each student, "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then they ask, "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures." If the recommendation proves wrong, the AI can't answer for it, and both students will.
 
 *Sources.* The task, the draft, the papers, the note and all four answers are constructed for this figure, and the task card says "Example task". *The Irreducible Officer*, Section II, defines responsibility laundering and names "assumptions no one examined". Section VII says AI "cannot own what follows", describes conviction-shaped output (Andres, 2026), uses "answerable", and asks students to say "why they accepted an output". The figure shows no numbers.
 
@@ -129,10 +139,10 @@ Two war-college students must recommend when to evacuate civilians from a port c
 
 **The colour rule.**
 - *Grey* is what the AI supplied: the draft's sentences on their band and "DRAFTED WITH AI".
-- *Red* is what a student decided, plus the dots and their name labels: the signatures, the second student's note, the half of the first student's dot, and the bracket beside the second student's answer.
-- *Navy ink* is the page: the task, labels, the weights, the key's text, faculty's questions and all four spoken answers.
+- *Red* is what a student decided, plus the dots and their name labels: the signatures, the second student's note, the dot that splits off the first student's, and the bracket beside the second student's answer.
+- *Navy ink* is the page: the task, labels, the weights, the "what faculty see" frame and its tags, the outlines on "The analysis", the key's text, faculty's questions and all four spoken answers.
 
-**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-supplied text, red `#b81b2b`. Type: Source Serif 4 for the papers, the note, speech and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (12 units, never smaller).
+**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-supplied text, red `#b81b2b`. Type: Source Serif 4 for the papers, the note, speech and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (13 units).
 
 **Stage.** An SVG with a 960 × 540 viewBox. No camera moves.
 - *Top:* the task card, a one-line strip at top left, throughout.
@@ -148,18 +158,20 @@ Two war-college students must recommend when to evacuate civilians from a port c
 
 | Element | Stands for | How it looks | Where |
 | --- | --- | --- | --- |
-| Task card | The assignment | Paper-bright strip, hairline ink border (15%): mono 13 "EXAMPLE TASK", then Serif 15 ink "Recommend when to evacuate a port city." on the same line, the strip sized to its text. Stays throughout | From x 24, y 16–52 |
+| Task card | The assignment | Paper-bright strip, hairline ink border (15%): mono 13 "EXAMPLE TASK", then Serif 16 ink "Recommend when to evacuate a port city." on the same line, the strip sized to its text. Stays throughout | From x 24, y 16–52 |
 | Red dots | The two students | Solid red circles, radius 5, with Sans 600 13 red labels "First student" and "Second student". The labels fade when the dots move onto the copies; the tags name the students from then on | Beats 1–2 at (60, 392) and (528, 392), labels to their right |
 | The draft | What the AI wrote | Paper-bright sheet, hairline ink border, soft shadow. Grey Serif on a grey band, two rows, and an empty signature line | Phase 1, centre |
-| The copies | What each student signs, and what faculty receive | The draft divides into two identical sheets that slide and shrink into the columns. Tags above them, mono 12: navy "FIRST STUDENT" / "SECOND STUDENT" with grey "· DRAFTED WITH AI". Identical to the end | Phase 2; tags at baseline 138 |
+| The copies | What each student signs, and what faculty receive | The draft divides into two identical sheets that slide and shrink into the columns. Tags above them, mono 13: navy "FIRST STUDENT'S COPY" / "SECOND STUDENT'S COPY" with grey "· DRAFTED WITH AI". Identical to the end | Phase 2; tags at baseline 138 |
 | Signature | A student puts their name to it | A red squiggle the dot draws along the signature line, about 120 units long; the dot then rests at the line's left end | Sheet x 86–206, above y 166 |
-| Note row | Each student's own working, not handed in | Mono 12 ink label "THEIR OWN NOTE · NOT HANDED IN" at the row's left. First student's cell: a faint ink "—". Second student's cell: their note, red Serif italic 15 on two lines, "Rests on an open port." / "Harbor reports: normal." Stays to the end | Label baseline (24, 74); cells y 80–122, with a hairline across both columns at y 126; "—" at (40, 104); note from x 508, baselines 98 and 116 |
-| Half dot | The part of the call the first student's answers lean on the AI | The first student's dot splits into two red dots, radius 3.5. One stays on the signature line. The other moves up the margin and sits just left of "The analysis estimates" (sheet x 66, y 35). No underline | First copy |
-| Faculty's questions | What faculty ask | Serif italic 17 ink, centred, numbered: "1 · Suppose the port closes. Who made the call to wait?" (beat 5), then under it "2 · Why did you rely on the estimate?" (beat 6) | Centred on x 480; baselines 350 and 370 |
-| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), a short tail up from its top-left corner toward the copy above. The student's name first, red Sans 600 13 ("First student", "Second student"; ID's convention), then Serif 15 ink in quotation marks, in numbered rows ("1 ·", "2 ·") that match the questions, each row two lines high so the rows line up across the panels. Two-line answers are balanced so no word sits alone. Words at about 3 a second. Both stay to the end | First x 24–468, second x 492–936; y 388–502 |
+| Note row | Each student's own working, not handed in | Mono 12 ink label "THEIR OWN NOTE · NOT HANDED IN" at the row's left. First student's cell: a faint ink "—". Second student's cell: their note, red Serif italic 15 on two lines, "Rests on an open port." / "Today's harbor reports: normal." Stays to the end, dimmed to 20% while faculty ask | Label baseline (24, 74); cells y 80–122, with a hairline across both columns at y 126; "—" at (40, 104); note from x 508, baselines 98 and 116 |
+| Split-off dot | The part of the call the first student's answers lean on the AI | A red dot, radius 7.5 with a 1.5 paper-bright edge, splits off the first student's dot, moves up the margin and settles just left of "The analysis estimates" (sheet x 58, y 34). It stays to the end. The student's own dot stays on the signature line at radius 5. No underline | First copy |
+| Outlines | The phrase the first student's answers lean on | Navy rounded outlines (1.5) round "The analysis" in the first student's answer 1 and on their copy, drawn together | First speech panel, row 1; first copy, row 1 |
+| What faculty see | Faculty have only the papers | While faculty ask: a navy frame (1.5, rounded 6) drawn round both copies, with mono 13 "WHAT FACULTY SEE" on its lower-right edge, and mono 13 "FACULTY DON'T SEE THIS" at the right of the note row, which dims to 20%. All go at the start of beat 7 | Frame x 14–946, y 124–336; label right edge (930, 340); tag right edge (936, 74) |
+| Faculty's questions | What faculty ask | Serif italic 17 ink, centred, numbered: "1 · Suppose the port closes. Who made the call to wait?" (beat 5), then under it "2 · Why did you rely on the estimate?" (beat 6) | Centred on x 480; baselines 352 and 372 |
+| Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%), a short tail up from its top-left corner toward the copy above. The student's name first, red Sans 600 13 ("First student", "Second student"; ID's convention), then Serif 15 ink in quotation marks, in numbered rows ("1 ·", "2 ·") that match the questions, row 1 two lines high and row 2 three, so the rows line up across the panels. Lines are balanced so no word sits alone. Words at about 3 a second. Both stay to the end | First x 24–468, second x 492–936; y 388–510; name baseline 404; rows at 422/440 and 462/480/498 |
 | Bracket | The answer that accounts for the reliance | A red square bracket drawn down the left edge of the second student's row 2, inside their speech panel. The words stay ink | Second panel, row 2 |
 | The weight | Being answerable for the decision, if it proves wrong | A navy block 96 × 34, its top 4 units narrower on each side (a weight's shape), overhanging the copy's left edge, with paper-coloured mono 13 "ANSWERABLE". Hangs at the top of a copy's margin, falls down it, rests on the dot. One per copy | Sheet x −22 to 74; hangs y −6 to 28, rests y 122–156 |
-| Key | How to read the marks | Mono 12: a grey band swatch and grey "WRITTEN BY AI" (beat 2); a red dot and red "A STUDENT'S DECISION" (beat 4) | Baseline 524, from x 24 |
+| Key | How to read the marks | Mono 13: an 18 × 12 grey band swatch and grey "WRITTEN BY AI" (beat 2); a red dot (radius 5) and red "A STUDENT'S DECISION" (beat 4) | Baseline 530, from x 24 |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 9") and the caption in Serif 22 ink. In beat 9, mono 13 ink "FACULTY CHECK" over the check in Serif italic 30, then directly under it at the same size and style, the move line. Fixed height on desktop, sized for both lines | Under the stage |
 | Beat list | Text equivalent and navigation | Nine numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
 
@@ -173,15 +185,17 @@ Two war-college students must recommend when to evacuate civilians from a port c
 | Question | First student | Second student |
 | --- | --- | --- |
 | 1 · "Suppose the port closes. Who made the call to wait?" | "I signed it. The analysis estimated the ships could do it." | "I did. I chose to rely on the estimate." |
-| 2 · "Why did you rely on the estimate?" | "It was the AI's estimate. It seemed solid." | "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures." |
+| 2 · "Why did you rely on the estimate?" | "It was the AI's estimate. It seemed solid." | "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures." |
 
-**Narrow screens.** Mono 12 text would render under 11 px on any stage narrower than 880 px. Whenever the legibility check would hide a picture label, the SVG collapses (height 0, so its text can still be measured) and a stacked text stage, driven by the same clock, shows the current beat at 13–16 px:
+**Narrow screens.** Mono 13 text would render under 11 px on any stage drawn below a 0.846 scale (narrower than about 812 px). Whenever the legibility check would hide a picture label, the SVG collapses (height 0, so its text can still be measured) and a stacked text stage, driven by the same clock, shows the current beat at 13–16 px:
 - *Top:* the task, one line.
 - *Beat 2:* one full-width card for the draft, then two cards side by side, "First student" and "Second student", each with the same two sentences and a signature row.
 - *Beats 3–4:* the signature rows take the red squiggle and dot. From beat 4 a row above the cards, "Their own note, not handed in", shows "—" for the first student and the red note for the second, and stays.
 - *Beats 5–6:* the questions across the full width, then both students' numbered answers side by side under their cards.
-- *Beat 7:* on the first card the signature row's dot halves, and a small red dot appears before "The analysis estimates". A red bar runs down the left of the second student's answer 2.
-- *Beat 8:* a navy chip, "Answerable", drops onto each signature row, the first card's first; that card's row dot is whole again under its chip.
+- *Beat 3:* a small red reading marker steps down each card, row by row, at the same pace.
+- *Beats 5–6:* the note row dims under "Faculty don't see this", and a navy frame labelled "What faculty see" goes round the two cards.
+- *Beat 7:* the frame goes and the note returns. "The analysis" is outlined on the first card and in the first student's answer 1, and an 11 px red dot appears before "The analysis estimates", where it stays. A red bar runs down the left of the second student's answer 2.
+- *Beat 8:* a navy chip, "Answerable", falls on each card from the top row, past the AI's sentences, to the signature row, the first card's first.
 - *The key* sits under the cards.
 - *Heights:* the narrow stage is fixed at its tallest beat and the caption band at a fixed height, so the controls never move. The final frame, with the check and the controls, must fit an 844 px phone; the build checks it.
 
@@ -198,121 +212,125 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
   3. 2.4–6.4: hold.
 - **Caption:** "Two students get the same task."
 - **Notice:** two students, one task. The task asks when to evacuate, so someone has to make a call.
-- **Why:** the setup names the situation before anything goes wrong.
+- **Why:** the setup names the situation before anything goes wrong. This settled frame is the runtime poster.
 
-### Beat 2 · 6.4–18.1 s · Same prompt, same draft
+### Beat 2 · 6.4–18.4 s · Same prompt, same draft
 
 - **What moves:**
   1. 7.4–7.8: both dots pulse once, together. Both ask.
-  2. 7.8–8.3: a blank sheet fades in at centre, large (x 202–757, y 140–355).
+  2. 7.8–8.3: a blank sheet fades in at centre, large (x 202–757, y 140–370).
   3. 10.7–11.5: row 1 writes in, grey on its band: "The analysis estimates ships can / carry everyone out." With it (10.7–11.1) the key's grey half fades in under the stage: a band swatch and "WRITTEN BY AI".
   4. 12.9–13.7: row 2 writes in: "It is recommended that civilians / wait for ships."
   5. 13.9–14.2: an empty signature line draws across the bottom of the sheet.
   6. 14.5–15.7: the sheet divides into two identical copies, which slide and shrink into the left and right columns.
-  7. 15.8–16.2: the tags fade in above them: "FIRST STUDENT · DRAFTED WITH AI" and "SECOND STUDENT · DRAFTED WITH AI".
-  8. 16.2–18.1: hold.
+  7. 15.8–16.2: the tags fade in above them: "FIRST STUDENT'S COPY · DRAFTED WITH AI" and "SECOND STUDENT'S COPY · DRAFTED WITH AI".
+  8. 16.2–18.4: hold.
 - **Caption:** "Suppose both give an AI the same prompt and get the same draft."
 - **Notice:** one draft, two copies, both marked as drafted with AI. The draft states its call flatly and reads as settled. The estimate doesn't say what it rests on.
 - **Why:** the supposition rules out copying. The rows start 4.3 s in, once the caption can be read; the pulse and the blank sheet are the lead-in its first clause describes.
 
-### Beat 3 · 18.1–25.3 s · Both read it closely
+### Beat 3 · 18.4–25.6 s · Both read it closely
 
 - **What moves:**
-  1. 19.1–19.5: both dots move onto their copies, into the margin beside row 1. Their labels fade.
-  2. 19.5–23.8: both read along each line, just under the words, at the same moment: 1.0 s a line, with a 0.3 s pause between the two sentences.
-  3. 23.8–25.3: hold.
+  1. 19.4–19.8: both dots move onto their copies, under the first line. Their labels fade.
+  2. 19.8–24.1: both read along each line, just under the words, at the same moment: 1.0 s a line, with a 0.3 s pause between the two sentences.
+  3. 24.1–25.6: hold.
 - **Caption:** "Both students read it closely and agree."
 - **Notice:** the same reading, at the same pace, at the same time. Nothing on either page changes.
 - **Why:** both do the same work, so what follows can't be put down to care. The reading is the lead-in the caption's main clause describes, as in fluency substitution's beat 3.
 
-### Beat 4 · 25.3–37.3 s · The first signs; the second notes first
+### Beat 4 · 25.6–37.9 s · The first signs; the second notes first
 
 - **What moves:**
-  1. 26.3–26.7: the first student's dot moves down the margin to the signature line.
-  2. 26.7–27.5: it signs: a red squiggle. With it (26.9–27.3) the key's red half fades in: a red dot and "A STUDENT'S DECISION".
-  3. 30.0–30.4: the second student's dot moves up out of its copy into the space above it.
-  4. 30.4–32.4: it writes a red italic note there: "Rests on an open port." / "Harbor reports: normal."
-  5. 32.5–32.9: the row's label fades in at its left, "THEIR OWN NOTE · NOT HANDED IN", with a faint "—" in the first student's cell.
-  6. 32.9–34.6: hold, while the note is read.
-  7. 34.6–35.0: the dot moves back down to its signature line.
-  8. 35.0–35.8: it signs.
-  9. 35.8–37.3: hold. The note stays.
+  1. 26.6–27.0: the first student's dot moves down the margin to the signature line.
+  2. 27.0–27.8: it signs: a red squiggle. With it (27.2–27.6) the key's red half fades in: a red dot and "A STUDENT'S DECISION".
+  3. 30.3–30.7: the second student's dot moves up out of its copy into the space above it. The row's label fades in at its left, "THEIR OWN NOTE · NOT HANDED IN", with a faint "—" in the first student's cell and a hairline under the row.
+  4. 30.7–33.1: the dot writes a red italic note there: "Rests on an open port." / "Today's harbor reports: normal."
+  5. 33.1–35.2: hold, while the note is read.
+  6. 35.2–35.6: the dot moves back down to its signature line.
+  7. 35.6–36.4: it signs.
+  8. 36.4–37.9: hold. The note stays.
 - **Caption:** "The first student signs. The second notes what the estimate rests on, then signs."
-- **Notice:** the one difference, made before anyone asks anything. The second student names what the estimate assumes and what they know about it. Neither changes the paper. The note sits in its own row, outside what faculty receive, and stays there.
-- **Why:** the habit is stated and shown before the reveal, so the later answer can't look made up afterwards. The note holds 4.2 s (its reading time plus 1.5 s) before the dot moves on. The first signature is the lead-in "The first student signs" describes; the note starts 4.7 s in.
+- **Notice:** the one difference, made before anyone asks anything. The second student names what the estimate assumes and what today's reports say. Neither changes the paper. The note sits in its own row, outside what faculty receive, and stays there.
+- **Why:** the habit is stated and shown before the reveal, so the later answer can't look made up afterwards. The note holds 4.5 s from its first word (its reading time plus 1.5 s) before the dot moves on. The first signature is the lead-in "The first student signs" describes; the second student's move starts 4.7 s in.
 
-### Beat 5 · 37.3–51.4 s · Faculty ask who made the call
-
-- **What moves:**
-  1. 41.0–41.6: in the centre band, "1 · Suppose the port closes. Who made the call to wait?" fades in and rises 6 units.
-  2. 42.2–42.6: a speech panel opens under the first copy.
-  3. 42.6–46.3: the first student's words appear at about 3 a second: "1 · I signed it. The analysis estimated the ships could do it."
-  4. 46.5–46.9: a speech panel opens under the second copy.
-  5. 46.9–49.9: the second student's words appear at the same pace: "1 · I did. I chose to rely on the estimate."
-  6. 49.9–51.4: hold.
-- **Caption:** "Faculty see only the papers. They ask who made the call."
-- **Notice:** faculty name one way the call could go wrong. Both answers are honest and in the same ink. The first owns the signature and gives the call back to the draft's own words; the second owns the call.
-- **Why:** the essay's "easier to soften because the model's language distributes agency": the first answer repeats the analysis's voice. On its own, this is still mostly wording; beat 6 asks for substance. The question appears 3.7 s in, once the caption naming it can be read.
-
-### Beat 6 · 51.4–64.7 s · Then they ask why
+### Beat 5 · 37.9–52.2 s · Faculty ask who made the call
 
 - **What moves:**
-  1. 52.7–53.3: under question 1, "2 · Why did you rely on the estimate?" fades in.
-  2. 53.5–53.9: the first panel's second row opens.
-  3. 53.9–56.6: "2 · It was the AI's estimate. It seemed solid."
-  4. 56.8–57.2: the second panel's second row opens.
-  5. 57.2–63.2: "2 · It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures."
-  6. 63.2–64.7: hold.
+  1. 38.9–39.4: the note row dims to 20%, and "FACULTY DON'T SEE THIS" fades in at its right.
+  2. 39.5–40.1: a navy frame draws round both copies; "WHAT FACULTY SEE" fades in on its lower-right edge (39.9–40.3).
+  3. 40.5–41.1: in the centre band, "1 · Suppose the port closes. Who made the call to wait?" fades in and rises 6 units.
+  4. 42.3–42.7: a speech panel opens under the first copy, headed "First student".
+  5. 42.7–46.4: the first student's words appear at about 3 a second: "1 · I signed it. The analysis estimated the ships could do it."
+  6. 46.6–47.0: a speech panel opens under the second copy, headed "Second student".
+  7. 47.0–50.0: the second student's words appear at the same pace: "1 · I did. I chose to rely on the estimate."
+  8. 50.0–52.2: hold.
+- **Caption:** "Faculty ask who made the call."
+- **Notice:** faculty see the two identical copies, and the note is marked as something they don't see. They name one way the call could go wrong. Both answers are honest and in the same ink. The first owns the signature and gives the call back to the draft's own words; the second owns the call.
+- **Why:** the picture says what faculty can and can't see, so the caption doesn't have to. The first answer repeats the analysis's voice: "easier to soften because the model's language distributes agency." On its own this is still mostly wording; beat 6 asks for substance. The dim and the frame are the lead-in to faculty asking; the question appears 2.6 s in.
+
+### Beat 6 · 52.2–66.5 s · Then they ask why
+
+- **What moves:**
+  1. 53.5–54.1: under question 1, "2 · Why did you rely on the estimate?" fades in.
+  2. 54.3–54.7: the first panel's second row opens.
+  3. 54.7–57.4: "2 · It was the AI's estimate. It seemed solid."
+  4. 57.6–58.0: the second panel's second row opens.
+  5. 58.0–64.7: "2 · It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures."
+  6. 64.7–66.5: hold.
 - **Caption:** "Then they ask why."
-- **Notice:** the first student can say who wrote the estimate and how it felt. The second can say what it assumed, why they accepted that, and what they didn't check, which matches the note above their paper.
+- **Notice:** the first student can say who wrote the estimate and how it felt. The second says what it assumed, why they accepted that, and the check they should have made, which matches their note.
 - **Why:** this is the account Section VII asks for, "why they accepted an output", and the difference faculty can hear. It is also the essay's "easier to defend because the model generated it". The question appears 1.3 s in.
 
-### Beat 7 · 64.7–73.6 s · What each answer does with the call (the turn)
+### Beat 7 · 66.5–76.8 s · What each answer does with the call (the turn)
 
 - **What moves:**
-  1. 65.7–66.1: the first speech panel pulses once.
-  2. 68.7–69.9: the first student's dot, on its signature line, splits into two smaller red dots. One stays on the line. The other moves up the margin and stops just left of "The analysis estimates".
-  3. 70.1–70.5: the second speech panel pulses once.
-  4. 70.5–71.3: a red bracket draws down the left edge of the second student's answer 2, inside their panel.
-  5. 71.3–73.6: hold.
-- **Caption:** "The first leans on the AI. The second explains why they relied."
-- **Notice:** half the first student's part now sits by the AI's phrase, the one their answers point to. The second student is in one piece, and the bracket marks their answer, the spoken account. Nothing is added to either paper.
-- **Why:** this makes the mechanism visible: the draft's wording gives the first student somewhere to put half the call. The panel's pulse is the lead-in "The first" names; the split starts 4.0 s in. The beat holds 2.3 s.
+  1. 67.5–68.1: the frame and "FACULTY DON'T SEE THIS" fade; the note row returns to full strength.
+  2. 68.5–68.9: the first speech panel pulses once.
+  3. 71.5–72.0: navy outlines draw round "The analysis" in the first student's answer 1 and on their copy.
+  4. 72.2–73.4: a red dot splits off the first student's dot on the signature line, grows to radius 7.5, and moves up the margin to settle just left of "The analysis estimates". The student's own dot stays on the line.
+  5. 73.6–74.0: the second speech panel pulses once.
+  6. 74.0–74.8: a red bracket draws down the left of the second student's answer 2, inside their panel.
+  7. 74.8–76.8: hold.
+- **Caption:** "The first leans on the AI. The second accounts for the call, right or wrong."
+- **Notice:** the first student's answers lean on the AI's own phrase, and part of their dot now sits beside it. The second student's dot is whole, and the bracket marks their account: the assumption, the reason they accepted it, and the gap. Nothing is added to either paper.
+- **Why:** this makes the mechanism visible: the draft's wording gives the first student somewhere to put part of the call. "Right or wrong" separates accounting for a call from having made the right one. The restored view and the pulse are the lead-ins; the outlines start 5.0 s in.
 
-### Beat 8 · 73.6–82.7 s · Suppose it proves wrong
+### Beat 8 · 76.8–85.9 s · Suppose it proves wrong
 
 - **What moves:**
-  1. 74.6–75.0: a navy weight labelled "ANSWERABLE" fades in at the top of each copy's margin.
-  2. 77.9–79.3: the first student's weight falls down the margin. It drops onto the half dot beside "The analysis estimates", which catches on its lower edge, and carries it down past the AI's sentences.
-  3. 79.3–79.7: it comes to rest just above the signature line. The two halves join into one dot under it, holding it up. A 2-unit settle.
-  4. 79.9–80.9: the second student's weight falls down its margin, past the same sentences.
-  5. 80.9–81.2: it rests on the second student's dot.
-  6. 81.2–82.7: hold.
+  1. 77.8–78.2: a navy weight labelled "ANSWERABLE" fades in at the top of each copy's margin.
+  2. 81.1–82.5: the first student's weight falls down the margin, past the AI's sentences and past the split-off dot, which stays where it is.
+  3. 82.5–82.9: it comes to rest just above the signature line, on the first student's dot, which holds it up. A 2-unit settle.
+  4. 83.1–84.1: the second student's weight falls down its margin, past the same sentences.
+  5. 84.1–84.4: it rests on the second student's dot.
+  6. 84.4–85.9: hold.
 - **Caption:** "Suppose it proves wrong. The AI can't answer for it. Both students will."
-- **Notice:** neither weight stops at the AI's words. The half the first student leaned on the AI comes back to them. Both students end up holding the same weight. The papers are unchanged, and nothing has actually gone wrong.
+- **Notice:** neither weight stops at the AI's words or at the part the first student leaned on them. Both weights rest on the students. The papers are unchanged, and nothing has actually gone wrong.
 - **Why:** Section VII: "AI can compress the work before a decision. It cannot own what follows." Both are answerable; only the second gave an account. The hanging weights are the lead-in "Suppose it proves wrong" describes; the first fall starts 4.3 s in, and the second waits for the first to settle.
 
-### Beat 9 · 82.7–89.9 s · The faculty check
+### Beat 9 · 85.9–93.1 s · The faculty check
 
 - **What moves:**
-  1. 82.7–82.9: caption 8 fades out.
-  2. 82.9–83.5: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the check in large italic.
-  3. 85.6–86.1: directly under the check, at the same size: "Name one way it could prove wrong. Ask why they relied on it."
-  4. 86.1–89.9: hold. At 89.9 the player shows Replay and the figure rests on this frame.
+  1. 85.9–86.1: caption 8 fades out.
+  2. 86.1–86.7: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the check in large italic.
+  3. 88.8–89.3: directly under the check, at the same size: "Name one way it could prove wrong. Ask why they relied on it."
+  4. 89.3–93.1: hold. At 93.1 the player shows Replay and the figure rests on this frame.
 - **Caption:** "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
 - **Notice:** the picture answers the first line: both students, one weight each. The second line is what faculty did in beats 5 and 6, and the answers to it are what differ.
 - **Why:** the figure ends on the check and the move an educator can make. The move line appears 2.7 s after the check begins to rise, once the check can be read.
 
 ## 5. Final frame
 
-The still at 89.9 s. It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
+The still at 93.1 s. It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
 
 **Stage:**
 - **Top left:** the task card, "EXAMPLE TASK · Recommend when to evacuate a port city."
-- **Note row,** "THEIR OWN NOTE · NOT HANDED IN": "—" for the first student; for the second, in red, "Rests on an open port. Harbor reports: normal."
-- **Left copy,** "FIRST STUDENT · DRAFTED WITH AI", and **right copy,** "SECOND STUDENT · DRAFTED WITH AI": the same two grey sentences, "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Each has a red signature, and in the margin a red dot holding up a weight, "ANSWERABLE".
+- **Note row,** "THEIR OWN NOTE · NOT HANDED IN": "—" for the first student; for the second, in red, "Rests on an open port. Today's harbor reports: normal."
+- **Left copy,** "FIRST STUDENT'S COPY · DRAFTED WITH AI", and **right copy,** "SECOND STUDENT'S COPY · DRAFTED WITH AI": the same two grey sentences, "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Each has a red signature, and in the margin a red dot holding up a weight, "ANSWERABLE".
+- **On the left copy only:** "The analysis" outlined in navy, and the split-off red dot beside it.
 - **Centre band:** "1 · Suppose the port closes. Who made the call to wait?" / "2 · Why did you rely on the estimate?"
-- **Speech panels:** under the left copy, "1 · I signed it. The analysis estimated the ships could do it." / "2 · It was the AI's estimate. It seemed solid." Under the right, "1 · I did. I chose to rely on the estimate." / "2 · It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures.", with a red bracket down the left of answer 2.
+- **Speech panels:** under the left copy, red "First student", then "1 · I signed it. The analysis estimated the ships could do it." (with "The analysis" outlined) / "2 · It was the AI's estimate. It seemed solid." Under the right, red "Second student", then "1 · I did. I chose to rely on the estimate." / "2 · It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures.", with a red bracket down the left of answer 2.
 - **Key:** "WRITTEN BY AI", "A STUDENT'S DECISION".
 
 **Caption band:**
@@ -323,11 +341,11 @@ The still at 89.9 s. It is also the reduced-motion view, the print view and the 
 
 **In the reduced-motion and print views,** all nine captions and their "On screen" lines are readable below the controls. Clicking a beat shows its settled still.
 
-**At 390 px** the final frame is the stacked text stage: the task, the note row, the two identical copies side by side with a chip on each signature row, the two questions, both students' answers side by side with the bar beside the second student's answer 2, the key, then the check and the controls.
+**At 390 px** the final frame is the stacked text stage: the task, the students' red names, the note row, the two identical copies side by side with an "Answerable" chip on each signature row and the split-off dot before "The analysis" on the first, the two questions, both students' answers side by side with "The analysis" outlined in the first and a red bar beside the second student's answer 2, the key, then the check and the controls. It measures 838 px with the check and controls.
 
-**What the still says alone:** two students signed the same AI-drafted recommendation, and a weight marked "answerable" rests on each. Only the second made a note before signing, and it wasn't handed in. Asked who made the call and why they relied on the estimate, one leans on the AI and says it seemed solid; the other names the assumption, why they accepted it and what they didn't check. The lines under the picture say what to ask.
+**What the still says alone:** two students signed the same AI-drafted recommendation, and a weight marked "answerable" rests on each. The first student's answers lean on the AI's phrase "The analysis", and part of their dot sits beside it. Only the second made a note before signing, and their answer says what the call rested on, why they accepted it, and the check they should have made. The lines under the picture say what to ask.
 
-**Runtime poster** (shown while the figure waits to play): beat 2 settled (18.08 s), with the task, both students and their two copies of the draft.
+**Runtime poster** (shown while the figure waits to play): beat 1 settled (6.38 s), the task and the two students, before the AI acts.
 
 **Built** (October 28, 2026): `index.html` and `responsibility-laundering.js` on the shared runtime. Mono labels are 13 units, so the drawn stage survives the viewport fit at 1280 × 720 and switches to the stacked stage only below a 0.846 scale. The stacked stage measures 838 px with the check and controls at 390 px wide, the same in every beat.
 
@@ -341,24 +359,24 @@ The still at 89.9 s. It is also the reduced-motion view, the print view and the 
 
 Suppose two students give an AI the same prompt, get the same draft, and sign it as written. *The Irreducible Officer* calls the risk responsibility laundering: a recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The figure runs about a minute and a half. The task, the draft and both students are a constructed example.
 
-**Figure summary** (visually hidden, for screen readers): An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose both give an AI the same prompt and get the same draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Harbor reports: normal." Then they sign. Faculty, who see only the identical papers, ask each student: "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures." Then the first student's dot splits, and half of it moves beside "The analysis estimates". A red bracket marks the second student's answer about why they relied on the estimate. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences. The first collects the half dot and rests on the first student, whose halves rejoin; the second rests on the second student. The figure ends on the faculty check. Each beat is listed below with what is on screen.
+**Figure summary** (visually hidden, for screen readers): An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose both give an AI the same prompt and get the same draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Today's harbor reports: normal." Then they sign. While faculty ask, the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two identical copies. Faculty ask each student: "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures." Then the note returns. "The analysis" is outlined in the first student's answer and on their copy, and part of the first student's dot splits off and settles beside "The analysis estimates", where it stays. A red bracket marks the second student's answer about why they relied on the estimate. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences, and rest on each student's dot at the signature. The figure ends on the faculty check. Each beat is listed below with what is on screen.
 
 **Beat list (text equivalent):**
 
 1. **Two students get the same task.** *On screen:* a task card appears at the top left: "Example task: Recommend when to evacuate a port city." Two red dots appear, labelled First student and Second student.
-2. **Suppose both give an AI the same prompt and get the same draft.** *On screen:* both dots pulse. A sheet fills at the centre in grey on a beige band, and a key below names that band "Written by AI": "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." It divides into two identical copies, labelled "First student, drafted with AI" and "Second student, drafted with AI".
+2. **Suppose both give an AI the same prompt and get the same draft.** *On screen:* both dots pulse. A sheet fills at the centre in grey on a beige band, and a key below names that band "Written by AI": "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." It divides into two identical copies, labelled "First student's copy, drafted with AI" and "Second student's copy, drafted with AI".
 3. **Both students read it closely and agree.** *On screen:* both dots read along every line of their copies, at the same pace and at the same time. Nothing changes.
-4. **The first student signs. The second notes what the estimate rests on, then signs.** *On screen:* the first dot signs in red, and the key adds "A student's decision" in red. The second dot moves above its copy and writes a red note, "Rests on an open port. Harbor reports: normal.", in a row labelled "Their own note, not handed in"; the first student's cell shows a dash. Then the second dot signs. The note stays.
-5. **Faculty see only the papers. They ask who made the call.** *On screen:* "1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."
-6. **Then they ask why.** *On screen:* "2. Why did you rely on the estimate?" The first student says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures."
-7. **The first leans on the AI. The second explains why they relied.** *On screen:* the first student's dot splits in two; one half stays on the signature line and the other moves beside "The analysis estimates". A red bracket marks the second student's second answer.
-8. **Suppose it proves wrong. The AI can't answer for it. Both students will.** *On screen:* a navy weight labelled "Answerable" falls down the first paper's margin, collects the half dot and rests on the first student, whose dot is whole again. A second weight falls down the second paper's margin and rests on the second student.
-9. **Faculty check: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.** *On screen:* the questions appear under the picture at the same size. Both papers, the note, all four answers and both weights stay in view.
+4. **The first student signs. The second notes what the estimate rests on, then signs.** *On screen:* the first dot signs in red, and the key adds "A student's decision" in red. The second dot moves above its copy, into a row labelled "Their own note, not handed in", and writes a red note: "Rests on an open port. Today's harbor reports: normal." The first student's cell shows a dash. Then the second dot signs. The note stays.
+5. **Faculty ask who made the call.** *On screen:* the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."
+6. **Then they ask why.** *On screen:* "2. Why did you rely on the estimate?" The first student says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures."
+7. **The first leans on the AI. The second accounts for the call, right or wrong.** *On screen:* the frame goes and the note returns. "The analysis" is outlined in the first student's answer and on their copy, and part of the first student's dot splits off and settles beside "The analysis estimates", where it stays. A red bracket marks the second student's second answer.
+8. **Suppose it proves wrong. The AI can't answer for it. Both students will.** *On screen:* a navy weight labelled "Answerable" falls down the first paper's margin, past the AI's sentences and the split-off dot, and rests on the first student's dot at the signature. A second weight falls down the second paper's margin and rests on the second student.
+9. **Faculty check: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.** *On screen:* the questions appear under the picture at the same size. Both papers, the note, all four answers, the split-off dot and both weights stay in view.
 
 **Faculty check:** Who owns the recommendation if it proves wrong?
 **Name one way it could prove wrong. Ask why they relied on it.** (same size)
 
-Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and what they didn't check. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's failure-mode lab makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by uncalibrated reliance.
+Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and the check they should have made. Accounting for a call means saying what it rested on, right or wrong. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's failure-mode lab (linked to Practice) makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by uncalibrated reliance.
 
 **From the essay** (*The Irreducible Officer*, Section II, What the Problem Looks Like):
 
@@ -370,13 +388,13 @@ And from Section VII, Accountability Is Structural:
 >
 > First-person ownership matters in the classroom. The student should be able to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. Students are practicing the accountability structure their professional roles will require.
 
-**Links:**
+**Links** (book, Practice, essay, then related figures):
 - Book chapter: Own the decision → `../../book-v0/four-moves-book.html?spread=5`
-- In the same chapter: Fluency substitution → `../fluency-substitution/`
-- Was the reliance justified? Uncalibrated reliance → `../uncalibrated-reliance/`
 - Practice: test responsibility laundering with your AI assistant → `https://judgmentlab.net/#companion`
 - Essay: Section II, What the Problem Looks Like → `https://judgmentlab.net/#ii-what-the-problem-looks-like`
 - Essay: Section VII, Accountability Is Structural → `https://judgmentlab.net/#vii-accountability-is-structural`
+- In the same chapter: Fluency substitution → `../fluency-substitution/`
+- Was the reliance justified? Uncalibrated reliance → `../uncalibrated-reliance/`
 
 ## 7. Pacing table
 
@@ -385,24 +403,24 @@ Reading time is caption words ÷ 3. Picture words are new words inside the pictu
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Picture words | Budget (words/s) | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 · The task | 0.0–6.4 | 6 | 2.0 | 4.0 | 13 | 3.0 | 1.0 | 1.4 | 4.0 | 6.4 |
-| 2 · Same prompt, same draft | 6.4–18.1 | 13 | 4.3 | 8.7 | 22 | 3.0 | 1.0 | 8.8 | 1.9 | 11.7 |
-| 3 · Both read it closely | 18.1–25.3 | 7 | 2.3 | 4.7 | 0 | 1.0 | 1.0 | 4.7 | 1.5 | 7.2 |
-| 4 · The first signs; the second notes first | 25.3–37.3 | 14 | 4.7 | 9.3 | 17 | 2.6 | 1.0 | 9.5 | 1.5 | 12.0 |
-| 5 · Who made the call | 37.3–51.4 | 11 | 3.7 | 7.3 | 30 | 2.9 | 1.0 | 11.6 | 1.5 | 14.1 |
-| 6 · Then they ask why | 51.4–64.7 | 4 | 1.3 | 2.7 | 32 | 2.7 | 1.0 | 10.8 | 1.5 | 13.3 |
-| 7 · What each answer does | 64.7–73.6 | 12 | 4.0 | 8.0 | 0 | 1.3 | 1.0 | 5.6 | 2.3 | 8.9 |
-| 8 · Suppose it proves wrong | 73.6–82.7 | 13 | 4.3 | 8.7 | 1 | 1.5 | 1.0 | 6.6 | 1.5 | 9.1 |
-| 9 · Faculty check | 82.7–89.9 | 8 + 12 second line | 2.7 + 4.0 | 5.3 (check) | 0 | 2.8 | 0.0 | 3.4 | 3.8 | 7.2, then rests |
-| **Total** | | **100** | **33.3** | | **115** | | **8.0** | **62.4** | **19.5** | **89.9** |
+| 2 · Same prompt, same draft | 6.4–18.4 | 13 | 4.3 | 8.7 | 23 | 3.0 | 1.0 | 8.8 | 2.2 | 12.0 |
+| 3 · Both read it closely | 18.4–25.6 | 7 | 2.3 | 4.7 | 0 | 1.0 | 1.0 | 4.7 | 1.5 | 7.2 |
+| 4 · The first signs; the second notes first | 25.6–37.9 | 14 | 4.7 | 9.3 | 18 | 2.6 | 1.0 | 9.8 | 1.5 | 12.3 |
+| 5 · Who made the call | 37.9–52.2 | 6 | 2.0 | 4.0 | 37 | 3.0 | 1.0 | 11.1 | 2.2 | 14.3 |
+| 6 · Then they ask why | 52.2–66.5 | 4 | 1.3 | 2.7 | 34 | 2.7 | 1.0 | 11.5 | 1.8 | 14.3 |
+| 7 · What each answer does | 66.5–76.8 | 15 | 5.0 | 10.0 | 0 | 1.5 | 1.0 | 7.3 | 2.0 | 10.3 |
+| 8 · Suppose it proves wrong | 76.8–85.9 | 13 | 4.3 | 8.7 | 1 | 1.5 | 1.0 | 6.6 | 1.5 | 9.1 |
+| 9 · Faculty check | 85.9–93.1 | 8 + 12 second line | 2.7 + 4.0 | 5.3 (check) | 0 | 2.8 | 0.0 | 3.4 | 3.8 | 7.2, then rests |
+| **Total** | | **98** | **32.7** | | **126** | | **8.0** | **64.6** | **20.5** | **93.1** |
 
 Checks:
 - One idea per beat; movements run one after another, except the two students' reading in beat 3, which runs at the same time because the point is that it's the same.
-- Changes a caption names wait until it can be read once: the draft's rows (beat 2, 4.3 s in), the note (beat 4, 4.7 s), question 1 (beat 5, 3.7 s), question 2 (beat 6, 1.3 s), the split (beat 7, 4.0 s), the first weight's fall (beat 8, 4.3 s) and the line under the check (beat 9, 2.7 s after the check begins to rise).
-- Lead-ins the caption's first clause describes start early, as in figures 1–5: the pulse and blank sheet (beat 2), the reading (beat 3), the first signature (beat 4), the first panel's pulse (beat 7) and the hanging weights (beat 8).
-- The note holds 4.2 s, its reading time (2.7 s) plus 1.5 s, before the second student's dot moves, and stays to the end.
+- Changes a caption names wait until it can be read once: the draft's rows (beat 2, 4.3 s in), the note (beat 4, 4.7 s), question 1 (beat 5, 2.6 s), question 2 (beat 6, 1.3 s), the outlines and split (beat 7, 5.0 s), the first weight's fall (beat 8, 4.3 s) and the line under the check (beat 9, 2.7 s after the check begins to rise).
+- Lead-ins the caption's first clause describes start early, as in figures 1–5: the pulse and blank sheet (beat 2), the reading (beat 3), the first signature (beat 4), the "what faculty see" dim and frame (beat 5), the restored view and the first panel's pulse (beat 7) and the hanging weights (beat 8).
+- The note holds 4.5 s from its first word, its reading time (3.0 s) plus 1.5 s, before the second student's dot moves, and stays to the end.
 - Both students read four lines at 1.0 s a line, with the same 0.3 s pause, at the same time, and sign with the same motion.
-- Spoken words appear at about 3 words a second: 11 and 9 words in beat 5 (3.7 s and 3.0 s), 8 and 18 in beat 6 (2.7 s and 6.0 s). All stay on screen to the end.
-- The viewer's marks for the answers (the split and the bracket) appear only after both rounds of answers. Nothing red or first-person sits on or under a handed-in paper.
-- Every hold is at least 1.5 s; the turn holds 2.3 s, and beat 9 holds while its second line is read.
+- Spoken words appear at about 3 words a second: 11 and 9 words in beat 5 (3.7 s and 3.0 s), 8 and 20 in beat 6 (2.7 s and 6.7 s). All stay on screen to the end.
+- The note row dims and the "what faculty see" frame is up only while faculty ask (beats 5–6). The viewer's marks for the answers (the outlines, the split and the bracket) appear only after both rounds of answers. Nothing red or first-person sits on or under a handed-in paper; the split-off dot is the person's mark, beside the AI's phrase.
+- Every hold is at least 1.5 s; the turn holds 2.0 s, and beat 9 holds while its second line is read.
 - No camera moves. The draft divides into two copies once (beat 2). Reduced motion shows the final frame.
-- Total 89.9 s.
+- Total 93.1 s.

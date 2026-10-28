@@ -409,7 +409,7 @@
 	N.gut = h('div', 'ar-n-gut', grid);
 	{
 		const zig = el(N.gut, 'svg', {viewBox: '0 0 18 200', preserveAspectRatio: 'none', 'aria-hidden': 'true'});
-		N.zig = el(zig, 'polyline', {points: '9,0 4,14 14,27 3,44 13,60 6,77 15,92 3,111 12,128 6,143 14,160 4,177 11,190 9,200', fill: 'none', stroke: C.ink, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke', 'pathLength': 1, 'stroke-dasharray': 1});
+		N.zig = el(zig, 'polyline', {points: '9,0 4,14 14,27 3,44 13,60 6,77 15,92 3,111 12,128 6,143 14,160 4,177 11,190 9,200', fill: 'none', stroke: C.ink, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke'});
 	}
 	col('b');
 	// Task B's evidence, written once and used in the slot and in the overlay.
@@ -462,8 +462,7 @@
 			n.opt.classList.toggle('is-chosen', isChosen);
 			op(n.rely, chosen1(k === 'a' ? 'b' : 'a') ? kP1 : 0);
 		}
-		op(N.zig.parentNode, t >= T.frontier[0] ? 1 : 0);
-		set(N.zig, {'stroke-dashoffset': 1 - prog(t, ...T.frontier)});
+		op(N.zig.parentNode, prog(t, ...T.frontier));
 		op(N.a.evTitle, prog(t, ...T.inTitle));
 		N.a.nums.forEach((p, i) => op(p, prog(t, ...[T.n1, T.n2, T.n3][i])));
 		op(N.b.ev, prog(t, ...T.settle));

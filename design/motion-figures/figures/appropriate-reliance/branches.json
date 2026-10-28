@@ -1,0 +1,10 @@
+{
+  "branches": {
+    "check-a-rely": "g1:a,g2:rely",
+    "check-b-move": "g1:b,g2:move",
+    "check-a-keep": "g1:a,g2:move",
+    "check-b-time": "g1:b,g2:time"
+  },
+  "beats": [3, 7, 8, 9],
+  "gates": [0, 1]
+}

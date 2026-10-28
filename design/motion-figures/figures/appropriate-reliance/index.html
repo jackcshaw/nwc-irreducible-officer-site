@@ -39,7 +39,8 @@
 #appropriate-reliance.is-stacked .mf-stage { height: 0; overflow: hidden; }
 #appropriate-reliance.is-stacked .ar-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 8px; background: var(--paper); }
 #appropriate-reliance.is-stacked .mf-caption { height: 136px; overflow: hidden; }
-@media (max-width: 719px) { #appropriate-reliance.is-stacked .mf-caption { height: 166px; } }
+/* 182 px on phones: the check plus the move line, measured at 390 px. */
+@media (max-width: 719px) { #appropriate-reliance.is-stacked .mf-caption { height: 182px; } }
 /* The check is longer than the family's others: one line at desktop widths, so the caption
    band keeps its 136 px and the controls don't move at the last beat. */
 #appropriate-reliance .mf-check-q, #appropriate-reliance .mf-follow.is-equal { font-size: clamp(20px, 2.1vw, 23px); }
@@ -68,7 +69,7 @@
 .ar-n-line.is-short { width: 60%; }
 .ar-n-cond { margin: 6px 0 4px; display: flex; justify-content: space-between; align-items: baseline; gap: 2px 6px; flex-wrap: wrap; }
 .ar-n-yc { font: 600 13px/1.3 var(--sans); letter-spacing: 0; text-transform: none; color: var(--red); }
-.ar-n-opt { display: flex; align-items: center; gap: 7px; min-height: 38px; margin: 0 0 4px; padding: 5px 9px; border: 1.1px solid rgba(10, 34, 66, 0.55); border-radius: 19px; background: var(--paper-bright); font: 600 14px/1.2 var(--sans); color: var(--ink); }
+.ar-n-opt { display: flex; align-items: center; gap: 7px; min-height: 34px; margin: 0 0 4px; padding: 4px 9px; border: 1.1px solid rgba(10, 34, 66, 0.55); border-radius: 19px; background: var(--paper-bright); font: 600 14px/1.2 var(--sans); color: var(--ink); }
 .ar-n-opt.is-chosen { border: 1.8px solid var(--ink); }
 .ar-n-radio { flex: none; display: grid; place-items: center; width: 14px; height: 14px; border: 1.1px solid var(--ink); border-radius: 50%; }
 .ar-n-opt.is-chosen .ar-n-radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--red); }
