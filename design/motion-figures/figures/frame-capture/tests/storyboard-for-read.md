@@ -43,7 +43,9 @@ Positions below are viewBox units on screen at 1×. Widths of text-sized element
 | Paper B | The second student's paper | Identical to paper A, all ink | Sheet x 356–642, y 62–247 |
 | What each can show | What each paper rests on | Two strips, hidden behind the papers until beat 10. *Under paper A:* grey brackets tagged "AI'S FRAME" around the two grey considerations, with the first student's red dot inside. *Under paper B:* the chosen frame, the four set aside and the second student's dot | Strip A x 40–326, y 262–318; strip B x 356–642, y 262–410 |
 | Question | The faculty member's question | Mono 13 ink "FACULTY ASK EACH STUDENT" over Serif italic 24 ink "Why this frame?" | x 670, y 150–190 |
-| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11: mono 13 ink "FACULTY CHECK" over the question in Serif italic 30, with "Why this frame? What would change it?" directly under it at the same size. Fixed height on desktop | Under the stage |
+| Name card (beat 0) | Which failure mode this is | The kicker "FAILURE MODE 1 OF 7" (mono 13, muted) over "Frame capture" (Serif 600, about 52 px), centred over the stage on a paper scrim. It moves and shrinks into the plate. Drawn by the runtime | Centre of the stage, then the plate |
+| Plate | The name, kept in view | "FRAME CAPTURE · 1 OF 7", mono 12 ink, small caps, letter-spaced, in a reserved 23 px strip with a hairline under it, above the stage's top-left corner. Drawn by the runtime | Above the stage, left |
+| Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11, in two columns (labels left, words right): mono 13 "FRAME CAPTURE" beside the definition in Serif 19; mono 13 "FACULTY CHECK" beside the question in Serif italic 30; then "Why this frame? What would change it?" under the question at the same size. On phones the column labels stack above the words. Fixed height: 144 px on desktop, 222 px on phones | Under the stage |
 | Beat list | Text equivalent and navigation | Eleven numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
 
 **Draft geometry** (for the build). Draft 1 has four ragged rows per column: left widths 144, 116, 132, 70 with offsets 0, 5, −3, 8; right widths 150, 124, 154, 88 with offsets 0, 6, −2, 3. Draft 2 has six straight rows per column, full width except the last (left 96, right 104), from y 222 to 282. Draft 3 adds a chart (four bars 12 wide, 7 apart from x 330, baseline 326, heights 20, 13, 28, 17) and a conclusion bar (x 162–488, y 342, 7 high). Change bars: draft 2 adds one per column (y 218–287); draft 3 adds one beside the chart (x 321, y 296–328) and one beside the conclusion (x 153, y 339–352).
@@ -65,7 +67,17 @@ The JS measures the tallest beat whenever the width changes and holds it as the 
 
 ## 4. Beats
 
-Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
+Times in this section are the figure's own clock. The player adds the 3.0 s name card in front, so player time is 3.0 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
+
+### Beat 0 · player 0.0–3.0 s · The name card
+
+- **On screen at the start:** the stage, empty, with the plate's strip at the top, still blank. (Before play, the waiting view shows the card over the poster instead.)
+- **What moves:**
+  1. 0.0–2.0: "FAILURE MODE 1 OF 7" and "Frame capture" hold, large and centred, on a paper scrim.
+  2. 2.0–3.0: the card moves and shrinks into the top-left strip, where it becomes "FRAME CAPTURE · 1 OF 7"; the kicker and scrim fade as it goes.
+- **Caption:** none; the caption band stays quiet.
+- **Notice:** the failure mode's name, then where it will stay.
+- **Why:** Jack forgets which named failure mode a figure interrogates. The name opens the figure and stays in view.
 
 ### Beat 1 · 0.0–6.0 s · The task
 
@@ -205,7 +217,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 ## 5. Final frame
 
-The still at 86.2 s. It is also the reduced-motion view, the print view and the social-card image (stage plus caption band). It shows the faculty side. The player's waiting frame before play (the runtime's `poster`) is the settled setup at 13.98 s: the task card, the student and the six dashed considerations.
+The still at 86.2 s figure time (89.2 s player time). It is also the reduced-motion view, the print view and the social-card image (stage plus caption band). It shows the faculty side. The player's waiting frame before play (the runtime's `poster`) is the settled setup at 13.98 s: the task card, the student and the six dashed considerations.
 
 **Stage:**
 - **Top right:** the task card, "EXAMPLE TASK" over "Recommend a response to an adversary's military buildup."
@@ -214,8 +226,11 @@ The still at 86.2 s. It is also the reduced-motion view, the print view and the 
 - **Under the left paper:** grey brackets tagged "AI'S FRAME" around the two grey considerations, with a red dot inside.
 - **Under the right paper:** the same frame in red, tagged "CHOSEN", around the same two, with a red dot inside. Below them sit Past buildups, Room to negotiate, Domestic politics and Economic pressure, solid with red touch marks, under "SET ASIDE".
 
+**Plate:** "FRAME CAPTURE · 1 OF 7" in the strip above the stage's top-left corner.
+
 **Caption band:**
 
+> FRAME CAPTURE *(navy mono)* The first plausible frame becomes the student's frame. *(Serif, about 19 px)*
 > FACULTY CHECK *(navy mono)*
 > *What problem did the student choose to solve?* *(Serif italic, about 30 px)*
 > *Why this frame? What would change it?* *(Serif italic, same size as the line above)*
@@ -236,6 +251,7 @@ A student asks an AI for help with a strategy paper, and the AI proposes a reaso
 
 **Beat list (text equivalent):**
 
+0. **Frame capture · Failure mode 1 of 7.** *On screen:* the name, "Frame capture", appears large over the stage with "Failure mode 1 of 7" above it, then moves into the top-left corner, where it stays.
 1. **A student gets an open strategy task.** *On screen:* a task card appears at the top right: "Example task: Recommend a response to an adversary's military buildup." A red dot labelled Student appears on the left.
 2. **Many things could matter. Framing means picking which ones define the problem.** *On screen:* six considerations appear one at a time in dashed outline, three above an open space and three below: past buildups, allies' interests, adversary's intent, domestic politics, room to negotiate, and economic pressure.
 3. **The student asks an AI. It proposes a reasonable, narrower frame.** *On screen:* the dot pulses. Grey corner brackets labelled "AI's frame" snap around the open space beside the student. A grey copy of the task sentence moves into the frame; every word fades except "adversary", and "Deter the" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings.
@@ -264,8 +280,9 @@ Both students in the figure would answer the first question the same way. The se
 
 Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and every total is at least twice the reading time. Label words are new words inside the picture.
 
-| Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
+| Beat | Time (s, figure clock; player +3.0) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 · The name card | player 0.0–3.0 | 0 | 0 | 0 | 5 (kicker, name) | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 | 3.0 |
 | 1 · The task | 0.0–6.0 | 7 | 2.3 | 4.7 | 11 | 1.0 | 1.0 | 4.0 | 6.0 |
 | 2 · Many things could matter | 6.0–14.0 | 12 | 4.0 | 8.0 | 13 | 1.0 | 2.6 | 4.4 | 8.0 |
 | 3 · A narrower frame | 14.0–23.0 | 11 | 3.7 | 7.3 | 5 | 1.0 | 6.5 | 1.5 | 9.0 |
@@ -277,11 +294,11 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 9 · The same paper | 64.7–71.5 | 10 | 3.3 | 6.7 | 3 | 1.0 | 3.2 | 2.6 | 6.8 |
 | 10 · Ask each student | 71.5–79.5 | 12 | 4.0 | 8.0 | 9 | 1.0 | 4.0 | 3.0 | 8.0 |
 | 11 · Faculty check | 79.5–86.2 | 10 + 7 second line | 3.3 + 2.3 | 6.7 (check) | 0 | 0.0 | 4.1 | 2.6 | 6.7, then rests |
-| **Total** | | **130** | **43.3** | | **68** | | **46.7** | | **86.2** |
+| **Total** | | **130** | **43.3** | | **73** | | **49.7** | | **86.2 figure, 89.2 player** |
 
 Checks:
 - One idea per beat; movements run one after another.
 - Changes a caption names wait until it can be read once: the narrowing (beat 3, 3.7 s in), the wipe (beat 7, 4.7 s), hiding the weighing (beat 9, 3.3 s), the reveal (beat 10, 4.0 s) and the second line (beat 11, 3.4 s after the check). In beat 8 the claim (grey to red) comes 6.1 s in.
 - Every hold is at least 1.5 s.
 - The camera moves are 1.9 s in, 2.4 s out and 2.2 s across, all eased and all under 2.5 s; reduced motion removes them.
-- Total 86.2 s.
+- Total 86.2 s on the figure's clock; 89.2 s in the player, with the name card.

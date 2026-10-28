@@ -526,8 +526,8 @@
 	}
 	const SHOW = [
 		['student', 'task'], ['student', 'task', 'field'], ['task', 'field', 'aiFrame'],
-		['aiFrame', 'draft'], ['aiFrame', 'draft'], ['task', 'field', 'aiFrame', 'draft'],
-		['task', 'faculty'], ['faculty', 'second'], ['papers'], ['papers', 'ask'], ['task', 'papers', 'ask'],
+		['aiFrame', 'draft'], ['aiFrame', 'draft'], ['field', 'aiFrame', 'draft'],
+		['task', 'faculty'], ['faculty', 'second'], ['papers'], ['papers', 'ask'], ['papers', 'ask'],
 	];
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
@@ -588,14 +588,14 @@
 		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));
 	}
 	// Hold the stacked view at its tallest beat, so the caption band and controls never move.
+	let player = null;
 	const sizeNarrow = () => {
 		if (!narrow || !root.classList.contains('is-stacked')) return;
 		narrow.style.minHeight = '';
 		let tallest = 0;
 		BEATS.forEach((b, i) => { renderNarrow(i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : T.end); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
 		narrow.style.minHeight = `${Math.ceil(tallest)}px`;
-		const scrub = root.querySelector('[data-mf-scrub]');
-		renderNarrow(scrub ? +scrub.value || 0 : 0);
+		renderNarrow(player ? player.time() : 0);
 	};
 
 	const BEATS = [
@@ -643,7 +643,9 @@
 		};
 		new ResizeObserver(syncStacked).observe(svg);
 		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02});
+		// Nameplate: the opening name card, the corner plate and the final name and definition.
+		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02,
+			nameplate: {name: 'Frame capture', kicker: 'Failure mode 1 of 7', definition: "The first plausible frame becomes the student's frame."}});
 		syncStacked();
 	});
 })();

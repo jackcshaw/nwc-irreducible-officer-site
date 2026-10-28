@@ -127,6 +127,12 @@ Shared visual vocabulary for the eight figures. The first figures settle these; 
 ## Final frame, text equivalent, page
 
 - **The final frame is the reduced-motion view, the print view and the poster.** The poster is the shot area (stage plus caption band). Design it first.
+- **Every figure names its failure mode** (FC; standard for all eight, at Jack's request: "I tend to forget which named failure mode we're interrogating"). Pass the runtime's `nameplate` option, below. The figure then:
+  - opens on its name, large and centred, with its kicker ("Failure mode 1 of 7"; appropriate reliance uses "The skill"). The card holds 2 s, then moves and shrinks into the top-left corner over 1 s, with the caption band quiet;
+  - keeps "NAME · 1 OF 7" in a reserved strip above the stage's top-left corner in every beat and view (drawn stage, stacked stage, reduced motion, print, stills, video), so it never covers the picture;
+  - ends with the name and the one-line definition (PLAN.md's "What goes wrong", verbatim) directly above the faculty check.
+
+  The waiting view before play shows the card over the poster. The beat list gains beat 0, the name card.
 - **Say what a person did, not only what they marked** (FS). A struck AI sentence alone reads as the person's writing; a red label ("Cut one sentence from the AI's draft:") says it was a cut.
 - **A comparison can end as a table** (FS). Rows are steps (their own work, what faculty receive, each question); columns are people, each headed by their red dot and name. Each item appears large first, then settles into its cell, so the final frame reads top to bottom on its own.
 - **Order as a sequence label** (PS). When the difference between two people is the order they worked in, each row carries a compact mono sequence ("READ → AI CONNECTS → WRITES", "READ → TRIES → AI CHECKS → WRITES"), AI steps in grey and the person's decisive step in red, so the final frame carries the cause as well as the test.
@@ -147,6 +153,18 @@ Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward comp
 
 - **A figure is `render(t)`,** a pure function of time. Captions and their fades are drawn from `t` too, so seeking gives identical frames for export.
 - **`MotionFigures.mount(root, {duration, render, beats, poster?})`.** Each beat is `{at, text, list?, detail?, check?}`. `check` is `{label, question, followLabel?, follow?, followAt?}`.
+- **`nameplate: {name, kicker, definition, plate?, card?}`** (FC; every figure passes it).
+  - `name`: "Frame capture".
+  - `kicker`: "Failure mode 1 of 7", or "The skill" for appropriate reliance.
+  - `definition`: the "What goes wrong" line from PLAN.md.
+  - `plate`: the corner text after the name. The default is the kicker without "Failure mode ", so "1 of 7".
+  - `card`: the card's length in seconds. The default is 3: a 2 s hold, then a 1 s move.
+
+  How it works:
+  - **Time.** The runtime offsets the figure's clock by the card. `render(t)`, beats, `poster`, `gates`, `lockedAt`, `reducedAt` and `api.seek` stay in figure time, so a figure's own constants don't change. `?t=`, the scrubber, the time readout and `window.__motionFigures[id]` (`duration`, `beats`, `settle`, `seek`, plus `card`) are in player time, which is figure time plus the card. `api.time()` returns figure time; a stacked stage uses it to re-render after a resize.
+  - **Layout.** The strip is 23 px. The last caption sets labels in a left column and words in the right (name beside the definition, "FACULTY CHECK" beside the question), so the desktop band grows only to 144 px. `--mf-plate` (31 px) joins `--mf-chrome` in the viewport fit. A drawn stage whose text is 13 units still renders it at 11.1 px at 1280 × 720.
+  - **Phones.** Below 560 px the columns stack. Measure the check band at 390 px and fix the caption band at that height (FC: 222 px). Check that the whole player still fits 844 px (FC: 780 px).
+  - **Compatibility.** Without `nameplate`, nothing changes: FS, PS, UR, ID, IM, RL and AR rendered identically before and after the change (same frames at 1440 × 900 and 390 × 844).
 - **Optional hooks inside the root:**
   - `[data-mf-toggle]` (Play/Pause/Replay);
   - `[data-mf-replay]` (Restart);

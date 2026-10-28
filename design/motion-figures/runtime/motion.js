@@ -38,12 +38,30 @@
    replaces what Play does at an open gate (default: resume). The ?t= hold
    respects lockedAt; window.__motionFigures[id].seek(t) is the export hook and
    ignores it, so scripts can render every frame. mount()
-   returns {play, pause, seek, redraw, resume, openGate, gateOpen}; figures
+   returns {play, pause, seek, redraw, resume, openGate, gateOpen, time}
+   (time(): the figure's current time); figures
    without these fields behave exactly as before.
 
    A playing figure pauses when its shot (or, for a v0 figure, its root) is
    mostly scrolled out of view, and shows Play; it doesn't resume by itself.
    data-mf-offscreen="play" on the root opts out.
+
+   Optional nameplate (every figure uses it; see CONVENTIONS.md):
+     nameplate: {name, kicker, definition, plate?, card?}
+   - name: "Frame capture"; kicker: "Failure mode 1 of 7" (or "The skill");
+     definition: the one-line "what goes wrong";
+     plate: the corner text after the name (default: the kicker without
+     "Failure mode "); card: the opening card's length in seconds (default 3:
+     a 2 s hold, then a 1 s move into the corner).
+   The runtime then (1) opens on a large name card, centred over the stage,
+   that moves and shrinks into the corner; (2) keeps "NAME · 1 OF 7" in a
+   reserved strip above the stage's top-left corner in every view; (3) sets
+   the name and definition above the faculty check in the last caption; and
+   (4) lists the card as beat 0. The figure's own clock is offset by the card:
+   render(t), beats, poster, gates, lockedAt, reducedAt and api.seek stay in
+   figure time, while ?t=, the scrubber and window.__motionFigures[id]
+   (duration, beats, settle, seek) are in player time (figure time + card).
+   Without nameplate, nothing changes.
 
    Test hooks: ?t=4.2 (or ?t=1:04.2) renders that moment and holds; ?reduced
    forces the reduced-motion path; window.__motionFigures[id].seek(t) for export. */
@@ -164,7 +182,14 @@
 
 	// ---- player ------------------------------------------------------------
 	function mount(root, figure) {
-		const {beats, duration} = figure;
+		// Nameplate (optional): the opening card adds C seconds before the figure's own t = 0.
+		// Everything below runs in player time; the figure keeps its own clock (toFig).
+		const plate = figure.nameplate || null;
+		const C = plate ? (plate.card ?? 3) : 0;
+		const HOLD = Math.max(0, C - 1);
+		const toFig = (T) => Math.max(0, T - C);
+		const beats = C ? figure.beats.map((b) => ({...b, at: b.at + C, check: b.check && {...b.check, followAt: b.check.followAt == null ? b.check.followAt : b.check.followAt + C}})) : figure.beats;
+		const duration = figure.duration + C;
 		const toggle = root.querySelector('[data-mf-toggle]');
 		const list = root.querySelector('[data-mf-beats]');
 		const caption = root.querySelector('[data-mf-caption]');
@@ -198,15 +223,45 @@
 			return button;
 		});
 
+		// The name card is beat 0 in the list (a button that plays it from the start).
+		let nameButton = null;
+		if (plate) {
+			const li = document.createElement('li');
+			li.className = 'mf-namebeat';
+			nameButton = document.createElement('button');
+			nameButton.type = 'button';
+			nameButton.dataset.beat = -1;
+			const n = document.createElement('span');
+			n.className = 'mf-n';
+			n.setAttribute('aria-hidden', 'true');
+			n.textContent = 0;
+			const text = document.createElement('span');
+			text.className = 'mf-text';
+			text.textContent = `${plate.name} · ${plate.kicker}`;
+			nameButton.append(n, text);
+			li.append(nameButton);
+			if (isList) {
+				const d = document.createElement('p');
+				d.className = 'mf-detail';
+				const dl = document.createElement('span');
+				dl.className = 'mf-detail-label';
+				dl.textContent = 'On screen:';
+				d.append(dl, ` the name, "${plate.name}", appears large over the stage with "${plate.kicker}" above it, then moves into the top-left corner, where it stays.`);
+				li.append(d);
+			}
+			list.prepend(li);
+		}
+
 		let t = 0, playing = false, prev = 0, raf = 0, shown = -1, started = false;
 		// Optional poster: while a figure waits to play, it shows this settled moment
 		// instead of an empty first frame. Play still starts from 0.
-		const poster = figure.poster;
+		const poster = figure.poster == null ? figure.poster : figure.poster + C;
+		let waiting = false; // the waiting view shows the name card large over the poster
 		let capBody = null, capFollow = null;
 		// Optional gates (see the header): each stops playback once until resumed.
-		const gates = (figure.gates || []).map((g) => ({at: g.at, resumeAt: g.resumeAt ?? g.at, armed: true}));
+		const gates = (figure.gates || []).map((g) => ({at: g.at + C, resumeAt: (g.resumeAt ?? g.at) + C, armed: true}));
 		let gateOpen = -1;
-		const reducedAt = figure.reducedAt ?? duration;
+		const reducedAt = figure.reducedAt == null ? duration : figure.reducedAt + C;
 
 		const label = (text) => {
 			if (!toggle) return;
@@ -233,6 +288,18 @@
 				capBody.innerHTML = `<p class="mf-check-label"></p><p class="mf-check-q"></p>`;
 				capBody.children[0].textContent = b.check.label;
 				capBody.children[1].textContent = b.check.question;
+				if (plate && plate.definition) {
+					// Name, then what goes wrong, directly above the check, in two columns
+					// (labels left, words right) so the band grows only a few pixels.
+					capBody.classList.add('has-final');
+					const fn = document.createElement('p');
+					fn.className = 'mf-final-name';
+					fn.textContent = plate.name;
+					const fd = document.createElement('p');
+					fd.className = 'mf-final-def';
+					fd.textContent = plate.definition;
+					capBody.prepend(fn, fd);
+				}
 				if (b.check.follow) {
 					// With no followLabel, the follow-up is set at the same size as the check.
 					capFollow = document.createElement('p');
@@ -267,7 +334,8 @@
 			if (i !== shown) { buildCaption(i); shown = i; }
 			const b = beats[i];
 			// Deterministic fades, drawn from t like the picture.
-			const k = b.check ? prog(time, b.at + 0.2, b.at + 0.8, E.house) : prog(time, b.at, b.at + 0.3);
+			// While the name card waits large over the poster, the caption band stays quiet.
+			const k = waiting ? 0 : b.check ? prog(time, b.at + 0.2, b.at + 0.8, E.house) : prog(time, b.at, b.at + 0.3);
 			capBody.style.opacity = k.toFixed(3);
 			capBody.style.transform = b.check ? `translateY(${mix(8, 0, k).toFixed(2)}px)` : '';
 			if (capFollow) {
@@ -276,10 +344,65 @@
 			}
 		};
 
-		const draw = (time, force = false) => {
+		// ---- nameplate: a reserved strip with "NAME · 1 OF 7", and the opening card ----
+		const shot = root.querySelector('[data-mf-shot]');
+		let P = null;
+		if (plate && shot) {
+			root.classList.add('has-nameplate');
+			const bar = document.createElement('div');
+			bar.className = 'mf-platebar';
+			bar.setAttribute('aria-hidden', 'true');
+			const tag = document.createElement('span');
+			tag.className = 'mf-plate';
+			tag.textContent = `${plate.name} · ${plate.plate ?? plate.kicker.replace(/^failure mode\s+/i, '')}`;
+			bar.append(tag);
+			shot.prepend(bar);
+			const scrim = document.createElement('div');
+			scrim.className = 'mf-namescrim';
+			scrim.setAttribute('aria-hidden', 'true');
+			const card = document.createElement('div');
+			card.className = 'mf-namecard';
+			card.setAttribute('aria-hidden', 'true');
+			const ck = document.createElement('p');
+			ck.className = 'mf-namecard-k';
+			ck.textContent = plate.kicker;
+			const cn = document.createElement('p');
+			cn.className = 'mf-namecard-n';
+			cn.textContent = plate.name;
+			card.append(ck, cn);
+			shot.append(scrim, card);
+			P = {bar, tag, scrim, card, ck, cn};
+		}
+		// Drawn from t like the picture: k = 0 is the large card, k = 1 the plate in its corner.
+		function drawPlate(time) {
+			if (!P) return;
+			const k = waiting ? 0 : prog(time, HOLD, C, E.inOutStrong);
+			P.tag.style.opacity = prog(k, 0.8, 1).toFixed(3);
+			if (k >= 1) { P.card.style.visibility = 'hidden'; P.scrim.style.visibility = 'hidden'; return; }
+			P.card.style.visibility = 'visible';
+			P.scrim.style.visibility = 'visible';
+			const sr = shot.getBoundingClientRect();
+			const top = P.bar.getBoundingClientRect().bottom - sr.top;
+			const bottom = (caption ? caption.getBoundingClientRect().top : sr.bottom) - sr.top;
+			P.scrim.style.top = `${top}px`;
+			P.scrim.style.height = `${Math.max(0, bottom - top)}px`;
+			P.scrim.style.opacity = (1 - k).toFixed(3);
+			const cw = P.card.offsetWidth, ch = P.card.offsetHeight;
+			const tr = P.tag.getBoundingClientRect();
+			const s1 = Math.min(1, tr.height / Math.max(1, P.cn.offsetHeight));
+			const x0 = (sr.width - cw) / 2, y0 = top + Math.max(0, (bottom - top - ch) / 2);
+			const x1 = tr.left - sr.left - P.cn.offsetLeft * s1, y1 = tr.top - sr.top - P.cn.offsetTop * s1;
+			P.card.style.transform = `translate(${mix(x0, x1, k).toFixed(2)}px, ${mix(y0, y1, k).toFixed(2)}px) scale(${mix(1, s1, k).toFixed(4)})`;
+			P.card.style.opacity = (1 - prog(k, 0.8, 1)).toFixed(3);
+			P.ck.style.opacity = (1 - prog(k, 0, 0.4)).toFixed(3);
+		}
+
+		const draw = (time, force = false, hold = false) => {
+			if (!hold) waiting = false;
 			let target = clamp(time, 0, duration);
 			// An unanswered gate can't be passed: the playhead stops there and the gate opens.
-			const lock = !force && figure.lockedAt ? figure.lockedAt() : null;
+			const lockFig = !force && figure.lockedAt ? figure.lockedAt() : null;
+			const lock = lockFig == null ? null : lockFig + C;
 			const wasOpen = gateOpen;
 			let lockGate = -1;
 			if (lock != null && target > lock + 0.001) {
@@ -290,17 +413,24 @@
 			for (const g of gates) if (t < g.at - 0.001) g.armed = true;
 			if (lockGate >= 0) { gates[lockGate].armed = false; gateOpen = lockGate; }
 			if (gateOpen >= 0 && Math.abs(t - gates[gateOpen].at) > 0.001) gateOpen = -1;
-			figure.render(t, {gate: gateOpen});
+			figure.render(toFig(t), {gate: gateOpen});
 			const current = beatAt(t);
 			drawCaption(t, current);
+			const onCard = !!plate && t < C;
+			if (nameButton) {
+				if (onCard) nameButton.setAttribute('aria-current', 'step');
+				else nameButton.removeAttribute('aria-current');
+				nameButton.classList.toggle('is-past', !onCard);
+			}
 			beatButtons.forEach((b, i) => {
-				if (i === current) b.setAttribute('aria-current', 'step');
+				if (i === current && !onCard) b.setAttribute('aria-current', 'step');
 				else b.removeAttribute('aria-current');
 				b.classList.toggle('is-past', i < current);
 			});
+			drawPlate(t);
 			if (scrub) {
 				scrub.value = t.toFixed(2);
-				scrub.setAttribute('aria-valuetext', `${fmt(t)} of ${fmt(duration)}, beat ${current + 1} of ${beats.length}`);
+				scrub.setAttribute('aria-valuetext', onCard ? `${fmt(t)} of ${fmt(duration)}, name card` : `${fmt(t)} of ${fmt(duration)}, beat ${current + 1} of ${beats.length}`);
 			}
 			if (timeOut) timeOut.textContent = `${fmt(t)} / ${fmt(duration)}`;
 			if (lockGate >= 0) {
@@ -380,6 +510,8 @@
 			if (!b) return;
 			const i = +b.dataset.beat;
 			// Reduced motion: jump between still key frames. Otherwise play on from the beat.
+			// Beat 0 is the name card: it plays from the start (reduced: the plate in place).
+			if (i < 0) { if (isReduced()) { pause(); draw(C); label('Play'); } else { draw(0); play(); } return; }
 			if (isReduced()) { pause(); draw(settle(i)); label('Play'); }
 			else { draw(beats[i].at); play(); }
 		});
@@ -391,9 +523,9 @@
 		addEventListener('beforeprint', () => { pause(); draw(duration); });
 
 		// Test and export hook: seek to any moment without the clock.
-		const seek = (time) => { pause(); draw(time); };
-		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen};
-		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at)};
+		const seek = (time) => { pause(); draw(time + C); };
+		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t)};
+		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C};
 
 		// Pause when scrolled away: once less than a quarter of the shot is in view, a playing
 		// figure pauses and shows Play. It doesn't resume by itself (the reader may be reading
@@ -410,7 +542,8 @@
 		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(tParam(params.get('t'))); label('Play'); return api; }
 		if (isReduced()) { root.classList.add('is-reduced'); draw(reducedAt); label('Play'); return api; }
 
-		draw(poster ?? 0);
+		waiting = !!plate;
+		draw(poster ?? 0, false, true);
 		label('Play');
 		if (root.dataset.mfAutoplay === 'off') return api;
 		// Autoplay waits until the picture, its caption band and the controls can all be
