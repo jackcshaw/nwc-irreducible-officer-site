@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
 import { extractAtAGlance, collapseFacilitation } from "./at-a-glance.mjs";
+import { renderRoster } from "./collaborate-roster.mjs";
 import { rmSync, mkdirSync, readFileSync, writeFileSync, existsSync, copyFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,6 +38,9 @@ const assetCommand = process.env.PDF_PYTHON
   : { command: "uv", baseArgs: ["run", "--with", "reportlab", "--with", "pillow", "python3"] };
 
 const discussionClaims = JSON.parse(readFileSync(join(root,"content/discussion-claims.json"),"utf8")).claims;
+// The open call: where sign-ups go, and the people who agreed separately to be listed.
+const collaborateConfig = JSON.parse(readFileSync(join(root,"content/collaborate.json"),"utf8"));
+const collaborators = JSON.parse(readFileSync(join(root,"content/collaborators.json"),"utf8"));
 const audiences = JSON.parse(readRequiredCompanionFile("audiences/catalog.json"));
 const companionEditions = audiences.filter(a => a.id !== "pme");
 const labCheck = spawnSync("python3", [join(companionRepoPath, "scripts/build_failure_mode_lab.py"), "--check"], {stdio:"inherit"});
@@ -369,7 +373,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     <div class="masthead-inner">
       <a class="package-brand" href="#overview" data-mode-link="overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a>
       <p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p>
-      <button class="reel-replay" type="button" data-reel-replay aria-haspopup="dialog" aria-controls="reel-dialog"><span class="reel-replay-dot" aria-hidden="true"></span>Watch the reel <span class="reel-replay-length" aria-hidden="true">0:15</span><span class="sr-only">(15 seconds)</span></button>
+      <div class="masthead-actions"><a class="masthead-call" href="#collaborate" data-mode-link="collaborate">Open call for collaborators</a><button class="reel-replay" type="button" data-reel-replay aria-haspopup="dialog" aria-controls="reel-dialog"><span class="reel-replay-dot" aria-hidden="true"></span>Watch the reel <span class="reel-replay-length" aria-hidden="true">0:15</span><span class="sr-only">(15 seconds)</span></button></div>
     </div>
   </header>
   <nav class="package-nav" aria-label="Learning paths"><div class="package-nav-inner">
@@ -413,15 +417,17 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
       <section class="mode-view" data-mode="companion" id="panel-companion" role="tabpanel" aria-labelledby="tab-companion">${companionHtml}</section>
       <section class="mode-view" data-mode="workbench" id="panel-workbench" data-wb-view="overview" role="tabpanel" aria-labelledby="tab-workbench">${workbenchHtml}</section>
       <section class="mode-view" data-mode="sources" id="panel-sources" role="tabpanel" aria-labelledby="tab-sources">${sourcesHtml}</section>
+      <section class="mode-view" data-mode="collaborate" id="panel-collaborate" role="region" aria-label="Open call for collaborators">${buildCollaborateMode()}</section>
     </div>
   </main>
 
-  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
+  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><div class="footer-links"><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><a href="#collaborate" data-mode-link="collaborate">Open call for collaborators</a></div><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
   ${reelDialog()}
 
   <script>${clientJs()}</script>
   <script>${readFileSync(join(root, "scripts", "reel-client.js"), "utf8")}</script>
+  <script>${readFileSync(join(root, "scripts", "collaborate-client.js"), "utf8")}</script>
 </body>
 </html>
 `;
@@ -487,6 +493,7 @@ function buildOverviewMode() {
       <div><h1>When AI helps,<br>who owns the judgment?</h1><p class="dek">Better work can make human understanding harder to see.</p><p>Explore the argument. Challenge it with others. Test a decision, then design practice that makes the reasoning visible.</p></div>
       <aside class="featured-reading"><h2>The Irreducible Officer</h2><p>The essay that started the Lab: purpose, accountability, and judgment in work shaped by AI.</p><a href="#essay" data-mode-link="essay">Read the essay <span aria-hidden="true">→</span></a><span class="reading-context">The original PME argument, with full companion essays for higher education and high-school educators.</span></aside>
     </section>
+    <p class="open-call-strip"><span>Help keep human judgment at the forefront of AI.</span><a href="#collaborate" data-mode-link="collaborate">Join the open call <span aria-hidden="true">→</span></a></p>
     <section class="setting-chooser-band" aria-label="Choose your setting"><h2 class="band-label">Choose your setting</h2><p>Each setting has its own essay and a judgment to try in its own case.</p>
       <div class="audience-paths setting-chooser">
         ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this setting →</strong></a>`).join("")}
@@ -497,14 +504,60 @@ function buildOverviewMode() {
       <a href="#discuss" data-mode-link="discuss"><h2>Discuss</h2><p>Bring an example. Challenge one of five claims with colleagues.</p><span>Open Judgment in Practice →</span></a>
       <a href="#companion" data-mode-link="companion"><h2>Practice</h2><p>Make a judgment before the assistant contributes. See what changes.</p><span>Set up a session →</span></a>
       <a href="#workbench" data-mode-link="workbench"><h2>Design</h2><p>Turn an insight into an assignment, assessment, or reusable teaching method.</p><span>Open the educator workbench →</span></a>
+      <a href="#collaborate" data-mode-link="collaborate"><h2>Collaborate</h2><p>Try the designs with your students, send a case, or check our evidence.</p><span>Join the open call →</span></a>
     </section>
-    <section class="testing-note"><h2>Ready for educator testing</h2><p>These teaching designs are proposals to test. A successful conversation does not establish learning gains. Inspect the decisions it records and revise from what happens.</p><a href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a></section>
+    <section class="testing-note"><h2>Ready for educator testing</h2><p>These teaching designs are proposals to test. A successful conversation does not establish learning gains. Inspect the decisions it records and revise from what happens.</p><p>We need educators to try them with students.</p><div class="action-row"><a class="copy-button primary" href="#collaborate" data-mode-link="collaborate">Join the open call</a><a class="quiet-action" href="#ix-a-foundation-pilot" data-essay-section-link="ix-a-foundation-pilot">See the five-step pilot</a></div></section>
+  </div>`;
+}
+
+// The open call for collaborators: one form feeding the private list (the
+// web app in apps-script/collaborators), and the public roster, which lists
+// only people who agreed to it separately (content/collaborators.json).
+function buildCollaborateMode() {
+  const ways = [
+    ["pilot", "Pilot with learners", "Run a design with your students, officers or team and tell us what happened. None of the designs has been tried in a classroom yet."],
+    ["cases", "Contribute cases", "Send a real decision or scenario we can use in Discuss and Practice."],
+    ["design", "Design teaching materials", "Build an assignment, assessment or workbench template for your setting with us."],
+    ["evidence", "Review the evidence", "Check our claims and sources, and tell us what’s wrong or what we missed."],
+  ];
+  const settings = [["pme", "PME"], ["he", "Higher education"], ["k12", "K–12 · High school"], ["business", "Business"], ["other", "Other"]];
+  const endpoint = escapeHtml(collaborateConfig.endpoint || "");
+  return `<div class="surface collaborate-surface">
+    <section class="surface-hero collaborate-hero"><h1>Help keep human judgment at the forefront of AI</h1><p class="dek">AI can now produce work that looks finished. Someone still has to understand it, question it, and answer for the decision.</p><p>Judgment Lab is building a group of educators, leaders and practitioners who take that seriously, across military education, universities, high schools and business. Join the conversation, bring what you’re seeing in your own work, and help us test what actually builds judgment.</p>
+      <ul class="collaborate-settings" aria-label="Who it’s for"><li class="setting-pme">Professional military education</li><li class="setting-he">Higher education</li><li class="setting-k12">High school</li><li class="setting-business">Business</li></ul>
+      <div class="action-row"><button class="copy-button collaborate-cta" type="button" data-collaborate-jump>Join the conversation</button><a class="collaborate-email" href="mailto:jshaw@comprendo.dev">Or email us</a></div></section>
+    <section class="collaborate-ways" aria-labelledby="collaborate-ways-heading"><h2 id="collaborate-ways-heading">Ways to participate</h2><ul>${ways.map(([, name, detail]) => `<li><h3>${name}</h3><p>${detail}</p></li>`).join("")}</ul></section>
+    <aside class="collaborate-gaidfly" aria-labelledby="gaidfly-heading"><h2 id="gaidfly-heading">Defend it out loud</h2><p>G<span class="ai">Ai</span>DFLY is a voice debate partner for strategy education. It takes the other side of your argument for 10 to 15 minutes, then writes a debrief of how you handled the pressure. It never grades. It’s in a closed pilot, so if you want to try it, say so in your sign-up.</p><a href="https://gaidfly.com" target="_blank" rel="noreferrer">See GAiDFLY <span aria-hidden="true">→</span></a></aside>
+    <section class="collaborate-join" aria-labelledby="collaborate-form-heading">
+      <div class="collaborate-intro"><h2 id="collaborate-form-heading">Sign up</h2><p>We read every sign-up and reply by email. You can also write to <a href="mailto:jshaw@comprendo.dev">jshaw@comprendo.dev</a>.</p><p class="collaborate-promise">Your details stay on a private Judgment Lab list. We won’t share them or publish your name without asking first, and you’ll get the newsletter only if you tick the box. To be removed, email jshaw@comprendo.dev.</p></div>
+      <div class="collaborate-signup">
+        <form class="collaborate-form" data-collaborate-form data-endpoint="${endpoint}" action="${endpoint || "mailto:jshaw@comprendo.dev"}" method="post">
+          <div class="field"><label for="collaborate-name">Name</label><input id="collaborate-name" name="name" type="text" autocomplete="name" maxlength="120" required></div>
+          <div class="field"><label for="collaborate-email">Email</label><input id="collaborate-email" type="email" name="email" autocomplete="email" maxlength="254" required></div>
+          <div class="field"><label for="collaborate-setting">Setting</label><select id="collaborate-setting" name="setting" required><option value="">Choose your setting</option>${settings.map(([id, name]) => `<option value="${id}">${name}</option>`).join("")}</select></div>
+          <div class="field"><label for="collaborate-role">Role and institution<span class="optional">Optional</span></label><input id="collaborate-role" name="role" type="text" autocomplete="organization-title" maxlength="160"></div>
+          <fieldset class="field"><legend>How do you want to participate?<span class="optional">Optional</span></legend><div class="choices">${ways.map(([id, name]) => `<div class="choice"><input type="checkbox" name="ways" value="${id}" id="collaborate-way-${id}"><label for="collaborate-way-${id}">${name}</label></div>`).join("")}</div></fieldset>
+          <div class="field"><label for="collaborate-note">What are you trying, or what are you stuck on?<span class="optional">Optional</span></label><textarea id="collaborate-note" name="note" rows="5" maxlength="1500"></textarea></div>
+          <div class="field choice"><input type="checkbox" name="listing" value="yes" id="collaborate-listing"><label for="collaborate-listing">List me publicly as a collaborator. We’ll confirm with you first.</label></div>
+          <div class="field choice"><input type="checkbox" name="newsletter" value="yes" id="collaborate-newsletter"><label for="collaborate-newsletter">Send me the Judgment Lab newsletter to stay informed about judgment in AI.</label></div>
+          <div class="collaborate-trap" aria-hidden="true"><label for="collaborate-website">Leave this empty</label><input id="collaborate-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+          <div class="action-row"><button class="copy-button collaborate-cta" type="submit" data-collaborate-submit>Send</button></div>
+        </form>
+        <div class="collaborate-result" data-collaborate-success hidden tabindex="-1"><h3>Thanks.</h3><p>We’ll be in touch by email.</p></div>
+        <div class="collaborate-result" data-collaborate-fallback hidden tabindex="-1"><div data-fallback-failed><h3>That didn’t go through.</h3><p>Your answers are still in the form.</p></div><div data-fallback-unknown hidden><h3>We couldn’t confirm your sign-up.</h3><p>It may have gone through. To be safe, email it too.</p></div><p><a data-collaborate-mailto href="mailto:jshaw@comprendo.dev">Email your sign-up to jshaw@comprendo.dev</a></p></div>
+      </div>
+    </section>
+    ${renderRoster(collaborators)}
   </div>`;
 }
 
 function buildDiscussMode() {
   return `<div class="surface discuss-surface">
     <section class="surface-hero"><h1>Judgment in Practice</h1><p class="dek">A conversation worth having before the next AI-assisted assignment.</p><p>Choose a claim to challenge. Bring a concrete example, a serious objection, and a willingness to reconsider. Use this 20–30 minute guided discussion with colleagues, supported by a facilitator guide.</p><div class="action-row"><a class="copy-button primary" href="https://judgment-in-practice.web.app/guide.html" target="_blank" rel="noreferrer">Open the facilitator guide</a><a class="quiet-action" href="https://judgment-in-practice.web.app/" target="_blank" rel="noreferrer">Open the guided discussion</a></div></section>
+    <section class="practitioner-conversation" aria-labelledby="conversation-heading">
+      <div class="conversation-invitation"><h2 id="conversation-heading">Join the conversation</h2><p>We're looking for people actively trying to strengthen human judgment while using AI in teaching or work.</p><p>What are you trying, and how do you tell whether people still understand and can defend the decisions they make? We'd like to compare concrete examples, including attempts that haven't worked.</p><div class="action-row"><a class="copy-button primary" href="#collaborate" data-mode-link="collaborate">Join the open call</a></div><p class="conversation-help">Tell us what you’re trying, what you’ve seen, or what you’re stuck on. Half-finished experiments are welcome.</p><p class="conversation-help">Prefer email? Write to <a href="mailto:jshaw@comprendo.dev">jshaw@comprendo.dev</a>.</p></div>
+      <aside class="conversation-session" aria-labelledby="maven-session-heading"><h3 id="maven-session-heading">A conversation to start from</h3><p><cite>“Prompting” Isn’t Leading: Executive Skills AI Can’t Fake</cite></p><p>Ethan Evans and Sue Bethanis · Maven · October 26, 2026</p><p>Frame the problem before prompting. Challenge the output. Own the decision. This session explores those responsibilities in leadership and work.</p><a href="https://maven.com/p/7b4117" target="_blank" rel="noreferrer">Visit the Maven session page</a><p class="source-note">Recording listed as coming soon when checked October 26, 2026. These practitioner perspectives offer questions to test, not evidence that a particular method strengthens judgment.</p></aside>
+    </section>
     <section class="detail-band"><h2 class="band-label">Read the argument in your setting</h2>${editionLinks()}</section>
     <section class="discussion-opening"><h2>Where does the judgment happen?</h2><p>A student submits an excellent paper with help from an AI agent. The agent helped define the problem and develop the argument. Which choices can the student explain—and what happens when an assumption changes?</p><p>Start with an example from your work. Whose decision is it, and what would make their understanding visible?</p><p class="source-note">Fictional education example adapted from <a href="#essay" data-mode-link="essay">The Irreducible Officer</a>.</p></section>
     <p class="discussion-setting" data-discussion-setting>Choose a setting above to frame the discussion for your audience.</p>
@@ -1425,7 +1478,7 @@ const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
 const modeAliases = {learn:"overview",practice:"companion",design:"workbench",references:"sources"};
-const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay"];
+const modeNames = ["discuss", "overview", "essay", "companion", "workbench", "sources", "pme", "he", "k12", "he-essay", "k12-essay", "collaborate"];
 const workbenchProfiles = ${JSON.stringify(profiles.map(({tools,rows,practice,assessment,...p})=>p)).replaceAll("<","\\u003c")};
 const workbenchPrompts = ${JSON.stringify(Object.fromEntries(profiles.map(p=>[p.id,workbenchSetupPrompt(p.id)]))).replaceAll("<","\\u003c")};
 const workbenchJobs = ${JSON.stringify(workbenchJobs).replaceAll("<","\\u003c")};
@@ -1448,6 +1501,7 @@ function applyAudience(id) {
   document.getElementById("workbench-summary").textContent = profile ? profile.summary : "Choose a setting to open its teaching examples, reference matrix, and adapted tools.";
   document.getElementById("workbench-setting-status").textContent = profile ? profile.status : "PME, HE, and high-school materials each require evidence from use in their own setting.";
   document.getElementById("lab-audience").value = currentWorkbenchAudience;
+  document.dispatchEvent(new CustomEvent("lab:audience", { detail: currentWorkbenchAudience }));
   document.getElementById("workbench-context-download").href = "assets/workbench-context"+(profile?"-"+id:"")+".md";
   document.querySelectorAll("[data-workbench-audience]").forEach(el=>el.hidden=el.dataset.workbenchAudience!==currentWorkbenchAudience);
   document.querySelectorAll("[data-audience-current]").forEach(el => el.textContent = label || "Choose your setting above");
@@ -1677,10 +1731,13 @@ function setMode(mode, shouldScroll = true, push = false) {
   document.body.dataset.activeMode = mode;
   document.body.dataset.readingEssay = String(["essay","he-essay","k12-essay"].includes(mode));
   selectEssayRail(mode);
+  const tabMode = audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode;
+  // Pages outside the five paths (the open call) select no tab; Learn stays reachable by keyboard.
+  const focusTab = buttons.some((button) => button.dataset.modeTab === tabMode) ? tabMode : "overview";
   buttons.forEach((button) => {
-    const active = button.dataset.modeTab === (audienceLabels[mode] || mode === "essay" || mode.endsWith("-essay") ? "overview" : mode);
+    const active = button.dataset.modeTab === tabMode;
     button.setAttribute("aria-selected", String(active));
-    button.tabIndex = active ? 0 : -1;
+    button.tabIndex = button.dataset.modeTab === focusTab ? 0 : -1;
   });
   views.forEach((view) => {
     view.classList.toggle("is-active", view.dataset.mode === mode);
@@ -3492,5 +3549,6 @@ body:not([data-reading-essay="true"]) .toc {
   }
 }
 ${readFileSync(join(root,"styles/lab-refresh.css"),"utf8")}
-${readFileSync(join(root,"styles/reel.css"),"utf8")}`;
+${readFileSync(join(root,"styles/reel.css"),"utf8")}
+${readFileSync(join(root,"styles/collaborate.css"),"utf8")}`;
 }

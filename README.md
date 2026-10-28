@@ -97,3 +97,18 @@ To retire a framing, add a rule to the companion's `alignment/retired-phrases.js
 Changes that span multiple repos share one branch name and merge in order: companion, then workbench, then site.
 
 `main` is protected and requires this check to pass before merging. On failure, the run uploads `dist` and the Playwright report as artifacts.
+
+### Open call for collaborators
+
+`#collaborate` invites educators and practitioners to pilot with learners, contribute cases, design teaching materials, or review the evidence.
+
+- **The form.** Its one form posts to the Apps Script web app in `apps-script/collaborators/`, which has the deploy steps. Each sign-up adds a row to a private Google Sheet and sends an email to jshaw@comprendo.dev.
+- **The endpoint.** `content/collaborate.json` holds the web app's `/exec` URL, and the contract test refuses to release without it. If a sign-up fails or times out, the page offers a prefilled email instead.
+- **The public roster.** Nothing is published automatically. The roster is `content/collaborators.json`, edited by hand once a person agrees to be listed.
+- **The links in.** The masthead, the footer, the home page's testing section and Discuss all link to the call.
+
+The design is in `docs/superpowers/specs/2026-10-26-collaborator-open-call-design.md`.
+
+### Practitioner conversation
+
+The Discuss page pairs the October 26, 2026 Maven session with an invitation to compare practices, and its button opens the open call. The Maven link goes to the official session page. The recording was listed as coming soon on October 26; when it is publicly playable, update the dated status and the link label. Private Granola notes and the transcript are not published.

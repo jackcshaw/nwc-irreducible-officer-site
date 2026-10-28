@@ -165,7 +165,8 @@ h2,h3 {line-height:1.25;}
 .discussion-library p {font-size:17px;line-height:1.5;color:var(--muted);margin-top:12px;}
 .lab-footer {max-width:1160px;margin:0 auto;padding:32px 28px 50px;border-top:1px solid var(--ink);display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:24px;align-items:baseline;}
 .lab-footer>a:first-child {font-family:var(--font-display);font-size:26px;text-decoration:none;color:var(--ink);}
-.lab-footer p,.lab-footer>a:last-of-type {font-size:16px;}
+.lab-footer p,.lab-footer .footer-links a {font-size:16px;}
+.lab-footer .footer-links {display:grid;gap:10px;justify-items:start;}
 .lab-footer .lab-version {grid-column:1/-1;margin:0;font-size:13px;color:var(--muted);}
 .skip-link {position:absolute;top:-100px;left:20px;z-index:100;background:var(--ink);color:var(--paper);padding:10px 18px;}
 .skip-link:focus {top:14px;}
@@ -295,7 +296,7 @@ h2,h3 {line-height:1.25;}
 
 /* Setting identity: one colour per setting, used only on the chip, the rule above the nav, the breadcrumb, and the essay rail. The red stays the action colour. */
 /* PME takes the NWC nav-bar blue; the Lab already wears NWC crimson (its action red) and navy (its ink). */
-:root {--set-pme:#2f5597;--set-he:#6b3a6b;--set-k12:#8a4e12;}
+:root {--set-pme:#2f5597;--set-he:#6b3a6b;--set-k12:#8a4e12;--set-business:#1e6b5c;}
 html[data-setting=pme] {--setting:var(--set-pme);}
 html[data-setting=he] {--setting:var(--set-he);}
 html[data-setting=k12] {--setting:var(--set-k12);}
@@ -319,3 +320,14 @@ html[data-setting] .toc a.is-active span {background:var(--setting);border-color
 .surface-hero .hero-routes {display:flex;flex-wrap:wrap;gap:22px;margin-top:16px;font-family:"Source Sans 3",sans-serif;font-size:16px;}
 .surface-hero .hero-routes a {color:var(--ink);text-decoration:underline;text-decoration-color:var(--faint);text-underline-offset:4px;}
 @media(hover:hover){.surface-hero .hero-routes a:hover {text-decoration-color:var(--red);}}
+
+/* An invitation to compare practice, beside the conversation that prompted it. */
+.practitioner-conversation {display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:48px;margin:40px 0 48px;padding:36px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--faint);}
+.conversation-invitation h2 {font-size:34px;margin-bottom:20px;}
+.practitioner-conversation p {font-size:19px;line-height:1.55;margin-bottom:18px;max-width:65ch;}
+.conversation-session {background:var(--paper-soft);padding:26px;}
+.conversation-session h3 {font-size:25px;margin-bottom:18px;}
+.conversation-session cite {font-style:normal;}
+.conversation-session a {font-size:18px;text-underline-offset:5px;}
+.conversation-session .source-note,.conversation-invitation .conversation-help {font-size:16px;color:var(--muted);margin-top:18px;}
+@media(max-width:700px){.practitioner-conversation {grid-template-columns:1fr;gap:26px;padding:28px 0;}.conversation-invitation h2 {font-size:29px;}.conversation-session {padding:22px;}}
