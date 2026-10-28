@@ -25,6 +25,15 @@
    followLabel?, follow?, followAt?}}. Figure fields: {duration, render, beats,
    poster?} (poster: a time shown while the figure waits to play).
 
+   Optional, for interactive figures (appropriate reliance): gates: [{at,
+   resumeAt}] stops playback at each `at` until resume() is called, which jumps
+   to resumeAt (default `at`) and plays. A gate re-arms whenever the figure is
+   drawn before it. onGate(i) is called when playback stops at gate i, and
+   render(t, {gate}) receives the open gate's index (-1 when none). reducedAt is
+   the moment reduced motion shows instead of the final frame. mount() returns
+   {play, pause, seek, redraw, resume, openGate, gateOpen}; figures without
+   these fields behave exactly as before.
+
    Test hooks: ?t=4.2 renders that moment and holds; ?reduced forces the
    reduced-motion path; window.__motionFigures[id].seek(t) for export. */
 (() => {
@@ -183,6 +192,10 @@
 		// instead of an empty first frame. Play still starts from 0.
 		const poster = figure.poster;
 		let capBody = null, capFollow = null;
+		// Optional gates (see the header): each stops playback once until resumed.
+		const gates = (figure.gates || []).map((g) => ({at: g.at, resumeAt: g.resumeAt ?? g.at, armed: true}));
+		let gateOpen = -1;
+		const reducedAt = figure.reducedAt ?? duration;
 
 		const label = (text) => {
 			if (!toggle) return;
@@ -254,7 +267,9 @@
 
 		const draw = (time) => {
 			t = clamp(time, 0, duration);
-			figure.render(t);
+			for (const g of gates) if (t < g.at - 0.001) g.armed = true;
+			if (gateOpen >= 0 && Math.abs(t - gates[gateOpen].at) > 0.001) gateOpen = -1;
+			figure.render(t, {gate: gateOpen});
 			const current = beatAt(t);
 			drawCaption(t, current);
 			beatButtons.forEach((b, i) => {
@@ -271,6 +286,8 @@
 		const tick = (now) => {
 			const dt = Math.min(0.1, (now - prev) / 1000);
 			prev = now;
+			const g = gates.findIndex((g) => g.armed && t < g.at && t + dt >= g.at);
+			if (g >= 0) { openGate(g); return; }
 			draw(t + dt);
 			if (t >= duration) { playing = false; label('Replay'); root.dataset.state = 'ended'; }
 			else raf = requestAnimationFrame(tick);
@@ -292,8 +309,24 @@
 			label(t >= duration ? 'Replay' : 'Play');
 			root.dataset.state = t >= duration ? 'ended' : 'paused';
 		};
+		// Gates: open one (playback stops there), or resume past it.
+		function openGate(i) {
+			pause();
+			gates[i].armed = false;
+			gateOpen = i;
+			draw(gates[i].at);
+			root.dataset.state = 'gate';
+			if (figure.onGate) figure.onGate(i);
+		}
+		const resume = (i = gateOpen) => {
+			if (i < 0 || !gates[i]) return;
+			gates[i].armed = false;
+			gateOpen = -1;
+			draw(gates[i].resumeAt);
+			play();
+		};
 
-		if (toggle) toggle.addEventListener('click', () => (playing ? pause() : play()));
+		if (toggle) toggle.addEventListener('click', () => (gateOpen >= 0 ? resume() : playing ? pause() : play()));
 		if (replay) replay.addEventListener('click', () => { draw(0); play(); });
 		if (scrub) {
 			scrub.min = 0;
@@ -321,20 +354,22 @@
 		});
 		reducedQuery.addEventListener('change', () => {
 			root.classList.toggle('is-reduced', isReduced());
-			if (isReduced()) { pause(); draw(duration); }
+			if (isReduced()) { pause(); draw(reducedAt); }
 		});
 		// Print the final frame, whatever moment is on screen.
 		addEventListener('beforeprint', () => { pause(); draw(duration); });
 
 		// Test and export hook: seek to any moment without the clock.
-		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time); }};
+		const seek = (time) => { pause(); draw(time); };
+		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen};
+		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek, resume, openGate, gates: gates.map((g) => g.at)};
 
-		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(+params.get('t')); label('Play'); return; }
-		if (isReduced()) { root.classList.add('is-reduced'); draw(duration); label('Play'); return; }
+		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(+params.get('t')); label('Play'); return api; }
+		if (isReduced()) { root.classList.add('is-reduced'); draw(reducedAt); label('Play'); return api; }
 
 		draw(poster ?? 0);
 		label('Play');
-		if (root.dataset.mfAutoplay === 'off') return;
+		if (root.dataset.mfAutoplay === 'off') return api;
 		// Autoplay waits until the picture, its caption band and the controls can all be
 		// seen: half the shot (stage plus caption band) in view, and the caption band and
 		// controls fully in view. figures.css caps the stage height so the three fit the
@@ -345,7 +380,7 @@
 				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); play(); }
 			}, {threshold: 0.6});
 			io.observe(root);
-			return;
+			return api;
 		}
 		const ctrlEl = root.querySelector('.mf-controls');
 		const need = [[shotEl, 0.5], [caption, 0.98], [ctrlEl, 0.98]].filter(([n]) => n);
@@ -355,6 +390,7 @@
 			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); play(); }
 		}, {threshold: [0, 0.25, 0.5, 0.75, 0.98, 1]});
 		need.forEach(([n]) => io.observe(n));
+		return api;
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};

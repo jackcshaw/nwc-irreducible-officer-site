@@ -429,6 +429,173 @@
 		set(nameA, {opacity: prog(t, T.nameSwap + 0.25, T.nameSwap + 0.5)});
 		const ak = prog(t, ...T.ask, E.house);
 		set(ask, {opacity: ak, transform: `translate(0 ${mix(6, 0, ak).toFixed(2)})`});
+		renderNarrow(t);
+	};
+
+	// ---- the stacked stage ----------------------------------------------------------------
+	// Whenever a picture label would render under 11 px, a stacked text view of the same
+	// moments replaces the SVG (see index.html), driven by the same clock, at 13–16 px.
+	const narrow = root.querySelector('[data-fc-narrow]');
+	const h = (tag, cls, parent, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; parent.append(n); return n; };
+	const N = {};
+	const section = (k, label, cls) => { const sec = h('div', 'fc-n-sec', narrow); N[k] = {sec}; if (label) N[k].label = h('p', `fc-n-label ${cls || ''}`, sec, label); return sec; };
+	const TASK = "Recommend a response to an adversary's military buildup.";
+	const KEPT = CHIPS.filter((c) => c.head).map((c) => c.text);
+	const ASIDE = CHIPS.filter((c) => !c.head).map((c) => c.text);
+	const paperBlock = (parent, who, body = true) => {
+		const box = h('div', 'fc-n-paper', parent);
+		const w = h('span', 'fc-n-who', box, who);
+		const ti = h('p', 'fc-n-ptitle', box);
+		const tiSpan = h('span', null, ti, 'Deter the adversary');
+		const heads = h('div', 'fc-n-heads', box);
+		const hs = KEPT.map((k) => h('span', 'fc-n-head', heads, k));
+		if (body) h('p', 'fc-n-body', box, 'Text, a chart and a conclusion.');
+		return {box, who: w, tiSpan, hs};
+	};
+	if (narrow) {
+		{ const sec = section('student'); N.student.who = h('span', 'fc-n-who', sec, 'Student'); }
+		{ const sec = section('task', 'Example task'); h('p', 'fc-n-task', sec, TASK); }
+		{
+			const sec = section('field', 'Six considerations');
+			const row = h('div', 'fc-n-chips', sec);
+			N.field.chips = CHIPS.map((c) => ({c, n: h('span', 'fc-n-chip', row, c.text)}));
+			N.field.note = h('p', 'fc-n-small', sec, 'The four dashed ones were never weighed.');
+		}
+		{
+			const sec = section('aiFrame', "AI's frame", 'is-ai');
+			const fr = h('div', 'fc-n-frame', sec);
+			N.aiFrame.title = h('p', 'fc-n-title', fr);
+			N.aiFrame.titleSpan = h('span', null, N.aiFrame.title, '');
+			const row = h('div', 'fc-n-chips', fr);
+			N.aiFrame.chips = KEPT.map((k) => h('span', 'fc-n-chip is-ai', row, k));
+		}
+		{
+			const sec = section('draft');
+			N.draft.who = h('span', 'fc-n-who', sec, 'Student');
+			N.draft.lines = [
+				['Draft 1: rows under the AI’s two headings', T.write],
+				['Draft 2: the rows straightened', T.d2],
+				['Draft 3: adds evidence, a chart', T.chartHop],
+				['and a firmer conclusion', T.con[0]],
+			].map(([txt, at], i) => ({n: h('p', `fc-n-line${i ? ' is-rev' : ''}`, sec, txt), at}));
+			N.draft.label = h('span', 'fc-n-dl', sec, "STUDENT'S DRAFT 1");
+		}
+		{
+			const sec = section('faculty', 'What faculty receive: the final copy');
+			N.faculty.paper = paperBlock(sec, 'From this student');
+			N.faculty.key = h('p', 'fc-n-key', sec);
+			h('i', null, N.faculty.key);
+			N.faculty.key.append('AI-SUPPLIED');
+		}
+		{
+			const sec = section('second');
+			N.second.who = h('span', 'fc-n-who', sec, 'Second student');
+			h('p', 'fc-n-small', sec, 'Its AI proposes the same frame:');
+			N.second.frame = h('div', 'fc-n-frame', sec);
+			N.second.tag = h('span', 'fc-n-tag is-ai', N.second.frame, "AI's frame");
+			const kr = h('div', 'fc-n-chips', N.second.frame);
+			N.second.kept = KEPT.map((k) => h('span', 'fc-n-chip is-ai', kr, k));
+			N.second.asideTag = h('span', 'fc-n-tag is-red', sec, 'Set aside');
+			const ar = h('div', 'fc-n-chips', sec);
+			N.second.aside = ASIDE.map((k) => h('span', 'fc-n-chip', ar, k));
+		}
+		{
+			const sec = section('papers', 'What faculty receive');
+			const pair = h('div', 'fc-n-pair', sec);
+			N.papers.a = paperBlock(pair, 'First student', false);
+			N.papers.b = paperBlock(pair, 'Second student', false);
+			N.papers.note = h('p', 'fc-n-small', sec, 'The weighing doesn’t show in either paper.');
+		}
+		{
+			const sec = section('ask');
+			N.ask.q = h('p', 'fc-n-q', sec, 'Faculty ask each student: Why this frame?');
+			const pair = h('div', 'fc-n-pair', sec);
+			const col = (who) => { const c = h('div', null, pair); h('span', 'fc-n-who', c, who); return c; };
+			const a = col('First student');
+			h('span', 'fc-n-tag is-ai', a, "AI's frame");
+			const ar = h('div', 'fc-n-chips', a);
+			KEPT.forEach((k) => h('span', 'fc-n-chip is-ai', ar, k));
+			const b = col('Second student');
+			h('span', 'fc-n-tag is-red', b, 'Chosen');
+			const br = h('div', 'fc-n-chips', b);
+			KEPT.forEach((k) => h('span', 'fc-n-chip is-seen', br, k));
+			h('span', 'fc-n-tag is-red', b, 'Set aside');
+			h('p', 'fc-n-aside', b, ASIDE.join(' · '));
+			N.ask.cols = [a, b];
+		}
+	}
+	const SHOW = [
+		['student', 'task'], ['student', 'task', 'field'], ['task', 'field', 'aiFrame'],
+		['aiFrame', 'draft'], ['aiFrame', 'draft'], ['task', 'field', 'aiFrame', 'draft'],
+		['task', 'faculty'], ['faculty', 'second'], ['papers'], ['papers', 'ask'], ['task', 'papers', 'ask'],
+	];
+	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
+	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
+	// Grey AI text drains to ink as the wipe crosses (beat 7), keeping its words.
+	const drain = (node, k) => { node.style.color = mixColor(C.grey, C.ink, k); node.style.backgroundColor = `rgba(222, 213, 196, ${(1 - k).toFixed(3)})`; };
+	function renderNarrow(t) {
+		if (!narrow || !root.classList.contains('is-stacked')) return;
+		const bi = beatIndex(t);
+		const show = new Set(SHOW[bi]);
+		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k);
+		fade(N.student.sec, prog(t, T.dotIn, T.dotIn + 0.4));
+		fade(N.task.sec, prog(t, ...T.card));
+		const hk = prog(t, ...T.heads);
+		N.field.chips.forEach(({c, n}) => {
+			const t0 = T.chips + T.chipStep * c.order;
+			fade(n, prog(t, t0, t0 + T.chipDur));
+			n.classList.toggle('is-ai', !!c.head && hk >= 0.5);
+		});
+		N.field.note.hidden = bi < 5;
+		fade(N.field.note, prog(t, ...T.pull));
+		// The AI's frame: the task sentence arrives in grey and narrows to "Deter the adversary".
+		fade(N.aiFrame.sec, prog(t, T.snap, T.snap + 0.3));
+		const ti = N.aiFrame.titleSpan;
+		if (t < T.fade[0]) { ti.textContent = TASK; fade(ti, prog(t, ...T.travel)); }
+		else if (t < T.deter[0]) { ti.textContent = 'adversary'; fade(ti, 1); }
+		else { ti.textContent = 'Deter the adversary'; fade(ti, 1); }
+		N.aiFrame.title.classList.toggle('is-band', t >= T.deter[0]);
+		N.aiFrame.chips.forEach((n) => fade(n, hk));
+		N.draft.lines.forEach(({n, at}) => fade(n, prog(t, at, at + 0.4)));
+		N.draft.label.textContent = `STUDENT'S DRAFT ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
+		fade(N.draft.label, prog(t, T.write, T.write + 0.3));
+		// What faculty receive: the paper arrives grey and framed, the wipe drains it, the frame goes.
+		const fp = N.faculty.paper, wk = prog(t, ...T.wipe), bo = 1 - prog(t, ...T.bracketsA);
+		fade(fp.box, prog(t, ...T.pan));
+		fp.box.classList.toggle('is-framed', bo > 0.5);
+		[fp.tiSpan, ...fp.hs].forEach((n) => drain(n, wk));
+		fade(N.faculty.key, prog(t, ...T.key) * bo);
+		const named = t >= T.nameSwap + 0.25;
+		N.faculty.label.textContent = named ? 'What faculty receive' : 'What faculty receive: the final copy';
+		fp.who.textContent = named ? 'First student' : 'From this student';
+		// The second student: the AI proposes the same frame; each consideration is examined; the frame is claimed.
+		fade(N.second.sec, prog(t, T.dotB, T.dotB + 0.4));
+		const claim = t >= T.claim[0] + 0.2;
+		N.second.frame.classList.toggle('is-chosen', claim);
+		N.second.tag.textContent = claim ? 'Chosen' : "AI's frame";
+		N.second.tag.classList.toggle('is-ai', !claim);
+		N.second.tag.classList.toggle('is-red', claim);
+		fade(N.second.frame, prog(t, T.aiB, T.aiB + 0.4));
+		const seen = (name) => { const c = stripBChips.find((x) => x.text === name); return c && t >= T.visit + T.visitStep * c.visit + 0.3; };
+		N.second.kept.forEach((n, i) => { const v = seen(KEPT[i]); n.classList.toggle('is-ai', !v); n.classList.toggle('is-seen', v); });
+		N.second.aside.forEach((n, i) => { fade(n, prog(t, ...T.chipsB)); n.classList.toggle('is-seen', seen(ASIDE[i])); });
+		fade(N.second.asideTag, prog(t, ...T.aside));
+		// Both papers, then what each student can show when asked.
+		fade(N.papers.b.box, prog(t, ...T.sweep));
+		N.papers.note.hidden = bi !== 8;
+		fade(N.papers.note, prog(t, ...T.hideB));
+		fade(N.ask.q, prog(t, ...T.ask));
+		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));
+	}
+	// Hold the stacked view at its tallest beat, so the caption band and controls never move.
+	const sizeNarrow = () => {
+		if (!narrow || !root.classList.contains('is-stacked')) return;
+		narrow.style.minHeight = '';
+		let tallest = 0;
+		BEATS.forEach((b, i) => { renderNarrow(i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : T.end); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
+		narrow.style.minHeight = `${Math.ceil(tallest)}px`;
+		const scrub = root.querySelector('[data-mf-scrub]');
+		renderNarrow(scrub ? +scrub.value || 0 : 0);
 	};
 
 	const BEATS = [
@@ -461,7 +628,22 @@
 	document.fonts.ready.then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
+		// The stacked stage takes over whenever the smallest picture text (13 units) would
+		// render under 11 px at the runtime's letterboxed scale.
+		let lastW = 0;
+		const syncStacked = () => {
+			const r = svg.getBoundingClientRect();
+			if (!r.width) return;
+			const scale = r.height ? Math.min(r.width / VW, r.height / 540) : r.width / VW;
+			const stacked = 13 * scale < 11;
+			if (stacked) root.classList.add('is-narrow');
+			const changed = stacked !== root.classList.contains('is-stacked');
+			if (changed) root.classList.toggle('is-stacked', stacked);
+			if (stacked && (changed || Math.abs(r.width - lastW) > 1)) { lastW = r.width; sizeNarrow(); }
+		};
+		new ResizeObserver(syncStacked).observe(svg);
 		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
 		mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02});
+		syncStacked();
 	});
 })();

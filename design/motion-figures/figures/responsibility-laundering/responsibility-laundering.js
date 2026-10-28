@@ -25,19 +25,20 @@
 		onto: [19.1, 19.5], read: [[19.5, 20.5], [20.5, 21.5], [21.8, 22.8], [22.8, 23.8]],
 		// 4 · the first signs; the second notes first
 		aToSig: [26.3, 26.7], aSign: [26.7, 27.5], keyRed: [26.9, 27.3],
-		bUp: [30.0, 30.4], note: [30.4, 32.4], noteLabel: [32.5, 32.9], bDown: [34.6, 35.0], bSign: [35.0, 35.8],
-		// 5 · who made the call
-		q1: [41.0, 41.6], aPanel: [42.2, 42.6], a1: [42.6, 46.3], bPanel: [46.5, 46.9], b1: [46.9, 49.9],
+		bUp: [30.0, 30.4], noteLabel: [30.0, 30.4], note: [30.4, 32.8], bDown: [34.9, 35.3], bSign: [35.3, 36.1],
+		// 5 · faculty see only the papers, and ask who made the call
+		dimNote: [38.6, 39.1], frame: [39.2, 39.8], frameLabel: [39.6, 40.0],
+		q1: [40.2, 40.8], aPanel: [42.0, 42.4], a1: [42.4, 46.1], bPanel: [46.3, 46.7], b1: [46.7, 49.7],
 		// 6 · then they ask why
-		q2: [52.7, 53.3], aRow2: [53.5, 53.9], a2: [53.9, 56.6], bRow2: [56.8, 57.2], b2: [57.2, 63.2],
+		q2: [53.2, 53.8], aRow2: [54.0, 54.4], a2: [54.4, 57.1], bRow2: [57.3, 57.7], b2: [57.7, 64.4],
 		// 7 · the turn
-		aPulse: [65.7, 66.1], split: [68.7, 69.9], bPulse: [70.1, 70.5], bracket: [70.5, 71.3],
+		restore: [67.2, 67.8], aPulse: [68.2, 68.6], outlines: [71.2, 71.7], split: [71.9, 73.1], bPulse: [73.3, 73.7], bracket: [73.7, 74.5],
 		// 8 · suppose it proves wrong
-		weights: [74.6, 75.0], aFall: [77.9, 79.3], aRest: [79.3, 79.7], bFall: [79.9, 80.9], bRest: [80.9, 81.2],
+		weights: [77.5, 77.9], aFall: [80.8, 82.2], aRest: [82.2, 82.6], bFall: [82.8, 83.8], bRest: [83.8, 84.1],
 		// 9 · the check
-		check: 82.7, follow: 85.6, end: 89.9,
+		check: 85.6, follow: 88.5, end: 92.8,
 	};
-	const BEAT_AT = [0, 6.4, 18.1, 25.3, 37.3, 51.4, 64.7, 73.6, 82.7];
+	const BEAT_AT = [0, 6.4, 18.1, 25.3, 37.6, 51.9, 66.2, 76.5, 85.6];
 
 	// ---- geometry (stage units; the sheets use their own units) --------------
 	const BIG = {x: 202, y: 140, s: 1.25};
@@ -49,14 +50,14 @@
 	const SIG = {y: 166, x0: 20, x1: 300, dot: {x: 36, y: 161}, start: {x: 86, y: 162}, end: {x: 206, y: 154}};
 	const SQUIGGLE = 'M86 162C90 152 96 150 100 158S104 168 110 160S118 148 123 156S129 166 135 158S144 148 148 155S154 163 160 157S170 151 176 156S184 160 206 154';
 	const WT = {x: -22, w: 96, h: 34, hang: -6, rest: 122};
-	const HALF = {x: 66, y: 35};
-	const NOTE = {x: 508, ys: [98, 116], lines: ['Rests on an open port.', 'Harbor reports: normal.'], dot: {x: 496, y: 93}};
-	const PANEL = {y0: 388, y1: 502, w: 444, name: 406, rows: [[426, 445], [469, 488]], textDx: 34};
+	const SPLIT = {x: 58, y: 34, r: 7.5};
+	const NOTE = {x: 508, ys: [98, 116], lines: ['Rests on an open port.', 'Today’s harbor reports: normal.'], dot: {x: 496, y: 93}};
+	const PANEL = {y0: 388, y1: 510, w: 444, name: 404, rows: [[422, 440], [462, 480, 498]], textDx: 34};
 	const SPEECH = {
 		a: {rows: [{n: '1', str: '“I signed it. The analysis estimated the ships could do it.”', at: T.a1, open: T.aPanel},
 			{n: '2', str: '“It was the AI’s estimate. It seemed solid.”', at: T.a2, open: T.aRow2}]},
 		b: {rows: [{n: '1', str: '“I did. I chose to rely on the estimate.”', at: T.b1, open: T.bPanel},
-			{n: '2', str: '“It assumes an open port. Harbor reports looked normal, so I accepted it. I didn’t check for closures.”', at: T.b2, open: T.bRow2}]},
+			{n: '2', str: '“It assumes an open port. Today’s harbor reports looked normal, so I accepted it. I should have checked for closures.”', at: T.b2, open: T.bRow2}]},
 	};
 	const Q = ['1 · Suppose the port closes. Who made the call to wait?', '2 · Why did you rely on the estimate?'];
 
@@ -85,17 +86,26 @@
 	const card = el(sceneBase, 'g');
 	const cardRect = el(card, 'rect', {x: 24, y: 16, width: 416, height: 36, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
 	const cardLabel = mono(card, 38, 39, 'EXAMPLE TASK');
-	const cardText = serif(card, 160, 39, 'Recommend when to evacuate a port city.', {fs: 15});
+	const cardText = serif(card, 160, 39.5, 'Recommend when to evacuate a port city.', {fs: 16});
 
 	// ---- note row (the second student's own note, not handed in) ------------
-	const noteLabel = mono(sceneBase, 24, 74, 'THEIR OWN NOTE · NOT HANDED IN');
-	const noteRule = el(sceneBase, 'line', {x1: 24, y1: 126, x2: 936, y2: 126, stroke: C.ink, 'stroke-opacity': 0.18});
-	const noteNone = serif(sceneBase, 40, 104, '—', {fs: 16, fill: mixColor(C.ink, C.paper, 0.55)});
+	const noteRow = el(sceneBase, 'g');
+	const noteLabel = mono(noteRow, 24, 74, 'THEIR OWN NOTE · NOT HANDED IN');
+	const noteRule = el(noteRow, 'line', {x1: 24, y1: 126, x2: 936, y2: 126, stroke: C.ink, 'stroke-opacity': 0.18});
+	const noteNone = serif(noteRow, 40, 104, '—', {fs: 16, fill: mixColor(C.ink, C.paper, 0.55)});
 	const noteWords = [];
 	NOTE.lines.forEach((ln, li) => {
-		const tn = serif(sceneBase, NOTE.x, NOTE.ys[li], '', {fs: 15, fill: C.red, style: 'italic'});
+		const tn = serif(noteRow, NOTE.x, NOTE.ys[li], '', {fs: 15, fill: C.red, style: 'italic'});
 		ln.split(' ').forEach((wd, wi) => noteWords.push(el(tn, 'tspan', {'fill-opacity': 0}, (wi ? ' ' : '') + wd)));
 	});
+
+	// Beats 5–6: what faculty see. The note row dims under a tag, and a frame goes round the copies.
+	const dontSee = mono(sceneBase, 936, 74, 'FACULTY DON’T SEE THIS', {anchor: 'end'});
+	const frame = el(sceneBase, 'rect', {x: 14, y: 124, width: 932, height: 212, rx: 6, fill: 'none', stroke: C.ink, 'stroke-width': 1.5});
+	const frameLabelG = el(sceneBase, 'g');
+	const frameLabelBg = el(frameLabelG, 'rect', {y: 328, height: 16, fill: C.paper});
+	const frameLabel = mono(frameLabelG, 930, 340, 'WHAT FACULTY SEE', {anchor: 'end'});
+	let frameLen = 0;
 
 	// ---- the copies (one draft that divides in two) ---------------------------
 	const copy = (col) => {
@@ -113,17 +123,18 @@
 		const sigLine = el(g, 'line', {x1: SIG.x0, y1: SIG.y, x2: SIG.x0, y2: SIG.y, stroke: C.ink, 'stroke-opacity': 0.35});
 		const squiggle = el(g, 'path', {d: SQUIGGLE, fill: 'none', stroke: C.red, 'stroke-width': 1.7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'});
 		const tag = el(g, 'text', {x: 0, y: -8, 'font-family': FONT.mono, 'font-size': MONO, 'font-weight': 600, 'letter-spacing': 1.1, 'data-fs': MONO});
-		el(tag, 'tspan', {fill: C.ink}, col === 'a' ? 'FIRST STUDENT' : 'SECOND STUDENT');
+		el(tag, 'tspan', {fill: C.ink}, col === 'a' ? 'FIRST STUDENT’S COPY' : 'SECOND STUDENT’S COPY');
 		el(tag, 'tspan', {fill: C.grey}, ' · DRAFTED WITH AI');
 		const weight = el(g, 'g');
 		el(weight, 'path', {d: `M${WT.x + 4} 0H${WT.x + WT.w - 4}L${WT.x + WT.w} ${WT.h}H${WT.x}Z`, fill: C.ink});
 		mono(weight, WT.x + WT.w / 2, 22, 'ANSWERABLE', {anchor: 'middle', fill: C.bright, ls: 0.4});
-		return {g, lines, sigLine, squiggle, tag, weight, len: 0};
+		const outline = col === 'a' ? el(g, 'rect', {y: LINE_Y[0][0] - 17, height: 24, rx: 3, fill: 'none', stroke: C.ink, 'stroke-width': 1.5}) : null;
+		return {g, lines, sigLine, squiggle, tag, weight, outline, len: 0};
 	};
 	const copies = {a: copy('a'), b: copy('b')};
 
 	// ---- faculty's questions and the speech panels -----------------------------
-	const qs = Q.map((s, i) => serif(sceneBase, 480, i ? 370 : 350, s, {fs: 17, style: 'italic', anchor: 'middle'}));
+	const qs = Q.map((s, i) => serif(sceneBase, 480, i ? 372 : 352, s, {fs: 17, style: 'italic', anchor: 'middle'}));
 	const speech = (col) => {
 		const x = ORIGIN[col].x, w = PANEL.w, y0 = PANEL.y0, y1 = PANEL.y1, r = 8;
 		const g = el(sceneBase, 'g');
@@ -138,24 +149,26 @@
 		return {g, box, rows, x};
 	};
 	const speeches = {a: speech('a'), b: speech('b')};
+	// The matching outline on "The analysis" in the first student's answer 1.
+	const sayOutline = el(sceneBase, 'rect', {height: 22, rx: 3, fill: 'none', stroke: C.ink, 'stroke-width': 1.5});
 	const bracketX = ORIGIN.b.x + 26;
-	const bracket = el(sceneBase, 'path', {d: `M${bracketX + 5} ${PANEL.rows[1][0] - 14}H${bracketX}V${PANEL.rows[1][1] + 6}H${bracketX + 5}`, fill: 'none', stroke: C.red, 'stroke-width': 2, 'stroke-linejoin': 'miter'});
+	const bracket = el(sceneBase, 'path', {d: `M${bracketX + 5} ${PANEL.rows[1][0] - 14}H${bracketX}V${PANEL.rows[1][2] + 6}H${bracketX + 5}`, fill: 'none', stroke: C.red, 'stroke-width': 2, 'stroke-linejoin': 'miter'});
 	let bracketLen = 0;
 
 	// ---- key ------------------------------------------------------------------
 	const keyGrey = el(sceneBase, 'g');
-	el(keyGrey, 'rect', {x: 24, y: 514, width: 16, height: 11, fill: C.band});
-	const keyGreyT = mono(keyGrey, 48, 524, 'WRITTEN BY AI', {fill: C.grey});
+	el(keyGrey, 'rect', {x: 24, y: 519, width: 18, height: 12, fill: C.band, stroke: C.grey, 'stroke-opacity': 0.35});
+	const keyGreyT = mono(keyGrey, 50, 530, 'WRITTEN BY AI', {fill: C.grey});
 	const keyRed = el(sceneBase, 'g');
-	const keyRedDot = el(keyRed, 'circle', {cx: 0, cy: 519.5, r: 4.5, fill: C.red});
-	const keyRedT = mono(keyRed, 0, 524, 'A STUDENT’S DECISION', {fill: C.red});
+	const keyRedDot = el(keyRed, 'circle', {cx: 0, cy: 525, r: 5, fill: C.red});
+	const keyRedT = mono(keyRed, 0, 530, 'A STUDENT’S DECISION', {fill: C.red});
 
 	// ---- dots -------------------------------------------------------------------
 	const dot = (col, label) => {
 		const g = el(sceneTop, 'g');
 		const ring = el(g, 'circle', {r: 5, fill: 'none', stroke: C.red, 'stroke-width': 1.5, opacity: 0});
 		const c = el(g, 'circle', {r: 5, fill: C.red});
-		const half = el(g, 'circle', {r: 0, fill: C.red});
+		const half = el(g, 'circle', {r: 0, fill: C.red, stroke: C.bright, 'stroke-width': 1.5});
 		const lab = text(g, HOME[col].x + 12, HOME[col].y + 4, label, {fs: 13, weight: 600, fill: C.red});
 		return {g, ring, c, half, lab};
 	};
@@ -188,25 +201,33 @@
 		}
 		set(cardText, {x: 38 + W(cardLabel) + 14});
 		set(cardRect, {width: W(cardLabel) + W(cardText) + 14 + 30});
-		const kx = 48 + W(keyGreyT) + 28;
+		const kx = 50 + W(keyGreyT) + 28;
 		set(keyRedDot, {cx: kx});
-		set(keyRedT, {x: kx + 11});
+		set(keyRedT, {x: kx + 12});
 		bracketLen = bracket.getTotalLength();
 		set(bracket, {'stroke-dasharray': bracketLen});
+		frameLen = frame.getTotalLength();
+		set(frame, {'stroke-dasharray': frameLen});
+		const flw = W(frameLabel);
+		set(frameLabelBg, {x: 930 - flw - 8, width: flw + 16});
+		// "The analysis" on the first copy (sheet units).
+		const first = copies.a.lines[0].t;
+		set(copies.a.outline, {x: TX - 3, width: first.getSubStringLength(0, 12) + 6});
 		// Speech: wrap each answer to its panel and split it into words on the clock.
 		for (const s of Object.values(speeches)) {
 			for (const row of s.rows) {
 				const maxW = PANEL.w - PANEL.textDx - 16;
 				let lines = wrap(row.str, maxW, row.lineEls[0]);
-				if (lines.length === 2) {
-					// Balance two lines so no word is left alone on the second.
-					for (let w2 = maxW; w2 > maxW * 0.5; w2 -= 6) {
+				if (lines.length > 1 && lines.length <= row.lineEls.length) {
+					// Balance the lines so no word is left alone on the last one.
+					const n = lines.length;
+					for (let w2 = maxW; w2 > maxW * 0.4; w2 -= 6) {
 						const tryL = wrap(row.str, w2, row.lineEls[0]);
-						if (tryL.length > 2) break;
+						if (tryL.length > n) break;
 						lines = tryL;
 					}
 				}
-				lines = lines.slice(0, 2);
+				lines = lines.slice(0, row.lineEls.length);
 				row.words = [];
 				lines.forEach((ln, li) => {
 					const tn = row.lineEls[li];
@@ -214,6 +235,14 @@
 					ln.split(' ').forEach((wd, wi) => row.words.push(el(tn, 'tspan', {'fill-opacity': 0}, (wi ? ' ' : '') + wd)));
 				});
 			}
+		}
+		// "The analysis" in the first student's answer 1 (stage units).
+		{
+			const row = speeches.a.rows[0];
+			const li = row.lineEls.findIndex((tn) => tn.textContent.includes('The analysis'));
+			const tn = row.lineEls[li], idx = tn.textContent.indexOf('The analysis');
+			const x0 = +tn.getAttribute('x') + tn.getSubStringLength(0, idx);
+			set(sayOutline, {x: x0 - 2, y: PANEL.rows[0][li] - 16, width: tn.getSubStringLength(idx, 12) + 5});
 		}
 		// Dot paths: both read the same lines at the same pace.
 		const lw = copies.a.lines.map((l) => l.w);
@@ -274,6 +303,18 @@
 		set(noteLabel, {opacity: prog(t, ...T.noteLabel)});
 		set(noteNone, {opacity: prog(t, ...T.noteLabel)});
 		set(noteRule, {opacity: prog(t, ...T.noteLabel)});
+		// Beats 5–6: faculty see only the papers. The note row dims under a tag, and a frame
+		// labelled "What faculty see" goes round the copies. Beat 7 restores the viewer's view.
+		const kAsk = prog(t, ...T.dimNote) - prog(t, ...T.restore);
+		set(noteRow, {opacity: 1 - 0.8 * kAsk});
+		set(dontSee, {opacity: kAsk});
+		const kFrame = prog(t, ...T.frame, E.inOut) * (1 - prog(t, ...T.restore));
+		set(frame, {'stroke-dashoffset': frameLen * (1 - prog(t, ...T.frame, E.inOut)), opacity: kFrame > 0 ? 1 - prog(t, ...T.restore) : 0});
+		set(frameLabelG, {opacity: prog(t, ...T.frameLabel) * (1 - prog(t, ...T.restore))});
+		// Beat 7: "The analysis" outlined in the first student's answer and on their copy.
+		const kOut = prog(t, ...T.outlines);
+		set(copies.a.outline, {opacity: kOut});
+		set(sayOutline, {opacity: kOut});
 
 		// Faculty's questions and the two rounds of answers.
 		set(qs[0], {opacity: prog(t, ...T.q1), transform: `translate(0 ${mix(6, 0, prog(t, ...T.q1, E.house))})`});
@@ -317,19 +358,13 @@
 			set(d.c, {cx: p.x, cy: p.y, r: 5 * Math.min(1, kDots * 1.2)});
 			set(d.half, {r: 0});
 		}
-		// Beat 7: the first student's dot splits; half moves beside the AI's phrase.
-		// Beat 8: the first weight collects that half, and the halves rejoin under it.
-		const kSplit = prog(t, ...T.split, E.inOut);
+		// Beat 7: part of the first student's dot splits off and settles beside "The analysis
+		// estimates" on their copy. It stays to the end; the weight passes it (beat 8).
 		if (t >= T.split[0]) {
-			const base = st('a', SIG.dot), beside = st('a', HALF);
-			const kMerge = prog(t, ...T.aRest, E.inOut);
-			let hp = {x: mix(base.x, beside.x, kSplit), y: mix(base.y, beside.y, kSplit)};
-			const bottom = wyA + WT.h;
-			if (bottom + 3.5 > HALF.y) hp = st('a', {x: HALF.x, y: Math.min(bottom + 3.5, SIG.dot.y)});
-			if (kMerge > 0) hp = {x: mix(st('a', {x: HALF.x, y: 0}).x, base.x, kMerge), y: mix(hp.y, base.y, kMerge)};
-			const rSmall = mix(5, 3.5, prog(t, T.split[0], T.split[0] + 0.3));
-			set(dots.a.c, {r: mix(rSmall, 5, kMerge)});
-			set(dots.a.half, {cx: hp.x, cy: hp.y, r: kMerge >= 1 ? 0 : mix(3.5, 5, kMerge)});
+			const kSplit = prog(t, ...T.split, E.inOut);
+			const base = st('a', SIG.dot), beside = st('a', SPLIT);
+			const lift = prog(t, T.split[0], T.split[0] + 0.25);
+			set(dots.a.half, {cx: mix(base.x, beside.x, kSplit), cy: mix(base.y, beside.y, kSplit), r: mix(5, SPLIT.r, lift)});
 		}
 
 		renderNarrow(t);
@@ -353,9 +388,10 @@
 		N.names = ['First student', 'Second student'].map((n) => h('p', 'rl-n-label rl-n-red', s, `● ${n}`));
 	}
 	{
-		const s = h('div', 'rl-n-sec', body);
+		const s = N.noteSec = h('div', 'rl-n-sec rl-n-rel', body);
 		N.noteLabel = h('p', 'rl-n-label', s, 'Their own note · not handed in');
-		const pair = h('div', 'rl-n-pair', s);
+		N.dontSee = h('p', 'rl-n-over', s, 'Faculty don’t see this');
+		const pair = N.notePair = h('div', 'rl-n-pair', s);
 		N.none = h('p', 'rl-n-none', h('div', 'rl-n-col', pair), '—');
 		const note = h('p', 'rl-n-note', h('div', 'rl-n-col', pair));
 		N.noteWords = NOTE.lines.join(' ').split(' ').map((wd, i) => h('span', null, note, (i ? ' ' : '') + wd));
@@ -370,9 +406,12 @@
 		const cardN = (col) => {
 			const c = h('div', 'rl-n-card', pair);
 			h('p', 'rl-n-tag rl-n-grey', c, 'Drafted with AI');
+			const reader = h('span', 'rl-n-reader', c);
 			const r1 = h('p', 'rl-n-row', c);
 			const half = col === 'a' ? h('span', 'rl-n-half', r1) : null;
-			h('span', 'rl-n-band', r1, 'The analysis estimates ships can carry everyone out.');
+			const b1 = h('span', 'rl-n-band', r1);
+			const theAnalysis = h('span', null, b1, 'The analysis');
+			b1.append(' estimates ships can carry everyone out.');
 			const r2 = h('p', 'rl-n-row', c);
 			h('span', 'rl-n-band', r2, 'It is recommended that civilians wait for ships.');
 			const sig = h('div', 'rl-n-sig', c);
@@ -380,9 +419,11 @@
 			const di = h('i', null, dotN);
 			const squig = sq(sig);
 			const chip = h('span', 'rl-n-chip', sig, 'Answerable');
-			return {c, half, di, squig, chip};
+			return {c, reader, r1, r2, half, theAnalysis, di, squig, sig, chip};
 		};
 		N.cards = {a: cardN('a'), b: cardN('b')};
+		N.frame = h('div', 'rl-n-frame', s);
+		N.frameLabel = h('span', 'rl-n-framelabel', N.frame, 'What faculty see');
 		const d = N.draft = h('div', 'rl-n-draft', s);
 		h('p', 'rl-n-tag rl-n-grey', d, 'One AI draft');
 		N.draftRows = ['The analysis estimates ships can carry everyone out.', 'It is recommended that civilians wait for ships.'].map((x) => { const r = h('p', 'rl-n-row', d); h('span', 'rl-n-band', r, x); return r; });
@@ -395,7 +436,15 @@
 		const s = h('div', 'rl-n-sec rl-n-pair', body);
 		N.say = ['a', 'b'].map((k) => {
 			const box = h('div', 'rl-n-say', s);
-			return {box, lines: SPEECH[k].rows.map((r) => h('p', 'rl-n-line', box, `${r.n} · ${r.str}`))};
+			return {box, lines: SPEECH[k].rows.map((r, ri) => {
+				const ln = h('p', 'rl-n-line', box);
+				const i = k === 'a' && ri === 0 ? r.str.indexOf('The analysis') : -1;
+				if (i < 0) { ln.textContent = `${r.n} · ${r.str}`; return ln; }
+				ln.append(`${r.n} · ${r.str.slice(0, i)}`);
+				N.sayAnalysis = h('span', null, ln, 'The analysis');
+				ln.append(r.str.slice(i + 12));
+				return ln;
+			})};
 		});
 	}
 	{
@@ -408,8 +457,12 @@
 		if (!root.classList.contains('is-stacked')) return;
 		op(N.task, prog(t, ...T.card));
 		N.names.forEach((n) => op(n, prog(t, ...T.dots)));
-		op(N.noteLabel, prog(t, ...T.noteLabel));
+		const kAsk = prog(t, ...T.dimNote) - prog(t, ...T.restore);
+		op(N.noteLabel, prog(t, ...T.noteLabel) * (1 - 0.8 * kAsk));
 		op(N.none, prog(t, ...T.noteLabel));
+		op(N.notePair, 1 - 0.8 * kAsk);
+		op(N.dontSee, kAsk);
+		op(N.frame, prog(t, ...T.frame) * (1 - prog(t, ...T.restore)));
 		const nW = N.noteWords.length;
 		N.noteWords.forEach((w, i) => { const ti = T.note[0] + ((T.note[1] - T.note[0]) * i) / nW; op(w, prog(t, ti, ti + 0.15)); });
 		const kDiv = prog(t, ...T.divide);
@@ -422,15 +475,23 @@
 			const sign = col === 'a' ? T.aSign : T.bSign;
 			cd.squig.setAttribute('stroke-dashoffset', (1 - prog(t, sign[0], sign[0] + (sign[1] - sign[0]) * 0.7)).toFixed(3));
 			op(cd.di, t >= sign[1] ? 1 : 0);
+			// The chip falls from the top row, past the AI's sentences, onto the signature row.
 			const fall = col === 'a' ? T.aFall : T.bFall;
 			const kChip = prog(t, fall[0], fall[1], (x) => x * x);
-			op(cd.chip, kChip);
-			cd.chip.style.transform = `translateY(${mix(-8, 0, kChip).toFixed(1)}px)`;
+			const dy = cd.sig.offsetTop - cd.r1.offsetTop;
+			op(cd.chip, prog(t, ...T.weights));
+			cd.chip.style.transform = `translateY(${(-dy * (1 - kChip)).toFixed(1)}px)`;
+			// Beat 3: each student's reading marker steps down the rows at the same pace.
+			const reading = t >= T.read[0][0] && t < T.read[3][1];
+			cd.reader.style.visibility = reading ? 'visible' : 'hidden';
+			cd.reader.style.top = `${(t < T.read[2][0] ? cd.r1.offsetTop : cd.r2.offsetTop) + 6}px`;
 		}
-		// The first card: the signature dot halves (beat 7) and is whole again (beat 8).
-		const split = t >= T.split[0] && t < T.aRest[1];
-		N.cards.a.half.style.visibility = split ? 'visible' : 'hidden';
-		N.cards.a.di.style.transform = split ? 'scale(0.7)' : '';
+		// Beat 7: part of the first student's dot splits off beside "The analysis" and stays.
+		N.cards.a.half.style.visibility = t >= T.split[0] ? 'visible' : 'hidden';
+		op(N.cards.a.half, prog(t, ...T.split));
+		const outlined = t >= T.outlines[0];
+		N.cards.a.theAnalysis.classList.toggle('is-outlined', outlined);
+		if (N.sayAnalysis) N.sayAnalysis.classList.toggle('is-outlined', outlined);
 		N.q.forEach((q, i) => op(q, prog(t, ...(i ? T.q2 : T.q1))));
 		N.say.forEach((s, ci) => {
 			const rows = SPEECH[ci ? 'b' : 'a'].rows;
@@ -463,18 +524,18 @@
 		{at: BEAT_AT[2], text: 'Both students read it closely and agree.',
 			detail: 'both dots read along every line of their copies, at the same pace and at the same time. Nothing changes.'},
 		{at: BEAT_AT[3], text: 'The first student signs. The second notes what the estimate rests on, then signs.',
-			detail: 'the first dot signs in red, and the key adds "A student\'s decision" in red. The second dot moves above its copy and writes a red note, "Rests on an open port. Harbor reports: normal.", in a row labelled "Their own note, not handed in"; the first student\'s cell shows a dash. Then the second dot signs. The note stays.'},
-		{at: BEAT_AT[4], text: 'Faculty see only the papers. They ask who made the call.',
-			detail: '"1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."'},
+			detail: 'the first dot signs in red, and the key adds "A student\'s decision" in red. The second dot moves above its copy, into a row labelled "Their own note, not handed in", and writes a red note: "Rests on an open port. Today\'s harbor reports: normal." The first student\'s cell shows a dash. Then the second dot signs. The note stays.'},
+		{at: BEAT_AT[4], text: 'Faculty ask who made the call.',
+			detail: 'the note row dims under "Faculty don\'t see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."'},
 		{at: BEAT_AT[5], text: 'Then they ask why.',
-			detail: '"2. Why did you rely on the estimate?" The first student says, "It was the AI\'s estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn\'t check for closures."'},
-		{at: BEAT_AT[6], text: 'The first leans on the AI. The second explains why they relied.',
-			detail: 'the first student\'s dot splits in two; one half stays on the signature line and the other moves beside "The analysis estimates". A red bracket marks the second student\'s second answer.'},
+			detail: '"2. Why did you rely on the estimate?" The first student says, "It was the AI\'s estimate. It seemed solid." The second says, "It assumes an open port. Today\'s harbor reports looked normal, so I accepted it. I should have checked for closures."'},
+		{at: BEAT_AT[6], text: 'The first leans on the AI. The second accounts for the call, right or wrong.',
+			detail: 'the frame goes and the note returns. "The analysis" is outlined in the first student\'s answer and on their copy, and part of the first student\'s dot splits off and settles beside "The analysis estimates", where it stays. A red bracket marks the second student\'s second answer.'},
 		{at: BEAT_AT[7], text: 'Suppose it proves wrong. The AI can\'t answer for it. Both students will.',
-			detail: 'a navy weight labelled "Answerable" falls down the first paper\'s margin, collects the half dot and rests on the first student, whose dot is whole again. A second weight falls down the second paper\'s margin and rests on the second student.'},
+			detail: 'a navy weight labelled "Answerable" falls down the first paper\'s margin, past the AI\'s sentences and the split-off dot, and rests on the first student\'s dot at the signature. A second weight falls down the second paper\'s margin and rests on the second student.'},
 		{at: BEAT_AT[8], text: 'Faculty check: Who owns the recommendation if it proves wrong?',
 			list: 'Faculty check: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.',
-			detail: 'the questions appear under the picture at the same size. Both papers, the note, all four answers and both weights stay in view.',
+			detail: 'the questions appear under the picture at the same size. Both papers, the note, all four answers, the split-off dot and both weights stay in view.',
 			check: {label: 'Faculty check', question: 'Who owns the recommendation if it proves wrong?', follow: 'Name one way it could prove wrong. Ask why they relied on it.', followAt: T.follow}},
 	];
 
@@ -483,6 +544,6 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
-		mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[2] - 0.02});
+		mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02});
 	});
 })();

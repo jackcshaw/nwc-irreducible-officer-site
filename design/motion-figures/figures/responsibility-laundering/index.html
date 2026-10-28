@@ -23,7 +23,7 @@
 @media (max-width: 480px) {
 	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 20px; }
 }
-.rl-n-sec { margin: 0 0 6px; }
+.rl-n-sec { margin: 0 0 4px; }
 .rl-n-label { margin: 0 0 4px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
 .rl-n-grey { color: var(--stone); }
 .rl-n-red { color: var(--red); }
@@ -32,11 +32,17 @@
 .rl-n-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
 .rl-n-pair > * { min-width: 0; }
 .rl-n-col { min-width: 0; }
-.rl-n-note { margin: 0; min-height: 2.8em; font: italic 400 13.5px/1.4 var(--serif); color: var(--red); }
+.rl-n-note { margin: 0; font: italic 400 13px/1.35 var(--serif); color: var(--red); }
 .rl-n-none { margin: 0; font: 400 14px/1.4 var(--serif); color: rgba(10, 34, 66, 0.45); }
 .rl-n-stack { position: relative; }
 .rl-n-draft { position: absolute; inset: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
-.rl-n-card { min-width: 0; padding: 4px 7px 5px 11px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-card { position: relative; min-width: 0; padding: 4px 7px 5px 15px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-rel { position: relative; }
+.rl-n-over { position: absolute; right: 0; top: 2.1em; margin: 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); opacity: 0; }
+.rl-n-frame { position: absolute; inset: -4px -4px -3px -4px; border: 1.5px solid var(--ink); border-radius: 6px; pointer-events: none; opacity: 0; }
+.rl-n-framelabel { position: absolute; right: 8px; top: -9px; padding: 0 5px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.rl-n-reader { position: absolute; left: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); visibility: hidden; }
+.is-outlined { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 2px; white-space: nowrap; }
 .rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
 .rl-n-row { position: relative; margin: 0 0 3px; font: 400 13px/1.4 var(--serif); color: var(--stone); }
 .rl-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
@@ -48,9 +54,9 @@
 .rl-n-dot i:last-child { left: 1.5px; }
 .rl-n-squiggle { font: italic 400 15px/1 var(--serif); color: var(--red); letter-spacing: -0.04em; }
 .rl-n-chip { margin-left: auto; padding: 1px 4px; background: var(--ink); color: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
-.rl-n-half { position: absolute; left: -9px; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.rl-n-half { position: absolute; left: -13px; top: 0.35em; width: 11px; height: 11px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 1.5px var(--paper-bright); }
 .rl-n-q { margin: 0 0 2px; font: italic 400 14px/1.35 var(--serif); color: var(--ink); }
-.rl-n-say { min-width: 0; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.rl-n-say { min-width: 0; padding: 3px 7px 2px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
 .rl-n-line { margin: 0 0 2px; padding-left: 7px; border-left: 2px solid transparent; font: 400 13px/1.35 var(--serif); color: var(--ink); }
 .rl-n-line.is-marked { border-left-color: var(--red); }
 .rl-n-key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
@@ -82,10 +88,10 @@
 			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the responsibility laundering figure</span></button>
 			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
-			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:29</span>
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:32</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose both give an AI the same prompt and get the same draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Harbor reports: normal." Then they sign. Faculty, who see only the identical papers, ask each student: "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Harbor reports looked normal, so I accepted it. I didn't check for closures." Then the first student's dot splits, and half of it moves beside "The analysis estimates". A red bracket marks the second student's answer about why they relied on the estimate. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences. The first collects the half dot and rests on the first student, whose halves rejoin; the second rests on the second student. The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only">An animated figure. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose both give an AI the same prompt and get the same draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Today's harbor reports: normal." Then they sign. While faculty ask, the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two identical copies. Faculty ask each student: "Suppose the port closes. Who made the call to wait?" The first says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on the estimate?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's harbor reports looked normal, so I accepted it. I should have checked for closures." Then the note returns. "The analysis" is outlined in the first student's answer and on their copy, and part of the first student's dot splits off and settles beside "The analysis estimates", where it stays. A red bracket marks the second student's answer about why they relied on the estimate. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences, and rest on each student's dot at the signature. The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
@@ -94,7 +100,7 @@
 		<h2 id="rl-check-h">Faculty check</h2>
 		<p class="fig-check">Who owns the recommendation if it proves wrong?</p>
 		<p class="fig-check">Name one way it could prove wrong. Ask why they relied on it.</p>
-		<p class="fig-follow">Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and what they didn't check. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's failure-mode lab makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by <a href="../uncalibrated-reliance/">uncalibrated reliance</a>.</p>
+		<p class="fig-follow">Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and the check they should have made. Accounting for a call means saying what it rested on, right or wrong. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's <a href="https://judgmentlab.net/#companion">failure-mode lab</a> makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by <a href="../uncalibrated-reliance/">uncalibrated reliance</a>.</p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="rl-essay-h">
@@ -114,11 +120,11 @@
 		<h2 id="rl-links-h">Go further</h2>
 		<ul class="fig-links">
 			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=5">Own the decision</a></li>
-			<li><span>In the same chapter:</span> <a href="../fluency-substitution/">Fluency substitution</a></li>
-			<li><span>Was the reliance justified?</span> <a href="../uncalibrated-reliance/">Uncalibrated reliance</a></li>
 			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test responsibility laundering with your AI assistant</a></li>
 			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
 			<li><span>Essay:</span> <a href="https://judgmentlab.net/#vii-accountability-is-structural">Section VII, Accountability Is Structural</a></li>
+			<li><span>In the same chapter:</span> <a href="../fluency-substitution/">Fluency substitution</a></li>
+			<li><span>Was the reliance justified?</span> <a href="../uncalibrated-reliance/">Uncalibrated reliance</a></li>
 		</ul>
 	</section>
 </main>

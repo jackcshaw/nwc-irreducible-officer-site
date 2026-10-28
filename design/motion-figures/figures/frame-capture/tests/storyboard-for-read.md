@@ -48,7 +48,20 @@ Positions below are viewBox units on screen at 1×. Widths of text-sized element
 
 **Draft geometry** (for the build). Draft 1 has four ragged rows per column: left widths 144, 116, 132, 70 with offsets 0, 5, −3, 8; right widths 150, 124, 154, 88 with offsets 0, 6, −2, 3. Draft 2 has six straight rows per column, full width except the last (left 96, right 104), from y 222 to 282. Draft 3 adds a chart (four bars 12 wide, 7 apart from x 330, baseline 326, heights 20, 13, 28, 17) and a conclusion bar (x 162–488, y 342, 7 high). Change bars: draft 2 adds one per column (y 218–287); draft 3 adds one beside the chart (x 321, y 296–328) and one beside the conclusion (x 153, y 339–352).
 
-**Narrow screens.** Any picture text that would render under 11 px is hidden. Each beat's "On screen" line then shows under its caption in the beat list, and the caption band carries the words at full size.
+**Stacked stage.** Whenever the smallest picture text (13 units) would render under 11 px at the runtime's letterboxed scale, which means phones and short windows such as 1100 × 560, the SVG collapses and a stacked text view takes its place. It is driven by the same clock, with text at 13–16 px. Each beat shows only its sections:
+
+| Beats | Sections shown |
+| --- | --- |
+| 1–2 | The student (red dot, "Student"), the task, then the six considerations as dashed chips |
+| 3 | The task, the considerations (the AI's two turn grey), and "AI's frame": the task sentence in grey becomes "Deter the adversary" on its band, over the AI's two grey chips |
+| 4–5 | The AI's frame and the student's drafts: Draft 1, then three revisions with red change bars, and "STUDENT'S DRAFT n" in red. The task and considerations are gone, as in the close-up |
+| 6 | All of the above again, with "The four dashed ones were never weighed." |
+| 7 | The task, and "What faculty receive: the final copy": the paper in a grey frame with its title and headings on the grey band, an "AI-SUPPLIED" key, then the drain to ink and the frame going |
+| 8 | The paper, now labelled red "First student", and the second student: "Its AI proposes the same frame", the six chips turning solid with red touch marks, the frame turning red as "Chosen", four "Set aside" |
+| 9 | Both papers side by side, red names, "The weighing doesn't show in either paper." |
+| 10–11 | The papers, "Faculty ask each student: Why this frame?", and each student's column: "AI's frame" with two grey chips, or "Chosen" with two solid chips and "Set aside" with the four. Beat 11 adds the task back for the comparison with "Deter the adversary" |
+
+The JS measures the tallest beat whenever the width changes and holds it as the view's minimum height (511 px at 390 px wide). The caption band holds 166 px below 720 px, so the controls never move. At 390 × 844 the whole player measures 796 px.
 
 ## 4. Beats
 

@@ -8,9 +8,8 @@
    the AI challenge it): one possible result spreads across three goals. The
    figure ends on the check and a move faculty can run.
    Papers never move or merge in the first layout; only copies of their problem
-   lines do. Whenever a picture label would render under 11 px (a stage
-   narrower than 880 px), the SVG gives way to a stacked text stage driven by
-   the same clock. Every attribute is a pure function of t, so the runtime can
+   lines do. The picture scales to fit the viewport; below 480 px of figure
+   width it gives way to a stacked text stage driven by the same clock. Every attribute is a pure function of t, so the runtime can
    play, scrub, hold (?t=) and export it frame by frame. */
 (() => {
 	const {mount, E, mix, prog, el, set, bracketPath, legibility, mixColor, FONT} = MotionFigures;
@@ -22,13 +21,13 @@
 	const T = {
 		card: [1.0, 1.6], papersIn: 1.7, paperStep: 0.1, paperDur: 0.3,
 		ctxLabel: [3.4, 3.8], ctx: 3.4, ctxStep: 0.75, ctxDur: 0.5,
-		panel: [12.5, 12.9], req: 12.9, reqStep: 0.1, reqDur: 0.4,
-		out: 15.5, outStep: 0.1, outDur: 0.6, panelLine: [15.5, 16.1],
+		panel: [12.5, 12.9], req: 12.9, reqStep: 0.1, reqDur: 0.6,
+		out: 15.5, outStep: 0.1, outDur: 0.6,
 		write: 20.5, writeStep: 0.2, writeDur: 0.8, tagA: [23.2, 23.6], ring: 24.5, ringStep: 0.2,
 		marks: [29.2, 29.8], lift: 31.2, liftStep: 0.7, liftDur: 0.7,
-		details: [42.7, 43.3], under: 45.7, underStep: 0.1, underDur: 0.3, bracket: [47.1, 47.9],
-		panelBump: [50.7, 51.3], grey: [52.2, 53.0],
-		compact: [57.7, 58.9], panelLineOut: [57.7, 58.3], seqA: [58.5, 58.9], blockB: [59.0, 59.6],
+		details: [42.7, 44.2], under: 45.7, underStep: 0.1, underDur: 0.3, bracket: [47.1, 47.9],
+		callout: [50.7, 51.5], grey: [52.2, 53.0],
+		compact: [57.7, 58.9], seqA: [58.5, 58.9], blockB: [59.0, 59.6],
 		red: 61.0, redStep: 0.1, redDur: 0.6, define: [61.0, 61.4],
 		send: 65.5, sendStep: 0.06, sendDur: 0.5, note: 69.2, noteStep: 0.1, noteDur: 0.5, challenges: [69.2, 69.6],
 		writeB: 70.8, writeBStep: 0.08, writeBDur: 0.5, seqWrite: [70.8, 71.2], tagB: [71.6, 72.0],
@@ -49,18 +48,19 @@
 	const LAYOUT_B = [3, 7, 0, 9, 5, 1, 8, 2, 6, 4]; // the same ten kinds, in a different order
 
 	// ---- geometry ----------------------------------------------------------------
-	const YA = 146, YB = 334; // compact block tops
+	const YA = 146, YB = 340; // compact block tops
 	const PW = 80, PH = 104, SC = 0.55;
 	const large = (i) => ({x: 40 + 100 * (i % 5), y: i < 5 ? 164 : 300, s: 1});
 	const compact = (i, Y) => ({x: 24 + 56 * (i % 5), y: Y + 38 + (i < 5 ? 0 : 64), s: SC});
 	const PANEL = {x: 24, y: 16, w: 276, h: 84};
-	const PANEL_HC = 40; // the panel shrinks once its opening line has done its job
+	const PANEL_HC = 40; // the panel shrinks when the layout compacts
 	const sendTo = (i, kC = 0) => ({x: 52 + 22 * i, y: PANEL.y + mix(PANEL.h, PANEL_HC, kC) - 4});
 	const LIST = {x: 600, y0: 204, dy: 26};
-	const CLIST = {x: 350, y0: YA + 36, dy: 15, s: 12.4 / 16};
+	const CLIST = {x: 350, y0: YA + 36, dy: 15, s: 13 / 16};
+	const CALL_L = {x: 320, y: 20, s: 1}, CALL_C = {x: 340, y: 80, s: 0.75}, CALL_W = 330, CALL_H = 76;
 	const BR_L = {x: 578, y: 184, w: 222, h: 264};
 	const BR_C = {x: 340, y: YA + 24, w: 180, h: 152};
-	const COLS = [340, 536, 732], COLW = 180;
+	const COLS = [340, 540, 750], COLW = 180;
 	const chipY = (k) => YB + 36 + 11 * k;
 
 	const root = document.querySelector('#institutional-monoculture');
@@ -70,7 +70,7 @@
 
 	const text = (parent, x, y, str, {fs, family = FONT.sans, weight = 400, fill = C.ink, anchor = 'start', ls = 0, style} = {}) =>
 		el(parent, 'text', {x, y, 'font-family': family, 'font-size': fs, 'font-weight': weight, fill, 'text-anchor': anchor, 'letter-spacing': ls, 'data-fs': fs, ...(style ? {'font-style': style} : {})}, str);
-	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1, ...opts});
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 13, family: FONT.mono, weight: 600, ls: 1, ...opts});
 	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, ...opts});
 	const bar = (parent, x, y, w, h = 3.4, fill = C.ink, op = 0.75) => el(parent, 'rect', {x, y, width: w, height: h, fill, 'fill-opacity': op});
 	const bump = (t, t0, t1) => Math.sin(Math.PI * prog(t, t0, t1));
@@ -88,14 +88,6 @@
 	const panel = el(topLayer, 'g');
 	const panelBox = el(panel, 'rect', {x: PANEL.x, y: PANEL.y, width: PANEL.w, height: PANEL.h, rx: 6, fill: C.band, 'fill-opacity': 0.4, stroke: C.grey, 'stroke-width': 1.5});
 	mono(panel, 36, 34, 'AI', {fill: C.grey});
-	const opening = el(panel, 'g');
-	mono(opening, 36, 58, 'EVERY OUTLINE OPENS WITH', {fill: C.grey, ls: 0.6});
-	const openBand = el(opening, 'rect', {x: 33, y: 68, height: 20, rx: 2, fill: C.band});
-	const openText = serif(opening, 36, 83, 'Counter the rival’s influence', {fs: 15, fill: C.grey});
-	const sheet = el(opening, 'g');
-	el(sheet, 'rect', {x: 248, y: 26, width: 38, height: 60, rx: 1.5, fill: C.band, stroke: C.grey, 'stroke-opacity': 0.6});
-	bar(sheet, 253, 32, 24, 3.4, C.grey, 1);
-	[44, 58, 72].forEach((y) => { bar(sheet, 253, y, 18, 2.8, C.grey, 0.9); bar(sheet, 253, y + 6, 26, 2, C.grey, 0.6); });
 
 	// ---- task card -----------------------------------------------------------------
 	const card = el(topLayer, 'g');
@@ -150,7 +142,7 @@
 		if (run === 'a') {
 			p.outline = el(p.g, 'g', {opacity: 0});
 			el(p.outline, 'rect', {x: 4, y: 4, width: PW - 8, height: PH - 8, rx: 1.5, fill: C.band, 'fill-opacity': 0.8});
-			[22, 48, 74].forEach((y, k) => { bar(p.outline, 8, y, 30, 4, C.grey, 1); bar(p.outline, 8, y + 9, 58 + ((i * 3 + k * 5) % 7), 2.8, C.grey, 0.85); bar(p.outline, 8, y + 16, 44 + ((i * 5 + k * 3) % 9), 2.8, C.grey, 0.85); });
+			[22, 48, 74].forEach((y) => { bar(p.outline, 8, y, 30, 4, C.grey, 1); bar(p.outline, 8, y + 9, 60, 2.8, C.grey, 0.85); bar(p.outline, 8, y + 16, 46, 2.8, C.grey, 0.85); });
 		} else {
 			// The AI's challenge (imagined seminar): a grey note under the student's line.
 			p.note = el(p.g, 'g', {opacity: 0});
@@ -175,17 +167,17 @@
 
 	// ---- first seminar ----------------------------------------------------------------
 	const nameA = text(gA, 40, 138, 'The seminar', {fs: 13, weight: 600, fill: C.red});
-	const seqA = mono(gA, 24, YA + 28, '', {ls: 0.6});
+	const seqA = mono(gA, 24, YA + 28, '', {ls: 0.4});
 	const seqA1 = el(seqA, 'tspan', {fill: C.grey}, 'AI OUTLINE');
 	const seqA2 = el(seqA, 'tspan', {}, ' → WRITE');
-	const tagA = mono(gA, 0, 0, 'ALL DRAFTED WITH AI', {fill: C.grey, ls: 0.6});
+	const tagA = mono(gA, 0, 0, 'ALL DRAFTED WITH AI', {fill: C.grey, ls: 0.4});
 	const papersA = Array.from({length: N}, (_, i) => makePaper(gA, i, 'a'));
 	// The lineup: one group per line (text, underline, wash behind the last word).
 	const lines = LINES.map(([verb, noun]) => {
 		const g = el(gA, 'g', {opacity: 0});
 		const wash = el(g, 'rect', {y: -14, height: 19, rx: 2, fill: C.ink, 'fill-opacity': 0});
 		const t = serif(g, 0, 0, `${verb} rival ${noun}`, {fs: 16});
-		t.setAttribute('data-fs', 12.4); // the smallest it is drawn (compact column)
+		t.setAttribute('data-fs', 13); // the smallest it is drawn (compact column)
 		const under = el(g, 'line', {y1: 4, y2: 4, stroke: C.ink, 'stroke-width': 1.3, opacity: 0});
 		return {g, wash, t, under, verb, noun};
 	});
@@ -196,8 +188,18 @@
 	const brLabelPre = el(brLabelL, 'tspan', {}, 'ONE FRAME');
 	el(brLabelL, 'tspan', {}, ': COUNTER THE RIVAL');
 	const oneFrame = mono(gA, 340, YA + 4, 'ONE FRAME', {opacity: 0});
-	const colLabelA = mono(gA, 348, YA + 18, 'COUNTER THE RIVAL', {opacity: 0});
-	const aiFrameC = mono(gA, 348, YA + 18, 'AI’S FRAME', {fill: C.grey, opacity: 0});
+	const colLabelA = mono(gA, 348, YA + 18, 'COUNTER THE RIVAL', {opacity: 0, ls: 0});
+	// Whose frame: a grey pill beside the bracket, apart from the goal's name.
+	const pill = el(gA, 'g', {opacity: 0});
+	const pillBox = el(pill, 'rect', {x: 0, y: 0, width: 100, height: 21, rx: 10.5, fill: C.band, stroke: C.grey, 'stroke-width': 1.2});
+	const pillText = mono(pill, 10, 15, 'AI’S FRAME', {fill: C.grey, ls: 0.4});
+	// Where the frame came from: the AI's opening line, traced to the bracket.
+	const callout = el(gA, 'g', {opacity: 0});
+	el(callout, 'rect', {x: 0, y: 0, width: CALL_W, height: CALL_H, rx: 6, fill: C.band, 'fill-opacity': 0.55, stroke: C.grey, 'stroke-width': 1.2});
+	mono(callout, 14, 26, 'EVERY AI OUTLINE OPENED WITH', {fill: C.grey, ls: 0.4});
+	const callBand = el(callout, 'rect', {x: 10, y: 37, height: 27, rx: 2, fill: C.band});
+	const callText = serif(callout, 14, 57, 'Counter the rival’s influence', {fs: 18, fill: C.grey});
+	const leader = el(gA, 'line', {stroke: C.grey, 'stroke-width': 1.4, opacity: 0});
 	// The question: dashed, empty, in open space.
 	const qGroup = el(gA, 'g', {opacity: 0});
 	const Q = {x: 600, y: 200, w: 160, h: 76};
@@ -206,16 +208,16 @@
 	serif(qGroup, Q.x + Q.w / 2, Q.y + Q.h / 2 + 10, '?', {fs: 28, style: 'italic', anchor: 'middle', fill: mixColor(C.ink, C.paper, 0.4)});
 
 	// ---- imagined seminar ---------------------------------------------------------------
-	const divider = el(gB, 'line', {x1: 24, y1: 327, x2: 936, y2: 327, stroke: C.ink, 'stroke-opacity': 0.15});
+	const divider = el(gB, 'line', {x1: 24, y1: 331, x2: 936, y2: 331, stroke: C.ink, 'stroke-opacity': 0.15});
 	const nameB = text(gB, 24, YB + 12, 'The same seminar, imagined', {fs: 13, weight: 600, fill: C.red});
-	const seqB = mono(gB, 24, YB + 28, '', {ls: 0.6});
+	const seqB = mono(gB, 24, YB + 28, '', {ls: 0.2});
 	const seqB1 = el(seqB, 'tspan', {fill: C.red}, 'DEFINE PROBLEM');
 	const seqB2 = el(seqB, 'tspan', {fill: C.grey}, ' → AI CHALLENGES');
 	const seqB3 = el(seqB, 'tspan', {}, ' → WRITE');
-	const tagB = mono(gB, 24, YB + 176, 'ALL DRAFTED WITH AI', {fill: C.grey, ls: 0.6});
+	const tagB = mono(gB, 24, YB + 176, 'ALL DRAFTED WITH AI', {fill: C.grey, ls: 0.4});
 	const papersB = Array.from({length: N}, (_, i) => makePaper(gB, i, 'b'));
 	const result = mono(gB, 340, YB + 4, 'ONE POSSIBLE RESULT');
-	const goalLabels = GOALS.map((g, k) => mono(gB, COLS[k] + 8, YB + 18, g.label, {ls: 0.4}));
+	const goalLabels = GOALS.map((g, k) => mono(gB, COLS[k] + 8, YB + 18, g.label, {ls: 0}));
 	const goalBrackets = GOALS.map((g) => {
 		const h = 12 + 11 * g.who.length + 4;
 		const b = el(gB, 'g', {opacity: 0});
@@ -228,7 +230,7 @@
 	GOALS.forEach((g, k) => g.who.forEach((i, j) => { slotOf[i] = {k, x: COLS[k] + 15, y: chipY(j), g: k}; }));
 
 	// ---- moving marks -----------------------------------------------------------------
-	const reqLines = Array.from({length: N}, () => el(flyLayer, 'line', {stroke: C.ink, 'stroke-width': 1, opacity: 0}));
+	const reqDots = Array.from({length: N}, () => el(flyLayer, 'circle', {r: 2.6, fill: C.ink, opacity: 0}));
 	const sends = Array.from({length: N}, () => el(flyLayer, 'rect', {height: 2.6, width: 25, rx: 1, fill: C.red, opacity: 0}));
 	const chips = Array.from({length: N}, () => el(flyLayer, 'rect', {height: 5, rx: 2, fill: C.ink, opacity: 0}));
 
@@ -245,9 +247,9 @@
 			set(l.wash, {x: l.nx - 2, width: l.nw + 4});
 			set(l.under, {x1: l.rx, x2: l.rx});
 		});
-		set(openBand, {width: openText.getComputedTextLength() + 6});
-		M.colLabelW = colLabelA.getComputedTextLength();
-		set(aiFrameC, {x: 348 + M.colLabelW + 12});
+		set(callBand, {width: callText.getComputedTextLength() + 8});
+		M.pillW = pillText.getComputedTextLength() + 20;
+		set(pillBox, {width: M.pillW});
 	}
 
 	// ---- render ---------------------------------------------------------------------------
@@ -274,8 +276,6 @@
 		// AI panel and its opening line.
 		set(panel, {opacity: prog(t, ...T.panel)});
 		set(panelBox, {height: mix(PANEL.h, PANEL_HC, kC)});
-		set(opening, {opacity: prog(t, ...T.panelLine) * (1 - prog(t, ...T.panelLineOut))});
-		set(openBand, {'fill-opacity': 1, fill: mixColor(C.band, '#c9bda6', bump(t, ...T.panelBump))});
 
 		// ---- first seminar ------------------------------------------------------------
 		set(gA, {opacity: dim});
@@ -306,18 +306,16 @@
 			const l0 = T.lift + T.liftStep * i;
 			set(p.mark, {opacity: prog(t, ...T.marks) * (1 - prog(t, l0, l0 + 0.3))});
 		});
-		// Request lines (first seminar).
-		reqLines.forEach((ln, i) => {
+		// Requests (first seminar): a small ink mark travels from each student to the AI.
+		reqDots.forEach((d, i) => {
 			const L = large(i);
 			const k = staged(t, T.req, T.reqStep, T.reqDur, i, E.inOut);
 			const a = {x: L.x - 2, y: L.y - 2}, b = sendTo(i);
-			const len = Math.hypot(b.x - a.x, b.y - a.y);
-			const fade = 1 - prog(t, T.req + T.reqStep * i + T.reqDur, T.req + T.reqStep * i + T.reqDur + 0.25);
-			set(ln, {x1: a.x, y1: a.y, x2: b.x, y2: b.y, 'stroke-dasharray': len, 'stroke-dashoffset': len * (1 - k), opacity: k > 0 ? fade : 0});
+			set(d, {cx: mix(a.x, b.x, k), cy: mix(a.y, b.y, k), opacity: k > 0 && k < 1 ? 1 - prog(k, 0.8, 1) : 0});
 		});
 
 		// The lineup.
-		const kDet = (i) => bump(t, T.details[0] + 0.03 * i, T.details[0] + 0.03 * i + 0.3);
+		const kDet = (i) => bump(t, T.details[0] + 0.06 * i, T.details[0] + 0.06 * i + 0.9);
 		lines.forEach((l, i) => {
 			const l0 = T.lift + T.liftStep * i;
 			const kL = prog(t, l0, l0 + T.liftDur, E.inOut);
@@ -326,7 +324,7 @@
 			const at = {x: mix(LIST.x, CLIST.x, kC), y: mix(LIST.y0 + LIST.dy * i, CLIST.y0 + CLIST.dy * i, kC), s: mix(1, CLIST.s, kC)};
 			const x = mix(from.x, at.x, kL), y = mix(from.y, at.y, kL), s = mix(from.s, at.s, kL);
 			set(l.g, {opacity: Math.min(1, kL * 3), transform: `translate(${x} ${y}) scale(${s})`});
-			set(l.wash, {'fill-opacity': 0.14 * kDet(i)});
+			set(l.wash, {'fill-opacity': 0.22 * kDet(i)});
 			const kU = staged(t, T.under, T.underStep, T.underDur, i, E.inOut);
 			set(l.under, {x2: l.rx + (l.rw || 30) * kU, opacity: kU > 0 ? 1 : 0});
 		});
@@ -337,12 +335,20 @@
 		set(bracketA, {opacity: kB});
 		set(brPath, {d: bracketPath(box, mix(20, 14, kC)), stroke: mixColor(C.ink, C.grey, kG)});
 		set(brLine, {x: box.x, y: box.y, width: box.w, height: box.h, stroke: mixColor(C.ink, C.grey, kG)});
-		brLabelPre.textContent = t >= T.grey[0] + 0.4 ? 'AI’S FRAME' : 'ONE FRAME';
-		set(brLabelL, {opacity: kB * (1 - bump(t, T.grey[0], T.grey[1])) * (1 - prog(t, T.compact[0], T.compact[0] + 0.5)), fill: t >= T.grey[0] + 0.4 ? C.grey : C.ink});
+		set(brLabelL, {opacity: kB * (1 - prog(t, T.compact[0], T.compact[0] + 0.5))});
 		const kCL = prog(t, T.compact[1] - 0.5, T.compact[1]);
 		set(oneFrame, {opacity: kCL});
 		set(colLabelA, {opacity: kCL});
-		set(aiFrameC, {opacity: kCL});
+		// The AI's opening line comes out of the panel, and a grey line traces it to the bracket.
+		const kCa = prog(t, ...T.callout, E.house);
+		const cAt = {x: mix(CALL_L.x, CALL_C.x, kC), y: mix(CALL_L.y, CALL_C.y, kC), s: mix(CALL_L.s, CALL_C.s, kC)};
+		const cx = mix(150, cAt.x, kCa), cy = mix(40, cAt.y, kCa), cs = mix(0.3, cAt.s, kCa);
+		set(callout, {opacity: Math.min(1, kCa * 2), transform: `translate(${cx} ${cy}) scale(${cs})`});
+		const pAt = {x: mix(BR_L.x, BR_C.x + BR_C.w + 8, kC), y: mix(BR_L.y - 27, BR_C.y - 2, kC)};
+		set(pill, {opacity: kG, transform: `translate(${pAt.x} ${pAt.y})`});
+		const la = {x: cAt.x + 250 * cAt.s, y: cAt.y + CALL_H * cAt.s}, lb = {x: pAt.x + (M.pillW || 100) / 2, y: pAt.y};
+		const len = Math.hypot(lb.x - la.x, lb.y - la.y);
+		set(leader, {x1: la.x, y1: la.y, x2: lb.x, y2: lb.y, 'stroke-dasharray': len, 'stroke-dashoffset': len * (1 - kG), opacity: kG > 0 ? 1 : 0});
 		set(qGroup, {opacity: prog(t, ...T.qmark), transform: `translate(${Q.x + Q.w / 2} ${Q.y + Q.h / 2}) scale(${mix(0.92, 1, prog(t, ...T.qmark, E.house))}) translate(${-(Q.x + Q.w / 2)} ${-(Q.y + Q.h / 2)})`});
 
 		// ---- imagined seminar ------------------------------------------------------------
@@ -416,7 +422,7 @@
 		NR.ai = h('p', 'im-n-ai', narrow);
 		h('b', null, NR.ai, 'AI');
 		NR.open = h('span', 'im-n-open', NR.ai);
-		NR.open.append('Every outline opens with: ');
+		NR.open.append('Every AI outline opened with: ');
 		h('i', null, NR.open, 'Counter the rival’s influence');
 		const run = (key) => {
 			const r = {};
@@ -441,6 +447,7 @@
 		};
 		NR.a = run('a');
 		NR.a.frame = h('p', 'im-n-frame im-n-label', NR.a.board, 'One frame: counter the rival');
+		NR.a.pill = h('span', 'im-n-pill', NR.a.frame, 'AI’s frame');
 		NR.a.lines = h('ol', 'im-n-lines', NR.a.board);
 		NR.a.items = LINES.map(([v, n]) => { const li = h('li', null, NR.a.lines); li.append(`${v} `); h('u', null, li, 'rival'); li.append(` ${n}`); return li; });
 		NR.a.q = h('span', 'im-n-q', NR.a.left, '?');
@@ -462,8 +469,7 @@
 		fade(NR.task, prog(t, ...T.card));
 		NR.ctx.forEach((s, j) => vis(s, t >= T.ctx + T.ctxStep * j));
 		vis(NR.ai, t >= T.panel[0]);
-		NR.open.style.display = t >= T.panelLine[0] && t < T.panelLineOut[1] ? '' : 'none';
-		NR.open.querySelector('i').style.background = t >= T.panelBump[0] && t < T.panelBump[1] ? '#c9bda6' : '';
+		NR.open.style.display = t >= T.callout[0] ? '' : 'none';
 		// First seminar.
 		const a = NR.a;
 		const dim = 1 - 0.65 * (prog(t, ...T.compact) - prog(t, ...T.undim));
@@ -483,8 +489,7 @@
 		a.lines.classList.toggle('is-marked', t >= T.under);
 		a.lines.classList.toggle('is-ai', t >= T.grey[0]);
 		vis(a.frame, t >= T.bracket[0]);
-		a.frame.textContent = t >= T.grey[0] ? 'AI’s frame: counter the rival' : 'One frame: counter the rival';
-		a.frame.classList.toggle('is-ai', t >= T.grey[0]);
+		a.pill.style.display = t >= T.grey[0] ? '' : 'none';
 		vis(a.q, t >= T.qmark[0]);
 		// Imagined seminar.
 		const b = NR.b;
@@ -520,9 +525,9 @@
 	const syncStacked = () => {
 		const r = svg.getBoundingClientRect();
 		if (!r.width) return;
-		const vb = svg.viewBox.baseVal;
-		const scale = r.height ? Math.min(r.width / vb.width, r.height / vb.height) : r.width / VW;
-		const stacked = 12 * scale < 11;
+		// The papers carry the figure without labels, so the picture stays whenever there is
+		// width for it; only a genuinely narrow figure gets the stacked text stage.
+		const stacked = root.getBoundingClientRect().width < 480;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
 			renderNarrow(+root.querySelector('[data-mf-scrub]').value || 0);
@@ -535,7 +540,7 @@
 		{at: 0, text: 'Ten students in a seminar get the same task.',
 			detail: 'a task card appears at the top right: "Example task. Recommend a strategy for our partnership with Country A." Ten blank papers appear in two rows of five, each with a red dot, labelled "The seminar". The card adds a context list, one item at a time: our trade, its ports, its election, its minerals, a rival\'s loans.'},
 		{at: 11.5, text: 'Each asks an AI for an outline. The outlines come back alike.',
-			detail: 'a grey box marked AI appears at the top left. A line runs from each dot up to it, and ten grey outlines drop back into the papers, all in one pattern. The box shows "Every outline opens with: Counter the rival\'s influence".'},
+			detail: 'a grey box marked AI appears at the top left. A small mark travels from each red dot up to it, and ten grey outlines drop back into the papers, all in one pattern.'},
 		{at: 19.5, text: 'Each writes their own paper. Faculty read each one, and each holds up.',
 			detail: 'each dot writes over its outline, and each paper turns to ink in its own layout: headings, bullets, a chart, a table, dense text, two columns, a numbered list, a pull quote, a timeline, a map. "All drafted with AI" appears under them. A navy ring steps across the papers and leaves a tick on each.'},
 		{at: 28.2, text: 'Then faculty line up the problem each paper defines.',
@@ -543,9 +548,9 @@
 		{at: 41.7, text: 'Different details, one frame: every paper sets out to counter the rival.',
 			detail: 'an underline runs under "rival" in every line, and a bracket closes around all ten, labelled "One frame: counter the rival".'},
 		{at: 49.7, text: 'Every AI outline opened with that frame.',
-			detail: 'the AI box\'s line, "Counter the rival\'s influence", brightens. The bracket turns grey and reads "AI\'s frame: counter the rival".'},
+			detail: 'a grey card comes out of the AI box: "Every AI outline opened with: Counter the rival\'s influence". A grey line runs from it to the bracket, which turns grey, and a grey tag beside the bracket reads "AI\'s frame".'},
 		{at: 56.7, text: 'Imagine the essay\'s proposal: each student defines the problem first.',
-			detail: 'the first seminar moves to the upper half and dims, labelled "The seminar: AI outline, write". Below it, "The same seminar, imagined" appears with ten blank papers, and each dot writes a red first line. Its label begins "Define problem".'},
+			detail: 'the first seminar moves to the upper half and dims, labelled "The seminar: AI outline, write", with the grey card above its list. Below it, "The same seminar, imagined" appears with ten blank papers, and each dot writes a red first line. Its label begins "Define problem".'},
 		{at: 64.5, text: 'Then each asks the AI to challenge it and suggest others, and writes.',
 			detail: 'a copy of each red line goes up to the AI box, and a grey challenge note comes back into each paper under its line. Each dot writes its paper. The label now reads "Define problem, AI challenges, write", and the papers are marked "All drafted with AI".'},
 		{at: 73.5, text: 'These papers hold up too. Faculty line up their problems by frame.',

@@ -13,6 +13,48 @@
 /* Phones: the caption band holds the check's height from the start, so the controls never move. */
 @media (max-width: 719px) { #frame-capture .mf-caption { min-height: 166px; } }
 @media (max-width: 480px) { #frame-capture .mf-check-q, #frame-capture .mf-follow.is-equal { font-size: 20px; } }
+/* Whenever a picture label would render under 11 px at the runtime's letterboxed scale,
+   the stage switches to a stacked text view driven by the same clock (13–16 px).
+   syncStacked() in the JS sets the class; the JS also fixes the view's height at its
+   tallest beat so the caption band and controls never move. */
+.fc-narrow { display: none; }
+#frame-capture.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#frame-capture.is-stacked .fc-narrow { display: block; padding: 12px clamp(12px, 3vw, 24px) 6px; background: var(--paper); }
+.fc-n-sec { margin: 0 0 12px; }
+.fc-n-sec[hidden] { display: none; }
+.fc-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.fc-n-label.is-ai, .fc-n-tag.is-ai { color: var(--stone); }
+.fc-n-label.is-red, .fc-n-tag.is-red { color: var(--red); }
+.fc-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.fc-n-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fc-n-chip { position: relative; padding: 1px 8px; border: 1.2px dashed rgba(10, 34, 66, 0.45); border-radius: 3px; font: 600 14px/1.5 var(--sans); color: var(--ink); }
+.fc-n-chip.is-ai { border: 1.2px solid var(--stone); background: #ded5c4; color: var(--stone); }
+.fc-n-chip.is-seen { border: 1.2px solid rgba(10, 34, 66, 0.8); background: none; color: var(--ink); }
+.fc-n-chip.is-seen::before { content: ""; position: absolute; left: -3px; top: -3px; width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+.fc-n-who { display: block; margin: 0 0 4px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.fc-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.fc-n-frame { padding: 7px 9px; border: 2px solid var(--stone); border-radius: 2px; }
+.fc-n-frame.is-chosen { border-color: var(--red); }
+.fc-n-title { margin: 0 0 6px; font: 600 16px/1.35 var(--serif); color: var(--stone); }
+.fc-n-title.is-band span { padding: 0 4px; background: #ded5c4; }
+.fc-n-line { margin: 3px 0 0; padding-left: 8px; border-left: 2.5px solid transparent; font: 400 14px/1.4 var(--sans); color: var(--ink); }
+.fc-n-line.is-rev { border-left-color: var(--red); }
+.fc-n-dl { display: block; margin: 6px 0 0; font: 600 13px/1.2 var(--mono); letter-spacing: 0.04em; color: var(--red); }
+.fc-n-small { margin: 6px 0 0; font: 500 14px/1.4 var(--sans); color: var(--muted); }
+.fc-n-small[hidden] { display: none; }
+.fc-n-paper { min-width: 0; padding: 7px 9px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.fc-n-paper.is-framed { outline: 2px solid var(--stone); outline-offset: 3px; }
+.fc-n-ptitle { margin: 2px 0 4px; font: 600 15px/1.3 var(--serif); }
+.fc-n-ptitle span { padding: 0 3px; }
+.fc-n-heads { display: flex; flex-wrap: wrap; gap: 4px; }
+.fc-n-head { padding: 0 6px; border: 1px solid rgba(10, 34, 66, 0.6); border-radius: 3px; font: 600 13px/1.5 var(--sans); }
+.fc-n-body { margin: 4px 0 0; font: 400 13px/1.4 var(--sans); color: var(--muted); }
+.fc-n-key { display: inline-flex; gap: 6px; align-items: center; margin: 8px 0 0; font: 600 13px/1 var(--mono); letter-spacing: 0.04em; color: var(--stone); }
+.fc-n-key i { display: inline-block; width: 16px; height: 11px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; }
+.fc-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fc-n-q { margin: 0 0 6px; font: italic 400 16px/1.35 var(--serif); color: var(--ink); }
+.fc-n-aside { margin: 0; font: 500 14px/1.4 var(--sans); color: var(--ink); }
+.fc-n-tag { display: block; margin: 4px 0; font: 600 13px/1.2 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -32,6 +74,7 @@
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
 			</div>
+			<div class="fc-narrow" data-fc-narrow aria-hidden="true"></div>
 			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
 		</div>
 		<div class="mf-controls">

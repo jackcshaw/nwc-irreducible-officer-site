@@ -18,6 +18,14 @@
 #institutional-monoculture { --mf-chrome: 268px; }
 @media (min-width: 720px) { #institutional-monoculture .mf-caption { min-height: 176px; } }
 @media (max-width: 719px) { #institutional-monoculture { --mf-chrome: 290px; } }
+/* Laptop windows: a compact caption band (one line for the check's second line) gives
+   the picture the height, so it scales to fit with every label at 11 px or more. */
+@media (min-width: 720px) and (max-height: 860px) {
+	#institutional-monoculture { --mf-chrome: 182px; }
+	#institutional-monoculture .mf-caption { min-height: 112px; padding-top: 10px; padding-bottom: 10px; font-size: 19px; }
+	#institutional-monoculture .mf-caption.is-check { padding-top: 10px; padding-bottom: 10px; }
+	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 22px; }
+}
 
 /* Whenever a picture label would render under 11 px (a stage narrower than
    880 px), the stage switches to a stacked text view driven by the same clock. */
@@ -26,14 +34,14 @@
 #institutional-monoculture.is-stacked .im-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 4px; background: var(--paper); }
 @media (max-width: 480px) {
 	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 18px; }
-	#institutional-monoculture .mf-caption { min-height: 168px; padding-top: 10px; padding-bottom: 10px; }
+	#institutional-monoculture .mf-caption { min-height: 144px; padding-top: 10px; padding-bottom: 10px; }
 }
 .im-narrow p { margin: 0; }
 .im-n-task { margin: 0 0 6px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.35 var(--serif); color: var(--ink); }
 .im-n-task b, .im-n-ai b, .im-n-label { font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
 .im-n-task b { margin-right: 4px; }
 .im-n-ctx { margin-top: 3px !important; padding-top: 3px; border-top: 1px solid var(--navy-line); font-size: 13px; }
-.im-n-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 0 0 8px !important; padding: 4px 8px; border: 1.5px solid rgba(91, 86, 79, 0.7); border-radius: 5px; background: rgba(222, 213, 196, 0.45); color: var(--stone); font: 400 14px/1.3 var(--serif); }
+.im-n-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 0 0 8px !important; padding: 4px 8px; border: 1.5px solid rgba(91, 86, 79, 0.7); border-radius: 5px; background: rgba(222, 213, 196, 0.45); color: var(--stone); font: 400 13px/1.3 var(--serif); }
 .im-n-open i { padding: 0 3px; background: #ded5c4; }
 .im-n-run { margin: 0 0 8px; padding-top: 6px; border-top: 1px solid var(--navy-line); }
 .im-n-who { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; margin: 0 0 4px !important; font: 600 13px/1.3 var(--sans); color: var(--red); }
@@ -60,11 +68,12 @@
 .im-n-board { min-width: 0; }
 .im-n-frame { margin: 0 0 2px !important; letter-spacing: 0 !important; color: var(--ink); }
 .im-n-frame.is-ai { color: var(--stone); }
-.im-n-lines { list-style: none; margin: 0; padding: 2px 6px; border: 1.5px solid var(--ink); font: 400 13px/1.22 var(--serif); color: var(--ink); }
+.im-n-lines { list-style: none; margin: 0; padding: 2px 6px; border: 1.5px solid var(--ink); font: 400 13px/1.18 var(--serif); color: var(--ink); }
 .im-n-lines.is-open { border-color: transparent; }
 .im-n-lines.is-ai { border-color: var(--stone); }
 .im-n-lines u { text-decoration: none; }
 .im-n-lines.is-marked u { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+.im-n-pill { display: inline-block; margin-left: 6px; padding: 0 7px; border: 1.2px solid rgba(91, 86, 79, 0.8); border-radius: 9px; background: #ded5c4; color: var(--stone); font: 600 12px/1.4 var(--mono); letter-spacing: 0.02em; }
 .im-n-q { display: inline-block; margin-top: 6px; padding: 0 10px; border: 1.5px dashed rgba(10, 34, 66, 0.45); font: italic 400 18px/1.3 var(--serif); color: rgba(10, 34, 66, 0.6); }
 .im-n-groups { display: grid; gap: 4px; }
 .im-n-group { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; padding: 2px 6px 3px; border: 1.5px solid var(--ink); }
@@ -122,12 +131,12 @@
 
 	<section class="fig-section" aria-labelledby="im-evidence-h">
 		<h2 id="im-evidence-h">The evidence</h2>
-		<p class="fig-follow">The essay cites three sources for this failure mode: Deng, Brucks &amp; Toubia (2026) on language models aggregating knowledge where people partition it; Murthy, Ullman &amp; Hu (2024) on alignment compressing outputs toward the statistical center; and Vendrell &amp; Johnston (2026), whose work the essay describes as framing this compression as epistemic narrowing. Workplace studies the essay doesn't cite point the same way, within limits:</p>
+		<p class="fig-follow">The essay cites three sources for this failure mode: Deng, Brucks &amp; Toubia (2026) on language models aggregating knowledge where people partition it; Murthy, Ullman &amp; Hu (2024) on alignment compressing outputs toward the statistical center; and Vendrell &amp; Johnston (2026). "Epistemic narrowing" is the essay's term, describing Vendrell &amp; Johnston; the companion's source notes cite that paper for its advice on sequencing AI-free and AI-assisted work. Studies the essay doesn't cite bear on this too, within limits:</p>
 		<ul class="fig-evidence">
 			<li><a href="https://hbr.org/2026/03/researchers-asked-llms-for-strategic-advice-they-got-trendslop-in-return">Romasanta, Thomas &amp; Levina</a> (HBR, 2026) report that across thousands of simulations, leading models gave the same trendy strategy advice regardless of context, defaulting to options such as differentiation, augmentation and collaboration. It is the closest of these to strategy work. It is a practitioner article, and its methods are visible only through the authors' summary.</li>
 			<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11244532/">Doshi &amp; Hauser</a> (Science Advances, 2024) found that AI story ideas made individual stories better rated and made the stories more similar to one another. It measured stories, not strategies.</li>
 			<li><a href="https://arxiv.org/abs/2506.07962">Kim, Garg, Peng &amp; Garg</a> (ICML, 2025) and <a href="https://arxiv.org/abs/2510.22954">Jiang et al.</a> (NeurIPS, 2025) found that when two models both get a question wrong they usually give the same wrong answer, and that different vendors give strikingly similar open-ended answers. Asking a second model is not an independent check.</li>
-			<li><a href="https://doi.org/10.1177/10591478261474243">Terwiesch et al.</a> (Production and Operations Management, 2026) found that better prompting, assigned personas and pooling several vendors brought the diversity of AI-generated ideas close to human levels. The companion's source notes read this as sameness being the default, with deliberate design needed to escape it. The study is about prompting AI for ideas; it doesn't test a seminar or the essay's pilot.</li>
+			<li>Counter-evidence: <a href="https://doi.org/10.1177/10591478261474243">Terwiesch et al.</a> (Production and Operations Management, 2026) found that better prompting, assigned personas and pooling several vendors brought the diversity of AI-generated ideas close to human levels. The companion's source notes read this as sameness being the default, with deliberate design needed to escape it. The study is about prompting AI for ideas; it doesn't test a seminar or the essay's pilot.</li>
 		</ul>
 	</section>
 
