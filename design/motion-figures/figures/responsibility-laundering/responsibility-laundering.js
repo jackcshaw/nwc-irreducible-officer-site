@@ -19,8 +19,8 @@
 		// 1 · the task
 		card: [1.0, 1.6], dots: [2.0, 2.4],
 		// 2 · same prompt, same draft
-		pulse: [7.4, 7.8], sheet: [7.8, 8.3], row1: [10.7, 11.5], keyGrey: [10.7, 11.1], row2: [12.9, 13.7], sigLine: [13.9, 14.2],
-		divide: [14.5, 15.7], tags: [15.8, 16.2],
+		pulse: [7.4, 7.8], sheet: [7.8, 8.3], row1: [8.8, 9.6], keyGrey: [8.8, 9.2], row2: [11.4, 12.2], sigLine: [12.4, 12.7],
+		divide: [13.4, 14.6], tags: [14.7, 15.1],
 		// 3 · both read it closely
 		onto: [19.4, 19.8], read: [[19.8, 20.8], [20.8, 21.8], [22.1, 23.1], [23.1, 24.1]],
 		// 4 · the first signs; the second notes first
@@ -28,17 +28,17 @@
 		bUp: [30.3, 30.7], noteLabel: [30.3, 30.7], note: [30.7, 33.1], bDown: [35.2, 35.6], bSign: [35.6, 36.4],
 		// 5 · faculty see only the papers, and ask who made the call
 		dimNote: [38.9, 39.4], frame: [39.5, 40.1], frameLabel: [39.9, 40.3],
-		q1: [40.5, 41.1], aPanel: [42.3, 42.7], a1: [42.7, 46.4], bPanel: [46.6, 47.0], b1: [47.0, 50.0],
-		// 6 · then they ask why
-		q2: [53.5, 54.1], aRow2: [54.3, 54.7], a2: [54.7, 57.4], bRow2: [57.6, 58.0], b2: [58.0, 64.7],
+		q1: [40.5, 41.1], aPanel: [42.4, 42.8], a1: [42.8, 45.0], bPanel: [46.5, 46.9], b1: [46.9, 48.7],
+		// 6 · then they ask why (answers type at about 5 words a second; each stays readable at 3 a second)
+		q2: [53.5, 54.1], aRow2: [54.3, 54.7], a2: [54.7, 56.3], bRow2: [56.4, 56.8], b2: [56.8, 60.8],
 		// 7 · the turn
-		restore: [67.5, 68.1], aPulse: [68.5, 68.9], outlines: [71.5, 72.0], split: [72.2, 73.4], bPulse: [73.6, 74.0], bracket: [74.0, 74.8],
+		restore: [66.0, 66.6], aPulse: [67.0, 67.4], outlines: [68.7, 69.2], split: [69.4, 70.6], keyHanded: [70.2, 70.6], bPulse: [70.8, 71.2], bracket: [71.2, 72.0],
 		// 8 · suppose it proves wrong
-		weights: [77.8, 78.2], aFall: [81.1, 82.5], aRest: [82.5, 82.9], bFall: [83.1, 84.1], bRest: [84.1, 84.4],
+		weights: [75.0, 75.4], aFall: [77.5, 78.9], aRest: [78.9, 79.3], bFall: [79.5, 80.5], bRest: [80.5, 80.8],
 		// 9 · the check
-		check: 85.9, follow: 88.8, end: 93.1,
+		check: 82.7, follow: 85.6, end: 89.9,
 	};
-	const BEAT_AT = [0, 6.4, 18.4, 25.6, 37.9, 52.2, 66.5, 76.8, 85.9];
+	const BEAT_AT = [0, 6.4, 18.4, 25.6, 37.9, 52.2, 65.0, 74.0, 82.7];
 
 	// ---- geometry (stage units; the sheets use their own units) --------------
 	const BIG = {x: 202, y: 140, s: 1.25};
@@ -50,7 +50,7 @@
 	const SIG = {y: 166, x0: 20, x1: 300, dot: {x: 36, y: 161}, start: {x: 86, y: 162}, end: {x: 206, y: 154}};
 	const SQUIGGLE = 'M86 162C90 152 96 150 100 158S104 168 110 160S118 148 123 156S129 166 135 158S144 148 148 155S154 163 160 157S170 151 176 156S184 160 206 154';
 	const WT = {x: -22, w: 96, h: 34, hang: -6, rest: 122};
-	const SPLIT = {x: 58, y: 34, r: 7.5};
+	const SPLIT = {x: 58, y: 34, r: 7, half: 3.5};
 	const NOTE = {x: 508, ys: [98, 116], lines: ['Rests on an open port.', 'Today’s harbor reports: normal.'], dot: {x: 496, y: 93}};
 	const PANEL = {y0: 388, y1: 510, w: 444, name: 404, rows: [[422, 440], [462, 480, 498]], textDx: 34};
 	const SPEECH = {
@@ -162,6 +162,9 @@
 	const keyRed = el(sceneBase, 'g');
 	const keyRedDot = el(keyRed, 'circle', {cx: 0, cy: 525, r: 5, fill: C.red});
 	const keyRedT = mono(keyRed, 0, 530, 'A STUDENT’S DECISION', {fill: C.red});
+	const keyHanded = el(sceneBase, 'g');
+	const keyHandedRing = el(keyHanded, 'circle', {cx: 0, cy: 525, r: 6, fill: 'none', stroke: C.grey, 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2'});
+	const keyHandedT = mono(keyHanded, 0, 530, 'REASON HANDED TO THE AI', {fill: C.grey});
 
 	// ---- dots -------------------------------------------------------------------
 	const dot = (col, label) => {
@@ -204,6 +207,9 @@
 		const kx = 50 + W(keyGreyT) + 28;
 		set(keyRedDot, {cx: kx});
 		set(keyRedT, {x: kx + 12});
+		const kx2 = kx + 12 + W(keyRedT) + 30;
+		set(keyHandedRing, {cx: kx2});
+		set(keyHandedT, {x: kx2 + 13});
 		bracketLen = bracket.getTotalLength();
 		set(bracket, {'stroke-dasharray': bracketLen});
 		frameLen = frame.getTotalLength();
@@ -335,14 +341,16 @@
 		// Key.
 		set(keyGrey, {opacity: prog(t, ...T.keyGrey)});
 		set(keyRed, {opacity: prog(t, ...T.keyRed)});
+		set(keyHanded, {opacity: prog(t, ...T.keyHanded)});
 
 		// Beat 8: a weight per copy, in that copy's own units. The first falls, then the second.
 		const kW = prog(t, ...T.weights);
-		const fallY = (span, rest) => {
+		const fallY = (span, rest, restY) => {
 			const k = prog(t, ...span, (x) => x * x);
-			return mix(WT.hang, WT.rest, k) - 2 * bump(t, ...rest);
+			return mix(WT.hang, restY, k) - 2 * bump(t, ...rest);
 		};
-		const wyA = fallY(T.aFall, T.aRest), wyB = fallY(T.bFall, T.bRest);
+		// The first student's dot is a half by now, so their weight comes to rest 1.5 lower.
+		const wyA = fallY(T.aFall, T.aRest, SIG.dot.y - SPLIT.half - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
 		set(copies.a.weight, {opacity: kW, transform: `translate(0 ${wyA})`});
 		set(copies.b.weight, {opacity: kW, transform: `translate(0 ${wyB})`});
 
@@ -358,13 +366,20 @@
 			set(d.c, {cx: p.x, cy: p.y, r: 5 * Math.min(1, kDots * 1.2)});
 			set(d.half, {r: 0});
 		}
-		// Beat 7: part of the first student's dot splits off and settles beside "The analysis
-		// estimates" on their copy. It stays to the end; the weight passes it (beat 8).
+		// Beat 7: the first student's dot halves. One half stays on the signature line; the other
+		// travels to "The analysis estimates" and becomes a hollow dashed grey ring: the reason
+		// handed to the AI. It stays to the end; the weight passes it (beat 8).
 		if (t >= T.split[0]) {
 			const kSplit = prog(t, ...T.split, E.inOut);
+			const kHalf = prog(t, T.split[0], T.split[0] + 0.3);
+			const kTurn = prog(t, T.split[0] + 0.6, T.split[1]);
 			const base = st('a', SIG.dot), beside = st('a', SPLIT);
-			const lift = prog(t, T.split[0], T.split[0] + 0.25);
-			set(dots.a.half, {cx: mix(base.x, beside.x, kSplit), cy: mix(base.y, beside.y, kSplit), r: mix(5, SPLIT.r, lift)});
+			set(dots.a.c, {r: mix(5, SPLIT.half, kHalf)});
+			set(dots.a.half, {
+				cx: mix(base.x, beside.x, kSplit), cy: mix(base.y, beside.y, kSplit),
+				r: mix(SPLIT.half, SPLIT.r, kTurn), fill: C.red, 'fill-opacity': 1 - kTurn,
+				stroke: C.grey, 'stroke-opacity': kTurn, 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2',
+			});
 		}
 
 		renderNarrow(t);
@@ -419,7 +434,8 @@
 			const di = h('i', null, dotN);
 			const squig = sq(sig);
 			const chip = h('span', 'rl-n-chip', sig, 'Answerable');
-			return {c, reader, r1, r2, half, theAnalysis, di, squig, sig, chip};
+			const drop = h('span', 'rl-n-drop', c);
+			return {c, reader, r1, r2, half, theAnalysis, di, squig, sig, chip, drop};
 		};
 		N.cards = {a: cardN('a'), b: cardN('b')};
 		N.frame = h('div', 'rl-n-frame', s);
@@ -451,6 +467,7 @@
 		const s = h('div', 'rl-n-key', body);
 		N.keyGrey = h('span', 'rl-n-grey', s); h('i', 'sw', N.keyGrey); N.keyGrey.append('Written by AI');
 		N.keyRed = h('span', 'rl-n-red', s); h('i', 'rd', N.keyRed); N.keyRed.append('A student’s decision');
+		N.keyHanded = h('span', 'rl-n-grey', s); h('i', 'rg', N.keyHanded); N.keyHanded.append('Reason handed to the AI');
 	}
 	const op = (node, k) => { node.style.opacity = Math.max(0, Math.min(1, k)).toFixed(3); };
 	function renderNarrow(t) {
@@ -459,7 +476,7 @@
 		N.names.forEach((n) => op(n, prog(t, ...T.dots)));
 		const kAsk = prog(t, ...T.dimNote) - prog(t, ...T.restore);
 		op(N.noteLabel, prog(t, ...T.noteLabel) * (1 - 0.8 * kAsk));
-		op(N.none, prog(t, ...T.noteLabel));
+		op(N.none, prog(t, ...T.noteLabel) * (1 - kAsk));
 		op(N.notePair, 1 - 0.8 * kAsk);
 		op(N.dontSee, kAsk);
 		op(N.frame, prog(t, ...T.frame) * (1 - prog(t, ...T.restore)));
@@ -475,20 +492,24 @@
 			const sign = col === 'a' ? T.aSign : T.bSign;
 			cd.squig.setAttribute('stroke-dashoffset', (1 - prog(t, sign[0], sign[0] + (sign[1] - sign[0]) * 0.7)).toFixed(3));
 			op(cd.di, t >= sign[1] ? 1 : 0);
-			// The chip falls from the top row, past the AI's sentences, onto the signature row.
+			// A small navy weight falls down the card's left edge, past the AI's sentences, without
+			// covering them; at the signature row it becomes the "Answerable" chip.
 			const fall = col === 'a' ? T.aFall : T.bFall;
-			const kChip = prog(t, fall[0], fall[1], (x) => x * x);
-			const dy = cd.sig.offsetTop - cd.r1.offsetTop;
-			op(cd.chip, prog(t, ...T.weights));
-			cd.chip.style.transform = `translateY(${(-dy * (1 - kChip)).toFixed(1)}px)`;
+			const kDrop = prog(t, fall[0], fall[1], (x) => x * x);
+			cd.drop.style.visibility = t >= fall[0] && t < fall[1] ? 'visible' : 'hidden';
+			cd.drop.style.top = `${(cd.r1.offsetTop + (cd.sig.offsetTop - cd.r1.offsetTop) * kDrop).toFixed(1)}px`;
+			op(cd.chip, prog(t, fall[1] - 0.1, fall[1] + 0.25));
+			cd.chip.style.transform = '';
 			// Beat 3: each student's reading marker steps down the rows at the same pace.
 			const reading = t >= T.read[0][0] && t < T.read[3][1];
 			cd.reader.style.visibility = reading ? 'visible' : 'hidden';
 			cd.reader.style.top = `${(t < T.read[2][0] ? cd.r1.offsetTop : cd.r2.offsetTop) + 6}px`;
 		}
-		// Beat 7: part of the first student's dot splits off beside "The analysis" and stays.
+		// Beat 7: the first student's dot halves; the other half becomes a dashed grey ring
+		// before "The analysis", and stays.
 		N.cards.a.half.style.visibility = t >= T.split[0] ? 'visible' : 'hidden';
 		op(N.cards.a.half, prog(t, ...T.split));
+		N.cards.a.di.style.transform = t >= T.split[0] ? 'scale(0.7)' : '';
 		const outlined = t >= T.outlines[0];
 		N.cards.a.theAnalysis.classList.toggle('is-outlined', outlined);
 		if (N.sayAnalysis) N.sayAnalysis.classList.toggle('is-outlined', outlined);
@@ -501,6 +522,7 @@
 		N.say[1].lines[1].classList.toggle('is-marked', t >= T.bracket[0]);
 		op(N.keyGrey, prog(t, ...T.keyGrey));
 		op(N.keyRed, prog(t, ...T.keyRed));
+		op(N.keyHanded, prog(t, ...T.keyHanded));
 	}
 	// The stacked stage takes over whenever the smallest picture text would render
 	// under 11 px at the runtime's letterboxed scale.
@@ -529,13 +551,13 @@
 			detail: 'the note row dims under "Faculty don\'t see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made the call to wait?" The first student says, "I signed it. The analysis estimated the ships could do it." The second says, "I did. I chose to rely on the estimate."'},
 		{at: BEAT_AT[5], text: 'Then they ask why.',
 			detail: '"2. Why did you rely on the estimate?" The first student says, "It was the AI\'s estimate. It seemed solid." The second says, "It assumes an open port. Today\'s harbor reports looked normal, so I accepted it. I should have checked for closures."'},
-		{at: BEAT_AT[6], text: 'The first leans on the AI. The second accounts for the call, right or wrong.',
-			detail: 'the frame goes and the note returns. "The analysis" is outlined in the first student\'s answer and on their copy, and part of the first student\'s dot splits off and settles beside "The analysis estimates", where it stays. A red bracket marks the second student\'s second answer.'},
+		{at: BEAT_AT[6], text: 'The first gives the AI\'s reason. The second gives their own.',
+			detail: 'the frame goes and the note returns. "The analysis" is outlined in the first student\'s answer and on their copy. The first student\'s dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "Reason handed to the AI". It stays. A red bracket marks the second student\'s second answer, their own reason; their dot stays whole.'},
 		{at: BEAT_AT[7], text: 'Suppose it proves wrong. The AI can\'t answer for it. Both students will.',
-			detail: 'a navy weight labelled "Answerable" falls down the first paper\'s margin, past the AI\'s sentences and the split-off dot, and rests on the first student\'s dot at the signature. A second weight falls down the second paper\'s margin and rests on the second student.'},
+			detail: 'a navy weight labelled "Answerable" falls down the first paper\'s margin, past the AI\'s sentences and the grey ring, and rests on the first student\'s half dot at the signature. A second weight falls down the second paper\'s margin and rests on the second student.'},
 		{at: BEAT_AT[8], text: 'Faculty check: Who owns the recommendation if it proves wrong?',
 			list: 'Faculty check: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.',
-			detail: 'the questions appear under the picture at the same size. Both papers, the note, all four answers, the split-off dot and both weights stay in view.',
+			detail: 'the questions appear under the picture at the same size. Both papers, the note, all four answers, the grey ring and both weights stay in view.',
 			check: {label: 'Faculty check', question: 'Who owns the recommendation if it proves wrong?', follow: 'Name one way it could prove wrong. Ask why they relied on it.', followAt: T.follow}},
 	];
 

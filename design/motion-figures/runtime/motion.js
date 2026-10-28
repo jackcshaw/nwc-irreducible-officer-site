@@ -30,12 +30,20 @@
    to resumeAt (default `at`) and plays. A gate re-arms whenever the figure is
    drawn before it. onGate(i) is called when playback stops at gate i, and
    render(t, {gate}) receives the open gate's index (-1 when none). reducedAt is
-   the moment reduced motion shows instead of the final frame. mount() returns
-   {play, pause, seek, redraw, resume, openGate, gateOpen}; figures without
-   these fields behave exactly as before.
+   the moment reduced motion shows instead of the final frame. lockedAt() may
+   return the time of a gate the reader hasn't answered: no seek, scrub or beat
+   click passes it (the gate opens there instead), and play() does nothing
+   while a gate is open. onGate(i, via) says how the gate opened ('play',
+   'lock' or 'api'); onResume(i) runs before resume() moves on. mount()
+   returns {play, pause, seek, redraw, resume, openGate, gateOpen}; figures
+   without these fields behave exactly as before.
 
-   Test hooks: ?t=4.2 renders that moment and holds; ?reduced forces the
-   reduced-motion path; window.__motionFigures[id].seek(t) for export. */
+   A playing figure pauses when its shot (or, for a v0 figure, its root) is
+   mostly scrolled out of view, and shows Play; it doesn't resume by itself.
+   data-mf-offscreen="play" on the root opts out.
+
+   Test hooks: ?t=4.2 (or ?t=1:04.2) renders that moment and holds; ?reduced
+   forces the reduced-motion path; window.__motionFigures[id].seek(t) for export. */
 (() => {
 	const params = new URLSearchParams(location.search);
 	const reducedQuery = matchMedia('(prefers-reduced-motion: reduce)');
@@ -266,8 +274,18 @@
 		};
 
 		const draw = (time) => {
-			t = clamp(time, 0, duration);
+			let target = clamp(time, 0, duration);
+			// An unanswered gate can't be passed: the playhead stops there and the gate opens.
+			const lock = figure.lockedAt ? figure.lockedAt() : null;
+			const wasOpen = gateOpen;
+			let lockGate = -1;
+			if (lock != null && target > lock + 0.001) {
+				target = lock;
+				lockGate = gates.findIndex((g) => Math.abs(g.at - lock) < 0.001);
+			}
+			t = target;
 			for (const g of gates) if (t < g.at - 0.001) g.armed = true;
+			if (lockGate >= 0) { gates[lockGate].armed = false; gateOpen = lockGate; }
 			if (gateOpen >= 0 && Math.abs(t - gates[gateOpen].at) > 0.001) gateOpen = -1;
 			figure.render(t, {gate: gateOpen});
 			const current = beatAt(t);
@@ -282,17 +300,25 @@
 				scrub.setAttribute('aria-valuetext', `${fmt(t)} of ${fmt(duration)}, beat ${current + 1} of ${beats.length}`);
 			}
 			if (timeOut) timeOut.textContent = `${fmt(t)} / ${fmt(duration)}`;
+			if (lockGate >= 0) {
+				playing = false;
+				cancelAnimationFrame(raf);
+				label('Play');
+				root.dataset.state = 'gate';
+				if (wasOpen !== lockGate && figure.onGate) figure.onGate(lockGate, 'lock');
+			}
 		};
 		const tick = (now) => {
 			const dt = Math.min(0.1, (now - prev) / 1000);
 			prev = now;
 			const g = gates.findIndex((g) => g.armed && t < g.at && t + dt >= g.at);
-			if (g >= 0) { openGate(g); return; }
+			if (g >= 0) { openGate(g, 'play'); return; }
 			draw(t + dt);
 			if (t >= duration) { playing = false; label('Replay'); root.dataset.state = 'ended'; }
 			else raf = requestAnimationFrame(tick);
 		};
 		const play = () => {
+			if (gateOpen >= 0) return;
 			if (!started && poster != null && t === poster) t = 0;
 			started = true;
 			if (t >= duration) t = 0;
@@ -310,16 +336,17 @@
 			root.dataset.state = t >= duration ? 'ended' : 'paused';
 		};
 		// Gates: open one (playback stops there), or resume past it.
-		function openGate(i) {
+		function openGate(i, via = 'api') {
 			pause();
 			gates[i].armed = false;
 			gateOpen = i;
 			draw(gates[i].at);
 			root.dataset.state = 'gate';
-			if (figure.onGate) figure.onGate(i);
+			if (figure.onGate) figure.onGate(i, via);
 		}
 		const resume = (i = gateOpen) => {
 			if (i < 0 || !gates[i]) return;
+			if (figure.onResume) figure.onResume(i);
 			gates[i].armed = false;
 			gateOpen = -1;
 			draw(gates[i].resumeAt);
@@ -364,7 +391,19 @@
 		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen};
 		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek, resume, openGate, gates: gates.map((g) => g.at)};
 
-		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(+params.get('t')); label('Play'); return api; }
+		// Pause when scrolled away: once less than a quarter of the shot is in view, a playing
+		// figure pauses and shows Play. It doesn't resume by itself (the reader may be reading
+		// the beat list or the page). Gates and seeks are unaffected.
+		const awayEl = root.querySelector('[data-mf-shot]') || root;
+		if (root.dataset.mfOffscreen !== 'play' && 'IntersectionObserver' in window) {
+			new IntersectionObserver((entries) => {
+				for (const e of entries) if (playing && e.intersectionRatio < 0.25) pause();
+			}, {threshold: [0, 0.1, 0.25, 0.5]}).observe(awayEl);
+		}
+
+		// ?t= takes seconds (12.5) or minutes and seconds (0:12.5).
+		const tParam = (v) => (v.includes(':') ? v.split(':').reduce((a, b) => a * 60 + +b, 0) : +v);
+		if (params.has('t')) { root.classList.toggle('is-reduced', isReduced()); draw(tParam(params.get('t'))); label('Play'); return api; }
 		if (isReduced()) { root.classList.add('is-reduced'); draw(reducedAt); label('Play'); return api; }
 
 		draw(poster ?? 0);
