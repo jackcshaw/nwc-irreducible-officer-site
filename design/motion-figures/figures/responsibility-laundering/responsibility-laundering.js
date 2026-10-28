@@ -36,7 +36,7 @@
 		// 8 · suppose it proves wrong
 		weights: [76.3, 76.7], aFall: [78.8, 80.2], aRest: [80.2, 80.6], bFall: [80.8, 81.8], bRest: [81.8, 82.1],
 		// 9 · the check
-		check: 84.0, follow: 86.9, end: 92.9,
+		check: 84.0, follow: 86.9, end: 93.2,
 	};
 	const BEAT_AT = [0, 7.4, 19.4, 26.6, 38.9, 53.5, 67.1, 75.3, 84.0];
 
@@ -441,7 +441,6 @@
 		N.frame = h('div', 'rl-n-frame', s);
 		N.frameLabel = h('span', 'rl-n-framelabel', N.frame, 'What faculty see');
 		const d = N.draft = h('div', 'rl-n-draft', s);
-		h('p', 'rl-n-tag rl-n-grey', d, 'One AI draft');
 		N.draftRows = ['The analysis estimates ships can carry everyone out.', 'It is recommended that civilians wait for ships.'].map((x) => { const r = h('p', 'rl-n-row', d); h('span', 'rl-n-band', r, x); return r; });
 	}
 	{

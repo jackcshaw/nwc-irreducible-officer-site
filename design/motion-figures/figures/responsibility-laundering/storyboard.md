@@ -65,7 +65,7 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 **Changes after final verification** (`tests/final-verify.md`):
 - *Reading pace, words first.* Every beat now holds (its caption plus the words the viewer must read in it) ÷ 3 + 1.5 s. Cuts: beat 1's caption is "Two students, one task."; beat 2's is "Suppose the same prompt gives both the same AI draft.", and the key's "WRITTEN BY AI" moves to beat 3; beat 5's caption is "Faculty ask each student." and question 1 is "Suppose the port closes. Who made this call?"; the first answer is "I signed it. The analysis said ships could do it."; beat 6's caption is "They ask why.", question 2 is "Why did you rely on it?", and the second answer drops "harbor" ("Today's reports looked normal…"). Time went back only where cutting would lose the point: beats 1, 5, 6 and 9.
 - *At 390 px the half travels.* The first card's signature dot halves, and the other half visibly moves up the card's left edge to "The analysis", turning into the dashed grey ring as it arrives.
-- *Total:* 92.9 s in 9 beats.
+- *Total:* 93.2 s in 9 beats (92.9 s, plus 0.3 s for beat 9 after a recount of the line under the check).
 
 **Changes after figure cold read 1** (`tests/figure-read-1.md` and the orchestrator's notes):
 - *What faculty see is shown.* While faculty ask (beats 5–6), the note row dims to 20% under "FACULTY DON'T SEE THIS", and a navy frame labelled "WHAT FACULTY SEE" goes round the two copies. Beat 7 removes the frame and brings the note back, since by then it explains the second answer. Beat 5's caption is now "Faculty ask who made the call."; the frame says the rest.
@@ -120,7 +120,7 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 - *Showing the port actually close.* It would make the AI wrong and the figure about error.
 - *Asking the check verbatim on stage.* "Who owns the recommendation?" invites "I do" from both.
 
-**Running time.** 92.9 s in 9 beats (frame capture 86.2 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 90.6 s, invisible delegation 101.6 s, institutional monoculture 90.5 s).
+**Running time.** 93.2 s in 9 beats (frame capture 86.2 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 90.6 s, invisible delegation 101.6 s, institutional monoculture 90.5 s).
 
 **Book link target.** `../../book-v0/four-moves-book.html?spread=5` (Move 4, Own the decision) until `book-v1/` exists.
 
@@ -322,20 +322,20 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 - **Notice:** neither weight stops at the AI's words or at the reason handed to them. Both weights rest on the students. The papers are unchanged, and nothing has actually gone wrong.
 - **Why:** Section VII: "AI can compress the work before a decision. It cannot own what follows." Both are answerable; only the second gave their own reason. The hanging weights are the lead-in "Suppose it proves wrong" describes; the first fall starts 3.5 s in (the hover trimmed at the orchestrator's request), and the second waits for the first to settle.
 
-### Beat 9 · 84.0–92.9 s · The faculty check
+### Beat 9 · 84.0–93.2 s · The faculty check
 
 - **What moves:**
   1. 84.0–84.2: caption 8 fades out.
   2. 84.2–84.8: the faculty check rises into the caption band: "FACULTY CHECK" in navy mono, then the check in large italic.
   3. 86.9–87.4: directly under the check, at the same size: "Name one way it could prove wrong. Ask why they relied on it."
-  4. 87.4–92.9: hold. At 92.9 the player shows Replay and the figure rests on this frame.
+  4. 87.4–93.2: hold. At 93.2 the player shows Replay and the figure rests on this frame.
 - **Caption:** "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
 - **Notice:** the picture answers the first line: both students, one weight each. The second line is what faculty did in beats 5 and 6, and the answers to it are what differ.
 - **Why:** the figure ends on the check and the move an educator can make. The move line appears 2.7 s after the check begins to rise, once the check can be read, and the beat holds both lines at 3 words a second plus 1.5 s before the figure rests.
 
 ## 5. Final frame
 
-The still at 92.9 s. It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
+The still at 93.2 s. It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
 
 **Stage:**
 - **Top left:** the task card, "EXAMPLE TASK · Recommend when to evacuate a port city."
@@ -420,19 +420,19 @@ The rule: every beat lasts at least (caption words + on-screen words the viewer 
 | 3 · Both read it closely | 19.4–26.6 | 7 | 3 (key "Written by AI") | 4.8 | 7.2 | 2.4 | 1.0 | 4.7 | 1.5 |
 | 4 · The first signs; the second notes first | 26.6–38.9 | 14 | 18 (key 3, note label 6, note 9) | 12.2 | 12.3 | 0.1 | 1.0 | 9.8 | 1.5 |
 | 5 · Faculty ask each student | 38.9–53.5 | 4 | 34 (overlays 7, question 8, answers 10 + 9) | 14.2 | 14.6 | 0.4 | 1.0 | 9.2 | 4.4 |
-| 6 · They ask why | 53.5–67.1 | 3 | 32 (question 6, answers 8 + 18) | 13.2 | 13.6 | 0.4 | 1.0 | 8.2 | 4.4 |
+| 6 · They ask why | 53.5–67.1 | 3 | 33 (question 6, answers 8 + 19) | 13.5 | 13.6 | 0.1 | 1.0 | 8.2 | 4.4 |
 | 7 · Whose reason | 67.1–75.3 | 11 | 5 (key "Reason handed to the AI") | 6.8 | 8.2 | 1.4 | 1.0 | 5.7 | 1.5 |
 | 8 · Suppose it proves wrong | 75.3–84.0 | 13 | 1 ("Answerable") | 6.2 | 8.7 | 2.5 | 1.0 | 5.8 | 1.9 |
-| 9 · Faculty check | 84.0–92.9 | 8 + 12 second line | 2 ("Faculty check") | 8.8 | 8.9, then rests | 0.1 | 0.0 | 3.4 | 5.5 |
-| **Total** | | **86** | **128** | | **92.9** | | **8.0** | **55.9** | **29.0** |
+| 9 · Faculty check | 84.0–93.2 | 8 + 13 second line | 2 ("Faculty check") | 9.2 | 9.2, then rests | 0.0 | 0.0 | 3.4 | 5.8 |
+| **Total** | | **87** | **129** | | **93.2** | | **8.0** | **55.9** | **29.3** |
 
 Checks:
 - Every beat meets the rule (the spare column is never negative). Beats 3, 7 and 8 keep slack because their lengths are set by twice the caption's reading time, the motion and the 1.5 s hold.
 - Changes a caption names wait until it can be read once: the note (beat 4, 4.7 s in), question 1 (beat 5, 2.6 s), question 2 (beat 6, 1.0 s), the outlines and split (beat 7, 3.7 s) and the line under the check (beat 9, 2.7 s after the check begins to rise). Trimmed at the orchestrator's request: the draft's rows (beat 2, 2.4 s in, 0.5 s after the sheet) and the first weight's fall (beat 8, 3.5 s in; the caption reads in 4.3 s).
-- Each answer types at about 5 words a second and stays readable at 3 words a second before the next answer begins: 10 and 9 words in beat 5, 8 and 18 in beat 6. All stay on screen to the end.
+- Each answer types at about 5 words a second and stays readable at 3 words a second before the next answer begins: 10 and 9 words in beat 5, 8 and 19 in beat 6. All stay on screen to the end.
 - The note holds 4.5 s from its first word, its reading time (3.0 s) plus 1.5 s, before the second student's dot moves, and stays to the end.
 - Both students read four lines at 1.0 s a line, with the same 0.3 s pause, at the same time, and sign with the same motion.
 - The note row dims and the "what faculty see" frame is up only while faculty ask (beats 5–6). The viewer's marks for the answers (the outlines, the halved dot and grey ring, and the bracket) appear only after both rounds of answers. Nothing red or first-person sits on or under a handed-in paper.
 - Nothing overlaps at 390 px: the overlays sit over empty space, the weights fall down each card's left edge, and the half dot travels up the card's left edge to "The analysis".
 - No camera moves. The draft divides into two copies once (beat 2). Reduced motion shows the final frame.
-- Total 92.9 s.
+- Total 93.2 s.

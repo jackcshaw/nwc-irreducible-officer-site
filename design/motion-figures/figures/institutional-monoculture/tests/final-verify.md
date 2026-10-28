@@ -112,3 +112,69 @@ At 97.7 s the caption band reads "FACULTY CHECK / What frames are missing across
 
 - In the compact layout, "ONE FRAME" (x 340) and "COUNTER THE RIVAL" (x 348) are offset by 8 units (lines 193–194). The offset is visible in the final frame.
 - At 390 px, the two-column problem list wraps "Undersell foreign arms" with "arms" outdented under the bullet (about 34–60 s).
+
+## Re-verify
+
+October 28, 2026 · report only, no figure files changed · served `design/motion-figures/` on 127.0.0.1:5341 (stopped afterwards), Playwright 1.63 (Chromium) from the repo's `node_modules`, `__motionFigures[id].seek()` at every 0.05 s from 0 to the end at 1366×657, 1280×720 and 1440×900. No console errors. The legibility rule hides nothing at any of the three sizes (`is-narrow` off).
+
+| # | Item | Result |
+| --- | --- | --- |
+| 4 | Label size | **Pass** for every settled label. Text in flight still dips under 11 px while it grows into place (beats 4, 6, 10). |
+| 7 | Reading pace | **Pass** on the clock in all 11 beats, under the same counting method. Margins are thin: see the table. |
+| 8 | Final frame | **Unchanged** |
+
+### Label size: pass (settled)
+
+**How it was measured:** for each visible SVG `text` or `tspan` (effective opacity over 0.05), rendered px = computed font-size × the vertical scale of `getScreenCTM()`. This includes every scaled group. HTML text in the caption band and controls was measured from its computed font-size.
+
+- **The callout heading now reads "EVERY OUTLINE OPENED"** (line 203), not "EVERY AI OUTLINE OPENED WITH". `CALL_C` is now `{x: 340, y: 64, s: 1}` (line 69), so the card keeps its full size in the compact layout.
+- **The heading from 59.0 s to the final frame:** 11.1 px at 1366×657 and 12.6 px at 1280×720, at every sample. Its opacity runs from 1 down to 0.35 (from 61.5 s) and back to 1 (from 79.2 s). It is the same size at 96.3 s. (At 1440×900 it is 14.1 px.)
+- **Smallest settled picture text:** 11.1 px at 1366×657 and 12.6 px at 1280×720. These are the mono 13-unit labels and the compact Serif 13-unit columns. The AI's question card is 15.4 / 17.5 px and the task card 12.8 / 14.6 px.
+- **HTML:** 12 px minimum (the `n / 11` counter); the time readout is 13 px and the caption 19–22 px.
+
+**Text in flight, under 11 px for a moment** (opacity over 0.05, 1366×657 figures; 1280×720 is slightly shorter):
+
+| Beat | What | Under 11 px | Smallest |
+| --- | --- | --- | --- |
+| 4 | Each first line lifting into the list | about 0.3 s per line, 28.4–35.0 s | 5.1 px |
+| 6 | The AI's card growing out of the panel | 47.05–47.45 s (heading); its serif line, 47.05–47.10 s | 5.3 px |
+| 10 | Each group's lines lifting into its column | about 0.7 s per group, 77.45–80.55 s | 2.9 px |
+
+These are words growing as they move, and none is meant to be read until it settles. The original report set the beat-4 lifts aside as momentary for this reason. Read literally, "at any point" fails in these three beats; read as settled text, item 4 passes.
+
+### Reading pace: pass on the clock
+
+**Rule and method (unchanged from §7 above):** (caption words + new picture words) ÷ 3 + 1.5 s. A label repeated from an earlier beat isn't counted again, and arrows and "?" aren't words. Beat lengths come from `AT` (line 40) and `T.end` (96.3). Captions come from `BEATS`, and the picture words are the SVG texts whose effective opacity first passes 0.1 inside the beat (measured, not taken from the storyboard).
+
+| Beat | Time (s) | Length | Caption | New picture words | Required | Margin |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 0.0–10.9 | 10.9 | 8 | 20 (EXAMPLE TASK 2, task 7, "The seminar" 2, context 9) | 10.83 | +0.07 |
+| 2 | 10.9–18.3 | 7.4 | 11 | 1 (AI) | 5.50 | +1.90 |
+| 3 | 18.3–26.3 | 8.0 | 12 | 7 ("AI OUTLINE → WRITE" 3, "ALL DRAFTED WITH AI" 4) | 7.83 | +0.17 |
+| 4 | 26.3–39.8 | 13.5 | 6 | 30 (ten lines) | 13.50 | 0.00 |
+| 5 | 39.8–46.0 | 6.2 | 9 | 5 ("ONE FRAME: COUNTER THE RIVAL") | 6.17 | +0.03 |
+| 6 | 46.0–52.9 | 6.9 | 7 | 9 (card heading 3, card line 4, pill 2) | 6.83 | +0.07 |
+| 7 | 52.9–58.9 | 6.0 | 9 | 2 ("FACULTY ASK") | 5.17 | +0.83 |
+| 8 | 58.9–66.1 | 7.2 | 9 | 8 (name 3, "ONE IMAGINED SPREAD" 3, "DEFINE PROBLEM" 2) | 7.17 | +0.03 |
+| 9 | 66.1–74.3 | 8.2 | 9 | 11 (the AI's questions 9, "AI CHALLENGES" 2) | 8.17 | +0.03 |
+| 10 | 74.3–87.8 | 13.5 | 9 | 27 (seven new lines 21, two new goal labels 6) | 13.50 | 0.00 |
+| 11 | 87.8–96.3, then rests | 8.5 | 7 (question) + 14 (follow-up) | 0 | 8.50 | 0.00 |
+
+**Total running time: 96.3 s.** The player shows "1:36 / 1:36".
+
+**What the count depends on.** Every beat passes, but three beats pass only because repeated labels aren't counted:
+
+- **Beat 8:** "ONE FRAME" / "COUNTER THE RIVAL" are beat 5's label reset in two lines (5 words). Counted, the beat needs 8.8 s.
+- **Beat 9:** the imagined run's "→ WRITE" and "ALL DRAFTED WITH AI" repeat beat 3's labels, which are still on screen at 35% (5 words). Counted, the beat needs 9.8 s.
+- **Beat 10:** the three carried-over lines and "COUNTER THE RIVAL" (12 words) aren't counted.
+
+**Beat 11's heading.** The caption band's "FACULTY CHECK" heading is left out of beat 11, as the storyboard and the original report left it out. Other headings are counted (EXAMPLE TASK, FACULTY ASK, EVERY OUTLINE OPENED). Counted the same way, beat 11 has 23 words and needs 9.17 s. That is 0.67 s short on the clock, and the beat is covered only by the rest on the final frame. Separately, the follow-up is on screen for 5.5 s (90.8–96.3), against 4.7 s to read its 14 words.
+
+### Final frame: unchanged
+
+At 96.3 s the caption band reads "FACULTY CHECK / What frames are missing across the seminar? / Line up each paper's problem, then ask what other frames the task could take." The question matches `scripts/build-site.mjs` line 974 verbatim. The follow-up is at opacity 1, with the same font as the question: italic 400 Source Serif 4, one line each.
+
+- 22 px at 1366×657 and 1280×720
+- 30 px at 1440×900
+
+This is the same as in §8. The dashed "?" box is still empty. One change since the first run: "ONE FRAME" and "COUNTER THE RIVAL" now share x 348 (lines 194–195), so the 8-unit offset noted under "Minor" is gone.

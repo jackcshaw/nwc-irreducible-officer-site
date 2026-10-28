@@ -48,6 +48,7 @@ Figure 3 (premature synthesis) done October 28: two storyboard reads, two figure
 Figure 4 (uncalibrated reliance) done October 28: two storyboard reads, two figure reads, final fixes checked by a verifier agent (91 seconds after a trim from 113).
 Figure 5 (invisible delegation) done October 28: two storyboard reads, two figure reads, final fixes checked by a verifier agent (90 seconds after a trim from 102).
 Figure 7 (responsibility laundering) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents (93 seconds).
+Figure 6 (institutional monoculture) done October 28: two storyboard reads, two figure reads, final fixes checked by verifier agents (96 seconds; flat, not 3D).
 
 ## Standalone pages
 
