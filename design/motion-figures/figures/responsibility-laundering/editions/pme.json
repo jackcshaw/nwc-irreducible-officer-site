@@ -1,5 +1,5 @@
 {
- "_doc": "Responsibility laundering, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in responsibility-laundering.js. Schema: CONVENTIONS.md, Editions; figure-specific keys: draft (the AI's draft, as SVG lines, and the phrase the first person's answer leans on), note, questions, answers. page.checkFollow and page.quotes use [text](href) links and *em*, filled by the figure (data-rl-rich). labels.dontSee and narrow.dontSee stay literal: the cast key {reviewer_doesnt_see} has a straight apostrophe, and these labels use a curly one.",
+ "_doc": "Responsibility laundering, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in responsibility-laundering.js. Schema: CONVENTIONS.md, Editions; figure-specific keys: draft (the AI's draft, as SVG lines, and the phrase the first person's answer leans on), note, questions, answers. page.checkFollow and page.quotes use [text](href) links and *em*, filled by the figure (data-rl-rich).",
  "id": "pme",
  "cast": "classroom",
  "task": {
@@ -42,7 +42,7 @@
  "labels": {
   "noteRow": "THEIR OWN NOTE · NOT HANDED IN",
   "noNote": "—",
-  "dontSee": "FACULTY DON’T SEE THIS",
+  "dontSee": "{reviewer_doesnt_see|upper}",
   "frame": "{what_reviewer_sees|upper}",
   "copyFirst": "{first|upper}’S COPY",
   "copySecond": "{second|upper}’S COPY",
@@ -57,7 +57,7 @@
  "narrow": {
   "taskLabel": "Example task",
   "noteRow": "Their own note · not handed in →",
-  "dontSee": "Faculty don’t see this",
+  "dontSee": "{reviewer_doesnt_see}",
   "frame": "{what_reviewer_sees}",
   "weight": "Answerable",
   "keyAI": "Written by AI",
@@ -170,6 +170,7 @@
     "text": "Uncalibrated reliance",
     "href": "../uncalibrated-reliance/"
    }
-  ]
+  ],
+  "editionNote": "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay."
  }
 }

@@ -64,6 +64,9 @@
 .rl-source { display: none; }
 #responsibility-laundering.is-stacked .rl-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 .is-outlined { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 2px; white-space: nowrap; }
+/* Business: in a spoken answer the outline hugs the phrase, so its top edge can't read as an
+   underline of the line above (the answers' line height is tight). */
+#responsibility-laundering[data-edition-id="business"] .rl-n-line .is-outlined { display: inline-block; line-height: 1.1; outline-offset: 0; }
 .rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
 .rl-n-row { position: relative; margin: 0 0 2px; font: 400 13px/1.32 var(--serif); color: var(--stone); }
 .rl-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
@@ -99,7 +102,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote"></p>
 
 	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
 		<p class="sr-only" id="rl-title" data-ed="page.srTitle"></p>

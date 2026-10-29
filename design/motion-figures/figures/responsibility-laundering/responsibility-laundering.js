@@ -86,6 +86,31 @@
 	const NOTE_LINES = ed.note.lines;
 	const SPEECH = Object.fromEntries(['a', 'b'].map((col) => [col, {rows: ed.answers[col === 'a' ? 'first' : 'second'].map((str, i) => ({n: String(i + 1), str, ...SPEECH_AT[col][i]}))}]));
 	const Q = ed.questions;
+	// The first person's answer that leans on the AI's phrase (PME: answer 1; business: answer 2,
+	// the answer to "Why did you rely on it?").
+	const PHRASE_ROW = Math.max(0, SPEECH.a.rows.findIndex((r) => r.str.includes(PHRASE)));
+	// Optional (business): the split staged one step at a time. The dot parts into two halves
+	// side by side; one travels up the margin with a halo and a dashed trail (which fades once it
+	// arrives) and turns into the grey ring. PME has no "split" and draws as before.
+	const SP = ed.split || null;
+	// An edition's own clock (business): edits to the core clock, in core seconds, as knots of a
+	// piecewise-linear map. A hold freezes the core and adds time; a cut skips a static stretch; a
+	// stretch plays [at, to] slower by its factor. With no edits (PME) both maps are the identity.
+	const EDITS = ((ed.timeline && ed.timeline.edits) || []).slice().sort((a, b) => a.at - b.at);
+	const KNOTS = [[0, 0]];
+	{
+		let o = 0;
+		for (const e of EDITS) {
+			KNOTS.push([e.at, e.at + o]);
+			if (e.hold) { o += e.hold; KNOTS.push([e.at, e.at + o]); }
+			else if (e.cut) { KNOTS.push([e.at + e.cut, e.at + o]); o -= e.cut; }
+			else if (e.stretch) { o += (e.to - e.at) * (e.stretch - 1); KNOTS.push([e.to, e.to + o]); }
+		}
+		KNOTS.push([1e5, 1e5 + o]);
+	}
+	const seg = (x, a, b) => { for (let i = 1; i < KNOTS.length; i++) { const p = KNOTS[i - 1], q = KNOTS[i]; if (q[a] > p[a] && x <= q[a]) return p[b] + ((x - p[a]) / (q[a] - p[a])) * (q[b] - p[b]); } return x; };
+	const toCore = EDITS.length ? (tau) => seg(tau, 1, 0) : (tau) => tau;
+	const toEd = EDITS.length ? (t) => seg(t, 0, 1) : (t) => t;
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: VW, height: VH, fill: C.paper});
 	const sceneBase = el(svg, 'g');
@@ -204,6 +229,9 @@
 		return {g, ring, c, half, lab};
 	};
 	const dots = {a: dot('a', L.first), b: dot('b', L.second)};
+	const trail = SP ? el(sceneTop, 'line', {stroke: C.grey, 'stroke-width': 1.5, 'stroke-dasharray': '3 3', 'stroke-linecap': 'round', opacity: 0}) : null;
+	const halo = SP ? el(sceneTop, 'circle', {r: 0, fill: C.red, opacity: 0}) : null;
+	if (SP) { sceneTop.insertBefore(halo, sceneTop.firstChild); sceneTop.insertBefore(trail, sceneTop.firstChild); }
 	let pathA = () => HOME.a, pathB = () => HOME.b;
 
 	// ---- measure (after fonts load) -------------------------------------------
@@ -272,11 +300,13 @@
 		}
 		// The same phrase in the first person's answer 1 (stage units).
 		{
-			const row = speeches.a.rows[0];
+			const row = speeches.a.rows[PHRASE_ROW];
 			const li = row.lineEls.findIndex((tn) => tn.textContent.includes(PHRASE));
 			const tn = row.lineEls[li], idx = tn.textContent.indexOf(PHRASE);
 			const x0 = +tn.getAttribute('x') + tn.getSubStringLength(0, idx);
-			set(sayOutline, {x: x0 - 2, y: PANEL.rows[0][li] - 16, width: tn.getSubStringLength(idx, PHRASE.length) + 5});
+			// After an opening quote (business) the box starts a little later, so it doesn't cover it.
+			const pad = idx > 0 && tn.textContent[idx - 1] !== ' ' ? 1.5 : 0;
+			set(sayOutline, {x: x0 - 2 + pad, y: PANEL.rows[PHRASE_ROW][li] - 16, width: tn.getSubStringLength(idx, PHRASE.length) + 5 - pad});
 		}
 		// Dot paths: both read the same lines at the same pace.
 		const lw = copies.a.lines.map((l) => l.w);
@@ -379,7 +409,7 @@
 			return mix(WT.hang, restY, k) - 2 * bump(t, ...rest);
 		};
 		// The first student's dot is a half by now, so their weight comes to rest 1.5 lower.
-		const wyA = fallY(T.aFall, T.aRest, SIG.dot.y - SPLIT.half - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
+		const wyA = fallY(T.aFall, T.aRest, SIG.dot.y - (SP ? SP.half : SPLIT.half) - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
 		set(copies.a.weight, {opacity: kW, transform: `translate(0 ${wyA})`});
 		set(copies.b.weight, {opacity: kW, transform: `translate(0 ${wyB})`});
 
@@ -398,7 +428,22 @@
 		// Beat 7: the first student's dot halves. One half stays on the signature line; the other
 		// travels to "The analysis estimates" and becomes a hollow dashed grey ring: the reason
 		// handed to the AI. It stays to the end; the weight passes it (beat 8).
-		if (t >= T.split[0]) {
+		if (SP && trail) { set(trail, {opacity: 0}); set(halo, {opacity: 0}); }
+		if (SP && t >= T.split[0]) {
+			const [s0, s1] = T.split;
+			const kApart = prog(t, s0, s0 + 0.3, E.inOut);
+			const kTravel = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
+			const kTurn = prog(t, s1 - 0.4, s1);
+			const base = st('a', SIG.dot), beside = st('a', SPLIT), dx = SP.apart / 2;
+			set(dots.a.c, {cx: base.x - dx * kApart, r: mix(5, SP.half, kApart)});
+			const hx = mix(base.x + dx * kApart, beside.x, kTravel), hy = mix(base.y, beside.y, kTravel);
+			set(dots.a.half, {
+				cx: hx, cy: hy, r: kApart > 0 ? mix(SP.half, SP.ring, kTurn) : 0, fill: C.red, 'fill-opacity': 1 - kTurn,
+				stroke: C.grey, 'stroke-opacity': kTurn, 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2',
+			});
+			set(halo, {cx: hx, cy: hy, r: SP.half + 6, opacity: 0.2 * prog(t, s0 + 0.15, s0 + 0.3) * (1 - kTurn)});
+			set(trail, {x1: base.x + dx, y1: base.y, x2: hx, y2: hy, opacity: 0.7 * (kTravel > 0 ? 1 : 0) * (1 - prog(t, s1, s1 + 0.25))});
+		} else if (t >= T.split[0]) {
 			const kSplit = prog(t, ...T.split, E.inOut);
 			const kHalf = prog(t, T.split[0], T.split[0] + 0.3);
 			const kTurn = prog(t, T.split[0] + 0.6, T.split[1]);
@@ -483,7 +528,7 @@
 			const box = h('div', 'rl-n-say', s);
 			return {box, lines: SPEECH[k].rows.map((r, ri) => {
 				const ln = h('p', 'rl-n-line', box);
-				const i = k === 'a' && ri === 0 ? r.str.indexOf(PHRASE) : -1;
+				const i = k === 'a' && ri === PHRASE_ROW ? r.str.indexOf(PHRASE) : -1;
 				if (i < 0) { ln.textContent = `${r.n} · ${r.str}`; return ln; }
 				ln.append(`${r.n} · ${r.str.slice(0, i)}`);
 				N.sayAnalysis = h('span', null, ln, PHRASE);
@@ -542,7 +587,25 @@
 			const on = t >= T.split[0];
 			hf.style.visibility = on ? 'visible' : 'hidden';
 			cd.di.style.transform = on ? 'scale(0.7)' : '';
-			if (on) {
+			if (on && SP) {
+				// Business: the halves part side by side, then one travels up the card's left edge,
+				// larger and with a halo, and turns into the dashed grey ring.
+				const [s0, s1] = T.split;
+				const kA = prog(t, s0, s0 + 0.3, E.inOut);
+				const k = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
+				const turn = prog(t, s1 - 0.4, s1);
+				cd.di.style.transform = `translateX(${(-3 * kA).toFixed(2)}px) scale(${mix(1, 0.75, kA).toFixed(3)})`;
+				const dotN = cd.di.parentNode, from = {x: dotN.offsetLeft + dotN.offsetWidth / 2 + 6 * kA, y: dotN.offsetTop + dotN.offsetHeight / 2};
+				const to = {x: 3, y: cd.r1.offsetTop + 9};
+				const size = mix(SP.narrowHalf, SP.narrowRing, turn);
+				hf.style.left = `${(mix(from.x, to.x + 6, k) - size / 2).toFixed(1)}px`;
+				hf.style.top = `${(mix(from.y, to.y, k) - size / 2).toFixed(1)}px`;
+				hf.style.width = hf.style.height = `${size.toFixed(1)}px`;
+				hf.style.background = turn < 1 ? `rgba(184, 27, 43, ${(1 - turn).toFixed(3)})` : 'transparent';
+				hf.style.borderColor = `rgba(91, 86, 79, ${turn.toFixed(3)})`;
+				hf.style.boxShadow = `0 0 0 5px rgba(184, 27, 43, ${(0.22 * kA * (1 - turn)).toFixed(3)})`;
+				hf.style.opacity = kA > 0 ? '1' : '0';
+			} else if (on) {
 				// From the signature dot, up the card's left edge, to just left of "The analysis".
 				const k = prog(t, ...T.split, E.inOut);
 				const turn = prog(t, T.split[0] + 0.6, T.split[1]);
@@ -581,13 +644,13 @@
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
 			// Figure time (the player's clock includes the opening name card).
-			renderNarrow(player ? player.time() : 0);
+			renderNarrow(toCore(player ? player.time() : 0));
 		}
 	};
 
 	// Beat times are core; the words come from the edition.
-	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
-	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
+	const BEATS = BEAT_AT.map((at, i) => ({at: toEd(at), ...ed.beats[i]}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: toEd(T.follow)};
 
 	measure();
 	legibility(root, svg, VW, 11);
@@ -595,7 +658,8 @@
 	syncStacked();
 	// Poster: beat 1 settled (the task and the two students). Nameplate: the opening name
 	// card, the corner plate and the name and definition above the check.
-	player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02, nameplate: NAMEPLATE});
+	const renderEd = EDITS.length ? (tau) => render(toCore(tau)) : render;
+	player = mount(root, {duration: toEd(T.end), render: renderEd, beats: BEATS, poster: toEd(BEAT_AT[1]) - 0.02, nameplate: NAMEPLATE});
 	syncStacked();
 	}
 })();
