@@ -28,6 +28,15 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 7. **Appropriate reliance opens on a live question** rather than autoplaying like the others, so the reader makes the call first.
 8. **Institutional monoculture is flat, not 3D.** Faculty read across a seminar rather than rotate it; the testers read the line-up clearly.
 
+## Editions: decisions for Jack (added October 28, evening)
+
+The business editions are in progress: every figure's words now live in data files, PME is unchanged frame for frame, and each business edition goes through two cold reads. These came up along the way:
+
+1. **Race in frame capture's business edition.** The study's finding is racial: at the same predicted cost, Black patients were sicker than White patients. The final-frame source line now says so in the paper's terms rather than leaving it only in the page text. Keep it, or move it back to the page?
+2. **"Agency" in responsibility laundering's definition** ("The model’s recommendation makes agency feel shared, or easier to defend.") A business tester found "agency" ambiguous (it can mean a company or a government body). An option: "makes ownership of the decision feel shared, or easier to defend." The definition is universal across editions, so it's your call.
+3. **Role words per example.** Several business examples need their own roles (engineer and tech lead; associate and partner; owner and mentor). They're written into each business edition for now. The classroom cast will need a per-edition override; it gets built at that step.
+4. **Workplace check wording** for each figure is in its `storyboard-business.md`.
+
 ## Not part of the figures, still waiting
 
 - **The open-call sign-up page** is reviewed and ready. It needs the updated script published (Deploy, then Manage deployments, then the pencil, then New version), then the inbox test and a release.
