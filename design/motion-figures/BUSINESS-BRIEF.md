@@ -26,6 +26,15 @@ For the authors of figures 2–8. Frame capture piloted this; its business editi
 5. **Load fonts before measuring** (CONVENTIONS.md, loader notes), or the business text will mis-measure.
 6. **PME must still frame-diff to 0** after your changes.
 
+## Lessons from round-1 cold reads (all figures)
+
+7. **The picture must show at 1280×720,** a common laptop size, not the text-only stacked view. Shorten SVG labels or tighten the layout until labels are 11px or more there. Check 1366×657 too.
+8. **No straw men.** The weaker person's answer must be what a careful, reasonable person would say. They fail by repeating the draft's reasoning, not by saying something obviously wrong.
+9. **The separating question must be the first point of difference.** If an earlier exchange (e.g. "and why?") already separates them, both must answer it equally well.
+10. **The good person's move must be their own,** not the AI draft's stated fallback or a step the study links to low scores. Check which behaviours the paper associates with good and poor outcomes, and match them.
+11. **Describe the sample accurately:** who the subjects were (lawyers, engineers, owners), their experience, and the subgroup a finding applies to. Label exploratory analyses as exploratory.
+12. **Same access on both sides:** both people see the same standard, docs and materials. Only what they do with them differs.
+
 ## Check before returning
 
 - Both editions at 1440×900, 1280×720 and 390×844, plus reduced and print.
