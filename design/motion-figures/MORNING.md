@@ -42,3 +42,9 @@ The business editions are in progress: every figure's words now live in data fil
 
 - **The open-call sign-up page** is reviewed and ready. It needs the updated script published (Deploy, then Manage deployments, then the pencil, then New version), then the inbox test and a release.
 - **The workplace-evidence correction** (companion PR #12) and the sign-up page can go out in one site release.
+
+## Companion source-spine follow-ups (from the business-edition paper checks)
+
+To land as one companion PR once the editions settle:
+- **Correct** Shen & Tamkin (2026): "52 mostly junior engineers" is wrong; the paper's Table 1 shows 29 of 52 had 7+ years of experience. The study's assistant was GPT-4o.
+- **Add** the verified figures the editions use: Obermeyer et al. (2019) abstract (17.7% to 46.5%), Lee et al. (2025) (319 knowledge workers, 936 examples), Otis et al. (2026) published figures, Autor et al. (2026) (91 of 133 lawyers redlined; split among juniors only), Bottesch (2025), and *Moffatt v. Air Canada* (2024).
