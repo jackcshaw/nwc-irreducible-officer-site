@@ -627,22 +627,53 @@
 	}
 
 	// ---- editions (additive; figures that don't call these are unchanged) ----
-	// Hold page copy back until an edition fills it, so no edition's words flash on load (and
-	// nothing jumps when a block an edition doesn't use is hidden). Opt-in by markup: only pages
-	// with data-ed attributes, i.e. pages that call fillPage. figures.css hides .fig-page while
-	// html[data-ed-pending] is set, and reveals it after 4 s regardless, in case loading fails.
-	if (document.querySelector('[data-ed], [data-ed-rich], [data-ed-section]')) document.documentElement.setAttribute('data-ed-pending', '');
+	// Hold page copy back until an edition fills it, so no edition's words flash on load. Each
+	// figure page's <head> snippet does this before first paint (html.ed-pending); after 3 s it
+	// shows a neutral loading state (html.ed-loading: "<title>: loading…") and keeps waiting.
+	// For a page without the snippet, the runtime sets html[data-ed-pending] instead
+	// (figures.css hides .fig-page, revealed after 3 s).
+	const docEl = document.documentElement;
+	if (!docEl.hasAttribute('data-ed-gate') && document.querySelector('[data-ed], [data-ed-rich], [data-ed-section]')) docEl.setAttribute('data-ed-pending', '');
+	const edReady = () => { docEl.removeAttribute('data-ed-pending'); docEl.classList.remove('ed-pending', 'ed-loading'); };
+	// Nothing could be loaded: keep the page's words hidden and say so.
+	const edFailed = () => {
+		const m = document.querySelector('main.fig-page');
+		if (m) m.setAttribute('data-loading', `${document.title}: this figure couldn\u2019t load. Reload the page to try again.`);
+		docEl.removeAttribute('data-ed-pending');
+		docEl.classList.remove('ed-pending');
+		docEl.classList.add('ed-loading');
+	};
+	/* casts:begin — generated from casts.json, which is the source of truth; regenerate after
+	   editing it (CONVENTIONS.md, Editions). Used only if casts.json can't be loaded. */
+	const BUILTIN_CASTS = {"classroom": {"person": "student", "Person": "Student", "people": "students", "a_person": "a student", "A_person": "A student", "the_person": "the student", "The_person": "The student", "first": "First student", "second": "Second student", "a_second": "a second student", "A_second": "A second student", "reviewer": "faculty", "Reviewer": "Faculty", "side": "the faculty side", "check": "Faculty check", "check_l": "faculty check", "receive": "What faculty receive", "reviewer_receives": "Faculty receive", "reviewer_asks_each": "Faculty ask each student", "ask_each": "Ask each student", "reviewer_ask": "Faculty ask", "reviewer_ask_l": "faculty ask", "reviewer_has": "Faculty have", "reviewer_sees": "Faculty see", "what_reviewer_sees": "What faculty see", "reviewer_doesnt_see": "Faculty don’t see this", "reviewer_points": "Faculty point", "reviewer_puts": "Faculty put", "then_ask": "Then they ask", "the_first": "the first student", "Another": "Another student", "That_person": "That student", "each_person": "each student", "group": "seminar", "reviewer_lines": "Faculty line"}, "workplace": {"person": "analyst", "Person": "Analyst", "people": "analysts", "a_person": "an analyst", "A_person": "An analyst", "the_person": "the analyst", "The_person": "The analyst", "first": "First analyst", "second": "Second analyst", "a_second": "a second analyst", "A_second": "A second analyst", "reviewer": "the manager", "Reviewer": "The manager", "side": "the manager’s side", "check": "Reviewer’s check", "check_l": "reviewer’s check", "receive": "What the manager receives", "reviewer_receives": "The manager receives", "reviewer_asks_each": "The manager asks each analyst", "ask_each": "Ask each analyst", "reviewer_ask": "The manager asks", "reviewer_ask_l": "the manager asks", "reviewer_has": "The manager has", "reviewer_sees": "The manager sees", "what_reviewer_sees": "What the manager sees", "reviewer_doesnt_see": "The manager doesn’t see this", "reviewer_points": "The manager points", "reviewer_puts": "The manager puts", "then_ask": "Then the manager asks", "the_first": "the first analyst", "Another": "Another analyst", "That_person": "That analyst", "each_person": "each analyst", "group": "team", "reviewer_lines": "The manager lines"}};
+	/* casts:end */
 	/** Load a figure's words. The edition comes from ?edition=, else data-edition on
 	    the root, else `fallback` (default 'pme'); an unknown edition falls back. The
 	    cast comes from ?cast=, else the edition's own "cast", else 'classroom'. Every
 	    string in the edition has {key} and {key|upper} filled from the cast's entry
 	    in casts.json. Returns the filled edition plus {id, castId, cast}. */
 	async function loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'} = {}) {
-		const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); });
-		let id = params.get('edition') || root.dataset.edition || fallback, raw;
-		try { raw = await get(`${base}${id}.json`); } catch (e) { id = fallback; raw = await get(`${base}${fallback}.json`); }
+		// A slow edition is waited for (the page shows its loading state from 3 s). Only a real
+		// failure (a network error, a 404, invalid JSON, or no answer in 10 s) falls back to PME,
+		// and the page then says so. Casts that fail or are slow use the built-in copy, which
+		// has the same words.
+		const get = (u, ms = 0) => {
+			const ctl = ms && 'AbortController' in window ? new AbortController() : null;
+			const timer = ctl ? setTimeout(() => ctl.abort(), ms) : 0;
+			return fetch(u, ctl ? {signal: ctl.signal} : undefined)
+				.then((r) => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); })
+				.finally(() => clearTimeout(timer));
+		};
+		let id = params.get('edition') || root.dataset.edition || fallback, raw, fellBack = false;
+		try { raw = await get(`${base}${id}.json`, 10000); }
+		catch (e) {
+			if (id === fallback) { edFailed(); throw e; }
+			id = fallback;
+			fellBack = true;
+			try { raw = await get(`${base}${fallback}.json`, 10000); } catch (e2) { edFailed(); throw e2; }
+		}
 		let all;
-		try { all = await get(casts); } catch (e) { document.documentElement.removeAttribute('data-ed-pending'); throw e; }
+		try { all = await get(casts, 2500); } catch (e) { all = BUILTIN_CASTS; }
 		let castId = params.get('cast') || raw.cast || 'classroom';
 		if (!all[castId]) castId = 'classroom';
 		const cast = all[castId];
@@ -650,7 +681,7 @@
 		const fill = (v) => (typeof v === 'string' ? fillStr(v) : Array.isArray(v) ? v.map(fill) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) : v);
 		root.dataset.editionId = id;
 		root.dataset.cast = castId;
-		return {...fill(raw), id, castId, cast};
+		return {...fill(raw), id, castId, cast, fellBack};
 	}
 	/** Inline markup for page copy: escapes HTML, then *words* become <em>words</em>. */
 	const rich = (str) => String(str).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])).replace(/\*([^*]+)\*/g, '<em>$1</em>');
@@ -700,7 +731,15 @@
 			if (a.dataset.editionLink === ed.id) a.setAttribute('aria-current', 'page');
 			else a.removeAttribute('aria-current');
 		});
-		doc.documentElement.removeAttribute('data-ed-pending');
+		// The requested edition failed and PME stands in: say so under the switch.
+		if (ed.fellBack && !doc.querySelector('.fig-fallback-note')) {
+			const n = doc.createElement('p');
+			n.className = 'fig-fallback-note';
+			n.textContent = 'Showing the original example.';
+			const at = doc.querySelector('.fig-editions') || doc.querySelector('main h1');
+			if (at) at.after(n);
+		}
+		edReady();
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};

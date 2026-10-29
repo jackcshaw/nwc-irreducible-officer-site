@@ -305,11 +305,21 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - `data-ed-content="path"`: a meta description, with the PME text kept as the static fallback;
   - `data-ed-section="path"`: hidden when empty, as for PME's evidence;
   - `data-edition-link="id"`: switch links, with href set and `aria-current` on the current edition.
-- **No flash of the wrong edition** (runtime, FC business verification).
-  - When the runtime loads on a page with `data-ed` attributes, it sets `html[data-ed-pending]`. `figures.css` hides `.fig-page` (visibility) until `fillPage` removes the attribute.
-  - The page appears once, already filled: no default-edition words flash, and nothing jumps when an edition hides a block.
-  - A CSS animation reveals the page after 4 s regardless, and a failed casts load clears the flag.
-  - It is additive: pages without `data-ed` attributes are unaffected. FC's PME and premature synthesis frame-diffed identical with the old and new runtime.
+- **No flash of the wrong edition** (FC business verification and recheck).
+  - **The head snippet.** Every figure page carries the same snippet before `</head>`: an inline `<style>` and a tiny inline script.
+    - The script sets `html.ed-pending` and `html[data-ed-gate]` before first paint.
+    - After 3 s, if the edition still hasn't filled the page, it switches to a neutral loading state, `html.ed-loading`. The page's words stay hidden, a line reads "<title>: loading…", and the page keeps waiting.
+    - It doesn't depend on `motion.js` arriving: a late script used to let the PME note paint, then the figure dropped 329 px.
+    - `fillPage` removes both classes, so the page appears once, already filled.
+  - **Without the snippet,** the runtime sets `html[data-ed-pending]` instead, and `figures.css` reveals it after 3 s.
+  - **Slow or failed loads:**
+    - **A slow edition is waited for.** It is never swapped: the loading state shows from 3 s until the edition arrives (tested with a 4 s delay).
+    - **PME stands in only on a real failure:** a network error, a 404, invalid JSON, or no answer in 10 s. The page then says "Showing the original example." under the switch (`.fig-fallback-note`).
+    - **If no edition loads,** the loading line becomes "<title>: this figure couldn't load. Reload the page to try again."
+    - **Casts:** `casts.json` that fails or takes over 2.5 s falls back to `BUILTIN_CASTS` in the runtime, which has the same words. That block is generated from `casts.json`, which stays the source of truth.
+  - **After editing `casts.json`, regenerate the block:** `node -e "const fs=require('fs');const c=JSON.parse(fs.readFileSync('casts.json'));delete c._doc;const p='runtime/motion.js';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace(/(const BUILTIN_CASTS = ).*;/,'$1'+JSON.stringify(c)+';'))"`.
+  - **No JavaScript:** each page has a `<noscript>` block after `<main>`. It is edition-neutral: the kicker, the name, the role-neutral definition (NAMEPLATE-DEFINITIONS.md) and "This figure needs JavaScript to play." The full text without JavaScript is the site build's job (INTEGRATION-PLAN.md §3.5).
+  - **Additive:** FC's PME, premature synthesis and appropriate reliance frame-diffed identical with the old and new runtime and page.
   - The static meta description is the role-neutral fallback. `data-ed-content` sets each edition's own description once the edition loads. A crawler or link preview without JavaScript sees only the fallback, so the site build should emit static pages or meta per edition (INTEGRATION-PLAN.md §3.5).
 - **Default:** PME with the classroom cast, so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.

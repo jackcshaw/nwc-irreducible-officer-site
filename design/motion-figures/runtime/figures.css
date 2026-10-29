@@ -189,10 +189,10 @@ body { margin: 0; background: var(--paper); color: var(--body); font-family: var
 .fig-links span { color: var(--muted); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-/* Editions: page copy stays hidden until fillPage fills it (the runtime sets
-   html[data-ed-pending] on pages with data-ed attributes), so no edition's words flash
-   and nothing jumps; it shows after 4 s regardless, in case loading fails. */
-html[data-ed-pending] .fig-page { visibility: hidden; animation: mf-ed-reveal 0s 4s forwards; }
+/* Editions: page copy stays hidden until fillPage fills it, so no edition's words flash.
+   Figure pages do this before first paint with a <head> snippet (html.ed-pending); for a
+   page without it the runtime sets html[data-ed-pending]. Shown after 3 s regardless. */
+html[data-ed-pending] .fig-page { visibility: hidden; animation: mf-ed-reveal 0s 3s forwards; }
 @keyframes mf-ed-reveal { to { visibility: visible; } }
 /* Editions: the switch under the setup, and a study's finding on the page. */
 /* Whole-pixel line heights, so adding the switch moves the figure by whole pixels
@@ -201,6 +201,8 @@ html[data-ed-pending] .fig-page { visibility: hidden; animation: mf-ed-reveal 0s
 .fig-editions a { color: var(--ink); text-underline-offset: 3px; }
 .fig-editions a[aria-current] { font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--ink); }
 .fig-edition-note { margin: 4px 0 0; font: 400 14px/20px var(--sans); color: var(--muted); }
+/* Shown only when the requested edition failed to load and PME stands in. */
+.fig-fallback-note { margin: 4px 0 0; font: 600 14px/20px var(--sans); color: var(--ink); }
 .fig-ed-evidence { margin: 0 0 10px; font-size: 17px; line-height: 1.55; color: var(--body); }
 
 /* Print: the final frame and the full text. */

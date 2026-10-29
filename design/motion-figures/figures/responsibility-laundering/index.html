@@ -89,6 +89,10 @@
 .rl-n-key .rg { display: inline-block; width: 10px; height: 10px; margin-right: 5px; box-sizing: border-box; border-radius: 50%; border: 1.6px dashed var(--stone); vertical-align: -1px; }
 .rl-n-key .rd { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
 </style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
 </head>
 <body>
 <header class="fig-top">
@@ -97,6 +101,7 @@
 </header>
 
 <main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 7 of 7</p><h1>Responsibility laundering</h1><p class="fig-setup">The model’s recommendation makes agency feel shared, or easier to defend.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
 	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
 	     (MotionFigures.fillPage, and data-rl-rich for paragraphs with links); see CONVENTIONS.md, Editions. -->
 	<p class="fig-kicker" data-ed="page.kicker"></p>

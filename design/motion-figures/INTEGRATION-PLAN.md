@@ -252,6 +252,10 @@ Per `book-v0` Option A, the book replaces `.method-band` ("One method, different
   - The figures show PME examples and say "faculty" and "seminar".
   - Default *(recommended)*: wait for edition variants or educator review (concepts-v0 §10 Q6, `book-v0` §9 Q4).
   - Alternative: cards at the editions' own failure-mode paragraphs (HE 5, high school 4), quoting that edition's paragraph and labelled "The figure's example is the PME one."
+- **Requirement: pre-render every edition** (added after the frame-capture business recheck).
+  - The build must pre-render each edition's text into static HTML: the title, setup, check, beat list, evidence, links and meta.
+  - Readers without JavaScript, and crawlers, then get the full text.
+  - The design pages fill their copy with JavaScript. Without it they show only an edition-neutral `<noscript>` summary: the name, the role-neutral definition, and "This figure needs JavaScript to play."
 - **A static page per edition** (added after the frame-capture business verification).
   - In the motion-figures prototype, `?edition=` picks an edition at runtime. The page's copy and meta description are filled in by JavaScript (`MotionFigures.fillPage`).
   - A link preview, or a crawler that runs no JavaScript, sees only the static fallback: role-neutral meta, and empty page copy.

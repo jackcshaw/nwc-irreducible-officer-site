@@ -87,6 +87,10 @@
 	#uncalibrated-reliance .mf-final-def { font-size: 16px; }
 }
 </style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
 </head>
 <body>
 <header class="fig-top">
@@ -95,6 +99,7 @@
 </header>
 
 <main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 4 of 7</p><h1>Uncalibrated reliance</h1><p class="fig-setup">Confident output is accepted without knowing whether the task fits the tool.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
 	<p class="fig-kicker" data-ed="page.kicker"></p>
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>

@@ -100,9 +100,9 @@
 .im-n-group b { margin-right: 6px; font: 600 12px/1.3 var(--mono); text-transform: uppercase; color: var(--ink); }
 </style>
 <!-- Editions: hide the page until its edition fills it, so no edition's words flash before
-     first paint; show it after 3 s regardless (CONVENTIONS.md, Editions). -->
-<style>html.ed-pending .fig-page { visibility: hidden; }</style>
-<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { d.classList.remove('ed-pending'); }, 3000); })(document.documentElement);</script>
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
 </head>
 <body>
 <header class="fig-top">
@@ -111,7 +111,7 @@
 </header>
 
 <main class="fig-page">
-	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 6 of 7</p><h1>Institutional monoculture</h1><p class="fig-setup">Shared systems and defaults narrow the range of frames a group considers.</p><p><strong>Faculty check:</strong> What frames are missing across the seminar? Line up each paper&#x27;s problem, then ask what other frames the task could take.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 6 of 7</p><h1>Institutional monoculture</h1><p class="fig-setup">Shared systems and defaults narrow the range of frames a group considers.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
 	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
 	     (MotionFigures.fillPage, plus the figure's own fill for text with links:
 	     data-im-linked, data-im-linked-items, data-im-lead); see CONVENTIONS.md, Editions. -->

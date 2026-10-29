@@ -167,3 +167,124 @@ The old version had a 3 s dead stretch before the reveal and 1.5 s after it. The
 4. **Phone layout jumps** at 88.95 s (+23 px) and 92.1 s (−1 line), 390×844.
 5. **Wording risk:** "not the study's" for chronic illness may misstate the study. Verify against the full text.
 6. **Nits:** phone ↑ against desktop ↓ on the callout. "Risk score" against "predicted cost" in the picture. The keyboard focus scroll cuts off the top of the stage.
+
+---
+
+## Recheck
+
+**Scope:** items 1 and 6 above, after commit `efc3ccb`. The figure and the runtime have no uncommitted changes. Served locally on port 5363 (now stopped).
+**Method (Playwright):**
+- **Real-time runs** at 1280×900, 1280×720 and 390×844. The player was wheel-scrolled into view and left to autoplay. An in-page log recorded, every 100 ms, the clock, the caption, the visible picture text, the player's geometry, scrollY and scrollWidth.
+  - Other sessions were running Playwright on the same machine. A first pass that also took a screenshot every 0.5 s slipped by up to 8 s in 84–102 s, so I discarded it.
+- **Frames every 0.5 s** from 76 to 103.6 s at all three sizes. I took them by seeking the player clock, so the 0.5 s spacing is exact.
+- **Seek pass** every 0.05 s, from 0 s at 390 and from 60 s on desktop. It logs each picture element's opacity, text and position, grouped into change episodes. The holds below come from it.
+- **Load and failure paths:** every rendered frame from the start of the document is logged: `data-ed-pending`, page visibility, the PME note, and the figure and controls positions. Fifteen scenarios, plus a run with JavaScript disabled.
+
+All times are on the player clock. Scripts, logs and frames are in the session scratchpad (`fc-recheck/`).
+
+### Verdict
+
+| # | Item | Result |
+|---|---|---|
+| 1 | Reading time for new picture text, 78–100 s | **Pass** at all three sizes; the margins are thin |
+| 1 | 390: the check is drawn | **Pass** |
+| 1 | 390: no layout jumps | **Pass** |
+| 2 | No PME note flash on load, nothing jumps | **Fail**: clean on a fast local load, but the note still paints whenever motion.js arrives after first paint |
+| 3a | `business.json` blocked | **Pass**: PME fallback shows at 0.45 s |
+| 3b | `casts.json` blocked | **Fail**: un-hides at 0.17 s, but the page is blank |
+| 3c | PME, no `?edition` | **Pass**: hidden for 0.28–0.37 s, then normal |
+| 3d | JavaScript disabled | **Fail**: not hidden, but blank |
+| 4 | Meta description | **Pass** |
+| 5 | Chronic-illness wording | **Pass** |
+| — | Run about 104 s | **Pass**: 103.6 s on the player clock; 104.4 s of wall time, including 0.8 s of lag from machine load |
+| — | No horizontal scroll at 390 | **Pass**: `scrollWidth` 390 in all 1,055 samples |
+| — | No console errors | **Pass**: 0 in every real-time run and every normal load |
+
+### 1. Reading time: pass
+
+The clock is the same at 1280×900, 1280×720 and 390×844, and the real-time logs match the seek pass within 0.2 s. As in the first verify, each hold runs from the start of a text's fade to the start of the next change. Caption changes count as changes.
+
+| Text (words) | Needs | Appears | Next change | Gets |
+|---|---|---|---|---|
+| "What would change it?" (4) | 2.83 s | 78.25 | the panel, 81.10 | 2.85 s |
+| "SAME PREDICTED COST", bars, dots and legend (7) | 3.83 s | 81.10 | the result, 84.95 | 3.85 s |
+| "Checked: some patients are sicker." (5) | 3.17 s | 84.95 | the caption, 88.15 | 3.20 s |
+| "Which patients are sickest?" (4; 6 with the "Chronic illness" heading on desktop) | 2.83 s (3.5 s) | 89.45 | the callout, 92.95 | 3.50 s |
+| "Sicker patients ranked lower" and "NOTHING TO CHECK" (7; on phones "↓ Sicker ranked lower" and "Nothing to check.", 6) | 3.83 s (3.5 s) | 92.95 | the ending caption, 96.90 | 3.95 s |
+
+- **The margins are only 0.02–0.12 s.** Each fade takes 0.4–0.6 s. Measured from full opacity, the first three texts get 2.45, 3.25 and 2.80 s, which is 0.35–0.6 s short. Any later retiming should keep the fade inside the hold.
+- **The source lines** arrive at 97.9 s (24 words). They're the last change and the final frame stays up, so nothing cuts them off.
+- **A residual outside the rule as written:** the frame swap.
+  - It brings no new words. On phones, though, it changes text in place at 88.85 s: under Chosen, "Next year's costs" becomes "Chronic illness", and the set-aside line is rewritten. The title changes 0.6 s later, at 89.45 s.
+  - On desktop, the chips travel from 88.45 to 89.25 s, and the rewrite starts 0.2 s after they settle.
+  - The swap is the beat's key change, so it may deserve a hold of its own.
+- **Context:** by design, the captions overlap the picture text. The beat 12 caption (14 words) and "What would change it?" both arrive at 78.25 s. Read in sequence, beat 12 needs about 16 s and has 9.9 s; beat 13 needs about 14 s and has 8.75 s. Each text meets the rule on its own.
+
+### 1. 390: the check is drawn: pass
+
+- From 81.10 to 81.70 s the check section draws itself:
+  - "SAME PREDICTED COST";
+  - two equal cost bars (56 px each), with 2 and 5 condition dots;
+  - the legend, "predicted cost · chronic condition".
+- "Checked: some patients are sicker." follows at 84.95 s.
+- Frame: `shots/390x844/t086.0.png`.
+
+### 1. 390: no layout jumps: pass
+
+- **Real-time:** the geometry never changes across the run:
+  - the shot: top 579 px, height 708 px;
+  - the stacked view: 463 px;
+  - the caption band: 222 px;
+  - the controls: at 1287 px;
+  - scrollY: 571.
+- **Seek pass, 0–103.6 s:** at every 0.05 s step, the stacked view stays at 463 px and the controls don't move. No visible text moves mid-beat anywhere in the run, and the callout's space is kept from the start.
+- **The content changes only at beat boundaries:**
+  - 78.25 s: the check replaces the ask section.
+  - 88.15 s: the ask section returns, with the result added to the note.
+
+### 2. The PME note on load: fail
+
+- **Fast local loads are clean.** In 12 plain loads, motion.js set `data-ed-pending` at 133–176 ms, before first contentful paint (156–828 ms). No frame showed the note.
+- **Two more loads each rendered one frame with the note,** at 219 ms and 892 ms, before the attribute was set.
+- **When motion.js arrives after first paint, the note paints.** Nothing hides the page until motion.js runs, because motion.js sets the attribute itself, from the end of the body.
+  - **motion.js 400 ms late:** the note and an empty player show from 140 to 408 ms (18 frames). Then the page blanks, and refills with the figure 329 px lower (top 164 → 493 px). This happens at 1280×900 and at 390.
+  - **motion.js 1 s late:** the note shows from 162 to 1001 ms. Evidence: `load/flash-motionjs-late-600ms.png`.
+- **When the edition takes longer than the 4 s CSS fallback** (business.json 5 s late): the fallback reveals the PME note and an empty page from 4.16 s. The fill comes at 5.34 s, and the figure jumps from 166 to 493 px.
+- **Fix:** set the attribute before first paint, either as `data-ed-pending` in the static `<html>` tag or with a one-line inline script in `<head>`. The CSS fallback still covers a failed load.
+
+### 3. Failure paths: fail (2 of 4)
+
+| Case | Result |
+|---|---|
+| (a) `business.json` aborted | **Pass.** It falls back to PME and shows at 453 ms (1280) and 434 ms (390), with the title, setup, PME note and a working figure (12 beats). The only console error is the aborted request. |
+| (b) `casts.json` aborted | **Fail.** The un-hide works: the page is visible at 168 ms (1280) and 185 ms (390). But it's blank: no title, setup, figure, caption or beat list. The empty player reads "0:00 / 1:26", the business URL shows the PME note, and the console has an uncaught "Failed to fetch". The cause is `frame-capture.js` line 80, `Promise.all([loadEdition(root), document.fonts.ready]).then(...)`, which has no catch and no fallback. This predates the hide; `efc3ccb^` behaves the same. Evidence: `load/b-abort-casts.json-2.5s.png`. |
+| (c) PME, no `?edition` | **Pass.** Hidden from 148 to 516 ms (1280) and from 144 to 424 ms (390), then normal. The note shows and nothing jumps. |
+| (d) JavaScript disabled | **Fail.** The page isn't hidden, because nothing sets the attribute. But it's blank: the header, the "See this with" line, the PME note, an empty player with dead controls, and empty section rules. There's no `<noscript>`. This also predates the hide: the title and setup have been empty in the static HTML since the move to editions. Evidence: `load/d-nojs-390.png`. |
+
+Two more paths, beyond the brief:
+- **Both edition files blocked:** the PME fallback fetch throws outside the try, so `data-ed-pending` is never cleared. The page stays hidden until the 4 s CSS fallback, then shows blank.
+- **`business.json` hangs:** the page stays hidden for 4.1 s, then shows blank with the PME note.
+
+### 4. Meta description: pass
+
+- **Served HTML (curl):** "Frame capture: an AI's reasonable first frame becomes the working frame, and the finished work can't show who chose it."
+- **Business page, after JS:** "An analyst builds on an AI's reasonable first frame, and the finished ranking can't show who chose it. One question can."
+- On the PME fallback (3a) it becomes PME's "A teaching figure: …", which is correct for PME.
+
+### 5. Chronic-illness wording: pass
+
+- **The evidence section renders:** "The figure uses chronic illness as its measure of need."
+- "Not the study's" is gone from the page and from the screen-reader text.
+
+### Remaining defects, by priority
+
+1. **Blank pages.** Each of these leaves a blank page:
+   - `casts.json` fails (3b);
+   - JavaScript is off (3d);
+   - both edition files fail;
+   - an edition file hangs (blank after 4 s).
+
+   Most of them show the PME note on the business URL. These predate the hide; it didn't cause them.
+2. **Load flash.** The PME note paints, then the page jumps 329 px, whenever motion.js arrives after first paint or the edition takes longer than 4 s.
+3. **Thin reading-time margins** in beats 12–13 (0.02–0.12 s). On phones the frame swap gets 0.6 s before the title changes (88.85 → 89.45 s).
+4. **Outside this brief:** the same rule would flag several spots in earlier beats, such as "Why this frame?" (0.7 s, at 73.65 s) and drafts 2 and 3 (30.6 and 32.7 s). That matters only if the rule is meant to cover the whole run.
