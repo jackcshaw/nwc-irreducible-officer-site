@@ -180,6 +180,10 @@ Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward comp
   - **Controls never move on phones** (PS; every figure, per CONSISTENCY.md). Measure the tallest stage and caption band at 390 × 844 by seeking through the whole run, and fix both: the stacked stage's minimum height, and the caption band's minimum height (160 px, or 166 px when the check needs it). Set the check at 20 px below 480 px. FC measures its stacked stage's tallest beat whenever the width changes and holds it (511 px at 390 px wide), with the caption band at 166 px below 720 px; its player measures 796 px at 390 × 844.
   - **The player fits the viewport** (PS, shared; applies to every figure with a shot). `figures.css` caps the stage SVG at `100svh − --mf-chrome` (228 px on desktop, 250 px below 720 px wide: what the caption band and controls need), so the stage, caption band and controls fit together when first in view. The SVG letterboxes inside its box, and `legibility()` measures the letterboxed scale (`min` of the width and height fits). A figure with its own narrow stage should give it a fixed height (its tallest beat) and fix the caption band's height on phones, so the controls never move.
   - **Autoplay waits for the whole player** (PS, shared). The figure plays once when half its shot (`[data-mf-shot]`) is in view and its caption band and controls are fully in view. Before PS it was 60% of the whole figure, which a long beat list kept from ever happening on phones or at 1280×720. A v0 figure without a shot still keys on its root at 60%. `data-mf-autoplay="off"` disables autoplay.
+  - **The reader is driving: focus stops autoplay** (runtime, FC business round 3, from figure cold read 2).
+    - Tabbing to Play scrolls the player into view, which used to autoplay it, so a keyboard reader's first Enter paused the figure.
+    - Now, if focus enters the figure (`focusin` on the root) before autoplay fires, autoplay stands down. Play, Enter and the scrubber work as usual.
+    - The change is additive (a flag checked in both autoplay observers). It changes no drawing: FC's PME and two other figures frame-diffed identical with the old and new runtime.
   - **Pause when scrolled away** (IM, shared, from figure cold read 2). A playing figure pauses once less than a quarter of its shot (`[data-mf-shot]`, or the root for a v0 figure) is in view, and shows Play. It doesn't resume by itself, so a reader who scrolls to the beat list or the page comes back to where they left. Gates, seeks and reduced motion are unaffected; `data-mf-offscreen="play"` on the root opts out. Checked on all eight figures: each mounts, autoplays, pauses away, stays paused on return and ends, and appropriate reliance still stops at its gate and resumes.
   - **Poster** (PS; standard for every figure, per CONSISTENCY.md). Use the settled setup beat, with the task and the people shown before the AI acts: `poster: BEATS[n].at - 0.02` (FC: `BEATS[2].at - 0.02`, the task, the student and six considerations). The runtime option itself stays optional. `mount(root, {…, poster: seconds})` shows that settled moment while the figure waits to play, so the first view isn't an empty stage; play still starts from 0. PS uses beat 1 settled.
   - **Setup copy** (PS). Keep the paragraph above the figure short (about four sentences), and don't tell readers to "pause it" before the controls are on screen.
@@ -257,6 +261,7 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - `narrow.askNote`: the note full width under the columns;
 - page keys:
   - `page.quote: null` hides the essay quote (`data-ed-section`);
+  - `page.editionNote` is the note under the switch: PME's names PME; business has none, since the switch carries it;
   - `page.linksNote` adds a line above the links.
 
 **An edition's own clock** (business, round 2). It lets an edition add beats or holds without touching the core timeline.
@@ -268,7 +273,11 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - **PME has no edits,** so both maps are the identity and PME is frame-identical (diffed).
 - **Phone heights:** with edits, the stacked view also measures each beat's opening, since a beat can open taller than it ends.
 
-**A turn where the finding is the payoff** (FC business, Jack's evidence exception).
+**A turn where the finding is the payoff** (FC business, Jack's evidence exception). Stage it one region at a time, at reading pace (FC round 3 splits it in two):
+- **The check:** the question, then the evidence drawn as it is described (FC: two patients with equal predicted-cost bars and chronic-condition dots, 2 and 5), then a plain result line. Don't write "the condition holds".
+- **The consequences:** the frame, the rewritten deliverable, what the old frame got wrong marked on the old deliverable (FC: "↓ Sicker patients ranked lower"), then "Nothing to check".
+- **Back-to-back holds:** holds at the same core time run in list order (FC: `turn` then `turn2`).
+- **Moving a static stretch:** a cut can move one from before a reveal to after it (FC beat 11).
 - When asked what would change the frame, the second person checks the condition they wrote down. The check shows it holds, and their frame and their deliverable change.
 - The person who never named a condition has "Nothing to check".
 - The check's words stay within what the source supports. FC says "At the same predicted cost, some patients are sicker", from the abstract's "At a given risk score…".
@@ -292,15 +301,20 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - **Default:** PME with the classroom cast, so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
 
-**Edition switch:** this is page furniture, the same in every edition, so it stays in the HTML under the setup:
+**Edition switch:** the links are page furniture, the same in every edition, so they stay in the HTML under the setup:
 - `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>`;
-- then `<p class="fig-edition-note">PME: example from <em>The Irreducible Officer</em>, the National War College essay.</p>`, which tells workplace readers what PME is.
+- then `<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">`.
+  - PME's note reads "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
+  - The business edition sets no note (round 3: the military wording sat above a workplace figure), so the line is hidden there.
 
-The current edition's link is bold and underlined (`aria-current`). Classroom joins as a third link later. Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels, and the figure sits at the same place in every edition.
+The current edition's link is bold and underlined (`aria-current`). Classroom joins as a third link later. Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels. An edition that hides the note sits 24 px higher.
 
 **Evidence, option A** (business):
 - "Illustration based on [study]" in the setup.
-- `labels.source` as one line under the final frame (FC: fades in 1 s after the check).
+- `labels.source` under the final frame, fading in 1 s after the check. It can be one line or a list of lines. FC round 3 uses two:
+  - "Illustration based on Obermeyer et al., Science (2019)."
+  - "In the study, at a given risk score, Black patients were considerably sicker than White patients." This names who the study found sicker, in the abstract's terms.
+- On a phone the source should be legible inside the player: give the stacked view a `source` section in its last beat (`narrow.show`). Fall back to under the controls only if it can't fit.
 - The full finding on the page in `.fig-ed-evidence` paragraphs: quotes word for word with page numbers, the finding stated in the paper's words, and what kind of system the study examined.
 - Quote only what you have read in the source itself.
   - FC's page quotes the abstract only (PubMed record).

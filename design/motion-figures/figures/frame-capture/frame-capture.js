@@ -100,9 +100,11 @@
 		for (const e of EDITS) { if (e.at >= t) break; o += e.hold ? e.hold : -Math.min(e.cut, t - e.at); }
 		return t + o;
 	};
-	const holdStart = (id) => { const e = EDITS.find((x) => x.id === id); return e ? toBiz(e.at) : null; };
+	// Where a hold begins on the edition clock (holds at the same core time run in list order).
+	const holdStart = (id) => { let o = 0; for (const e of EDITS) { if (e.id === id) return e.at + o; o += e.hold ? e.hold : -e.cut; } return null; };
 	const TURN = ed.turn || null;
 	const TURN_AT = TURN ? holdStart('turn') : null;
+	const TURN2 = TURN ? holdStart('turn2') - TURN_AT : null; // the second half of the turn, in turn seconds
 	let TAU = null; // the edition clock while a frame renders (null: same as the core clock)
 	const CHIPS = CHIP_SLOTS.map((c, i) => ({text: ed.considerations[i], ...c}));
 	// The AI's restatement: segments kept from the task's words or added; joined with spaces.
@@ -259,35 +261,60 @@
 	text(ask, DX + 670, 184, L.askQ, {fs: 24, family: FONT.serif, style: 'italic'});
 
 	// Optional (business): a one-line source under the final frame, on the reviewer's side.
-	const sourceLine = L.source ? text(cam, DX + 40, 524, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink}) : null;
-	// The stacked view has no room under its final beat within the phone budget, so the
-	// source sits just under the controls there (outside the fixed-height player).
+	let sourceLine = null;
+	if (L.source) {
+		const lines = [].concat(L.source);
+		sourceLine = el(cam, 'g');
+		lines.forEach((ln, i) => text(sourceLine, DX + 40, 524 - 18 * (lines.length - 1 - i), ln, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink}));
+	}
+	// The stacked view shows the source in its last beat when the edition gives it a section
+	// (narrow.show has 'source'); otherwise it sits just under the controls.
 	const stackedSource = root.querySelector('[data-fc-source]');
-	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
+	const sourceInView = (NW.show || []).some((sh) => sh.includes('source'));
+	if (stackedSource && NW.source && !sourceInView) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	const dotB = el(cam, 'circle', {r: 5, fill: C.red});
 	const dotBLabel = text(cam, DX + 500, 462, L.second, {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
 
 	// ---- the turn (business): asked what would change it, the second person checks the
 	// condition they wrote down; it holds, so their frame and their ranking change. ----------
-	const TU = {q2: [0.3, 0.7], panel: [1.0, 1.4], bars: [1.6, 2.4], result: [2.6, 3.0], swap: [3.6, 4.6], nothing: [3.6, 4.0], title: [4.4, 4.9], rewrite: [4.6, 6.0]};
+	// One region at a time: the check (right column), then the frame (middle), the rewritten
+	// ranking (top), the note on the first ranking and "nothing to check" (left).
+	const TU = TURN && (() => {
+		const o = TURN2;
+		return {q2: [0.3, 0.7], panel: [1.2, 1.6], rows: [1.9, 2.6], dots: 2.9, dotStep: 0.14, result: [4.3, 4.7],
+			swap: [o + 0.6, o + 1.6], title: [o + 2.0, o + 2.4], rewrite: [o + 2.0, o + 3.4], callout: [o + 3.9, o + 4.3], nothing: [o + 4.6, o + 5.0]};
+	})();
 	let turnEls = null;
 	if (TURN) {
-		const tc = TURN.check;
-		const q2 = text(cam, DX + 670, 216, TURN.askQ2, {fs: 24, family: FONT.serif, style: 'italic'});
+		const tc = TURN.check, X0 = DX + 670;
+		const q2 = text(cam, X0, 216, TURN.askQ2, {fs: 24, family: FONT.serif, style: 'italic'});
+		// The check draws what it says: two patients with the same predicted cost (equal bars),
+		// one with more chronic conditions (dots).
 		const panel = el(cam, 'g');
-		mono(panel, DX + 670, 262, tc.label, {fill: C.red});
-		text(panel, DX + 670, 286, tc.intro, {fs: 15, family: FONT.serif});
-		const barRows = tc.bars.map((lab, i) => {
-			const y = 300 + 26 * i;
-			return {
-				bar: el(panel, 'rect', {x: DX + 670, y, width: 0, height: 12, rx: 2, fill: C.ink, 'fill-opacity': 0.85}),
-				w: i ? 128 : 64,
-				label: text(panel, DX + 670, y + 11, lab, {fs: 13, weight: 600}),
-			};
+		mono(panel, X0, 256, tc.label, {fill: C.red});
+		text(panel, X0, 280, tc.intro, {fs: 15, family: FONT.serif});
+		const rows = el(cam, 'g');
+		let di = 0;
+		const pats = tc.patients.map((name, i) => {
+			const y = 304 + 26 * i;
+			text(rows, X0, y, name, {fs: 13, weight: 600});
+			const bar = el(rows, 'rect', {x: X0 + 72, y: y - 10, width: 0, height: 10, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
+			const dots = Array.from({length: tc.conditions[i]}, (_, k) => ({n: el(rows, 'circle', {cx: X0 + 152 + 13 * k, cy: y - 5, r: 4.5, fill: C.ink, opacity: 0}), k: di++}));
+			return {bar, dots};
 		});
-		const result = text(panel, DX + 670, 376, tc.result, {fs: 15, family: FONT.serif, style: 'italic', fill: C.red});
+		el(rows, 'rect', {x: X0, y: 345, width: 14, height: 8, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
+		text(rows, X0 + 20, 353, tc.legend[0], {fs: 13});
+		el(rows, 'circle', {cx: X0 + 128, cy: 349, r: 4.5, fill: C.ink});
+		text(rows, X0 + 138, 353, tc.legend[1], {fs: 13});
+		const result = el(cam, 'g');
+		tc.result.forEach((ln, i) => text(result, X0, 380 + 18 * i, ln, {fs: 15, family: FONT.serif, style: 'italic', fill: C.red}));
 		const nothing = mono(cam, SA.x, 344, TURN.nothing, {ls: 0.6});
+		// What the check showed about the first ranking: a red note on it.
+		const callout = el(cam, 'g');
+		el(callout, 'rect', {x: DX + 50, y: 188, width: 130, height: 40, rx: 3, fill: C.bright, stroke: C.red, 'stroke-width': 1.2});
+		el(callout, 'path', {d: `M${DX + 61} 195V219M${DX + 57} 214L${DX + 61} 220L${DX + 65} 214`, fill: 'none', stroke: C.red, 'stroke-width': 1.6, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'});
+		TURN.callout.forEach((ln, i) => text(callout, DX + 72, 204 + 16 * i, ln, {fs: 13, weight: 600, fill: C.red}));
 		// The second ranking, rewritten: a fresh sheet over paper B with the new title and
 		// headings, revealed top to bottom, with red change bars (the person's revision).
 		const rewriteClip = clipRect('fc-rewrite');
@@ -306,7 +333,7 @@
 			tx: el(pb2, 'text', {x: c.head.x + 8, y: c.head.y + 18, 'font-family': FONT.sans, 'font-size': PH_FS, 'font-weight': 600, fill: C.ink, 'data-fs': PH_FS * PS}, headTexts[i]),
 		}));
 		[[PT.y - 20, 27], [rowY(0) - 4, 69], [CHART.base - 30, 32], [CON.y - 3, 13]].forEach(([y, hh]) => el(pb2, 'rect', {x: COL[0].bar - 4, y, width: 2.5, height: hh, fill: C.red}));
-		turnEls = {q2, panel, barRows, result, nothing, rewriteClip, paperB2, t2, heads2};
+		turnEls = {q2, panel, rows, pats, result, nothing, callout, rewriteClip, paperB2, t2, heads2};
 	}
 
 	// ---- paths ---------------------------------------------------------------------------
@@ -426,9 +453,14 @@
 		set(E2.q2, {opacity: prog(u, ...TU.q2)});
 		const pk = prog(u, ...TU.panel, E.house);
 		set(E2.panel, {opacity: pk, transform: `translate(0 ${mix(6, 0, pk).toFixed(2)})`});
-		const bk = prog(u, ...TU.bars, E.outCubic);
-		E2.barRows.forEach((b) => { set(b.bar, {width: b.w * bk}); set(b.label, {x: DX + 670 + b.w * bk + 8, opacity: bk}); });
+		const rk = prog(u, ...TU.rows, E.outCubic);
+		set(E2.rows, {opacity: prog(u, TU.rows[0], TU.rows[0] + 0.3)});
+		E2.pats.forEach((pt) => {
+			set(pt.bar, {width: 64 * rk});
+			pt.dots.forEach(({n, k}) => set(n, {opacity: prog(u, TU.dots + TU.dotStep * k, TU.dots + TU.dotStep * k + 0.12)}));
+		});
 		set(E2.result, {opacity: prog(u, ...TU.result)});
+		set(E2.callout, {opacity: prog(u, ...TU.callout)});
 		set(E2.nothing, {opacity: prog(u, ...TU.nothing)});
 		const sk = prog(u, ...TU.swap, E.inOut);
 		if (ready) stripBChips.forEach((c) => {
@@ -649,6 +681,8 @@
 			N.papers.a = paperBlock(pair, L.first, false, !!NW.compactPapers);
 			N.papers.b = paperBlock(pair, L.second, false, !!NW.compactPapers);
 			N.papers.note = h('p', 'fc-n-small', sec, NW.weighingNote);
+			// The turn's note on the first ranking: one line under the pair, pointing up at it.
+			if (TURN) N.papers.callout = h('p', 'fc-n-callout', sec, TURN.narrow.callout);
 		}
 		{
 			const sec = section('ask');
@@ -665,15 +699,25 @@
 			h('span', 'fc-n-tag is-red', b, NW.chosen);
 			const br = h('div', 'fc-n-chips', b);
 			N.ask.bKept = KEPT.map((k) => h('span', 'fc-n-chip is-seen', br, k));
-			h('span', 'fc-n-tag is-red', b, NW.setAside);
-			N.ask.bAside = h('p', 'fc-n-aside', b, ASIDE.join(' · '));
-			if (NW.changeNote && !NW.askNote) h('p', 'fc-n-note', b, NW.changeNote);
-			N.ask.cols = [a, b];
-			// Optional (business): the second person's note, and later their check, run full
-			// width under both columns (named, since they leave the column).
-			if (NW.askNote) { N.ask.note = h('p', 'fc-n-note', sec, NW.askNote); N.ask.cols.push(N.ask.note); }
-			if (TURN) N.ask.check = h('p', 'fc-n-note', NW.askNote ? sec : b, TURN.narrow.check);
+			// Optional (business): what the second person set aside, their note and later their
+			// check run full width under both columns (named, since they leave the column).
+			if (NW.askNote) {
+				N.ask.cols = [a, b];
+				const aw = h('p', 'fc-n-aside', sec);
+				h('span', 'fc-n-tag is-red fc-n-inline', aw, NW.setAside);
+				N.ask.bAside = h('span', null, aw, ASIDE.join(' · '));
+				N.ask.note = h('p', 'fc-n-note', sec, NW.askNote);
+				N.ask.cols.push(aw, N.ask.note);
+				if (TURN) { N.ask.note.append(' '); N.ask.check = h('span', null, N.ask.note, TURN.narrow.check); }
+			} else {
+				h('span', 'fc-n-tag is-red', b, NW.setAside);
+				N.ask.bAside = h('p', 'fc-n-aside', b, ASIDE.join(' · '));
+				if (NW.changeNote) h('p', 'fc-n-note', b, NW.changeNote);
+				N.ask.cols = [a, b];
+				if (TURN) N.ask.check = h('p', 'fc-n-note', b, TURN.narrow.check);
+			}
 		}
+		if (sourceInView && NW.source) { const sec = section('source'); h('p', 'fc-n-src', sec, NW.source); }
 	}
 	const SHOW = [
 		['student', 'task'], ['student', 'task', 'field'], ['task', 'field', 'aiFrame'],
@@ -745,7 +789,12 @@
 			const u = tau - TURN_AT;
 			fade(N.ask.q2, prog(u, ...TU.q2));
 			fade(N.ask.check, prog(u, ...TU.result));
+			N.ask.check.hidden = u < TU.result[0];
+			// The last beat's caption band asks the questions, so the stacked view drops its own.
+			N.ask.q.hidden = show.has('source');
 			fade(N.ask.nothing, prog(u, ...TU.nothing));
+			fade(N.papers.callout, prog(u, ...TU.callout));
+			N.papers.callout.hidden = u < TU.callout[0];
 			const swapped = u >= (TU.swap[0] + TU.swap[1]) / 2;
 			const sw = (k) => (swapped && k === TURN.swap.out ? TURN.swap.in : swapped && k === TURN.swap.in ? TURN.swap.out : k);
 			N.ask.bKept.forEach((n, i) => { n.textContent = sw(KEPT[i]); });

@@ -597,6 +597,10 @@
 		draw(poster ?? 0, false, true);
 		label('Play');
 		if (root.dataset.mfAutoplay === 'off') return api;
+		// The reader is driving: once focus enters the figure (tabbing to Play scrolls it into
+		// view), autoplay stands down, so their first Enter plays instead of pausing.
+		let driving = false;
+		root.addEventListener('focusin', () => { driving = true; }, {once: true});
 		// Autoplay waits until the picture, its caption band and the controls can all be
 		// seen: half the shot (stage plus caption band) in view, and the caption band and
 		// controls fully in view. figures.css caps the stage height so the three fit the
@@ -604,7 +608,7 @@
 		const shotEl = root.querySelector('[data-mf-shot]');
 		if (!shotEl) {
 			const io = new IntersectionObserver((entries) => {
-				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); if (!started) play(); }
+				if (entries.some((e) => e.isIntersecting)) { io.disconnect(); if (!started && !driving) play(); }
 			}, {threshold: 0.6});
 			io.observe(root);
 			return api;
@@ -616,7 +620,7 @@
 			entries.forEach((e) => ratio.set(e.target, e.intersectionRatio));
 			// Autoplay only if nobody has played yet: once the reader has started (or paused)
 			// the figure, scrolling it into view never restarts it.
-			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); if (!started) play(); }
+			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); if (!started && !driving) play(); }
 		}, {threshold: [0, 0.25, 0.5, 0.75, 0.98, 1]});
 		need.forEach(([n]) => io.observe(n));
 		return api;

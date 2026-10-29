@@ -62,6 +62,10 @@
 .fc-n-tlk { font: 600 12px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .fc-n-paper.is-revised { box-shadow: inset 3px 0 0 var(--red); }
 #frame-capture[data-edition-id="business"] .fc-n-sec { margin-bottom: 8px; }
+.fc-n-callout { margin: 6px 0 0; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.fc-n-tag.fc-n-inline { display: inline; margin: 0 6px 0 0; }
+.fc-n-callout[hidden] { display: none; }
+.fc-n-src { margin: 0; font: italic 400 13px/1.4 var(--serif); color: var(--ink); }
 /* An edition's source line: in the SVG's final frame on the picture stage; under the
    controls in the stacked view (shown only when the edition has one). */
 .fc-source { display: none; }
@@ -81,7 +85,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="frame-capture" aria-labelledby="fc-title">
 		<p class="sr-only" id="fc-title" data-ed="page.srTitle"></p>
