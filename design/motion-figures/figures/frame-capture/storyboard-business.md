@@ -195,6 +195,7 @@ The business edition in two more casts, through data in `editions/business.json`
 | Where | Classroom | High school |
 | --- | --- | --- |
 | Caption 1 | A student gets an open health-system case. | same |
+| Caption 3 | The student asks an AI. It turns need into cost: a reasonable, narrower frame. | same |
 | Caption 7 | Faculty receive the final ranking. | The teacher receives the final ranking. |
 | Captions 9, 11, 12 | A second student… / Ask each student… / The second student checks it… | same |
 | Caption 14 | Faculty check: What problem did the student choose to solve? | Teacher's check: … |
@@ -205,7 +206,21 @@ The business edition in two more casts, through data in `editions/business.json`
 | Links note | "The failure mode and the faculty check come from the essay below. This page shows the same move in a seminar working a health system's case." | "…the teacher's check… a class…" |
 | Teacher note | none | "For teachers: the figure's last line gives the study's finding about Black and White patients in the paper's terms. The study traces it to unequal access to care: less money was spent on Black patients with the same level of need." (abstract; *Science* editor's summary) |
 
-**Kept on screen in every cast:** "In the study, at a given risk score, Black patients were considerably sicker than White patients" (decision 5). High school adds the teacher note above the evidence. **The check:** the business questions under each cast's heading (decision 3).
+**The race finding stays on screen in every cast** (decision 5).
+- **Workplace and classroom:** "In the study, at a given risk score, Black patients were considerably sicker than White patients."
+- **High school** (after the light read) explains the score and gives the cause, in the abstract's terms:
+  - "Illustration based on Obermeyer et al., Science (2019). In the study, the risk score was the algorithm's prediction of cost."
+  - "At the same risk score, Black patients were considerably sicker than White patients, because less was spent on their care."
+  - The phone wording is "Obermeyer et al., Science (2019): at the same risk score (a cost prediction), Black patients were sicker than White patients, because less was spent on their care." This keeps it to three lines inside the 844 px player.
+  - A boxed "For teachers" note sits just under the player: "The figure's last line gives the study's finding about Black and White patients in the paper's terms, with its cause. The study traces it to unequal access to care: less money was spent on Black patients with the same level of need."
+
+**The check:** the business questions under each cast's heading (decision 3).
+
+**After the light read** (`tests/classroom-light-read.md`):
+- **Caption 3 (classroom casts):** "The student asks an AI. It turns need into cost: a reasonable, narrower frame." It names the change the picture makes.
+  - The overlap the reader saw at about 16.5 s (the grey copy lifting off the task card) is core motion in every edition, PME and workplace included, so it is flagged for Jack rather than changed.
+- **The setup (classroom casts)** adds: "The seminar (class) allows AI, and both students say they used it, so the question is whose frame the ranking rests on." This answers the undisclosed-AI reading of beats 7–8.
+- **The switch:** on a high-school page, "Classroom" is current and keeps `cast=high-school` (the runtime's cast families).
 
 **Switch:** "See this with: Workplace · Classroom · Military education".
 - Classroom is `data-edition-link="business" data-cast-link="classroom"`. High school has no link; it is reached with `?cast=high-school`.
@@ -213,7 +228,7 @@ The business edition in two more casts, through data in `editions/business.json`
   - no query, and `?edition=pme`: Military education;
   - `business` and `cast=workplace`: Workplace;
   - `cast=classroom`: Classroom;
-  - `cast=high-school`: none.
+  - `cast=high-school`: Classroom, with its link keeping `cast=high-school`.
 
 **Pace** (caption words ÷ 3 + 1.5 s, on the business timeline, figure clock):
 
@@ -221,7 +236,7 @@ The business edition in two more casts, through data in `editions/business.json`
 | --- | --- | --- | --- | --- |
 | 1 | 4.0 | 7 words, 3.8 | 7, 3.8 | 7, 3.8 |
 | 2 | 5.6 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
-| 3 | 9.0 | 11, 5.2 | 11, 5.2 | 11, 5.2 |
+| 3 | 9.0 | 11, 5.2 | 13, 5.8 | 13, 5.8 |
 | 4 | 8.0 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
 | 5 | 7.0 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
 | 6 | 5.5 | 11, 5.2 | 11, 5.2 | 11, 5.2 |

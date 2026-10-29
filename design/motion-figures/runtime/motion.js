@@ -643,6 +643,9 @@
 		docEl.classList.remove('ed-pending');
 		docEl.classList.add('ed-loading');
 	};
+	// Cast families for the edition switch: a variant counts as its family's cast.
+	const CAST_FAMILY = {'high-school': 'classroom'};
+	const castFamily = (c) => CAST_FAMILY[c] || c;
 	/* casts:begin — generated from casts.json, which is the source of truth; regenerate after
 	   editing it (CONVENTIONS.md, Editions). Used only if casts.json can't be loaded. */
 	const BUILTIN_CASTS = {"classroom":{"person":"student","Person":"Student","people":"students","a_person":"a student","A_person":"A student","the_person":"the student","The_person":"The student","first":"First student","second":"Second student","a_second":"a second student","A_second":"A second student","reviewer":"faculty","Reviewer":"Faculty","side":"the faculty side","check":"Faculty check","check_l":"faculty check","receive":"What faculty receive","reviewer_receives":"Faculty receive","reviewer_asks_each":"Faculty ask each student","ask_each":"Ask each student","reviewer_ask":"Faculty ask","reviewer_ask_l":"faculty ask","reviewer_has":"Faculty have","reviewer_sees":"Faculty see","what_reviewer_sees":"What faculty see","reviewer_doesnt_see":"Faculty don’t see this","reviewer_points":"Faculty point","reviewer_puts":"Faculty put","then_ask":"Then they ask","the_first":"the first student","Another":"Another student","That_person":"That student","each_person":"each student","group":"seminar","reviewer_lines":"Faculty line","reviewer_sends":"faculty send"},"high-school":{"person":"student","Person":"Student","people":"students","a_person":"a student","A_person":"A student","the_person":"the student","The_person":"The student","first":"First student","second":"Second student","a_second":"a second student","A_second":"A second student","reviewer":"the teacher","Reviewer":"The teacher","side":"the teacher’s side","check":"Teacher’s check","check_l":"teacher’s check","receive":"What the teacher receives","reviewer_receives":"The teacher receives","reviewer_asks_each":"The teacher asks each student","ask_each":"Ask each student","reviewer_ask":"The teacher asks","reviewer_ask_l":"the teacher asks","reviewer_has":"The teacher has","reviewer_sees":"The teacher sees","what_reviewer_sees":"What the teacher sees","reviewer_doesnt_see":"The teacher doesn’t see this","reviewer_points":"The teacher points","reviewer_puts":"The teacher puts","then_ask":"Then the teacher asks","the_first":"the first student","Another":"Another student","That_person":"That student","each_person":"each student","group":"class","reviewer_lines":"The teacher lines","reviewer_sends":"the teacher sends"},"workplace":{"person":"analyst","Person":"Analyst","people":"analysts","a_person":"an analyst","A_person":"An analyst","the_person":"the analyst","The_person":"The analyst","first":"First analyst","second":"Second analyst","a_second":"a second analyst","A_second":"A second analyst","reviewer":"the manager","Reviewer":"The manager","side":"the manager’s side","check":"Reviewer’s check","check_l":"reviewer’s check","receive":"What the manager receives","reviewer_receives":"The manager receives","reviewer_asks_each":"The manager asks each analyst","ask_each":"Ask each analyst","reviewer_ask":"The manager asks","reviewer_ask_l":"the manager asks","reviewer_has":"The manager has","reviewer_sees":"The manager sees","what_reviewer_sees":"What the manager sees","reviewer_doesnt_see":"The manager doesn’t see this","reviewer_points":"The manager points","reviewer_puts":"The manager puts","then_ask":"Then the manager asks","the_first":"the first analyst","Another":"Another analyst","That_person":"That analyst","each_person":"each analyst","group":"team","reviewer_lines":"The manager lines","reviewer_sends":"the manager sends"}};
@@ -767,15 +770,22 @@
 		// ?edition=business&cast=classroom. A link without data-cast-link clears cast, so its
 		// edition shows in its own cast. aria-current marks the link whose edition and cast are
 		// the ones on screen. Other query parameters stay, except the ?t= test hook.
+		// A cast link names a family: data-cast-link may list casts ("classroom high-school"),
+		// and CAST_FAMILY folds variants into it, so on a high-school page "Classroom" is
+		// current and keeps cast=high-school.
+		const onScreen = ed.castId || 'classroom';
 		doc.querySelectorAll('[data-edition-link]').forEach((a) => {
 			const u = new URL(location.href);
-			const castLink = a.dataset.castLink || '';
+			const castList = (a.dataset.castLink || '').split(/\s+/).filter(Boolean);
+			const sameEdition = a.dataset.editionLink === ed.id;
+			const inFamily = castList.some((c) => c === onScreen || castFamily(onScreen) === c);
 			u.searchParams.set('edition', a.dataset.editionLink);
-			if (castLink) u.searchParams.set('cast', castLink);
+			if (castList.length) u.searchParams.set('cast', sameEdition && inFamily ? onScreen : castList[0]);
 			else u.searchParams.delete('cast');
 			u.searchParams.delete('t');
 			a.href = u.pathname + u.search;
-			if (a.dataset.editionLink === ed.id && (castLink || ed.cast || 'classroom') === (ed.castId || 'classroom')) a.setAttribute('aria-current', 'page');
+			const current = sameEdition && (castList.length ? inFamily : (ed.cast || 'classroom') === onScreen);
+			if (current) a.setAttribute('aria-current', 'page');
 			else a.removeAttribute('aria-current');
 		});
 		// The requested edition failed and PME stands in: say so under the switch.

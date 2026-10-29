@@ -337,7 +337,12 @@ The current edition's link is bold and underlined (`aria-current`). Both lines u
 
 **A cast in the switch** (`data-cast-link`). Classroom is the business edition in another cast, so its link names both: `<a data-edition-link="business" data-cast-link="classroom">Classroom</a>`, giving "Workplace · Classroom · Military education".
 - Each link sets `cast` (with `data-cast-link`) or clears it (without), so the edition shows in its own cast. "Workplace" from `?edition=business&cast=classroom` goes to the workplace cast. Before this, `fillPage` kept every query parameter, so that link stayed classroom.
-- `aria-current` needs both to match: the link's edition is the one on screen, and its cast (or, without `data-cast-link`, the edition's own `cast`) is the one on screen. At `?cast=high-school` no link is current unless one names `high-school`.
+- `aria-current` needs both to match: the link's edition is the one on screen, and its cast (or, without `data-cast-link`, the edition's own `cast`) is the one on screen.
+- **Cast families** (FC classroom light read).
+  - High school is a variant of Classroom: `CAST_FAMILY` in the runtime maps `high-school` to `classroom`.
+  - On a high-school page, "Classroom" (`data-cast-link="classroom"`) is marked current, and its link keeps `cast=high-school`, so a teacher stays in their version. Before this, no link was current and "Classroom" led to the higher-ed version.
+  - `data-cast-link` may also list casts ("classroom high-school"). The link sets the first unless the page is already in one of them.
+  - It is generic: every figure's Classroom link gets it with no page change.
 - Other query parameters stay, except `t`.
 
 **Casts within an edition** (CLASSROOM-PLAN.md, "Mechanism"). One `business.json` serves the workplace, classroom and high-school casts through three optional fields:
