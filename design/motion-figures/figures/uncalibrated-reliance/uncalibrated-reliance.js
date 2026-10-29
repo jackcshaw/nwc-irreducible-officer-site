@@ -82,6 +82,9 @@
 
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
+	// Optional (business): moments moved within a beat (ed.timing, e.g. the frontier drawn as
+	// beat 7's caption lands). Beat starts (BEAT_AT) stay shared; PME has no timing.
+	Object.assign(T, ed.timing || {});
 	const ANS = ed.answers;
 	const SPEECH = {
 		a: {x: 52, rows: ed.speech.a.map((r, i) => ({...r, at: i ? T.a2 : T.a1}))},
@@ -277,7 +280,9 @@
 	const panel = el(layer, 'g');
 	el(panel, 'rect', {x: 104, y: 145, width: 760, height: 260, fill: C.ink, 'fill-opacity': 0.07});
 	el(panel, 'rect', {x: 100, y: 140, width: 760, height: 260, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
-	text(panel, 128, 182, L.panel.title, {fs: 18, weight: 600});
+	// Optional (business): a mono heading above the title (L.panel.heading).
+	if (L.panel.heading) mono(panel, 128, 176, L.panel.heading);
+	text(panel, 128, L.panel.heading ? 204 : 182, L.panel.title, {fs: 18, weight: 600});
 	let bars, bracket, bracketText;
 	if (L.panel.rows) {
 		// Optional (business): signed results on rows around a zero line, for a study that
@@ -286,7 +291,7 @@
 		// An uncertain row (row.uncertain) is drawn light and dashed, with its note under the
 		// value. The bracket is optional.
 		const n = L.panel.rows.length;
-		const Z = {x: L.panel.zeroX || 360, k: 6, h: 18, ys: n === 2 ? [234, 286] : [214, 262, 296]};
+		const Z = {x: L.panel.zeroX || 360, k: 6, h: 18, ys: n === 2 ? [244, 294] : [214, 262, 296]};
 		el(panel, 'path', {d: `M${Z.x} ${Z.ys[0] - 8}V${Z.ys[n - 1] + Z.h + 8}`, stroke: C.ink, 'stroke-opacity': 0.45, 'stroke-width': 1.2});
 		bars = L.panel.rows.map((row, i) => {
 			const y = Z.ys[i], w = Math.abs(row.v) * Z.k;
@@ -382,7 +387,7 @@
 	const render = (t) => {
 		// The scene dims while the evidence panel is up; at hand-in our side recedes.
 		const dimK = prog(t, ...T.dim) - prog(t, ...T.undim);
-		set(scene, {opacity: 1 - 0.75 * dimK});
+		set(scene, {opacity: 1 - (L.panel.dim || 0.75) * dimK});
 		set(sceneOurs, {opacity: 1 - 0.40 * prog(t, ...T.facLabel)});
 
 		const kc = prog(t, ...T.card, E.house);

@@ -22,12 +22,26 @@
   true,
   false
  ],
+ "timing": {
+  "frontier": [
+   51.0,
+   52.4
+  ],
+  "fLabels": [
+   52.4,
+   52.8
+  ],
+  "together": [
+   53.0,
+   53.6
+  ]
+ },
  "callouts": {
   "survey": {
-   "heading": "THEIR PRICES",
+   "heading": "THEIR OFFER",
    "lines": [
     [
-     "20% below ours"
+     "Cheaper prints"
     ]
    ]
   },
@@ -35,7 +49,7 @@
    "heading": "OUR SALES",
    "lines": [
     [
-     "Mostly same-day"
+     "Lost: rush jobs"
     ],
     [
      "(not given to AI)",
@@ -51,7 +65,7 @@
   ],
   "p2": [
    "Win them back:",
-   "cut prices 20%"
+   "loyalty discount"
   ],
   "corrected": {
    "l1": [
@@ -70,7 +84,7 @@
    ],
    "l2": [
     [
-     "cut prices 20%",
+     "loyalty discount",
      "ai"
     ],
     [
@@ -110,8 +124,8 @@
    {
     "n": "2",
     "lines": [
-     "“Our sales records. They",
-     "come for speed.”"
+     "“Our records. Rush customers",
+     "left in blackouts.”"
     ]
    }
   ]
@@ -149,16 +163,18 @@
    "keepB": true
   },
   "panel": {
-   "title": "Results seem to hinge on which advice owners acted on",
+   "heading": "A REAL STUDY, NOT THESE OWNERS",
+   "title": "Revenue and profit",
    "zeroX": 480,
+   "dim": 0.9,
    "rows": [
     {
-     "label": "Started weaker",
+     "label": "Weaker businesses",
      "v": -9.5,
      "value": "nearly 10% worse"
     },
     {
-     "label": "Started stronger",
+     "label": "Stronger businesses",
      "v": 15,
      "value": "may have gained over 15%",
      "uncertain": true,
@@ -182,12 +198,12 @@
    "Sales records"
   ],
   "survey": {
-   "head": "Flyer · their prices: ",
-   "text": "20% below ours."
+   "head": "Flyer · their offer: ",
+   "text": "cheaper prints."
   },
   "log": {
-   "head": "Sales records · most jobs: ",
-   "text": "same-day."
+   "head": "Sales records · lost: ",
+   "text": "rush jobs."
   },
   "closed": "Not given to the AI.",
   "aiHead": "AI's answers",
@@ -204,15 +220,15 @@
   "second": "Second owner",
   "answers": {
    "p1": "Battery A: 6 hours, cheaper",
-   "p2": "Cut prices 20%"
+   "p2": "Loyalty discount"
   },
   "briefs": {
    "p1": "Battery A: 6 hours, cheaper",
-   "p2": "Cut prices 20%"
+   "p2": "Loyalty discount"
   },
   "corrected": [
    [
-    "Cut prices 20%",
+    "Loyalty discount",
     "struck"
    ],
    [
@@ -227,7 +243,7 @@
    ],
    "b": [
     "“The quotes.”",
-    "“Our sales records: they come for speed.”"
+    "“Our records: we lost rush jobs.”"
    ]
   },
   "marks": {
@@ -239,15 +255,15 @@
    "label": "A real study, not these owners",
    "rows": [
     [
-     "Started weaker",
+     "Weaker businesses",
      "nearly 10% worse"
     ],
     [
-     "Started stronger",
+     "Stronger businesses",
      "may have gained over 15% (less certain)"
     ]
    ],
-   "quality": "Results seem to hinge on which advice owners acted on.",
+   "quality": "Change in revenue and profit.",
    "source": "Otis et al. (2026) · Kenyan entrepreneurs · Management Science"
   },
   "source": "Based on Otis et al. (2026) and its working paper."
@@ -259,7 +275,7 @@
   },
   {
    "text": "It answers both with equal confidence.",
-   "detail": "two answer cards labelled \"AI's answers\" write in together, in grey on a beige band. Part 1: \"Buy battery A: runs 6 hours, costs less.\" Part 2: \"Win them back: cut prices 20%.\" Each gets the same grey \"Ready\" tag at the same moment."
+   "detail": "two answer cards labelled \"AI's answers\" write in together, in grey on a beige band. Part 1: \"Buy battery A: runs 6 hours, costs less.\" Part 2: \"Win them back: loyalty discount.\" Each gets the same grey \"Ready\" tag at the same moment."
   },
   {
    "text": "The owner checks Part 1 against the two battery quotes. It's right.",
@@ -275,19 +291,19 @@
   },
   {
    "text": "That owner checks Part 2 against the flyer and records, and changes it.",
-   "detail": "the dot opens the rival's flyer, headed \"Their prices\": \"20% below ours\". Then the sales records, headed \"Our sales\": \"Mostly same-day\", and set apart, \"not given to AI\". After a pause, Part 2 slides into the second plan. The dot strikes out \"cut prices 20%\" and writes \"same-day service\", so it reads \"Win them back: same-day service\", and marks it \"Checked\". The first plan still says to cut prices 20%."
+   "detail": "the dot opens the rival's flyer, headed \"Their offer\": \"Cheaper prints\". Then the sales records, headed \"Our sales\": \"Lost: rush jobs\", and set apart, \"not given to AI\". After a pause, Part 2 slides into the second plan. The dot strikes out \"loyalty discount\" and writes \"same-day service\", so it reads \"Win them back: same-day service\", and marks it \"Checked\". The first plan still offers a loyalty discount."
   },
   {
-   "text": "Part 2 depends on why customers come here. A jagged frontier marks where an AI stops being reliable.",
-   "detail": "the sales records' \"Mostly same-day\" is underlined. The AI's \"cut prices 20%\" is underlined and marked \"From their flyer\". Then an uneven line is drawn between the AI's two answer cards, labelled \"Inside the frontier\" above and \"Outside the frontier\" below, and the two cards, alike in form, pulse together."
+   "text": "Part 2 depends on why customers left. A jagged frontier marks where an AI stops being reliable.",
+   "detail": "the sales records' \"Lost: rush jobs\" is underlined. The AI's \"loyalty discount\" is underlined and marked \"From their flyer\". Then an uneven line is drawn between the AI's two answer cards, labelled \"Inside the frontier\" above and \"Outside the frontier\" below, and the two cards, alike in form, pulse together."
   },
   {
-   "text": "A real study gave owners the same AI. It didn't measure checking.",
-   "detail": "the picture dims and a panel rises, headed \"Results seem to hinge on which advice owners acted on\". Owners who started weaker: nearly 10% worse, a solid bar to the left of zero. Owners who started stronger: may have gained over 15%, a lighter dashed bar to the right, marked \"Less certain\". Source: Otis et al. (2026), Kenyan entrepreneurs, Management Science."
+   "text": "A real study suggests what mattered was which AI advice owners acted on.",
+   "detail": "the picture dims almost away and a panel rises, headed \"A real study, not these owners\" and titled \"Revenue and profit\". Weaker businesses: nearly 10% worse, a solid bar to the left of zero. Stronger businesses: may have gained over 15%, a lighter dashed bar to the right, marked \"Less certain\". Source: Otis et al. (2026), Kenyan entrepreneurs, Management Science."
   },
   {
    "text": "A reviewer who sees only the plans points to each part and asks what justified relying on it.",
-   "detail": "the panel goes. The red marks lift off both plans, the documents and the AI's column fade back, and \"The reviewer sees only the plans\" appears. Part 1 is outlined in both plans, and each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our sales records. They come for speed.\""
+   "detail": "the panel goes. The red marks lift off both plans, the documents and the AI's column fade back, and \"The reviewer sees only the plans\" appears. Part 1 is outlined in both plans, and each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our records. Rush customers left in blackouts.\""
   },
   {
    "text": "{check}: What evidence justified relying on the AI here?",
@@ -306,20 +322,20 @@
   "description": "Two AI answers look equally sure. A shop owner checks one and acts on both, and a reviewer finds the difference by asking about each part.",
   "setup": "The owner of a print-and-internet shop in Nairobi asks an AI assistant two things: how to keep printing through power blackouts, and how to win back customers from a new shop nearby. They share two supplier quotes and the new shop's flyer, but not their own sales records. They check the first answer, find it right, and act on both. What can happen next is uncalibrated reliance: confident output is accepted without knowing whether the task fits the tool. Later a reviewer, say a lender or business adviser, sees only the plan and asks about each part. Illustration based on Otis et al. (2026) and its working paper. The owners, their documents and every number in their plans are constructed.",
   "srTitle": "Uncalibrated reliance, an animated figure in eleven beats",
-  "srSummary": "An animated figure. A red dot stands for the owner of a print shop, with an example task in two parts: keep printing in blackouts, and win back customers. The owner has four documents: two battery quotes, a rival's flyer and their own sales records. They give the AI copies of the quotes and the flyer, not the sales records. The AI answers both in the same form, in grey, each marked ready: \"Buy battery A: runs 6 hours, costs less\" and \"Win them back: cut prices 20%\". The owner checks Part 1 against both battery quotes, finds it right, and puts both answers into their plan, marking Part 1 checked and Part 2 used as is. A second owner, with the same documents and the same answers, checks each part at its source. Part 1 checks out. For Part 2, the flyer, headed their prices, says 20% below ours, and the sales records, headed our sales and not given to the AI, say mostly same-day. The second owner changes the plan to \"Win them back: same-day service\". Part 2 depends on why customers come here: the records' mostly same-day is underlined, and the AI's \"cut prices 20%\" is marked from their flyer. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel shows a real field experiment that gave Kenyan entrepreneurs the same AI assistant. It didn't measure checking. Results seem to hinge on which advice owners acted on: those who started weaker did nearly 10% worse, and those who started stronger may have gained over 15%, a less certain result. The owners' working marks come off the plans, the AI's column fades back, and a reviewer sees only the plans. The reviewer points to Part 1 in both: each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our sales records. They come for speed.\" The figure ends on the reviewer's check, with a line under the picture: illustration based on Otis et al. (2026) and its working paper. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. A red dot stands for the owner of a print shop, with an example task in two parts: keep printing in blackouts, and win back customers. The owner has four documents: two battery quotes, a rival's flyer and their own sales records. They give the AI copies of the quotes and the flyer, not the sales records. The AI answers both in the same form, in grey, each marked ready: \"Buy battery A: runs 6 hours, costs less\" and \"Win them back: loyalty discount\". The owner checks Part 1 against both battery quotes, finds it right, and puts both answers into their plan, marking Part 1 checked and Part 2 used as is. A second owner, with the same documents and the same answers, checks each part at its source. Part 1 checks out. For Part 2, the flyer, headed their offer, says cheaper prints, and the sales records, headed our sales and not given to the AI, say the shop lost rush jobs. The second owner changes the plan to \"Win them back: same-day service\". Part 2 depends on why customers left: the records' lost rush jobs is underlined, and the AI's \"loyalty discount\" is marked from their flyer. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel headed a real study, not these owners, shows a field experiment that gave some Kenyan entrepreneurs an AI assistant. On revenue and profit, weaker businesses did nearly 10% worse, and stronger ones may have gained over 15%, a less certain result. The study suggests what mattered was which AI advice owners acted on. The owners' working marks come off the plans, the AI's column fades back, and a reviewer sees only the plans. The reviewer points to Part 1 in both: each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our records. Rush customers left in blackouts.\" The figure ends on the reviewer's check, with a line under the picture: illustration based on Otis et al. (2026) and its working paper. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "What evidence justified relying on the AI here?",
    "Ask part by part: was the evidence about that part?"
   ],
-  "checkFollow": "Both owners give the same reason for Part 1. For Part 2, the first owner's evidence is about Part 1, and the second owner's is about Part 2. The AI's two answers looked equally sure, and Part 2 turned on the sales records the AI never saw. The second owner found that by checking each part against its own evidence: the battery against the quotes, the price cut against their sales.",
+  "checkFollow": "Both owners give the same reason for Part 1. For Part 2, the first owner's evidence is about Part 1, and the second owner's is about Part 2. The AI's two answers looked equally sure, and Part 2 turned on the sales records the AI never saw: the customers who left were rush jobs lost on blackout days, so a discount chases the wrong customers. The second owner found that by checking each part against its own evidence.",
   "evidenceHeading": "The study behind this example",
   "evidence": [
-   "Otis, Clarke, Delecourt, Holtz and Koning ran a field experiment with Kenyan entrepreneurs, \"randomizing access to a GPT-4-powered AI business assistant\" (*Management Science*, 2026, abstract). On average they were \"unable to reject the null hypothesis of no average treatment effect on firm revenues and profits.\" The average hid a split: \"low performers did nearly 10% worse because of the AI assistant, whereas high performers may have benefited by over 15%.\" The effect for owners who started weaker was \"over 0.20-standard-deviations lower than for initial high performers.\"",
-   "Where the gap came from: \"This differential impact does not appear to result from differences in the questions posed to the AI or the advice that it provided but rather, from the advice that entrepreneurs chose to implement.\" The study didn't measure checking, and the two owners in the figure don't stand for its groups. The figure's lesson, to check each part against evidence for that part, is what the result suggests, not something the study tested.",
-   "The limits. \"Low\" and \"high\" mean how each business was doing before the study: below or above the median, in the working paper. Only the stronger group's gain is uncertain, which is why the paper says it \"may have\" happened. The revised working paper calls that estimate \"noisier\" than the weaker group's loss (p. 9). The assistant was built on GPT-4.",
-   "The revised working paper on eScholarship (PDF dated July 2024) adds detail the published abstract doesn't give. It describes 640 entrepreneurs, randomly assigned either to the assistant on WhatsApp or to standard business guides (pp. 3, 7–8). The median owner was 26, had run the business for a year and held a college degree, and the businesses ranged \"from fast-food joints to poultry farms to cybershops,\" which offer internet access and printing (p. 8). In an analysis the authors call exploratory, \"treated low performers were especially likely to implement 'generic' advice focused on lowering prices and investing in advertising,\" while high performers found \"tailored and specific changes,\" from \"finding alternative ways to get power during blackouts\" to a new car wash detergent (pp. 3–4). The figure's two parts echo that reading. Treat it as a lead, not a measured result. The published abstract doesn't mention it, and the February 2024 version gave a different explanation: that weaker owners \"sought help on more challenging business tasks.\"",
-   "Everything in the figure is constructed: the owners, the battery, the 20% and the sales records. The jagged frontier is the essay's term, taken from Dell'Acqua et al. (2023); the appropriate reliance figure shows that study's numbers."
+   "From the published paper's abstract (Otis, Clarke, Delecourt, Holtz and Koning, *Management Science*, 2026): a field experiment with Kenyan entrepreneurs, \"randomizing access to a GPT-4-powered AI business assistant.\" On average the authors were \"unable to reject the null hypothesis of no average treatment effect on firm revenues and profits.\" But \"low performers did nearly 10% worse because of the AI assistant, whereas high performers may have benefited by over 15%,\" and the effect for low performers was \"over 0.20-standard-deviations lower than for initial high performers.\"",
+   "Also from the abstract, where the gap came from: \"This differential impact does not appear to result from differences in the questions posed to the AI or the advice that it provided but rather, from the advice that entrepreneurs chose to implement.\" The study didn't measure checking, and the two owners in the figure don't stand for its groups. The figure's lesson, to check each part against evidence for that part, is what the result suggests, not something the study tested.",
+   "The limits, from the revised working paper on eScholarship (PDF created July 2024). The outcome is \"an index that combines standardized measures of weekly and monthly revenue and profits\" (p. 8), and the percentages convert that index into an \"equivalent\" change in profits or revenue (p. 11). \"Low\" and \"high\" performers are businesses below and above the median before the study (p. 9). Only the stronger group's gain is uncertain: the paper calls it \"noisier\" (p. 9), and the published abstract says it \"may have\" happened. The assistant was built on GPT-4.",
+   "The same revised working paper adds detail the published abstract doesn't give. It describes 640 entrepreneurs randomly assigned to the assistant on WhatsApp (p. 3) or to business training guides (p. 7). The median owner was 26, had run the business for a year and held a college degree, and the businesses ranged \"from fast-food joints to poultry farms to cybershops,\" which offer internet access and printing (p. 8). In an analysis the authors call exploratory, \"treated low performers were especially likely to implement 'generic' advice focused on lowering prices and investing in advertising,\" while high performers found \"tailored and specific changes,\" from \"finding alternative ways to get power during blackouts\" to a new car wash detergent (pp. 3–4). The figure's two parts echo that reading. Treat it as a lead, not a measured result. The published abstract doesn't mention it, and the February 2024 version of the working paper gave a different explanation in its abstract: weaker owners \"sought help on more challenging business tasks.\"",
+   "Everything in the figure is constructed: the owners, the battery, the discount and the sales records. The jagged frontier is the essay's term, taken from Dell'Acqua et al. (2023); the appropriate reliance figure shows that study's numbers."
   ],
   "quoteHeading": "From the original essay",
   "quotes": [
