@@ -43,7 +43,7 @@
 		askOut: [75.3, 75.8], undim: [75.3, 76.5], ringB: 75.3, ringBStep: 0.1,
 		groups: [[77.3, 78.3], [78.5, 79.5], [79.7, 80.7]], brackets: [80.9, 81.7],
 		check: 87.8, follow: 90.8, qPulse: [90.8, 91.6], end: 96.3,
-		source: [88.8, 89.3], // used only by editions that supply one
+		source: [88.8, 89.3], answer: [76.6, 77.3], // used only by editions that supply them
 	};
 	const AT = [0, 10.9, 18.3, 26.3, 39.8, 46.0, 52.9, 58.9, 66.1, 74.3, 87.8]; // beat starts
 
@@ -92,6 +92,12 @@
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
 	const LINES = ed.problems, LINES_B = ed.imagined.problems, GOALS = ed.imagined.goals, CTX = ed.context;
+	// An edition's own clock (business): cuts to the core clock, in core seconds, each skipping
+	// a static stretch. With no edits (PME) both maps are the identity, so the core renders
+	// exactly as before.
+	const EDITS = ((ed.timeline && ed.timeline.edits) || []).slice().sort((a, b) => a.at - b.at);
+	const toCore = (tau) => { let o = 0; for (const e of EDITS) { if (tau < e.at + o) break; o -= e.cut; } return tau - o; };
+	const toBiz = (t) => { let o = 0; for (const e of EDITS) { if (e.at >= t) break; o -= Math.min(e.cut, t - e.at); } return t + o; };
 	el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 
@@ -227,7 +233,9 @@
 	const askLabel = mono(qGroup, 0, 0, L.ask, {ls: 0.6});
 	const qPath = el(qGroup, 'path', {d: bracketPath({x: 0, y: 10, w: QW, h: QH}, 14), fill: 'none', stroke: C.ink, 'stroke-opacity': 0.5, 'stroke-width': 2, 'stroke-dasharray': '5 4'});
 	el(qGroup, 'rect', {x: 0, y: 10, width: QW, height: QH, fill: 'none', stroke: C.ink, 'stroke-opacity': 0.25, 'stroke-dasharray': '4 4'});
-	serif(qGroup, QW / 2, 10 + QH / 2 + 10, '?', {fs: 28, style: 'italic', anchor: 'middle', fill: mixColor(C.ink, C.paper, 0.35)});
+	// The box holds a "?" (PME) or the manager's question in words (business, labels.askQ).
+	if (L.askQ) L.askQ.forEach((ln, i) => serif(qGroup, QW / 2, 10 + QH / 2 + 21 * (i - (L.askQ.length - 1) / 2) + 6, ln, {fs: 17, style: 'italic', anchor: 'middle', fill: C.ink}));
+	else serif(qGroup, QW / 2, 10 + QH / 2 + 10, '?', {fs: 28, style: 'italic', anchor: 'middle', fill: mixColor(C.ink, C.paper, 0.35)});
 
 	// ---- imagined seminar ---------------------------------------------------------------
 	const divider = el(gB, 'line', {x1: 24, y1: 331, x2: 936, y2: 331, stroke: C.ink, 'stroke-opacity': 0.15});
@@ -237,7 +245,11 @@
 	const seqB2 = el(seqB, 'tspan', {fill: C.grey}, ` → ${L.seqB[1]}`);
 	const seqB3 = el(seqB, 'tspan', {}, ` → ${L.seqB[2]}`);
 	const tagB = mono(gB, 24, YB + 176, L.drafted, {fill: C.grey, ls: 0.4});
-	const headB = mono(gB, 348, YB + 4, L.spread, {ls: 0.6});
+	const headB = mono(gB, 348, YB + 4, L.answer || L.spread, {ls: 0.6});
+	// Optional (business): the imagined board answers the manager's question. Its heading arrives
+	// with the goals, and a navy line runs from the question box to it.
+	const answerLine = L.answer ? el(gB, 'path', {fill: 'none', stroke: C.ink, 'stroke-width': 1.4, opacity: 0}) : null;
+	const answerHead = L.answer ? el(gB, 'path', {fill: 'none', stroke: C.ink, 'stroke-width': 1.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: 0}) : null;
 	const papersB = Array.from({length: N}, (_, i) => makePaper(gB, i, 'b'));
 	// The AI's challenge, once, in words.
 	const askCard = el(gB, 'g', {opacity: 0});
@@ -276,6 +288,7 @@
 	function measure() {
 		set(callBand, {width: callText.getComputedTextLength() + 8});
 		M.pillW = pillText.getComputedTextLength() + 20;
+		M.headW = headB.getComputedTextLength();
 		set(pillBox, {width: M.pillW});
 		// A label wider than the question box ends at the box's right edge (business:
 		// "THE MANAGER ASKS"), so it stays clear of the stage edge; PME's fits and is unchanged.
@@ -376,7 +389,13 @@
 		set(seqB2, {'fill-opacity': prog(t, ...T.challenges)});
 		set(seqB3, {'fill-opacity': prog(t, ...T.seqWrite)});
 		set(tagB, {opacity: prog(t, ...T.tagB)});
-		set(headB, {opacity: 1});
+		set(headB, {opacity: L.answer ? prog(t, ...T.answer) : 1});
+		if (answerLine) {
+			const q = lerp(Q_L, Q_C, kC), x0 = q.x + QW / 2, y0 = q.y + 10 + QH + 4, x1 = 348 + (M.headW || 160) + 10, y1 = YB - 1;
+			const len = (y1 - y0) + (x0 - x1), kA = prog(t, ...T.answer);
+			set(answerLine, {d: `M${x0} ${y0}V${y1}H${x1}`, 'stroke-dasharray': len, 'stroke-dashoffset': len * (1 - kA), opacity: kA > 0 ? 1 : 0});
+			set(answerHead, {d: `M${x1 + 6} ${y1 - 5}L${x1} ${y1}L${x1 + 6} ${y1 + 5}`, opacity: prog(kA, 0.85, 1)});
+		}
 		papersB.forEach((p, i) => {
 			const pos = compact(i, YB);
 			set(p.g, {transform: `translate(${pos.x} ${pos.y}) scale(${pos.s})`});
@@ -467,8 +486,9 @@
 		NR.a.q = h('span', 'im-n-q', NR.a.frame, '?');
 		NR.a.lines = h('ol', 'im-n-lines', NR.a.board);
 		NR.a.items = LINES.map((s) => h('li', null, NR.a.lines, s));
+		if (NW.askQ) NR.a.ask = h('p', 'im-n-ask', NR.a.board, NW.askQ);
 		NR.b = run('b');
-		NR.b.head = h('p', 'im-n-frame', NR.b.board, NW.spread);
+		NR.b.head = h('p', 'im-n-frame', NR.b.board, NW.answer || NW.spread);
 		NR.b.groups = GOALS.map((g) => {
 			const d = h('p', 'im-n-group', NR.b.board);
 			h('b', null, d, g.name);
@@ -507,7 +527,8 @@
 		show(a.board, t >= T.lift);
 		vis(a.frameText, t >= T.bracket[0]);
 		show(a.pill, t >= T.grey[0]);
-		show(a.q, t >= T.qmark[0]);
+		show(a.q, !a.ask && t >= T.qmark[0]);
+		if (a.ask) { show(a.ask, t >= T.qmark[0]); a.ask.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8)); }
 		a.q.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8));
 		show(a.lines, t < T.compact[0]);
 		a.items.forEach((li, i) => { vis(li, t >= T.lift + T.liftStep * i + 0.3); li.classList.toggle('is-read', t >= T.read + T.readStep * i); });
@@ -518,6 +539,7 @@
 		show(b.el, t >= T.blockB[0]);
 		fade(b.el, prog(t, ...T.blockB));
 		vis(b.s1, t >= T.define[0]); vis(b.s2, t >= T.challenges[0]); vis(b.s3, t >= T.seqWrite[0]);
+		if (NW.answer) show(b.head, t >= T.answer[0]);
 		b.papers.forEach((p, i) => {
 			const r0 = T.red + T.redStep * i, n0 = T.note + T.noteStep * i, w0 = T.writeB + T.writeBStep * i, k0 = T.ringB + T.ringBStep * i;
 			p.classList.toggle('is-red', t >= r0);
@@ -535,7 +557,7 @@
 	}
 	let fitWidth = 0, player = null;
 	const fitNarrow = () => {
-		const now = player ? player.time() : 0;
+		const now = player ? toCore(player.time()) : 0;
 		narrow.style.minHeight = '0px';
 		let max = 0;
 		for (let t = 0; t <= T.end; t += 0.5) { renderNarrow(t); max = Math.max(max, narrow.scrollHeight); }
@@ -551,14 +573,16 @@
 		const stacked = root.getBoundingClientRect().width < 480;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
-			renderNarrow(player ? player.time() : 0);
+			renderNarrow(player ? toCore(player.time()) : 0);
 		}
 		const w = Math.round(root.getBoundingClientRect().width);
 		if (stacked && w !== fitWidth) { fitWidth = w; fitNarrow(); }
 	};
 
-	const BEATS = AT.map((at, i) => ({at, ...ed.beats[i]}));
-	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
+	// Beat times are core; an edition with its own clock maps them (identity for PME).
+	const BEATS = AT.map((at, i) => ({at: toBiz(at), ...ed.beats[i]}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: toBiz(T.follow)};
+	const renderEd = EDITS.length ? (tau) => render(toCore(tau)) : render;
 
 	// fonts.ready above resolved before the edition's words were on the page, so fonts
 	// used only by them (the SVG's mono 600 and serif italic) may still be loading. Lay
@@ -569,7 +593,7 @@
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(root);
 		syncStacked();
-		player = mount(root, {duration: T.end, render, beats: BEATS, poster: AT[3] - 0.02, nameplate: NAMEPLATE});
+		player = mount(root, {duration: toBiz(T.end), render: renderEd, beats: BEATS, poster: toBiz(AT[3] - 0.02), nameplate: NAMEPLATE});
 	});
 	}
 })();

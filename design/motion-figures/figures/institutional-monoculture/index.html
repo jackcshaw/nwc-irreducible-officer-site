@@ -81,6 +81,9 @@
 .im-n-pill { display: inline-block; padding: 0 7px; border: 1.2px solid rgba(91, 86, 79, 0.8); border-radius: 9px; background: #ded5c4; color: var(--stone); font: 600 12px/1.4 var(--mono); }
 .im-n-q { display: inline-block; margin-left: auto; padding: 0 12px; border: 1.5px dashed rgba(10, 34, 66, 0.5); font: italic 400 17px/1.25 var(--serif); text-transform: none; color: rgba(10, 34, 66, 0.65); transition: border-color 160ms ease; }
 .im-n-q.is-pulse { border-color: var(--ink); }
+/* An edition can put the manager's question in words under the list (business). */
+.im-n-ask { margin: 6px 0 0 !important; padding: 2px 10px; border: 1.5px dashed rgba(10, 34, 66, 0.5); font: italic 400 14px/1.3 var(--serif); color: var(--ink); transition: border-color 160ms ease; }
+.im-n-ask.is-pulse { border-color: var(--ink); }
 .im-n-lines { list-style: none; margin: 0; padding: 3px 8px; border: 1.5px solid var(--ink); columns: 2; column-gap: 12px; font: 400 13px/1.3 var(--serif); color: var(--ink); }
 .im-n-lines li { break-inside: avoid; padding-left: 10px; text-indent: -10px; }
 .im-n-lines li::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 5px; border-radius: 50%; background: transparent; vertical-align: 2px; }
@@ -105,7 +108,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="institutional-monoculture" aria-labelledby="im-title">
 		<p class="sr-only" id="im-title" data-ed="page.srTitle"></p>
