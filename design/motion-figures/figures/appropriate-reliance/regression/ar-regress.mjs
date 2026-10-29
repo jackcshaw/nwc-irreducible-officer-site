@@ -17,6 +17,7 @@
 //
 //   node figures/appropriate-reliance/regression/ar-regress.mjs capture <dir> [--port=5291]
 //   node figures/appropriate-reliance/regression/ar-regress.mjs diff <baselineDir> <currentDir> [--port=5291]
+//   node figures/appropriate-reliance/regression/ar-regress.mjs compare <baselineDir> <currentDir>
 //
 // capture runs frame-diff.mjs capture into <dir> first, then adds branches/ and flows/.
 // diff captures into <currentDir>, then compares every baseline file: PNGs byte for byte,
@@ -256,7 +257,12 @@ if (mode === "capture") {
   const r = await compare(dirA, dirB);
   console.log(JSON.stringify({ captured: r1, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40), missingFiles: r.missing.slice(0, 20) }, null, 1));
   process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length ? 1 : 0;
+} else if (mode === "compare") {
+  // Compare two existing captures without capturing again.
+  const r = await compare(dirA, dirB);
+  console.log(JSON.stringify({ compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40) }, null, 1));
+  process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length ? 1 : 0;
 } else {
-  console.log("usage: ar-regress.mjs capture <dir> | diff <baselineDir> <currentDir> [--port=5291]");
+  console.log("usage: ar-regress.mjs capture <dir> | diff <baselineDir> <currentDir> | compare <baselineDir> <currentDir> [--port=5291]");
   process.exitCode = 2;
 }

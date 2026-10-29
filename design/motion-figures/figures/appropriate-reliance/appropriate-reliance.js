@@ -10,7 +10,11 @@
    lockedAt), and the beat list, the hidden summary and the page copy unlock question
    by question. Whenever any picture label would render under 11 px, the SVG gives way
    to a stacked stage driven by the same clock and calls; it grows only at a question,
-   so it is compact while the reader decides. */
+   so it is compact while the reader decides.
+   Editions: every visible word (picture, stacked stage, live region, beat list, check,
+   page) comes from editions/<id>.json with cast words from ../../casts.json, loaded by
+   the runtime's loadEdition; the timeline, layout, gates and nameplate stay here.
+   Regression: regression/ar-regress.mjs (frame-diff plus branches and gate flows). */
 (() => {
 	const {mount, E, mix, prog, el, set, legibility, FONT, isReduced, loadEdition, fillPage, rich} = MotionFigures;
 	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};

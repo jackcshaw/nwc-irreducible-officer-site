@@ -291,6 +291,7 @@
 		// The second ranking, rewritten: a fresh sheet over paper B with the new title and
 		// headings, revealed top to bottom, with red change bars (the person's revision).
 		const rewriteClip = clipRect('fc-rewrite');
+		set(rewriteClip, {width: SHEET.w + 16});
 		const paperB2 = el(cam, 'g', {transform: `translate(${PAPER_B.ox} ${PAPER_B.oy}) scale(${PS}) translate(-156 -141)`});
 		const pb2 = el(paperB2, 'g', {'clip-path': 'url(#fc-rewrite)'});
 		el(pb2, 'rect', {x: SHEET.x, y: SHEET.y, width: SHEET.w, height: SHEET.h, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
@@ -666,9 +667,12 @@
 			N.ask.bKept = KEPT.map((k) => h('span', 'fc-n-chip is-seen', br, k));
 			h('span', 'fc-n-tag is-red', b, NW.setAside);
 			N.ask.bAside = h('p', 'fc-n-aside', b, ASIDE.join(' · '));
-			if (NW.changeNote) h('p', 'fc-n-note', b, NW.changeNote);
-			if (TURN) N.ask.check = h('p', 'fc-n-note', b, TURN.narrow.check);
+			if (NW.changeNote && !NW.askNote) h('p', 'fc-n-note', b, NW.changeNote);
 			N.ask.cols = [a, b];
+			// Optional (business): the second person's note, and later their check, run full
+			// width under both columns (named, since they leave the column).
+			if (NW.askNote) { N.ask.note = h('p', 'fc-n-note', sec, NW.askNote); N.ask.cols.push(N.ask.note); }
+			if (TURN) N.ask.check = h('p', 'fc-n-note', NW.askNote ? sec : b, TURN.narrow.check);
 		}
 	}
 	const SHOW = [
@@ -732,6 +736,7 @@
 		// Both papers, then what each student can show when asked.
 		fade(N.papers.b.box, prog(t, ...T.sweep));
 		N.papers.note.hidden = show.has('ask');
+		if (NW.compactPapers) N.papers.label.hidden = show.has('ask');
 		fade(N.papers.note, prog(t, ...T.hideB));
 		fade(N.ask.q, prog(t, ...T.ask));
 		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));

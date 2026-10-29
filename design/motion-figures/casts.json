@@ -20,7 +20,21 @@
     "receive": "What faculty receive",
     "reviewer_receives": "Faculty receive",
     "reviewer_asks_each": "Faculty ask each student",
-    "ask_each": "Ask each student"
+    "ask_each": "Ask each student",
+    "reviewer_ask": "Faculty ask",
+    "reviewer_ask_l": "faculty ask",
+    "reviewer_has": "Faculty have",
+    "reviewer_sees": "Faculty see",
+    "what_reviewer_sees": "What faculty see",
+    "reviewer_doesnt_see": "Faculty don't see this",
+    "reviewer_points": "Faculty point",
+    "reviewer_puts": "Faculty put",
+    "then_ask": "Then they ask",
+    "the_first": "the first student",
+    "Another": "Another student",
+    "That_person": "That student",
+    "each_person": "each student",
+    "group": "seminar"
   },
   "workplace": {
     "person": "analyst",
@@ -42,6 +56,20 @@
     "receive": "What the manager receives",
     "reviewer_receives": "The manager receives",
     "reviewer_asks_each": "The manager asks each analyst",
-    "ask_each": "Ask each analyst"
+    "ask_each": "Ask each analyst",
+    "reviewer_ask": "The manager asks",
+    "reviewer_ask_l": "the manager asks",
+    "reviewer_has": "The manager has",
+    "reviewer_sees": "The manager sees",
+    "what_reviewer_sees": "What the manager sees",
+    "reviewer_doesnt_see": "The manager doesn't see this",
+    "reviewer_points": "The manager points",
+    "reviewer_puts": "The manager puts",
+    "then_ask": "Then the manager asks",
+    "the_first": "the first analyst",
+    "Another": "Another analyst",
+    "That_person": "That analyst",
+    "each_person": "each analyst",
+    "group": "team"
   }
 }

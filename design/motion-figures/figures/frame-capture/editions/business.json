@@ -85,7 +85,7 @@
   "setAside": "Set aside",
   "changeNote": "Would change it: if some patients cost less because they get less care.",
   "weighingNote": "The weighing doesn’t show in either ranking.",
-  "askQ": "{Reviewer} asks: Why this frame?",
+  "askQ": "Why this frame?",
   "source": "Illustration based on Obermeyer et al., Science (2019).",
   "taskLine": {
    "label": "Example task",
@@ -152,7 +152,8 @@
     "papers",
     "ask"
    ]
-  ]
+  ],
+  "askNote": "Second analyst's note: would change it if some patients cost less because they get less care."
  },
  "beats": [
   {
@@ -324,7 +325,7 @@
   "title": "Which patients are sickest?",
   "nothing": "NOTHING TO CHECK",
   "narrow": {
-   "check": "Checked: at the same predicted cost, some patients are sicker.",
+   "check": "Their check: at the same predicted cost, some patients are sicker.",
    "nothing": "Nothing to check.",
    "askQ2": " What would change it?"
   }
