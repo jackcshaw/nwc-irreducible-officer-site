@@ -37,6 +37,7 @@ The business editions are in progress: every figure's words now live in data fil
 3. **Role words per example.** Several business examples need their own roles (engineer and tech lead; associate and partner; owner and mentor). They're written into each business edition for now. The classroom cast will need a per-edition override; it gets built at that step.
 4. **Workplace check wording** for each figure is in its `storyboard-business.md`.
 6. **Responsibility laundering's split dot (PME).** After the split, the first student's dot stays half-size and the "Answerable" weight lands on it, which a business tester read as "half the responsibility went to the AI", the illusion the figure argues against. The business edition now restores the dot to full size as the weight lands. PME has the same reading; applying the fix there changes an approved figure, so it waits for your go.
+7. **Invisible delegation's stacked view (PME).** In the stacked layouts, only the second student's read of the rubric stays underlined to the end, which a tester read as a second difference between them. The business edition now underlines it only while either person reads it. PME has the same asymmetry; fixing it there waits for your go.
 5. **PME at laptop size.** Some PME figures (e.g. premature synthesis) switch to the text-only stacked view at 1280×720, a common laptop size. The business editions were reworked to show the picture there. Applying the same fix to PME changes approved figures, so it waits for your go.
 
 ## Not part of the figures, still waiting
