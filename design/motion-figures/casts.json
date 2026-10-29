@@ -34,7 +34,8 @@
     "Another": "Another student",
     "That_person": "That student",
     "each_person": "each student",
-    "group": "seminar"
+    "group": "seminar",
+    "reviewer_lines": "Faculty line"
   },
   "workplace": {
     "person": "analyst",
@@ -70,6 +71,7 @@
     "Another": "Another analyst",
     "That_person": "That analyst",
     "each_person": "each analyst",
-    "group": "team"
+    "group": "team",
+    "reviewer_lines": "The manager lines"
   }
 }
