@@ -603,7 +603,9 @@
 		if (N.own.a) fade(N.own.a, prog(t, ...T.lift));
 		fade(N.own.note, prog(t, ...T.write));
 		fade(N.draftB.sec, prog(t, ...T.sheetB));
-		fade(N.draftB.same, prog(t, ...T.sweep));
+		// Optional (business): narrow.sameAt shows "Suppose it matches…" once the draft is
+		// composed, so it stays up long enough to read before beat 6 swaps the layout.
+		fade(N.draftB.same, prog(t, ...(NW.sameAt || T.sweep)));
 		const rv = prog(t, ...T.reveal, E.inOut);
 		for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
 			fade(N[q].sec, q === 'q1' ? prog(t, ...T.q1) : prog(t, ...T.q2));
