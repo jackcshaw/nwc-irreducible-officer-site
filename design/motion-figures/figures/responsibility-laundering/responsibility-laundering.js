@@ -44,7 +44,7 @@
 		weights: [76.3, 76.7], aFall: [78.8, 80.2], aRest: [80.2, 80.6], bFall: [80.8, 81.8], bRest: [81.8, 82.1],
 		// 9 · the check
 		check: 84.0, follow: 86.9, end: 93.2,
-		source: [87.9, 88.4], // used only by editions that supply a source line
+		source: [87.4, 87.9], // used only by editions that supply a source line (after the line under the check)
 	};
 	const BEAT_AT = [0, 7.4, 19.4, 26.6, 38.9, 53.5, 67.1, 75.3, 84.0];
 
@@ -213,9 +213,14 @@
 	const keyHanded = el(sceneBase, 'g');
 	const keyHandedRing = el(keyHanded, 'circle', {cx: 0, cy: 525, r: 6, fill: 'none', stroke: C.grey, 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2'});
 	const keyHandedT = mono(keyHanded, 0, 530, L.keyHanded, {fill: C.grey});
-	// Optional (business): a one-line source under the final frame, right of the key. The
-	// stacked view has no room under its last beat, so its source sits under the controls.
-	const sourceLine = L.source ? serif(sceneBase, 936, 530, L.source, {fs: 13, style: 'italic', anchor: 'end'}) : null;
+	// Optional (business): a source line in the final frame. One line sits right of the key; a
+	// longer source, given as lines, sits at the top right beside the task card, the final
+	// frame's widest free space. The stacked view has no room under its last beat, so its
+	// source sits under the controls.
+	const SRC = L.source ? [].concat(L.source) : [];
+	let sourceLine = null;
+	if (SRC.length === 1) sourceLine = serif(sceneBase, 936, 530, SRC[0], {fs: 13, style: 'italic', anchor: 'end'});
+	else if (SRC.length) { sourceLine = el(sceneBase, 'g'); SRC.forEach((str, i) => serif(sourceLine, 936, 28 + 15 * i, str, {fs: 13, style: 'italic', anchor: 'end'})); }
 	const stackedSource = root.querySelector('[data-rl-source]');
 	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
@@ -409,7 +414,8 @@
 			return mix(WT.hang, restY, k) - 2 * bump(t, ...rest);
 		};
 		// The first student's dot is a half by now, so their weight comes to rest 1.5 lower.
-		const wyA = fallY(T.aFall, T.aRest, SIG.dot.y - (SP ? SP.half : SPLIT.half) - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
+		// (Business with split.whole: the dot is whole again as the weight lands, so it rests like the second.)
+		const wyA = fallY(T.aFall, T.aRest, SP && SP.whole ? WT.rest : SIG.dot.y - (SP ? SP.half : SPLIT.half) - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
 		set(copies.a.weight, {opacity: kW, transform: `translate(0 ${wyA})`});
 		set(copies.b.weight, {opacity: kW, transform: `translate(0 ${wyB})`});
 
@@ -435,7 +441,10 @@
 			const kTravel = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
 			const kTurn = prog(t, s1 - 0.4, s1);
 			const base = st('a', SIG.dot), beside = st('a', SPLIT), dx = SP.apart / 2;
-			set(dots.a.c, {cx: base.x - dx * kApart, r: mix(5, SP.half, kApart)});
+			// split.whole: as the "Answerable" weight lands (beat 8), the remaining half grows back into
+			// a whole dot. The weight lands on a whole person; the grey ring stays with the AI's phrase.
+			const kWhole = SP.whole ? prog(t, T.aRest[0], T.aRest[0] + 0.6, E.inOut) : 0;
+			set(dots.a.c, {cx: base.x - dx * kApart * (1 - kWhole), r: mix(mix(5, SP.half, kApart), 5, kWhole)});
 			const hx = mix(base.x + dx * kApart, beside.x, kTravel), hy = mix(base.y, beside.y, kTravel);
 			set(dots.a.half, {
 				cx: hx, cy: hy, r: kApart > 0 ? mix(SP.half, SP.ring, kTurn) : 0, fill: C.red, 'fill-opacity': 1 - kTurn,
@@ -594,7 +603,8 @@
 				const kA = prog(t, s0, s0 + 0.3, E.inOut);
 				const k = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
 				const turn = prog(t, s1 - 0.4, s1);
-				cd.di.style.transform = `translateX(${(-3 * kA).toFixed(2)}px) scale(${mix(1, 0.75, kA).toFixed(3)})`;
+				const kW = SP.whole ? prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut) : 0; // whole again as the weight lands
+				cd.di.style.transform = `translateX(${(-3 * kA * (1 - kW)).toFixed(2)}px) scale(${mix(mix(1, 0.75, kA), 1, kW).toFixed(3)})`;
 				const dotN = cd.di.parentNode, from = {x: dotN.offsetLeft + dotN.offsetWidth / 2 + 6 * kA, y: dotN.offsetTop + dotN.offsetHeight / 2};
 				const to = {x: 3, y: cd.r1.offsetTop + 9};
 				const size = mix(SP.narrowHalf, SP.narrowRing, turn);

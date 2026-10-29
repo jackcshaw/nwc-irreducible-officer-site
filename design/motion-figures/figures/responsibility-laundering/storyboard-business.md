@@ -1,10 +1,29 @@
 # Responsibility laundering: business edition storyboard
 
-Edition `business`, workplace cast. Round 2, revised after `tests/business-figure-read-1.md`.
+Edition `business`, workplace cast. Round 2, revised after `tests/business-figure-read-1.md`, with the final fixes from `tests/business-figure-read-2.md`.
 
 It is built from `editions/business.json` on top of the core in `storyboard.md`: layout, motion, colour grammar and nameplate. This file lists only what differs from the PME edition. The words live in the data files: `editions/business.json` for the scenario, and `../../casts.json` (workplace) for role words. If this file and the data disagree, the data is what ships.
 
 To open it, use `index.html?edition=business`, or the page's "See this with: Workplace" link.
+
+## Final fixes after cold read 2
+
+Cold read 2 passed on the point. These are its final fixes.
+
+1. **The first analyst's dot is whole again when "Answerable" lands** (`split.whole`, business only). After the split, the smaller dot left at the signature could read as "half the responsibility went to the AI".
+   - Now, as the first weight comes to rest (beat 8), the remaining half grows back into a whole dot over 0.6 s, so the weight lands on a whole person.
+   - The grey ring stays by "The analysis estimates" as the reason handed to the AI.
+   - At 390 the stacked dot returns to full size as its chip appears. The weight rests where the second analyst's does.
+   - **PME has the same reading:** its weight rests on the half dot for the rest of the figure. That's left unchanged, for Jack to decide.
+2. **The source line carries its context:** "Related case: Moffatt v. Air Canada (2024), where a company was held responsible for its chatbot's answer."
+   - On the drawn stage it is three right-aligned lines of serif italic 13 at the top right, beside the task card, the final frame's widest free space. That area is empty in beat 9; the "doesn't see this" tag that uses it is gone after beat 6.
+   - It keeps a clear gap from the card at 1280 × 720 and 1440 × 900.
+   - On phones it is one wrapped line under the controls.
+   - It now fades in 0.5 s after the line under the check (87.4–87.9 s core). A 1.0 s hold at core 93.1 lets its 16 words get their reading time plus 1.5 s before the figure rests.
+   - The run is now 96.6 s on the figure's clock and 99.6 s in the player.
+3. **Attribution.** The agents/servants/representatives sentence is presented as the tribunal's summary of the airline's position, quoted from "Air Canada argues…" (para. 27).
+   - Paras. 2, 14, 28 and 44 were confirmed by paragraph number in both CanLII-stamped copies (section 6), so they stay.
+4. The switch label and the meta description are left for the sweep across all eight figures.
 
 ## Changes after cold read 1
 
@@ -50,8 +69,8 @@ Also:
 
 Evidence follows option A. There is no evidence beat, because the case isn't the figure's turn; the turn is "Why did you rely on it?".
 - **Setup:** "The retailer, the analysts, their AI, the chatbot and the 97% are constructed. Related case: *Moffatt v. Air Canada* (2024), in which a tribunal held an airline responsible for its chatbot's answers."
-- **Under the final frame:** "Related case: Moffatt v. Air Canada (2024)."
-  - On the drawn stage it is serif italic 13, right-aligned at x 936 on the key's baseline, and fades in 1 s after the line under the check.
+- **In the final frame:** "Related case: Moffatt v. Air Canada (2024), where a company was held responsible for its chatbot's answer."
+  - On the drawn stage it is three lines of serif italic 13, right-aligned at x 936 on baselines 28, 43 and 58, beside the task card. It fades in 0.5 s after the line under the check.
   - On the stacked phone view it sits under the controls, outside the fixed-height player.
 - **On the page,** "A related case", after the check. In order:
   - how the case relates, and how it differs;
@@ -74,10 +93,11 @@ There is no change to PME. Everything below is gated on business data, so PME dr
 - **`timeline.edits`: the business edition's own clock,** as edits to the core clock in core seconds. A hold freezes the core and adds time; a cut skips a static stretch; a stretch plays an interval slower.
   - Beat 7: hold 1.5 s at 71.3; stretch 71.3–71.6 ×3; hold 0.8 s at 71.6; stretch 71.6–72.5 ×3; hold 1.5 s at 72.5.
   - Cuts: 1.4 s at 16.5 (beat 2), 2.0 s at 49.6 (beat 5), 0.4 s at 82.2 (beat 8).
+  - Hold: 1.0 s at 93.1 (beat 9), for the source line's reading time.
   - Beat starts, the follow-up and the poster are mapped onto the edition clock. The core keeps its own times, and with no edits both maps are the identity.
-- **`split`: the staged split** (sizes and spacing). With it, the dot parts before the half travels; a halo and a dashed trail show the travelling half, and the trail fades on arrival. Without it, PME's split draws as before.
+- **`split`: the staged split** (sizes and spacing). With it, the dot parts before the half travels; a halo and a dashed trail show the travelling half, and the trail fades on arrival. With `whole`, the dot is whole again as the "Answerable" weight lands. Without `split`, PME's split draws as before.
 - **The phrase outline** now sits on the first person's first answer that contains the phrase. That is answer 1 in PME, so nothing changes there, and answer 2 in business.
-- **`labels.source` / `narrow.source`:** the source line.
+- **`labels.source` / `narrow.source`:** the source line. A list of lines draws as a block at the top right; a single string draws right of the key.
 - **Page furniture:**
   - the edition switch;
   - `page.editionNote`, hidden when null;
@@ -107,7 +127,8 @@ The cast supplies the role words: "student" becomes "analyst", "faculty" becomes
 | 4 · Signs; notes first | The first analyst signs. The second notes what the estimate rests on, then signs. | Key "AN ANALYST'S DECISION"; row "THEIR OWN NOTE · NOT SENT"; note "Rests on last quarter's questions. / Recent ones match." |
 | 5 · The manager asks | The manager asks each analyst. | "THE MANAGER DOESN'T SEE THIS"; frame "WHAT THE MANAGER SEES"; "1 · If it misleads a customer, who made this call?"; both answer "I did. I signed it." |
 | 6 · Why | The manager asks why. | First: "The analysis estimated 97%. It seemed solid." Second: "It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't test exceptions." |
-| 9 · Reviewer's check | Reviewer's check: Who owns the recommendation if it proves wrong? / Name one way it could prove wrong. Ask why they relied on it. | **New:** "Related case: Moffatt v. Air Canada (2024)." right of the key |
+| 8 · Suppose it proves wrong | (role word only) | As the first weight lands, the first analyst's dot is whole again; the grey ring stays |
+| 9 · Reviewer's check | Reviewer's check: Who owns the recommendation if it proves wrong? / Name one way it could prove wrong. Ask why they relied on it. | **New:** "Related case: Moffatt v. Air Canada (2024), / where a company was held responsible / for its chatbot's answer." at the top right |
 
 The wording stays parallel to PME: the note's "Rests on…" comes back in the answer's "It rests on…", as PME's open port does. At 390 × 844 the player measures 821 px in every beat.
 
@@ -133,12 +154,12 @@ The rule: every beat lasts at least (caption words + new on-screen words) ÷ 3 +
 | 6 · Why | 50.1–63.7 | 4 | 30 (question 6, answers 7 + 17) | 12.8 | 13.6 | 0.8 |
 | 7 · Whose reason (staged) | 63.7–78.1 | 11 | 5 (key) | 6.8 | 14.4 | 7.6 |
 | 8 · Suppose it proves wrong | 78.1–86.4 | 13 | 1 ("Answerable") | 6.2 | 8.3 | 2.1 |
-| 9 · Reviewer's check | 86.4–95.6 | 8 + 13 second line | 2 ("Reviewer's check"); source 7 | 9.2 | 9.2, then rests | 0.0 |
-| **Total** | | **89** | **115** (+7 source) | | **95.6 figure, 98.6 player** | |
+| 9 · Reviewer's check | 86.4–96.6 | 8 + 13 second line | 2 ("Reviewer's check"); source 16 | 9.2 | 10.2, then rests | 1.0 |
+| **Total** | | **89** | **115** (+16 source) | | **96.6 figure, 99.6 player** | |
 
 Checks:
 - Every beat meets the rule. Every cut lands in a static hold and leaves at least 1.5 s after the last movement.
-- The source line arrives 1.0 s after the line under the check, at 90.3 s. It gets its reading time (2.3 s) plus 1.5 s by 94.1 s, before the figure rests.
+- The source line arrives 0.5 s after the line under the check has appeared, at 89.8 s. Its 16 words get their reading time (5.3 s) plus 1.5 s by 96.6 s, when the figure rests.
 - The key never contradicts the caption. On phones the task card stays on screen through the final frame.
 
 ## 6. Verified in the decision (for the source spine)
@@ -166,7 +187,12 @@ The text was read in two CanLII-stamped PDF copies of *Moffatt v. Air Canada*, 2
   - The coordinator's change to `casts.json` (straight to curly apostrophe in "Faculty don't see this") altered beat 5's text in the beat list and summary. That changed five captures: the reduced and full page at 1440 and 390, and print.
   - A text comparison confirmed that's the only difference, so the baseline was re-captured on it.
   - PME now takes `labels.dontSee` and `narrow.dontSee` from the key too, with identical output.
-- **Business baseline:** `regression/baseline-business` (209 shots), re-captured for round 2.
+- **PME after the final fixes:** 0 differing (209/209).
+  - One capture under heavy machine load (load average about 8, with other figures' agents running) differed in 13 phone frames, at the bottom edge of the stacked "What faculty see" frame.
+  - The rerun matched the baseline 209/209, and the two captures differed from each other in exactly those frames, so that run was a capture flake.
+- **Business baseline:** `regression/baseline-business` (212 shots), re-captured after the final fixes.
+  - Phone captures of moving moments (the travelling half, the falling weight) vary by a few pixels between runs under that load.
+  - The baseline is the capture that agrees with at least one other run at 211 of 212 frames. At t = 86.0 (a weight mid-fall) all three runs differed.
 - **Both editions:**
   - 1440 × 900 and 1280 × 720 fit on the drawn stage and autoplay (controls end at 693 px at 1280 × 720);
   - the caption band is 144 px on desktop, 194 px on phones and 188 px at 768;
