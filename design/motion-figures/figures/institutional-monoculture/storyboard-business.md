@@ -10,7 +10,7 @@ Source: `tests/business-figure-read-2.md` and the coordinator's notes. Round 2 p
 
 1. **The lines are problem definitions.**
    - The first run's ten lines are now questions that define the problem, all in the one frame: How do we stand out? · Why pay more for ours? · Why are we worth more? · What can't they copy? · Where do we add value? · Can we stay premium? · Can we out-serve them? · Which features win? · Can we keep our edge? · What earns a premium?
-   - The imagined run keeps the first three. It adds four in the cost frame (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?) and three in the partner frame (Should we partner? · License our designs? · Supply the rival?).
+   - The imagined run keeps the first three. It adds four in the cost frame (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?) and three in the partner frame (Should we partner? · Who wants our designs? · Is the rival a buyer?).
    - Every line is 22 characters or fewer, so it fits its bracket at 13 units.
 2. **The manager's move on today's plans is visible.**
    - Beat 8 is now "Imagine the manager sends them back: what else could the problem be?". A navy line runs from the question box to the heading "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?", drawn at core 61.2–61.9, before the imagined run writes. The spread forms under that question in beat 10.
@@ -21,6 +21,11 @@ Source: `tests/business-figure-read-2.md` and the coordinator's notes. Round 2 p
    - To keep the phone player at 832 px, the paper rows give way once the goals form.
 4. **Beats 5, 6 and 9 get more time.** Holds of 1.0 s after the bracket (core 43.7) and after the grey trace (core 49.4), and the cut before beat 10 is gone. Every new text holds at least (words ÷ 3) + 1.5 s (§5).
 5. **Beat 2** says "the company's AI", so the shared system is in the caption.
+6. **Tidy-up after verification** (`tests/business-verify.md`).
+   - Two partner lines become framings: "Who wants our designs?" and "Is the rival a buyer?".
+   - The phone list in beat 4 is one question per line (`narrow.oneColumn`), so none wraps mid-phrase.
+   - On phones the imagined paper rows stay until the second goal group forms, so their ticks show for about 2 s. The first run's rows give way when the first group forms.
+   - All ten first-run lines are in the one frame. The page and captions say "each plan", and only the AI card says "almost every outline".
 
 The run is 94.0 s in the player.
 
@@ -121,7 +126,7 @@ The cast supplies the role words: "students" becomes "analysts", "seminar" becom
 | 7 · The manager asks | The manager asks what frames are missing. | "THE MANAGER ASKS" over the box, which holds "What frames / are missing?" |
 | 8 · Sent back | Imagine the manager sends them back: what else could the problem be? | A navy line from the box to "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?"; "Same team, imagined" |
 | 9 · Define first, then the AI challenges | Each defines the problem first, then asks the AI to challenge it. | The AI's questions: "What did you assume? / What other frames fit?" |
-| 10 · Lined up again | These hold up too. The manager lines them up again. | Under the sent-back question: DIFFERENTIATE (the first three lines); MATCH ON COST (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?); PARTNER OR LICENSE (Should we partner? · License our designs? · Supply the rival?) |
+| 10 · Lined up again | These hold up too. The manager lines them up again. | Under the sent-back question: DIFFERENTIATE (the first three lines); MATCH ON COST (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?); PARTNER OR LICENSE (Should we partner? · Who wants our designs? · Is the rival a buyer?) |
 | 11 · Reviewer's check | Reviewer's check: What frames are missing across the team? / Line up the problems. What else could the problem be? | The source line under the picture |
 
 ## 4. The workplace check

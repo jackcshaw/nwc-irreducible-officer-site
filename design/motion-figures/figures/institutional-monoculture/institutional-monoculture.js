@@ -497,7 +497,7 @@
 		NR.a.frameText = h('span', null, NR.a.frame, NW.frame);
 		NR.a.pill = h('span', 'im-n-pill', NR.a.frame, NW.aiFrame);
 		NR.a.q = h('span', 'im-n-q', NR.a.frame, '?');
-		NR.a.lines = h('ol', 'im-n-lines', NR.a.board);
+		NR.a.lines = h('ol', NW.oneColumn ? 'im-n-lines is-one' : 'im-n-lines', NR.a.board);
 		NR.a.items = LINES.map((s) => h('li', null, NR.a.lines, s));
 		if (NW.keep) NR.a.compact = h('p', 'im-n-compact', NR.a.board, [...LINES.slice(0, 3), NW.more].join(' · '));
 		if (NW.askQ) NR.a.ask = h('p', 'im-n-ask', NR.a.board, NW.askQ);
@@ -538,9 +538,10 @@
 			p.classList.toggle('is-pulse', near(t, o0, 0.6) || near(t, w0, T.writeDur) || near(t, r0, 0.3) || near(t, l0, 0.7));
 		});
 		vis(a.tag, t >= T.tagA[0]);
-		// Business keeps more words to the end, so the paper rows give way once the goals form.
-		const rows = !(NW.keep && t >= T.groups[0][0]);
-		show(a.grid, rows); show(a.tag, rows);
+		// Business keeps more words to the end, so the paper rows give way as the goals form:
+		// the first run's at once, the imagined run's once its ticks have had their time.
+		const rowsA = !(NW.keep && t >= T.groups[0][0]);
+		show(a.grid, rowsA); show(a.tag, rowsA);
 		show(a.board, t >= T.lift);
 		vis(a.frameText, t >= T.bracket[0]);
 		show(a.pill, t >= T.grey[0]);
@@ -568,7 +569,8 @@
 			p.classList.toggle('is-pulse', near(t, r0, 0.6) || near(t, T.send + T.sendStep * i, 0.5) || near(t, n0, 0.5) || near(t, w0, 0.5) || near(t, T.groups[g][0], 1.0));
 		});
 		vis(b.tag, t >= T.tagB[0]);
-		show(b.grid, rows); show(b.tag, rows);
+		const rowsB = !(NW.keep && t >= T.groups[1][0] - 0.1);
+		show(b.grid, rowsB); show(b.tag, rowsB);
 		b.groups.forEach((g, k) => {
 			show(g, t >= T.groups[k][0]);
 			g.style.borderColor = t >= T.brackets[0] ? '' : 'transparent';
