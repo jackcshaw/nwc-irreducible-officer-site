@@ -40,8 +40,8 @@
    "group. I'm not sure that applies here.”"
   ],
   [
-   "“An error one fetch doesn't catch.",
-   "The group then cancels the other two.”"
+   "“If one fetch hits an error it doesn't",
+   "catch, the group cancels the other two.”"
   ]
  ],
  "labels": {
@@ -109,13 +109,50 @@
   "noteStage": [
    "Bug: when one fetch failed,",
    "the group canceled the rest."
+  ],
+  "mainOnMap": "MAIN LINK",
+  "fixNotes": [
+   {
+    "lines": [
+     "each fetch catches",
+     "its own error"
+    ],
+    "x": 434,
+    "y": 240,
+    "at": [
+     42.0,
+     42.4
+    ]
+   },
+   {
+    "lines": [
+     "a timeout counts",
+     "as an error"
+    ],
+    "x": 522,
+    "y": 332,
+    "at": [
+     42.8,
+     43.2
+    ]
+   }
+  ],
+  "sketchNotes": [
+   {
+    "t": "Redrawn from the AI's code",
+    "role": "ai"
+   },
+   {
+    "t": "Built, broken once, fixed",
+    "role": "own"
+   }
   ]
  },
  "narrow": {
   "taskLabel": "Example task",
   "taskLine": "Using a library new to you, fetch three records at the same time.",
   "readingsLabel": "Six sections of the library's docs",
-  "mapA": "First engineer: the AI's code",
+  "mapA": "First engineer: the AI's code, taken as written",
   "mapAMain": "Its main connection: 2–5, the task group and the fetches.",
   "paperA": "First engineer’s code",
   "paperTitle": "Fetch all three records in one task group.",
@@ -177,7 +214,9 @@
   "source": "Illustration based on Shen & Tamkin, Anthropic (2026).",
   "hideSketchAtEnd": true,
   "learnedInBox": true,
-  "ask": "They ask the AI how cancellation works. The AI: in a task group, one error cancels all the other tasks."
+  "ask": "They ask the AI how cancellation works. The AI: in a task group, one error cancels all the other tasks.",
+  "sketchA": "Redrawn from the AI's code: 1–4 · 4–6 · 3–4 · 3–5 · 2–5",
+  "sketchB": "Built, broken once, fixed: 1–4 · 4–6 · 3–4 · 3–5 · 2–5"
  },
  "beats": [
   {
@@ -185,28 +224,28 @@
    "detail": "a task card appears at the top right: \"Example task: Using a library new to you, fetch three records at the same time.\" A red dot labelled Engineer appears on the left. Six numbered cards for sections of the library's docs appear one at a time: 1 Retry on error, 2 Task groups, 3 Timeouts, 4 Error handling, 5 Fetching records, 6 Channels. Nothing joins them yet."
   },
   {
-   "text": "The engineer reads the docs closely, then has an AI write the code.",
+   "text": "The engineer reads the docs closely, then takes an AI's code without asking how it works.",
    "detail": "the dot visits each card, and each opens to show notes. The dot pulses. Five dashed grey lines appear all at once, labelled \"AI code\", joining 1 to 4, 4 to 6, 3 to 4, 3 to 5 and 2 to 5."
   },
   {
-   "text": "The code runs, and the engineer ships it.",
-   "detail": "the dot runs along each grey line once, and each turns solid: the engineer takes the code as written and asks no questions about it. The dot writes up the code on the left, labelled \"First engineer's code\" and titled \"Fetch all three records in one task group.\" As the title appears, the line from 2 to 5 turns heavy. The first paragraph, tagged \"Main\", cites sections 2 and 5; the others cite 3, 4 and 5, and 1, 4 and 6. A grey note at the foot says \"AI helped with the code\"."
+   "text": "The code runs, and the engineer ships it as written.",
+   "detail": "the dot pulses once and every grey line turns solid at the same moment: the engineer takes the code as written, with no questions about how it works. The dot goes straight to write up the code on the left, labelled \"First engineer's code\" and titled \"Fetch all three records in one task group.\" As the title appears, the line from 2 to 5 turns heavy and is labelled \"Main link\". The first paragraph, tagged \"Main\", cites sections 2 and 5; the others cite 3, 4 and 5, and 1, 4 and 6. A grey note at the foot says \"AI helped with the code\"."
   },
   {
-   "text": "A second engineer, with the same docs and time, asks the AI only how it works, then writes the code.",
+   "text": "A second engineer, with the same docs and time limit, asks the AI only how it works, then writes the code.",
    "detail": "the grey lines and the first dot leave, and the cards close. A second red dot labelled Second engineer visits each card the same way, and each opens to show notes. The dot returns and pulses. Beside it, in red: \"How does cancellation work?\" Under that, the AI's answer in grey: \"AI: in a task group, one error cancels all the other tasks.\" The AI writes no code. The dot draws three red lines: 2 to 5, 3 to 5 and 4 to 6."
   },
   {
    "text": "One part breaks. That engineer finds the bug and fixes it alone.",
-   "detail": "the dot draws a fourth line, from 1 to 2, and goes back to both cards. A red cross appears on that line, with a red note: \"Bug: when one fetch failed, the group canceled the rest.\" The line pulls back; the cross and the note stay. The cross brightens, and the dot draws the fix in red: 1 to 4 (each fetch handles its own errors), then 3 to 4 (a timeout counts as an error)."
+   "detail": "the dot draws a fourth line, from 1 to 2, and goes back to both cards. A red cross appears on that line, with a red note: \"Bug: when one fetch failed, the group canceled the rest.\" The line pulls back; the cross and the note stay. The cross brightens, and the dot draws the fix in red: 1 to 4, labelled \"each fetch catches its own error\", then 3 to 4, labelled \"a timeout counts as an error\"."
   },
   {
-   "text": "That engineer ships the same code, in the same time.",
+   "text": "That engineer ships the same code, within the same time limit.",
    "detail": "the dot writes up the code under the first, labelled \"Second engineer's code\", with the same title, citations and grey note, and lines of different lengths. The cards, lines, note, question and answer leave. \"What the tech lead reviews. The same code.\" appears above the two."
   },
   {
    "text": "With the code closed, both engineers sketch the same connections.",
-   "detail": "the two write-ups shrink and slide up into a strip at the top left, next to \"Both say AI helped\". \"In review, code closed: Sketch how the pieces connect.\" appears. Each row is labelled: \"First engineer: read, AI writes, ships\" and \"Second engineer: read, asks AI, tries, fixes\". Each engineer draws six numbered points joined by the same five lines, in the same ink."
+   "detail": "the two write-ups shrink and slide up into a strip at the top left, next to \"Both say AI helped\". \"In review, code closed: Sketch how the pieces connect.\" appears. Each row is labelled: \"First engineer: read, AI writes, ships\" and \"Second engineer: read, asks AI, tries, fixes\". Each engineer draws six numbered points joined by the same five lines, in the same ink. Under the first row: \"Redrawn from the AI's code\", in grey. Under the second: \"Built, broken once, fixed\", in red."
   },
   {
    "text": "The tech lead asks what would make the main connection fail.",
@@ -214,7 +253,7 @@
   },
   {
    "text": "The second engineer applies the rule, from the bug they fixed.",
-   "detail": "in the second engineer's row, \"What they learned\" appears in red over the note: \"When one fetch failed, the group canceled the rest.\" The second engineer says: \"An error one fetch doesn't catch. The group then cancels the other two.\""
+   "detail": "in the second engineer's row, the ring pulses, and \"What they learned\" appears in red over the note: \"When one fetch failed, the group canceled the rest.\" The second engineer says: \"If one fetch hits an error it doesn't catch, the group cancels the other two.\""
   },
   {
    "text": "{check}: Can they say why these connections matter?",
@@ -231,9 +270,9 @@
   "kicker": "Failure mode 3 of 7",
   "title": "Premature synthesis",
   "description": "A workplace example: two engineers ship the same code and sketch the same design, but only the one who wrote it, broke it and fixed it can say what would make it fail.",
-  "setup": "Two engineers get the same docs and the same time to build a feature with a library new to them. One has an AI write the code; the other asks the AI only how things work, then writes the code, breaks it once and fixes it. The first route is premature synthesis: the model connects the material before anyone has built the map. Illustration based on Shen & Tamkin (2026); the engineers and the task are constructed.",
+  "setup": "Two engineers get the same docs and the same time limit to build a feature with a library new to them. One takes an AI's code as written, without asking how it works. The other asks the AI only how things work, then writes the code, breaks it once and fixes it. The first route is premature synthesis: the model connects the material before anyone has built the map. Who wrote the code isn't the difference; asking how it works is. Illustration based on Shen & Tamkin (2026); the engineers and the task are constructed.",
   "srTitle": "Premature synthesis, an animated figure in ten beats",
-  "srSummary": "An animated figure. A red dot stands for an engineer with an example task: using a library new to them, fetch three records at the same time. Six cards stand for sections of the library's docs: retry on error, task groups, timeouts, error handling, fetching records and channels. The engineer reads each section closely, then has an AI write the code, which joins the sections with five grey connections at once. The engineer takes the code as written and ships it, titled \"Fetch all three records in one task group\", whose main connection is between sections 2 and 5, with a note that AI helped with the code. A second engineer, with the same docs and the same time, asks the AI only how cancellation works. The AI explains that in a task group one error cancels all the other tasks, and writes no code. The engineer writes three connections of their own, then a fourth, between sections 1 and 2, that breaks, with the note \"Bug: when one fetch failed, the group canceled the rest.\" The engineer fixes it alone, connecting 1 to 4 and 3 to 4. Both ship the same code. In review, with the code closed, both sketch the same connections. The tech lead points to the connection between sections 2 and 5, the task group and the fetches, and asks what would make that fail. The first engineer says, \"The docs say one failure cancels the group. I'm not sure that applies here.\" The second, remembering the bug, says, \"An error one fetch doesn't catch. The group then cancels the other two.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. A red dot stands for an engineer with an example task: using a library new to them, fetch three records at the same time. Six cards stand for sections of the library's docs: retry on error, task groups, timeouts, error handling, fetching records and channels. The engineer reads each section closely, then has an AI write the code, which joins the sections with five grey connections at once. The engineer takes the code as written, without asking how it works, and ships it, titled \"Fetch all three records in one task group\", whose main link is between sections 2 and 5, with a note that AI helped with the code. A second engineer, with the same docs and the same time limit, asks the AI only how cancellation works. The AI explains that in a task group one error cancels all the other tasks, and writes no code. The engineer writes three connections of their own, then a fourth, between sections 1 and 2, that breaks, with the note \"Bug: when one fetch failed, the group canceled the rest.\" The engineer fixes it alone: each fetch catches its own error (1 to 4), and a timeout counts as an error (3 to 4). Both ship the same code within the time limit. In review, with the code closed, both sketch the same connections: the first redrawn from the AI's code, the second built, broken once and fixed. The tech lead points to the connection between sections 2 and 5, the task group and the fetches, and asks what would make that fail. The first engineer says, \"The docs say one failure cancels the group. I'm not sure that applies here.\" The second, remembering the bug, says, \"If one fetch hits an error it doesn't catch, the group cancels the other two.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "Can they say why these connections matter?",
@@ -245,7 +284,8 @@
    "Judy Hanwen Shen and Alex Tamkin at Anthropic ran a randomized experiment with 52 developers recruited online, most of them professional or freelance programmers: 29 had seven or more years of coding experience, 19 had four to six, and 4 had one to three. They were learning \"a new asynchronous programming library\", Trio. Each had up to 35 minutes for two short tasks, one of them a function that handles missing-record errors, then took a quiz on the library.",
    "Developers given an AI assistant scored lower. The paper puts it this way: \"For a 27-point quiz, this translates into a 17% score difference or 2 grade points\" (Cohen's d = 0.738, p = 0.01). Anthropic's summary gives the averages as 50% with AI and about 67% by hand. The AI did not make them significantly faster.",
    "In an exploratory breakdown (\"exploratory data analysis (not pre-registered)\"), the largest score gap was on debugging questions. The authors' explanation is that the group without AI \"encountered more errors during the task and became more capable at debugging.\"",
-   "How people used the AI mattered, in small groups found by exploratory analysis. Conceptual Inquiry, seven people: they \"only asked conceptual questions and relied on their improved understanding to complete the task. Although this group encountered many errors, they also independently resolved these errors.\" They averaged 65% or higher. AI Delegation, four people: they \"wholly relied on AI to write code and complete the task\" and averaged under 40%. Iterative AI Debugging, four people, \"relied on AI to debug or verify their code\" and also scored poorly. In the figure, the first engineer follows AI Delegation and the second follows Conceptual Inquiry.",
+   "How people used the AI mattered, in small groups the authors identified from screen recordings. Conceptual Inquiry, seven people: they \"only asked conceptual questions and relied on their improved understanding to complete the task. Although this group encountered many errors, they also independently resolved these errors.\" They averaged 65%. AI Delegation, four people, \"wholly relied on AI to write code and complete the task\" and averaged 39%; they were the fastest, at 19.5 minutes on average to Conceptual Inquiry's 22. Iterative AI Debugging, four people, \"relied on AI to debug or verify their code\" and averaged 24%.",
+   "Who wrote the code wasn't the dividing line. The top group, Generation-Then-Comprehension, two people, \"first generated code and then manually copied or pasted the code into their work. After their code was generated, they then asked the AI assistant follow-up questions to improve understanding.\" They averaged 86%. The authors note that this approach \"looks nearly the same as the AI delegation group, but additionally uses AI to check their own understanding.\" In the figure, the first engineer follows AI Delegation, taking the code as written, and the second follows Conceptual Inquiry.",
    "Limits: one session of two short tasks, about an hour, with the quiz straight after; 52 people, and groups of two to seven; and, as the authors note, \"there was not the same incentive to learn the library as if it were required for their actual job.\" The figure's review question is constructed; the study measured a quiz. Other evidence points the other way: a field study of 5,172 customer support agents found \"evidence that AI assistance facilitates worker learning\" (Brynjolfsson, Li & Raymond, \"Generative AI at Work\")."
   ],
   "quoteHeading": null,

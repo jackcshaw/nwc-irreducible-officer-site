@@ -162,7 +162,12 @@
 		home0: [29.5, 29.9], ask: [30.0, 30.5], answer: [30.8, 31.3], redB: 32.45, homeB: [34.3, 34.8],
 		try12: [36.85, 37.5], check12: [37.6, 38.6], x: [38.7, 39.1], note: [39.2, 39.7], retract: [39.8, 40.1],
 		pulseB: [30.0, 30.4], xBright: [40.9, 41.3], toFix: [41.3, 41.6], red34: [42.4, 42.9],
+		// Beat 9's payoff starts as its caption does.
+		ringPulseB: [73.0, 73.4], learned: [73.4, 73.9], ansB: [74.2, 79.2],
 	} : T;
+	// Conceptual flow, beat 3: the first person takes the AI's code as written. No tracing:
+	// the dot pulses once and every line turns solid together.
+	const TAKE = [16.5, 17.0];
 	const FIX = {'1-4': [41.6, 42.1]};
 	const RED_T = (() => { let j = 0; return redB.map((l, i) => { if (CONCEPT && FIX[l.k]) return FIX[l.k]; const k = CONCEPT ? j++ : i; return [TB.redB + T.redStep * k + 0.15, TB.redB + T.redStep * (k + 1)]; }); })();
 	const RED34_T = TB.red34;
@@ -181,6 +186,15 @@
 		cards[id] = {g, box, bars};
 	}
 	const aiTag = mono(markLayer, 770, 300, L.aiMap, {fill: C.grey});
+	// Optional: names the heavy line on the map when the paper's "MAIN" tag first appears.
+	const mainTag = L.mainOnMap ? mono(markLayer, 860, 330, L.mainOnMap) : null;
+	if (mainTag) set(mainTag, {opacity: 0});
+	// Optional: why each fix line fixes the bug, beside the line, as it is drawn ({lines, x, y, at: [t0, t1]}).
+	const fixNotes = (L.fixNotes || []).map((f) => {
+		const g = el(markLayer, 'g', {opacity: 0});
+		f.lines.forEach((str, i) => serif(g, f.x, f.y + 17 * i, str, {fs: 14, style: 'italic', fill: C.red}));
+		return {g, at: f.at};
+	});
 
 	// The cross and the note on the connection that doesn't hold.
 	const cross = el(markLayer, 'g', {opacity: 0});
@@ -255,6 +269,12 @@
 	seq(rowLab[0], 24, 300, L.seqA);
 	text(rowLab[1], 24, 446, L.rowB, {fs: 13, weight: 600, fill: C.red});
 	seq(rowLab[1], 24, 466, L.seqB);
+	// Optional: how each sketch was made, under each row, once it is drawn (business: redrawn vs built).
+	const sketchNotes = (L.sketchNotes || []).map((n, i) => {
+		const node = serif(rowLab[i], 24, [322, 488][i], n.t, {fs: 14, style: 'italic', fill: ROLE[n.role] || C.ink});
+		set(node, {opacity: 0});
+		return node;
+	});
 
 	const sketches = [0, 1].map((row) => {
 		const g = el(facLayer, 'g');
@@ -366,7 +386,7 @@
 			const {segs, prev: afterRead} = readSegs(HOME_A, T.readA);
 			segs.push([T.returnA[0], T.returnA[1], afterRead, HOME_A, E.inOut]);
 			let prev = HOME_A;
-			linesA.forEach((l, i) => {
+			if (!CONCEPT) linesA.forEach((l, i) => {
 				const a = T.traceA + T.trace * i;
 				segs.push([a, a + 0.12, prev, l.s[0], E.inOut]);
 				segs.push([a + 0.12, a + T.trace, l.s[0], l.s[1]]);
@@ -492,7 +512,7 @@
 		const heavyA = prog(t, ...T.heavyA, E.inOut);
 		linesA.forEach((l, i) => {
 			const a = T.traceA + T.trace * i + 0.12;
-			const taken = prog(t, a, T.traceA + T.trace * (i + 1));
+			const taken = CONCEPT ? prog(t, ...TAKE) : prog(t, a, T.traceA + T.trace * (i + 1));
 			let w = 2.2;
 			if (l.k === '2-5') w = mix(2.2, 3.8, heavyA);
 			TAG_LINES.forEach((ks, pi) => { if (pi > 0 && ks.includes(l.k)) w += 1.4 * pulse(t, [T.parasA + T.para * pi + 0.3, T.parasA + T.para * pi + 0.7]); });
@@ -502,6 +522,8 @@
 			set(l.solid, {opacity: (taken > 0 ? 1 : 0) * outA, 'stroke-width': w});
 		});
 		set(aiTag, {opacity: (prog(t, ...T.tagA) * outA) + (CONCEPT ? 0 : prog(t, ...T.tagB) * cardsOut)});
+		if (mainTag) set(mainTag, {opacity: prog(t, ...T.heavyA) * outA});
+		fixNotes.forEach((f) => set(f.g, {opacity: prog(t, ...f.at) * cardsOut}));
 
 		// The second student's map.
 		const heavyB = prog(t, ...T.heavyB, E.inOut);
@@ -602,23 +624,24 @@
 				// While faculty point, the other lines stay navy and only thin, so nothing reads as AI grey.
 				set(l.node, {opacity: t >= a ? 1 : 0, 'stroke-width': main ? mix(1.6, 4, pointK) : mix(1.6, 1.1, pointK)});
 			});
-			const rp = row ? pulse(t, T.ringPulseB) : 0;
+			const rp = row ? pulse(t, TB.ringPulseB) : 0;
 			set(sk.ring, {opacity: pointK > 0 ? 1 : 0, r: 16 + 3 * rp, 'stroke-width': 1.5 + rp, 'stroke-dasharray': RING_LEN.toFixed(2), 'stroke-dashoffset': (RING_LEN * (1 - pointK)).toFixed(2)});
 		});
-		[T.ansA, T.ansB].forEach((span, i) => {
+		sketchNotes.forEach((n, i) => { const t0 = [T.sketchA, T.sketchB][i] + 1.5; set(n, {opacity: prog(t, t0, t0 + 0.4)}); });
+		[T.ansA, TB.ansB].forEach((span, i) => {
 			const p = panels[i];
 			const hidden = p.lines[0].n.getAttribute('visibility') === 'hidden';
 			set(p.g, {opacity: prog(t, span[0], span[0] + 0.25), display: hidden ? 'none' : 'inline'});
 			reveal(p.lines, t, span[0] + 0.15, span[1]);
 		});
 		if (sourceLine) set(sourceLine, {opacity: prog(t, T.check, T.check + 0.5)});
-		const lk = prog(t, ...T.learned, E.house);
+		const lk = prog(t, ...TB.learned, E.house);
 		set(learned, {opacity: lk, transform: `translate(0 ${mix(6, 0, lk).toFixed(2)})`, display: learnedLabel.getAttribute('visibility') === 'hidden' ? 'none' : 'inline'});
 
 		// Dots.
 		const pa = pathA(t);
 		const growA = spring(t, T.dotIn, {stiffness: 300, damping: 20});
-		set(dotA, {cx: pa.x, cy: pa.y, r: Math.max(0, 5 * growA + 2.5 * pulse(t, T.pulseA)), opacity: outA});
+		set(dotA, {cx: pa.x, cy: pa.y, r: Math.max(0, 5 * growA + 2.5 * (pulse(t, T.pulseA) + (CONCEPT ? pulse(t, TAKE) : 0))), opacity: outA});
 		set(labA, {opacity: prog(t, T.dotIn, T.dotIn + 0.4) * (1 - prog(t, ...T.labelAOut))});
 		const pb = pathB(t);
 		const growB = spring(t, T.dotB, {stiffness: 300, damping: 20});
@@ -698,16 +721,17 @@
 	}
 	{
 		const sec = section('rows', NW.rows);
-		const row = (who, parts) => {
+		const row = (who, parts, sketch) => {
 			const r = h('div', 'ps-n-row', sec);
 			h('span', 'ps-n-who', r, who);
 			const o = h('p', 'ps-n-order', r);
 			parts.forEach(({t: txt, role}) => h('span', role ? `is-${role}` : null, o, txt));
-			const sk = h('p', 'ps-n-sketch', r, NW.sketch);
+			const sk = h('p', 'ps-n-sketch', r, sketch);
 			return {r, sk};
 		};
-		N.rows.a = row(NW.rowA, NW.orderA);
-		N.rows.b = row(NW.rowB, NW.orderB);
+		// Optional: a sketch line per row (business: how each was made); otherwise one shared line.
+		N.rows.a = row(NW.rowA, NW.orderA, NW.sketchA || NW.sketch);
+		N.rows.b = row(NW.rowB, NW.orderB, NW.sketchB || NW.sketch);
 	}
 	{
 		const sec = section('q2', NW.q2Label);
@@ -741,7 +765,7 @@
 		});
 		N.mapA.chips.forEach((c, i) => {
 			fade(c, prog(t, ...T.sweepA));
-			c.classList.toggle('is-taken', t >= T.traceA + T.trace * (i + 1));
+			c.classList.toggle('is-taken', t >= (CONCEPT ? TAKE[1] : T.traceA + T.trace * (i + 1)));
 			c.classList.toggle('is-main', linesA[i].k === '2-5' && t >= T.heavyA[0]);
 		});
 		fade(N.mapA.main, prog(t, ...T.heavyA));
@@ -774,12 +798,12 @@
 		// shown in beat 7, step back in the final beat.
 		if (NW.hideSketchAtEnd) { const end = beatIndex(t) === BEATS.length - 1; N.rows.a.sk.hidden = end; N.rows.b.sk.hidden = end; }
 		fade(N.q2.sec, prog(t, ...T.q2));
-		const ka = prog(t, T.ansA[0] + 0.15, T.ansA[1]), kb = prog(t, T.ansB[0] + 0.15, T.ansB[1]);
+		const ka = prog(t, T.ansA[0] + 0.15, T.ansA[1]), kb = prog(t, TB.ansB[0] + 0.15, TB.ansB[1]);
 		N.q2.a.textContent = words(ANS[0], ka);
 		N.q2.b.textContent = words(ANS[1], kb);
 		N.q2.a.parentNode.hidden = ka <= 0;
-		N.q2.b.parentNode.hidden = kb <= 0 && !(NW.learnedInBox && t >= T.learned[0]);
-		fade(N.q2.learned, prog(t, ...T.learned));
+		N.q2.b.parentNode.hidden = kb <= 0 && !(NW.learnedInBox && t >= TB.learned[0]);
+		fade(N.q2.learned, prog(t, ...TB.learned));
 	}
 
 	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
