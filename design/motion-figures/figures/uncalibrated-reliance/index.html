@@ -73,9 +73,19 @@
 .ur-n-ev { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 4px; padding: 4px 0; border-bottom: 1px solid var(--navy-line); font: 400 15px/1.4 var(--sans); color: var(--ink); }
 .ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
 .ur-n-src { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); }
-/* Optional (business): the one-line source, under the controls on the stacked stage only. */
-.ur-source { display: none; }
-#uncalibrated-reliance.is-stacked .ur-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+/* Optional (business): the source line, the stacked stage's last line. */
+.ur-n-srcline { margin: 2px 0 0; font: italic 400 13px/1.3 var(--serif); color: var(--ink); }
+/* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the
+   144 px band the picture would letterbox under 11 px and give way to the stacked stage.
+   Below 717 px tall the band is 100 px with tighter padding and the check at 20 px, so the
+   picture keeps 11 px labels: 657 − 168 − 31 = 458 px of stage. Taller windows, and so the
+   frame-diff sizes (1440 × 900, 1280 × 720), don't change. */
+@media (min-width: 1200px) and (max-height: 716px) {
+	#uncalibrated-reliance.has-nameplate { --mf-chrome: 168px; --mf-plate: 31px; }
+	#uncalibrated-reliance .mf-caption { height: 100px; min-height: 0; padding-top: 10px; padding-bottom: 10px; overflow: hidden; }
+	#uncalibrated-reliance .mf-check-q, #uncalibrated-reliance .mf-follow.is-equal { font-size: 20px; }
+	#uncalibrated-reliance .mf-final-def { font-size: 16px; }
+}
 </style>
 </head>
 <body>
@@ -89,7 +99,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note" data-ed-section="page.editionNote">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="uncalibrated-reliance" aria-labelledby="ur-title">
 		<p class="sr-only" id="ur-title" data-ed="page.srTitle"></p>
@@ -106,7 +116,6 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:33</span>
 		</div>
-		<p class="ur-source" data-ur-source hidden></p>
 		<figcaption>
 			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>

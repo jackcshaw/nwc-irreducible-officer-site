@@ -136,6 +136,8 @@
 	};
 	const surveyC = callout(652, ed.callouts.survey.heading, ed.callouts.survey.lines);
 	const logC = callout(800, ed.callouts.log.heading, ed.callouts.log.lines);
+	// Optional (business): ed.reportsGiven says which documents go to the AI (default: all).
+	const GIVEN = ed.reportsGiven || REPORTS.map(() => true);
 	const copies = REPORTS.map(() => el(sceneOurs, 'rect', {width: 40, height: 24, rx: 2, fill: C.band, stroke: C.grey, 'stroke-opacity': 0.5, opacity: 0}));
 	const stackLabel = mono(sceneOurs, 448, 102, L.given, {anchor: 'end', fill: C.grey});
 
@@ -209,10 +211,12 @@
 	})();
 	// What the second student reads in the port reports, set large in the empty middle of
 	// their sheet before they correct anything. A working note: it lifts off at hand-in.
+	// Optional: an edition without labels.slot (business) draws no reading note.
+	const SL = L.slot || {label: '', lines: ['', '']};
 	const slot = el(sceneBase, 'g');
-	const slotLabel = mono(slot, COL.b + 16, 232, L.slot.label);
-	const slotL1 = serif(slot, COL.b + 16, 255, L.slot.lines[0], {fs: 16});
-	const slotL2 = serif(slot, COL.b + 16, 277, L.slot.lines[1], {fs: 16});
+	const slotLabel = mono(slot, COL.b + 16, 232, SL.label);
+	const slotL1 = serif(slot, COL.b + 16, 255, SL.lines[0], {fs: 16});
+	const slotL2 = serif(slot, COL.b + 16, 277, SL.lines[1], {fs: 16});
 
 	// Working marks: what each student did with each part, written by their dot.
 	const markEl = (col, key, str) => {
@@ -279,21 +283,29 @@
 		// Optional (business): signed results on rows around a zero line, for a study that
 		// reports changes rather than rates. A bar grows from zero toward its sign; a zero
 		// result is a short tick. Each value label sits just right of its bar or of zero.
-		const Z = {x: 360, k: 6, h: 18, ys: [214, 262, 296]};
-		el(panel, 'path', {d: `M${Z.x} ${Z.ys[0] - 8}V${Z.ys[2] + Z.h + 8}`, stroke: C.ink, 'stroke-opacity': 0.45, 'stroke-width': 1.2});
+		// An uncertain row (row.uncertain) is drawn light and dashed, with its note under the
+		// value. The bracket is optional.
+		const n = L.panel.rows.length;
+		const Z = {x: L.panel.zeroX || 360, k: 6, h: 18, ys: n === 2 ? [234, 286] : [214, 262, 296]};
+		el(panel, 'path', {d: `M${Z.x} ${Z.ys[0] - 8}V${Z.ys[n - 1] + Z.h + 8}`, stroke: C.ink, 'stroke-opacity': 0.45, 'stroke-width': 1.2});
 		bars = L.panel.rows.map((row, i) => {
 			const y = Z.ys[i], w = Math.abs(row.v) * Z.k;
 			text(panel, 128, y + 14, row.label, {fs: 16});
-			const r = el(panel, 'rect', {x: Z.x, y, height: Z.h, width: 0, fill: C.ink, 'fill-opacity': 0.85});
+			const r = el(panel, 'rect', {x: Z.x, y, height: Z.h, width: 0, fill: C.ink, 'fill-opacity': row.uncertain ? 0.22 : 0.85,
+				...(row.uncertain ? {stroke: C.ink, 'stroke-width': 1.4, 'stroke-dasharray': '5 3'} : {})});
 			const tick = row.v ? null : el(panel, 'rect', {x: Z.x - 2, y: y - 2, width: 4, height: Z.h + 4, fill: C.ink});
-			const t = text(panel, Z.x + (row.v > 0 ? w : 0) + 12, y + 14, row.value, {fs: 16, weight: 600});
+			const vx = Z.x + (row.v > 0 ? w : 0) + 12;
+			const t = text(panel, vx, y + 14, row.value, {fs: 16, weight: 600});
+			const note = row.note ? mono(panel, vx, y + 34, row.note, {weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)}) : null;
 			const draw = (k) => { set(r, {x: row.v < 0 ? Z.x - w * k : Z.x, width: w * k}); if (tick) set(tick, {opacity: k}); };
-			return {r, t, draw};
+			return {r, t, note, draw};
 		});
-		const bx = Math.round(Math.max(...bars.map((b) => b.t.getComputedTextLength() + Number(b.t.getAttribute('x'))))) + 16;
-		bracket = el(panel, 'path', {d: `M${bx} ${Z.ys[1]}H${bx + 10}V${Z.ys[2] + Z.h}H${bx}`, fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
 		bracketText = el(panel, 'g');
-		L.panel.bracket.forEach((s, i) => serif(bracketText, bx + 24, Z.ys[1] + 8 + 19 * i, s, {fs: 16, style: 'italic'}));
+		if (L.panel.bracket) {
+			const bx = Math.round(Math.max(...bars.map((b) => b.t.getComputedTextLength() + Number(b.t.getAttribute('x'))))) + 16;
+			bracket = el(panel, 'path', {d: `M${bx} ${Z.ys[1]}H${bx + 10}V${Z.ys[n - 1] + Z.h}H${bx}`, fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
+			L.panel.bracket.forEach((s, i) => serif(bracketText, bx + 24, Z.ys[1] + 8 + 19 * i, s, {fs: 16, style: 'italic'}));
+		} else bracket = el(panel, 'path', {d: ''});
 	} else {
 		text(panel, 128, 238, L.panel.without, {fs: 16});
 		text(panel, 128, 290, L.panel.with, {fs: 16});
@@ -309,11 +321,9 @@
 		L.panel.bracket.forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
 	}
 	text(panel, 128, 380, L.panel.source, {fs: MONO, family: FONT.mono, weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)});
-	// Optional (business): a one-line source under the final frame. On the stacked stage it
-	// sits just under the controls, outside the fixed-height player.
+	// Optional (business): a one-line source under the final frame. The stacked stage
+	// carries its own copy as its last line (narrow.source), inside the player.
 	const sourceLine = L.source ? text(sceneBase, 480, 522, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink, anchor: 'middle'}) : null;
-	const stackedSource = root.querySelector('[data-ur-source]');
-	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	// ---- measure (after fonts load) -------------------------------------------------------
 	const W = (node) => node.getComputedTextLength();
@@ -400,7 +410,7 @@
 		copies.forEach((c, i) => {
 			const k = prog(t, T.copies + 0.1 * i, T.copies + 0.1 * i + 0.5, E.inOut);
 			const from = {x: REPORTS[i].x + 48, y: 58}, to = {x: 456 + 4 * i, y: 84 + 4 * i};
-			set(c, {x: mix(from.x, to.x, k), y: mix(from.y, to.y, k), opacity: Math.min(1, k / 0.2)});
+			set(c, {x: mix(from.x, to.x, k), y: mix(from.y, to.y, k), opacity: GIVEN[i] ? Math.min(1, k / 0.2) : 0});
 		});
 		set(stackLabel, {opacity: prog(t, ...T.stackLabel)});
 
@@ -434,12 +444,12 @@
 			const ks = prog(t, ...strikeSpan), ki = prog(t, ...insSpan, E.inOut);
 			let x = secB2.x;
 			const [num, ins, tail] = segs;
-			set(num.t, {x}); set(num.band, {x: x - 2, width: num.w + 2});
-			set(strikeEl, {x1: x - 1, y1: y, x2: x - 1 + (num.w + 2) * ks, y2: y, opacity: ks > 0 ? 1 : 0});
+			set(num.t, {x}); set(num.band, {x: x - 2, width: num.w ? num.w + 2 : 0});
+			set(strikeEl, {x1: x - 1, y1: y, x2: x - 1 + (num.w + 2) * ks, y2: y, opacity: ks > 0 && num.w ? 1 : 0});
 			x += num.w;
 			set(ins.t, {x, opacity: ki});
 			x += ins.w * ki;
-			set(tail.t, {x}); set(tail.band, {x, width: tail.w + 2});
+			set(tail.t, {x}); set(tail.band, {x, width: tail.w ? tail.w + 2 : 0});
 		};
 		editLine(secB2.l1, T.strike20, T.ins15, secB2.s1, S.strike ? S.strike.y1 : 337);
 		editLine(secB2.l2, T.strike4, T.ins3, secB2.s2, S.strike ? S.strike.y2 : 355);
@@ -474,6 +484,7 @@
 			const span = i ? T.bars2 : T.bar1;
 			b.draw(prog(t, ...span, E.outCubic));
 			set(b.t, {opacity: prog(t, span[1] - 0.1, span[1] + 0.1)});
+			if (b.note) set(b.note, {opacity: prog(t, span[1] - 0.1, span[1] + 0.1)});
 		});
 		set(bracket, {opacity: prog(t, ...T.bracket)});
 		set(bracketText, {opacity: prog(t, ...T.bracketText)});
@@ -504,7 +515,8 @@
 		set(labA2, {opacity: prog(t, ...T.dotB) * (1 - prog(t, ...T.panels))});
 		set(key, {opacity: prog(t, ...T.facLabel)});
 		names.forEach((n) => set(n, {opacity: prog(t, ...T.panels)}));
-		dotLayer(dotB, pathB(t), prog(t, ...T.dotB, E.house), prog(t, ...T.bLabel), prog(t, ...T.pulseB));
+		// Optional (business, L.dot.keepB): the second dot's label stays until the names appear.
+		dotLayer(dotB, pathB(t), prog(t, ...T.dotB, E.house), prog(t, ...(L.dot.keepB ? T.panels : T.bLabel)), prog(t, ...T.pulseB));
 
 		renderNarrow(t);
 	};
@@ -594,12 +606,14 @@
 			return SPEECH[k].rows.map((r, ri) => h('p', 'ur-n-line', c, `${r.n} · ${NW.speech ? NW.speech[k][ri] : r.lines.join(' ')}`));
 		});
 		N.sayBox = [...row.children];
+		// Optional (business): the source line, the stage's last line, so it stays in the player.
+		N.src = NW.source ? h('p', 'ur-n-srcline', s, NW.source) : null;
 	}
 	{
 		const o = h('div', 'ur-n-evidence', narrow);
 		h('p', 'ur-n-label', o, NW.evidence.label);
 		N.ev = NW.evidence.rows.map(([a, b]) => { const r = h('p', 'ur-n-ev', o); h('span', null, r, a); h('b', null, r, b); return r; });
-		N.evq = h('p', 'ur-n-evq', o, NW.evidence.quality);
+		N.evq = NW.evidence.quality ? h('p', 'ur-n-evq', o, NW.evidence.quality) : null;
 		h('p', 'ur-n-src', o, NW.evidence.source);
 		N.evidence = o;
 	}
@@ -650,9 +664,10 @@
 		[N.a1.p, N.b1.p].forEach((n) => n.classList.toggle('is-pointed', onP1));
 		[N.a2.p, N.b2.p].forEach((n) => n.classList.toggle('is-pointed', onP2));
 		N.ev.forEach((r, i) => op(r, prog(t, ...(i ? T.bars2 : T.bar1))));
-		op(N.evq, prog(t, ...T.bracketText));
+		if (N.evq) op(N.evq, prog(t, ...(L.panel.bracket ? T.bracketText : T.panel)));
 		op(N.facLabel, prog(t, ...T.facLabel));
 		N.sayBox.forEach((b) => op(b, prog(t, ...T.panels)));
+		if (N.src) op(N.src, prog(t, ...T.source));
 		N.say.forEach((rows, ci) => rows.forEach((r, ri) => { const at = SPEECH[ci ? 'b' : 'a'].rows[ri].at; op(r, prog(t, at[0], at[1])); }));
 	}
 	// The stacked stage takes over whenever the smallest picture text would render

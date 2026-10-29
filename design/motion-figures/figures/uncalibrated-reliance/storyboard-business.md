@@ -1,169 +1,219 @@
 # Uncalibrated reliance: business edition storyboard
 
-Edition `business`, workplace cast (for `{check}` only; see section 3). It's built from `editions/business.json` on top of the core described in `storyboard.md`: the timeline, layout, motion, colour grammar and nameplate. This file lists only what differs from the PME edition. The words live in the data files, and if this file and the data disagree, the data is what ships.
+Edition `business`, round 2, revised after business figure cold read 1 (`tests/business-figure-read-1.md`) and lessons 7–12 in BUSINESS-BRIEF.md. It's built from `editions/business.json` on top of the core described in `storyboard.md`: the timeline, layout, motion, colour grammar and nameplate. This file lists only what differs from the PME edition. The words live in the data files, and if this file and the data disagree, the data is what ships.
 
 Open it with `index.html?edition=business`, or use the "See this with: Workplace" link on the page.
 
 ## 1. Source and evidence treatment
 
-*Illustration based on Otis, Clarke, Delecourt, Holtz & Koning (2026), "The Uneven Impact of Generative Artificial Intelligence on Entrepreneurial Performance: Evidence from a Field Experiment in Kenya," Management Science (online July 10, 2026), doi 10.1287/mnsc.2024.06909.* The scenario and sensitivity rules come from BUSINESS-EXAMPLES.md, section 4. Evidence follows option A, keeping the evidence beat, because for this figure the finding is the turn:
+*Illustration based on Otis, Clarke, Delecourt, Holtz & Koning (2026), "The Uneven Impact of Generative Artificial Intelligence on Entrepreneurial Performance: Evidence from a Field Experiment in Kenya," Management Science (online July 10, 2026), doi 10.1287/mnsc.2024.06909, and its working paper.* The scenario and sensitivity rules come from BUSINESS-EXAMPLES.md, section 4. Evidence follows option A, keeping the evidence beat, because for this figure the finding is the turn:
 
-- **Setup:** "Illustration based on Otis et al. (2026). The owners, their documents and the numbers in their plans are constructed."
-- **Under the final frame:** "Illustration based on Otis et al., Management Science (2026)." This line sits in the SVG, centred under the key, and fades in at 84.9–85.4 s, 1.0 s after the check. On the stacked phone stage it sits just under the controls, outside the fixed-height player.
-- **On the page:** a section after the check, "The study behind this example", in five paragraphs:
+- **Setup:** "Illustration based on Otis et al. (2026) and its working paper. The owners, their documents and every number in their plans are constructed."
+- **Under the final frame:** "Illustration based on Otis et al. (2026) and its working paper." It sits in the SVG under the key and fades in at 84.9–85.4 s, 1.0 s after the check. On the stacked phone stage it's the stage's last line, "Based on Otis et al. (2026) and its working paper.", inside the player. In round 1 it sat below the controls, where it was cut off.
+- **On the page:** "The study behind this example", in five paragraphs:
   1. the published abstract's findings, quoted word for word;
-  2. where the gap came from, again in the abstract's words;
+  2. where the gap came from, and what the study didn't measure;
   3. the limits;
-  4. the working paper's detail, including its exploratory reading, labelled as exploratory;
+  4. the revised working paper's detail, with its exploratory reading labelled as exploratory and the earlier version's different explanation;
   5. what in the figure is constructed.
 
-### The evidence beat: Otis, not BCG
+### The evidence beat: Otis, not BCG (unchanged from round 1)
 
-PME's beat 8 shows Dell'Acqua et al. (BCG). The business edition replaces that panel with Otis et al. These are the reasons:
+PME's beat 8 shows Dell'Acqua et al. (BCG); the business edition shows Otis et al. The reasons:
 
-1. **The scene and the study have to be the same study.** The setup says "Illustration based on Otis et al." If the panel then showed consultants, the reader would be asked to carry a result from a different setting into a Nairobi print shop, with nothing to bridge the gap. With Otis, the panel reports on the people the scene illustrates.
-2. **Otis's headline finding is the act the figure slows down.** Owners in the same trial, with the same assistant, split apart. In the abstract's words, the gap came "from the advice that entrepreneurs chose to implement," not from "the questions posed to the AI or the advice that it provided." The two owners in the figure get identical answers. The only difference between them is which answers they act on, and on what evidence. That's also what the check asks.
-3. **BCG keeps one home.** Figure 8 (appropriate reliance) is built on BCG, and its business edition is the consulting tasks. With Otis here, each study appears once across the eight business figures, which is what BUSINESS-EXAMPLES.md recommended.
+1. **The scene and the panel must come from the same study.** The setup cites Otis. A consulting panel after a Nairobi print shop would ask the reader to carry a result across settings with nothing to bridge the gap.
+2. **Otis's headline finding concerns the act the figure slows down.** The gap came "from the advice that entrepreneurs chose to implement," not from "the questions posed to the AI or the advice that it provided."
+3. **BCG keeps one home:** figure 8 (appropriate reliance).
 
-**What this costs, said plainly.** BCG measured the frontier itself: look-alike tasks where AI helped and where it hurt. Otis doesn't measure a task boundary. It measures who gained and who lost, and traces the gap to what owners acted on. So in this edition, beat 7's jagged frontier is the figure's reasoning and the essay's term, not a measured result. Beat 7 keeps the same definition sentence as PME and figure 8 ("A jagged frontier marks where an AI stops being reliable"). The page credits the term to Dell'Acqua et al. (2023) and links to the appropriate reliance figure, where BCG's numbers are shown.
+**The cost:** BCG measured the frontier itself and Otis doesn't. So beat 7's jagged frontier is the essay's term and the figure's reasoning, not a measured result. The page credits the term to Dell'Acqua et al. (2023) and links to the appropriate reliance figure.
 
-**Rejected: both panels.** The shared timeline has one 9.5 s evidence beat, and showing both studies would have meant BCG's second use and a core timing change.
+### Round 2: the panel is the study's result, not the two owners
 
-**The generic-versus-tailored detail stays off the picture.** The working paper's exploratory reading has low performers more often acting on "generic" advice (lowering prices, advertising) and high performers finding "tailored and specific changes" (for example, power during blackouts). The figure's two parts are built to echo it: a blackout battery that deserves acceptance, and a price cut that doesn't fit this shop. The reading appears only on the page, labelled as exploratory and as coming from the working paper. No panel line rests on it, so the panel needs no "WHAT THE EVIDENCE SUGGESTS" line.
+The cold read mapped "started weaker" onto the first owner and "started stronger" onto the second. That reads checking as the cause of the study's gap, and the study didn't measure checking. Beat 8 now:
 
-### Lesson 1 check: does the contrast endorse what the study found wrong?
+- **Caption:** "A real study gave owners the same AI. It didn't measure checking." "Real" sets the study apart from the invented owners, and the second sentence rules out the causal reading before any bar is drawn.
+- **Panel title, the key line:** "Results seem to hinge on which advice owners acted on". It arrives with the panel at 59.8–60.4 and stays until 68.9. That's 8.5 s on screen against the 4.8 s it needs (10 words ÷ 3 + 1.5). Round 1 put the key line in a bracket that came last and stayed up for 5.5 s.
+- **Rows:**
+  - "Started weaker" is a solid bar left of zero, labelled "nearly 10% worse".
+  - "Started stronger" is a light dashed bar right of zero, labelled "may have gained over 15%", with "LESS CERTAIN" under it. In the revised working paper, the weaker group's loss has p = 0.007 and the stronger group's gain has p = 0.07, which the paper calls "noisier" (p. 9).
+  - The zero line is centred in the panel (x 480), under the AI's column rather than between the owners' columns.
+- **Cut:** the "On average" row and the bracket. The average is on the page.
+- **Stacked view:** the label reads "A real study, not these owners", the stronger row ends "(less certain)", and the key line is in italic.
+- **Word count:** the caption and panel together come to 36 words (12 + 24). That compares with 46 in round 1 and 45 in PME.
 
-It doesn't. The first owner acts on the price cut, which is the kind of advice the working paper links (exploratorily) with worse results. The second owner keeps prices and competes on speed. The second owner's plan deliberately drops "advertise". BUSINESS-EXAMPLES.md had them "advertise same-day printing", but advertising is half of the study's "generic" advice, so the good plan avoids it: "Keep prices: outpace the new shop". No contrast had to be reversed, so the one allowed core change wasn't used.
+### Round 2: the wrong answer hinges on what the AI didn't have
+
+In round 1 the AI was given the sales book, so its 10% price cut looked careless. Now:
+
+- **Same access on both sides** (lesson 12). Both owners have the same four documents. Each shares only the two battery quotes and the new shop's flyer with the AI; the sales records stay with them. Beat 1 says so ("sharing everything but the sales records"), and only three grey copies slide into "GIVEN TO THE AI".
+- **The AI's answers are good on their inputs and equally confident.** Part 1, "Buy battery A: runs 6 hours, costs less", follows from the quotes. Part 2, "Win them back: cut prices 20%", is a fair answer to the flyer alone, and beat 7 tags it "FROM THEIR FLYER".
+- **The decisive fact is outside the AI's input.** The sales records say "Mostly same-day", with "(not given to AI)" set apart in the callout. The second owner's change, "same-day service", rests on them.
+- **The margin argument is gone.** The tester noted it was never stated, so I removed it rather than add words.
+- **Smaller changes:**
+  - The scenario's number is now 20%, so it no longer echoes the study's "nearly 10%".
+  - "Sales book" is now "sales records", for US readers.
+
+### Lesson checks
+
+- **Lesson 1 (don't endorse what the study found wrong).** The first owner acts on a price cut, the kind of advice the working paper's exploratory reading links with worse results. The second owner's change avoids both halves of that reading's "generic" advice, price cuts and advertising. No contrast had to be reversed.
+- **Lesson 8 (no straw man).** The first owner checks Part 1 carefully. Their reason, "Part 1 checked out, so I trusted the rest", is a reasonable person's reason.
+- **Lesson 9 (the separating question comes first).** Both owners answer the Part 1 question identically. Part 2 is the first difference.
+- **Lesson 10 (the good move is the owner's own).** "Same-day service" comes from the second owner's own records, which the AI never saw. It isn't an AI fallback.
+- **Lesson 11 (describe the sample accurately).** The page describes the participants as Kenyan entrepreneurs (median age 26, a year in business, a college degree). It also gives the median split and the exploratory label.
 
 ### Sensitivity, kept from BUSINESS-EXAMPLES.md
 
-- Neither owner is labelled weak, low or high, and both are competent. The first checks Part 1 exactly as carefully as the second does. The only difference in the figure is one check.
-- Nairobi appears only in the setup, matter-of-fact. Blackouts appear only as the task's first part.
-- "May have gained" keeps its hedge on the panel. The panel's row labels are "Started weaker" and "Started stronger". Those are the study's baseline groups, not the two owners.
+- Neither owner is labelled weak or strong, and both are competent. The panel's groups are the study's.
+- Nairobi appears only in the setup.
+- "May have gained" keeps its hedge, and the uncertain bar now looks uncertain.
 
 ## 2. Core changes (gated on data; PME frame-diffs to 0)
 
-The timeline is unchanged: the same `BEAT_AT`, the same `T`, and 90.6 s of figure time. Every change below draws only when its key is present, so PME draws exactly as before. PME was re-diffed after the changes: **0 of 209 frames differ** against the re-captured `regression/baseline`, which includes the edition switch.
+The timeline is unchanged: the same `BEAT_AT` and `T`, and 90.6 s of figure time. Each change below draws only when its key is present, so PME draws exactly as before. After all changes, PME re-diffed at **0 of 209 frames** against `regression/baseline`.
 
-1. **Signed results panel (`labels.panel.rows`).** Otis reports changes against a control group, not rates, and one of the changes is negative. Drawing it as PME's rightward rate bars would show a loss as if it were a gain. So when `rows` exists, the panel draws rows around a zero line (x 360, 6 units per percentage point):
-   - each bar grows from zero toward its sign;
-   - a zero result is a short tick;
-   - each value label sits just right of its bar or of the zero line;
-   - the bracket spans the two group rows, placed after the longest label.
+1. **`ed.reportsGiven`:** only the listed documents' copies slide to the AI. The default is all four.
+2. **Empty edit segments draw nothing:** no band and no strike. That lets business edit a single line: "~~cut prices 20%~~ same-day service".
+3. **No `labels.slot` means no reading note.** Business drops the large note in the second plan, which takes two events out of beat 6 (cold read item 5).
+4. **The panel's signed rows,** extending round 1:
+   - `zeroX` sets the zero line;
+   - two rows get their own spacing;
+   - `row.uncertain` draws a light dashed bar;
+   - `row.note` adds a mono note under the value;
+   - the bracket is optional; with no bracket, the stacked view's italic line appears with the panel.
+5. **`labels.dot.keepB`:** the second owner keeps the "Second owner" label until the names appear at the end (cold read item 7). In round 1 that dot was unlabelled from beat 5.
+6. **`narrow.source`** is now the stacked stage's last line, inside the player. The line under the controls is gone.
+7. **Laptop windows** (both editions; page CSS). At 1200 px wide or more and 716 px tall or less:
+   - the caption band is 100 px, with the check at 20 px;
+   - `--mf-chrome` is 168 px, as in AR.
 
-   The bar lengths come from the data: −9.5 for "nearly 10% worse" and +15 for "over 15%". The timings are PME's: the average's tick on `bar1` (60.5–61.1), both group bars on `bars2` (61.2–61.8), then the bracket and its text.
-2. **Source line under the final frame (`labels.source`, `narrow.source`)**, with a new optional timing, `T.source` (84.9–85.4). The stacked view's copy goes in `[data-ur-source]` under the controls.
-3. **Shorter stacked-stage wordings (`narrow.answers`, `narrow.speech`).** The phone stage can now take its own wording for the AI's answers and the spoken answers. With them, and with shorter document chips, the 390 × 844 player measures 822 px. The first build, with the desktop wordings, measured 931 px.
-4. **Stacked evidence rows** fade in generically: row 0 on `bar1`, and every later row on `bars2`. PME's two rows behave as before.
-5. **Page:**
-   - the edition switch and note (CONVENTIONS.md wording);
-   - a business-only study section (`data-ed-section="page.evidence"`, `.fig-ed-evidence` paragraphs), hidden for PME;
-   - PME's evidence section, now hidden when an edition has no `page.evidenceText`.
+   The picture now shows at 1366 × 657 (lesson 7) instead of giving way to the stacked view. The frame-diff sizes (1440 × 900, 1280 × 720) are taller than 716 px, so they're unaffected.
+8. **Page:**
+   - The PME/National War College note above the figure shows only when the edition has `page.editionNote`: PME keeps it, business drops it.
+   - The meta description is in business wording.
+   - The screen-reader title says "eleven beats" in both editions. It used to say twelve; it isn't visible.
 
-The nameplate is unchanged: "Uncalibrated reliance", "Failure mode 4 of 7", "Confident output is accepted without knowing whether the task fits the tool."
+**Kept from round 1:** the signed-results panel, the source line under the final frame, the shorter stacked wordings (`narrow.answers`, `narrow.speech`) and the generic stacked evidence rows. The nameplate is unchanged.
 
 ## 3. Role words
 
-The people here are two shop owners, and their reviewer is a mentor. The workplace cast says "analyst" and "the manager", which would misdescribe a two-person print shop and the study's entrepreneurs. So this edition writes "owner", "First owner", "Second owner" and "the mentor" as scenario words in `business.json`, and takes only `{check}` ("Reviewer's check") from the cast. The AI is "an AI assistant", the published abstract's own term ("AI business assistant"). That keeps it apart from the human mentor.
+The people are two shop owners and **a reviewer**, and "reviewer" is now the one name throughout:
+- The setup introduces the role: "Later a reviewer, say a lender or business adviser, sees only the plan and asks about each part."
+- Beat 9 says "A reviewer who sees only the plans…", and the label reads "THE REVIEWER SEES ONLY THE PLANS".
+- The check card is the cast's "Reviewer's check".
 
-If the edition needs to stay cast-switchable, there are two options. One is an edition-level cast override in `loadEdition` (a runtime change, not made). The other is to accept literal roles for scenarios whose people aren't employees. That's a question for Jack and the coordinator.
+Round 1's "mentor" is gone everywhere: Otis et al.'s earlier version called the AI itself an "AI business mentor". "Owner", "First owner" and "Second owner" are written into `business.json`; only `{check}` comes from the workplace cast.
 
-PME now uses the merged keys: `{reviewer_sees}` (label and stacked label), `{Another}` (beat 5), `{That_person}` (beat 6), `{reviewer_points}` (beat 9), plus `{each_person}`, `{the_first}` and `{person}` in beat 9's description. These fill to the identical classroom words, and the PME diff stays 0.
-
-One caution: PME's beat 9 reads "{reviewer_points} to each part in turn and ask…". The "ask" agrees with "Faculty" but not with "The manager points", so PME rendered with the workplace cast would be ungrammatical there. Fixing it would change PME's words, so I left it.
+PME uses the merged cast keys (`{reviewer_sees}`, `{Another}`, `{That_person}`, `{reviewer_points}`, `{each_person}`, `{the_first}`, `{person}`) and still diffs to 0. One known wrinkle: PME's beat 9 says "…point to each part in turn and ask…", which agrees only with a plural reviewer.
 
 ## 4. Words that differ, beat by beat
 
-The two owners' answers, their documents and the mentor replace the students, the port and faculty. Beat 2's caption is unchanged.
-
 | Beat | Caption (business) | Picture words that differ from PME |
 | --- | --- | --- |
-| 1 · The task | A shop owner gives an AI two questions and four documents. | Task: "Part 1 · Keep printing in blackouts", "Part 2 · Win back customers". Documents: BATTERY QUOTE, BATTERY QUOTE, RIVAL'S FLYER, SALES BOOK. Dot: "Owner". Stacked: "2 quotes", "Rival's flyer", "Sales book" |
-| 2 · Equal confidence | (same) | Part 1: "Buy battery A: / runs 6 hours, costs less". Part 2: "Cut prices 10%: / match the new shop". Stacked: "Battery A: 6 hours, cheaper" and "Cut prices 10%" |
+| 1 · The task | A shop owner asks an AI two questions, sharing everything but the sales records. | Task: "Part 1 · Keep printing in blackouts", "Part 2 · Win back customers". Documents: BATTERY QUOTE ×2, RIVAL'S FLYER, SALES RECORDS. Three copies (not the records) go to "GIVEN TO THE AI". Dot: "Owner" |
+| 2 · Equal confidence | (same) | "Buy battery A: / runs 6 hours, costs less"; "Win them back: / cut prices 20%". Stacked: "Battery A: 6 hours, cheaper", "Cut prices 20%" |
 | 3 · Checks Part 1 | The owner checks Part 1 against the two battery quotes. It's right. | "FIRST OWNER'S PLAN" |
-| 4 · Uses Part 2 | (same: "Part 2 looks just as sure, so they use it.") | — |
-| 5 · Checks each part | Another owner, with the same answers, checks each at its source. | "Second owner", "SECOND OWNER'S PLAN", "First owner" |
-| 6 · Checks Part 2 too | That owner checks Part 2 against the flyer and the sales book, and changes it. | Flyer callout: "THEIR PRICES / 10% below ours / *(the new shop)*". Sales book callout: "OUR SALES / Mostly same-day / *Margin: under 10%*". Note: "FLYER AND SALES BOOK / Flyer: new shop 10% cheaper. / Book: same-day jobs, thin margin." Edits: ~~Cut prices 10%~~ **Keep prices**: / ~~match~~ **outpace** the new shop. Stacked: ~~Cut prices 10%~~ **Keep prices; outpace them** |
-| 7 · The reason and the frontier | Part 2 depends on why customers come here. A jagged frontier marks where an AI stops being reliable. | "Mostly same-day" underlined. The AI's "match the new shop" is underlined and tagged "THEIR PRICES" (PME: "CAPACITY") |
-| 8 · The study | In a field experiment in Kenya, the same AI assistant split owners' results. | Panel: "Effect on revenue and profit". On average: tick at zero, "no clear change". Started weaker: bar left, "nearly 10% worse". Started stronger: bar right, "may have gained over 15%". Bracket: "The gap seems to / come from which / advice they acted on". Source: "OTIS ET AL. (2026) · KENYAN ENTREPRENEURS · MANAGEMENT SCIENCE" |
-| 9 · The mentor points | The mentor points to each part in turn and asks what justified relying on it. | "THE MENTOR SEES ONLY THE PLANS". Key: "AN OWNER'S OWN WORK". Answers: 1 "The battery quotes." (both); 2 "Part 1 checked out, so I trusted the rest." and "Our sales book. They come for speed." Names: "First owner", "Second owner". Stacked: 1 "The quotes." |
-| 10 · Reviewer's check | Reviewer's check: What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part? | **New:** "Illustration based on Otis et al., Management Science (2026)." under the picture at 84.9 s |
+| 4 · Uses Part 2 | (same) | — |
+| 5 · Checks each part | Another owner, with the same answers, checks each at its source. | "Second owner" (now kept to the end), "SECOND OWNER'S PLAN", "First owner" |
+| 6 · Checks Part 2 too | That owner checks Part 2 against the flyer and records, and changes it. | Flyer: "THEIR PRICES / 20% below ours". Records: "OUR SALES / Mostly same-day / *(not given to AI)*". No reading note. Edit: Win them back: ~~cut prices 20%~~ **same-day service** |
+| 7 · The frontier | Part 2 depends on why customers come here. A jagged frontier marks where an AI stops being reliable. | "Mostly same-day" underlined; the AI's "cut prices 20%" underlined and tagged "FROM THEIR FLYER" |
+| 8 · The study | A real study gave owners the same AI. It didn't measure checking. | Title: "Results seem to hinge on which advice owners acted on". Started weaker: solid bar, "nearly 10% worse". Started stronger: light dashed bar, "may have gained over 15%", "LESS CERTAIN". Source: "OTIS ET AL. (2026) · KENYAN ENTREPRENEURS · MANAGEMENT SCIENCE" |
+| 9 · The reviewer | A reviewer who sees only the plans points to each part and asks what justified relying on it. | "THE REVIEWER SEES ONLY THE PLANS". Key: "AN OWNER'S OWN WORK". Answers: "The battery quotes." (both); "Part 1 checked out, so I trusted the rest." / "Our sales records. They come for speed." |
+| 10 · Reviewer's check | Reviewer's check: What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part? | "Illustration based on Otis et al. (2026) and its working paper." at 84.9 s |
 
 ### The workplace check (for Jack)
 
 > **Reviewer's check:** What evidence justified relying on the AI here?
 > Ask part by part: was the evidence about that part?
 
-The check starts from the EDITIONS-PLAN draft ("What evidence justified relying on the AI here? Ask part by part.") and keeps PME's separating question at equal weight. "Ask part by part" on its own tells the reviewer what to do. "Was the evidence about that part?" is the question that separates the two owners: the first owner's evidence for Part 2 is about Part 1. Both lines are set at the same size in the final caption and on the page.
+The check keeps the EDITIONS-PLAN draft ("Ask part by part") and PME's separating question, at equal weight.
 
 ## 5. Pace
 
-Reading time is caption words ÷ 3. Every beat holds at least 1.5 s after the reading. Picture words are the new words drawn in the beat, counted the same way for both editions, with PME's count in brackets. Times are figure time; the player adds the 3.0 s name card.
+Reading time is words ÷ 3, plus a hold of at least 1.5 s after the reading. Picture words are the new words drawn in each beat, counted the same way for both editions. Times are figure time; the player adds the 3.0 s name card.
 
 | Beat | Time (s) | Caption words (PME) | Reading (s) | Reading + 1.5 (s) | 2× reading (s) | Picture words (PME) | Beat (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 0.0–8.6 | 11 (12) | 3.7 | 5.2 | 7.3 | 26 (29) | 8.6 |
-| 2 | 8.6–15.6 | 6 (6) | 2.0 | 3.5 | 4.0 | 23 (26) | 7.0 |
+| 1 | 0.0–8.6 | 14 (12) | 4.7 | 6.2 | 9.3 ✕ | 26 (29) | 8.6 |
+| 2 | 8.6–15.6 | 6 (6) | 2.0 | 3.5 | 4.0 | 22 (26) | 7.0 |
 | 3 | 15.6–23.1 | 12 (12) | 4.0 | 5.5 | 8.0 ✕ | 4 (4) | 7.5 |
 | 4 | 23.1–30.3 | 10 (10) | 3.3 | 4.8 | 6.7 | 3 (3) | 7.2 |
 | 5 | 30.3–37.6 | 11 (11) | 3.7 | 5.2 | 7.3 | 8 (8) | 7.3 |
-| 6 | 37.6–48.6 | 15 (12) | 5.0 | 6.5 | 10.0 | 35 (37) | 11.0 |
-| 7 | 48.6–58.4 | 18 (17) | 6.0 | 7.5 | 12.0 ✕ | 8 (7) | 9.8 |
-| 8 | 58.4–67.9 | 13 (16) | 4.3 | 5.8 | 8.7 | 33 (29) + source 8 (10) | 9.5 |
-| 9 | 67.9–83.9 | 15 (14) | 5.0 | 6.5 | 10.0 | 39 (38) | 16.0 |
-| 10 | 83.9–90.6 | 20 (20) | 6.7 | 8.2 (check, then rests) | — | 9 (0) | 6.7, then rests |
-| **Total** | | **131 (130)** | **43.7** | | | **188 (181)** | **90.6 figure, 93.6 player** |
+| 6 | 37.6–48.6 | 13 (12) | 4.3 | 5.8 | 8.7 | 17 (37) | 11.0 |
+| 7 | 48.6–58.4 | 18 (17) | 6.0 | 7.5 | 12.0 ✕ | 9 (7) | 9.8 |
+| 8 | 58.4–67.9 | 12 (16) | 4.0 | 5.5 | 8.0 | 24 (29) + source | 9.5 |
+| 9 | 67.9–83.9 | 18 (14) | 6.0 | 7.5 | 12.0 | 39 (38) | 16.0 |
+| 10 | 83.9–90.6 | 20 (20) | 6.7 | 8.2 (then rests) | — | 11 (0) | 6.7, then rests |
+| **Total** | | **134 (130)** | | | | **163 (181)** | **90.6 figure, 93.6 player** |
 
 Notes:
-- **Every beat meets reading + 1.5 s.** Twice the reading time isn't met in beats 3 and 7 (✕). PME has the same shortfall in both beats: beat 3 has the identical 12 words, and beat 7 has 17 words, so 11.3 s against 9.8. Business beat 7 is one word longer. "Why customers come here" is the reason the beat underlines, so I kept it.
-- **Beat 8:** the business caption is 3 words shorter, which pays for the panel's 4 extra words. The beat carries 46 words against PME's 45. The bracket (11 words) arrives at 62.5–62.9, and the panel holds until 68.9, so it gets its 3.7 s reading time plus 2.3 s.
-- **Beat 9:** the second owner's spoken answer was cut to 7 words, the same as PME's, so it is read and held 1.5 s before the check arrives at 83.9 (it's revealed 80.1–82.4). "For speed, not price" would have run 0.7 s into the check.
-- **Beat 10:** the source line appears 1.0 s after the check, in small italic ink at the bottom of the stage, so the check stays the last word. Its reading time (3 s) overlaps the check. This is FC's treatment.
+- **Every caption meets reading + 1.5 s.** Twice the reading time isn't met in beats 1, 3 and 7 (✕). PME misses beats 3 and 7 the same way. Beat 1 is two words over PME, because it now says that the sales records stay back.
+- **Beat 6** now carries 30 words in all, against PME's 49. Its events:
+  - the flyer opens (39.1);
+  - the records open (40.7);
+  - Part 2 slides in (43.2);
+  - one strike and one insertion (44.7–45.3);
+  - the check mark (45.5).
+
+  Round 1 also had two notes and a second edit.
+- **Beat 8** carries 36 words in all (46 in round 1, 45 in PME). The key line leads the panel and gets 8.5 s against the 4.8 s it needs.
+- **Beat 9:** the second owner's answer is 7 words, the same as PME's, so it's read and held before the check.
 
 ## 6. Verified figures (for the companion's source spine)
 
-**Published abstract** (Crossref record for doi 10.1287/mnsc.2024.06909, read October 28, 2026):
-- "by randomizing access to a GPT-4-powered AI business assistant";
+**Published abstract** (Crossref, doi 10.1287/mnsc.2024.06909, read October 28, 2026):
+- "randomizing access to a GPT-4-powered AI business assistant";
 - "unable to reject the null hypothesis of no average treatment effect on firm revenues and profits";
-- "the effect for entrepreneurs who were low performing at baseline is over 0.20-standard-deviations lower than for initial high performers";
+- "over 0.20-standard-deviations lower than for initial high performers";
 - "low performers did nearly 10% worse because of the AI assistant, whereas high performers may have benefited by over 15%";
 - "This differential impact does not appear to result from differences in the questions posed to the AI or the advice that it provided but rather, from the advice that entrepreneurs chose to implement."
 
-**Working paper**, HBS 24-042, February 27, 2024 version (eScholarship, qt40s41244, read the same day; printed page numbers):
-- "640 Kenyan small business entrepreneurs who were randomly assigned to receive access to a GPT-4-powered AI business assistant via WhatsApp" (p. 3);
-- "fast-food joints to poultry farms to cybershops" (p. 8), where the footnote says cybershops offer "computer access, internet browsing, printing, scanning, photocopying" (p. 8);
-- "we engage in exploratory text analysis" (p. 3);
-- "treated low performers were especially likely to implement 'generic' advice focused on lowering prices and investing in advertising … treated high performers worked with the AI to discover tailored and specific changes … from finding alternative ways to get power during blackouts to introducing a new in-demand car wash detergent" (p. 4).
+**Revised working paper** (eScholarship qt40s41244). The listing is dated 2024-02-27, but the PDF was created July 1, 2024 and modified July 17, 2024. Page numbers are the printed ones:
+- 640 entrepreneurs randomly assigned to "a GPT-4-powered AI business assistant via WhatsApp" (p. 3), with control participants given "business training guides" (pp. 7–8);
+- the median entrepreneur "26 years old, had been running their business for one year, and held a college degree" (p. 8);
+- businesses ranging "from fast-food joints to poultry farms to cybershops", with the cybershops footnote (p. 8);
+- the split at the median (p. 9);
+- low performers β = −0.09 s.d. (p = 0.007), high performers β = 0.19 s.d. (p = 0.07), "noisier given the long right tail" (p. 9);
+- "exploratory text analysis" (p. 3);
+- the "generic" versus "tailored and specific changes" passage, including blackouts and the car wash detergent (p. 4).
 
-**Not used:** this working paper's own effect sizes ("0.27 standard deviations", "8% decline"). The 2026 revision's "nearly 0.25" isn't used either. Only the published figures appear.
+**February 2024 version** (NBER conference copy f194654, read the same day):
+- its abstract calls the AI an "AI business mentor";
+- it explains the gap differently: "low performers did worse because they sought help on more challenging business tasks."
+
+**Not used:** the working papers' "0.27 standard deviations", "about 8% worse" and "just over 15%". The figure uses only the published figures.
 
 ## 7. What I couldn't verify
 
-- **The published full text.** It's paywalled, and I read only its abstract. The 640, WhatsApp and the generic-versus-tailored reading come from the 2024 working paper. BUSINESS-EXAMPLES.md cites the 2026 revision at different pages (pp. 3, 4, 9, 29), so the page numbers here are the 2024 version's.
-- **Whether the exploratory reading survives in the published paper.** The page says so: "The published abstract doesn't mention it."
-- The figure's numbers (battery A, 6 hours, 10%, the margin) are constructed and labelled that way in the setup and on the page.
+- **The published full text** is paywalled (HTTP 403), so I don't know whether the generic-versus-tailored reading survives in it. The page says that the published abstract doesn't mention it.
+- **The figure's constructed numbers** (battery A, 6 hours, 20%) are labelled as constructed in the setup and on the page.
 
-## 8. Final frame (business)
+## 8. Final frame and checks
 
-Player 93.6 s, with these elements in place:
-- **Top:** the task card, the four documents, and the flyer and sales-book callouts. "Mostly same-day" is underlined.
-- **Plans:** both owners' plans, with Part 2 outlined in each. The second plan reads ~~Cut prices 10%~~ Keep prices: ~~match~~ outpace the new shop.
-- **The AI's column:** receded, with the frontier between its answers and "THEIR PRICES" under Part 2.
-- **Under the plans:** both answer bubbles, the names, "THE MENTOR SEES ONLY THE PLANS" with the key, and the source line.
-- **Caption band:** "UNCALIBRATED RELIANCE · Confident output is accepted without knowing whether the task fits the tool." and "REVIEWER'S CHECK · What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part?"
+The final frame, at player time 93.6 s:
+- **Top:** the task card and the four documents. The flyer callout reads "THEIR PRICES / 20% below ours"; the records callout reads "OUR SALES / Mostly same-day / (not given to AI)", with "Mostly same-day" underlined.
+- **Plans:** both owners' plans, with Part 2 outlined. The second reads "Win them back: ~~cut prices 20%~~ same-day service".
+- **The AI's column:** receded, with the frontier between its answers and "FROM THEIR FLYER" under Part 2.
+- **Below:** both answer bubbles, the names, "THE REVIEWER SEES ONLY THE PLANS" with the key, and the source line.
+- **Caption band:** the name and definition, then "REVIEWER'S CHECK · What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part?"
 
-**Checks:** both editions at 1440 × 900, 1280 × 720, 390 × 844 and 768 × 1024. No console errors. Controls stay fixed through the run, with no horizontal scroll. The smallest SVG text is 14.1 px at 1440 and 11.1 px at 1280 × 720, and the stage is stacked below that. The phone player is 822 px at 390 × 844; the source line under the controls brings it to 869 px, outside the player, as in FC. Reduced and print views checked. Visitor copy passes the writing-as-jack mechanical check.
+**Checks:**
+- Both editions were checked at 1440 × 900, 1280 × 720, 1366 × 657, 390 × 844 and 768 × 1024.
+- **Laptop picture:** it shows at 1280 × 720 and 1366 × 657 in both editions. The last caption fits the 100 px band there (99 px).
+- **Stability:** the controls stay fixed through the run, with no horizontal scroll and no console errors.
+- **Phone:** the player is 841 px at 390 × 844, source line included (PME: 838).
+- **Other views:** reduced and print views checked.
+- **Voice:** the visitor copy passes the writing-as-jack mechanical check.
 
 **Stills:** `shots/business/`:
 - `beat-01.png` to `beat-10.png`;
-- `final.png`, `final-1440.png`, `final-390.png`, `player-390-final.png`;
-- `reduced-figure.png`, `page-1440-reduced.png`, `page-390-reduced.png`, `page-768-reduced.png`.
+- `final.png`, `final-1440.png`, `final-1366.png`, `final-390.png` and `player-390-final.png`;
+- `reduced-figure.png` and the page views.
 
 **Preview:** `shots/uncalibrated-reliance-business.mp4`, `.webm` and `.gif`.
 
 ## 9. Questions for Jack
 
-1. **The evidence beat uses Otis** (section 1). BCG stays in figure 8, and here the frontier becomes the figure's reasoning rather than a measured result.
-2. **The workplace check:** "What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part?"
-3. **Literal roles.** The edition uses owners and a mentor rather than the workplace cast's analysts and manager (section 3).
-4. **Phone wordings are shorter than desktop.** The answers read "Battery A: 6 hours, cheaper" and "Cut prices 10%", and the second owner's edit is one red phrase, "Keep prices; outpace them". This keeps the phone player within 844 px.
+1. **The evidence beat uses Otis,** with its result shown as the study's, apart from the two owners: "A real study gave owners the same AI. It didn't measure checking."
+2. **The workplace check:** the wording in section 4.
+3. **The held-back sales records.** The owner keeps them from the AI, so Part 2 depends on something it didn't have. Is that a fair stand-in for the study's owners, who asked questions over WhatsApp?
+4. **Phone wordings are shorter than desktop,** to keep the phone player within 844 px.
