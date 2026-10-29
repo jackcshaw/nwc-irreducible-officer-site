@@ -8,9 +8,11 @@
    Whenever any picture label would render under 11 px (the runtime's letterboxed
    scale), the SVG gives way to a stacked text stage driven by the same clock. That
    stage has a fixed layout: sections are placed from the start and only fade in,
-   so the caption and controls never move. Every attribute is a pure function of t. */
+   so the caption and controls never move. Every attribute is a pure function of t.
+   Every visible word comes from editions/<id>.json (default pme) with role words from
+   ../../casts.json, loaded by MotionFigures.loadEdition; see CONVENTIONS.md, Editions. */
 (() => {
-	const {mount, E, mix, prog, el, set, pathAt, legibility, mixColor, FONT} = MotionFigures;
+	const {mount, E, mix, prog, el, set, pathAt, legibility, mixColor, FONT, loadEdition, fillPage, rich} = MotionFigures;
 	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};
 	const VW = 960, VH = 540, MONO = 13;
 
@@ -47,19 +49,43 @@
 	const COL = {a: 24, ai: 338, b: 652}, COLW = 284;
 	const ROW = {p1: 140, p2: 300}, ROWH = 68;
 	const LINE = {p1: [182, 200], p2: [342, 360]};
-	const REPORTS = [{x: 338, label: 'AID REPORT'}, {x: 486, label: 'AID REPORT'}, {x: 652, label: 'PORT SURVEY'}, {x: 800, label: 'HARBOR LOG'}];
+	const REPORTS = [{x: 338}, {x: 486}, {x: 652}, {x: 800}];
 	const RY = 20, RH = 36, RW = 136;
 	const HOME = {a: {x: 36, y: 456}, b: {x: 664, y: 456}};
 	const READ = REPORTS.map((r) => ({x: r.x - 7, y: 38}));
-	const ANS = {p1: ['24 ships a day:', '480 tons at 20 each'], p2: ['20 ships a day:', '4 docks at 5 each']};
-	const Q = (s) => '“' + s + '”';
-	const SPEECH = {
-		a: {x: 52, rows: [{n: '1', lines: [Q('The aid reports.')], at: T.a1}, {n: '2', lines: ['“Part 1 checked out, so I', 'trusted the rest.”'], at: T.a2}]},
-		b: {x: 680, rows: [{n: '1', lines: [Q('The aid reports.')], at: T.b1}, {n: '2', lines: ['“The harbor log.', 'One dock is closed.”'], at: T.b2}]},
-	};
 	const FRONTIER = [[330, 252], [344, 243], [356, 259], [371, 246], [380, 262], [398, 240], [414, 266], [432, 249], [446, 256], [460, 238], [475, 268], [494, 250], [508, 245], [521, 261], [538, 253], [552, 239], [566, 264], [584, 248], [598, 257], [612, 242], [630, 253]];
 
 	const root = document.querySelector('#uncalibrated-reliance');
+	// Every face the picture uses is loaded before anything is measured. The page copy now
+	// arrives with the edition, so it no longer triggers these loads early.
+	const FACES = ['500 13px "IBM Plex Mono"', '600 13px "IBM Plex Mono"', '400 16px "Source Sans 3"', '600 16px "Source Sans 3"',
+		'400 16px "Source Serif 4"', '600 16px "Source Serif 4"', 'italic 400 16px "Source Serif 4"'];
+	Promise.all([loadEdition(root), document.fonts.ready, ...FACES.map((f) => document.fonts.load(f))])
+		.then(([ed]) => { fillPage(document, ed); fillLinked(ed); build(ed); });
+
+	// Page copy with inline links (the essay's citation, the study): an array of segments,
+	// each a string (escaped, *words* in italics) or {text, href}.
+	function fillLinked(ed) {
+		document.querySelectorAll('[data-ur-linked]').forEach((n) => {
+			const segs = n.dataset.urLinked.split('.').reduce((o, k) => (o == null ? o : o[k]), ed) || [];
+			n.textContent = '';
+			segs.forEach((sg) => {
+				if (typeof sg === 'string') { n.insertAdjacentHTML('beforeend', rich(sg)); return; }
+				const a = document.createElement('a');
+				a.href = sg.href;
+				a.textContent = sg.text;
+				n.append(a);
+			});
+		});
+	}
+
+	function build(ed) {
+	const L = ed.labels, NW = ed.narrow;
+	const ANS = ed.answers;
+	const SPEECH = {
+		a: {x: 52, rows: ed.speech.a.map((r, i) => ({...r, at: i ? T.a2 : T.a1}))},
+		b: {x: 680, rows: ed.speech.b.map((r, i) => ({...r, at: i ? T.b2 : T.b1}))},
+	};
 	const svg = root.querySelector('svg');
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: VW, height: VH, fill: C.paper});
@@ -85,15 +111,15 @@
 	// ---- task card ----------------------------------------------------------
 	const card = el(sceneBase, 'g');
 	el(card, 'rect', {x: 24, y: 16, width: 284, height: 84, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-	mono(card, 40, 37, 'EXAMPLE TASK');
-	const taskP1 = serif(card, 40, 61, 'Part 1 · Ships needed a day', {fs: 16});
-	const taskP2 = serif(card, 40, 81, 'Part 2 · Ships the port takes a day', {fs: 16});
+	mono(card, 40, 37, ed.task.label);
+	const taskP1 = serif(card, 40, 61, ed.task.lines[0], {fs: 16});
+	const taskP2 = serif(card, 40, 81, ed.task.lines[1], {fs: 16});
 
 	// ---- reports and callouts ------------------------------------------------
-	const reports = REPORTS.map((r) => {
+	const reports = REPORTS.map((r, i) => {
 		const g = el(sceneOurs, 'g');
 		const rect = el(g, 'rect', {x: r.x, y: RY, width: RW, height: RH, rx: 3, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-		mono(g, r.x + RW / 2, 43, r.label, {anchor: 'middle'});
+		mono(g, r.x + RW / 2, 43, ed.reports[i], {anchor: 'middle'});
 		const bars = [el(g, 'rect', {x: r.x + 22, y: 52, width: 92, height: 3, fill: C.ink, 'fill-opacity': 0.7}), el(g, 'rect', {x: r.x + 22, y: 60, width: 64, height: 3, fill: C.ink, 'fill-opacity': 0.7})];
 		return {g, rect, bars};
 	});
@@ -107,10 +133,10 @@
 		const ts = lines.map(([s, style], i) => serif(g, x + 8, 89 + 15 * i, s, style === 'off' ? {fs: 13, style: 'italic', fill: muted} : {fs: 13}));
 		return {g, ts};
 	};
-	const surveyC = callout(652, 'CAPACITY', [['4 docks, 5 each'], ['(survey, last year)', 'off']]);
-	const logC = callout(800, 'OPEN TODAY', [['Docks 1, 3, 4'], ['✕ Dock 2: closed', 'off']]);
+	const surveyC = callout(652, ed.callouts.survey.heading, ed.callouts.survey.lines);
+	const logC = callout(800, ed.callouts.log.heading, ed.callouts.log.lines);
 	const copies = REPORTS.map(() => el(sceneOurs, 'rect', {width: 40, height: 24, rx: 2, fill: C.band, stroke: C.grey, 'stroke-opacity': 0.5, opacity: 0}));
-	const stackLabel = mono(sceneOurs, 448, 102, 'GIVEN TO THE AI', {anchor: 'end', fill: C.grey});
+	const stackLabel = mono(sceneOurs, 448, 102, L.given, {anchor: 'end', fill: C.grey});
 
 	// ---- a line of the AI's words on its grey band ---------------------------------
 	const bandLine = (parent, x, y, str, withClip) => {
@@ -122,15 +148,15 @@
 	};
 
 	// ---- the AI's answers ----------------------------------------------------------
-	const aiHead = mono(sceneOurs, COL.ai, 129, "AI'S ANSWERS", {fill: C.grey});
+	const aiHead = mono(sceneOurs, COL.ai, 129, L.aiHead, {fill: C.grey});
 	const aiCard = (key) => {
 		const y = ROW[key];
 		const g = el(sceneOurs, 'g');
 		const rect = el(g, 'rect', {x: COL.ai, y, width: COLW, height: ROWH, rx: 3, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-		mono(g, COL.ai + 14, y + 19, key === 'p1' ? 'PART 1' : 'PART 2', {fill: C.grey});
+		mono(g, COL.ai + 14, y + 19, L.parts[key === 'p1' ? 0 : 1], {fill: C.grey});
 		const pill = el(g, 'g');
 		el(pill, 'rect', {x: COL.ai + COLW - 78, y: y + 6, width: 66, height: 19, rx: 9.5, fill: C.grey});
-		mono(pill, COL.ai + COLW - 45, y + 20, 'READY', {anchor: 'middle', fill: C.bright, ls: 1});
+		mono(pill, COL.ai + COLW - 45, y + 20, L.ready, {anchor: 'middle', fill: C.bright, ls: 1});
 		const lines = ANS[key].map((s, i) => bandLine(g, COL.ai + 14, LINE[key][i], s, true));
 		return {g, rect, pill, lines, y};
 	};
@@ -138,13 +164,13 @@
 
 	// Beat 7: the AI worked from capacity; the real number depends on what's open today.
 	const capLine = el(sceneOurs, 'line', {stroke: C.ink, 'stroke-width': 1.6});
-	const capTag = mono(sceneOurs, 0, 360, 'CAPACITY');
+	const capTag = mono(sceneOurs, 0, 360, L.capacity);
 	const openLine = el(sceneSrc, 'line', {stroke: C.ink, 'stroke-width': 1.6});
 
 	// ---- the frontier ------------------------------------------------------------------
 	const frontier = el(sceneOurs, 'path', {d: 'M' + FRONTIER.map((p) => p.join(' ')).join('L'), fill: 'none', stroke: C.ink, 'stroke-width': 1.8, 'stroke-linejoin': 'round'});
-	const fIn = mono(sceneOurs, 480, 228, 'INSIDE THE FRONTIER', {anchor: 'middle'});
-	const fOut = mono(sceneOurs, 480, 290, 'OUTSIDE THE FRONTIER', {anchor: 'middle'});
+	const fIn = mono(sceneOurs, 480, 228, L.inside, {anchor: 'middle'});
+	const fOut = mono(sceneOurs, 480, 290, L.outside, {anchor: 'middle'});
 	let fLen = 0;
 
 	// ---- briefs ----------------------------------------------------------------------------
@@ -156,8 +182,8 @@
 		mono(g, x, 129, label);
 		return g;
 	};
-	const sheetA = sheet('a', "FIRST STUDENT'S BRIEF");
-	const sheetB = sheet('b', "SECOND STUDENT'S BRIEF");
+	const sheetA = sheet('a', L.briefA);
+	const sheetB = sheet('b', L.briefB);
 	const section = (col, key) => {
 		const g = el(sceneBase, 'g');
 		const lines = ANS[key].map((s, i) => bandLine(g, COL[col] + 16, LINE[key][i], s, false));
@@ -174,8 +200,8 @@
 		});
 		return {
 			g, x: COL.b + 16,
-			l1: mk(LINE.p2[0], [['20', 'ai'], [' 15', 'red'], [' ships a day:', 'ai']]),
-			l2: mk(LINE.p2[1], [['4', 'ai'], [' 3 open', 'red'], [' docks at 5 each', 'ai']]),
+			l1: mk(LINE.p2[0], ANS.corrected.l1),
+			l2: mk(LINE.p2[1], ANS.corrected.l2),
 			s1: el(g, 'line', {stroke: C.red, 'stroke-width': 2}),
 			s2: el(g, 'line', {stroke: C.red, 'stroke-width': 2}),
 		};
@@ -183,9 +209,9 @@
 	// What the second student reads in the port reports, set large in the empty middle of
 	// their sheet before they correct anything. A working note: it lifts off at hand-in.
 	const slot = el(sceneBase, 'g');
-	const slotLabel = mono(slot, COL.b + 16, 232, 'PORT REPORTS');
-	const slotL1 = serif(slot, COL.b + 16, 255, 'Survey: 4 docks, 5 ships each.', {fs: 16});
-	const slotL2 = serif(slot, COL.b + 16, 277, 'Log: dock 2 closed for repairs.', {fs: 16});
+	const slotLabel = mono(slot, COL.b + 16, 232, L.slot.label);
+	const slotL1 = serif(slot, COL.b + 16, 255, L.slot.lines[0], {fs: 16});
+	const slotL2 = serif(slot, COL.b + 16, 277, L.slot.lines[1], {fs: 16});
 
 	// Working marks: what each student did with each part, written by their dot.
 	const markEl = (col, key, str) => {
@@ -195,20 +221,20 @@
 		return {g: c.g, rect: c.rect, t, right, y, w: 0};
 	};
 	const marks = {
-		a1: markEl('a', 'p1', '✓ CHECKED'), a2: markEl('a', 'p2', 'USED AS IS'),
-		b1: markEl('b', 'p1', '✓ CHECKED'), b2: markEl('b', 'p2', '✓ CHECKED'),
+		a1: markEl('a', 'p1', L.marks.checked), a2: markEl('a', 'p2', L.marks.used),
+		b1: markEl('b', 'p1', L.marks.checked), b2: markEl('b', 'p2', L.marks.checked),
 	};
 
 	// ---- faculty -----------------------------------------------------------------------------
-	const facLabel = mono(sceneBase, 480, 412, 'FACULTY SEE ONLY THE BRIEFS', {anchor: 'middle'});
+	const facLabel = mono(sceneBase, 480, 412, L.faculty, {anchor: 'middle'});
 	// The final frame's key: the grey band is the AI's words; red is a student's own work.
 	const key = el(sceneBase, 'g');
 	el(key, 'rect', {x: 372, y: 437, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
-	mono(key, 398, 448, 'WRITTEN BY AI', {fill: C.grey});
+	mono(key, 398, 448, L.key.ai, {fill: C.grey});
 	el(key, 'circle', {cx: 381, cy: 466, r: 5, fill: C.red});
-	mono(key, 398, 470, "A STUDENT'S OWN WORK", {fill: C.red});
+	mono(key, 398, 470, L.key.own, {fill: C.red});
 	// Each person named once in red in the final frame, under what they say.
-	const names = [text(sceneBase, 52, 512, 'First student', {fs: 13, weight: 600, fill: C.red}), text(sceneBase, 680, 512, 'Second student', {fs: 13, weight: 600, fill: C.red})];
+	const names = [text(sceneBase, 52, 512, L.names.first, {fs: 13, weight: 600, fill: C.red}), text(sceneBase, 680, 512, L.names.second, {fs: 13, weight: 600, fill: C.red})];
 	const outlines = ['a', 'b'].map((c) => el(sceneBase, 'rect', {x: COL[c] + 6, width: COLW - 12, height: 76, rx: 6, fill: 'none', stroke: C.ink, 'stroke-width': 1.5}));
 	const speech = (key) => {
 		const s = SPEECH[key], x = s.x, w = 256, y0 = 384, y1 = 490, r = 8;
@@ -237,28 +263,28 @@
 		const lab = text(g, home.x + 12, home.y + 4, label, {fs: 13, weight: 600, fill: C.red});
 		return {g, ring, c, lab};
 	};
-	const dotA = dot(HOME.a, 'Student');
-	const labA2 = text(sceneBase, HOME.a.x + 12, HOME.a.y + 4, 'First student', {fs: 13, weight: 600, fill: C.red});
-	const dotB = dot(HOME.b, 'Second student');
+	const dotA = dot(HOME.a, L.dot.a);
+	const labA2 = text(sceneBase, HOME.a.x + 12, HOME.a.y + 4, L.dot.a2, {fs: 13, weight: 600, fill: C.red});
+	const dotB = dot(HOME.b, L.dot.b);
 	let pathA = () => HOME.a, pathB = () => HOME.b;
 
 	// ---- the evidence panel (above the dimmed scene) ---------------------------------------
 	const panel = el(layer, 'g');
 	el(panel, 'rect', {x: 104, y: 145, width: 760, height: 260, fill: C.ink, 'fill-opacity': 0.07});
 	el(panel, 'rect', {x: 100, y: 140, width: 760, height: 260, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
-	text(panel, 128, 182, 'Right answers on a task outside the jagged frontier', {fs: 18, weight: 600});
-	text(panel, 128, 238, 'Without AI', {fs: 16});
-	text(panel, 128, 290, 'With AI', {fs: 16});
-	mono(panel, 128, 309, 'TWO GROUPS', {weight: 500});
+	text(panel, 128, 182, L.panel.title, {fs: 18, weight: 600});
+	text(panel, 128, 238, L.panel.without, {fs: 16});
+	text(panel, 128, 290, L.panel.with, {fs: 16});
+	mono(panel, 128, 309, L.panel.groups, {weight: 500});
 	const BAR = {x: 272, k: 4, h: 18};
-	const bars = [{y: 224, v: 84.5, label: 'about 84.5%'}, {y: 274, v: 60, label: '60%'}, {y: 298, v: 70, label: '70%'}].map((b) => ({
+	const bars = [{y: 224, v: 84.5}, {y: 274, v: 60}, {y: 298, v: 70}].map((b, i) => ({...b, label: L.panel.bars[i]})).map((b) => ({
 		...b, r: el(panel, 'rect', {x: BAR.x, y: b.y, height: BAR.h, fill: C.ink, 'fill-opacity': 0.85}),
 		t: text(panel, BAR.x + b.v * BAR.k + 10, b.y + 14, b.label, {fs: 16, weight: 600}),
 	}));
 	const bracket = el(panel, 'path', {d: 'M610 274H620V316H610', fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
 	const bracketText = el(panel, 'g');
-	['Rated higher in quality', 'than without AI,', 'regardless of correctness'].forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
-	text(panel, 128, 380, "DELL'ACQUA ET AL. (2023) · BCG CONSULTANTS · HBS WORKING PAPER 24-013", {fs: MONO, family: FONT.mono, weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)});
+	L.panel.bracket.forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
+	text(panel, 128, 380, L.panel.source, {fs: MONO, family: FONT.mono, weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)});
 
 	// ---- measure (after fonts load) -------------------------------------------------------
 	const W = (node) => node.getComputedTextLength();
@@ -465,74 +491,72 @@
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const p = h('p', 'ur-n-task', s);
-		h('span', 'ur-n-label', p, 'Example task ');
-		N.p1 = h('span', null, p, 'Part 1 · Ships needed a day. ');
-		N.p2 = h('span', null, p, 'Part 2 · Ships the port takes a day.');
+		h('span', 'ur-n-label', p, NW.taskLabel);
+		N.p1 = h('span', null, p, NW.taskLines[0]);
+		N.p2 = h('span', null, p, NW.taskLines[1]);
 		N.task = s;
-		N.who = h('span', 'ur-n-who', p, 'Student');
+		N.who = h('span', 'ur-n-who', p, NW.who);
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const p = h('p', 'ur-n-reports', s);
-		N.rep = ['2 aid reports', 'Port survey', 'Harbor log'].map((l) => h('span', 'ur-n-chip', p, l));
+		N.rep = NW.reports.map((l) => h('span', 'ur-n-chip', p, l));
 		const calls = N.calls = h('div', 'ur-n-calls', s);
 		N.survey = h('p', 'ur-n-call', calls);
-		h('b', 'ur-n-head', N.survey, 'Survey (last year) · capacity: ');
-		N.survey.append('4 docks, 5 each.');
+		h('b', 'ur-n-head', N.survey, NW.survey.head);
+		N.survey.append(NW.survey.text);
 		N.log = h('p', 'ur-n-call', calls);
-		h('b', 'ur-n-head', N.log, 'Harbor log · open today: ');
-		N.logLine = h('span', null, N.log, 'docks 1, 3, 4.');
-		N.closed = h('p', 'ur-n-call ur-n-off', calls, '✕ Dock 2: closed for repairs.');
+		h('b', 'ur-n-head', N.log, NW.log.head);
+		N.logLine = h('span', null, N.log, NW.log.text);
+		N.closed = h('p', 'ur-n-call ur-n-off', calls, NW.closed);
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const head = h('p', 'ur-n-label ur-n-grey ur-n-head2', s);
-		N.aiHead = h('span', null, head, "AI's answers");
-		N.given = h('span', null, head, 'Given all four reports');
+		N.aiHead = h('span', null, head, NW.aiHead);
+		N.given = h('span', null, head, NW.given);
 		const item = (key, txt) => {
 			const r = h('div', 'ur-n-ai', s);
 			h('span', 'ur-n-part', r, key);
 			const p = h('span', 'ur-n-ans', r);
 			band(p, txt);
-			const ready = h('span', 'ur-n-ready', r, 'Ready');
+			const ready = h('span', 'ur-n-ready', r, NW.ready);
 			return {r, ready, p};
 		};
-		N.ai1 = item('1', '24 ships a day: 480 tons at 20 each');
+		N.ai1 = item(NW.parts[0], ANS.p1.join(' '));
 		N.front = h('div', 'ur-n-front', s);
 		const fl = h('div', 'ur-n-flabels', N.front);
-		h('span', null, fl, 'Inside the frontier ↑');
-		h('span', null, fl, 'Outside the frontier ↓');
+		h('span', null, fl, NW.inside);
+		h('span', null, fl, NW.outside);
 		const zig = el(N.front, 'svg', {viewBox: '0 0 200 10', preserveAspectRatio: 'none', 'aria-hidden': 'true'});
 		el(zig, 'polyline', {points: '0,5 9,1 16,9 27,3 33,8 45,1 55,9 66,4 74,7 83,1 93,9 105,4 113,2 121,8 132,5 141,1 150,9 161,3 170,7 180,2 192,8 200,5', fill: 'none', stroke: C.ink, 'stroke-width': 1.4, 'vector-effect': 'non-scaling-stroke'});
-		N.ai2 = item('2', '20 ships a day: 4 docks at 5 each');
-		N.cap = h('span', 'ur-n-tag', N.ai2.p, 'Capacity');
+		N.ai2 = item(NW.parts[1], ANS.p2.join(' '));
+		N.cap = h('span', 'ur-n-tag', N.ai2.p, NW.capacity);
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
 		const row = h('div', 'ur-n-pair', s);
 		const col = (title) => { const c = h('div', 'ur-n-col', row); h('p', 'ur-n-name', c, title); return c; };
 		const part = (c, txt, mark) => { const p = h('p', 'ur-n-brief', c); band(p, txt); const m = h('span', 'ur-n-mark', p, mark); return {p, m}; };
-		N.colA = col('First student'); N.colB = col('Second student');
-		N.a1 = part(N.colA, '24 ships a day: 480 tons at 20 each', '✓ Checked');
-		N.a2 = part(N.colA, '20 ships a day: 4 docks at 5 each', 'Used as is');
-		N.b1 = part(N.colB, '24 ships a day: 480 tons at 20 each', '✓ Checked');
+		N.colA = col(NW.first); N.colB = col(NW.second);
+		N.a1 = part(N.colA, NW.briefs.p1, NW.marks.checked);
+		N.a2 = part(N.colA, NW.briefs.p2, NW.marks.used);
+		N.b1 = part(N.colB, NW.briefs.p1, NW.marks.checked);
 		// The original and the corrected text share one cell, so swapping them never changes the height.
 		const p = h('p', 'ur-n-brief', N.colB);
 		const stack = h('span', 'ur-n-stack', p);
 		N.bOrig = h('span', null, stack);
-		band(N.bOrig, '20 ships a day: 4 docks at 5 each');
+		band(N.bOrig, NW.briefs.p2);
 		N.bEdit = h('span', null, stack);
-		band(N.bEdit, '20').classList.add('is-struck');
-		h('span', 'ur-n-ins', N.bEdit, ' 15');
-		band(N.bEdit, ' ships a day: ');
-		band(N.bEdit, '4').classList.add('is-struck');
-		h('span', 'ur-n-ins', N.bEdit, ' 3 open');
-		band(N.bEdit, ' docks at 5 each');
-		N.b2 = {p, m: h('span', 'ur-n-mark', p, '✓ Checked')};
+		NW.corrected.forEach(([str, kind]) => {
+			if (kind === 'ins') h('span', 'ur-n-ins', N.bEdit, str);
+			else { const b = band(N.bEdit, str); if (kind === 'struck') b.classList.add('is-struck'); }
+		});
+		N.b2 = {p, m: h('span', 'ur-n-mark', p, NW.marks.checked)};
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
-		N.facLabel = h('p', 'ur-n-label', s, 'Faculty see only the briefs');
+		N.facLabel = h('p', 'ur-n-label', s, NW.faculty);
 		const row = h('div', 'ur-n-pair', s);
 		N.say = ['a', 'b'].map((k) => {
 			const c = h('div', 'ur-n-say', row);
@@ -542,10 +566,10 @@
 	}
 	{
 		const o = h('div', 'ur-n-evidence', narrow);
-		h('p', 'ur-n-label', o, 'Right answers on a task outside the jagged frontier');
-		N.ev = [['Without AI', 'about 84.5%'], ['With AI, two groups', '60% and 70%']].map(([a, b]) => { const r = h('p', 'ur-n-ev', o); h('span', null, r, a); h('b', null, r, b); return r; });
-		N.evq = h('p', 'ur-n-evq', o, 'Rated higher in quality than without AI, regardless of correctness.');
-		h('p', 'ur-n-src', o, 'Dell’Acqua et al. (2023) · BCG consultants · HBS working paper 24-013');
+		h('p', 'ur-n-label', o, NW.evidence.label);
+		N.ev = NW.evidence.rows.map(([a, b]) => { const r = h('p', 'ur-n-ev', o); h('span', null, r, a); h('b', null, r, b); return r; });
+		N.evq = h('p', 'ur-n-evq', o, NW.evidence.quality);
+		h('p', 'ur-n-src', o, NW.evidence.source);
 		N.evidence = o;
 	}
 	const op = (node, k) => { node.style.opacity = Math.max(0, Math.min(1, k)).toFixed(3); };
@@ -614,39 +638,19 @@
 		}
 	};
 
-	const BEATS = [
-		{at: BEAT_AT[0], text: 'A student gets a two-part task and gives an AI four reports.',
-			detail: 'a task card appears at the top left: "Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day." A red dot labelled Student appears below. Four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled "Given to the AI", where it stays.'},
-		{at: BEAT_AT[1], text: 'It answers both with equal confidence.',
-			detail: 'two answer cards labelled "AI\'s answers" write in together, in grey on a beige band. Part 1: "24 ships a day: 480 tons at 20 each." Part 2: "20 ships a day: 4 docks at 5 each." Each gets the same grey "Ready" tag at the same moment.'},
-		{at: BEAT_AT[2], text: 'The student checks Part 1 against the two aid reports. It\'s right.',
-			detail: 'the dot opens both aid reports. A sheet labelled "First student\'s brief" appears, Part 1 slides into it, and the dot marks it "Checked" in red.'},
-		{at: BEAT_AT[3], text: 'Part 2 looks just as sure, so they use it.',
-			detail: 'the "Ready" tag on the AI\'s Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first brief, and the dot marks it "Used as is". The aid reports close.'},
-		{at: BEAT_AT[4], text: 'Another student, with the same answers, checks each at its source.',
-			detail: 'a second red dot labelled Second student and an empty sheet labelled "Second student\'s brief" appear. The dot pulses and both "Ready" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked "Checked".'},
-		{at: BEAT_AT[5], text: 'That student checks Part 2 against the port reports, and corrects it.',
-			detail: 'the dot opens the port survey, headed "Capacity": "4 docks, 5 each". Its note appears large in the second brief: "Survey: 4 docks, 5 ships each." The dot opens the harbor log, headed "Open today": "Docks 1, 3, 4", and set apart, "Dock 2: closed". Its note appears: "Log: dock 2 closed for repairs." After a pause, Part 2 slides into the second brief. The dot strikes out "20" and writes "15", strikes out "4" and writes "3 open", so it reads "15 ships a day: 3 open docks at 5 each", and marks it "Checked". The first brief still says 20.'},
-		{at: BEAT_AT[6], text: 'Part 2 depends on what\'s open today. A jagged frontier marks where an AI stops being reliable.',
-			detail: 'the harbor log\'s "Docks 1, 3, 4" is underlined. The AI\'s "4 docks at 5 each" is underlined and marked "Capacity". Then an uneven line is drawn between the AI\'s two answer cards, labelled "Inside the frontier" above and "Outside the frontier" below, and the two cards, alike in form, pulse together.'},
-		{at: BEAT_AT[7], text: 'In a field experiment, consultants with AI got a task outside the frontier right less often.',
-			detail: 'the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: "Rated higher in quality than without AI, regardless of correctness." Source: Dell\'Acqua et al. (2023), BCG consultants, HBS working paper 24-013.'},
-		{at: BEAT_AT[8], text: 'Faculty point to each part in turn and ask what justified relying on it.',
-			detail: 'the panel goes. The red marks and the second student\'s note lift off both briefs, the reports and the AI\'s column fade back, and "Faculty see only the briefs" appears. Part 1 is outlined in both briefs, and each student says, "The aid reports." Then Part 2: the first student says, "Part 1 checked out, so I trusted the rest." The second says, "The harbor log. One dock is closed."'},
-		{at: BEAT_AT[9], text: 'Faculty check: What evidence justified relying on the system here?',
-			list: 'Faculty check: What evidence justified relying on the system here? Point to each part. Was the evidence about that part?',
-			detail: 'both lines appear under the picture at the same size. The briefs, both answers, the AI\'s answers, the frontier and the harbor log stay in view.',
-			check: {label: 'Faculty check', question: 'What evidence justified relying on the system here?', follow: 'Point to each part. Was the evidence about that part?', followAt: T.follow}},
-	];
+	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
 
 	let api = null;
-	document.fonts.ready.then(() => {
+	{
 		measure();
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
 		syncStacked();
+		// The nameplate is core: the same name, kicker and role-neutral definition in every edition.
 		api = mount(root, {duration: T.end, render, beats: BEATS, poster: BEAT_AT[1] - 0.02,
 			nameplate: {name: 'Uncalibrated reliance', kicker: 'Failure mode 4 of 7', definition: 'Confident output is accepted without knowing whether the task fits the tool.'}});
 		if (root.classList.contains('is-stacked')) renderNarrow(api.time());
-	});
+	}
+	}
 })();

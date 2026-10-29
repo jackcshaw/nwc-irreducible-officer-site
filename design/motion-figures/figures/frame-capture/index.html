@@ -57,6 +57,10 @@
 .fc-n-aside { margin: 0; font: 500 14px/1.4 var(--sans); color: var(--ink); }
 .fc-n-tag { display: block; margin: 4px 0; font: 600 13px/1.2 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
 .fc-n-note { margin: 6px 0 0; font: italic 400 14px/1.35 var(--serif); color: var(--red); }
+/* Business: the task as one line kept to the end; a revised ranking gets a red change bar. */
+.fc-n-tl { margin: 0; font: 400 14px/1.35 var(--serif); color: var(--ink); }
+.fc-n-tlk { font: 600 12px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.fc-n-paper.is-revised { box-shadow: inset 3px 0 0 var(--red); }
 /* An edition's source line: in the SVG's final frame on the picture stage; under the
    controls in the stacked view (shown only when the edition has one). */
 .fc-source { display: none; }
@@ -76,7 +80,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME: example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="frame-capture" aria-labelledby="fc-title">
 		<p class="sr-only" id="fc-title" data-ed="page.srTitle"></p>
@@ -111,7 +115,7 @@
 		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
 	</section>
 
-	<section class="fig-section" aria-labelledby="fc-essay-h">
+	<section class="fig-section" aria-labelledby="fc-essay-h" data-ed-section="page.quote">
 		<h2 id="fc-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
 			<p data-ed-rich="page.quote"></p>
@@ -121,6 +125,7 @@
 
 	<section class="fig-section" aria-labelledby="fc-links-h">
 		<h2 id="fc-links-h" data-ed="page.linksHeading"></h2>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
 		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>

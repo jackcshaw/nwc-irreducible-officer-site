@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Responsibility Laundering</title>
-<meta name="description" content="A teaching figure: two students sign the same AI-drafted recommendation, and faculty find out who can account for it by asking why they relied on the AI's estimate.">
+<meta name="description" data-ed-content="page.description" content="A teaching figure: two students sign the same AI-drafted recommendation, and faculty find out who can account for it by asking why they relied on the AI's estimate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -87,12 +87,12 @@
 </header>
 
 <main class="fig-page">
-	<p class="fig-kicker">Failure mode 7 of 7</p>
-	<h1>Responsibility laundering</h1>
-	<p class="fig-setup">Suppose two students give an AI the same prompt, get the same draft, and sign it as written. <em>The Irreducible Officer</em> calls the risk responsibility laundering: a recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The figure runs about a minute and a half. The task, the draft and both students are a constructed example.</p>
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
 
 	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
-		<p class="sr-only" id="rl-title">Responsibility laundering, an animated figure in nine beats after its name card</p>
+		<p class="sr-only" id="rl-title" data-ed="page.srTitle"></p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -107,41 +107,32 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:36</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure, "Responsibility laundering", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two students with an example task: recommend when to evacuate a port city. Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: "The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships." The draft divides into two copies, one for each student, both marked "drafted with AI". Both students read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled "their own note, not handed in": "Rests on an open port. Today's harbor reports: normal." Then they sign. While faculty ask, the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two identical copies. Faculty ask each student: "Suppose the port closes. Who made this call?" The first says, "I signed it. The analysis said ships could do it." The second says, "I did. I chose to rely on the estimate." Then: "Why did you rely on it?" The first says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures." Then the note returns. "The analysis" is outlined in the first student's answer and on their copy, and the first student's dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "reason handed to the AI", where it stays. A red bracket marks the second student's answer, their own reason; their dot stays whole. Two navy weights labelled "Answerable" fall, one down each paper's margin, past the AI's sentences, and rest on each student's dot at the signature. The figure ends on the name and its definition, "The model’s recommendation makes agency feel shared, or easier to defend.", above the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
 
 	<section class="fig-section" aria-labelledby="rl-check-h">
-		<h2 id="rl-check-h">Faculty check</h2>
-		<p class="fig-check">Who owns the recommendation if it proves wrong?</p>
-		<p class="fig-check">Name one way it could prove wrong. Ask why they relied on it.</p>
-		<p class="fig-follow">Both students signed the same paper. If it proves wrong, both answer for it, and the AI can't. Asked who owns it, both would say they do. Asked why they relied on the AI's estimate, the first student says it seemed solid. The second says what the estimate assumed, why they accepted that, and the check they should have made. Both answer for the call. Only the second can say what it rested on. That answer is hard to give without having asked the question before signing, and the second student's note shows they did. Section VII of the essay asks students to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. The companion's <a href="https://judgmentlab.net/#companion">failure-mode lab</a> makes a related point about a signed statement of responsibility: it can add evidence, but it doesn't show that the learner can defend the judgment. The lab also notes the cost: with many learners, faculty have to sample rather than question everyone. Whether relying on the estimate was justified is a separate check, covered by <a href="../uncalibrated-reliance/">uncalibrated reliance</a>.</p>
+		<h2 id="rl-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-rl-rich="page.checkFollow"></p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="rl-essay-h">
-		<h2 id="rl-essay-h">From the essay</h2>
+		<h2 id="rl-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
-			<p>Responsibility laundering is the final danger. A recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The analysis lands with the apparent weight of objectivity. But AI does not become accountable for the recommendation. The human remains responsible for the final judgment. When the recommendation proves wrong, shaped by assumptions no one examined and optimizing toward a target no one explicitly chose, the question of who chose the frame does not have a satisfying answer.</p>
-			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+			<div data-ed-lines="page.quotes.0.paras"></div>
+			<cite data-ed-rich="page.quotes.0.cite"></cite>
 		</blockquote>
 		<blockquote class="fig-quote" style="margin-top: 18px">
-			<p>… A human recommendation brings context with it. Experience, incentives, reputation, and the way a person answers when pressed all travel with the recommendation. A commander can weigh those signals. A model carries none of them and can still sound equally confident. It can support a judgment, but it cannot provide the human presence that makes accountability clear to subordinates, partners, or commanders who will live with the result.</p>
-			<p>First-person ownership matters in the classroom. The student should be able to say why they accepted an output, why they rejected one, and why they remain accountable for the recommendation despite the system's contribution. Students are practicing the accountability structure their professional roles will require.</p>
-			<cite><em>The Irreducible Officer</em>, Section VII, Accountability Is Structural</cite>
+			<div data-ed-lines="page.quotes.1.paras"></div>
+			<cite data-ed-rich="page.quotes.1.cite"></cite>
 		</blockquote>
 	</section>
 
 	<section class="fig-section" aria-labelledby="rl-links-h">
-		<h2 id="rl-links-h">Go further</h2>
-		<ul class="fig-links">
-			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=5">Own the decision</a></li>
-			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test responsibility laundering with your AI assistant</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#vii-accountability-is-structural">Section VII, Accountability Is Structural</a></li>
-			<li><span>In the same chapter:</span> <a href="../fluency-substitution/">Fluency substitution</a></li>
-			<li><span>Was the reliance justified?</span> <a href="../uncalibrated-reliance/">Uncalibrated reliance</a></li>
-		</ul>
+		<h2 id="rl-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>
 

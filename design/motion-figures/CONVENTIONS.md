@@ -253,7 +253,9 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - Edition: `?edition=`, then `data-edition` on the root, then `fallback`. An unknown id falls back.
   - Cast: `?cast=`, then the edition's `cast`, then `classroom`.
   - It sets `data-edition-id` and `data-cast` on the root.
-- A figure builds after it loads: `Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); })`. `window.__motionFigures[id]` appears after that, and the scripts already wait for it.
+- A figure builds after it loads: `Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); })`.
+  - **Fonts before measuring (found in four figures during the refactor).** `document.fonts.ready` can resolve before faces used only inside the SVG have loaded, so text measured at build time comes out 2–199px off. Load every face the figure draws with explicitly before building, e.g. `Promise.all([loadEdition(root), ...FACES.map((f) => document.fonts.load(f))])`, where `FACES` lists each weight and style (serif, sans, mono, bold, italic). If the figure measures again after building, wait for `document.fonts.ready` once more.
+  - **Frame-diff noise.** CSS transitions (e.g. stacked-view pulses) can differ between two captures of the same build. Freeze transitions when diffing, and establish the noise floor by capturing the unchanged build twice. `window.__motionFigures[id]` appears after that, and the scripts already wait for it.
 - `MotionFigures.fillPage(document, ed)` fills page copy from these attributes; the page HTML keeps only structure:
   - `data-ed="path"`: text;
   - `data-ed-rich="path"`: text where `*words*` becomes `<em>`, everything else escaped;

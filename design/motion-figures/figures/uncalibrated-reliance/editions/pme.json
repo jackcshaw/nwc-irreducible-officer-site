@@ -1,0 +1,376 @@
+{
+ "_doc": "Uncalibrated reliance, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}, {key|upper}). The timeline, layout, colour grammar and nameplate are core and stay in uncalibrated-reliance.js. Schema: CONVENTIONS.md, Editions; figure-specific keys are listed in the storyboard.",
+ "id": "pme",
+ "cast": "classroom",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Part 1 · Ships needed a day",
+   "Part 2 · Ships the port takes a day"
+  ],
+  "text": "Part 1 · Ships needed a day. Part 2 · Ships the port takes a day."
+ },
+ "reports": [
+  "AID REPORT",
+  "AID REPORT",
+  "PORT SURVEY",
+  "HARBOR LOG"
+ ],
+ "callouts": {
+  "survey": {
+   "heading": "CAPACITY",
+   "lines": [
+    [
+     "4 docks, 5 each"
+    ],
+    [
+     "(survey, last year)",
+     "off"
+    ]
+   ]
+  },
+  "log": {
+   "heading": "OPEN TODAY",
+   "lines": [
+    [
+     "Docks 1, 3, 4"
+    ],
+    [
+     "✕ Dock 2: closed",
+     "off"
+    ]
+   ]
+  }
+ },
+ "answers": {
+  "p1": [
+   "24 ships a day:",
+   "480 tons at 20 each"
+  ],
+  "p2": [
+   "20 ships a day:",
+   "4 docks at 5 each"
+  ],
+  "corrected": {
+   "l1": [
+    [
+     "20",
+     "ai"
+    ],
+    [
+     " 15",
+     "red"
+    ],
+    [
+     " ships a day:",
+     "ai"
+    ]
+   ],
+   "l2": [
+    [
+     "4",
+     "ai"
+    ],
+    [
+     " 3 open",
+     "red"
+    ],
+    [
+     " docks at 5 each",
+     "ai"
+    ]
+   ]
+  }
+ },
+ "speech": {
+  "a": [
+   {
+    "n": "1",
+    "lines": [
+     "“The aid reports.”"
+    ]
+   },
+   {
+    "n": "2",
+    "lines": [
+     "“Part 1 checked out, so I",
+     "trusted the rest.”"
+    ]
+   }
+  ],
+  "b": [
+   {
+    "n": "1",
+    "lines": [
+     "“The aid reports.”"
+    ]
+   },
+   {
+    "n": "2",
+    "lines": [
+     "“The harbor log.",
+     "One dock is closed.”"
+    ]
+   }
+  ]
+ },
+ "labels": {
+  "given": "GIVEN TO THE AI",
+  "aiHead": "AI'S ANSWERS",
+  "parts": [
+   "PART 1",
+   "PART 2"
+  ],
+  "ready": "READY",
+  "capacity": "CAPACITY",
+  "inside": "INSIDE THE FRONTIER",
+  "outside": "OUTSIDE THE FRONTIER",
+  "briefA": "{first|upper}'S BRIEF",
+  "briefB": "{second|upper}'S BRIEF",
+  "slot": {
+   "label": "PORT REPORTS",
+   "lines": [
+    "Survey: 4 docks, 5 ships each.",
+    "Log: dock 2 closed for repairs."
+   ]
+  },
+  "marks": {
+   "checked": "✓ CHECKED",
+   "used": "USED AS IS"
+  },
+  "faculty": "FACULTY SEE ONLY THE BRIEFS",
+  "key": {
+   "ai": "WRITTEN BY AI",
+   "own": "{A_person|upper}'S OWN WORK"
+  },
+  "names": {
+   "first": "{first}",
+   "second": "{second}"
+  },
+  "dot": {
+   "a": "{Person}",
+   "a2": "{first}",
+   "b": "{second}"
+  },
+  "panel": {
+   "title": "Right answers on a task outside the jagged frontier",
+   "without": "Without AI",
+   "with": "With AI",
+   "groups": "TWO GROUPS",
+   "bars": [
+    "about 84.5%",
+    "60%",
+    "70%"
+   ],
+   "bracket": [
+    "Rated higher in quality",
+    "than without AI,",
+    "regardless of correctness"
+   ],
+   "source": "DELL'ACQUA ET AL. (2023) · BCG CONSULTANTS · HBS WORKING PAPER 24-013"
+  }
+ },
+ "narrow": {
+  "taskLabel": "Example task ",
+  "taskLines": [
+   "Part 1 · Ships needed a day. ",
+   "Part 2 · Ships the port takes a day."
+  ],
+  "who": "{Person}",
+  "reports": [
+   "2 aid reports",
+   "Port survey",
+   "Harbor log"
+  ],
+  "survey": {
+   "head": "Survey (last year) · capacity: ",
+   "text": "4 docks, 5 each."
+  },
+  "log": {
+   "head": "Harbor log · open today: ",
+   "text": "docks 1, 3, 4."
+  },
+  "closed": "✕ Dock 2: closed for repairs.",
+  "aiHead": "AI's answers",
+  "given": "Given all four reports",
+  "parts": [
+   "1",
+   "2"
+  ],
+  "ready": "Ready",
+  "inside": "Inside the frontier ↑",
+  "outside": "Outside the frontier ↓",
+  "capacity": "Capacity",
+  "first": "{first}",
+  "second": "{second}",
+  "briefs": {
+   "p1": "24 ships a day: 480 tons at 20 each",
+   "p2": "20 ships a day: 4 docks at 5 each"
+  },
+  "corrected": [
+   [
+    "20",
+    "struck"
+   ],
+   [
+    " 15",
+    "ins"
+   ],
+   [
+    " ships a day: ",
+    "band"
+   ],
+   [
+    "4",
+    "struck"
+   ],
+   [
+    " 3 open",
+    "ins"
+   ],
+   [
+    " docks at 5 each",
+    "band"
+   ]
+  ],
+  "marks": {
+   "checked": "✓ Checked",
+   "used": "Used as is"
+  },
+  "faculty": "Faculty see only the briefs",
+  "evidence": {
+   "label": "Right answers on a task outside the jagged frontier",
+   "rows": [
+    [
+     "Without AI",
+     "about 84.5%"
+    ],
+    [
+     "With AI, two groups",
+     "60% and 70%"
+    ]
+   ],
+   "quality": "Rated higher in quality than without AI, regardless of correctness.",
+   "source": "Dell’Acqua et al. (2023) · BCG consultants · HBS working paper 24-013"
+  }
+ },
+ "beats": [
+  {
+   "text": "{A_person} gets a two-part task and gives an AI four reports.",
+   "detail": "a task card appears at the top left: \"Example task. Part 1: Ships needed a day. Part 2: Ships the port takes a day.\" A red dot labelled {Person} appears below. Four reports appear across the top: Aid report, Aid report, Port survey and Harbor log. The dot pulses, and a grey copy of each report slides into a small stack labelled \"Given to the AI\", where it stays."
+  },
+  {
+   "text": "It answers both with equal confidence.",
+   "detail": "two answer cards labelled \"AI's answers\" write in together, in grey on a beige band. Part 1: \"24 ships a day: 480 tons at 20 each.\" Part 2: \"20 ships a day: 4 docks at 5 each.\" Each gets the same grey \"Ready\" tag at the same moment."
+  },
+  {
+   "text": "{The_person} checks Part 1 against the two aid reports. It's right.",
+   "detail": "the dot opens both aid reports. A sheet labelled \"{first}'s brief\" appears, Part 1 slides into it, and the dot marks it \"Checked\" in red."
+  },
+  {
+   "text": "Part 2 looks just as sure, so they use it.",
+   "detail": "the \"Ready\" tag on the AI's Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first brief, and the dot marks it \"Used as is\". The aid reports close."
+  },
+  {
+   "text": "Another student, with the same answers, checks each at its source.",
+   "detail": "a second red dot labelled {second} and an empty sheet labelled \"{second}'s brief\" appear. The dot pulses and both \"Ready\" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked \"Checked\"."
+  },
+  {
+   "text": "That student checks Part 2 against the port reports, and corrects it.",
+   "detail": "the dot opens the port survey, headed \"Capacity\": \"4 docks, 5 each\". Its note appears large in the second brief: \"Survey: 4 docks, 5 ships each.\" The dot opens the harbor log, headed \"Open today\": \"Docks 1, 3, 4\", and set apart, \"Dock 2: closed\". Its note appears: \"Log: dock 2 closed for repairs.\" After a pause, Part 2 slides into the second brief. The dot strikes out \"20\" and writes \"15\", strikes out \"4\" and writes \"3 open\", so it reads \"15 ships a day: 3 open docks at 5 each\", and marks it \"Checked\". The first brief still says 20."
+  },
+  {
+   "text": "Part 2 depends on what's open today. A jagged frontier marks where an AI stops being reliable.",
+   "detail": "the harbor log's \"Docks 1, 3, 4\" is underlined. The AI's \"4 docks at 5 each\" is underlined and marked \"Capacity\". Then an uneven line is drawn between the AI's two answer cards, labelled \"Inside the frontier\" above and \"Outside the frontier\" below, and the two cards, alike in form, pulse together."
+  },
+  {
+   "text": "In a field experiment, consultants with AI got a task outside the frontier right less often.",
+   "detail": "the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: \"Rated higher in quality than without AI, regardless of correctness.\" Source: Dell'Acqua et al. (2023), BCG consultants, HBS working paper 24-013."
+  },
+  {
+   "text": "Faculty point to each part in turn and ask what justified relying on it.",
+   "detail": "the panel goes. The red marks and the second student's note lift off both briefs, the reports and the AI's column fade back, and \"Faculty see only the briefs\" appears. Part 1 is outlined in both briefs, and each student says, \"The aid reports.\" Then Part 2: the first student says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"The harbor log. One dock is closed.\""
+  },
+  {
+   "text": "{check}: What evidence justified relying on the system here?",
+   "list": "{check}: What evidence justified relying on the system here? Point to each part. Was the evidence about that part?",
+   "detail": "both lines appear under the picture at the same size. The briefs, both answers, the AI's answers, the frontier and the harbor log stay in view."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What evidence justified relying on the system here?",
+  "follow": "Point to each part. Was the evidence about that part?"
+ },
+ "page": {
+  "kicker": "Failure mode 4 of 7",
+  "title": "Uncalibrated reliance",
+  "description": "A teaching figure: two AI answers look equally sure, a student checks one and relies on the other, and faculty find the difference by asking about each part.",
+  "setup": "A student asks an AI for help with a two-part task. They check its first answer, find it right, and use both. *The Irreducible Officer* calls what can happen next uncalibrated reliance: the student accepts confident output without knowing whether the task fits the tool. The research figures come from Dell'Acqua et al. (2023), and the task, the reports and both students are a constructed example.",
+  "srTitle": "Uncalibrated reliance, an animated figure in twelve beats",
+  "srSummary": "An animated figure. A red dot stands for a student with an example task in two parts: ships needed a day, and ships the port takes a day. The student gives an AI four reports: two aid reports, a port survey and a harbor log. Copies of all four stay in a small stack labelled given to the AI. The AI answers both in the same form, in grey, each marked ready: \"24 ships a day: 480 tons at 20 each\" and \"20 ships a day: 4 docks at 5 each\". The student checks Part 1 against both aid reports, finds it right, and puts both answers into their brief, marking Part 1 checked and Part 2 used as is. A second student gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, last year's port survey, headed capacity, says 4 docks at 5 each, and the harbor log, headed open today, lists docks 1, 3 and 4, with dock 2 closed. The second student notes both, then corrects the estimate to 15 ships from 3 open docks. Part 2 depends on what's open today: the harbor log's docks 1, 3 and 4 are underlined, and the AI's \"4 docks at 5 each\" is marked capacity. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel shows a field experiment with BCG consultants: on a task outside the jagged frontier, the group without AI was right about 84.5% of the time and the two groups with AI 60% and 70%, and graders still rated the AI users' work higher in quality than the group without AI, regardless of correctness. The students' working marks come off the briefs, the AI's column fades back, and faculty see only the briefs. Faculty point to Part 1 in both: each student says, \"The aid reports.\" Then Part 2: the first student says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"The harbor log. One dock is closed.\" The figure ends on the faculty check. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What evidence justified relying on the system here?",
+   "Point to each part. Was the evidence about that part?"
+  ],
+  "checkFollow": "Both students give the same reason for Part 1. For Part 2, the first student's evidence is about Part 1 and the second student's is about Part 2. The edge between the two parts doesn't show on the page; the second student found it by checking each part against the reports it rests on. Section II of the essay asks students to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required.",
+  "quoteHeading": "From the essay",
+  "quotes": [
+   {
+    "text": [
+     "Uncalibrated reliance begins with a reasonable impulse: AI is useful, the output is confident, and parts of the task feel tedious. The problem is that AI performance is uneven in ways that are not always visible from the outside. Tasks that look similar may differ significantly in whether AI helps or hurts. Appropriate reliance requires the student to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required before discovering the error downstream."
+    ],
+    "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like"
+   },
+   {
+    "text": [
+     "The distinction between trust and reliance matters here. Trust is a subjective disposition, a feeling of confidence that a system will perform well. Reliance is the observable act of accepting its output and acting on it. Appropriate reliance is harder and more discriminating: accepting support when it is warranted, refusing or verifying when it is not, and being able to give an account of the difference (",
+     {
+      "text": "Raees & Papangelis, 2026",
+      "href": "https://arxiv.org/abs/2604.23896"
+     },
+     ")."
+    ],
+    "cite": "*The Irreducible Officer*, Section V, Appropriate Reliance as a Teachable Competency"
+   }
+  ],
+  "evidenceHeading": "Evidence",
+  "evidenceText": [
+   "Dell'Acqua et al., ",
+   {
+    "text": "Navigating the Jagged Technological Frontier",
+    "href": "https://www.hbs.edu/faculty/Pages/item.aspx?num=64700"
+   },
+   ", HBS working paper 24-013 (2023). On a task chosen to fall outside the frontier, consultants without AI were right about 84.5% of the time and the two AI groups 60% and 70%: in the working paper's words, \"19 percentage points less likely to produce correct solutions.\" Graders still rated the AI users' recommendations higher in quality \"regardless of the correctness of their answer.\""
+  ],
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Book chapter:",
+    "text": "Calibrate the tool",
+    "href": "../../book-v0/four-moves-book.html?spread=3"
+   },
+   {
+    "lead": "Practice:",
+    "text": "test uncalibrated reliance with your AI assistant",
+    "href": "https://judgmentlab.net/#companion"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section II, What the Problem Looks Like",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section V, Appropriate Reliance as a Teachable Competency",
+    "href": "https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency"
+   },
+   {
+    "lead": "Make the call yourself:",
+    "text": "in the appropriate reliance figure, decide whether to rely on the AI for two tasks from the same study",
+    "href": "../appropriate-reliance/"
+   }
+  ]
+ }
+}

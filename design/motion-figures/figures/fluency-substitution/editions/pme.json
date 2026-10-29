@@ -1,0 +1,333 @@
+{
+	"id": "pme",
+	"cast": "classroom",
+	"task": {
+		"label": "EXAMPLE TASK",
+		"lines": [
+			"Recommend whether to",
+			"send forces to reassure",
+			"a threatened ally."
+		],
+		"text": "Recommend whether to send forces to reassure a threatened ally."
+	},
+	"paper": {
+		"_doc": "The shared paper. lines: fixed line breaks as segments [text, key]; keys: s1 first sentence, ans the words the first person repeats, s2b the rest of the call, cut the sentence the first person strikes (the first draft only), null a space.",
+		"lines": [
+			[
+				[
+					"Any course must weigh escalation against",
+					"s1"
+				]
+			],
+			[
+				[
+					"the ally's trust.",
+					"s1"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"On balance, losing that",
+					"ans"
+				]
+			],
+			[
+				[
+					"trust is the greater risk: the forces",
+					"ans"
+				]
+			],
+			[
+				[
+					"should go",
+					"ans"
+				],
+				[
+					", with clear limits to contain",
+					"s2b"
+				]
+			],
+			[
+				[
+					"escalation.",
+					"s2b"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"Either choice carries real",
+					"cut"
+				]
+			],
+			[
+				[
+					"consequences.",
+					"cut"
+				]
+			]
+		],
+		"text": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation.",
+		"cut": "Either choice carries real consequences."
+	},
+	"answers": {
+		"_doc": "Speech panel lines as segments [text, key]: ai the AI's words, own the person's own, null a space.",
+		"a1": [
+			[
+				[
+					"“On balance, losing that trust is the",
+					"ai"
+				]
+			],
+			[
+				[
+					"greater risk: the forces should go.”",
+					"ai"
+				]
+			]
+		],
+		"b1": [
+			[
+				[
+					"“Send them. The ally's trust matters most,",
+					"own"
+				]
+			],
+			[
+				[
+					"and troops show we mean it.”",
+					"own"
+				]
+			]
+		],
+		"a2": [
+			[
+				[
+					"“On balance, losing that trust is",
+					"ai"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"still",
+					"own"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"the",
+					"ai"
+				]
+			],
+			[
+				[
+					"greater risk. The forces should go.”",
+					"ai"
+				]
+			]
+		],
+		"b2": [
+			[
+				[
+					"“Then troops would cost the ally's trust.",
+					"own"
+				]
+			],
+			[
+				[
+					"I'd send arms and aid instead.”",
+					"own"
+				]
+			]
+		]
+	},
+	"labels": {
+		"person": "{Person}",
+		"first": "{first}",
+		"second": "{second}",
+		"rowOwn": [
+			"THEIR OWN WORK",
+			"NOT HANDED IN"
+		],
+		"rowRecv": "{receive|upper}",
+		"q1": {
+			"label": "FACULTY ASK",
+			"lines": [
+				"Papers aside: what do you",
+				"recommend, and why?"
+			]
+		},
+		"q2": {
+			"label": "THEN ONE FACT CHANGES",
+			"lines": [
+				"What if the ally doesn't want",
+				"our troops on its soil?"
+			]
+		},
+		"keyAI": "WRITTEN BY AI",
+		"keyOwn": "{A_person|upper}'S OWN WORK",
+		"tagDraft": "AI'S DRAFT",
+		"tagKept": "{Person|upper}'S PAPER",
+		"tagDisclosed": " · DRAFTED WITH AI",
+		"cutLabel": "Cut one sentence from the AI's draft:",
+		"noteLabel": "{second|upper}'S NOTE",
+		"noteLines": [
+			"Send them. The ally's trust",
+			"matters most, and troops",
+			"show we mean it."
+		]
+	},
+	"narrow": {
+		"task": "Example task",
+		"draft": "AI's draft",
+		"draftKept": "{Person}'s paper · drafted with AI",
+		"own": "Their own work, not handed in",
+		"cutAct": "Cut one sentence from the AI's draft:",
+		"note": "Send them. The ally's trust matters most, and troops show we mean it.",
+		"draftB": "{second}: AI's draft from the note",
+		"same": "Suppose it matches the first {person}'s paper word for word.",
+		"paper": "Both handed in this paper",
+		"q1": {
+			"label": "Faculty ask",
+			"question": "Papers aside: what do you recommend, and why?"
+		},
+		"q2": {
+			"label": "Then one fact changes",
+			"question": "What if the ally doesn't want our troops on its soil?"
+		},
+		"answers": {
+			"a1": [
+				[
+					"“On balance, losing that trust is the greater risk: the forces should go.”",
+					"ai"
+				]
+			],
+			"b1": [
+				[
+					"“Send them. The ally's trust matters most, and troops show we mean it.”",
+					"own"
+				]
+			],
+			"a2": [
+				[
+					"“On balance, losing that trust is",
+					"ai"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"still",
+					"own"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"the greater risk. The forces should go.”",
+					"ai"
+				]
+			],
+			"b2": [
+				[
+					"“Then troops would cost the ally's trust. I'd send arms and aid instead.”",
+					"own"
+				]
+			]
+		},
+		"keyAI": "Written by AI",
+		"keyOwn": "{A_person}'s own work"
+	},
+	"beats": [
+		{
+			"text": "{A_person} gets a task that needs a decision.",
+			"detail": "a task card appears at the top left: \"Example task: Recommend whether to send forces to reassure a threatened ally.\" A red dot labelled Student appears below it."
+		},
+		{
+			"text": "{The_person} asks an AI for a draft. It writes a polished recommendation.",
+			"detail": "the dot pulses. A sheet labelled \"AI's draft\" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band \"Written by AI\": \"Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences.\""
+		},
+		{
+			"text": "{The_person} reads closely, cuts a weak line, and agrees with the rest.",
+			"detail": "the dot reads along each line, then strikes out \"Either choice carries real consequences.\" in red, and the key adds \"{A_person}'s own work\" in red. The struck sentence moves above the paper, under a red label: \"Cut one sentence from the AI's draft\". The rest stays grey, and the label changes to \"Student's paper, drafted with AI\"."
+		},
+		{
+			"text": "{A_second} writes their own call first, in plain words.",
+			"detail": "the first paper moves into a column headed {first}. A second red dot heads a column labelled {second} and writes on a large note card in red: \"Send them. The ally's trust matters most, and troops show we mean it.\""
+		},
+		{
+			"text": "An AI drafts from the note. Suppose it matches the first paper word for word.",
+			"detail": "the note moves into the top row, beside the first student's cut sentence. The dot pulses, and a sheet labelled \"AI's draft\" fills with a grey paragraph. Suppose it is the same as the first paper, word for word. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper."
+		},
+		{
+			"text": "{reviewer_receives} two identical papers, both drafted with AI.",
+			"detail": "the second paper moves into its column beside the first, in a row labelled \"What faculty receive\"; the top row is labelled \"Their own work, not handed in\". Both papers are tagged \"Student's paper, drafted with AI\"."
+		},
+		{
+			"text": "Without the papers, both explain the call clearly.",
+			"detail": "both papers dim. A row labelled \"Faculty ask: Papers aside: what do you recommend, and why?\" fills. In plain ink, the first student says, \"On balance, losing that trust is the greater risk: the forces should go.\" The second student says, \"Send them. The ally's trust matters most, and troops show we mean it.\""
+		},
+		{
+			"text": "Change one fact.",
+			"detail": "a new row appears: \"Then one fact changes: What if the ally doesn't want our troops on its soil?\""
+		},
+		{
+			"text": "One student stays with the paper's call. The other reworks it from their reason.",
+			"detail": "in plain ink, the first student says, \"On balance, losing that trust is still the greater risk. The forces should go.\" The second student says, \"Then troops would cost the ally's trust. I'd send arms and aid instead.\" Then the answers take their colours: the first student's words turn grey on a beige band, the mark for words the AI wrote, except \"still\", which turns red; the paper's matching words are underlined. The second student's answers turn red, their own words."
+		},
+		{
+			"text": "Faculty check: Can {the_person} independently explain the judgment in plain speech?",
+			"list": "Faculty check: Can {the_person} independently explain the judgment in plain speech? Then change one fact. What would you recommend now?",
+			"detail": "both lines appear under the picture at the same size. The whole table stays in view."
+		}
+	],
+	"check": {
+		"label": "{check}",
+		"question": "Can {the_person} independently explain the judgment in plain speech?",
+		"follow": "Then change one fact. What would you recommend now?"
+	},
+	"page": {
+		"kicker": "Failure mode 2 of 7",
+		"title": "Fluency substitution",
+		"description": "A teaching figure: two students hand in the same AI-drafted paper, and only changing one fact shows which of them owns the call.",
+		"setup": "{A_person} asks an AI to draft a strategy recommendation, reads it closely and agrees with it. The paper reads like a considered judgment. Suppose {a_second}, who made the call first, hands in the very same paper. *The Irreducible Officer* calls the risk fluency substitution: polished analysis stands in for owned reasoning. Not every student who agrees with an AI fails this way. The task, the paper and all the answers are a constructed example.",
+		"srTitle": "Fluency substitution, an animated figure in ten beats",
+		"srSummary": "An animated figure that opens on its name, Fluency substitution, failure mode 2 of 7, and builds a table. A red dot stands for a student with an example task: recommend whether to send forces to reassure a threatened ally. An AI drafts a polished paragraph, shown in grey on a beige band, the figure's mark for words the AI wrote: weigh escalation against the ally's trust; on balance, losing that trust is the greater risk, so the forces should go, with clear limits. The student reads it closely, strikes out one weak sentence and keeps the rest. A second student first writes their own call in a red note, \"Send them. The ally's trust matters most, and troops show we mean it.\", then has an AI draft from it. Suppose that draft matches the first paper word for word. Faculty receive two identical papers, both tagged as drafted with AI. With the papers set aside, they ask each student why, and both explain the call clearly; their answers appear in plain ink, as faculty hear them. Then faculty change one fact: what if the ally doesn't want our troops on its soil? The first student tries, and stays with the paper's call in its own words: on balance, losing that trust is still the greater risk, so the forces should go. The second says troops would now cost the ally's trust and proposes arms and aid instead. Only then do the answers take their colours: the first student's in the AI's grey, the second student's in red. The figure ends on the name and its definition, \"Polished analysis stands in for owned reasoning.\", then the faculty check and the follow-up: change one fact and ask what they would recommend now. Each beat is listed below with what is on screen.",
+		"checkHeading": "{check}",
+		"checkLines": [
+			"Can {the_person} independently explain the judgment in plain speech?",
+			"Then change one fact. What would you recommend now?"
+		],
+		"checkFollow": "Both students in the figure explain the call clearly without the paper. The second line separates them. Section VIII of the essay looks for the student who \"revises under challenge rather than retreating to the artifact's language\". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.",
+		"quoteHeading": "From the essay",
+		"quote": "Fluency substitution is easier to miss. AI produces the tone of analytic maturity (balanced paragraphs, caveats in the right places, the measured voice of a considered judgment) and the student mistakes well-ordered language for well-owned reasoning. Researchers studying AI's effects on student cognition have introduced the concept of epistemic confinement to describe this condition: an illusion of competence while operating entirely within AI-constructed analytical boundaries, where the student believes they are thinking independently while the frame doing the work was never theirs ([Chow et al., 2026](https://ojs.aut.ac.nz/pjtel/article/view/246)). In strategy, fluency substitutes for deciding. A paragraph that balances every consideration may never identify which risk actually matters most.",
+		"cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",
+		"linksHeading": "Go further",
+		"links": [
+			{
+				"lead": "Book chapter:",
+				"text": "Own the decision",
+				"href": "../../book-v0/four-moves-book.html?spread=5"
+			},
+			{
+				"lead": "Practice:",
+				"text": "test fluency substitution with your AI assistant",
+				"href": "https://judgmentlab.net/#companion"
+			},
+			{
+				"lead": "Essay:",
+				"text": "Section II, What the Problem Looks Like",
+				"href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+			}
+		]
+	}
+}

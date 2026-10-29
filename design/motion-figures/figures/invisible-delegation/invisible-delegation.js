@@ -15,7 +15,7 @@
    Every attribute is a pure function of t, so the runtime can play, scrub,
    hold (?t=) and export it frame by frame. */
 (() => {
-	const {mount, E, mix, prog, el, set, pathAt, legibility, mixColor, FONT} = MotionFigures;
+	const {mount, E, mix, prog, el, set, pathAt, legibility, mixColor, FONT, loadEdition, fillPage} = MotionFigures;
 	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};
 	const VW = 960;
 
@@ -58,23 +58,21 @@
 	const rowY = (k) => 44 + 58 * k; // card top
 	const qY = (k) => 56 + 58 * k; // first quote baseline
 	const HOME = {x: 30, y: 7};
-	const LABELS = ['The criteria', 'How the argument runs', 'What “strategic” means'];
-	const REQ_A = ['Give me feedback', 'Suggest a better structure', 'Make it more strategic'];
-	const UNSAID = ['against your criteria', 'for your argument', 'as you define it'];
-	const REQ_B = [['Give me feedback', 'against my criteria'], ['Suggest a better structure', 'for my argument'], ['Make it more strategic,', 'as I define it']];
-	const NOTES = ['Tighter opening', 'Add the costs', 'Be more decisive'];
-	const REASON = 'evidence too thin';
-	// What the second student writes on each card: the decision itself.
-	const DECIDED = [['Evidence must back', 'the call'], ['Lead with the call,', 'then its evidence'], ['Serves the ally’s', 'long-term interest']];
 	const BH = 54; // a written card's height
 	const NOTE_Y = [133, 151, 169];
-	const SPEECH = {
-		a: {name: 'First student', lines: ['“The AI’s notes, I', 'suppose. I worked through', 'what it flagged.”']},
-		b: {name: 'Second student', lines: ['“Mine, set first from the', 'rubric: does the evidence', 'back my call?”']},
-	};
+
+	// The beat times are core; the words come from the edition (editions/<id>.json).
+	const BEAT_AT = [0, 9.5, 20.8, 32.9, 41.6, 48.9, 60.3, 70.5, 83.6];
 
 	const root = document.querySelector('#invisible-delegation');
 	const svg = root.querySelector('svg');
+	Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); });
+
+	function build(ed) {
+	const L = ed.labels, NW = ed.narrow;
+	const LABELS = ed.decisions, REQ_A = ed.requests.first, UNSAID = ed.requests.unsaid, REQ_B = ed.requests.second;
+	const NOTES = ed.notes.items, REASON = ed.notes.reason, DECIDED = ed.decided;
+	const SPEECH = {a: {name: L.first, lines: ed.answers.first}, b: {name: L.second, lines: ed.answers.second}};
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 	el(el(defs, 'marker', {id: 'id-arrow', viewBox: '0 0 6 6', refX: 5, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto'}), 'path', {d: 'M0 0L6 3L0 6Z', fill: C.red});
@@ -100,13 +98,13 @@
 	// ---- task card (top band) ------------------------------------------------
 	const card = el(topLayer, 'g');
 	el(card, 'rect', {x: 24, y: 14, width: 400, height: 78, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-	mono(card, 40, 34, 'EXAMPLE TASK');
-	serif(card, 40, 56, 'Recommend whether to keep a forward base.', {fs: 16});
+	mono(card, 40, 34, ed.task.label);
+	serif(card, 40, 56, ed.task.text, {fs: 16});
 	const RUB = {x: 40, y: 78};
 	const rubricWash = el(topLayer, 'rect', {x: 32, y: 57, height: 30, rx: 3, fill: C.ink, 'fill-opacity': 0});
 	const rubric = el(topLayer, 'g');
-	mono(rubric, 40, RUB.y, 'RUBRIC ·');
-	const rubricText = serif(rubric, 108, RUB.y, 'Evidence must back the call.', {fs: 16, style: 'italic'});
+	mono(rubric, 40, RUB.y, ed.task.rubricLabel);
+	const rubricText = serif(rubric, 108, RUB.y, ed.task.rubric, {fs: 16, style: 'italic'});
 	const rubricLine = el(rubric, 'line', {x1: 108, y1: RUB.y + 5, x2: 108, y2: RUB.y + 5, stroke: C.ink, 'stroke-width': 1.6});
 
 	// ---- a student's block -----------------------------------------------------
@@ -115,7 +113,7 @@
 	function block(g, key) {
 		const isA = key === 'a';
 		const o = {key, isA};
-		o.name = text(g, 42, 12, isA ? 'First student' : 'Second student', {fs: 13, weight: 600, fill: C.red});
+		o.name = text(g, 42, 12, isA ? L.first : L.second, {fs: 13, weight: 600, fill: C.red});
 		// The paper: title bar and seven rows; four of them can turn into the AI's grey text.
 		o.paper = el(g, 'g');
 		el(o.paper, 'rect', {x: 27, y: 25, width: 72, height: 70, fill: C.ink, 'fill-opacity': 0.06});
@@ -131,12 +129,12 @@
 		});
 		o.draft = mono(g, 104, 36, '');
 		o.rev = el(g, 'g');
-		mono(o.rev, 104, 52, 'REVISED', {fill: C.grey});
-		mono(o.rev, 104, 66, 'WITH AI', {fill: C.grey});
+		mono(o.rev, 104, 52, L.revised[0], {fill: C.grey});
+		mono(o.rev, 104, 66, L.revised[1], {fill: C.grey});
 		// The AI's notes, worked through by the student.
 		o.notes = el(g, 'g');
 		el(o.notes, 'rect', {x: 24, y: 100, width: 144, height: 100, rx: 2, fill: C.band, 'fill-opacity': 0.75, stroke: C.grey, 'stroke-opacity': 0.5});
-		mono(o.notes, 29, 115, "AI'S NOTES", {fill: C.grey});
+		mono(o.notes, 29, 115, ed.notes.label, {fill: C.grey});
 		o.noteText = NOTES.map((s, i) => serif(o.notes, 44, NOTE_Y[i], s, {fs: 15, fill: C.grey}));
 		o.ticks = NOTES.map((s, i) => text(o.notes, 28, NOTE_Y[i], '✓', {fs: 15, weight: 600, fill: C.ink}));
 		if (!isA) {
@@ -150,9 +148,9 @@
 		o.ledFrame = el(o.led, 'g');
 		el(o.ledFrame, 'line', {x1: X.div1, y1: 2, x2: X.div1, y2: 202, stroke: C.ink, 'stroke-opacity': 0.3});
 		el(o.ledFrame, 'line', {x1: X.div2, y1: 2, x2: X.div2, y2: 202, stroke: C.ink, 'stroke-opacity': 0.3});
-		mono(o.ledFrame, X.own, 12, 'THE STUDENT DECIDES', {fill: C.red});
-		mono(o.ledFrame, X.req, 12, 'REQUESTS');
-		mono(o.ledFrame, X.ai, 12, 'THE AI DECIDES', {fill: C.grey});
+		mono(o.ledFrame, X.own, 12, L.laneOwn, {fill: C.red});
+		mono(o.ledFrame, X.req, 12, L.laneRequests);
+		mono(o.ledFrame, X.ai, 12, L.laneAI, {fill: C.grey});
 		const slot = (x, k) => {
 			const s = el(o.led, 'g', {opacity: 0});
 			el(s, 'rect', {x, y: rowY(k), width: CW, height: CH, rx: 3, fill: 'none', stroke: C.ink, 'stroke-opacity': 0.15});
@@ -192,14 +190,14 @@
 			// What each request left unsaid: its own line, outside the quotation marks.
 			o.unsaid = [0, 1, 2].map((k) => {
 				const u = el(o.led, 'g', {opacity: 0});
-				const tag = mono(u, X.req, qY(k) + 20, 'UNSAID', {fs: 15, ls: 0});
+				const tag = mono(u, X.req, qY(k) + 20, L.unsaid, {fs: 15, ls: 0});
 				const box = el(u, 'rect', {x: X.req, y: qY(k) + 6, height: 19, rx: 2, fill: 'none', stroke: C.grey, 'stroke-width': 1.3, 'stroke-dasharray': '3 3'});
 				const t = serif(u, X.req, qY(k) + 20, UNSAID[k], {fs: 15, style: 'italic', fill: C.grey});
 				return {u, tag, box, t};
 			});
 			o.key = el(o.led, 'g', {opacity: 0});
 			el(o.key, 'rect', {x: 424, y: 2, width: 14, height: 11, fill: 'none', stroke: C.grey, 'stroke-width': 1.3, 'stroke-dasharray': '3 2'});
-			mono(o.key, 444, 12, 'LEFT UNSAID', {fs: 13, ls: 0.5});
+			mono(o.key, 444, 12, L.unsaidKey, {fs: 13, ls: 0.5});
 		} else {
 			o.pointers = [0, 1, 2].map((k) => el(o.led, 'path', {d: `M${X.req - 2} ${qY(k) + 13}C${X.req - 6} ${qY(k) + 13} ${X.req - 6} ${rowY(k) + BH / 2} ${X.own + CW + 3} ${rowY(k) + BH / 2}`, fill: 'none', stroke: C.red, 'stroke-width': 1.3, 'marker-end': 'url(#id-arrow)'}));
 		}
@@ -225,8 +223,8 @@
 
 	// ---- faculty --------------------------------------------------------------------------
 	const fac = el(facLayer, 'g');
-	mono(fac, 724, 44, 'FACULTY ASK');
-	serif(fac, 724, 70, 'Better by whose standard?', {fs: 19, style: 'italic'});
+	mono(fac, 724, 44, L.askLabel);
+	serif(fac, 724, 70, L.askQ, {fs: 19, style: 'italic'});
 	const speech = (key, y0) => {
 		const x = 724, w = 212, h = 88, r = 8;
 		const g = el(facLayer, 'g');
@@ -316,7 +314,7 @@
 	}
 
 	// ---- render ------------------------------------------------------------------------------
-	const draftLabel = (t, d2, d3, d4) => (t >= d4 ? 'DRAFT 4' : t >= d3 ? 'DRAFT 3' : t >= d2 ? 'DRAFT 2' : '');
+	const draftLabel = (t, d2, d3, d4, word = L.draft) => (t >= d4 ? `${word} 4` : t >= d3 ? `${word} 3` : t >= d2 ? `${word} 2` : '');
 	const draftsA = (t) => draftLabel(t, T.draftA2[0], T.workA3[1] - 0.1, T.workA4[1] - 0.2);
 	const draftsB = (t) => draftLabel(t, T.revB[0], T.workB3[1] - 0.1, T.workB4[1] - 0.2);
 	function renderPaper(o, t, {ticks, head, work3, para, work4}) {
@@ -464,30 +462,30 @@
 	{
 		const task = h('div', 'id-n-task', narrow);
 		const p1 = h('p', null, task);
-		h('b', null, p1, 'Example task');
-		p1.append(' Recommend whether to keep a forward base.');
+		h('b', null, p1, NW.taskLabel);
+		p1.append(` ${ed.task.text}`);
 		NR.rubric = h('p', 'id-n-rubric', task);
-		h('b', null, NR.rubric, 'Rubric ·');
-		h('span', null, NR.rubric, 'Evidence must back the call.');
+		h('b', null, NR.rubric, NW.rubricLabel);
+		h('span', null, NR.rubric, ed.task.rubric);
 		NR.task = task;
 		NR.fac = h('p', 'id-n-fac', narrow);
-		h('b', null, NR.fac, 'Faculty ask');
-		NR.fac.append('Better by whose standard?');
+		h('b', null, NR.fac, NW.askLabel);
+		NR.fac.append(L.askQ);
 		// One key for the cells, in place of a tag on every chip.
 		NR.key = h('p', 'id-n-keys', narrow);
-		NR.keyItems = [['is-open', 'Undecided'], ['is-ai', 'AI decides'], ['is-own', 'Student decides'], ['is-uns', 'Left unsaid']].map(([cls, txt]) => h('span', cls, NR.key, txt));
+		NR.keyItems = ['is-open', 'is-ai', 'is-own', 'is-uns'].map((cls, i) => [cls, NW.keys[i]]).map(([cls, txt]) => h('span', cls, NR.key, txt));
 		const grid = h('div', 'id-n-grid', narrow);
 		const column = (key) => {
 			const isA = key === 'a';
 			const c = {};
 			c.el = h('div', 'id-n-col', grid);
 			const who = h('p', 'id-n-who', c.el);
-			h('span', null, who, isA ? 'First student' : 'Second student');
-			c.draft = h('span', 'id-n-draft', who, 'Draft 1');
+			h('span', null, who, isA ? L.first : L.second);
+			c.draft = h('span', 'id-n-draft', who, NW.draft1);
 			const paper = h('p', 'id-n-paper', c.el);
-			c.rev = h('span', 'id-n-rev', paper, 'Revised with AI');
+			c.rev = h('span', 'id-n-rev', paper, NW.revised);
 			c.notes = h('div', 'id-n-notes', c.el);
-			h('b', null, c.notes, "AI's notes");
+			h('b', null, c.notes, NW.notesLabel);
 			c.noteEls = NOTES.map((n) => {
 				const line = h('p', 'id-n-note', c.notes);
 				const tick = h('i', null, line, '✓');
@@ -502,7 +500,7 @@
 				if (isA) q.textContent = `“${REQ_A[k]}”`;
 				else { q.append(`“${REQ_B[k][0]} `); h('span', 'is-red', q, REQ_B[k][1]); q.append('”'); }
 				let uns = null;
-				if (isA) { uns = h('p', 'id-n-uns', cell, 'Unsaid'); h('span', 'id-n-ghost', uns, UNSAID[k]); }
+				if (isA) { uns = h('p', 'id-n-uns', cell, NW.unsaid); h('span', 'id-n-ghost', uns, UNSAID[k]); }
 				const chip = h('p', 'id-n-chip', cell);
 				const label = h('span', null, chip, LABELS[k]);
 				const decided = isA ? null : h('i', 'id-n-decided', chip, DECIDED[k].join(' '));
@@ -529,7 +527,7 @@
 		// First student.
 		const a = NR.a;
 		fade(a.el, prog(t, ...T.dotA));
-		a.draft.textContent = draftsA(t) || 'Draft 1';
+		a.draft.textContent = draftsA(t) || NW.draft1;
 		vis(a.rev, t >= T.revA[0]);
 		vis(a.notes, t >= T.notesA[0]);
 		fade(a.notes, ledOp);
@@ -555,7 +553,7 @@
 		const b = NR.b;
 		vis(b.el, t >= T.blockB[0]);
 		fade(b.el, prog(t, ...T.blockB));
-		b.draft.textContent = draftsB(t) || 'Draft 1';
+		b.draft.textContent = draftsB(t) || NW.draft1;
 		vis(b.rev, t >= T.revB[0]);
 		vis(b.notes, t >= T.notesB[0]);
 		fade(b.notes, ledOp);
@@ -606,30 +604,13 @@
 		if (stacked && w !== fitWidth) { fitWidth = w; fitNarrow(); }
 	};
 
-	const BEATS = [
-		{at: 0, text: 'A student wants to improve a draft paper. We\'ll track three decisions it needs.',
-			detail: 'a task card at the top left: "Example task. Recommend whether to keep a forward base. Rubric: evidence must back the call." A red dot labelled First student appears with a draft paper. Beside it, a ledger in three lanes: "The student decides", "Requests" and "The AI decides". Three dashed cards, still undecided, sit in the student\'s lane: "The criteria", "How the argument runs" and "What \'strategic\' means". The AI\'s lane shows three empty slots.'},
-		{at: 9.5, text: 'The student asks an AI for feedback. The request carries the criteria across.',
-			detail: 'a speech bubble, "Give me feedback", clips onto the criteria card, and the two travel slowly across into the AI\'s lane, where the card turns grey. The request settles in the middle lane. The AI\'s notes appear under the paper: "Tighter opening", "Add the costs", "Be more decisive". The student ticks all three: draft 2, revised with AI.'},
-		{at: 20.8, text: 'Then for a better structure, and a more strategic version.',
-			detail: '"Suggest a better structure" carries "How the argument runs" across, and "Make it more strategic" carries "What \'strategic\' means". Both turn grey in the AI\'s lane. The AI\'s grey headings and paragraph appear in the paper, and the student revises to draft 4.'},
-		{at: 32.9, text: 'Each request left out whose standard to use. The AI used its own.',
-			detail: 'a key appears, "Left unsaid". Under each request, a line marked "unsaid" with the words in a dashed box: against your criteria; for your argument; as you define it. The three grey cards pulse.'},
-		{at: 41.6, text: 'A second student, with the same task, starts from the rubric.',
-			detail: 'the first student\'s ledger moves up, and a second student appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, "Evidence must back the call", grows larger and is highlighted.'},
-		{at: 48.9, text: 'Before each request, the second student writes the decision down.',
-			detail: 'the dot writes on the criteria card, which turns red: "Evidence must back the call." Then it asks, "Give me feedback against my criteria," with a red pointer back to the card. It writes "Lead with the call, then its evidence" on "How the argument runs" and asks, "Suggest a better structure for my argument." It writes "Serves the ally\'s long-term interest" on "What \'strategic\' means" and asks, "Make it more strategic, as I define it." All three cards stay red in the student\'s lane; the AI\'s lane stays empty.'},
-		{at: 60.3, text: 'Both get the same AI notes. The second student judges them against their decisions.',
-			detail: 'the same notes appear under the second paper: "Tighter opening", "Add the costs", "Be more decisive". The student ticks the first two. The criteria card pulses as the student strikes "Be more decisive" in red and writes underneath: "evidence too thin". The same grey headings and paragraph appear in this paper, up to draft 4.'},
-		{at: 70.5, text: 'Faculty have only the papers. They ask each student about the standard.',
-			detail: 'the ledgers and notes fade; the two papers stay, both at draft 4 and marked "Revised with AI". "Faculty ask: Better by whose standard?" appears. The first student says, "The AI\'s notes, I suppose. I worked through what it flagged." The second says, "Mine, set first from the rubric: does the evidence back my call?"'},
-		{at: 83.6, text: 'Faculty check: What did the AI decide for the student?',
-			list: 'Faculty check: What did the AI decide for the student? To find out, ask each student: better by whose standard?',
-			detail: 'both lines appear under the picture at the same size, and the ledgers and notes return: the first student\'s three decisions in the AI\'s lane, the second student\'s three in their own, in their words.',
-			check: {label: 'Faculty check', question: 'What did the AI decide for the student?', follow: 'To find out, ask each student: better by whose standard?', followAt: T.follow}},
-	];
+	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
 
-	document.fonts.ready.then(() => {
+	// The faces the picture uses must be loaded before text is measured: the SVG is built
+	// after the edition loads, so its italic and mono faces may not have been requested yet.
+	const FACES = ['400 16px "Source Serif 4"', 'italic 400 16px "Source Serif 4"', '600 13px "Source Sans 3"', '400 14px "Source Sans 3"', '600 12px "IBM Plex Mono"'];
+	Promise.all(FACES.map((f) => document.fonts.load(f))).then(() => {
 		measure();
 		legibility(root, svg, VW, 11);
 		new ResizeObserver(syncStacked).observe(svg);
@@ -641,4 +622,5 @@
 		fitWidth = 0;
 		syncStacked();
 	});
+	}
 })();

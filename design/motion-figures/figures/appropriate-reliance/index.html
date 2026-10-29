@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Appropriate Reliance</title>
-<meta name="description" content="An interactive teaching figure: with time to check one of two tasks from the Dell'Acqua et al. field experiment, you decide where the check goes, see what the study found, and make one more call when a condition changes.">
+<meta name="description" data-ed-content="page.description" content="An interactive teaching figure: with time to check one of two tasks from the Dell'Acqua et al. field experiment, you decide where the check goes, see what the study found, and make one more call when a condition changes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -180,19 +180,19 @@
 </header>
 
 <main class="fig-page ar-page">
-	<p class="fig-kicker">The skill</p>
-	<h1>Appropriate reliance</h1>
-	<p class="ar-lede">You have time to check one of two AI answers. Decide where the check goes, then see what the study found.</p>
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="ar-lede" data-ed-rich="page.setup"></p>
 
 	<div class="ar-printq" data-ar-printq aria-hidden="true">
-		<p class="ar-printq-plate">Appropriate reliance · The skill</p>
-		<p class="fig-kicker">The question</p>
+		<p class="ar-printq-plate" data-ar-plate></p>
+		<p class="fig-kicker" data-ed="page.printKicker"></p>
 		<div data-ar-printq-svg></div>
-		<p class="ar-printq-cap">You have time to check one. Which one? The answer follows on the next page.</p>
+		<p class="ar-printq-cap" data-ed="page.printCaption"></p>
 	</div>
 
 	<figure class="mf" id="appropriate-reliance" aria-labelledby="ar-title">
-		<p class="sr-only" id="ar-title">Appropriate reliance, an interactive figure in ten beats</p>
+		<p class="sr-only" id="ar-title" data-ed="page.srTitle"></p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -200,23 +200,23 @@
 			<div class="ar-narrow" data-ar-narrow aria-hidden="true"></div>
 			<div class="ar-hits">
 				<fieldset class="ar-hitset" data-ar-gate="0" hidden>
-					<legend class="sr-only">Your one check goes to</legend>
-					<label class="ar-hit" data-ar-opt="a"><input type="radio" name="ar-g1" value="a"><span class="sr-only">Task A, segment the footwear market</span></label>
-					<label class="ar-hit" data-ar-opt="b"><input type="radio" name="ar-g1" value="b"><span class="sr-only">Task B, pick the clothing brand</span></label>
+					<legend class="sr-only" data-ed="gates.legends.0"></legend>
+					<label class="ar-hit" data-ar-opt="a"><input type="radio" name="ar-g1" value="a"><span class="sr-only" data-ed="gates.options.a"></span></label>
+					<label class="ar-hit" data-ar-opt="b"><input type="radio" name="ar-g1" value="b"><span class="sr-only" data-ed="gates.options.b"></span></label>
 				</fieldset>
 				<fieldset class="ar-hitset" data-ar-gate="1" hidden>
-					<legend class="sr-only">If your segmentation goes straight into the launch plan, Task A</legend>
-					<label class="ar-hit" data-ar-opt="rely"><input type="radio" name="ar-g2" value="rely"><span class="sr-only">Rely on it, after a careful read</span></label>
-					<label class="ar-hit" data-ar-opt="move"><input type="radio" name="ar-g2" value="move"><span class="sr-only" data-ar-movelabel>Put my check here</span></label>
-					<label class="ar-hit" data-ar-opt="time"><input type="radio" name="ar-g2" value="time"><span class="sr-only">Ask for a week to check both</span></label>
+					<legend class="sr-only" data-ed="gates.legends.1"></legend>
+					<label class="ar-hit" data-ar-opt="rely"><input type="radio" name="ar-g2" value="rely"><span class="sr-only" data-ed="gates.options.rely"></span></label>
+					<label class="ar-hit" data-ar-opt="move"><input type="radio" name="ar-g2" value="move"><span class="sr-only" data-ar-movelabel></span></label>
+					<label class="ar-hit" data-ar-opt="time"><input type="radio" name="ar-g2" value="time"><span class="sr-only" data-ed="gates.options.time"></span></label>
 				</fieldset>
 			</div>
 			<div class="ar-capwrap">
 				<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
 				<div class="ar-gatebar" data-ar-gatebar hidden>
-					<span class="ar-prompt" data-ar-prompt hidden>Make your call first, or skip this question.</span>
-					<button class="ar-continue" type="button" data-ar-continue disabled>Continue</button>
-					<button class="ar-skip" type="button" data-ar-skip>Skip this question</button>
+					<span class="ar-prompt" data-ar-prompt hidden data-ed="gates.prompt"></span>
+					<button class="ar-continue" type="button" data-ar-continue disabled data-ed="gates.continue"></button>
+					<button class="ar-skip" type="button" data-ar-skip data-ed="gates.skip"></button>
 				</div>
 			</div>
 		</div>
@@ -228,55 +228,50 @@
 		</div>
 		<p class="sr-only" aria-live="polite" data-ar-live></p>
 		<figcaption>
-			<p class="sr-only" data-ar-sum1>An interactive figure with two tasks from a 2023 field experiment with BCG consultants. Task A: segment the footwear industry market based on users. Task B: use a spreadsheet and insider interviews to pick the brand a clothing firm should back. An AI answers both in the same form, each marked ready, and both answers will go into your team's first draft. You have time to check one task; a check means working it yourself, then comparing with the AI's answer. You choose which task gets the check and rely on the AI for the other. The rest of this description, and the rest of the beat list, appear after you answer or skip each question.</p>
-			<p class="sr-only" data-ar-sum2 hidden>After the first question: a jagged line, the frontier, is drawn between the tasks: Task A inside, Task B outside. On tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster, at more than 40% higher quality. On Task B, consultants without AI were right 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus a prompt-engineering overview 60%, and graders rated the AI users' work higher in quality, right or wrong. Task B's deciding details were in the interviews; the spreadsheet only looked complete. For Task A, the evidence suggests no hidden facts: a weak answer shows when read. The suggested call, reasoned from the results, is to rely on Task A, since a check there leaves Task B unchecked, and to work Task B from the interviews yourself, then compare. Then your segmentation goes straight into the launch plan, and you choose again for Task A: rely on it after a careful read, move or put your check there, or ask for a week to check both.</p>
-			<p class="sr-only" data-ar-sum3 hidden>After the second question: the suggested call is to rely on Task A and read it before it's built: it is still inside the frontier and a weak answer shows on a careful read. Task B needs the check. Moving the check leaves Task B to a read-through only; asking for a week to check both slips the launch a week. The figure ends on the faculty check.</p>
+			<p class="sr-only" data-ar-sum1 data-ed="page.srSummary.0"></p>
+			<p class="sr-only" data-ar-sum2 hidden data-ed="page.srSummary.1"></p>
+			<p class="sr-only" data-ar-sum3 hidden data-ed="page.srSummary.2"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
 
 	<section class="fig-section" aria-labelledby="ar-check-h">
-		<h2 id="ar-check-h">Faculty check</h2>
-		<p class="fig-check">What evidence justified relying on the system here, and what would have changed the call?</p>
-		<p class="fig-check">Change one condition and ask for the call again.</p>
+		<h2 id="ar-check-h" data-ed="page.checkHeading"></h2>
+		<p class="fig-check" data-ed="page.checkLines.0"></p>
+		<p class="fig-check" data-ed="page.checkLines.1"></p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="ar-how-h">
-		<h2 id="ar-how-h">How this figure works</h2>
-		<p class="fig-follow">Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning.</p>
+		<h2 id="ar-how-h" data-ed="page.howHeading"></h2>
+		<p class="fig-follow" data-ed-rich="page.how"></p>
 	</section>
 
-	<p class="ar-after-locked" data-ar-after-locked>After you make your call: make or skip both calls to open this.</p>
+	<p class="ar-after-locked" data-ar-after-locked data-ed="page.afterLocked"></p>
 	<details class="ar-after" id="ar-after" hidden>
-		<summary>After you make your call: what a good answer says, the evidence, the tasks</summary>
-		<h3>What a good answer says</h3>
-		<p class="fig-follow">A good answer says where the check went and why. This is the figure's reasoning from the study's results; the study itself didn't test checking, a time budget, or what the work was for. Task B's deciding details were in the interviews, and the spreadsheet only looked complete. Graders rated the AI users' recommendations higher whether or not they were right, so a read-through wouldn't show a miss. That's where the one check belongs, and it starts from the interviews. Task A is the kind of work the study found inside the frontier, and the figure reads it as having no hidden facts: a weak segmentation shows when read. As a first draft it can go without a check. When the segmentation goes straight into the launch plan, it is still inside the frontier, so the call is still to rely on it, but now someone has to read it carefully before it's built. Moving the one check would leave Task B, the risky task, to a read-through; asking for a week to check both is defensible, and it slips the launch a week. Changing one condition and asking again shows whether the student has a reason for the call.</p>
-		<h3>Evidence</h3>
-		<p class="fig-follow">Dell'Acqua et al., <a href="https://www.hbs.edu/faculty/Pages/item.aspx?num=64700">Navigating the Jagged Technological Frontier</a>, HBS working paper 24-013 (2023). In the field experiment, 758 BCG consultants were split between two sets of tasks and randomly assigned to work without AI, with GPT-4, or with GPT-4 plus a prompt-engineering overview. On the tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster and at more than 40% higher quality. On the task chosen to fall outside it, consultants without AI were right about 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus the overview 60%: in the working paper's words, with the two AI groups pooled, "19 percentage points less likely to produce correct solutions." Graders still rated the AI users' recommendations higher in quality "regardless of the correctness of their answer."</p>
-		<h3>About the tasks</h3>
-		<p class="fig-follow">The tasks inside the frontier were 18 product-development questions for a fictional footwear company. Consultants generated ideas for a new shoe, segmented the market by users, listed the steps to launch it, and wrote a press release and a persuasive memo. On the task built to fall outside the frontier, consultants told a fictional clothing company's CEO which of its brands to invest in, working from a spreadsheet of financial data and interviews with company insiders. The spreadsheet was designed to look complete, but the deciding details were in the interviews, and the authors designed the task so that GPT-4 would get it wrong. In the study each consultant worked one set of tasks; the choice of where to spend one check, and the launch-plan condition, are this figure's. The task wording on screen is paraphrased. The frontier moves as models change; this is where it sat in 2023, with GPT-4.</p>
+		<summary data-ed="page.afterSummary"></summary>
+		<h3 data-ed="page.after.0.heading"></h3>
+		<p class="fig-follow" data-ar-ed-rich="page.after.0.text"></p>
+		<h3 data-ed="page.after.1.heading"></h3>
+		<p class="fig-follow" data-ar-ed-rich="page.after.1.text"></p>
+		<h3 data-ed="page.after.2.heading"></h3>
+		<p class="fig-follow" data-ar-ed-rich="page.after.2.text"></p>
 	</details>
 
 	<section class="fig-section" aria-labelledby="ar-essay-h">
-		<h2 id="ar-essay-h">From the essay</h2>
+		<h2 id="ar-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
-			<p>The distinction between trust and reliance matters here. Trust is a subjective disposition, a feeling of confidence that a system will perform well. Reliance is the observable act of accepting its output and acting on it. Appropriate reliance is harder and more discriminating: accepting support when it is warranted, refusing or verifying when it is not, and being able to give an account of the difference (<a href="https://arxiv.org/abs/2604.23896">Raees &amp; Papangelis, 2026</a>).</p>
-			<cite><em>The Irreducible Officer</em>, Section V, Appropriate Reliance as a Teachable Competency</cite>
+			<p data-ar-ed-rich="page.quotes.0.text"></p>
+			<cite data-ed-rich="page.quotes.0.cite"></cite>
 		</blockquote>
 		<blockquote class="fig-quote" style="margin-top: 18px">
-			<p>The educational response is pattern recognition: learning to identify what kind of task is in front of you, where models tend to be strong, where they tend to fail, and what independent checks are required before the output governs the work.</p>
-			<cite><em>The Irreducible Officer</em>, Section V, Appropriate Reliance as a Teachable Competency</cite>
+			<p data-ar-ed-rich="page.quotes.1.text"></p>
+			<cite data-ed-rich="page.quotes.1.cite"></cite>
 		</blockquote>
 	</section>
 
 	<section class="fig-section" aria-labelledby="ar-links-h">
-		<h2 id="ar-links-h">Go further</h2>
-		<ul class="fig-links">
-			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=3">Calibrate the tool</a></li>
-			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test your reliance calls with your AI assistant</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></li>
-			<li><span>See the failure:</span> <a href="../uncalibrated-reliance/">Uncalibrated reliance</a></li>
-		</ul>
+		<h2 id="ar-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>
 

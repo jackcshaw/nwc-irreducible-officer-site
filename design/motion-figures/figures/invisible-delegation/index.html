@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invisible Delegation</title>
-<meta name="description" content="A teaching figure: ordinary requests for AI help can hand over the criteria, the argument and what 'strategic' means. Faculty find out by asking each student whose standard the help followed.">
+<meta name="description" data-ed-content="page.description" content="A teaching figure: ordinary requests for AI help can hand over the criteria, the argument and what 'strategic' means. Faculty find out by asking each student whose standard the help followed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -92,12 +92,12 @@
 </header>
 
 <main class="fig-page">
-	<p class="fig-kicker">Failure mode 5 of 7</p>
-	<h1>Invisible delegation</h1>
-	<p class="fig-setup">A student asks an AI for feedback on a draft paper, then a better structure, then a more strategic version, and revises after each. <em>The Irreducible Officer</em> calls what can happen next invisible delegation: a request for help transfers criteria, structure or meaning, and the student doesn't notice. The task, the rubric, the requests and both students are a constructed example.</p>
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
 
 	<figure class="mf" id="invisible-delegation" aria-labelledby="id-title">
-		<p class="sr-only" id="id-title">Invisible delegation, an animated figure in nine beats</p>
+		<p class="sr-only" id="id-title" data-ed="page.srTitle"></p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -112,39 +112,32 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:33</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure. A red dot stands for a student improving a draft strategy paper, for an example task: recommend whether to keep a forward base. The task card carries a rubric: evidence must back the call. Beside the paper is a ledger in three lanes: "The student decides", "Requests" and "The AI decides". Three undecided cards start in the student's lane: the criteria, how the argument runs, and what "strategic" means. The student asks an AI, "Give me feedback." The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back ("Tighter opening", "Add the costs", "Be more decisive"), and the student ticks all three and revises. The student then asks, "Suggest a better structure," and "Make it more strategic." Each request carries a card across, and the student revises to draft 4. Then, under each request, a line marked "unsaid" shows what it left out, in a dashed box: against your criteria, for your argument, as you define it. A second student, with the same task, starts from the rubric, which is enlarged and highlighted. Before each request, they write the decision on its card in red: "Evidence must back the call"; "Lead with the call, then its evidence"; "Serves the ally's long-term interest". Then they ask: "Give me feedback against my criteria," "Suggest a better structure for my argument," "Make it more strategic, as I define it." Their cards stay in their lane. Both get the same AI notes. The second student judges them against their decisions: they tick two and strike "Be more decisive", writing "evidence too thin". Their paper gets the same grey help. Faculty, who have only the two papers, both marked "Revised with AI", ask each student, "Better by whose standard?" The first says, "The AI's notes, I suppose. I worked through what it flagged." The second says, "Mine, set first from the rubric: does the evidence back my call?" The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
 
 	<section class="fig-section" aria-labelledby="id-check-h">
-		<h2 id="id-check-h">Faculty check</h2>
-		<p class="fig-check">What did the AI decide for the student?</p>
-		<p class="fig-check">To find out, ask each student: better by whose standard?</p>
-		<p class="fig-follow">A student who didn't notice what they handed over can honestly answer the first question with "nothing". The second line is a question they can answer, and the answer shows whose standard the help followed. In the figure, both students have the same rubric and get the same AI notes. The first followed the notes. The second wrote their decisions down first, the criteria from the rubric, and judged the notes against them, turning one down. The essay's own pairs give the follow-ups: feedback against which criteria, a better structure for which argument, more strategic in what sense. The companion's failure-mode lab adds a fair objection: an assistant can legitimately propose criteria. The trouble starts when a student accepts them without seeing how they relate to the task.</p>
+		<h2 id="id-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="id-essay-h">
-		<h2 id="id-essay-h">From the essay</h2>
+		<h2 id="id-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
-			<p>Invisible delegation occurs when the student does not notice which parts of the work they have handed over. Asking for "feedback" may delegate criteria. Asking for "a better structure" may delegate the argument. Asking for "counterarguments" may delegate the range of imaginable objections. Asking for "a more strategic version" may delegate the meaning of strategic. The language of assistance hides the transfer of judgment. The student believes they are working; the model has already done the framing.</p>
-			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+			<p data-ed-rich="page.quotes.0.text"></p>
+			<cite data-ed-rich="page.quotes.0.cite"></cite>
 		</blockquote>
 		<blockquote class="fig-quote" style="margin-top: 18px">
-			<p>Minimal-context prompting inherits the model's frame almost entirely. Structured prompting with explicit purpose and evaluation criteria moves the human contribution upstream.</p>
-			<cite><em>The Irreducible Officer</em>, Section V, Appropriate Reliance as a Teachable Competency</cite>
+			<p data-ed-rich="page.quotes.1.text"></p>
+			<cite data-ed-rich="page.quotes.1.cite"></cite>
 		</blockquote>
 	</section>
 
 	<section class="fig-section" aria-labelledby="id-links-h">
-		<h2 id="id-links-h">Go further</h2>
-		<ul class="fig-links">
-			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=2">Frame the problem</a></li>
-			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test invisible delegation with your AI assistant</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency">Section V, Appropriate Reliance as a Teachable Competency</a></li>
-			<li><span>In the same chapter:</span> <a href="../frame-capture/">Frame capture</a></li>
-		</ul>
+		<h2 id="id-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>
 

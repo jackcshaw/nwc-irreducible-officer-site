@@ -1,0 +1,206 @@
+{
+ "_doc": "Invisible delegation, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in invisible-delegation.js. Schema: CONVENTIONS.md, Editions.",
+ "id": "pme",
+ "cast": "classroom",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "text": "Recommend whether to keep a forward base.",
+  "rubricLabel": "RUBRIC ·",
+  "rubric": "Evidence must back the call."
+ },
+ "decisions": [
+  "The criteria",
+  "How the argument runs",
+  "What “strategic” means"
+ ],
+ "requests": {
+  "first": [
+   "Give me feedback",
+   "Suggest a better structure",
+   "Make it more strategic"
+  ],
+  "unsaid": [
+   "against your criteria",
+   "for your argument",
+   "as you define it"
+  ],
+  "second": [
+   [
+    "Give me feedback",
+    "against my criteria"
+   ],
+   [
+    "Suggest a better structure",
+    "for my argument"
+   ],
+   [
+    "Make it more strategic,",
+    "as I define it"
+   ]
+  ]
+ },
+ "decided": [
+  [
+   "Evidence must back",
+   "the call"
+  ],
+  [
+   "Lead with the call,",
+   "then its evidence"
+  ],
+  [
+   "Serves the ally’s",
+   "long-term interest"
+  ]
+ ],
+ "notes": {
+  "label": "AI'S NOTES",
+  "items": [
+   "Tighter opening",
+   "Add the costs",
+   "Be more decisive"
+  ],
+  "reason": "evidence too thin"
+ },
+ "answers": {
+  "first": [
+   "“The AI’s notes, I",
+   "suppose. I worked through",
+   "what it flagged.”"
+  ],
+  "second": [
+   "“Mine, set first from the",
+   "rubric: does the evidence",
+   "back my call?”"
+  ]
+ },
+ "labels": {
+  "first": "{first}",
+  "second": "{second}",
+  "draft": "DRAFT",
+  "revised": [
+   "REVISED",
+   "WITH AI"
+  ],
+  "laneOwn": "THE {person|upper} DECIDES",
+  "laneRequests": "REQUESTS",
+  "laneAI": "THE AI DECIDES",
+  "unsaid": "UNSAID",
+  "unsaidKey": "LEFT UNSAID",
+  "askLabel": "FACULTY ASK",
+  "askQ": "Better by whose standard?"
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "rubricLabel": "Rubric ·",
+  "askLabel": "Faculty ask",
+  "draft1": "Draft 1",
+  "draftWord": "DRAFT",
+  "revised": "Revised with AI",
+  "notesLabel": "AI's notes",
+  "keys": [
+   "Undecided",
+   "AI decides",
+   "{Person} decides",
+   "Left unsaid"
+  ],
+  "unsaid": "Unsaid"
+ },
+ "beats": [
+  {
+   "text": "{A_person} wants to improve a draft paper. We'll track three decisions it needs.",
+   "detail": "a task card at the top left: \"Example task. Recommend whether to keep a forward base. Rubric: evidence must back the call.\" A red dot labelled {first} appears with a draft paper. Beside it, a ledger in three lanes: \"{The_person} decides\", \"Requests\" and \"The AI decides\". Three dashed cards, still undecided, sit in {the_person}'s lane: \"The criteria\", \"How the argument runs\" and \"What 'strategic' means\". The AI's lane shows three empty slots."
+  },
+  {
+   "text": "{The_person} asks an AI for feedback. The request carries the criteria across.",
+   "detail": "a speech bubble, \"Give me feedback\", clips onto the criteria card, and the two travel slowly across into the AI's lane, where the card turns grey. The request settles in the middle lane. The AI's notes appear under the paper: \"Tighter opening\", \"Add the costs\", \"Be more decisive\". {The_person} ticks all three: draft 2, revised with AI."
+  },
+  {
+   "text": "Then for a better structure, and a more strategic version.",
+   "detail": "\"Suggest a better structure\" carries \"How the argument runs\" across, and \"Make it more strategic\" carries \"What 'strategic' means\". Both turn grey in the AI's lane. The AI's grey headings and paragraph appear in the paper, and {the_person} revises to draft 4."
+  },
+  {
+   "text": "Each request left out whose standard to use. The AI used its own.",
+   "detail": "a key appears, \"Left unsaid\". Under each request, a line marked \"unsaid\" with the words in a dashed box: against your criteria; for your argument; as you define it. The three grey cards pulse."
+  },
+  {
+   "text": "{A_second}, with the same task, starts from the rubric.",
+   "detail": "the first student's ledger moves up, and {a_second} appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, \"Evidence must back the call\", grows larger and is highlighted."
+  },
+  {
+   "text": "Before each request, the second {person} writes the decision down.",
+   "detail": "the dot writes on the criteria card, which turns red: \"Evidence must back the call.\" Then it asks, \"Give me feedback against my criteria,\" with a red pointer back to the card. It writes \"Lead with the call, then its evidence\" on \"How the argument runs\" and asks, \"Suggest a better structure for my argument.\" It writes \"Serves the ally's long-term interest\" on \"What 'strategic' means\" and asks, \"Make it more strategic, as I define it.\" All three cards stay red in {the_person}'s lane; the AI's lane stays empty."
+  },
+  {
+   "text": "Both get the same AI notes. The second {person} judges them against their decisions.",
+   "detail": "the same notes appear under the second paper: \"Tighter opening\", \"Add the costs\", \"Be more decisive\". {The_person} ticks the first two. The criteria card pulses as {the_person} strikes \"Be more decisive\" in red and writes underneath: \"evidence too thin\". The same grey headings and paragraph appear in this paper, up to draft 4."
+  },
+  {
+   "text": "Faculty have only the papers. They ask each {person} about the standard.",
+   "detail": "the ledgers and notes fade; the two papers stay, both at draft 4 and marked \"Revised with AI\". \"Faculty ask: Better by whose standard?\" appears. The first student says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\""
+  },
+  {
+   "text": "{check}: What did the AI decide for {the_person}?",
+   "list": "{check}: What did the AI decide for {the_person}? To find out, ask each {person}: better by whose standard?",
+   "detail": "both lines appear under the picture at the same size, and the ledgers and notes return: the first student's three decisions in the AI's lane, the second {person}'s three in their own, in their words."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What did the AI decide for the student?",
+  "follow": "To find out, ask each {person}: better by whose standard?"
+ },
+ "page": {
+  "kicker": "Failure mode 5 of 7",
+  "title": "Invisible delegation",
+  "description": "A teaching figure: ordinary requests for AI help can hand over the criteria, the argument and what 'strategic' means. Faculty find out by asking each student whose standard the help followed.",
+  "setup": "A student asks an AI for feedback on a draft paper, then a better structure, then a more strategic version, and revises after each. *The Irreducible Officer* calls what can happen next invisible delegation: a request for help transfers criteria, structure or meaning, and the student doesn't notice. The task, the rubric, the requests and both students are a constructed example.",
+  "srTitle": "Invisible delegation, an animated figure in nine beats",
+  "srSummary": "An animated figure. A red dot stands for a student improving a draft strategy paper, for an example task: recommend whether to keep a forward base. The task card carries a rubric: evidence must back the call. Beside the paper is a ledger in three lanes: \"The student decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the student's lane: the criteria, how the argument runs, and what \"strategic\" means. The student asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Tighter opening\", \"Add the costs\", \"Be more decisive\"), and the student ticks all three and revises. The student then asks, \"Suggest a better structure,\" and \"Make it more strategic.\" Each request carries a card across, and the student revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out, in a dashed box: against your criteria, for your argument, as you define it. A second student, with the same task, starts from the rubric, which is enlarged and highlighted. Before each request, they write the decision on its card in red: \"Evidence must back the call\"; \"Lead with the call, then its evidence\"; \"Serves the ally's long-term interest\". Then they ask: \"Give me feedback against my criteria,\" \"Suggest a better structure for my argument,\" \"Make it more strategic, as I define it.\" Their cards stay in their lane. Both get the same AI notes. The second student judges them against their decisions: they tick two and strike \"Be more decisive\", writing \"evidence too thin\". Their paper gets the same grey help. Faculty, who have only the two papers, both marked \"Revised with AI\", ask each student, \"Better by whose standard?\" The first says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\" The figure ends on the faculty check. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What did the AI decide for {the_person}?",
+   "To find out, ask each {person}: better by whose standard?"
+  ],
+  "checkFollow": "A student who didn't notice what they handed over can honestly answer the first question with \"nothing\". The second line is a question they can answer, and the answer shows whose standard the help followed. In the figure, both students have the same rubric and get the same AI notes. The first followed the notes. The second wrote their decisions down first, the criteria from the rubric, and judged the notes against them, turning one down. The essay's own pairs give the follow-ups: feedback against which criteria, a better structure for which argument, more strategic in what sense. The companion's failure-mode lab adds a fair objection: an assistant can legitimately propose criteria. The trouble starts when a student accepts them without seeing how they relate to the task.",
+  "quoteHeading": "From the essay",
+  "quotes": [
+   {
+    "text": "Invisible delegation occurs when the student does not notice which parts of the work they have handed over. Asking for \"feedback\" may delegate criteria. Asking for \"a better structure\" may delegate the argument. Asking for \"counterarguments\" may delegate the range of imaginable objections. Asking for \"a more strategic version\" may delegate the meaning of strategic. The language of assistance hides the transfer of judgment. The student believes they are working; the model has already done the framing.",
+    "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like"
+   },
+   {
+    "text": "Minimal-context prompting inherits the model's frame almost entirely. Structured prompting with explicit purpose and evaluation criteria moves the human contribution upstream.",
+    "cite": "*The Irreducible Officer*, Section V, Appropriate Reliance as a Teachable Competency"
+   }
+  ],
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Book chapter:",
+    "text": "Frame the problem",
+    "href": "../../book-v0/four-moves-book.html?spread=2"
+   },
+   {
+    "lead": "Practice:",
+    "text": "test invisible delegation with your AI assistant",
+    "href": "https://judgmentlab.net/#companion"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section II, What the Problem Looks Like",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section V, Appropriate Reliance as a Teachable Competency",
+    "href": "https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency"
+   },
+   {
+    "lead": "In the same chapter:",
+    "text": "Frame capture",
+    "href": "../frame-capture/"
+   }
+  ]
+ }
+}

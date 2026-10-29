@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Institutional Monoculture</title>
-<meta name="description" content="A teaching figure: papers that each hold up can share one definition of the problem, the one the AI's outlines opened with. Faculty see it by lining up every paper's problem statement.">
+<meta name="description" data-ed-content="page.description" content="A teaching figure: papers that each hold up can share one definition of the problem, the one the AI's outlines opened with. Faculty see it by lining up every paper's problem statement.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -94,12 +94,15 @@
 </header>
 
 <main class="fig-page">
-	<p class="fig-kicker">Failure mode 6 of 7</p>
-	<h1>Institutional monoculture</h1>
-	<p class="fig-setup">Ten students in a seminar each use an AI to help write the same strategy paper. Each writes their own, and each paper holds up when read alone. <em>The Irreducible Officer</em> calls what can still go wrong institutional monoculture: shared systems and defaults narrow the range of frames available to the class. The seminar, the task and the papers are a constructed example.</p>
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage, plus the figure's own fill for text with links:
+	     data-im-linked, data-im-linked-items, data-im-lead); see CONVENTIONS.md, Editions. -->
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
 
 	<figure class="mf" id="institutional-monoculture" aria-labelledby="im-title">
-		<p class="sr-only" id="im-title">Institutional monoculture, an animated figure in eleven beats</p>
+		<p class="sr-only" id="im-title" data-ed="page.srTitle"></p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -114,47 +117,35 @@
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:39</span>
 		</div>
 		<figcaption>
-			<p class="sr-only">An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten students in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each student asks an AI for an outline, and ten grey outlines come back in the same pattern. Each student writes their own paper, in ten different layouts, all marked "All drafted with AI". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled "One frame: counter the rival". A grey card comes out of the AI box: every outline opened with "Counter the rival's influence". A grey line runs from it to the bracket, which turns grey, with a grey tag: "AI's frame". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading "One imagined spread". Each student writes the problem in red first, then asks the AI to challenge it ("What did you assume? What else could it be?"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
 
 	<section class="fig-section" aria-labelledby="im-check-h">
-		<h2 id="im-check-h">Faculty check</h2>
-		<p class="fig-check">What frames are missing across the seminar?</p>
-		<p class="fig-check">Line up each paper's problem, then ask what other frames the task could take.</p>
-		<p class="fig-follow">Read one at a time, every paper in the seminar holds up, and the papers look nothing alike. Lined up, they share one problem definition, the one every AI outline opened with. Lining up shows which frames a seminar has. It can't show which are missing. For that, faculty ask what other frames the task could take, and answer from their own knowledge of the problem or let the class name them before discussion settles on one. The figure's imagined seminar follows the essay's proposal for a framing assignment: each student writes a problem frame without AI, then asks an AI to find assumptions they missed and suggest other frames (Section IX, steps one and two). The essay proposes framing first; whether it spreads frames across a seminar is untested, and the imagined board is one possible spread. Lining up the problems across a seminar is this figure's way of applying the essay's per-student frame evidence (Section VIII) to a class. The companion's failure-mode lab adds a fair objection: convergence can reflect a justified shared purpose or strong evidence, and difference isn't better by itself. A seminar can compare several frames and still agree on one.</p>
-		<p class="fig-follow"><strong>About the example.</strong> Each paper's first line stands for the frame evidence the essay asks students to name before submitting (Section VIII), which the essay describes as a short page: the problem frame, key assumptions, criteria for success, evidence standard and the role AI played. The figure groups problems by the goal they set, and names three goals for the imagined seminar as one possible spread. Telling real frames apart takes reading, and, as the lab notes, authored examples don't show the output of any model or actual class.</p>
+		<h2 id="im-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+		<p class="fig-follow" data-im-lead="page.about"></p>
 	</section>
 
 	<section class="fig-section" aria-labelledby="im-essay-h">
-		<h2 id="im-essay-h">From the essay</h2>
+		<h2 id="im-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
-			<p>Institutional monoculture is the class-level version of the same problem. When many students use similar systems, similar prompts, and similar defaults, the range of strategic frames available to a seminar narrows. AI can create a surface appearance of diversity (different arguments, different structures, different evidence) while reproducing common assumptions at the level of problem definition. Research into the diversity of AI-generated ideas finds that language models aggregate knowledge into a unified distribution in ways that human cognition does not: people exhibit knowledge partitioning, each occupying a distinct semantic region, in ways that independent AI samples do not replicate (<a href="https://arxiv.org/abs/2602.20408">Deng, Brucks &amp; Toubia, 2026</a>). Post-training alignment compounds this further, compressing the distribution of outputs toward the statistical center (<a href="https://arxiv.org/abs/2411.04427">Murthy, Ullman &amp; Hu, 2024</a>). Pedagogical research on LLM integration in higher education frames this compression as epistemic narrowing: the constraining of students' exposure to diverse, ambiguous, or contested knowledge by tools optimized for convergence and fluency (<a href="https://doi.org/10.1016/j.caeai.2026.100572">Vendrell &amp; Johnston, 2026</a>). In a war college seminar, that compression raises a serious possibility: the same systems that help students produce stronger work may also narrow the range of strategic imagination the seminar is meant to develop.</p>
-			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+			<p data-im-linked="page.quote"></p>
+			<cite data-ed-rich="page.cite"></cite>
 		</blockquote>
 	</section>
 
-	<section class="fig-section" aria-labelledby="im-evidence-h">
-		<h2 id="im-evidence-h">The evidence</h2>
-		<p class="fig-follow">The essay cites three sources for this failure mode: Deng, Brucks &amp; Toubia (2026) on language models aggregating knowledge where people partition it; Murthy, Ullman &amp; Hu (2024) on alignment compressing outputs toward the statistical center; and Vendrell &amp; Johnston (2026). "Epistemic narrowing" is the essay's term, describing Vendrell &amp; Johnston; the companion's source notes cite that paper for its advice on sequencing AI-free and AI-assisted work. Studies the essay doesn't cite bear on this too, within limits:</p>
-		<ul class="fig-evidence">
-			<li><a href="https://hbr.org/2026/03/researchers-asked-llms-for-strategic-advice-they-got-trendslop-in-return">Romasanta, Thomas &amp; Levina</a> (HBR, 2026) report that across thousands of simulations, leading models gave the same trendy strategy advice regardless of context, defaulting to options such as differentiation, augmentation and collaboration. It is the closest of these to strategy work. It is a practitioner article, and its methods are visible only through the authors' summary.</li>
-			<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11244532/">Doshi &amp; Hauser</a> (Science Advances, 2024) found that AI story ideas made individual stories better rated and made the stories more similar to one another. It measured stories, not strategies.</li>
-			<li><a href="https://arxiv.org/abs/2506.07962">Kim, Garg, Peng &amp; Garg</a> (ICML, 2025) and <a href="https://arxiv.org/abs/2510.22954">Jiang et al.</a> (NeurIPS, 2025) found that when two models both get a question wrong they usually give the same wrong answer, and that different vendors give strikingly similar open-ended answers. Asking a second model is not an independent check.</li>
-			<li>Counter-evidence: <a href="https://doi.org/10.1177/10591478261474243">Terwiesch et al.</a> (Production and Operations Management, 2026) found that better prompting, assigned personas and pooling several vendors brought the diversity of AI-generated ideas close to human levels. The companion's source notes read this as sameness being the default, with deliberate design needed to escape it. The study is about prompting AI for ideas; it doesn't test a seminar or the essay's pilot.</li>
-		</ul>
+	<section class="fig-section" aria-labelledby="im-evidence-h" data-ed-section="page.evidence">
+		<h2 id="im-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-follow"></div>
+		<ul class="fig-evidence" data-im-linked-items="page.evidenceList"></ul>
 	</section>
 
 	<section class="fig-section" aria-labelledby="im-links-h">
-		<h2 id="im-links-h">Go further</h2>
-		<ul class="fig-links">
-			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=4">Refuse the garden path</a></li>
-			<li><span>In the same chapter:</span> <a href="../premature-synthesis/">Premature synthesis</a></li>
-			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test institutional monoculture with your AI assistant</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ix-a-foundation-pilot">Section IX, A Foundation Pilot</a></li>
-		</ul>
+		<h2 id="im-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>
 

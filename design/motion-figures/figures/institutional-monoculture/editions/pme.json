@@ -1,0 +1,239 @@
+{
+ "_doc": "Institutional monoculture, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in institutional-monoculture.js. page.quote and page.evidenceList may hold [text](href) links; page.about is a bold lead and its text. Schema: CONVENTIONS.md, Editions.",
+ "id": "pme",
+ "cast": "classroom",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Recommend a strategy for",
+   "partner Country A."
+  ],
+  "text": "Recommend a strategy for partner Country A."
+ },
+ "context": [
+  [
+   "Our trade,",
+   "its ports,",
+   "election,"
+  ],
+  [
+   "minerals,",
+   "a rival’s loans."
+  ]
+ ],
+ "problems": [
+  "Outbid rival lenders",
+  "Block rival ports",
+  "Outshout their media",
+  "Undersell foreign arms",
+  "Win back trade",
+  "Fund competing roads",
+  "Shadow foreign fleets",
+  "Outspend their grants",
+  "Deny them mines",
+  "Replace rival cables"
+ ],
+ "aiOpening": "Counter the rival’s influence",
+ "aiChallenge": [
+  "What did you assume?",
+  "What else could it be?"
+ ],
+ "imagined": {
+  "problems": [
+   "Outbid rival lenders",
+   "Block rival ports",
+   "Outshout their media",
+   "Ease its debts",
+   "Grow export jobs",
+   "Back fair elections",
+   "Keep port access",
+   "Fund its plans",
+   "Secure mineral supplies",
+   "Protect undersea cables"
+  ],
+  "goals": [
+   {
+    "label": "COUNTER THE RIVAL",
+    "name": "Counter the rival",
+    "who": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "label": "BACK THE PARTNER",
+    "name": "Back the partner",
+    "who": [
+     3,
+     4,
+     5,
+     7
+    ]
+   },
+   {
+    "label": "SECURE OUR NEEDS",
+    "name": "Secure our needs",
+    "who": [
+     6,
+     8,
+     9
+    ]
+   }
+  ]
+ },
+ "labels": {
+  "ai": "AI",
+  "runA": "The seminar",
+  "seqA": [
+   "AI OUTLINE",
+   "WRITE"
+  ],
+  "drafted": "ALL DRAFTED WITH AI",
+  "frame": "ONE FRAME: COUNTER THE RIVAL",
+  "oneFrame": "ONE FRAME",
+  "frameGoal": "COUNTER THE RIVAL",
+  "aiFrame": "AI’S FRAME",
+  "opened": "EVERY OUTLINE OPENED",
+  "ask": "FACULTY ASK",
+  "runB": "Same seminar, imagined",
+  "seqB": [
+   "DEFINE PROBLEM",
+   "AI CHALLENGES",
+   "WRITE"
+  ],
+  "spread": "ONE IMAGINED SPREAD"
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "ai": "AI",
+  "opened": "Every AI outline opened with:",
+  "asks": "The AI asks:",
+  "runA": "The seminar",
+  "seqA": [
+   "AI outline",
+   "write"
+  ],
+  "runB": "Same seminar, imagined",
+  "seqB": [
+   "Define problem",
+   "AI challenges",
+   "write"
+  ],
+  "drafted": "All drafted with AI",
+  "frame": "One frame: counter the rival",
+  "aiFrame": "AI’s frame",
+  "spread": "One imagined spread"
+ },
+ "beats": [
+  {
+   "text": "Ten {people} in a seminar get one task.",
+   "detail": "a task card appears at the top right: \"Example task. Recommend a strategy for partner Country A.\" Ten blank papers appear in two rows of five, each with a red dot, labelled \"The seminar\". Under a line on the card, the context appears one item at a time: our trade, its ports, election, minerals, a rival's loans."
+  },
+  {
+   "text": "Each asks an AI for an outline. They come back alike.",
+   "detail": "a grey box marked AI appears at the top left. A small mark travels from each red dot up to it, and ten grey outlines drop back into the papers, all in the same pattern."
+  },
+  {
+   "text": "Each writes their own paper. Each holds up when faculty read it.",
+   "detail": "each dot writes over its outline, and each paper turns to ink in its own layout: headings, bullets, a chart, a table, dense text, two columns, a numbered list, a pull quote, a timeline, a map. \"AI outline, write\" and \"All drafted with AI\" appear. A navy ring steps across the papers and leaves a tick on each."
+  },
+  {
+   "text": "Faculty line up each paper's problem.",
+   "detail": "each paper's first line is outlined, then lifts out and joins a list at the right: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. The papers stay where they are, ticked."
+  },
+  {
+   "text": "Different words, one frame: each paper counters the rival.",
+   "detail": "a navy mark appears beside each line in turn as faculty read it. Then a bracket closes around all ten, labelled \"One frame: counter the rival\"."
+  },
+  {
+   "text": "Every AI outline opened with that frame.",
+   "detail": "a grey card comes out of the AI box: \"Every outline opened: Counter the rival's influence\". A grey line runs from it to the bracket, which turns grey, and a grey tag beside the bracket reads \"AI's frame\"."
+  },
+  {
+   "text": "Faculty ask what other frames the task could take.",
+   "detail": "beside the bracket, in open space, a dashed, empty box with a question mark appears, labelled \"Faculty ask\". Nothing fills it."
+  },
+  {
+   "text": "Imagine the essay's proposal: each defines the problem first.",
+   "detail": "the first seminar moves to the upper half and dims, with the grey card above its list and the question box beside it. Below a line, \"Same seminar, imagined\" appears with ten blank papers and the heading \"One imagined spread\". Each dot writes a red first line, and its label begins \"Define problem\"."
+  },
+  {
+   "text": "Each asks the AI to challenge it, then writes.",
+   "detail": "a copy of each red line goes up to the AI box. A grey speech bubble appears: \"What did you assume? What else could it be?\", and small grey speech bubbles land on each paper under its red line. Each dot writes its paper. The label now reads \"Define problem, AI challenges, write\", and the papers are marked \"All drafted with AI\"."
+  },
+  {
+   "text": "These hold up too. Faculty line them up again.",
+   "detail": "the speech bubble fades, the first seminar returns to full strength, and a navy ring ticks each imagined paper. Group by group, their problem lines lift out as words into three labelled columns: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). Brackets close around them."
+  },
+  {
+   "text": "{check}: What frames are missing across the seminar?",
+   "list": "{check}: What frames are missing across the seminar? Line up each paper's problem, then ask what other frames the task could take.",
+   "detail": "the questions appear under the picture at the same size, and the dashed question box beside the first seminar's frame pulses once. It stays empty."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What frames are missing across the seminar?",
+  "follow": "Line up each paper's problem, then ask what other frames the task could take."
+ },
+ "page": {
+  "kicker": "Failure mode 6 of 7",
+  "title": "Institutional monoculture",
+  "description": "A teaching figure: papers that each hold up can share one definition of the problem, the one the AI's outlines opened with. Faculty see it by lining up every paper's problem statement.",
+  "setup": "Ten {people} in a seminar each use an AI to help write the same strategy paper. Each writes their own, and each paper holds up when read alone. *The Irreducible Officer* calls what can still go wrong institutional monoculture: shared systems and defaults narrow the range of frames available to the class. The seminar, the task and the papers are a constructed example.",
+  "srTitle": "Institutional monoculture, an animated figure in eleven beats",
+  "srSummary": "An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten {people} in a seminar with an example task: recommend a strategy for partner Country A. The context lists our trade, its ports, election and minerals, and a rival's loans. Each {person} asks an AI for an outline, and ten grey outlines come back in the same pattern. Each {person} writes their own paper, in ten different layouts, all marked \"All drafted with AI\". Faculty read each paper and tick it, and the ticks stay. Then faculty line up the one-line problem statement from every paper: outbid rival lenders, block rival ports, outshout their media, undersell foreign arms, win back trade, fund competing roads, shadow foreign fleets, outspend their grants, deny them mines, replace rival cables. Faculty read each line, and a bracket closes around all ten, labelled \"One frame: counter the rival\". A grey card comes out of the AI box: every outline opened with \"Counter the rival's influence\". A grey line runs from it to the bracket, which turns grey, with a grey tag: \"AI's frame\". Faculty then ask what other frames the task could take: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first seminar dims above, the figure imagines the same seminar the way the essay proposes, under the heading \"One imagined spread\". Each {person} writes the problem in red first, then asks the AI to challenge it (\"What did you assume? What else could it be?\"), and a grey speech bubble lands on each paper before they write. Faculty tick these papers too and line up their problems: counter the rival (outbid rival lenders, block rival ports, outshout their media); back the partner (ease its debts, grow export jobs, back fair elections, fund its plans); secure our needs (keep port access, secure mineral supplies, protect undersea cables). The figure ends on the {check_l}. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What frames are missing across the seminar?",
+   "Line up each paper's problem, then ask what other frames the task could take."
+  ],
+  "checkFollow": "Read one at a time, every paper in the seminar holds up, and the papers look nothing alike. Lined up, they share one problem definition, the one every AI outline opened with. Lining up shows which frames a seminar has. It can't show which are missing. For that, faculty ask what other frames the task could take, and answer from their own knowledge of the problem or let the class name them before discussion settles on one. The figure's imagined seminar follows the essay's proposal for a framing assignment: each student writes a problem frame without AI, then asks an AI to find assumptions they missed and suggest other frames (Section IX, steps one and two). The essay proposes framing first; whether it spreads frames across a seminar is untested, and the imagined board is one possible spread. Lining up the problems across a seminar is this figure's way of applying the essay's per-student frame evidence (Section VIII) to a class. The companion's failure-mode lab adds a fair objection: convergence can reflect a justified shared purpose or strong evidence, and difference isn't better by itself. A seminar can compare several frames and still agree on one.",
+  "about": {
+   "lead": "About the example.",
+   "text": "Each paper's first line stands for the frame evidence the essay asks students to name before submitting (Section VIII), which the essay describes as a short page: the problem frame, key assumptions, criteria for success, evidence standard and the role AI played. The figure groups problems by the goal they set, and names three goals for the imagined seminar as one possible spread. Telling real frames apart takes reading, and, as the lab notes, authored examples don't show the output of any model or actual class."
+  },
+  "quoteHeading": "From the essay",
+  "quote": "Institutional monoculture is the class-level version of the same problem. When many students use similar systems, similar prompts, and similar defaults, the range of strategic frames available to a seminar narrows. AI can create a surface appearance of diversity (different arguments, different structures, different evidence) while reproducing common assumptions at the level of problem definition. Research into the diversity of AI-generated ideas finds that language models aggregate knowledge into a unified distribution in ways that human cognition does not: people exhibit knowledge partitioning, each occupying a distinct semantic region, in ways that independent AI samples do not replicate ([Deng, Brucks & Toubia, 2026](https://arxiv.org/abs/2602.20408)). Post-training alignment compounds this further, compressing the distribution of outputs toward the statistical center ([Murthy, Ullman & Hu, 2024](https://arxiv.org/abs/2411.04427)). Pedagogical research on LLM integration in higher education frames this compression as epistemic narrowing: the constraining of students' exposure to diverse, ambiguous, or contested knowledge by tools optimized for convergence and fluency ([Vendrell & Johnston, 2026](https://doi.org/10.1016/j.caeai.2026.100572)). In a war college seminar, that compression raises a serious possibility: the same systems that help students produce stronger work may also narrow the range of strategic imagination the seminar is meant to develop.",
+  "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",
+  "evidenceHeading": "The evidence",
+  "evidence": [
+   "The essay cites three sources for this failure mode: Deng, Brucks & Toubia (2026) on language models aggregating knowledge where people partition it; Murthy, Ullman & Hu (2024) on alignment compressing outputs toward the statistical center; and Vendrell & Johnston (2026). \"Epistemic narrowing\" is the essay's term, describing Vendrell & Johnston; the companion's source notes cite that paper for its advice on sequencing AI-free and AI-assisted work. Studies the essay doesn't cite bear on this too, within limits:"
+  ],
+  "evidenceList": [
+   "[Romasanta, Thomas & Levina](https://hbr.org/2026/03/researchers-asked-llms-for-strategic-advice-they-got-trendslop-in-return) (HBR, 2026) report that across thousands of simulations, leading models gave the same trendy strategy advice regardless of context, defaulting to options such as differentiation, augmentation and collaboration. It is the closest of these to strategy work. It is a practitioner article, and its methods are visible only through the authors' summary.",
+   "[Doshi & Hauser](https://pmc.ncbi.nlm.nih.gov/articles/PMC11244532/) (Science Advances, 2024) found that AI story ideas made individual stories better rated and made the stories more similar to one another. It measured stories, not strategies.",
+   "[Kim, Garg, Peng & Garg](https://arxiv.org/abs/2506.07962) (ICML, 2025) and [Jiang et al.](https://arxiv.org/abs/2510.22954) (NeurIPS, 2025) found that when two models both get a question wrong they usually give the same wrong answer, and that different vendors give strikingly similar open-ended answers. Asking a second model is not an independent check.",
+   "Counter-evidence: [Terwiesch et al.](https://doi.org/10.1177/10591478261474243) (Production and Operations Management, 2026) found that better prompting, assigned personas and pooling several vendors brought the diversity of AI-generated ideas close to human levels. The companion's source notes read this as sameness being the default, with deliberate design needed to escape it. The study is about prompting AI for ideas; it doesn't test a seminar or the essay's pilot."
+  ],
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Book chapter:",
+    "text": "Refuse the garden path",
+    "href": "../../book-v0/four-moves-book.html?spread=4"
+   },
+   {
+    "lead": "In the same chapter:",
+    "text": "Premature synthesis",
+    "href": "../premature-synthesis/"
+   },
+   {
+    "lead": "Practice:",
+    "text": "test institutional monoculture with your AI assistant",
+    "href": "https://judgmentlab.net/#companion"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section II, What the Problem Looks Like",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section IX, A Foundation Pilot",
+    "href": "https://judgmentlab.net/#ix-a-foundation-pilot"
+   }
+  ]
+ }
+}

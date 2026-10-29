@@ -81,6 +81,29 @@
 
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
+	// An edition's own clock (business): edits to the core clock, in core seconds. A cut skips
+	// a static stretch; a hold freezes the core and adds time (an id'd hold carries its own beat).
+	// With no edits (PME) both maps are the identity, so the core renders exactly as before.
+	const EDITS = ((ed.timeline && ed.timeline.edits) || []).slice().sort((a, b) => a.at - b.at);
+	const toCore = (tau) => {
+		let o = 0;
+		for (const e of EDITS) {
+			const bs = e.at + o;
+			if (tau < bs) return {t: tau - o};
+			if (e.hold) { if (tau < bs + e.hold) return {t: e.at, hold: e, u: tau - bs}; o += e.hold; }
+			else o -= e.cut;
+		}
+		return {t: tau - o};
+	};
+	const toBiz = (t) => {
+		let o = 0;
+		for (const e of EDITS) { if (e.at >= t) break; o += e.hold ? e.hold : -Math.min(e.cut, t - e.at); }
+		return t + o;
+	};
+	const holdStart = (id) => { const e = EDITS.find((x) => x.id === id); return e ? toBiz(e.at) : null; };
+	const TURN = ed.turn || null;
+	const TURN_AT = TURN ? holdStart('turn') : null;
+	let TAU = null; // the edition clock while a frame renders (null: same as the core clock)
 	const CHIPS = CHIP_SLOTS.map((c, i) => ({text: ed.considerations[i], ...c}));
 	// The AI's restatement: segments kept from the task's words or added; joined with spaces.
 	const TITLE_SEGS = [];
@@ -245,6 +268,46 @@
 	const dotB = el(cam, 'circle', {r: 5, fill: C.red});
 	const dotBLabel = text(cam, DX + 500, 462, L.second, {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
 
+	// ---- the turn (business): asked what would change it, the second person checks the
+	// condition they wrote down; it holds, so their frame and their ranking change. ----------
+	const TU = {q2: [0.3, 0.7], panel: [1.0, 1.4], bars: [1.6, 2.4], result: [2.6, 3.0], swap: [3.6, 4.6], nothing: [3.6, 4.0], title: [4.4, 4.9], rewrite: [4.6, 6.0]};
+	let turnEls = null;
+	if (TURN) {
+		const tc = TURN.check;
+		const q2 = text(cam, DX + 670, 216, TURN.askQ2, {fs: 24, family: FONT.serif, style: 'italic'});
+		const panel = el(cam, 'g');
+		mono(panel, DX + 670, 262, tc.label, {fill: C.red});
+		text(panel, DX + 670, 286, tc.intro, {fs: 15, family: FONT.serif});
+		const barRows = tc.bars.map((lab, i) => {
+			const y = 300 + 26 * i;
+			return {
+				bar: el(panel, 'rect', {x: DX + 670, y, width: 0, height: 12, rx: 2, fill: C.ink, 'fill-opacity': 0.85}),
+				w: i ? 128 : 64,
+				label: text(panel, DX + 670, y + 11, lab, {fs: 13, weight: 600}),
+			};
+		});
+		const result = text(panel, DX + 670, 376, tc.result, {fs: 15, family: FONT.serif, style: 'italic', fill: C.red});
+		const nothing = mono(cam, SA.x, 344, TURN.nothing, {ls: 0.6});
+		// The second ranking, rewritten: a fresh sheet over paper B with the new title and
+		// headings, revealed top to bottom, with red change bars (the person's revision).
+		const rewriteClip = clipRect('fc-rewrite');
+		const paperB2 = el(cam, 'g', {transform: `translate(${PAPER_B.ox} ${PAPER_B.oy}) scale(${PS}) translate(-156 -141)`});
+		const pb2 = el(paperB2, 'g', {'clip-path': 'url(#fc-rewrite)'});
+		el(pb2, 'rect', {x: SHEET.x, y: SHEET.y, width: SHEET.w, height: SHEET.h, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
+		const D3 = [[154, 120, 146, 154, 98, 132], [140, 158, 126, 158, 112, 84]];
+		COL.forEach((c, ci) => D3[ci].forEach((w, i) => el(pb2, 'rect', {x: c.x, y: rowY(i), width: w, height: RH + 0.5, rx: 2.5, fill: C.ink, 'fill-opacity': 0.85})));
+		[13, 24, 9, 19].forEach((hh, j) => el(pb2, 'rect', {x: CHART.x + j * CHART.step, y: CHART.base - hh, width: CHART.w, height: hh, fill: C.ink, 'fill-opacity': 0.85}));
+		el(pb2, 'rect', {x: CON.x, y: CON.y, width: CON.w * 0.82, height: CON.h + 1, rx: 4, fill: C.ink});
+		const t2 = el(pb2, 'text', {x: PT.x, y: PT.y, 'font-family': FONT.serif, 'font-size': PT.fs, 'font-weight': 600, fill: C.ink, 'data-fs': PT.fs * PS}, TURN.title);
+		const headTexts = CHIPS.filter((c) => c.head).map((c) => (c.text === TURN.swap.out ? TURN.swap.in : c.text));
+		const heads2 = CHIPS.filter((c) => c.head).map((c, i) => ({
+			r: el(pb2, 'rect', {x: c.head.x, y: c.head.y, height: 25.5, rx: 3, fill: 'none', stroke: C.ink, 'stroke-opacity': 0.7, 'stroke-width': 1.3}),
+			tx: el(pb2, 'text', {x: c.head.x + 8, y: c.head.y + 18, 'font-family': FONT.sans, 'font-size': PH_FS, 'font-weight': 600, fill: C.ink, 'data-fs': PH_FS * PS}, headTexts[i]),
+		}));
+		[[PT.y - 20, 27], [rowY(0) - 4, 69], [CHART.base - 30, 32], [CON.y - 3, 13]].forEach(([y, hh]) => el(pb2, 'rect', {x: COL[0].bar - 4, y, width: 2.5, height: hh, fill: C.red}));
+		turnEls = {q2, panel, barRows, result, nothing, rewriteClip, paperB2, t2, heads2};
+	}
+
 	// ---- paths ---------------------------------------------------------------------------
 	const START = {x: 80, y: 270};
 	const segs = [[T.enter[0], T.enter[1], START, {x: COL[0].x, y: rowY(0) + 2.25}, E.inOut]];
@@ -335,16 +398,46 @@
 		[a0, a1].forEach((c) => { set(c.ai, {opacity: 1}); set(c.dashed, {opacity: 0}); set(c.label, {fill: C.grey}); });
 		const kept = stripBChips.filter((c) => c.kept != null).sort((x, y) => x.kept - y.kept);
 		const aside = stripBChips.filter((c) => c.kept == null);
-		const asideW = Math.max(...aside.map((c) => c.w));
+		const swapOut = TURN && stripBChips.find((c) => c.text === TURN.swap.out);
+		const asideW = Math.max(...aside.map((c) => c.w), ...(TURN ? [swapOut.w] : []));
 		kept[0].final = {x: SB.chipX, y: SB.y};
 		kept[1].final = {x: SB.chipX + kept[0].w + 8, y: SB.y};
 		aside.forEach((c, i) => { c.final = {x: SB.chipX + (i % 2) * (asideW + 8), y: 334 + Math.floor(i / 2) * 32}; c.visit = i; });
 		kept.forEach((c, i) => { c.visit = aside.length + i; });
 		stripBChips.forEach((c) => set(c.g, {transform: `translate(${c.final.x} ${c.final.y})`}));
+		if (TURN) {
+			// The swap: the incoming consideration takes the outgoing one's place in the
+			// chosen frame; the outgoing one takes its place among the set-aside four.
+			const sIn = stripBChips.find((c) => c.text === TURN.swap.in);
+			const keptAfter = kept.map((c) => (c === swapOut ? sIn : c));
+			let x = SB.chipX;
+			keptAfter.forEach((c) => { c.swapTo = {x, y: SB.y}; x += c.w + 8; });
+			swapOut.swapTo = sIn.final;
+			turnEls.heads2.forEach(({r, tx}) => set(r, {width: tx.getComputedTextLength() + 16}));
+		}
 		buildBPath();
 		dotBAt = pathAt(bSegs, B_START);
 		ready = true;
 	}
+
+	const renderTurn = (u) => {
+		const E2 = turnEls;
+		set(E2.q2, {opacity: prog(u, ...TU.q2)});
+		const pk = prog(u, ...TU.panel, E.house);
+		set(E2.panel, {opacity: pk, transform: `translate(0 ${mix(6, 0, pk).toFixed(2)})`});
+		const bk = prog(u, ...TU.bars, E.outCubic);
+		E2.barRows.forEach((b) => { set(b.bar, {width: b.w * bk}); set(b.label, {x: DX + 670 + b.w * bk + 8, opacity: bk}); });
+		set(E2.result, {opacity: prog(u, ...TU.result)});
+		set(E2.nothing, {opacity: prog(u, ...TU.nothing)});
+		const sk = prog(u, ...TU.swap, E.inOut);
+		if (ready) stripBChips.forEach((c) => {
+			if (!c.swapTo) return;
+			const x = mix(c.final.x, c.swapTo.x, sk), y = mix(c.final.y, c.swapTo.y, sk);
+			set(c.g, {transform: `translate(${x.toFixed(2)} ${y.toFixed(2)})`});
+		});
+		set(E2.rewriteClip, {y: SHEET.y - 8, height: (SHEET.h + 16) * prog(u, ...TU.rewrite)});
+		set(E2.paperB2, {opacity: u >= TU.rewrite[0] ? 1 : 0});
+	};
 
 	const render = (t) => {
 		// Camera: in (beat 4), out (beat 6), across to the faculty side (beat 7).
@@ -437,7 +530,7 @@
 		set(stripA, {opacity: t >= T.toSlot[1] ? 1 : 0, transform: `translate(0 ${(STRIP_HIDE * (1 - reveal)).toFixed(2)})`});
 		const hideB = prog(t, ...T.hideB, E.inOut);
 		set(stripB, {transform: `translate(0 ${(STRIP_HIDE_B * hideB * (1 - reveal)).toFixed(2)})`});
-		if (changeNote) set(changeNote, {opacity: prog(t, ...T.note)});
+		if (changeNote) set(changeNote, {opacity: prog(t, ...T.note) * (1 - hideB * (1 - reveal))});
 		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 		// Beat 8: the AI proposes the same frame to the second student, who
 		// examines all six (each turns solid), then claims the frame (grey to red).
@@ -478,7 +571,8 @@
 		set(nameA, {opacity: prog(t, T.nameSwap + 0.25, T.nameSwap + 0.5)});
 		const ak = prog(t, ...T.ask, E.house);
 		set(ask, {opacity: ak, transform: `translate(0 ${mix(6, 0, ak).toFixed(2)})`});
-		renderNarrow(t);
+		if (TURN) renderTurn((TAU == null ? t : TAU) - TURN_AT);
+		renderNarrow(t, TAU == null ? t : TAU);
 	};
 
 	// ---- the stacked stage ----------------------------------------------------------------
@@ -491,19 +585,22 @@
 	const TASK = ed.task.text;
 	const KEPT = CHIPS.filter((c) => c.head).map((c) => c.text);
 	const ASIDE = CHIPS.filter((c) => !c.head).map((c) => c.text);
-	const paperBlock = (parent, who, body = true) => {
+	const paperBlock = (parent, who, body = true, compact = false) => {
 		const box = h('div', 'fc-n-paper', parent);
 		const w = h('span', 'fc-n-who', box, who);
 		const ti = h('p', 'fc-n-ptitle', box);
 		const tiSpan = h('span', null, ti, TITLE_TEXT);
-		const heads = h('div', 'fc-n-heads', box);
-		const hs = KEPT.map((k) => h('span', 'fc-n-head', heads, k));
+		const heads = compact ? null : h('div', 'fc-n-heads', box);
+		const hs = compact ? [] : KEPT.map((k) => h('span', 'fc-n-head', heads, k));
 		if (body) h('p', 'fc-n-body', box, NW.paperBody);
 		return {box, who: w, tiSpan, hs};
 	};
 	if (narrow) {
 		{ const sec = section('student'); N.student.who = h('span', 'fc-n-who', sec, L.person); }
 		{ const sec = section('task', NW.taskLabel); h('p', 'fc-n-task', sec, TASK); }
+		// Optional (business): the task as one compact line, kept in view to the end, so the
+		// task's wording stays beside the rankings' titles.
+		if (NW.taskLine) { const sec = section('taskLine'); const p = h('p', 'fc-n-tl', sec); h('span', 'fc-n-tlk', p, NW.taskLine.label); p.append(' ', NW.taskLine.text); }
 		{
 			const sec = section('field', NW.fieldLabel);
 			const row = h('div', 'fc-n-chips', sec);
@@ -548,26 +645,29 @@
 		{
 			const sec = section('papers', NW.receive);
 			const pair = h('div', 'fc-n-pair', sec);
-			N.papers.a = paperBlock(pair, L.first, false);
-			N.papers.b = paperBlock(pair, L.second, false);
+			N.papers.a = paperBlock(pair, L.first, false, !!NW.compactPapers);
+			N.papers.b = paperBlock(pair, L.second, false, !!NW.compactPapers);
 			N.papers.note = h('p', 'fc-n-small', sec, NW.weighingNote);
 		}
 		{
 			const sec = section('ask');
 			N.ask.q = h('p', 'fc-n-q', sec, NW.askQ);
+			if (TURN) N.ask.q2 = h('span', null, N.ask.q, TURN.narrow.askQ2);
 			const pair = h('div', 'fc-n-pair', sec);
 			const col = (who) => { const c = h('div', null, pair); h('span', 'fc-n-who', c, who); return c; };
 			const a = col(L.first);
 			h('span', 'fc-n-tag is-ai', a, NW.aiFrame);
 			const ar = h('div', 'fc-n-chips', a);
 			KEPT.forEach((k) => h('span', 'fc-n-chip is-ai', ar, k));
+			if (TURN) N.ask.nothing = h('p', 'fc-n-small', a, TURN.narrow.nothing);
 			const b = col(L.second);
 			h('span', 'fc-n-tag is-red', b, NW.chosen);
 			const br = h('div', 'fc-n-chips', b);
-			KEPT.forEach((k) => h('span', 'fc-n-chip is-seen', br, k));
+			N.ask.bKept = KEPT.map((k) => h('span', 'fc-n-chip is-seen', br, k));
 			h('span', 'fc-n-tag is-red', b, NW.setAside);
-			h('p', 'fc-n-aside', b, ASIDE.join(' · '));
+			N.ask.bAside = h('p', 'fc-n-aside', b, ASIDE.join(' · '));
 			if (NW.changeNote) h('p', 'fc-n-note', b, NW.changeNote);
+			if (TURN) N.ask.check = h('p', 'fc-n-note', b, TURN.narrow.check);
 			N.ask.cols = [a, b];
 		}
 	}
@@ -576,14 +676,15 @@
 		['aiFrame', 'draft'], ['aiFrame', 'draft'], ['field', 'aiFrame', 'draft'],
 		['task', 'faculty'], ['faculty', 'second'], ['papers'], ['papers', 'ask'], ['papers', 'ask'],
 	];
+	const SHOWS = NW.show || SHOW;
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
 	// Grey AI text drains to ink as the wipe crosses (beat 7), keeping its words.
 	const drain = (node, k) => { node.style.color = mixColor(C.grey, C.ink, k); node.style.backgroundColor = `rgba(222, 213, 196, ${(1 - k).toFixed(3)})`; };
-	function renderNarrow(t) {
+	function renderNarrow(t, tau = t) {
 		if (!narrow || !root.classList.contains('is-stacked')) return;
-		const bi = beatIndex(t);
-		const show = new Set(SHOW[bi]);
+		const bi = beatIndex(tau);
+		const show = new Set(SHOWS[bi]);
 		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k);
 		fade(N.student.sec, prog(t, T.dotIn, T.dotIn + 0.4));
 		fade(N.task.sec, prog(t, ...T.card));
@@ -630,10 +731,24 @@
 		if (N.second.note) fade(N.second.note, prog(t, ...T.note));
 		// Both papers, then what each student can show when asked.
 		fade(N.papers.b.box, prog(t, ...T.sweep));
-		N.papers.note.hidden = bi !== 8;
+		N.papers.note.hidden = show.has('ask');
 		fade(N.papers.note, prog(t, ...T.hideB));
 		fade(N.ask.q, prog(t, ...T.ask));
 		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));
+		if (TURN) {
+			// The turn: the second question, the check, then the new frame and title.
+			const u = tau - TURN_AT;
+			fade(N.ask.q2, prog(u, ...TU.q2));
+			fade(N.ask.check, prog(u, ...TU.result));
+			fade(N.ask.nothing, prog(u, ...TU.nothing));
+			const swapped = u >= (TU.swap[0] + TU.swap[1]) / 2;
+			const sw = (k) => (swapped && k === TURN.swap.out ? TURN.swap.in : swapped && k === TURN.swap.in ? TURN.swap.out : k);
+			N.ask.bKept.forEach((n, i) => { n.textContent = sw(KEPT[i]); });
+			N.ask.bAside.textContent = ASIDE.map(sw).join(' · ');
+			const retitled = u >= TU.title[0];
+			N.papers.b.tiSpan.textContent = retitled ? TURN.title : TITLE_TEXT;
+			N.papers.b.box.classList.toggle('is-revised', retitled);
+		}
 	}
 	// Hold the stacked view at its tallest beat, so the caption band and controls never move.
 	let player = null;
@@ -641,14 +756,18 @@
 		if (!narrow || !root.classList.contains('is-stacked')) return;
 		narrow.style.minHeight = '';
 		let tallest = 0;
-		BEATS.forEach((b, i) => { renderNarrow(i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : T.end); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
+		const at = (tau) => renderNarrow(toCore(tau).t, tau);
+		BEATS.forEach((b, i) => { at(i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : END); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
 		narrow.style.minHeight = `${Math.ceil(tallest)}px`;
-		renderNarrow(player ? player.time() : 0);
+		at(player ? player.time() : 0);
 	};
 
-	// Beat times are core; their words come from the edition.
-	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
-	BEATS[BEATS.length - 1].check = {...ed.check, followAt: FOLLOW_AT};
+	// Beat times are core; their words come from the edition. An edition with its own clock
+	// names each beat's start in core seconds (core) or by a hold's id.
+	const beatAt = (b, i) => (b.core == null ? toBiz(BEAT_AT[i]) : typeof b.core === 'string' ? holdStart(b.core) : toBiz(b.core));
+	const BEATS = ed.beats.map((b, i) => ({at: beatAt(b, i), ...b}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: toBiz(FOLLOW_AT)};
+	const END = toBiz(T.end);
 
 	{
 		measure();
@@ -669,7 +788,8 @@
 		new ResizeObserver(syncStacked).observe(svg);
 		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
 		// Nameplate: the opening name card, the corner plate and the final name and definition.
-		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02,
+		const renderEd = EDITS.length ? (tau) => { TAU = tau; render(toCore(tau).t); TAU = null; } : render;
+		player = mount(root, {duration: END, render: renderEd, beats: BEATS, poster: BEATS[2].at - 0.02,
 			nameplate: NAMEPLATE});
 		syncStacked();
 	}
