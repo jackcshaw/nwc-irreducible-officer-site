@@ -89,6 +89,15 @@
 	#appropriate-reliance.has-nameplate { --mf-plate: 43px; }
 	#appropriate-reliance .mf-caption { height: 156px; }
 }
+/* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the 144 px band the
+   picture would be letterboxed under 11 px and give way to the stacked stage. Below 717 px
+   tall the band is 100 px with tighter padding (the last caption measures 94 px there), so
+   the drawn picture keeps 11 px labels once question 1 is answered: 657 − 199 = 458 px of
+   stage. Taller windows, and so the PME frames at 1440 × 900 and 1280 × 720, don't change. */
+@media (min-width: 1200px) and (max-height: 716px) {
+	#appropriate-reliance.has-nameplate { --mf-chrome: 168px; --mf-plate: 31px; }
+	#appropriate-reliance .mf-caption, #appropriate-reliance .mf-caption.is-check { height: 100px; padding-top: 10px; padding-bottom: 10px; }
+}
 @media (max-width: 719px) {
 	#appropriate-reliance.is-stacked .mf-caption { height: auto; min-height: 182px; overflow: visible; }
 	#appropriate-reliance.is-stacked.ar-firstq .mf-caption { min-height: 124px; }

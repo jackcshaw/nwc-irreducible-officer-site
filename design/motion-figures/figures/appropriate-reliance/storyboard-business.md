@@ -31,7 +31,7 @@ Every picture word is the same in both editions: the tasks, labels, results, opt
 - **How this figure works** (the figure's fuller setup, below it): "two consulting tasks from a 2023 field experiment", ending "Illustration based on Dell'Acqua et al. (2023): the tasks and results are the study's, and the time budget, the first draft and the launch plan are this figure's."
 - **After you make your call** (still locked until both calls are made, since it states the answers):
   - *What a good answer says:* unchanged, except "whether the analyst has a reason for the call".
-  - *Evidence:* PME's paragraph, plus where each quote sits ("(abstract)", "(p. 15)"). It adds two limits: "the gap between the two AI groups is significant only at the 10% level, and so is the higher rating among wrong answers alone. The study examined GPT-4 as it was in 2023."
+  - *Evidence:* PME's paragraph, with the sample described exactly (758 BCG consultants, about 7% of the firm's individual-contributor consultants: 385 worked the tasks inside the frontier, 373 the task outside it; within each set they were randomly assigned to no AI, GPT-4, or GPT-4 plus the overview). It also says where each quote sits ("(abstract)", "(p. 15)"). It adds two limits: "the gap between the two AI groups is significant only at the 10% level, and so is the higher rating among wrong answers alone. The study examined GPT-4 as it was in 2023."
   - *About the tasks:* unchanged.
 - **From the essay:** removed. The quotes assume the essay.
 - **Go further:**
@@ -49,6 +49,21 @@ Every picture word is the same in both editions: the tasks, labels, results, opt
 ## The edition switch
 
 "See this with: Workplace · PME" shares the kicker's row, at the right, and its line box, so it adds no height. Under the setup it would have pushed the figure down about 40 px, and at 1440 × 900 the first view would have dropped to the stacked stage. The note "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay." sits under "How this figure works". The PME link points to it (`aria-describedby`).
+
+## Round-1 lessons (BUSINESS-BRIEF.md, 7–12)
+
+- **7, the picture at 1280 × 720 and 1366 × 657.** Once question 1 is answered, the drawn picture shows at both:
+  - at 1280 × 720, labels are 11.1 px, as before;
+  - at 1366 × 657 (and 1280 × 657 or 1440 × 700), a short-window rule takes the caption band from 144 px to 100 px with tighter padding, for windows 1200 px wide and up and 716 px tall or less. The last caption measures 94 px there, and the drawn picture keeps 11.0 px labels. Before, these windows used the stacked view throughout.
+
+  Question 1 itself still uses the compact stacked stage at these sizes. The first view has to fit the live question and Continue without scrolling the page (figure cold read 2), and the drawn picture would be 7 px there. After question 1 the page now scrolls to the shot's top, so the nameplate strip stays in view. Both rules leave 1440 × 900, 1280 × 720 and 390 × 844 unchanged, so the PME diff holds.
+- **8, 9, 12.** These don't apply: there's no second person, and the reader makes both calls. Both tasks get the same AI answer in the same form.
+- **10, the good move matches the study.** The suggested calls follow what the paper links to good outcomes:
+  - relying on the AI inside the frontier, where AI users did more, faster and better;
+  - working the outside task yourself from the interviews and comparing. Consultants without AI were right most often there (84.5%), and the right answer depended on details in the interviews.
+
+  Gate 2's suggested "rely on it, and read it before it's built" keeps the inside-the-frontier reliance and adds a read, which the study doesn't contradict. Its fallbacks are the reader's options, not the AI's.
+- **11, the sample.** On screen the figure says "758 BCG consultants · some with GPT-4", which is accurate. The page gives the 7% share, the 385/373 split between the two experiments, and the three arms within each. Every result is tied to its own experiment: the inside numbers come from the 385, the outside numbers from the 373. Nothing exploratory is used.
 
 ## Pace table
 
@@ -73,7 +88,7 @@ The name card (3 s before 0.0) is unchanged, as is the nameplate's definition in
 
 These are checked against the full working paper text (HBS Working Paper 24-013, September 2023) and BCG-VERIFY.md. Each reference gives the printed page first, then the PDF page in brackets.
 
-- 758 BCG consultants: abstract [4]; p. 6 [10].
+- 758 BCG consultants, about 7% of BCG's individual-contributor consultants: abstract [4]; p. 5 [9]. The split was 385 inside the frontier and 373 outside: p. 6 [10].
 - Inside the frontier, 12.2% more tasks, 25.1% more quickly and more than 40% higher quality: abstract [4]. The 12.2% is also on p. 11 [15].
 - 18 product-development tasks for a fictional footwear company, including "Segment the footwear industry market based on users.": p. 9 [13]; Appendix A, p. 41 [45].
 - The outside task's spreadsheet and insider interviews, with the spreadsheet "designed to seem to be comprehensive": p. 13 [17]. The task was built so GPT-4 would err: p. 8 [12].

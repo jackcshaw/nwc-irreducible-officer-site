@@ -60,8 +60,13 @@ async function open(b, w, h, query = "", opts = {}) {
 }
 // Element stills of a shot taller than the window are stitched, so sticky bands would land
 // wherever the scroll left them: set them static for the still, then restore.
+// The page is also scrolled so the element's top sits at the same place in the window every
+// time: an element still's edge rows otherwise depend on where the figure's own scrolling
+// left the page (a sub-pixel offset showed as one changed row).
 const still = async (p, sel, path) => {
   await p.evaluate(() => { for (const el of document.querySelectorAll("figure *")) if (getComputedStyle(el).position === "sticky") { el.dataset.unstuck = "1"; el.style.position = "static"; } });
+  await p.evaluate((sel) => { const el = document.querySelector(sel); window.scrollTo(0, Math.floor(window.scrollY + el.getBoundingClientRect().top)); }, sel);
+  await p.waitForTimeout(60);
   await p.locator(sel).first().screenshot({ path });
   await p.evaluate(() => { for (const el of document.querySelectorAll("[data-unstuck]")) { el.style.position = ""; delete el.dataset.unstuck; } });
 };
@@ -87,8 +92,12 @@ const snapshot = (p) => p.evaluate(([id, hide]) => {
   };
 }, [SLUG, hide]);
 
+// --disable-partial-raster: with partial raster, a few frames (the evidence panel's scale
+// transform, beat 9's tags) came out in one of two antialiasing variants from run to run
+// with no code change; full-tile raster makes every capture byte-stable.
+const LAUNCH = { args: ["--disable-partial-raster"] };
 async function captureExtra(dir) {
-  const b = await chromium.launch();
+  const b = await chromium.launch(LAUNCH);
   const errors = [];
   let count = 0;
   const pad = (i) => String(i).padStart(2, "0");

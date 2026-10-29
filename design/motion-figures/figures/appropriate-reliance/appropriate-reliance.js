@@ -719,9 +719,9 @@
 			// band), then focus the first one.
 			presentGate(g);
 		};
+		// The shot's top, so the nameplate strip above the stage stays in view too.
 		function showPicture() {
-			const stacked = root.classList.contains('is-stacked');
-			const r = (stacked ? narrow : shot).getBoundingClientRect();
+			const r = shot.getBoundingClientRect();
 			if (r.top < 0 || r.top > 80) scrollBy({top: r.top - 8, behavior: reducedNow() ? 'auto' : 'smooth'});
 		}
 		// First view: until the first question is answered, the picture is capped so the
