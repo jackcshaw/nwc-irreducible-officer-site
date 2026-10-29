@@ -79,6 +79,9 @@ Each must pass the same frame-first tests as the PME versions:
 - **Classroom cast:** build after the business edition.
 - **Examples:** Jack asked for examples straight from the research, so any business or nonprofit reader sees themselves. A research-mapping pass ([BUSINESS-EXAMPLES.md](BUSINESS-EXAMPLES.md)) proposes a study-grounded scenario per figure, labelled "Illustration based on…", with a fictional fallback, for Jack to pick before building.
 
+- **The research-grounded examples** in BUSINESS-EXAMPLES.md: approved ("sounds good"). Health system (Obermeyer), patent firm (Autor), engineering team (Anthropic), Nairobi print shop (Otis), account manager (Lee), industrial managers (trendslop and Bottesch), Air Canada's chatbot ruling, consulting (BCG).
+- **Evidence treatment, option A:** no new evidence beat. Each business figure says "Illustration based on [study]" in its setup, with a one-line source under the final frame and the full finding on the page. Figures where the finding is the turn (uncalibrated reliance, appropriate reliance) keep their evidence beats.
+
 ## Decisions for Jack
 
 1. Approve the role-neutral one-line definitions (wording to come with the pilot).
