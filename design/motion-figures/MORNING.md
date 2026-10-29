@@ -38,6 +38,10 @@ The business editions are in progress: every figure's words now live in data fil
 4. **Workplace check wording** for each figure is in its `storyboard-business.md`.
 6. **Responsibility laundering's split dot (PME).** After the split, the first student's dot stays half-size and the "Answerable" weight lands on it, which a business tester read as "half the responsibility went to the AI", the illusion the figure argues against. The business edition now restores the dot to full size as the weight lands. PME has the same reading; applying the fix there changes an approved figure, so it waits for your go.
 7. **Invisible delegation's stacked view (PME).** In the stacked layouts, only the second student's read of the rubric stays underlined to the end, which a tester read as a second difference between them. The business edition now underlines it only while either person reads it. PME has the same asymmetry; fixing it there waits for your go.
+8. **A PME polish pass (one decision for items 5–7 and these).** The business verifiers were stricter than the original loop and found small issues that the PME editions share. Each is fixed in business only, so PME stays frame-for-frame as you approved it:
+   - premature synthesis: the "Second engineer" dot label is up 0.7 s (needs 2.2 s);
+   - fluency substitution at 390: "Suppose it matches…" is up 2.1 s (needs 4.8 s).
+   One short pass could apply the same fixes to PME, re-verified frame by frame.
 5. **PME at laptop size.** Some PME figures (e.g. premature synthesis) switch to the text-only stacked view at 1280×720, a common laptop size. The business editions were reworked to show the picture there. Applying the same fix to PME changes approved figures, so it waits for your go.
 
 ## Not part of the figures, still waiting
