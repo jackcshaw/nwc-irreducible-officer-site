@@ -33,7 +33,7 @@ Cold read 1 mapped "started weaker" onto the first owner and "started stronger" 
 
 - **Caption, the key line:** "A real study suggests what mattered was which AI advice owners acted on." It's on screen for the whole 9.5 s beat, so the key line has its reading time and much more.
 - **Heading on desktop and phone:** "A REAL STUDY, NOT THESE OWNERS".
-- **Title naming the measure:** "Revenue and profit". The page explains that the percentages convert the paper's revenue-and-profit index into an "equivalent" change.
+- **Title naming the measure:** "Revenue and profit", the published abstract's terms ("firm revenues and profits"). The panel's percentages are the published abstract's own. The page notes that the revised working paper builds its estimates from a revenue-and-profit index and converts them to percentages of its own, without applying that conversion to the published figures.
 - **Rows by business, not by person:**
   - "Weaker businesses": a solid bar left of zero, "nearly 10% worse".
   - "Stronger businesses": a light dashed bar right of zero, "may have gained over 15%", with "LESS CERTAIN" under it.
@@ -46,7 +46,7 @@ Cold read 1 mapped "started weaker" onto the first owner and "started stronger" 
 - **Same access on both sides** (lesson 12). Both owners have the same four documents, and each shares only the two battery quotes and the new shop's flyer with the AI. The sales records stay with them. Beat 1 says so, and only three grey copies slide into "GIVEN TO THE AI".
 - **The AI's answers are fair to their inputs and equally confident.**
   - Part 1, "Buy battery A: runs 6 hours, costs less", follows from the quotes.
-  - Part 2, "Win them back: loyalty discount", is a modest, ordinary answer to the flyer ("THEIR OFFER / Cheaper prints"). Beat 7 tags it "FROM THEIR FLYER".
+  - Part 2, "Win them back: loyalty discount", is a modest, ordinary answer to the flyer ("THEIR OFFER / Cheaper prints"). Beat 7 tags it "THEIR FLYER".
   - Round 3 replaced round 2's "cut prices 20%", which the tester found too big a move for a careful owner to accept. The first owner now accepts a plausible suggestion.
 - **The records settle Part 2.** Cold read 2 noted that round 2's "Mostly same-day" described the customers who stayed, not the ones who left, so a sharp owner could still argue for a price response. The records now read "OUR SALES / Lost: rush jobs / (not given to AI)", and the second owner says "Our records. Rush customers left in blackouts."
   - The customers who left wanted speed and left on blackout days, not over price.
@@ -123,7 +123,7 @@ PME uses the merged cast keys (`{reviewer_sees}`, `{Another}`, `{That_person}`, 
 | 4 · Uses Part 2 | (same) | — |
 | 5 · Checks each part | Another owner, with the same answers, checks each at its source. | "Second owner" (now kept to the end), "SECOND OWNER'S PLAN", "First owner" |
 | 6 · Checks Part 2 too | That owner checks Part 2 against the flyer and records, and changes it. | Flyer: "THEIR OFFER / Cheaper prints". Records: "OUR SALES / Lost: rush jobs / *(not given to AI)*". No reading note. Edit: Win them back: ~~loyalty discount~~ **same-day service** |
-| 7 · The frontier | Part 2 depends on why customers left. A jagged frontier marks where an AI stops being reliable. | "Lost: rush jobs" underlined; the AI's "loyalty discount" underlined and tagged "FROM THEIR FLYER". The frontier draws at 51.0 (PME 54.3) |
+| 7 · The frontier | Part 2 depends on why customers left. A jagged frontier marks where an AI stops being reliable. | "Lost: rush jobs" underlined; the AI's "loyalty discount" underlined and tagged "THEIR FLYER". The frontier draws at 51.0 (PME 54.3) |
 | 8 · The study | A real study suggests what mattered was which AI advice owners acted on. | Heading: "A REAL STUDY, NOT THESE OWNERS". Title: "Revenue and profit". Weaker businesses: solid bar, "nearly 10% worse". Stronger businesses: light dashed bar, "may have gained over 15%", "LESS CERTAIN". Source: "OTIS ET AL. (2026) · KENYAN ENTREPRENEURS · MANAGEMENT SCIENCE". The scene dims to 10% |
 | 9 · The reviewer | A reviewer who sees only the plans points to each part and asks what justified relying on it. | "THE REVIEWER SEES ONLY THE PLANS". Key: "AN OWNER'S OWN WORK". Answers: "The battery quotes." (both); "Part 1 checked out, so I trusted the rest." / "Our records. Rush customers left in blackouts." Stacked: "Our records: we lost rush jobs." |
 | 10 · Reviewer's check | Reviewer's check: What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part? | "Illustration based on Otis et al. (2026) and its working paper." at 84.9 s |
@@ -195,7 +195,7 @@ The cold-read tester couldn't reach the published abstract, so couldn't confirm 
 - its abstract calls the AI an "AI business mentor";
 - it says "low performers did worse because they sought help on more challenging business tasks."
 
-**Not used in the figure:** the working papers' "0.27 standard deviations", "about 8% worse" and "just over 15%". The page names the revised paper's conversion only to explain what the published percentages mean.
+**Not used in the figure:** the working papers' "0.27 standard deviations", "about 8% worse" and "just over 15%". The page mentions the revised paper's own conversion (p. 11) without applying it to the published percentages (verify fix 2). The tag on the AI's Part 2 is now "THEIR FLYER", as on the phone; "FROM THEIR FLYER" ran onto the card's border (verify fix 1).
 
 ## 7. What I couldn't verify
 
@@ -207,7 +207,7 @@ The cold-read tester couldn't reach the published abstract, so couldn't confirm 
 The final frame, at player time 93.6 s:
 - **Top:** the task card and the four documents. The flyer callout reads "THEIR OFFER / Cheaper prints"; the records callout reads "OUR SALES / Lost: rush jobs / (not given to AI)", with "Lost: rush jobs" underlined.
 - **Plans:** both owners' plans, with Part 2 outlined. The second reads "Win them back: ~~loyalty discount~~ same-day service".
-- **The AI's column:** receded, with the frontier between its answers and "FROM THEIR FLYER" under Part 2.
+- **The AI's column:** receded, with the frontier between its answers and "THEIR FLYER" under Part 2.
 - **Below:** both answer bubbles, the names, "THE REVIEWER SEES ONLY THE PLANS" with the key, and the source line.
 - **Caption band:** the name and definition, then "REVIEWER'S CHECK · What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part?"
 
