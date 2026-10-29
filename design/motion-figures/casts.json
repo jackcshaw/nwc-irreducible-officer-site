@@ -35,7 +35,46 @@
     "That_person": "That student",
     "each_person": "each student",
     "group": "seminar",
-    "reviewer_lines": "Faculty line"
+    "reviewer_lines": "Faculty line",
+    "reviewer_sends": "faculty send"
+  },
+  "high-school": {
+    "person": "student",
+    "Person": "Student",
+    "people": "students",
+    "a_person": "a student",
+    "A_person": "A student",
+    "the_person": "the student",
+    "The_person": "The student",
+    "first": "First student",
+    "second": "Second student",
+    "a_second": "a second student",
+    "A_second": "A second student",
+    "reviewer": "the teacher",
+    "Reviewer": "The teacher",
+    "side": "the teacher’s side",
+    "check": "Teacher’s check",
+    "check_l": "teacher’s check",
+    "receive": "What the teacher receives",
+    "reviewer_receives": "The teacher receives",
+    "reviewer_asks_each": "The teacher asks each student",
+    "ask_each": "Ask each student",
+    "reviewer_ask": "The teacher asks",
+    "reviewer_ask_l": "the teacher asks",
+    "reviewer_has": "The teacher has",
+    "reviewer_sees": "The teacher sees",
+    "what_reviewer_sees": "What the teacher sees",
+    "reviewer_doesnt_see": "The teacher doesn’t see this",
+    "reviewer_points": "The teacher points",
+    "reviewer_puts": "The teacher puts",
+    "then_ask": "Then the teacher asks",
+    "the_first": "the first student",
+    "Another": "Another student",
+    "That_person": "That student",
+    "each_person": "each student",
+    "group": "class",
+    "reviewer_lines": "The teacher lines",
+    "reviewer_sends": "the teacher sends"
   },
   "workplace": {
     "person": "analyst",
@@ -72,6 +111,7 @@
     "That_person": "That analyst",
     "each_person": "each analyst",
     "group": "team",
-    "reviewer_lines": "The manager lines"
+    "reviewer_lines": "The manager lines",
+    "reviewer_sends": "the manager sends"
   }
 }

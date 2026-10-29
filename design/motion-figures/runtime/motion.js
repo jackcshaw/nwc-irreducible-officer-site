@@ -645,13 +645,57 @@
 	};
 	/* casts:begin — generated from casts.json, which is the source of truth; regenerate after
 	   editing it (CONVENTIONS.md, Editions). Used only if casts.json can't be loaded. */
-	const BUILTIN_CASTS = {"classroom": {"person": "student", "Person": "Student", "people": "students", "a_person": "a student", "A_person": "A student", "the_person": "the student", "The_person": "The student", "first": "First student", "second": "Second student", "a_second": "a second student", "A_second": "A second student", "reviewer": "faculty", "Reviewer": "Faculty", "side": "the faculty side", "check": "Faculty check", "check_l": "faculty check", "receive": "What faculty receive", "reviewer_receives": "Faculty receive", "reviewer_asks_each": "Faculty ask each student", "ask_each": "Ask each student", "reviewer_ask": "Faculty ask", "reviewer_ask_l": "faculty ask", "reviewer_has": "Faculty have", "reviewer_sees": "Faculty see", "what_reviewer_sees": "What faculty see", "reviewer_doesnt_see": "Faculty don’t see this", "reviewer_points": "Faculty point", "reviewer_puts": "Faculty put", "then_ask": "Then they ask", "the_first": "the first student", "Another": "Another student", "That_person": "That student", "each_person": "each student", "group": "seminar", "reviewer_lines": "Faculty line"}, "workplace": {"person": "analyst", "Person": "Analyst", "people": "analysts", "a_person": "an analyst", "A_person": "An analyst", "the_person": "the analyst", "The_person": "The analyst", "first": "First analyst", "second": "Second analyst", "a_second": "a second analyst", "A_second": "A second analyst", "reviewer": "the manager", "Reviewer": "The manager", "side": "the manager’s side", "check": "Reviewer’s check", "check_l": "reviewer’s check", "receive": "What the manager receives", "reviewer_receives": "The manager receives", "reviewer_asks_each": "The manager asks each analyst", "ask_each": "Ask each analyst", "reviewer_ask": "The manager asks", "reviewer_ask_l": "the manager asks", "reviewer_has": "The manager has", "reviewer_sees": "The manager sees", "what_reviewer_sees": "What the manager sees", "reviewer_doesnt_see": "The manager doesn’t see this", "reviewer_points": "The manager points", "reviewer_puts": "The manager puts", "then_ask": "Then the manager asks", "the_first": "the first analyst", "Another": "Another analyst", "That_person": "That analyst", "each_person": "each analyst", "group": "team", "reviewer_lines": "The manager lines"}};
+	const BUILTIN_CASTS = {"classroom":{"person":"student","Person":"Student","people":"students","a_person":"a student","A_person":"A student","the_person":"the student","The_person":"The student","first":"First student","second":"Second student","a_second":"a second student","A_second":"A second student","reviewer":"faculty","Reviewer":"Faculty","side":"the faculty side","check":"Faculty check","check_l":"faculty check","receive":"What faculty receive","reviewer_receives":"Faculty receive","reviewer_asks_each":"Faculty ask each student","ask_each":"Ask each student","reviewer_ask":"Faculty ask","reviewer_ask_l":"faculty ask","reviewer_has":"Faculty have","reviewer_sees":"Faculty see","what_reviewer_sees":"What faculty see","reviewer_doesnt_see":"Faculty don’t see this","reviewer_points":"Faculty point","reviewer_puts":"Faculty put","then_ask":"Then they ask","the_first":"the first student","Another":"Another student","That_person":"That student","each_person":"each student","group":"seminar","reviewer_lines":"Faculty line","reviewer_sends":"faculty send"},"high-school":{"person":"student","Person":"Student","people":"students","a_person":"a student","A_person":"A student","the_person":"the student","The_person":"The student","first":"First student","second":"Second student","a_second":"a second student","A_second":"A second student","reviewer":"the teacher","Reviewer":"The teacher","side":"the teacher’s side","check":"Teacher’s check","check_l":"teacher’s check","receive":"What the teacher receives","reviewer_receives":"The teacher receives","reviewer_asks_each":"The teacher asks each student","ask_each":"Ask each student","reviewer_ask":"The teacher asks","reviewer_ask_l":"the teacher asks","reviewer_has":"The teacher has","reviewer_sees":"The teacher sees","what_reviewer_sees":"What the teacher sees","reviewer_doesnt_see":"The teacher doesn’t see this","reviewer_points":"The teacher points","reviewer_puts":"The teacher puts","then_ask":"Then the teacher asks","the_first":"the first student","Another":"Another student","That_person":"That student","each_person":"each student","group":"class","reviewer_lines":"The teacher lines","reviewer_sends":"the teacher sends"},"workplace":{"person":"analyst","Person":"Analyst","people":"analysts","a_person":"an analyst","A_person":"An analyst","the_person":"the analyst","The_person":"The analyst","first":"First analyst","second":"Second analyst","a_second":"a second analyst","A_second":"A second analyst","reviewer":"the manager","Reviewer":"The manager","side":"the manager’s side","check":"Reviewer’s check","check_l":"reviewer’s check","receive":"What the manager receives","reviewer_receives":"The manager receives","reviewer_asks_each":"The manager asks each analyst","ask_each":"Ask each analyst","reviewer_ask":"The manager asks","reviewer_ask_l":"the manager asks","reviewer_has":"The manager has","reviewer_sees":"The manager sees","what_reviewer_sees":"What the manager sees","reviewer_doesnt_see":"The manager doesn’t see this","reviewer_points":"The manager points","reviewer_puts":"The manager puts","then_ask":"Then the manager asks","the_first":"the first analyst","Another":"Another analyst","That_person":"That analyst","each_person":"each analyst","group":"team","reviewer_lines":"The manager lines","reviewer_sends":"the manager sends"}};
 	/* casts:end */
+	/** Resolve an edition for a cast, without fetching (scripts/edition-check.mjs runs this in
+	    Node). raw: the edition file; all: casts.json; requested: ?cast= (or null). Three optional
+	    edition fields, applied in this order: the edition, then the byCast patches, then {key}
+	    and {key|upper} filled from casts.json[cast] merged with castOverrides[cast].
+	      casts          ["workplace", "classroom", …]: the casts the edition supports. A requested
+	                     cast outside it falls back to the edition's own cast. No list: any cast.
+	      castOverrides  {cast: {key: words}}: this edition's role words, over casts.json's. Only
+	                     keys casts.json has; any other is ignored with a console warning.
+	      byCast         {cast: {"path.to.string": "words"}}, or {cast: "other cast"} to inherit
+	                     that cast's patches: whole-string replacements by path ("beats.0.text").
+	    An edition without them resolves exactly as before. Returns {ed, castId, words, patched}:
+	    ed is the filled edition plus {castId, cast (the edition's own cast id), castWords}. */
+	function resolveEdition(raw, all, requested, warn = (m) => console.warn(m)) {
+		const own = raw.cast || 'classroom';
+		let castId = Array.isArray(raw.casts) ? (requested && raw.casts.includes(requested) ? requested : own) : requested || own;
+		if (!all[castId]) castId = 'classroom';
+		const words = {...all[castId]};
+		const over = (raw.castOverrides || {})[castId] || {};
+		for (const k in over) {
+			if (k in words) words[k] = over[k];
+			else warn(`${raw.id}: castOverrides.${castId}.${k} isn\u2019t a casts.json key, so it is ignored. Add new keys to casts.json, for every cast.`);
+		}
+		// byCast: a string value inherits another cast's patches.
+		let patches = (raw.byCast || {})[castId];
+		for (const seen = new Set([castId]); typeof patches === 'string';) {
+			if (seen.has(patches)) { warn(`${raw.id}: byCast for ${castId} inherits in a loop (${patches}).`); patches = null; break; }
+			seen.add(patches);
+			patches = raw.byCast[patches];
+		}
+		let patched = raw;
+		if (patches && typeof patches === 'object') {
+			patched = JSON.parse(JSON.stringify(raw));
+			for (const [path, value] of Object.entries(patches)) {
+				const keys = path.split('.'), last = keys.pop();
+				const parent = keys.reduce((o, k) => (o == null ? o : o[k]), patched);
+				if (parent == null || typeof parent[last] !== 'string' || typeof value !== 'string') { warn(`${raw.id}: byCast patch for ${castId}, "${path}", doesn\u2019t replace a string, so it is skipped.`); continue; }
+				parent[last] = value;
+			}
+		}
+		const fillStr = (str) => str.replace(/\{(\w+)(\|upper)?\}/g, (m, k, up) => (k in words ? (up ? words[k].toUpperCase() : words[k]) : m));
+		const fill = (v) => (typeof v === 'string' ? fillStr(v) : Array.isArray(v) ? v.map(fill) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) : v);
+		return {ed: {...fill(patched), castId, cast: own, castWords: words}, castId, words, patched};
+	}
 	/** Load a figure's words. The edition comes from ?edition=, else data-edition on
 	    the root, else `fallback` (default 'pme'); an unknown edition falls back. The
-	    cast comes from ?cast=, else the edition's own "cast", else 'classroom'. Every
-	    string in the edition has {key} and {key|upper} filled from the cast's entry
-	    in casts.json. Returns the filled edition plus {id, castId, cast}. */
+	    cast comes from ?cast= (within the edition's `casts`, if it lists them), else the
+	    edition's own "cast", else 'classroom'; resolveEdition (above) fills the words.
+	    Returns the filled edition plus {id, castId, cast, castWords, fellBack}: cast is the
+	    edition's own cast id, castWords the role words used. */
 	async function loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'} = {}) {
 		// A slow edition is waited for (the page shows its loading state from 3 s). Only a real
 		// failure (a network error, a 404, invalid JSON, or no answer in 10 s) falls back to PME,
@@ -674,14 +718,10 @@
 		}
 		let all;
 		try { all = await get(casts, 2500); } catch (e) { all = BUILTIN_CASTS; }
-		let castId = params.get('cast') || raw.cast || 'classroom';
-		if (!all[castId]) castId = 'classroom';
-		const cast = all[castId];
-		const fillStr = (str) => str.replace(/\{(\w+)(\|upper)?\}/g, (m, k, up) => (k in cast ? (up ? cast[k].toUpperCase() : cast[k]) : m));
-		const fill = (v) => (typeof v === 'string' ? fillStr(v) : Array.isArray(v) ? v.map(fill) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) : v);
+		const {ed, castId} = resolveEdition(raw, all, params.get('cast'));
 		root.dataset.editionId = id;
 		root.dataset.cast = castId;
-		return {...fill(raw), id, castId, cast, fellBack};
+		return {...ed, id, fellBack};
 	}
 	/** Inline markup for page copy: escapes HTML, then *words* become <em>words</em>. */
 	const rich = (str) => String(str).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])).replace(/\*([^*]+)\*/g, '<em>$1</em>');
@@ -693,7 +733,8 @@
 	      [data-ed-links="path"]  <li><span>lead</span> <a href>text</a></li> per item
 	      [data-ed-content="path"] the content attribute (a meta description)
 	      [data-ed-section="path"] hidden when the value is empty
-	      [data-edition-link="id"] an edition switch link (href and aria-current) */
+	      [data-edition-link="id"] an edition switch link (href and aria-current), with
+	                              data-cast-link="cast" to name a cast (see below) */
 	function fillPage(doc, ed) {
 		doc.querySelectorAll('[data-ed]').forEach((n) => { n.textContent = pathGet(ed, n.dataset.ed) ?? ''; });
 		doc.querySelectorAll('[data-ed-rich]').forEach((n) => { n.innerHTML = rich(pathGet(ed, n.dataset.edRich) ?? ''); });
@@ -721,14 +762,20 @@
 		});
 		doc.querySelectorAll('[data-ed-content]').forEach((n) => { const v = pathGet(ed, n.dataset.edContent); if (v != null) n.setAttribute('content', v); });
 		doc.querySelectorAll('[data-ed-section]').forEach((n) => { const v = pathGet(ed, n.dataset.edSection); n.hidden = v == null || (Array.isArray(v) && !v.length); });
-		// Edition switch: <a data-edition-link="business">Workplace</a> links to ?edition= and
-		// marks the current edition with aria-current.
+		// Edition switch: <a data-edition-link="business">Workplace</a> links to ?edition=business,
+		// and <a data-edition-link="business" data-cast-link="classroom">Classroom</a> to
+		// ?edition=business&cast=classroom. A link without data-cast-link clears cast, so its
+		// edition shows in its own cast. aria-current marks the link whose edition and cast are
+		// the ones on screen. Other query parameters stay, except the ?t= test hook.
 		doc.querySelectorAll('[data-edition-link]').forEach((a) => {
 			const u = new URL(location.href);
+			const castLink = a.dataset.castLink || '';
 			u.searchParams.set('edition', a.dataset.editionLink);
+			if (castLink) u.searchParams.set('cast', castLink);
+			else u.searchParams.delete('cast');
 			u.searchParams.delete('t');
 			a.href = u.pathname + u.search;
-			if (a.dataset.editionLink === ed.id) a.setAttribute('aria-current', 'page');
+			if (a.dataset.editionLink === ed.id && (castLink || ed.cast || 'classroom') === (ed.castId || 'classroom')) a.setAttribute('aria-current', 'page');
 			else a.removeAttribute('aria-current');
 		});
 		// The requested edition failed and PME stands in: say so under the switch.
@@ -743,5 +790,5 @@
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};
-	window.MotionFigures = {mount, E, clamp, clamp01, mix, prog, spring, mixRgb, mixColor, css, el, set, bracketPath, pathAt, legibility, isReduced, FONT, loadEdition, fillPage, rich};
+	window.MotionFigures = {mount, E, clamp, clamp01, mix, prog, spring, mixRgb, mixColor, css, el, set, bracketPath, pathAt, legibility, isReduced, FONT, loadEdition, resolveEdition, fillPage, rich};
 })();

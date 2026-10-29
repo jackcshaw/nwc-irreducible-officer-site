@@ -268,6 +268,18 @@ Per `book-v0` Option A, the book replaces `.method-band` ("One method, different
   - The build should emit one static page per edition, e.g. `/failure-modes/frame-capture/` for the default (business) edition and `/failure-modes/frame-capture/pme/`. Each page bakes in that edition's title, meta description, Open Graph tags and page copy from `editions/<id>.json` and `casts.json`. The figure is set with `data-edition`.
   - The edition switch then links between these static paths rather than `?edition=`.
   - At minimum, emit static meta per edition, so social previews and search results carry the right wording.
+- **Pre-render per cast too** (added with the classroom cast mechanism, CLASSROOM-PLAN.md).
+  - A business edition that lists `casts` is a separate page in each cast: the words differ ("analyst" or "student", "Reviewer's check" or "Faculty check"), so each needs its own static text and meta.
+  - Resolve the words the way the runtime does. `MotionFigures.resolveEdition(raw, casts, castId)` is pure, so the build can run it, as `scripts/edition-check.mjs` does, rather than copying its logic.
+  - Paths, e.g. `/failure-modes/frame-capture/` (business, workplace), `/failure-modes/frame-capture/classroom/`, `/failure-modes/frame-capture/high-school/` and `/failure-modes/frame-capture/pme/`. The switch's Classroom link (`data-cast-link="classroom"`) then points at the classroom path.
+  - Run `scripts/edition-check.mjs` in the build or its tests. It fails on an unfilled `{key}`, another cast's role words or a reviewer verb that breaks with plural "Faculty".
+  - Until a figure's business edition lists a cast, `?cast=` outside its list falls back to the workplace cast, so don't emit a cast page for that figure.
+- **The site's settings map to casts.**
+  - PME: the `pme` edition (its own cast is `classroom`).
+  - HE: the business edition with the `classroom` cast ("faculty", "seminar", "Faculty check").
+  - K–12: the business edition with the `high-school` cast ("the teacher", "class", "Teacher’s check").
+  - Workplace, and standalone pages and articles: the business edition in its own `workplace` cast.
+  - A setting page or card links to the cast's static path (or `?edition=business&cast=classroom` / `&cast=high-school` in the prototype). Where a figure doesn't list the cast, the link falls back as above. CLASSROOM-PLAN.md decision 7 sends fluency substitution's high-school link to the workplace edition if its high-school read fails.
 
 ---
 

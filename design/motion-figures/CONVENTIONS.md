@@ -224,7 +224,7 @@ Serve `motion-figures/` with `python3 -m http.server 5291 --bind 127.0.0.1`. Don
 
 ## Editions (pilot: frame capture)
 
-One figure, several scenarios: PME (the essay's own examples), business (study-grounded, workplace cast) and, later, classroom. Plan and Jack's decisions: EDITIONS-PLAN.md. Scenarios: BUSINESS-EXAMPLES.md.
+One figure, several scenarios: PME (the essay's own examples) and business (study-grounded, workplace cast). The business scenarios also take a classroom cast, through data in `business.json` (below, "Casts within an edition"). Plan and Jack's decisions: EDITIONS-PLAN.md and CLASSROOM-PLAN.md. Scenarios: BUSINESS-EXAMPLES.md.
 
 **Three layers.**
 - **Core** stays in the figure's JS and never changes between editions:
@@ -234,13 +234,15 @@ One figure, several scenarios: PME (the essay's own examples), business (study-g
   - the nameplate (name, kicker and the role-neutral definition are universal).
 - **Scenario:** `figures/<slug>/editions/<id>.json` holds every visible word: picture labels, stacked-view text, captions, the beat list, the check and follow-up, and page copy.
 - **Cast:** `casts.json` (shared) holds role words and check headings.
-  - `classroom`: "First student", "Faculty check", "What faculty receive", …
+  - `classroom`: "First student", "Faculty check", "What faculty receive", …; for higher education and PME. "Faculty" is plural: "Faculty ask".
+  - `high-school`: classroom's person words, with "the teacher", "Teacher’s check" and "class". Its verbs are singular, the same forms as workplace's ("The teacher asks", "What the teacher receives"), so the business editions' grammar holds.
   - `workplace`: "First analyst", "Reviewer's check", "What the manager receives", …
+  - `reviewer_sends` ("faculty send", "the teacher sends", "the manager sends") is in every cast. `scripts/edition-check.mjs` fails if a cast lacks a key another cast has.
 
 Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Both are filled from its cast. Add a key to every cast at once, never in a figure.
 
 **Edition schema** (FC's, as the pattern; figure-specific keys are fine if they're semantic):
-- `id`, `cast`;
+- `id`, `cast`, and optionally `casts`, `castOverrides` and `byCast` ("Casts within an edition", below);
 - `task {label, lines[], text}`;
 - `considerations[]`: in the core's slot order;
 - `narrowing {split?, title: [{add | keep, join?}]}`. This is the AI's restatement as segments. A `keep` segment claims the first travelling word of the task with the same text. An `add` segment fades in. `join` means no space before it. `split` breaks a task word into pieces (PME: "adversary's" → "adversary" + "'s"). PME's `[{add: "Deter the"}, {keep: "adversary"}]` draws exactly what the hard-coded version did;
@@ -290,13 +292,14 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - The check's words stay within what the source supports. FC says "At the same predicted cost, some patients are sicker", from the abstract's "At a given risk score…".
 
 **Loader** (runtime, additive):
-- `MotionFigures.loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'})` returns a promise of the filled edition plus `{id, castId, cast}`.
+- `MotionFigures.loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'})` returns a promise of the filled edition plus `{id, castId, cast, castWords, fellBack}`. `cast` stays the edition's own cast id (`"workplace"`); `castWords` holds the role words used. Before the classroom mechanism, the cast object overwrote `cast`.
   - Edition: `?edition=`, then `data-edition` on the root, then `fallback`. An unknown id falls back.
-  - Cast: `?cast=`, then the edition's `cast`, then `classroom`.
+  - Cast: `?cast=`, then the edition's `cast`, then `classroom`. If the edition lists `casts`, a `?cast=` outside the list falls back to the edition's own cast. A cast missing from `casts.json` falls back to `classroom`.
   - It sets `data-edition-id` and `data-cast` on the root.
+  - The words come from `MotionFigures.resolveEdition(raw, casts, requestedCast)`, which is pure and fetches nothing. `edition-check.mjs` runs the same function in Node.
 - A figure builds after it loads: `Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); })`.
   - **Fonts before measuring (found in four figures during the refactor).** `document.fonts.ready` can resolve before faces used only inside the SVG have loaded, so text measured at build time comes out 2–199px off. Load every face the figure draws with explicitly before building, e.g. `Promise.all([loadEdition(root), ...FACES.map((f) => document.fonts.load(f))])`, where `FACES` lists each weight and style (serif, sans, mono, bold, italic). If the figure measures again after building, wait for `document.fonts.ready` once more.
-  - **Frame-diff noise.** CSS transitions (e.g. stacked-view pulses) can differ between two captures of the same build. Freeze transitions when diffing, and establish the noise floor by capturing the unchanged build twice. `window.__motionFigures[id]` appears after that, and the scripts already wait for it.
+  - **Frame-diff noise.** CSS transitions (e.g. stacked-view pulses) can differ between two captures of the same build. Freeze transitions when diffing (`frame-diff.mjs --freeze`), and establish the noise floor by capturing the unchanged build twice. Run diffs one at a time on a quiet port: two captures running side by side gave a few false differences (FC's late-measured SVG text, single-pixel raster seams) that a rerun alone cleared. `window.__motionFigures[id]` appears after that, and the scripts already wait for it.
 - `MotionFigures.fillPage(document, ed)` fills page copy from these attributes; the page HTML keeps only structure:
   - `data-ed="path"`: text;
   - `data-ed-rich="path"`: text where `*words*` becomes `<em>`, everything else escaped;
@@ -304,7 +307,7 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - `data-ed-links="path"`: `<li><span>lead</span> <a>`;
   - `data-ed-content="path"`: a meta description, with the PME text kept as the static fallback;
   - `data-ed-section="path"`: hidden when empty, as for PME's evidence;
-  - `data-edition-link="id"`: switch links, with href set and `aria-current` on the current edition.
+  - `data-edition-link="id"`: switch links, with href set and `aria-current` on the current edition. Add `data-cast-link="cast"` to name a cast (below).
 - **No flash of the wrong edition** (FC business verification and recheck).
   - **The head snippet.** Every figure page carries the same snippet before `</head>`: an inline `<style>` and a tiny inline script.
     - The script sets `html.ed-pending` and `html[data-ed-gate]` before first paint.
@@ -330,7 +333,34 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - PME's note reads "Military education: the original example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
   - The business edition sets no note (round 3: the military wording sat above a workplace figure), so the line is hidden there.
 
-The current edition's link is bold and underlined (`aria-current`). Classroom joins as a third link later. Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels. An edition that hides the note sits 24 px higher.
+The current edition's link is bold and underlined (`aria-current`). Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels. An edition that hides the note sits 24 px higher.
+
+**A cast in the switch** (`data-cast-link`). Classroom is the business edition in another cast, so its link names both: `<a data-edition-link="business" data-cast-link="classroom">Classroom</a>`, giving "Workplace · Classroom · Military education".
+- Each link sets `cast` (with `data-cast-link`) or clears it (without), so the edition shows in its own cast. "Workplace" from `?edition=business&cast=classroom` goes to the workplace cast. Before this, `fillPage` kept every query parameter, so that link stayed classroom.
+- `aria-current` needs both to match: the link's edition is the one on screen, and its cast (or, without `data-cast-link`, the edition's own `cast`) is the one on screen. At `?cast=high-school` no link is current unless one names `high-school`.
+- Other query parameters stay, except `t`.
+
+**Casts within an edition** (CLASSROOM-PLAN.md, "Mechanism"). One `business.json` serves the workplace, classroom and high-school casts through three optional fields:
+- **`casts`**, e.g. `["workplace", "classroom", "high-school"]`: the casts the edition supports. A `?cast=` outside the list falls back to the edition's own `cast`, so `?cast=classroom` can't show "student" beside a literal "associate" before the figure is built. No list means any cast, as before.
+- **`castOverrides`**, e.g. `{"workplace": {"person": "associate", "Person": "Associate", "reviewer": "the partner", "check": "Partner’s check"}}`: this edition's role words, merged over `casts.json` for that cast. It lets a figure move literal roles into keys while its business edition renders the same. An override may only redefine a key `casts.json` has; any other is ignored, with a console warning. New keys go into `casts.json`, for every cast.
+- **`byCast`**, e.g. `{"classroom": {"page.setup": "…", "beats.0.text": "…"}, "high-school": "classroom"}`: whole-string replacements by path, with array indexes as numbers. A string value inherits another cast's patches, so one patch with keys in it serves both classroom casts. A patch that doesn't replace a string is skipped, with a warning.
+  - Where a verb follows a reviewer word, carry the verb in a key (`{reviewer_sends}`), or patch the two casts separately: "Faculty, who see…" against "The teacher, who sees…".
+  - Patches change words only, never the timeline, layout or data that drives drawing. A patched string must fit where the original fit.
+- **Order:** the edition, then the `byCast` patches, then `{key}` filling from `casts.json[cast]` merged with `castOverrides[cast]`. Patches can therefore carry keys.
+- **Unchanged without them.** An edition without these fields resolves exactly as before: the runtime change frame-diffed to 0 for all eight figures' PME and business editions, with the switch hidden and transitions frozen.
+- **Held in reserve:** a separate `business-classroom.json`, for a figure whose drawing or timing must change.
+
+**Scripts for a cast.**
+- `frame-diff.mjs`, `figure-shots.mjs`, `figure-export.mjs`, `figure-branches.mjs` and AR's `ar-regress.mjs` take `--cast=id`, which adds `?cast=id`. Stills for a cast go to `shots/<edition>-<cast>/` (`shots/business-classroom/`), and previews to `shots/<slug>-<edition>-<cast>.mp4`.
+- `frame-diff.mjs` and `ar-regress.mjs` take `--freeze` (no CSS transitions or animations). Every capture writes its flags to `capture.json` in its folder, and `diff` warns when the baseline was captured with other flags. ID's and UR's `regression/baseline-business` were captured with `--freeze` (a second capture: 0 differing), so diff them with `--freeze`. The other six were captured without it.
+- **`scripts/edition-check.mjs`** resolves every edition in each cast it lists (its own cast if it lists none) with the runtime's `resolveEdition`, and fails on:
+  - a cast in `casts.json` without a key another cast has;
+  - a loader warning (an override key `casts.json` lacks, or a patch that doesn't replace a string);
+  - an unfilled `{key}`;
+  - another cast's role words, for an edition with `casts`. The words are each cast's person, people and reviewer words, the edition's own `castOverrides`, and the literal workplace roles (analyst, manager, associate, partner, engineer, tech lead, owner, reviewer). A per-figure allowlist (`ALLOW` in the script) passes phrases that are right in every cast: UR's study owners and IM's "partner or license";
+  - a verb after a reviewer key that doesn't agree with the cast: "{reviewer_has} only the emails, and asks" breaks with plural "Faculty", and "{reviewer_puts} them aside and ask" with singular "The teacher".
+
+  An edition without `casts` whose own cast isn't classroom is also resolved in the classroom cast (`--todo=id` for another). What that would flag prints as a to-do for the figure work, and doesn't fail the check. `--counts` prints only the counts. Run it after any edition or `casts.json` change.
 
 **Evidence, option A** (business):
 - "Illustration based on [study]" in the setup.

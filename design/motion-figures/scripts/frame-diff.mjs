@@ -5,8 +5,14 @@
 // and 390×844, and the reduced-motion and print views, and the full page (reduced). Then compares a capture
 // against a baseline pixel by pixel.
 //
-//   node scripts/frame-diff.mjs <slug> capture <dir> [--edition=id] [--hide=css] [--port=5291]
-//   node scripts/frame-diff.mjs <slug> diff <baselineDir> <currentDir> [--edition=id] [--hide=css] [--port=5291]
+//   node scripts/frame-diff.mjs <slug> capture <dir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]
+//   node scripts/frame-diff.mjs <slug> diff <baselineDir> <currentDir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]
+//
+// --cast=id loads ?cast=id (a classroom cast of a business edition, CONVENTIONS.md, Editions).
+// --freeze turns off CSS transitions and animations, so a seek always shows the end state:
+// the beat list's colour change and stacked-view pulses otherwise differ between two
+// captures of the same build. Diff with the flags the baseline was captured with; each
+// capture writes them to <dir>/capture.json, and diff warns when they differ.
 //
 // --hide=".fig-editions,.fig-edition-note" sets display:none on page additions above
 // the figure, so a capture stays comparable with a baseline taken before them. Any
@@ -19,7 +25,7 @@
 // the count of differing pixels (any channel off by more than 0) is reported.
 // Serve motion-figures/ first (python3 -m http.server 5291 --bind 127.0.0.1).
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
-import { mkdirSync, readdirSync, readFileSync, existsSync, statSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const args = process.argv.slice(2);
@@ -27,15 +33,19 @@ const flag = (name, def) => (args.find((a) => a.startsWith(`--${name}=`)) || `--
 const [slug, mode, dirA, dirB] = args.filter((a) => !a.startsWith("--"));
 const port = flag("port", "5291");
 const edition = flag("edition", "");
+const cast = flag("cast", "");
 const hide = flag("hide", "");
+const freeze = args.includes("--freeze");
 const root = new URL("../", import.meta.url).pathname;
 const resolve = (d) => (d.startsWith("/") ? d : join(root, d));
-const url = `http://127.0.0.1:${port}/figures/${slug}/index.html${edition ? `?edition=${edition}` : ""}`;
+const query = new URLSearchParams([["edition", edition], ["cast", cast]].filter(([, v]) => v)).toString();
+const url = `http://127.0.0.1:${port}/figures/${slug}/index.html${query ? `?${query}` : ""}`;
 const SIZES = [[1440, 900], [1280, 720], [390, 844]];
 
 async function open(b, w, h, opts = {}) {
   const c = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, ...opts });
   if (hide) await c.addInitScript((css) => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = `${css}{display:none!important}`; document.head.append(s); }), hide);
+  if (freeze) await c.addInitScript(() => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}"; document.head.append(s); }));
   const p = await c.newPage();
   const errors = [];
   p.on("pageerror", (e) => errors.push(e.message));
@@ -98,6 +108,7 @@ async function capture(dir) {
     await c.close();
   }
   await b.close();
+  writeFileSync(join(dir, "capture.json"), JSON.stringify({ slug, edition, cast, hide, freeze, sizes: SIZES, captured: count }, null, 1) + "\n");
   return { count, errors };
 }
 
@@ -138,9 +149,13 @@ if (mode === "capture") {
 } else if (mode === "diff") {
   const r1 = await capture(dirB);
   const r = await compare(dirA, dirB);
-  console.log(JSON.stringify({ captured: r1.count, errors: r1.errors, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing, diffs: r.diffs.slice(0, 40) }, null, 1));
+  // A baseline captured with other flags differs for that reason alone: say so.
+  const manifest = (d) => { const f = join(resolve(d), "capture.json"); return existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : null; };
+  const ma = manifest(dirA), mb = manifest(dirB);
+  const flagsDiffer = ma && ["edition", "cast", "hide", "freeze"].filter((k) => (ma[k] || "") !== (mb[k] || ""));
+  console.log(JSON.stringify({ captured: r1.count, errors: r1.errors, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing, ...(flagsDiffer?.length ? { warning: `baseline captured with other flags: ${flagsDiffer.join(", ")}` } : {}), diffs: r.diffs.slice(0, 40) }, null, 1));
   process.exitCode = r.diffs.length || r.missing.length ? 1 : 0;
 } else {
-  console.log("usage: frame-diff.mjs <slug> capture <dir> | diff <baselineDir> <currentDir> [--edition=id] [--hide=css] [--port=5291]");
+  console.log("usage: frame-diff.mjs <slug> capture <dir> | diff <baselineDir> <currentDir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]");
   process.exitCode = 2;
 }

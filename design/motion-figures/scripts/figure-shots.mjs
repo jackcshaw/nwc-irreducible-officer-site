@@ -1,17 +1,20 @@
 // Stills for a motion figure: one per beat (its settled moment) plus the final
 // frame, a reduced-motion page, a 390px page, and mechanical checks.
 // Adapted from concepts-v0/scripts/stills.mjs.
-// usage: node figure-shots.mjs <slug> [port] [--edition=id]   (serve motion-figures/ first)
+// usage: node figure-shots.mjs <slug> [port] [--edition=id] [--cast=id]   (serve motion-figures/ first)
 // --edition=id loads ?edition=id and writes to shots/<id>/ (CONVENTIONS.md, Editions).
+// --cast=id adds ?cast=id and writes to shots/<edition>-<cast>/, e.g. shots/business-classroom/.
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
 import { mkdirSync } from "node:fs";
 
 const argv = process.argv.slice(2);
 const edition = (argv.find((a) => a.startsWith("--edition=")) || "").split("=")[1] || "";
+const cast = (argv.find((a) => a.startsWith("--cast=")) || "").split("=")[1] || "";
 const [slug, portArg] = argv.filter((a) => !a.startsWith("--"));
-// base ends in "?" (or "?edition=id&") so call sites append their own query.
-const base = `http://127.0.0.1:${portArg || 5291}/figures/${slug}/index.html?${edition ? `edition=${edition}&` : ""}`;
-const out = new URL(`../figures/${slug}/shots/${edition ? `${edition}/` : ""}`, import.meta.url).pathname;
+// base ends in "?" (or "?edition=id&cast=id&") so call sites append their own query.
+const base = `http://127.0.0.1:${portArg || 5291}/figures/${slug}/index.html?${edition ? `edition=${edition}&` : ""}${cast ? `cast=${cast}&` : ""}`;
+const sub = [edition, cast].filter(Boolean).join("-");
+const out = new URL(`../figures/${slug}/shots/${sub ? `${sub}/` : ""}`, import.meta.url).pathname;
 mkdirSync(out, { recursive: true });
 const b = await chromium.launch();
 const errors = [];

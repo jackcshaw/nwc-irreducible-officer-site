@@ -15,13 +15,14 @@
 //   Text snapshots: domText (every text node) compares without whitespace, since page
 //   indentation between elements isn't a word; visibleText and the rest compare exactly.
 //
-//   node figures/appropriate-reliance/regression/ar-regress.mjs capture <dir> [--port=5291] [--edition=id] [--hide=css]
-//   node figures/appropriate-reliance/regression/ar-regress.mjs diff <baselineDir> <currentDir> [--port=5291]
+//   node figures/appropriate-reliance/regression/ar-regress.mjs capture <dir> [--port=5291] [--edition=id] [--cast=id] [--hide=css] [--freeze]
+//   node figures/appropriate-reliance/regression/ar-regress.mjs diff <baselineDir> <currentDir> [--port=5291] [--edition=id] [--cast=id] [--hide=css] [--freeze]
 //   node figures/appropriate-reliance/regression/ar-regress.mjs compare <baselineDir> <currentDir>
 //
 // capture runs frame-diff.mjs capture into <dir> first, then adds branches/ and flows/.
-// --edition=id loads ?edition=id; --hide=css hides intended page additions (as frame-diff's
-// --hide does) in the stills and removes them from the text snapshots.
+// --edition=id loads ?edition=id and --cast=id adds ?cast=id; --hide=css hides intended page
+// additions (as frame-diff's --hide does) in the stills and removes them from the text
+// snapshots; --freeze turns off CSS transitions and animations, as frame-diff's does.
 // diff captures into <currentDir>, then compares every baseline file: PNGs byte for byte,
 // then pixel by pixel; text snapshots key by key. Serve motion-figures/ first.
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
@@ -35,7 +36,9 @@ const flag = (name, def) => (args.find((a) => a.startsWith(`--${name}=`)) || `--
 const [mode, dirA, dirB] = args.filter((a) => !a.startsWith("--"));
 const port = flag("port", "5291");
 const edition = flag("edition", "");
+const cast = flag("cast", "");
 const hide = flag("hide", "");
+const freeze = args.includes("--freeze");
 const ROOT = new URL("../../../", import.meta.url).pathname; // motion-figures/
 const resolve = (d) => (d.startsWith("/") ? d : join(ROOT, d));
 const URL0 = `http://127.0.0.1:${port}/figures/${SLUG}/index.html`;
@@ -45,8 +48,10 @@ const cfg = JSON.parse(readFileSync(join(ROOT, `figures/${SLUG}/branches.json`),
 async function open(b, w, h, query = "", opts = {}) {
   const c = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, ...opts });
   if (hide) await c.addInitScript((css) => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = `${css}{display:none!important}`; document.head.append(s); }), hide);
+  if (freeze) await c.addInitScript(() => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}"; document.head.append(s); }));
   const qs = new URLSearchParams(query.replace(/^\?/, ""));
   if (edition) qs.set("edition", edition);
+  if (cast) qs.set("cast", cast);
   query = qs.toString() ? `?${qs}` : "";
   const p = await c.newPage();
   const errors = [];
@@ -217,7 +222,7 @@ async function captureExtra(dir) {
 async function capture(dir) {
   dir = resolve(dir);
   mkdirSync(dir, { recursive: true });
-  const out = execFileSync("node", [join(ROOT, "scripts/frame-diff.mjs"), SLUG, "capture", dir, `--port=${port}`, ...(edition ? [`--edition=${edition}`] : []), ...(hide ? [`--hide=${hide}`] : [])], { encoding: "utf8" });
+  const out = execFileSync("node", [join(ROOT, "scripts/frame-diff.mjs"), SLUG, "capture", dir, `--port=${port}`, ...(edition ? [`--edition=${edition}`] : []), ...(cast ? [`--cast=${cast}`] : []), ...(hide ? [`--hide=${hide}`] : []), ...(freeze ? ["--freeze"] : [])], { encoding: "utf8" });
   const fd = JSON.parse(out);
   const r = await captureExtra(dir);
   return { frames: fd.captured, extra: r.count, errors: [...fd.errors, ...r.errors] };
@@ -285,6 +290,6 @@ if (mode === "capture") {
   console.log(JSON.stringify({ compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40) }, null, 1));
   process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length ? 1 : 0;
 } else {
-  console.log("usage: ar-regress.mjs capture <dir> | diff <baselineDir> <currentDir> | compare <baselineDir> <currentDir> [--port=5291]");
+  console.log("usage: ar-regress.mjs capture <dir> | diff <baselineDir> <currentDir> | compare <baselineDir> <currentDir> [--port=5291] [--edition=id] [--cast=id] [--hide=css] [--freeze]");
   process.exitCode = 2;
 }
