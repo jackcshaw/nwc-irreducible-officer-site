@@ -175,7 +175,81 @@ All copy is in `editions/business.json` → `page`.
 
 The copy passed writing-as-jack's mechanical check.
 
-## 7. Questions for Jack
+## 7. Classroom cast (pilot, CLASSROOM-PLAN.md step 2)
+
+The business edition in two more casts, through data in `editions/business.json` (`casts`, `byCast`). The scenario, timeline, picture and evidence stay as built. Open it with `?edition=business&cast=classroom` (higher ed: "faculty", "seminar", "Faculty check") or `&cast=high-school` ("the teacher", "class", "Teacher's check").
+
+**Keys.**
+- The eleven literals `edition-check` flagged are now keys: `{second}`, `{person}`, `{A_person}`, `{people}` and `{That_person}`. The workplace text resolves exactly as before.
+- Where a sentence changes beyond role words, there is a `byCast` patch:
+  - the first caption;
+  - the beat 12 detail ("the second question from {reviewer}");
+  - the setup;
+  - the source paragraph;
+  - the links note.
+- `byCast["high-school"]` is classroom's patches plus `page.teacherNote`.
+- Two internal stacked-view section ids were renamed (`student` to `dot`, `faculty` to `final`). They were never shown, but the check read them as role words.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Caption 1 | A student gets an open health-system case. | same |
+| Caption 7 | Faculty receive the final ranking. | The teacher receives the final ranking. |
+| Captions 9, 11, 12 | A second student… / Ask each student… / The second student checks it… | same |
+| Caption 14 | Faculty check: What problem did the student choose to solve? | Teacher's check: … |
+| Picture | WHAT FACULTY RECEIVE (: THE FINAL RANKING), FROM THIS STUDENT, STUDENT'S DRAFT, First/Second student, FACULTY ASK EACH STUDENT | WHAT THE TEACHER RECEIVES…, THE TEACHER ASKS EACH STUDENT |
+| Phone | Second student: would change it if some patients cost less because they get less care. | same |
+| Setup | "A student in a health policy seminar works a health system's case… like test scores for learning, or sales for customer value. Faculty receive the finished ranking, which can't show who chose its frame. The case is an illustration based on Obermeyer et al. (2019), a study of a health-care algorithm and its patients, not of students. The students, their AI and the task are constructed." | "…health policy class… The teacher receives the finished ranking…" |
+| Source paragraph | "The study looked at an algorithm and its patients, not at students. The students, their AI, the case, the six considerations, the rankings and the check are constructed." | same |
+| Links note | "The failure mode and the faculty check come from the essay below. This page shows the same move in a seminar working a health system's case." | "…the teacher's check… a class…" |
+| Teacher note | none | "For teachers: the figure's last line gives the study's finding about Black and White patients in the paper's terms. The study traces it to unequal access to care: less money was spent on Black patients with the same level of need." (abstract; *Science* editor's summary) |
+
+**Kept on screen in every cast:** "In the study, at a given risk score, Black patients were considerably sicker than White patients" (decision 5). High school adds the teacher note above the evidence. **The check:** the business questions under each cast's heading (decision 3).
+
+**Switch:** "See this with: Workplace · Classroom · Military education".
+- Classroom is `data-edition-link="business" data-cast-link="classroom"`. High school has no link; it is reached with `?cast=high-school`.
+- `aria-current` was checked in six states:
+  - no query, and `?edition=pme`: Military education;
+  - `business` and `cast=workplace`: Workplace;
+  - `cast=classroom`: Classroom;
+  - `cast=high-school`: none.
+
+**Pace** (caption words ÷ 3 + 1.5 s, on the business timeline, figure clock):
+
+| # | Length (s) | Workplace | Classroom | High school |
+| --- | --- | --- | --- | --- |
+| 1 | 4.0 | 7 words, 3.8 | 7, 3.8 | 7, 3.8 |
+| 2 | 5.6 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 3 | 9.0 | 11, 5.2 | 11, 5.2 | 11, 5.2 |
+| 4 | 8.0 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 5 | 7.0 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
+| 6 | 5.5 | 11, 5.2 | 11, 5.2 | 11, 5.2 |
+| 7 | 7.15 | 6, 3.5 | 5, 3.2 | 6, 3.5 |
+| 8 | 4.85 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
+| 9 | 13.5 | 14, 6.2 | 14, 6.2 | 14, 6.2 |
+| 10 | 5.0 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
+| 11 | 5.65 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 12 | 9.9 | 14, 6.2 | 14, 6.2 | 14, 6.2 |
+| 13 | 8.75 | 16, 6.8 | 16, 6.8 | 16, 6.8 |
+| 14 | 6.7, then rests | 10 + 7, 4.8 | same | same |
+
+The picture's new texts keep workplace's word counts or fewer. For example, "THE TEACHER ASKS EACH STUDENT" has 5 words, the same as "THE MANAGER ASKS EACH ANALYST", so every picture hold still meets words ÷ 3 + 1.5 s.
+
+**Checks** (both classroom casts):
+- `edition-check` passes for all three casts.
+- 1440 × 900: the picture, smallest label 14.1 px.
+- 1280 × 720: the picture, smallest label 11.1 px.
+- 1366 × 657: the stacked view, as in workplace and PME.
+- 390 × 844: the player is 827 px.
+- The controls never move, there's no horizontal scroll, and the console is clean.
+- The workplace business edition frame-diffs 248/248 against a baseline taken before the change (switch hidden), and PME 203/203.
+
+**Stills:**
+- `shots/business-classroom/` and `shots/business-high-school/`, each with a still per beat, `final.png`, `final-1440.png`, `final-390.png`, and reduced and page views.
+- Previews: `shots/frame-capture-business-classroom.mp4` and `shots/frame-capture-business-high-school.mp4`, plus `.webm` and `.gif`.
+
+## 8. Questions for Jack
 
 1. The payoff and its evidence exception (check, condition holds, frame changes): confirm it is the faithful variant.
 2. The four unverified passages (section 1) need a check against the published full text before they return to the page or reach the source spine.

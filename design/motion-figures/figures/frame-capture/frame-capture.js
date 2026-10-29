@@ -629,7 +629,7 @@
 		return {box, who: w, tiSpan, hs};
 	};
 	if (narrow) {
-		{ const sec = section('student'); N.student.who = h('span', 'fc-n-who', sec, L.person); }
+		{ const sec = section('dot'); N.dot.who = h('span', 'fc-n-who', sec, L.person); }
 		{ const sec = section('task', NW.taskLabel); h('p', 'fc-n-task', sec, TASK); }
 		// Optional (business): the task as one compact line, kept in view to the end, so the
 		// task's wording stays beside the rankings' titles.
@@ -656,11 +656,11 @@
 			N.draft.label = h('span', 'fc-n-dl', sec, `${L.draft} 1`);
 		}
 		{
-			const sec = section('faculty', NW.receiveFinal);
-			N.faculty.paper = paperBlock(sec, NW.fromThis);
-			N.faculty.key = h('p', 'fc-n-key', sec);
-			h('i', null, N.faculty.key);
-			N.faculty.key.append(NW.key);
+			const sec = section('final', NW.receiveFinal);
+			N.final.paper = paperBlock(sec, NW.fromThis);
+			N.final.key = h('p', 'fc-n-key', sec);
+			h('i', null, N.final.key);
+			N.final.key.append(NW.key);
 		}
 		{
 			const sec = section('second');
@@ -736,9 +736,9 @@
 		if (sourceInView && NW.source) { const sec = section('source'); h('p', 'fc-n-src', sec, NW.source); }
 	}
 	const SHOW = [
-		['student', 'task'], ['student', 'task', 'field'], ['task', 'field', 'aiFrame'],
+		['dot', 'task'], ['dot', 'task', 'field'], ['task', 'field', 'aiFrame'],
 		['aiFrame', 'draft'], ['aiFrame', 'draft'], ['field', 'aiFrame', 'draft'],
-		['task', 'faculty'], ['faculty', 'second'], ['papers'], ['papers', 'ask'], ['papers', 'ask'],
+		['task', 'final'], ['final', 'second'], ['papers'], ['papers', 'ask'], ['papers', 'ask'],
 	];
 	const SHOWS = NW.show || SHOW;
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
@@ -750,7 +750,7 @@
 		const bi = beatIndex(tau);
 		const show = new Set(SHOWS[bi]);
 		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k);
-		fade(N.student.sec, prog(t, T.dotIn, T.dotIn + 0.4));
+		fade(N.dot.sec, prog(t, T.dotIn, T.dotIn + 0.4));
 		fade(N.task.sec, prog(t, ...T.card));
 		const hk = prog(t, ...T.heads);
 		N.field.chips.forEach(({c, n}) => {
@@ -772,13 +772,13 @@
 		N.draft.label.textContent = `${L.draft} ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
 		fade(N.draft.label, prog(t, T.write, T.write + 0.3));
 		// What faculty receive: the paper arrives grey and framed, the wipe drains it, the frame goes.
-		const fp = N.faculty.paper, wk = prog(t, ...T.wipe), bo = 1 - prog(t, ...T.bracketsA);
+		const fp = N.final.paper, wk = prog(t, ...T.wipe), bo = 1 - prog(t, ...T.bracketsA);
 		fade(fp.box, prog(t, ...T.pan));
 		fp.box.classList.toggle('is-framed', bo > 0.5);
 		[fp.tiSpan, ...fp.hs].forEach((n) => drain(n, wk));
-		fade(N.faculty.key, prog(t, ...T.key) * bo);
+		fade(N.final.key, prog(t, ...T.key) * bo);
 		const named = t >= T.nameSwap + 0.25;
-		N.faculty.label.textContent = named ? NW.receive : NW.receiveFinal;
+		N.final.label.textContent = named ? NW.receive : NW.receiveFinal;
 		fp.who.textContent = named ? L.first : NW.fromThis;
 		// The second student: the AI proposes the same frame; each consideration is examined; the frame is claimed.
 		fade(N.second.sec, prog(t, T.dotB, T.dotB + 0.4));
