@@ -1,0 +1,162 @@
+{
+ "_doc": "Frame capture, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout and nameplate are core and stay in frame-capture.js. Schema: CONVENTIONS.md, Editions.",
+ "id": "pme",
+ "cast": "classroom",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Recommend a response to an",
+   "adversary's military buildup."
+  ],
+  "text": "Recommend a response to an adversary's military buildup."
+ },
+ "considerations": [
+  "Past buildups",
+  "Adversary's intent",
+  "Room to negotiate",
+  "Allies' interests",
+  "Domestic politics",
+  "Economic pressure"
+ ],
+ "narrowing": {
+  "split": {
+   "adversary's": [
+    "adversary",
+    "'s"
+   ]
+  },
+  "title": [
+   {
+    "add": "Deter the"
+   },
+   {
+    "keep": "adversary"
+   }
+  ]
+ },
+ "labels": {
+  "aiFrame": "AI'S FRAME",
+  "draft": "{Person|upper}'S DRAFT",
+  "person": "{Person}",
+  "receive": "{receive|upper}",
+  "fromThis": "FROM THIS {person|upper}",
+  "first": "{first}",
+  "second": "{second}",
+  "chosen": "CHOSEN",
+  "setAside": "SET ASIDE",
+  "centre": "{receive|upper}: THE FINAL COPY",
+  "key": "AI-SUPPLIED",
+  "askEach": "{reviewer_asks_each|upper}",
+  "askQ": "Why this frame?"
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "fieldLabel": "Six considerations",
+  "fieldNote": "The four dashed ones were never weighed.",
+  "aiFrame": "AI's frame",
+  "draftLines": [
+   "Draft 1: rows under the AI’s two headings",
+   "Draft 2: the rows straightened",
+   "Draft 3: adds evidence, a chart",
+   "and a firmer conclusion"
+  ],
+  "receiveFinal": "{receive}: the final copy",
+  "receive": "{receive}",
+  "fromThis": "From this {person}",
+  "paperBody": "Text, a chart and a conclusion.",
+  "key": "AI-SUPPLIED",
+  "proposes": "Its AI proposes the same frame:",
+  "chosen": "Chosen",
+  "setAside": "Set aside",
+  "weighingNote": "The weighing doesn’t show in either paper.",
+  "askQ": "{reviewer_asks_each}: Why this frame?"
+ },
+ "beats": [
+  {
+   "text": "{A_person} gets an open strategy task.",
+   "detail": "a task card appears at the top right: \"Example task: Recommend a response to an adversary's military buildup.\" A red dot labelled {Person} appears on the left."
+  },
+  {
+   "text": "Many things could matter. Framing means picking which ones define the problem.",
+   "detail": "six considerations appear one at a time in dashed outline, three above an open space and three below: past buildups, allies' interests, adversary's intent, domestic politics, room to negotiate, and economic pressure."
+  },
+  {
+   "text": "{The_person} asks an AI. It proposes a reasonable, narrower frame.",
+   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task sentence moves into the frame; every word fades except \"adversary\", and \"Deter the\" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings."
+  },
+  {
+   "text": "{The_person} takes up the frame. Up close, it's all they see.",
+   "detail": "the dot steps into the frame. The view moves in until the frame fills it, and the dot writes a rough first draft in two columns under the AI's headings."
+  },
+  {
+   "text": "{The_person} revises twice, adding evidence and a firmer conclusion.",
+   "detail": "the dot straightens the rows, then adds a chart and a conclusion across both columns. Red change bars mark each revision. The red label reads {Person}'s draft 3."
+  },
+  {
+   "text": "Step back with us: every revision stayed inside the AI's frame.",
+   "detail": "the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets."
+  },
+  {
+   "text": "{reviewer_receives} the final copy. Nothing in it shows the frame came from the AI.",
+   "detail": "a clean final copy of the paper travels to {side} and stops in the middle, large, labelled \"{receive}: the final copy\". It is still inside grey brackets, and a key marks its tinted title and headings as \"AI-supplied\". A wipe crosses it, and the title and headings turn the same ink as the rest, keeping their words. The brackets and the key fade, and the paper moves to the top left, labelled \"From this {person}\"."
+  },
+  {
+   "text": "{A_second}, also working with AI, weighs all six and chooses this frame.",
+   "detail": "the label over the first paper becomes \"{first}\". A second red dot labelled {second} appears. Its AI proposes the same frame: grey brackets tagged \"AI's frame\" around adversary's intent and allies' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads \"Chosen\"; the other four go under \"Set aside\"."
+  },
+  {
+   "text": "That {person} writes the same paper; the weighing doesn't show.",
+   "detail": "the second dot writes a paper identical to the first, labelled \"{second}\". Then the weighing slides up behind the paper and is hidden."
+  },
+  {
+   "text": "{ask_each} why this frame. One can show what they weighed.",
+   "detail": "\"{reviewer_asks_each}: Why this frame?\" appears. From behind each paper, what it rests on slides into view. Under the first is only the AI's grey frame around its two considerations, with the first {person} inside. Under the second is the same frame in red, chosen, with the four set aside below."
+  },
+  {
+   "text": "{check}: What problem did {the_person} choose to solve?",
+   "list": "{check}: What problem did {the_person} choose to solve? Why this frame? What would change it?",
+   "detail": "the questions appear under the picture, at the same size. The task card's \"a response\" and the papers' title, \"Deter the adversary\", are both in view."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What problem did {the_person} choose to solve?",
+  "follow": "Why this frame? What would change it?"
+ },
+ "page": {
+  "kicker": "Failure mode 1 of 7",
+  "title": "Frame capture",
+  "description": "A teaching figure: {a_person} builds on an AI's reasonable first frame, and the finished paper can't show who chose it.",
+  "setup": "{A_person} asks an AI for help with a strategy paper, and the AI proposes a reasonable way to frame the problem. {The_person} works hard from there. *The Irreducible Officer* calls what can happen next frame capture: the first plausible frame becomes the {person}'s frame. The task and the six considerations are a constructed example.",
+  "srTitle": "Frame capture, an animated figure in eleven beats",
+  "srSummary": "An animated figure. On the left, a red dot stands for {a_person}, surrounded by six dashed considerations. An AI's grey frame takes in two of them and turns the task, \"recommend a response to an adversary's military buildup\", into \"deter the adversary\". {The_person} steps into the frame and writes and revises a paper there. The view moves to {side}, where the paper arrives and the signs of the AI's frame drain out of it. {A_second}, also working with AI, gets the same proposed frame, weighs all six considerations, chooses that frame and writes an identical paper. Asked why this frame, the first {person} can show only the AI's two considerations; the second can show all six and the choice. The figure ends on the {check_l}. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What problem did {the_person} choose to solve?",
+   "Why this frame? What would change it?"
+  ],
+  "checkFollow": "Both {people} in the figure would answer the first question the same way. The second line separates them. It comes from Section VIII of the essay, which asks: why this problem, why this frame, what would change it?",
+  "quoteHeading": "From the essay",
+  "quote": "Frame capture occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it. The danger is not that the frame is obviously wrong; it may be entirely reasonable. It may simply define the problem too narrowly, privilege one set of interests over others, assume a theory of adversary behavior, or treat a structural constraint as fixed when it should be contested. Once accepted, later revisions improve the answer inside the wrong boundary. The frame capture is invisible inside the final product.",
+  "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",
+  "evidence": null,
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Book chapter:",
+    "text": "Frame the problem",
+    "href": "../../book-v0/four-moves-book.html?spread=2"
+   },
+   {
+    "lead": "Practice:",
+    "text": "test frame capture with your AI assistant",
+    "href": "https://judgmentlab.net/#companion"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section II, What the Problem Looks Like",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ]
+ }
+}

@@ -1,0 +1,189 @@
+{
+ "_doc": "Frame capture, business edition (workplace cast): an illustration based on Obermeyer, Powers, Vogeli & Mullainathan (2019), Science 366: 447-453. Quotes on the page are verbatim from BUSINESS-EXAMPLES.md's verified passages. Core change: the second analyst keeps cost for now and writes down what would change it (see storyboard-business.md).",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Which patients need the most",
+   "help from the program?"
+  ],
+  "text": "Which patients need the most help from the program?"
+ },
+ "considerations": [
+  "Chronic illness",
+  "Next year's costs",
+  "Avoidable visits",
+  "Program budget",
+  "Access to care",
+  "Who it can help"
+ ],
+ "narrowing": {
+  "title": [
+   {
+    "keep": "Which"
+   },
+   {
+    "keep": "patients"
+   },
+   {
+    "add": "cost"
+   },
+   {
+    "keep": "the"
+   },
+   {
+    "keep": "most"
+   },
+   {
+    "add": "?",
+    "join": true
+   }
+  ]
+ },
+ "labels": {
+  "aiFrame": "AI'S FRAME",
+  "draft": "{Person|upper}'S DRAFT",
+  "person": "{Person}",
+  "receive": "{receive|upper}",
+  "fromThis": "FROM THIS {person|upper}",
+  "first": "{first}",
+  "second": "{second}",
+  "chosen": "CHOSEN",
+  "setAside": "SET ASIDE",
+  "centre": "{receive|upper}: THE FINAL RANKING",
+  "key": "AI-SUPPLIED",
+  "askEach": "{reviewer_asks_each|upper}",
+  "askQ": "Why this frame?",
+  "changeNote": {
+   "label": "WOULD CHANGE IT",
+   "lines": [
+    "If some patients cost less",
+    "because they get less care"
+   ]
+  },
+  "source": "Illustration based on Obermeyer et al., Science (2019)."
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "fieldLabel": "Six considerations",
+  "fieldNote": "The four dashed ones were never weighed.",
+  "aiFrame": "AI's frame",
+  "draftLines": [
+   "Draft 1: a ranking under the AI’s two headings",
+   "Draft 2: the rows straightened",
+   "Draft 3: adds evidence, a chart",
+   "and a firmer cut-off"
+  ],
+  "receiveFinal": "{receive}: the final ranking",
+  "receive": "{receive}",
+  "fromThis": "From this {person}",
+  "paperBody": "A ranked list, a chart and a cut-off.",
+  "key": "AI-SUPPLIED",
+  "proposes": "Its AI proposes the same frame:",
+  "chosen": "Chosen",
+  "setAside": "Set aside",
+  "changeNote": "Would change it: if low cost reflects less care.",
+  "weighingNote": "The weighing doesn’t show in either ranking.",
+  "askQ": "{reviewer_asks_each}: Why this frame?",
+  "source": "Illustration based on Obermeyer et al., Science (2019)."
+ },
+ "beats": [
+  {
+   "text": "{A_person} gets an open care-program task.",
+   "detail": "a task card appears at the top right: \"Example task: Which patients need the most help from the program?\" A red dot labelled {Person} appears on the left."
+  },
+  {
+   "text": "Many things could matter. Framing means picking which ones define the problem.",
+   "detail": "six considerations appear one at a time in dashed outline, three above an open space and three below: chronic illness, program budget, next year's costs, access to care, avoidable visits, and who it can help."
+  },
+  {
+   "text": "{The_person} asks an AI. It proposes a reasonable, narrower frame.",
+   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task question moves into the frame; \"need\" and \"help from the program\" fade, and \"cost\" appears, so it reads \"Which patients cost the most?\" Next year's costs and the program budget slide inside as grey headings."
+  },
+  {
+   "text": "{The_person} takes up the frame. Up close, it's all they see.",
+   "detail": "the dot steps into the frame. The view moves in until the frame fills it, and the dot writes a rough first ranking in two columns under the AI's headings."
+  },
+  {
+   "text": "{The_person} revises twice, adding evidence and a firmer cut-off.",
+   "detail": "the dot straightens the ranked rows, then adds a chart and a cut-off line across both columns. Red change bars mark each revision. The red label reads {Person}'s draft 3."
+  },
+  {
+   "text": "Step back with us: every revision stayed inside the AI's frame.",
+   "detail": "the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets."
+  },
+  {
+   "text": "{reviewer_receives} the final ranking. Nothing shows the frame came from the AI.",
+   "detail": "a clean final copy of the ranking travels to {side} and stops in the middle, large, labelled \"{receive}: the final ranking\". It is still inside grey brackets, and a key marks its tinted title and headings as \"AI-supplied\". A wipe crosses it, and the title and headings turn the same ink as the rest, keeping their words. The brackets and the key fade, and the ranking moves to the top left, labelled \"From this {person}\"."
+  },
+  {
+   "text": "{A_second}, also using AI, weighs all six and keeps cost, for now.",
+   "detail": "the label over the first ranking becomes \"{first}\". A second red dot labelled {second} appears. Its AI proposes the same frame: grey brackets tagged \"AI's frame\" around next year's costs and the program budget, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads \"Chosen\"; the other four go under \"Set aside\", and a red note says what would change it: some patients costing less because they get less care."
+  },
+  {
+   "text": "That {person} writes the same ranking; the weighing doesn't show.",
+   "detail": "the second dot writes a ranking identical to the first, labelled \"{second}\". Then the weighing slides up behind the ranking and is hidden."
+  },
+  {
+   "text": "{ask_each} why this frame. One knows what would change it.",
+   "detail": "\"{reviewer_asks_each}: Why this frame?\" appears. From behind each ranking, what it rests on slides into view. Under the first is only the AI's grey frame around its two considerations, with the first {person} inside. Under the second is the same frame in red, chosen, with the four set aside and the note on what would change it."
+  },
+  {
+   "text": "{check}: What problem did {the_person} choose to solve?",
+   "list": "{check}: What problem did {the_person} choose to solve? Why this frame? What would change it?",
+   "detail": "the questions appear under the picture, at the same size. The task card's \"need\" and the rankings' title, \"Which patients cost the most?\", are both in view. Under the picture: \"Illustration based on Obermeyer et al., Science (2019).\""
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What problem did {the_person} choose to solve?",
+  "follow": "Why this frame? What would change it?"
+ },
+ "page": {
+  "kicker": "Failure mode 1 of 7",
+  "title": "Frame capture",
+  "description": "A teaching figure: {a_person} builds on an AI's reasonable first frame, and the finished ranking can't show who chose it.",
+  "setup": "{A_person} at a health system asks an AI which patients most need a care program's help, and the AI proposes a reasonable way to frame the problem. {The_person} works hard from there. What can happen next is frame capture: the first plausible frame becomes the working frame, unexamined. Illustration based on Obermeyer et al. (2019). The analysts, their AI and the task are constructed.",
+  "srTitle": "Frame capture, an animated figure in eleven beats",
+  "srSummary": "An animated figure. On the left, a red dot stands for {a_person}, surrounded by six dashed considerations. An AI's grey frame takes in two of them, next year's costs and the program budget, and turns the task question, \"which patients need the most help from the program?\", into \"which patients cost the most?\". {The_person} steps into the frame and builds and revises a ranking there. The view moves to {side}, where the ranking arrives and the signs of the AI's frame drain out of it. {A_second}, also using AI, gets the same proposed frame, weighs all six considerations, keeps cost for now and writes down what would change it: if some patients cost less because they get less care. That analyst's ranking is identical. Asked why this frame, the first {person} can show only the AI's two considerations; the second can show all six and what would change the frame. The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What problem did {the_person} choose to solve?",
+   "Why this frame? What would change it?"
+  ],
+  "checkFollow": "Both {people} in the figure would answer the first question the same way. The second line separates them. It comes from Section VIII of *The Irreducible Officer*, a National War College essay, which asks: why this problem, why this frame, what would change it?",
+  "evidenceHeading": "The study behind this example",
+  "evidence": [
+   "A widely used commercial algorithm ranked patients for \"high-risk care management\" programs. \"Patients above the 97th percentile are automatically identified for enrollment in the program\" (p. 448). It was a prediction model. No generative AI was involved.",
+   "The paper states its finding this way: \"At a given risk score, Black patients are considerably sicker than White patients, as evidenced by signs of uncontrolled illnesses. Remedying this disparity would increase the percentage of Black patients receiving additional help from 17.7 to 46.5%\" (abstract, p. 447).",
+   "The authors trace it to what the algorithm was built to predict: \"The bias arises because the algorithm predicts health care costs rather than illness, but unequal access to care means that we spend less money caring for Black patients than for White patients\" (abstract, p. 447).",
+   "The cost predictions themselves were accurate: \"At every level of algorithm-predicted risk, Blacks and Whites have (roughly) the same costs the following year. In other words, the algorithm's predictions are well calibrated across races\" (p. 449).",
+   "The authors defend the starting choice: \"the algorithm manufacturer's choice to predict future costs is reasonable: The program's goal, at least in part, is to reduce costs\" (pp. 450–451). They also write that \"future cost is by no means the only reasonable choice\" (p. 451).",
+   "The fix was a different frame. In the manufacturer's data, a label combining health and cost cut the excess chronic conditions among Black patients \"to 7758, an 84% reduction in bias\" (p. 453).",
+   "In the figure, the second analyst keeps cost but writes down what would change it: patients who cost less because they get less care. That is the condition the study found, by checking illness against cost for Black and White patients at the same score.",
+   "Source: Obermeyer, Powers, Vogeli & Mullainathan, \"Dissecting racial bias in an algorithm used to manage the health of populations,\" *Science* 366 (2019): 447–453. The analysts, their AI, the six considerations and the ranking are constructed. The figure shows none of the study's data."
+  ],
+  "quoteHeading": "From the essay",
+  "quote": "Frame capture occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it. The danger is not that the frame is obviously wrong; it may be entirely reasonable. It may simply define the problem too narrowly, privilege one set of interests over others, assume a theory of adversary behavior, or treat a structural constraint as fixed when it should be contested. Once accepted, later revisions improve the answer inside the wrong boundary. The frame capture is invisible inside the final product.",
+  "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Book chapter:",
+    "text": "Frame the problem",
+    "href": "../../book-v0/four-moves-book.html?spread=2"
+   },
+   {
+    "lead": "Practice:",
+    "text": "test frame capture with your AI assistant",
+    "href": "https://judgmentlab.net/#companion"
+   },
+   {
+    "lead": "Essay:",
+    "text": "Section II, What the Problem Looks Like",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ]
+ }
+}

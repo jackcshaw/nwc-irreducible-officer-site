@@ -622,6 +622,76 @@
 		return api;
 	}
 
+	// ---- editions (additive; figures that don't call these are unchanged) ----
+	/** Load a figure's words. The edition comes from ?edition=, else data-edition on
+	    the root, else `fallback` (default 'pme'); an unknown edition falls back. The
+	    cast comes from ?cast=, else the edition's own "cast", else 'classroom'. Every
+	    string in the edition has {key} and {key|upper} filled from the cast's entry
+	    in casts.json. Returns the filled edition plus {id, castId, cast}. */
+	async function loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'} = {}) {
+		const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); });
+		let id = params.get('edition') || root.dataset.edition || fallback, raw;
+		try { raw = await get(`${base}${id}.json`); } catch (e) { id = fallback; raw = await get(`${base}${fallback}.json`); }
+		const all = await get(casts);
+		let castId = params.get('cast') || raw.cast || 'classroom';
+		if (!all[castId]) castId = 'classroom';
+		const cast = all[castId];
+		const fillStr = (str) => str.replace(/\{(\w+)(\|upper)?\}/g, (m, k, up) => (k in cast ? (up ? cast[k].toUpperCase() : cast[k]) : m));
+		const fill = (v) => (typeof v === 'string' ? fillStr(v) : Array.isArray(v) ? v.map(fill) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fill(x)])) : v);
+		root.dataset.editionId = id;
+		root.dataset.cast = castId;
+		return {...fill(raw), id, castId, cast};
+	}
+	/** Inline markup for page copy: escapes HTML, then *words* become <em>words</em>. */
+	const rich = (str) => String(str).replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c])).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+	const pathGet = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
+	/** Fill page copy from an edition (the standard figure page):
+	      [data-ed="path"]        text
+	      [data-ed-rich="path"]   text with *em*
+	      [data-ed-lines="path"]  one <p class="(data-ed-class)"> per array item
+	      [data-ed-links="path"]  <li><span>lead</span> <a href>text</a></li> per item
+	      [data-ed-content="path"] the content attribute (a meta description)
+	      [data-ed-section="path"] hidden when the value is empty
+	      [data-edition-link="id"] an edition switch link (href and aria-current) */
+	function fillPage(doc, ed) {
+		doc.querySelectorAll('[data-ed]').forEach((n) => { n.textContent = pathGet(ed, n.dataset.ed) ?? ''; });
+		doc.querySelectorAll('[data-ed-rich]').forEach((n) => { n.innerHTML = rich(pathGet(ed, n.dataset.edRich) ?? ''); });
+		doc.querySelectorAll('[data-ed-lines]').forEach((n) => {
+			n.textContent = '';
+			(pathGet(ed, n.dataset.edLines) || []).forEach((line) => {
+				const p = doc.createElement('p');
+				if (n.dataset.edClass) p.className = n.dataset.edClass;
+				p.innerHTML = rich(line);
+				n.append(p);
+			});
+		});
+		doc.querySelectorAll('[data-ed-links]').forEach((n) => {
+			n.textContent = '';
+			(pathGet(ed, n.dataset.edLinks) || []).forEach((l) => {
+				const li = doc.createElement('li');
+				const sp = doc.createElement('span');
+				sp.textContent = l.lead;
+				const a = doc.createElement('a');
+				a.href = l.href;
+				a.textContent = l.text;
+				li.append(sp, ' ', a);
+				n.append(li);
+			});
+		});
+		doc.querySelectorAll('[data-ed-content]').forEach((n) => { const v = pathGet(ed, n.dataset.edContent); if (v != null) n.setAttribute('content', v); });
+		doc.querySelectorAll('[data-ed-section]').forEach((n) => { const v = pathGet(ed, n.dataset.edSection); n.hidden = v == null || (Array.isArray(v) && !v.length); });
+		// Edition switch: <a data-edition-link="business">Workplace</a> links to ?edition= and
+		// marks the current edition with aria-current.
+		doc.querySelectorAll('[data-edition-link]').forEach((a) => {
+			const u = new URL(location.href);
+			u.searchParams.set('edition', a.dataset.editionLink);
+			u.searchParams.delete('t');
+			a.href = u.pathname + u.search;
+			if (a.dataset.editionLink === ed.id) a.setAttribute('aria-current', 'page');
+			else a.removeAttribute('aria-current');
+		});
+	}
+
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};
-	window.MotionFigures = {mount, E, clamp, clamp01, mix, prog, spring, mixRgb, mixColor, css, el, set, bracketPath, pathAt, legibility, isReduced, FONT};
+	window.MotionFigures = {mount, E, clamp, clamp01, mix, prog, spring, mixRgb, mixColor, css, el, set, bracketPath, pathAt, legibility, isReduced, FONT, loadEdition, fillPage, rich};
 })();

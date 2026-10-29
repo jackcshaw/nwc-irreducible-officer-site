@@ -1,13 +1,17 @@
 // Stills for a motion figure: one per beat (its settled moment) plus the final
 // frame, a reduced-motion page, a 390px page, and mechanical checks.
 // Adapted from concepts-v0/scripts/stills.mjs.
-// usage: node figure-shots.mjs <slug> [port]   (serve motion-figures/ first)
+// usage: node figure-shots.mjs <slug> [port] [--edition=id]   (serve motion-figures/ first)
+// --edition=id loads ?edition=id and writes to shots/<id>/ (CONVENTIONS.md, Editions).
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
 import { mkdirSync } from "node:fs";
 
-const [slug, portArg] = process.argv.slice(2);
-const base = `http://127.0.0.1:${portArg || 5291}/figures/${slug}/index.html`;
-const out = new URL(`../figures/${slug}/shots/`, import.meta.url).pathname;
+const argv = process.argv.slice(2);
+const edition = (argv.find((a) => a.startsWith("--edition=")) || "").split("=")[1] || "";
+const [slug, portArg] = argv.filter((a) => !a.startsWith("--"));
+// base ends in "?" (or "?edition=id&") so call sites append their own query.
+const base = `http://127.0.0.1:${portArg || 5291}/figures/${slug}/index.html?${edition ? `edition=${edition}&` : ""}`;
+const out = new URL(`../figures/${slug}/shots/${edition ? `${edition}/` : ""}`, import.meta.url).pathname;
 mkdirSync(out, { recursive: true });
 const b = await chromium.launch();
 const errors = [];
@@ -27,7 +31,7 @@ async function open(url, opts = {}) {
 
 // Beat stills at each beat's settled moment, and the final frame, at 1440.
 {
-  const [c, p] = await open(`${base}?t=0`);
+  const [c, p] = await open(`${base}t=0`);
   const fig = await p.evaluate((id) => ({ beats: window.__motionFigures[id].beats, duration: window.__motionFigures[id].duration }), slug);
   const shot = p.locator("[data-mf-shot]");
   for (let i = 0; i < fig.beats.length; i++) {
@@ -54,7 +58,7 @@ async function open(url, opts = {}) {
 // (getScreenCTM), for every visible picture text at each beat's settled moment.
 // data-fs alone misses text inside a scaled <g>. Checked at 1440 and two laptop windows.
 for (const [w, h] of [[1440, 1000], [1366, 657], [1280, 720]]) {
-  const [c, p] = await open(`${base}?t=0`, { viewport: { width: w, height: h }, deviceScaleFactor: 1 });
+  const [c, p] = await open(`${base}t=0`, { viewport: { width: w, height: h }, deviceScaleFactor: 1 });
   const stacked = await p.evaluate(() => !!document.querySelector(".is-stacked"));
   let min = Infinity, where = "";
   if (!stacked) {
@@ -81,7 +85,7 @@ for (const [w, h] of [[1440, 1000], [1366, 657], [1280, 720]]) {
 }
 // Full page at 1440, final frame (reduced), for the record.
 {
-  const [c, p] = await open(`${base}?reduced`);
+  const [c, p] = await open(`${base}reduced`);
   await p.screenshot({ path: `${out}page-1440-reduced.png`, fullPage: true });
   await c.close();
 }
@@ -105,7 +109,7 @@ for (const [w, h] of [[1440, 1000], [1366, 657], [1280, 720]]) {
 }
 // Phone width: no horizontal scroll; the final frame and the beat list.
 for (const w of [390, 768]) {
-  const [c, p] = await open(`${base}?reduced`, { viewport: { width: w, height: 844 }, deviceScaleFactor: 3 });
+  const [c, p] = await open(`${base}reduced`, { viewport: { width: w, height: 844 }, deviceScaleFactor: 3 });
   report[`overflow${w}`] = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   report[`hiddenText${w}`] = await p.evaluate(() => [...document.querySelectorAll("svg [data-fs]")].filter((n) => n.getAttribute("visibility") === "hidden").length);
   await p.screenshot({ path: `${out}page-${w}-reduced.png`, fullPage: true });
@@ -113,7 +117,7 @@ for (const w of [390, 768]) {
 }
 // Keyboard: Tab reaches play, restart, scrubber; arrow keys scrub.
 {
-  const [c, p] = await open(`${base}?t=0`);
+  const [c, p] = await open(`${base}t=0`);
   const seen = [];
   for (let i = 0; i < 8; i++) {
     await p.keyboard.press("Tab");

@@ -199,6 +199,107 @@ Serve `motion-figures/` with `python3 -m http.server 5291 --bind 127.0.0.1`. Don
   - reports console errors.
   - also reports `minRenderedTextPx` at 1440 × 1000, 1366 × 657 and 1280 × 720: the smallest visible picture text at any beat's settled moment, from each text's font size times its screen scale (`getScreenCTM`), so text inside a scaled group counts at its drawn size (IM; `data-fs` alone missed IM's scaled card label).
 - `node scripts/figure-export.mjs <slug> [port] [fps]` renders the shot area frame by frame through `seek` into `shots/<slug>.mp4`, `.webm` and `.gif`. It uses the showreel's Remotion ffmpeg read-only.
+- Both take `--edition=<id>` (editions pilot, FC). It loads `?edition=<id>`. Stills go to `shots/<id>/` and previews to `shots/<slug>-<id>.mp4/.webm/.gif`. Without the flag, both behave as before.
+- `node scripts/frame-diff.mjs <slug> capture <dir> [--edition=id] [--hide=css] [--port=5291]` is the regression check (editions pilot, FC). It captures the shot area at these moments:
+  - the waiting view;
+  - every beat start;
+  - every beat's settled moment;
+  - every 2 s and the end;
+
+  at 1440 × 900, 1280 × 720 and 390 × 844. It also captures reduced motion (the figure at 1440 and 390, and the full page at both widths) and the print view. FC's set is 203 PNGs.
+- `node scripts/frame-diff.mjs <slug> diff <baseline> <current> […]` captures into `<current>`, then compares every baseline file.
+  - Identical bytes count as identical. Otherwise it compares pixels in the browser and reports the count of differing pixels per file.
+  - It prints `{captured, errors, compared, identical, differing, missing, diffs}` and exits 1 on any difference.
+  - Rendering is deterministic, so a re-capture of an unchanged figure is identical byte for byte (FC: 203/203).
+  - Anything that changes layout above the figure moves it. Even a move of whole pixels shifts Chrome's raster tiles and gives single-row differences. `--hide=".fig-editions,.fig-edition-note"` sets `display:none` on intended page additions, so a capture still compares with a baseline taken before them.
+  - Keep regression folders under `figures/<slug>/regression/` (PNGs are gitignored).
+  - Run captures one at a time, on a server of your own (`--port`, e.g. 5293). A parallel load produced noise in earlier checks. On the shared 5291 server, two captures of the same ID code differed in 128 frames; on a quiet port, the same code matched HEAD in all 203.
+  - The print shot waits 600 ms after `beforeprint`, past the beat list's 200 ms colour transition. At 100 ms, shots of the same code differed by one colour level from run to run.
+  - Some figures differ slightly even between two captures of the same code (AR: one pixel at 1440 × 900, t = 20). Before calling a difference real, run a self-check: diff the baseline against a second capture of the same code.
+  - To check a shared runtime change against other figures, export HEAD to a scratch folder (`git archive HEAD design/motion-figures | tar -x -C <scratch>`). Serve it on a second port, capture each figure there with `--port`, then diff against the working tree on 5291.
+
+## Editions (pilot: frame capture)
+
+One figure, several scenarios: PME (the essay's own examples), business (study-grounded, workplace cast) and, later, classroom. Plan and Jack's decisions: EDITIONS-PLAN.md. Scenarios: BUSINESS-EXAMPLES.md.
+
+**Three layers.**
+- **Core** stays in the figure's JS and never changes between editions:
+  - the timeline (beat times, motion moments);
+  - layout and slots;
+  - the colour grammar;
+  - the nameplate (name, kicker and the role-neutral definition are universal).
+- **Scenario:** `figures/<slug>/editions/<id>.json` holds every visible word: picture labels, stacked-view text, captions, the beat list, the check and follow-up, and page copy.
+- **Cast:** `casts.json` (shared) holds role words and check headings.
+  - `classroom`: "First student", "Faculty check", "What faculty receive", …
+  - `workplace`: "First analyst", "Reviewer's check", "What the manager receives", …
+
+Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Both are filled from its cast. Add a key to every cast at once, never in a figure.
+
+**Edition schema** (FC's, as the pattern; figure-specific keys are fine if they're semantic):
+- `id`, `cast`;
+- `task {label, lines[], text}`;
+- `considerations[]`: in the core's slot order;
+- `narrowing {split?, title: [{add | keep, join?}]}`. This is the AI's restatement as segments. A `keep` segment claims the first travelling word of the task with the same text. An `add` segment fades in. `join` means no space before it. `split` breaks a task word into pieces (PME: "adversary's" → "adversary" + "'s"). PME's `[{add: "Deter the"}, {keep: "adversary"}]` draws exactly what the hard-coded version did;
+- `labels {…}`: SVG words;
+- `narrow {…}`: stacked-view words;
+- `beats[] {text, list?, detail}`: times stay in the core (`BEAT_AT`);
+- `check {label, question, follow}`;
+- `page {kicker, title, description, setup, srTitle, srSummary, checkHeading, checkLines[], checkFollow, evidenceHeading?, evidence[]?, quoteHeading, quote, cite, linksHeading, links[{lead, text, href}]}`.
+
+**Optional scenario features are gated on data,** so other editions draw exactly as before. Business adds `labels.changeNote {label, lines[]}` and `narrow.changeNote` (the second person's "what would change it"), and `labels.source` / `narrow.source` (the one-line source under the final frame). The core draws a feature only when its key exists.
+
+**Loader** (runtime, additive):
+- `MotionFigures.loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'})` returns a promise of the filled edition plus `{id, castId, cast}`.
+  - Edition: `?edition=`, then `data-edition` on the root, then `fallback`. An unknown id falls back.
+  - Cast: `?cast=`, then the edition's `cast`, then `classroom`.
+  - It sets `data-edition-id` and `data-cast` on the root.
+- A figure builds after it loads: `Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); })`. `window.__motionFigures[id]` appears after that, and the scripts already wait for it.
+- `MotionFigures.fillPage(document, ed)` fills page copy from these attributes; the page HTML keeps only structure:
+  - `data-ed="path"`: text;
+  - `data-ed-rich="path"`: text where `*words*` becomes `<em>`, everything else escaped;
+  - `data-ed-lines="path"` (+ `data-ed-class`): one `<p>` per item;
+  - `data-ed-links="path"`: `<li><span>lead</span> <a>`;
+  - `data-ed-content="path"`: a meta description, with the PME text kept as the static fallback;
+  - `data-ed-section="path"`: hidden when empty, as for PME's evidence;
+  - `data-edition-link="id"`: switch links, with href set and `aria-current` on the current edition.
+- **Default:** PME with the classroom cast, so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
+- Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
+
+**Edition switch:** this is page furniture, the same in every edition, so it stays in the HTML under the setup:
+- `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>`;
+- then `<p class="fig-edition-note">PME: example from <em>The Irreducible Officer</em>, the National War College essay.</p>`, which tells workplace readers what PME is.
+
+The current edition's link is bold and underlined (`aria-current`). Classroom joins as a third link later. Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels, and the figure sits at the same place in every edition.
+
+**Evidence, option A** (business):
+- "Illustration based on [study]" in the setup.
+- `labels.source` as one line under the final frame (FC: fades in 1 s after the check).
+- The full finding on the page in `.fig-ed-evidence` paragraphs: quotes word for word with page numbers, the finding stated in the paper's words, and what kind of system the study examined.
+- A stacked phone view too tight for the source shows it under the controls instead (`[data-fc-source]`, outside the fixed-height player).
+- Shared classes for editions are prefixed `fig-ed-`. IM already has its own `.fig-evidence`, and a shared rule with that name would collide.
+
+**The pilot's steps, for each figure:**
+1. **Baseline first.** `frame-diff.mjs <slug> capture figures/<slug>/regression/baseline-pre-editions`, before any code changes.
+2. **Data refactor with no visible change.**
+   - Move every visible word into `editions/pme.json` and cast placeholders.
+   - Load it, fill the page from it, and keep the nameplate in the JS.
+   - Run `frame-diff.mjs <slug> diff …baseline-pre-editions …current`. It must report 0 differing (FC: 203/203).
+3. **Add the switch.** Run the diff again with `--hide=".fig-editions,.fig-edition-note"`; it must report 0. Then capture the new `regression/baseline`, which includes the switch.
+4. **Business edition.**
+   - Write `editions/business.json`, with optional features gated on data.
+   - Re-diff PME against the new baseline (0) after every core change.
+   - Keep captions within the PME beat budgets, so the timeline is shared.
+5. **`storyboard-business.md`.** List the words that differ beat by beat and any core change, with the reason, for Jack. Include a pace table: caption words ÷ 3 plus a 1.5 s hold, and the PME rule of twice the reading time.
+6. **Checks for both editions** at 1440 × 900, 1280 × 720, 390 × 844 and 768 × 1024:
+   - fit: the phone player fits in 844 px;
+   - the controls stay fixed;
+   - no horizontal scroll;
+   - legibility;
+   - reduced and print views;
+   - console errors.
+
+   Then make stills (`figure-shots.mjs <slug> --edition=business`) and the preview (`figure-export.mjs <slug> 5291 30 --edition=business`).
+7. **Copy.** Run new copy through writing-as-jack. Check quotes against the source.
 
 ## Interactive figures (appropriate reliance, figure 8)
 

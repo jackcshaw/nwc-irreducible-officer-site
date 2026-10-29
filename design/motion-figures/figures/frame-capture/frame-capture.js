@@ -1,13 +1,20 @@
-/* Frame capture: motion figure 1 of 8. Built to storyboard.md (revised after
-   figure cold read 1). Grey is what the AI supplied, red is what a student
-   decided, navy is ink. The world is two panels wide: the student's side
-   (x 0-960) and the faculty side (x 960-1920); the view pans across in beat 7.
+/* Frame capture: motion figure 1 of 8. Built to storyboard.md (PME) and
+   storyboard-business.md. Grey is what the AI supplied, red is what a person
+   decided, navy is ink. The world is two panels wide: the person's side
+   (x 0-960) and the reviewer's side (x 960-1920); the view pans across in beat 7.
    Every attribute is a pure function of t, so the runtime can play, scrub,
-   hold (?t=) and export it frame by frame. */
+   hold (?t=) and export it frame by frame.
+
+   Editions: every visible word comes from editions/<id>.json (the scenario) and
+   ../../casts.json (role words), loaded by MotionFigures.loadEdition (?edition=,
+   default PME). This file holds only the core: timeline, layout, motion and the
+   universal nameplate. */
 (() => {
-	const {mount, E, mix, prog, spring, el, set, mixColor, bracketPath, pathAt, legibility, FONT} = MotionFigures;
+	const {mount, E, mix, prog, spring, el, set, mixColor, bracketPath, pathAt, legibility, FONT, loadEdition, fillPage} = MotionFigures;
 	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};
 	const VW = 960, DX = 960; // DX: where the faculty side starts in the world
+	// Universal across editions: the failure mode's name, kicker and role-neutral definition.
+	const NAMEPLATE = {name: 'Frame capture', kicker: 'Failure mode 1 of 7', definition: 'The first plausible frame becomes the working frame, unexamined.'};
 
 	// ---- timeline (absolute seconds, from the storyboard) -------------------
 	const T = {
@@ -25,6 +32,7 @@
 		dotB: 56.3, chipsB: [56.8, 57.3], aiB: 57.4, aiTagB: [57.7, 58.0], visit: 58.2, visitStep: 0.5, claim: [61.4, 62.0], aside: [62.0, 62.4],
 		nameSwap: 56.3, up: [65.7, 66.0], sweep: [66.0, 67.2], labelB: [67.2, 67.5], back: [67.5, 67.8], hideB: [68.0, 68.9],
 		ask: [72.5, 73.0], reveal: [75.5, 76.5],
+		note: [62.5, 63.0], source: [80.5, 81.0], // used only by editions that supply them
 		end: 86.2,
 	};
 
@@ -42,14 +50,17 @@
 	const CON = {x: 162, y: 342, w: 326, h: 7};
 	const rowY = (i) => ROW0 + DY * i;
 	const CHIP_H = 30, CHIP_FS = 15, HEAD_S = 0.87, STRIP_S = 0.87;
-	const CHIPS = [
-		{text: 'Past buildups', x: 24, y: 60, order: 0},
-		{text: "Adversary's intent", x: 249, y: 60, order: 2, head: {x: 162, y: 176}, kept: 0},
-		{text: 'Room to negotiate', x: 480, y: 60, order: 4},
-		{text: "Allies' interests", x: 24, y: 470, order: 1, head: {x: 330, y: 176}, kept: 1},
-		{text: 'Domestic politics', x: 250, y: 470, order: 3},
-		{text: 'Economic pressure', x: 480, y: 470, order: 5},
+	// Six consideration slots (core layout); their words come from the edition, in this order.
+	const CHIP_SLOTS = [
+		{x: 24, y: 60, order: 0},
+		{x: 249, y: 60, order: 2, head: {x: 162, y: 176}, kept: 0},
+		{x: 480, y: 60, order: 4},
+		{x: 24, y: 470, order: 1, head: {x: 330, y: 176}, kept: 1},
+		{x: 250, y: 470, order: 3},
+		{x: 480, y: 470, order: 5},
 	];
+	const BEAT_AT = [0, 6.0, 14.0, 23.0, 31.0, 38.0, 45.3, 55.3, 64.7, 71.5, 79.5];
+	const FOLLOW_AT = 83.1;
 
 	// ---- geometry: the faculty side ------------------------------------------
 	// Papers hold the frame's contents (local x 156-492, y 141-350) at 80%.
@@ -66,6 +77,21 @@
 
 	const root = document.querySelector('#frame-capture');
 	const svg = root.querySelector('svg');
+	Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); });
+
+	function build(ed) {
+	const L = ed.labels, NW = ed.narrow;
+	const CHIPS = CHIP_SLOTS.map((c, i) => ({text: ed.considerations[i], ...c}));
+	// The AI's restatement: segments kept from the task's words or added; joined with spaces.
+	const TITLE_SEGS = [];
+	let TITLE_TEXT = '';
+	ed.narrowing.title.forEach((sg) => {
+		const str = sg.add ?? sg.keep;
+		if (TITLE_TEXT && !sg.join) TITLE_TEXT += ' ';
+		TITLE_SEGS.push({...sg, str, start: TITLE_TEXT.length});
+		TITLE_TEXT += str;
+	});
+	const KEPT_TEXT = TITLE_SEGS.filter((sg) => sg.keep != null).map((sg) => sg.str).join(' ');
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 	const cam = el(svg, 'g');
@@ -93,18 +119,18 @@
 	// ---- task card (stays put on screen through the pan) ----------------------
 	const card = el(cam, 'g');
 	el(card, 'rect', {x: 670, y: 24, width: 276, height: 82, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-	mono(card, 684, 44, 'EXAMPLE TASK');
-	const LINES = ['Recommend a response to an', "adversary's military buildup."];
+	mono(card, 684, 44, ed.task.label);
+	const LINES = ed.task.lines;
 	LINES.forEach((s, i) => text(card, 684, 68 + 22 * i, s, {fs: 16, family: FONT.serif}));
 
 	// ---- the student's side ------------------------------------------------------
 	const chips = CHIPS.map((c) => ({...c, ...chip(cam, c.text)}));
 	const hair = el(cam, 'rect', {fill: 'none', stroke: C.grey, 'stroke-opacity': 0.4, 'stroke-width': 1});
 	const brackets = el(cam, 'path', {fill: 'none', stroke: C.grey, 'stroke-width': 2.6, 'stroke-linecap': 'square'});
-	const tag = mono(cam, F.x, 120, "AI'S FRAME", {fill: C.grey});
+	const tag = mono(cam, F.x, 120, L.aiFrame, {fill: C.grey});
 	const titleBand = el(cam, 'rect', {x: 156, y: 145, height: 22, rx: 2, fill: C.band});
 	const TITLE = {x: 162, y: 160, fs: 18};
-	const titleLead = text(cam, TITLE.x, TITLE.y, 'Deter the', {fs: TITLE.fs, family: FONT.serif, weight: 600, fill: C.grey});
+	const titleAdds = TITLE_SEGS.filter((sg) => sg.add != null).map((sg) => ({sg, node: text(cam, TITLE.x, TITLE.y, sg.str, {fs: TITLE.fs, family: FONT.serif, weight: 600, fill: C.grey})}));
 	const travel = el(cam, 'g');
 	const words = [];
 	const rows = COL.map(() => D2[0].map(() => el(cam, 'rect', {height: RH, rx: RH / 2, fill: C.ink, 'fill-opacity': 0.85})));
@@ -116,17 +142,17 @@
 		chart: el(cam, 'rect', {x: COL[1].bar, y: 296, width: 2.5, fill: C.red}),
 		con: el(cam, 'rect', {x: COL[0].bar, y: 339, width: 2.5, fill: C.red}),
 	};
-	const draftLabel = mono(cam, 492, 398, "STUDENT'S DRAFT 1", {fill: C.red, anchor: 'end'});
-	const dotLabel = text(cam, 80, 294, 'Student', {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
+	const draftLabel = mono(cam, 492, 398, `${L.draft} 1`, {fill: C.red, anchor: 'end'});
+	const dotLabel = text(cam, 80, 294, L.person, {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
 	const dot = el(cam, 'circle', {r: 5, fill: C.red});
 
 	// ---- the faculty side: labels, strips (behind the papers), papers, question --------
 	const deskLabels = el(cam, 'g');
-	mono(deskLabels, DX + 40, 34, 'WHAT FACULTY RECEIVE', {ls: 0.6});
-	const fromThis = mono(deskLabels, DX + 40, 53, 'FROM THIS STUDENT', {weight: 500, ls: 0.6});
+	mono(deskLabels, DX + 40, 34, L.receive, {ls: 0.6});
+	const fromThis = mono(deskLabels, DX + 40, 53, L.fromThis, {weight: 500, ls: 0.6});
 	// Once there are two students, each is named in red, as in the other figures.
-	const nameA = text(cam, DX + 40, 53, 'First student', {fs: 13, weight: 600, fill: C.red});
-	const labelB = text(cam, DX + 356, 53, 'Second student', {fs: 13, weight: 600, fill: C.red});
+	const nameA = text(cam, DX + 40, 53, L.first, {fs: 13, weight: 600, fill: C.red});
+	const labelB = text(cam, DX + 356, 53, L.second, {fs: 13, weight: 600, fill: C.red});
 
 	// Strip A: what the first student can show (the AI's two, in the AI's frame).
 	// Each strip is clipped to the area below its paper, so it slides out from underneath.
@@ -134,20 +160,29 @@
 	underClip('fc-under-a', DX + 20, 330);
 	underClip('fc-under-b', DX + 336, 330);
 	const stripA = el(el(cam, 'g', {'clip-path': 'url(#fc-under-a)'}), 'g');
-	mono(stripA, SA.x, 268, "AI'S FRAME", {fill: C.grey});
+	mono(stripA, SA.x, 268, L.aiFrame, {fill: C.grey});
 	frameMarks(stripA, {x: SA.x, y: 274, w: 300, h: 46}, 12, C.grey, 2.2);
 	el(stripA, 'circle', {cx: SA.x + 14, cy: 297, r: 5, fill: C.red});
 	const stripAChips = CHIPS.filter((c) => c.head).map((c) => ({...c, ...chip(stripA, c.text, STRIP_S)}));
 
 	// Strip B: the second student's weighing, later what they can show.
 	const stripB = el(el(cam, 'g', {'clip-path': 'url(#fc-under-b)'}), 'g');
-	const aiTagB = mono(stripB, SB.x, 268, "AI'S FRAME", {fill: C.grey});
-	const chosenTag = mono(stripB, SB.x, 268, 'CHOSEN', {fill: C.red});
+	const aiTagB = mono(stripB, SB.x, 268, L.aiFrame, {fill: C.grey});
+	const chosenTag = mono(stripB, SB.x, 268, L.chosen, {fill: C.red});
 	const chosenMarks = frameMarks(stripB, {x: SB.x, y: 274, w: 300, h: 46}, 12, C.grey, 2.2);
-	const asideLabel = mono(stripB, SB.chipX, 408, 'SET ASIDE', {fill: C.red});
+	const asideLabel = mono(stripB, SB.chipX, 408, L.setAside, {fill: C.red});
 	const stripBDot = el(stripB, 'circle', {cx: SB.x + 14, cy: 297, r: 5, fill: C.red});
 	const stripBChips = CHIPS.map((c) => ({...c, ...chip(stripB, c.text, STRIP_S)}));
 	stripBChips.forEach((c) => { c.touch = el(c.g, 'circle', {cx: -3, cy: -3, r: 2.6, fill: C.red}); });
+	// Optional (business): what the second person wrote would change the frame. It sits
+	// under "SET ASIDE", so strip B hides further up to clear it.
+	let changeNote = null;
+	if (L.changeNote) {
+		changeNote = el(stripB, 'g');
+		mono(changeNote, SB.chipX, 432, L.changeNote.label, {fill: C.red});
+		L.changeNote.lines.forEach((ln, i) => text(changeNote, SB.chipX, 452 + 18 * i, ln, {fs: 15, family: FONT.serif, fill: C.red, style: 'italic'}));
+	}
+	const STRIP_HIDE_B = changeNote ? -240 : STRIP_HIDE;
 
 	// Papers: the frame's contents, placed by a transform.
 	const PT = {x: 162, y: 162, fs: 21}, PH_FS = 16.3;
@@ -162,7 +197,7 @@
 	const paperHeads = (g, ai) => {
 		const out = {};
 		if (ai) out.band = el(g, 'rect', {x: PT.x - 6, y: PT.y - 20, height: 27, rx: 2, fill: C.band});
-		out.title = el(g, 'text', {x: PT.x, y: PT.y, 'font-family': FONT.serif, 'font-size': PT.fs, 'font-weight': 600, fill: ai ? C.grey : C.ink, 'data-fs': PT.fs * PS}, 'Deter the adversary');
+		out.title = el(g, 'text', {x: PT.x, y: PT.y, 'font-family': FONT.serif, 'font-size': PT.fs, 'font-weight': 600, fill: ai ? C.grey : C.ink, 'data-fs': PT.fs * PS}, TITLE_TEXT);
 		out.heads = CHIPS.filter((c) => c.head).map((c) => ({
 			r: el(g, 'rect', {x: c.head.x, y: c.head.y, height: 25.5, rx: 3, fill: ai ? C.band : 'none', stroke: ai ? C.grey : C.ink, 'stroke-opacity': ai ? 1 : 0.7, 'stroke-width': 1.3}),
 			tx: el(g, 'text', {x: c.head.x + 8, y: c.head.y + 18, 'font-family': FONT.sans, 'font-size': PH_FS, 'font-weight': 600, fill: ai ? C.grey : C.ink, 'data-fs': PH_FS * PS}, c.text),
@@ -190,18 +225,25 @@
 	const inkHeadsB = paperHeads(paperBInner, false);
 
 	// Centre stage for the wipe: a label for the copy and a key for the tint.
-	const centreLabel = mono(cam, DX + 250, 140, 'WHAT FACULTY RECEIVE: THE FINAL COPY', {ls: 0.6});
+	const centreLabel = mono(cam, DX + 250, 140, L.centre, {ls: 0.6});
 	const key = el(cam, 'g');
 	el(key, 'rect', {x: DX + 622, y: 168, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
-	mono(key, DX + 646, 179, 'AI-SUPPLIED', {fill: C.grey});
+	mono(key, DX + 646, 179, L.key, {fill: C.grey});
 	el(key, 'path', {d: `M${DX + 618} 174H${DX + 600}`, stroke: C.grey, 'stroke-width': 1.2});
 
 	const ask = el(cam, 'g');
-	mono(ask, DX + 670, 150, 'FACULTY ASK EACH STUDENT', {ls: 0.6});
-	text(ask, DX + 670, 184, 'Why this frame?', {fs: 24, family: FONT.serif, style: 'italic'});
+	mono(ask, DX + 670, 150, L.askEach, {ls: 0.6});
+	text(ask, DX + 670, 184, L.askQ, {fs: 24, family: FONT.serif, style: 'italic'});
+
+	// Optional (business): a one-line source under the final frame, on the reviewer's side.
+	const sourceLine = L.source ? text(cam, DX + 40, 524, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink}) : null;
+	// The stacked view has no room under its final beat within the phone budget, so the
+	// source sits just under the controls there (outside the fixed-height player).
+	const stackedSource = root.querySelector('[data-fc-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	const dotB = el(cam, 'circle', {r: 5, fill: C.red});
-	const dotBLabel = text(cam, DX + 500, 462, 'Second student', {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
+	const dotBLabel = text(cam, DX + 500, 462, L.second, {fs: 13, weight: 600, fill: C.red, anchor: 'middle'});
 
 	// ---- paths ---------------------------------------------------------------------------
 	const START = {x: 80, y: 270};
@@ -262,7 +304,7 @@
 			probe.textContent = line;
 			let idx = 0;
 			line.split(' ').forEach((p) => {
-				const pieces = p === "adversary's" ? [['adversary', true], ["'s", false]] : [[p, false]];
+				const pieces = (ed.narrowing.split && ed.narrowing.split[p] ? ed.narrowing.split[p] : [p]).map((str) => [str, false]);
 				pieces.forEach(([str, keep]) => {
 					const x = idx ? probe.getSubStringLength(0, idx) : 0;
 					const node = el(travel, 'text', {'font-family': FONT.serif, 'font-size': TITLE.fs, 'font-weight': 600, fill: C.grey, 'data-fs': TITLE.fs, opacity: 0}, str);
@@ -272,11 +314,16 @@
 				idx += 1;
 			});
 		});
-		probe.textContent = 'Deter the adversary';
-		const leadW = probe.getSubStringLength(0, 'Deter the '.length);
+		probe.textContent = TITLE_TEXT;
+		const at = (i) => (i ? probe.getSubStringLength(0, i) : 0);
+		// Each kept segment claims the first unclaimed travelling word with its text.
+		TITLE_SEGS.filter((sg) => sg.keep != null).forEach((sg) => {
+			const w = words.find((x) => !x.keep && x.node.textContent === sg.str);
+			if (w) { w.keep = true; w.finalX = TITLE.x + at(sg.start); }
+		});
+		titleAdds.forEach(({sg, node}) => { if (sg.start) set(node, {x: TITLE.x + at(sg.start)}); });
 		const fullW = probe.getComputedTextLength();
 		probe.remove();
-		words.forEach((w) => { if (w.keep) w.finalX = TITLE.x + leadW; });
 		set(titleBand, {width: fullW + 12});
 		[...chips, ...stripAChips, ...stripBChips].forEach(fitChip);
 		set(greyHeads.band, {width: greyHeads.title.getComputedTextLength() + 12});
@@ -348,7 +395,7 @@
 			});
 		}
 		const dk = prog(t, ...T.deter);
-		set(titleLead, {opacity: dk});
+		titleAdds.forEach(({node}) => set(node, {opacity: dk}));
 		set(titleBand, {opacity: dk});
 
 		// Beats 4-5: the first student's drafts.
@@ -367,7 +414,7 @@
 			set(node, {y: CHART.base - h, height: h});
 		});
 		set(con, {width: CON.w * prog(t, ...T.con, E.outCubic)});
-		draftLabel.textContent = `STUDENT'S DRAFT ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
+		draftLabel.textContent = `${L.draft} ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
 		set(draftLabel, {opacity: prog(t, T.write, T.write + 0.3)});
 
 		// Beat 7: paper A travels with the pan, then the wipe, then the brackets go.
@@ -389,7 +436,9 @@
 		const reveal = prog(t, ...T.reveal, E.inOut);
 		set(stripA, {opacity: t >= T.toSlot[1] ? 1 : 0, transform: `translate(0 ${(STRIP_HIDE * (1 - reveal)).toFixed(2)})`});
 		const hideB = prog(t, ...T.hideB, E.inOut);
-		set(stripB, {transform: `translate(0 ${(STRIP_HIDE * hideB * (1 - reveal)).toFixed(2)})`});
+		set(stripB, {transform: `translate(0 ${(STRIP_HIDE_B * hideB * (1 - reveal)).toFixed(2)})`});
+		if (changeNote) set(changeNote, {opacity: prog(t, ...T.note)});
+		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 		// Beat 8: the AI proposes the same frame to the second student, who
 		// examines all six (each turns solid), then claims the frame (grey to red).
 		const chipsIn = prog(t, ...T.chipsB, E.house);
@@ -439,30 +488,30 @@
 	const h = (tag, cls, parent, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; parent.append(n); return n; };
 	const N = {};
 	const section = (k, label, cls) => { const sec = h('div', 'fc-n-sec', narrow); N[k] = {sec}; if (label) N[k].label = h('p', `fc-n-label ${cls || ''}`, sec, label); return sec; };
-	const TASK = "Recommend a response to an adversary's military buildup.";
+	const TASK = ed.task.text;
 	const KEPT = CHIPS.filter((c) => c.head).map((c) => c.text);
 	const ASIDE = CHIPS.filter((c) => !c.head).map((c) => c.text);
 	const paperBlock = (parent, who, body = true) => {
 		const box = h('div', 'fc-n-paper', parent);
 		const w = h('span', 'fc-n-who', box, who);
 		const ti = h('p', 'fc-n-ptitle', box);
-		const tiSpan = h('span', null, ti, 'Deter the adversary');
+		const tiSpan = h('span', null, ti, TITLE_TEXT);
 		const heads = h('div', 'fc-n-heads', box);
 		const hs = KEPT.map((k) => h('span', 'fc-n-head', heads, k));
-		if (body) h('p', 'fc-n-body', box, 'Text, a chart and a conclusion.');
+		if (body) h('p', 'fc-n-body', box, NW.paperBody);
 		return {box, who: w, tiSpan, hs};
 	};
 	if (narrow) {
-		{ const sec = section('student'); N.student.who = h('span', 'fc-n-who', sec, 'Student'); }
-		{ const sec = section('task', 'Example task'); h('p', 'fc-n-task', sec, TASK); }
+		{ const sec = section('student'); N.student.who = h('span', 'fc-n-who', sec, L.person); }
+		{ const sec = section('task', NW.taskLabel); h('p', 'fc-n-task', sec, TASK); }
 		{
-			const sec = section('field', 'Six considerations');
+			const sec = section('field', NW.fieldLabel);
 			const row = h('div', 'fc-n-chips', sec);
 			N.field.chips = CHIPS.map((c) => ({c, n: h('span', 'fc-n-chip', row, c.text)}));
-			N.field.note = h('p', 'fc-n-small', sec, 'The four dashed ones were never weighed.');
+			N.field.note = h('p', 'fc-n-small', sec, NW.fieldNote);
 		}
 		{
-			const sec = section('aiFrame', "AI's frame", 'is-ai');
+			const sec = section('aiFrame', NW.aiFrame, 'is-ai');
 			const fr = h('div', 'fc-n-frame', sec);
 			N.aiFrame.title = h('p', 'fc-n-title', fr);
 			N.aiFrame.titleSpan = h('span', null, N.aiFrame.title, '');
@@ -471,56 +520,54 @@
 		}
 		{
 			const sec = section('draft');
-			N.draft.who = h('span', 'fc-n-who', sec, 'Student');
-			N.draft.lines = [
-				['Draft 1: rows under the AI’s two headings', T.write],
-				['Draft 2: the rows straightened', T.d2],
-				['Draft 3: adds evidence, a chart', T.chartHop],
-				['and a firmer conclusion', T.con[0]],
-			].map(([txt, at], i) => ({n: h('p', `fc-n-line${i ? ' is-rev' : ''}`, sec, txt), at}));
-			N.draft.label = h('span', 'fc-n-dl', sec, "STUDENT'S DRAFT 1");
+			N.draft.who = h('span', 'fc-n-who', sec, L.person);
+			N.draft.lines = [T.write, T.d2, T.chartHop, T.con[0]]
+				.map((at, i) => ({n: h('p', `fc-n-line${i ? ' is-rev' : ''}`, sec, NW.draftLines[i]), at}));
+			N.draft.label = h('span', 'fc-n-dl', sec, `${L.draft} 1`);
 		}
 		{
-			const sec = section('faculty', 'What faculty receive: the final copy');
-			N.faculty.paper = paperBlock(sec, 'From this student');
+			const sec = section('faculty', NW.receiveFinal);
+			N.faculty.paper = paperBlock(sec, NW.fromThis);
 			N.faculty.key = h('p', 'fc-n-key', sec);
 			h('i', null, N.faculty.key);
-			N.faculty.key.append('AI-SUPPLIED');
+			N.faculty.key.append(NW.key);
 		}
 		{
 			const sec = section('second');
-			N.second.who = h('span', 'fc-n-who', sec, 'Second student');
-			h('p', 'fc-n-small', sec, 'Its AI proposes the same frame:');
+			N.second.who = h('span', 'fc-n-who', sec, L.second);
+			h('p', 'fc-n-small', sec, NW.proposes);
 			N.second.frame = h('div', 'fc-n-frame', sec);
-			N.second.tag = h('span', 'fc-n-tag is-ai', N.second.frame, "AI's frame");
+			N.second.tag = h('span', 'fc-n-tag is-ai', N.second.frame, NW.aiFrame);
 			const kr = h('div', 'fc-n-chips', N.second.frame);
 			N.second.kept = KEPT.map((k) => h('span', 'fc-n-chip is-ai', kr, k));
-			N.second.asideTag = h('span', 'fc-n-tag is-red', sec, 'Set aside');
+			N.second.asideTag = h('span', 'fc-n-tag is-red', sec, NW.setAside);
 			const ar = h('div', 'fc-n-chips', sec);
 			N.second.aside = ASIDE.map((k) => h('span', 'fc-n-chip', ar, k));
+			if (NW.changeNote) N.second.note = h('p', 'fc-n-note', sec, NW.changeNote);
 		}
 		{
-			const sec = section('papers', 'What faculty receive');
+			const sec = section('papers', NW.receive);
 			const pair = h('div', 'fc-n-pair', sec);
-			N.papers.a = paperBlock(pair, 'First student', false);
-			N.papers.b = paperBlock(pair, 'Second student', false);
-			N.papers.note = h('p', 'fc-n-small', sec, 'The weighing doesn’t show in either paper.');
+			N.papers.a = paperBlock(pair, L.first, false);
+			N.papers.b = paperBlock(pair, L.second, false);
+			N.papers.note = h('p', 'fc-n-small', sec, NW.weighingNote);
 		}
 		{
 			const sec = section('ask');
-			N.ask.q = h('p', 'fc-n-q', sec, 'Faculty ask each student: Why this frame?');
+			N.ask.q = h('p', 'fc-n-q', sec, NW.askQ);
 			const pair = h('div', 'fc-n-pair', sec);
 			const col = (who) => { const c = h('div', null, pair); h('span', 'fc-n-who', c, who); return c; };
-			const a = col('First student');
-			h('span', 'fc-n-tag is-ai', a, "AI's frame");
+			const a = col(L.first);
+			h('span', 'fc-n-tag is-ai', a, NW.aiFrame);
 			const ar = h('div', 'fc-n-chips', a);
 			KEPT.forEach((k) => h('span', 'fc-n-chip is-ai', ar, k));
-			const b = col('Second student');
-			h('span', 'fc-n-tag is-red', b, 'Chosen');
+			const b = col(L.second);
+			h('span', 'fc-n-tag is-red', b, NW.chosen);
 			const br = h('div', 'fc-n-chips', b);
 			KEPT.forEach((k) => h('span', 'fc-n-chip is-seen', br, k));
-			h('span', 'fc-n-tag is-red', b, 'Set aside');
+			h('span', 'fc-n-tag is-red', b, NW.setAside);
 			h('p', 'fc-n-aside', b, ASIDE.join(' · '));
+			if (NW.changeNote) h('p', 'fc-n-note', b, NW.changeNote);
 			N.ask.cols = [a, b];
 		}
 	}
@@ -552,12 +599,12 @@
 		fade(N.aiFrame.sec, prog(t, T.snap, T.snap + 0.3));
 		const ti = N.aiFrame.titleSpan;
 		if (t < T.fade[0]) { ti.textContent = TASK; fade(ti, prog(t, ...T.travel)); }
-		else if (t < T.deter[0]) { ti.textContent = 'adversary'; fade(ti, 1); }
-		else { ti.textContent = 'Deter the adversary'; fade(ti, 1); }
+		else if (t < T.deter[0]) { ti.textContent = KEPT_TEXT; fade(ti, 1); }
+		else { ti.textContent = TITLE_TEXT; fade(ti, 1); }
 		N.aiFrame.title.classList.toggle('is-band', t >= T.deter[0]);
 		N.aiFrame.chips.forEach((n) => fade(n, hk));
 		N.draft.lines.forEach(({n, at}) => fade(n, prog(t, at, at + 0.4)));
-		N.draft.label.textContent = `STUDENT'S DRAFT ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
+		N.draft.label.textContent = `${L.draft} ${t < T.d2 ? 1 : t < T.chartHop ? 2 : 3}`;
 		fade(N.draft.label, prog(t, T.write, T.write + 0.3));
 		// What faculty receive: the paper arrives grey and framed, the wipe drains it, the frame goes.
 		const fp = N.faculty.paper, wk = prog(t, ...T.wipe), bo = 1 - prog(t, ...T.bracketsA);
@@ -566,13 +613,13 @@
 		[fp.tiSpan, ...fp.hs].forEach((n) => drain(n, wk));
 		fade(N.faculty.key, prog(t, ...T.key) * bo);
 		const named = t >= T.nameSwap + 0.25;
-		N.faculty.label.textContent = named ? 'What faculty receive' : 'What faculty receive: the final copy';
-		fp.who.textContent = named ? 'First student' : 'From this student';
+		N.faculty.label.textContent = named ? NW.receive : NW.receiveFinal;
+		fp.who.textContent = named ? L.first : NW.fromThis;
 		// The second student: the AI proposes the same frame; each consideration is examined; the frame is claimed.
 		fade(N.second.sec, prog(t, T.dotB, T.dotB + 0.4));
 		const claim = t >= T.claim[0] + 0.2;
 		N.second.frame.classList.toggle('is-chosen', claim);
-		N.second.tag.textContent = claim ? 'Chosen' : "AI's frame";
+		N.second.tag.textContent = claim ? NW.chosen : NW.aiFrame;
 		N.second.tag.classList.toggle('is-ai', !claim);
 		N.second.tag.classList.toggle('is-red', claim);
 		fade(N.second.frame, prog(t, T.aiB, T.aiB + 0.4));
@@ -580,6 +627,7 @@
 		N.second.kept.forEach((n, i) => { const v = seen(KEPT[i]); n.classList.toggle('is-ai', !v); n.classList.toggle('is-seen', v); });
 		N.second.aside.forEach((n, i) => { fade(n, prog(t, ...T.chipsB)); n.classList.toggle('is-seen', seen(ASIDE[i])); });
 		fade(N.second.asideTag, prog(t, ...T.aside));
+		if (N.second.note) fade(N.second.note, prog(t, ...T.note));
 		// Both papers, then what each student can show when asked.
 		fade(N.papers.b.box, prog(t, ...T.sweep));
 		N.papers.note.hidden = bi !== 8;
@@ -598,34 +646,11 @@
 		renderNarrow(player ? player.time() : 0);
 	};
 
-	const BEATS = [
-		{at: 0, text: 'A student gets an open strategy task.',
-			detail: 'a task card appears at the top right: "Example task: Recommend a response to an adversary\'s military buildup." A red dot labelled Student appears on the left.'},
-		{at: 6.0, text: 'Many things could matter. Framing means picking which ones define the problem.',
-			detail: "six considerations appear one at a time in dashed outline, three above an open space and three below: past buildups, allies' interests, adversary's intent, domestic politics, room to negotiate, and economic pressure."},
-		{at: 14.0, text: 'The student asks an AI. It proposes a reasonable, narrower frame.',
-			detail: 'the dot pulses. Grey corner brackets labelled "AI\'s frame" snap around the open space beside the student. A grey copy of the task sentence moves into the frame; every word fades except "adversary", and "Deter the" appears in front of it. Adversary\'s intent and allies\' interests slide inside as grey headings.'},
-		{at: 23.0, text: "The student takes up the frame. Up close, it's all they see.",
-			detail: "the dot steps into the frame. The view moves in until the frame fills it, and the dot writes a rough first draft in two columns under the AI's headings."},
-		{at: 31.0, text: 'The student revises twice, adding evidence and a firmer conclusion.',
-			detail: "the dot straightens the rows, then adds a chart and a conclusion across both columns. Red change bars mark each revision. The red label reads Student's draft 3."},
-		{at: 38.0, text: "Step back with us: every revision stayed inside the AI's frame.",
-			detail: 'the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets.'},
-		{at: 45.3, text: 'Faculty receive the final copy. Nothing in it shows the frame came from the AI.',
-			detail: 'a clean final copy of the paper travels to the faculty side and stops in the middle, large, labelled "What faculty receive: the final copy". It is still inside grey brackets, and a key marks its tinted title and headings as "AI-supplied". A wipe crosses it, and the title and headings turn the same ink as the rest, keeping their words. The brackets and the key fade, and the paper moves to the top left, labelled "From this student".'},
-		{at: 55.3, text: 'A second student, also working with AI, weighs all six and chooses this frame.',
-			detail: 'the label over the first paper becomes "First student". A second red dot labelled Second student appears. Its AI proposes the same frame: grey brackets tagged "AI\'s frame" around adversary\'s intent and allies\' interests, with the other four outside. The dot touches each of the six in turn, and each turns solid. Then the brackets turn red and the tag reads "Chosen"; the other four go under "Set aside".'},
-		{at: 64.7, text: "That student writes the same paper; the weighing doesn't show.",
-			detail: 'the second dot writes a paper identical to the first, labelled "Second student". Then the weighing slides up behind the paper and is hidden.'},
-		{at: 71.5, text: 'Ask each student why this frame. One can show what they weighed.',
-			detail: '"Faculty ask each student: Why this frame?" appears. From behind each paper, what it rests on slides into view. Under the first is only the AI\'s grey frame around its two considerations, with the first student inside. Under the second is the same frame in red, chosen, with the four set aside below.'},
-		{at: 79.5, text: 'Faculty check: What problem did the student choose to solve?',
-			list: 'Faculty check: What problem did the student choose to solve? Why this frame? What would change it?',
-			detail: 'the questions appear under the picture, at the same size. The task card\'s "a response" and the papers\' title, "Deter the adversary", are both in view.',
-			check: {label: 'Faculty check', question: 'What problem did the student choose to solve?', follow: 'Why this frame? What would change it?', followAt: 83.1}},
-	];
+	// Beat times are core; their words come from the edition.
+	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
+	BEATS[BEATS.length - 1].check = {...ed.check, followAt: FOLLOW_AT};
 
-	document.fonts.ready.then(() => {
+	{
 		measure();
 		legibility(root, svg, VW, 11);
 		// The stacked stage takes over whenever the smallest picture text (13 units) would
@@ -645,7 +670,8 @@
 		// Poster: the setup settled (task, student, six considerations) before anything goes wrong.
 		// Nameplate: the opening name card, the corner plate and the final name and definition.
 		player = mount(root, {duration: T.end, render, beats: BEATS, poster: BEATS[2].at - 0.02,
-			nameplate: {name: 'Frame capture', kicker: 'Failure mode 1 of 7', definition: "The first plausible frame becomes the working frame, unexamined."}});
+			nameplate: NAMEPLATE});
 		syncStacked();
-	});
+	}
+	}
 })();

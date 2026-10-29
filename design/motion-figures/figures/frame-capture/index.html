@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Frame Capture</title>
-<meta name="description" content="A teaching figure: a student builds on an AI's reasonable first frame, and the finished paper can't show who chose it.">
+<meta name="description" data-ed-content="page.description" content="A teaching figure: a student builds on an AI's reasonable first frame, and the finished paper can't show who chose it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -56,6 +56,11 @@
 .fc-n-q { margin: 0 0 6px; font: italic 400 16px/1.35 var(--serif); color: var(--ink); }
 .fc-n-aside { margin: 0; font: 500 14px/1.4 var(--sans); color: var(--ink); }
 .fc-n-tag { display: block; margin: 4px 0; font: 600 13px/1.2 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.fc-n-note { margin: 6px 0 0; font: italic 400 14px/1.35 var(--serif); color: var(--red); }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.fc-source { display: none; }
+#frame-capture.is-stacked .fc-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -65,12 +70,16 @@
 </header>
 
 <main class="fig-page">
-	<p class="fig-kicker">Failure mode 1 of 7</p>
-	<h1>Frame capture</h1>
-	<p class="fig-setup">A student asks an AI for help with a strategy paper, and the AI proposes a reasonable way to frame the problem. The student works hard from there. <em>The Irreducible Officer</em> calls what can happen next frame capture: the first plausible frame becomes the student's frame. The task and the six considerations are a constructed example.</p>
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage); see CONVENTIONS.md, Editions. -->
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note">PME: example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="frame-capture" aria-labelledby="fc-title">
-		<p class="sr-only" id="fc-title">Frame capture, an animated figure in eleven beats</p>
+		<p class="sr-only" id="fc-title" data-ed="page.srTitle"></p>
 		<div class="mf-shot" data-mf-shot>
 			<div class="mf-stage">
 				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
@@ -84,34 +93,35 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:26</span>
 		</div>
+		<p class="fc-source" data-fc-source hidden></p>
 		<figcaption>
-			<p class="sr-only">An animated figure. On the left, a red dot stands for a student, surrounded by six dashed considerations. An AI's grey frame takes in two of them and turns the task, "recommend a response to an adversary's military buildup", into "deter the adversary". The student steps into the frame and writes and revises a paper there. The view moves to the faculty side, where the paper arrives and the signs of the AI's frame drain out of it. A second student, also working with AI, gets the same proposed frame, weighs all six considerations, chooses that frame and writes an identical paper. Asked why this frame, the first student can show only the AI's two considerations; the second can show all six and the choice. The figure ends on the faculty check. Each beat is listed below with what is on screen.</p>
+			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
 		</figcaption>
 	</figure>
 
 	<section class="fig-section" aria-labelledby="fc-check-h">
-		<h2 id="fc-check-h">Faculty check</h2>
-		<p class="fig-check">What problem did the student choose to solve?</p>
-		<p class="fig-check">Why this frame? What would change it?</p>
-		<p class="fig-follow">Both students in the figure would answer the first question the same way. The second line separates them. It comes from Section VIII of the essay, which asks: why this problem, why this frame, what would change it?</p>
+		<h2 id="fc-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fc-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="fc-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
 	</section>
 
 	<section class="fig-section" aria-labelledby="fc-essay-h">
-		<h2 id="fc-essay-h">From the essay</h2>
+		<h2 id="fc-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
-			<p>Frame capture occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it. The danger is not that the frame is obviously wrong; it may be entirely reasonable. It may simply define the problem too narrowly, privilege one set of interests over others, assume a theory of adversary behavior, or treat a structural constraint as fixed when it should be contested. Once accepted, later revisions improve the answer inside the wrong boundary. The frame capture is invisible inside the final product.</p>
-			<cite><em>The Irreducible Officer</em>, Section II, What the Problem Looks Like</cite>
+			<p data-ed-rich="page.quote"></p>
+			<cite data-ed-rich="page.cite"></cite>
 		</blockquote>
 	</section>
 
 	<section class="fig-section" aria-labelledby="fc-links-h">
-		<h2 id="fc-links-h">Go further</h2>
-		<ul class="fig-links">
-			<li><span>Book chapter:</span> <a href="../../book-v0/four-moves-book.html?spread=2">Frame the problem</a></li>
-			<li><span>Practice:</span> <a href="https://judgmentlab.net/#companion">test frame capture with your AI assistant</a></li>
-			<li><span>Essay:</span> <a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Section II, What the Problem Looks Like</a></li>
-		</ul>
+		<h2 id="fc-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>
 
