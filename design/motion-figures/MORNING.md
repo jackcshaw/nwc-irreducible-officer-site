@@ -60,6 +60,17 @@ You said to build the classroom cast after business, so it's underway. [CLASSROO
   2. Frame capture follows as the pilot, built on the plan's recommended defaults.
   3. **It stops for you after the pilot,** before the other seven.
 
+**The pilot is ready for your review.** Frame capture in three versions:
+- [higher ed](figures/frame-capture/index.html?edition=business&cast=classroom): students and faculty;
+- [high school](figures/frame-capture/index.html?edition=business&cast=high-school): students and the teacher, with a boxed "For teachers" note on the race finding;
+- [workplace](figures/frame-capture/index.html?edition=business), for comparison.
+
+Where it stands:
+- **Reads:** a light read by an educator found the point lands in both classroom versions, with no workplace wording and nothing that reads as "don't use AI". Its fixes are in.
+- **No regressions:** the workplace and military-education editions are unchanged frame for frame.
+- **The switch** reads "Workplace · Classroom · Military education". High school is a variant of Classroom, reached through the K–12 setting.
+- **Previews:** the classroom preview video is stale, because the machine ran low on memory during export. The stills are current.
+
 Decisions, each with a recommendation in the plan:
 1. Overrides on the business edition, or a separate classroom file per figure.
 2. A high-school cast ("the teacher") beside higher ed's "faculty".
@@ -82,6 +93,7 @@ The business editions are in progress: every figure's words now live in data fil
 8. **A PME polish pass (one decision for items 5–7 and these).** The business verifiers were stricter than the original loop and found small issues that the PME editions share. Each is fixed in business only, so PME stays frame-for-frame as you approved it:
    - premature synthesis: the "Second engineer" dot label is up 0.7 s (needs 2.2 s);
    - fluency substitution at 390: "Suppose it matches…" is up 2.1 s (needs 4.8 s).
+   - frame capture, beat 3: the switch from "need" to "cost" overlaps text briefly for about 2 s. This is in the shared motion, so every edition has it; the classroom caption now names the change.
    One short pass could apply the same fixes to PME, re-verified frame by frame.
 5. **PME at laptop size.** Some PME figures (e.g. premature synthesis) switch to the text-only stacked view at 1280×720, a common laptop size. The business editions were reworked to show the picture there. Applying the same fix to PME changes approved figures, so it waits for your go.
 
