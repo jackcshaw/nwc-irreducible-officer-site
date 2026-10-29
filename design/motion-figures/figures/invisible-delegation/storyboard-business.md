@@ -22,6 +22,8 @@ Open it with `index.html?edition=business`, or with the page's "See this with: W
    - Beat 2's caption no longer says "across": "The analyst asks an AI for feedback. The request hands the criteria to the AI." It is true at 390, where the chip greys in place.
 4. **Sources:** see section 6, with the spine entry and Microsoft Research PDF pages.
 
+**After verification:** in the stacked layouts the standard is underlined only while either analyst reads it (`is-consulted`), as in the wide picture. Before this fix, the second analyst's read left an underline that stayed to the end. PME has the same asymmetry by design, because there only the second person reads the rubric. PME is unchanged; flagged for Jack.
+
 **Core changes, gated on edition data,** with PME pixel-identical (0 of 203 frames) to `regression/baseline`:
 - `followUp`, with `labels.askQ2` and `answers.split`: the follow-up question, a shared first answer, and the timing overrides.
 - The pulse for `notes.judgedBy` now also applies in the stacked view.

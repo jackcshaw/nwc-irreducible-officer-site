@@ -575,8 +575,11 @@
 		const ledOp = 1 - 0.85 * dimK;
 		fade(NR.task, prog(t, ...T.card));
 		vis(NR.rubric, t >= T.rubric[0]);
-		NR.rubric.classList.toggle('is-consulted', t >= T.rubricHi[0]);
-		NR.rubric.classList.toggle('is-lit', (t >= T.rubricHi[0] && t < T.rubricBack[1]) || (FIRST_READS && t >= T.readA[1] && t < T.readBackA[1]));
+		const readingB = t >= T.rubricHi[0] && t < T.rubricBack[1], readingA = FIRST_READS && t >= T.readA[1] && t < T.readBackA[1];
+		// When both people read the standard (business), the underline shows only while either reads, as in
+		// the wide picture; PME keeps it from the second person's read on.
+		NR.rubric.classList.toggle('is-consulted', FIRST_READS ? readingA || readingB : t >= T.rubricHi[0]);
+		NR.rubric.classList.toggle('is-lit', readingB || readingA);
 		vis(NR.fac, t >= T.fac[0]);
 		fade(NR.fac, prog(t, ...T.fac));
 		// First student.
