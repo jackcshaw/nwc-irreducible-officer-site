@@ -110,7 +110,7 @@ Reading is words ÷ 3 s, plus a 1.5 s hold. The PME rule, a beat at least twice 
 | Check | 1440 × 900 | 1280 × 720 (stacked) | 390 × 844 (stacked) |
 | --- | --- | --- | --- |
 | Control travel during the run | 0 px | 0 px | 0 px |
-| Player height | 846 px | 660 px | 836 px (fits 844) |
+| Player height | 846 px | 621 px | 836 px (fits 844) |
 | Horizontal overflow | none | none | none |
 | Console errors | none | none | none |
 
