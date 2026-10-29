@@ -77,6 +77,12 @@
 
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
+	// Optional (business): a larger smallest picture text and a compact caption band on
+	// laptop windows (.fs-laptop), so the drawn picture holds at 1280 × 720 and 1366 × 657:
+	// 13-unit text renders at 11 px or more there. Without it the smallest text is 12 units.
+	const MIN_TEXT = (ed.picture && ed.picture.minText) || 12;
+	const SM = Math.max(SMALL, MIN_TEXT / P.fs), NOTE_S = Math.max(NOTE.s, MIN_TEXT / NOTE.fs);
+	root.classList.toggle('fs-laptop', !!(ed.picture && ed.picture.laptop));
 	const LINES = ed.paper.lines;
 	const ANSWERS = Object.fromEntries(Object.entries(ANSWER_SLOTS).map(([id, slot]) => [id, {...slot, lines: ed.answers[id]}]));
 	const svg = root.querySelector('svg');
@@ -86,7 +92,7 @@
 
 	const text = (parent, x, y, str, {fs, family = FONT.sans, weight = 400, fill = C.ink, anchor = 'start', ls = 0, style, dataFs} = {}) =>
 		el(parent, 'text', {x, y, 'font-family': family, 'font-size': fs, 'font-weight': weight, fill, 'text-anchor': anchor, 'letter-spacing': ls, 'data-fs': dataFs ?? fs, ...(style ? {'font-style': style} : {})}, str);
-	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: MIN_TEXT, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
 	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, ...opts});
 	let clipN = 0;
 	const clipGroup = (parent, rects) => {
@@ -134,7 +140,8 @@
 		const g = el(stage, 'g');
 		const shadow = el(g, 'rect', {x: 3, y: 4, width: P.w, rx: 1, fill: C.ink, 'fill-opacity': 0.06});
 		const sheet = el(g, 'rect', {x: 0, y: 0, width: P.w, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
-		const lines = withCut ? LINES : LINES.slice(0, 5).map((l, i) => (i === 4 ? l.slice(0, 1) : l));
+		// The second paper ends where the cut sentence starts (line 5, before its space).
+		const lines = withCut ? LINES : LINES.slice(0, 5).map((l, i) => (i === 4 ? l.slice(0, l.findIndex(([, k]) => k === 'cut') - 1) : l));
 		const clip = clipGroup(g, lines.map((_, i) => ({x: 0, y: baseY(i) - 26, height: P.lh + 2})));
 		const bandLayer = el(clip.g, 'g'), overLayer = el(clip.g, 'g'), textLayer = el(clip.g, 'g');
 		const segs = [];
@@ -142,7 +149,7 @@
 			if (!k) return;
 			const prevSpace = si === 0 || !line[si - 1][1];
 			const nextSpace = si === line.length - 1 || !line[si + 1][1];
-			const node = serif(textLayer, 0, baseY(li), str, {fs: P.fs, fill: C.grey, dataFs: P.fs * SMALL});
+			const node = serif(textLayer, 0, baseY(li), str, {fs: P.fs, fill: C.grey, dataFs: P.fs * SM});
 			// The highlight for the words the first student repeats (beat 8).
 			const over = k === 'ans' ? el(overLayer, 'rect', {y: baseY(li) - 18, height: 25, rx: 2, fill: C.band, opacity: 0}) : null;
 			const under = k === 'ans' ? el(g, 'line', {y1: baseY(li) + 7, y2: baseY(li) + 7, stroke: C.ink, 'stroke-width': 2.4, opacity: 0}) : null;
@@ -179,7 +186,7 @@
 	const note = el(stage, 'g');
 	el(note, 'rect', {x: 0, y: 0, width: NOTE.w, height: NOTE.h, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
 	const noteClip = clipGroup(note, NOTE.base.map((b) => ({x: 0, y: b - 24, height: 30})));
-	const noteText = L.noteLines.map((s, i) => serif(noteClip.g, NOTE.x, NOTE.base[i], s, {fs: NOTE.fs, fill: C.red, dataFs: NOTE.fs * NOTE.s}));
+	const noteText = L.noteLines.map((s, i) => serif(noteClip.g, NOTE.x, NOTE.base[i], s, {fs: NOTE.fs, fill: C.red, dataFs: NOTE.fs * NOTE_S}));
 	const noteLabel = mono(stage, COL.b, 204, L.noteLabel, {fill: C.red});
 
 	// Speech panels.
@@ -351,7 +358,7 @@
 
 		// Paper A: appears, composes, is cut, shrinks into its cell.
 		const cellA = prog(t, ...T.cellA, E.inOutStrong);
-		const posA = lerpPos(PA.big, PA.cell, cellA), sA = mix(BIG, SMALL, cellA);
+		const posA = lerpPos(PA.big, PA.cell, cellA), sA = mix(BIG, SM, cellA);
 		place(paperA.g, posA, sA);
 		const inA = prog(t, ...T.sheetA, E.house);
 		set(paperA.g, {opacity: inA});
@@ -396,7 +403,7 @@
 		set(headB, {opacity: prog(t, T.dotB, T.dotB + 0.4)});
 		const noteIn = prog(t, ...T.noteIn, E.house);
 		const up = prog(t, ...T.noteUp, E.inOutStrong);
-		place(note, lerpPos(NOTE.big, NOTE.cell, up), mix(1, NOTE.s, up));
+		place(note, lerpPos(NOTE.big, NOTE.cell, up), mix(1, NOTE_S, up));
 		set(note, {opacity: noteIn});
 		set(noteLabel, {opacity: noteIn * (1 - prog(t, T.noteUp[0], T.noteUp[0] + 0.3))});
 		noteClip.rects.forEach((r, i) => set(r, {width: (noteW[i] + 8) * prog(t, ...noteTiming[i])}));
@@ -404,7 +411,7 @@
 
 		// Beat 5: the AI drafts from the note; the match sweep.
 		const cellB = prog(t, ...T.cellB, E.inOutStrong);
-		const posB = lerpPos(PB.big, PB.cell, cellB), sB = mix(BIG, SMALL, cellB);
+		const posB = lerpPos(PB.big, PB.cell, cellB), sB = mix(BIG, SM, cellB);
 		place(paperB.g, posB, sB);
 		const inB = prog(t, ...T.sheetB, E.house);
 		set(paperB.g, {opacity: inB});
@@ -490,7 +497,7 @@
 		const cutP = h('p', 'fs-n-ai fs-n-sm', a);
 		h('span', 'fs-n-band fs-n-struck', cutP, ed.paper.cut);
 		const b = h('div', 'fs-n-cell', row);
-		h('span', 'fs-n-who', b, L.second);
+		N.own.bWho = h('span', 'fs-n-who', b, L.second);
 		N.own.a = a;
 		N.own.note = h('p', 'fs-n-note', b, NW.note);
 	}
@@ -542,6 +549,14 @@
 			// With the task kept, the shared paper goes inline with its label from beat 8.
 			N.paper.sec.classList.toggle('is-inline', bi >= 7);
 		}
+		// Optional (business): from beat 7 the second person's note stays on the stacked
+		// stage under one label, so the final frame still shows why the two differ.
+		if (NW.noteKept) {
+			const keep = bi >= 6;
+			if (keep) show.add('own');
+			N.own.sec.classList.toggle('is-note-only', keep);
+			N.own.bWho.textContent = keep ? NW.noteKept : L.second;
+		}
 		for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
 		fade(N.task.sec, prog(t, ...T.card));
 		// Once the papers are set aside (beat 7), the shared paper shrinks to a two-line
@@ -587,9 +602,9 @@
 		});
 		narrow.style.height = `${Math.ceil(tallest)}px`;
 	};
-	// The stacked stage takes over whenever the smallest picture text (12-unit mono)
-	// would render under 11 px at the runtime's letterboxed scale.
-	const MIN_FS = 12;
+	// The stacked stage takes over whenever the smallest picture text (MIN_TEXT-unit
+	// mono, 12 by default) would render under 11 px at the runtime's letterboxed scale.
+	const MIN_FS = MIN_TEXT;
 	let player = null;
 	const syncStacked = () => {
 		const r = svg.getBoundingClientRect();

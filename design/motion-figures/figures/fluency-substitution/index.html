@@ -23,6 +23,17 @@
 /* The last caption (name, definition, check) measures 172 px on desktop, 212 px
    below 720 px and 219 px at 390 px, so the band is held at that height throughout. */
 @media (min-width: 720px) { #fluency-substitution .mf-caption { min-height: 174px; } }
+/* Business (picture.laptop): laptop windows keep the drawn picture. A compact caption
+   band (name, definition, check and follow-up one line each) gives the picture the
+   height, so 13-unit labels stay at 11 px or more (11.1 px at 1366 × 657). The stacked
+   rules below still win if the picture is stacked anyway. */
+@media (min-width: 720px) and (max-height: 860px) {
+	#fluency-substitution.fs-laptop { --mf-chrome: 166px; }
+	#fluency-substitution.fs-laptop .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#fluency-substitution.fs-laptop .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#fluency-substitution.fs-laptop .mf-check-q, #fluency-substitution.fs-laptop .mf-follow.is-equal { font-size: 20px; }
+	#fluency-substitution.fs-laptop .mf-final-def { font-size: 15px; }
+}
 #fluency-substitution.is-stacked .mf-caption { height: 174px; overflow: hidden; }
 @media (max-width: 719px) { #fluency-substitution.is-stacked .mf-caption { height: 212px; } }
 @media (max-width: 480px) {
@@ -42,8 +53,13 @@
 .fs-n-sec.is-compact .fs-n-task { display: inline; padding: 0; border: 0; background: none; font-size: 14px; }
 /* Business (task kept): tighter stacked rows so the phone player still fits 844 px. */
 .fs-keep-task .fs-n-sec { margin-bottom: 6px; }
-.fs-keep-task .fs-n-q { font-size: 14px; }
+.fs-keep-task .fs-n-q { font-size: 13px; }
 .fs-keep-task .fs-n-txt { font-size: 13.5px; }
+/* Business (narrow.noteKept): from beat 7 only the second person's note stays in the
+   own-work section, under one label, so the final frame keeps it. */
+.fs-n-sec.is-note-only > .fs-n-label, .fs-n-sec.is-note-only .fs-n-cell:first-child { display: none; }
+.fs-n-sec.is-note-only .fs-n-pair { display: block; }
+.fs-n-sec.is-note-only .fs-n-note { padding: 0; border: 0; background: none; font-size: 13.5px; }
 .fs-n-paper.is-inline { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .fs-n-paper.is-inline .fs-n-label { display: inline; margin: 0 6px 0 0; }
 .fs-n-paper.is-inline .fs-n-tile { display: inline; padding: 0; border: 0; }
