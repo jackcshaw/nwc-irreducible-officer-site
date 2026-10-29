@@ -18,51 +18,15 @@
 		"lines": [
 			[
 				[
-					"Cover the sensor and the band.",
-					"s1"
+					"Claim",
+					"s2"
 				],
 				[
 					" ",
 					null
 				],
 				[
-					"The key",
-					"s2"
-				]
-			],
-			[
-				[
-					"advance is ",
-					"s2"
-				],
-				[
-					"reading heart rate through",
-					"ans"
-				]
-			],
-			[
-				[
-					"clothing, which no earlier device does:",
-					"ans"
-				]
-			],
-			[
-				[
-					"claim it broadly",
-					"ans"
-				],
-				[
-					", with the ",
-					"s2b"
-				],
-				[
-					"battery",
-					"ans"
-				]
-			],
-			[
-				[
-					"design",
+					"reading through clothing",
 					"ans"
 				],
 				[
@@ -70,7 +34,33 @@
 					null
 				],
 				[
-					"as a fallback.",
+					"broadly:",
+					"s2"
+				]
+			],
+			[
+				[
+					"no earlier device does it.",
+					"ans"
+				],
+				[
+					" ",
+					null
+				],
+				[
+					"Narrower",
+					"s2"
+				]
+			],
+			[
+				[
+					"claim: the sensor's fabric adjustment.",
+					"s2"
+				]
+			],
+			[
+				[
+					"Fallback:",
 					"s2b"
 				],
 				[
@@ -78,19 +68,16 @@
 					null
 				],
 				[
-					"Every claim adds",
-					"cut"
-				]
-			],
-			[
+					"the battery design",
+					"ans"
+				],
 				[
-					"real protection.",
-					"cut"
+					".",
+					"s2b"
 				]
 			]
 		],
-		"text": "Cover the sensor and the band. The key advance is reading heart rate through clothing, which no earlier device does: claim it broadly, with the battery design as a fallback.",
-		"cut": "Every claim adds real protection."
+		"text": "Claim reading through clothing broadly: no earlier device does it. Narrower claim: the sensor's fabric adjustment. Fallback: the battery design."
 	},
 	"answers": {
 		"a1": [
@@ -125,34 +112,28 @@
 			[
 				[
 					"“Then lead with ",
-					null
+					"own"
 				],
 				[
 					"the battery design",
 					"ai"
 				],
 				[
-					",",
-					null
-				]
-			],
-			[
-				[
-					"as the draft says.”",
-					null
+					".”",
+					"own"
 				]
 			]
 		],
 		"b2": [
 			[
 				[
-					"“Then claim how ours does it: the",
+					"“Then lead with the sensor that adjusts",
 					"own"
 				]
 			],
 			[
 				[
-					"sensor adjusts to each fabric.”",
+					"to each fabric.”",
 					"own"
 				]
 			]
@@ -179,14 +160,14 @@
 			"lines": [
 				"What if an older patent covers",
 				"reading through clothing?"
-			]
+			],
+			"more": "It covers the battery too."
 		},
 		"keyAI": "WRITTEN BY AI",
 		"keyOwn": "ASSOCIATE'S OWN WORK",
 		"tagDraft": "AI'S DRAFT",
 		"tagKept": "THEIR CLAIMS",
 		"tagDisclosed": " · DRAFTED WITH AI",
-		"cutLabel": "Cut one sentence from the AI's draft:",
 		"noteLabel": "SECOND ASSOCIATE'S NOTE",
 		"noteLines": [
 			"What's new: it reads heart rate",
@@ -200,7 +181,6 @@
 		"draft": "AI's draft",
 		"draftKept": "Their claims · drafted with AI",
 		"own": "Their own work, not handed in",
-		"cutAct": "Cut one sentence from the AI's draft:",
 		"note": "What's new: it reads heart rate through clothing, by adjusting its sensor to each fabric.",
 		"draftB": "Second associate: AI's draft from the note",
 		"same": "Suppose it matches the first associate's draft word for word.",
@@ -211,7 +191,8 @@
 		},
 		"q2": {
 			"label": "Then one fact changes",
-			"question": "What if an older patent covers reading through clothing?"
+			"question": "What if an older patent covers reading through clothing?",
+			"more": "It covers the battery too."
 		},
 		"answers": {
 			"a1": [
@@ -229,20 +210,20 @@
 			"a2": [
 				[
 					"“Then lead with ",
-					null
+					"own"
 				],
 				[
 					"the battery design",
 					"ai"
 				],
 				[
-					", as the draft says.”",
-					null
+					".”",
+					"own"
 				]
 			],
 			"b2": [
 				[
-					"“Then claim how ours does it: the sensor adjusts to each fabric.”",
+					"“Then lead with the sensor that adjusts to each fabric.”",
 					"own"
 				]
 			]
@@ -251,7 +232,8 @@
 		"keyOwn": "Associate's own work",
 		"keepTask": true,
 		"source": "Illustration based on Autor et al., NBER (2026).",
-		"noteKept": "Second associate's note, not handed in"
+		"noteKept": "Second associate's note, not handed in",
+		"paperFull": true
 	},
 	"beats": [
 		{
@@ -260,23 +242,23 @@
 		},
 		{
 			"text": "The associate asks an AI for a draft. It writes polished claims.",
-			"detail": "the dot pulses. A sheet labelled \"AI's draft\" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band \"Written by AI\": \"Cover the sensor and the band. The key advance is reading heart rate through clothing, which no earlier device does: claim it broadly, with the battery design as a fallback. Every claim adds real protection.\""
+			"detail": "the dot pulses. A sheet labelled \"AI's draft\" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band \"Written by AI\": \"Claim reading through clothing broadly: no earlier device does it. Narrower claim: the sensor's fabric adjustment. Fallback: the battery design.\""
 		},
 		{
-			"text": "The associate reads closely, cuts a weak line, and agrees with the rest.",
-			"detail": "the dot reads along each line, then strikes out \"Every claim adds real protection.\" in red, and the key adds \"Associate's own work\" in red. The struck sentence moves above the draft, under a red label: \"Cut one sentence from the AI's draft\". The rest stays grey, and the label changes to \"Their claims, drafted with AI\"."
+			"text": "The associate reads it closely and agrees with every line.",
+			"detail": "the dot reads along each line at a steady pace. Nothing is cut. The label changes to \"Their claims, drafted with AI\"."
 		},
 		{
 			"text": "A second associate first writes down what's new and how it works.",
-			"detail": "the first draft moves into a column headed First associate. A second red dot heads a column labelled Second associate and writes on a large note card in red: \"What's new: it reads heart rate through clothing, by adjusting its sensor to each fabric.\""
+			"detail": "the first draft moves into a column headed First associate. A second red dot heads a column labelled Second associate and writes on a large note card in red, \"What's new: it reads heart rate through clothing, by adjusting its sensor to each fabric.\", and the key adds \"Associate's own work\" in red."
 		},
 		{
 			"text": "An AI drafts from the note. Suppose it matches the first draft word for word.",
-			"detail": "the note moves into the top row, beside the first associate's cut sentence. The dot pulses, and a sheet labelled \"AI's draft\" fills with a grey paragraph. Suppose it is the same as the first draft, word for word. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first draft."
+			"detail": "the note moves into the top row of the second column. The dot pulses, and a sheet labelled \"AI's draft\" fills with the same grey paragraph, the narrower claim on the sensor included. Suppose it is the same as the first draft, word for word. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first draft."
 		},
 		{
 			"text": "The partner receives two identical drafts, made with AI.",
-			"detail": "the second draft moves into its column beside the first, in a row labelled \"What the partner receives\"; the top row is labelled \"Their own work, not handed in\". Both drafts are tagged \"Their claims, drafted with AI\"."
+			"detail": "the second draft moves into its column beside the first, in a row labelled \"What the partner receives\". The top row is labelled \"Their own work, not handed in\": empty for the first associate, the note for the second. Both drafts are tagged \"Their claims, drafted with AI\"."
 		},
 		{
 			"text": "Without the drafts, both explain the claims clearly.",
@@ -287,8 +269,16 @@
 			"detail": "a new row appears: \"Then one fact changes: What if an older patent covers reading through clothing?\""
 		},
 		{
-			"text": "One associate takes the draft's fallback. The other reworks the call from how it works.",
-			"detail": "in plain ink, the first associate says, \"Then lead with the battery design, as the draft says.\" The second associate says, \"Then claim how ours does it: the sensor adjusts to each fabric.\" Then the answers take their colours. In the first associate's answers, the draft's words turn grey on a beige band, the mark for words the AI wrote, and the same words in the first draft are underlined. The second associate's answers turn red, their own words."
+			"text": "One associate takes the draft's fallback, the other the sensor.",
+			"detail": "in plain ink, the first associate says, \"Then lead with the battery design.\" The second associate says, \"Then lead with the sensor that adjusts to each fabric.\""
+		},
+		{
+			"text": "But the older patent covers the battery too.",
+			"detail": "under the changed fact, the partner adds, \"It covers the battery too.\" The draft's fallback is taken. Of the claims both handed in, only the sensor that adjusts to each fabric is still new."
+		},
+		{
+			"text": "The colours show whose words these are.",
+			"detail": "the answers take their colours. Words the AI wrote turn grey on a beige band: all of the first associate's first answer, and \"the battery design\". The same words in the first draft are underlined for a few seconds. The associates' own words turn red: \"Then lead with\" and both of the second associate's answers."
 		},
 		{
 			"text": "Partner’s check: Can the associate explain the call plainly, without the draft?",
@@ -304,10 +294,10 @@
 	"page": {
 		"kicker": "Failure mode 2 of 7",
 		"title": "Fluency substitution",
-		"description": "A teaching figure: two associates hand in the same AI-drafted patent claims, and only changing one fact shows which of them owns the call.",
+		"description": "Two associates hand in the same AI-drafted patent claims. Changing one fact shows which of them owns the reasoning.",
 		"setup": "Two junior associates at a patent law firm get the same task, the same inventor's notes and the same AI: draft a client's patent claims, the sentences that set what an invention protects. The first has the AI draft them, reads the draft closely and agrees with it. The second first writes down what's new and how it works, then has the AI draft from that. Suppose both hand in the very same claims. The same goes for any polished draft you sign: change one fact, and you find out whether the reasoning in it is yours. This is fluency substitution: polished analysis stands in for owned reasoning. Illustration based on Autor et al. (2026). The associates, the invention and the older patent are constructed.",
-		"srTitle": "Fluency substitution, an animated figure in ten beats",
-		"srSummary": "An animated figure that opens on its name, Fluency substitution, failure mode 2 of 7, and builds a table. A red dot stands for an associate at a patent law firm with an example task: draft the claims for a client's invention, a wearable that reads heart rate. An AI drafts polished claims, shown in grey on a beige band, the figure's mark for words the AI wrote: the key advance is reading heart rate through clothing, which no earlier device does, so claim it broadly, with the battery design as a fallback. The associate reads it closely, strikes out one weak sentence and keeps the rest. A second associate first writes down in a red note what is new and how it works, \"it reads heart rate through clothing, by adjusting its sensor to each fabric\", then has an AI draft from it. Suppose that draft matches the first one word for word. The partner receives two identical drafts, both tagged as drafted with AI. With the drafts set aside, the partner asks each associate what they would claim and why, and both explain clearly: reading through clothing, which no device has done before. Their answers appear in plain ink, as the partner would hear them. Then one fact changes: an older patent already covers reading through clothing. The first associate reaches for the draft's fallback: lead with the battery design, as the draft says. The second reworks the call from how the device works: claim how ours does it, since the sensor adjusts to each fabric. Only then do the answers take their colours: the draft's words in the first associate's answers turn the AI's grey, and the second associate's answers turn red. The figure ends on the name and its definition, \"Polished analysis stands in for owned reasoning.\", then the partner’s check and the follow-up, with a source line: illustration based on Autor et al. (2026). Each beat is listed below with what is on screen.",
+		"srTitle": "Fluency substitution, an animated figure in twelve beats",
+		"srSummary": "An animated figure that opens on its name, Fluency substitution, failure mode 2 of 7, and builds a table. A red dot stands for an associate at a patent law firm with an example task: draft the claims for a client's invention, a wearable that reads heart rate. An AI drafts polished claims, shown in grey on a beige band, the figure's mark for words the AI wrote: claim reading through clothing broadly, since no earlier device does it; as a narrower claim, the sensor's fabric adjustment; as the fallback, the battery design. The associate reads it closely and agrees with every line. A second associate first writes down in a red note what is new and how it works, \"it reads heart rate through clothing, by adjusting its sensor to each fabric\", then has an AI draft from it. Suppose that draft matches the first one word for word. The partner receives two identical drafts, both tagged as drafted with AI. With the drafts set aside, the partner asks each associate what they would claim and why, and both explain clearly: reading through clothing, which no device has done before. Their answers appear in plain ink, as the partner would hear them. Then one fact changes: an older patent already covers reading through clothing. The first associate takes the draft's fallback: lead with the battery design. The second leads with the sensor that adjusts to each fabric. Then the partner adds that the older patent covers the battery too, so only the sensor is still new. Only then do the answers take their colours, to show whose words they are: the draft's words in the first associate's answers turn the AI's grey, and the associates' own words turn red. The figure ends on the name and its definition, \"Polished analysis stands in for owned reasoning.\", then the partner’s check and the follow-up, with a source line: illustration based on Autor et al. (2026). Each beat is listed below with what is on screen.",
 		"checkHeading": "Partner’s check",
 		"checkLines": [
 			"Can the associate explain the call plainly, without the draft?",
@@ -319,9 +309,9 @@
 			"In a pre-registered three-month randomized trial, David Autor and colleagues gave \"133 practicing patent lawyers at eleven U.S. intellectual property law firms\" access to a custom AI patent drafting assistant. Of those, 91 completed the full protocol. Expert raters, blind to who had the tool, scored the work.",
 			"The paper's abstract states the finding: \"AI access raised the quality of work delivered on benchmark patent drafting tasks at 10 days (0.34 SD, p = 0.03) and 90 days (0.38 SD, p = 0.01), with larger gains among junior lawyers.\"",
 			"At the end, the 91 lawyers who completed the study each reviewed and corrected an existing patent application without AI. \"Treated lawyers outperformed controls by 0.32 SD (p = 0.04), but this advantage was concentrated entirely among senior lawyers (0.45 SD, p = 0.02). Junior lawyers showed no average gain. Their scores instead bifurcated, with sharply fewer mediocre scores offset by more poor and more good ones, suggesting that AI assistance served as a springboard for some juniors and a cushion for others.\"",
-			"So the split was among juniors, lawyers with fewer than seven years of experience (p. 23). Seniors gained: \"only senior lawyers emerged from three months of AI use with improved capability\" (p. 2). Fifteen of the 91 redlines showed possible AI use. Without them, the overall gain falls below conventional significance, while the senior gain holds at the 10 percent level (p. 3).",
+			"So the split was among juniors, lawyers with fewer than seven years of experience (p. 23). Seniors gained: \"Measured by unassisted judgment, only senior lawyers emerged from three months of AI use with improved capability\" (p. 2). Fifteen of the 91 redlines showed possible AI use. Without them, the overall gain falls below conventional significance, while the senior gain holds at the 10 percent level (p. 3).",
 			"The authors are plain about the limit: \"Our experiment does not answer why the effects appear positive for some lawyers and negative for others\" (p. 2). It covers one profession, and the junior group was small. The tool was custom. The study was conducted by Google, Google funded its direct costs, and all eleven firms have patent-drafting relationships with Google.",
-			"The figure's two associates show one way the split among juniors could arise. The study's tested results are scores. Its look at reasons, post-experiment interviews and an exploratory, AI-assisted reading of the redlines, is in supplementary materials that aren't public (p. 29). The authors float time spent as one possible mechanism: \"Juniors using AI worked faster but showed no unassisted gains\" (p. 30). The figure's account, writing down what's new before drafting and reworking the call from it when a fact changes, is an illustration, not a finding.",
+			"The figure's two associates show one way the split among juniors could arise. The study's tested results are scores. Its look at reasons, \"post-experiment interviews with treated participants and an LLM-based qualitative analysis of redlining submissions\" (p. 29), is in supplementary materials \"not intended for publication\" (p. 9, note 8). The authors float time spent as one possible mechanism: \"Juniors using AI worked faster but showed no unassisted gains\" (p. 30). The figure's account, writing down what's new before drafting and reworking the call from it when a fact changes, is an illustration, not a finding.",
 			"Source: Autor, Rodchenko, Martin, Iscenko, Strand, Pearl & Ferere, \"Does AI Assistance Enhance or Erode Expertise? Evidence from a Three-Month Field Experiment in Patent Drafting,\" NBER Working Paper 35720 (revised October 2026). Quotes are from the abstract unless a page is given. The associates, the invention, the claims, the older patent and the check are constructed."
 		],
 		"linksHeading": "Go further",
@@ -337,5 +327,50 @@
 				"href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
 			}
 		]
+	},
+	"timeline": {
+		"beatAt": [
+			0,
+			6.0,
+			14.7,
+			23.5,
+			32.0,
+			43.4,
+			49.4,
+			63.9,
+			70.4,
+			77.1,
+			82.7,
+			88.3
+		],
+		"times": {
+			"keyRed": [
+				27.3,
+				27.7
+			],
+			"fact2": [
+				77.5,
+				78.0
+			],
+			"reveal": [
+				83.3,
+				84.1
+			],
+			"bright": [
+				83.3,
+				83.9
+			],
+			"unbright": [
+				85.9,
+				86.4
+			],
+			"check": 88.3,
+			"source": [
+				89.3,
+				89.8
+			],
+			"follow": 91.8,
+			"end": 95.5
+		}
 	}
 }

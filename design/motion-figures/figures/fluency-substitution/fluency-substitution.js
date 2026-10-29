@@ -21,7 +21,7 @@
 	const VW = 960;
 
 	// ---- timeline (absolute seconds, from the storyboard) -------------------
-	const T = {
+	const T0 = {
 		card: [1.0, 1.6], dotIn: 1.6,
 		pulseA: [7.0, 7.4], sheetA: [7.4, 7.9], composeA: 8.0, line: 0.4, keyGrey: [8.0, 8.4],
 		enterA: [15.7, 16.1], readA: 16.1, read: 0.6,
@@ -83,6 +83,14 @@
 	const MIN_TEXT = (ed.picture && ed.picture.minText) || 12;
 	const SM = Math.max(SMALL, MIN_TEXT / P.fs), NOTE_S = Math.max(NOTE.s, MIN_TEXT / NOTE.fs);
 	root.classList.toggle('fs-laptop', !!(ed.picture && ed.picture.laptop));
+	// Optional (business): an edition can retime the figure and add beats (timeline.times
+	// overrides moments; timeline.beatAt replaces the beat starts).
+	const TL = ed.timeline || {};
+	const T = {...T0, ...(TL.times || {})};
+	const beatAt = TL.beatAt || BEAT_AT;
+	// Optional (business): with no paper.cut, neither person cuts a line, so both get the
+	// same draft and the same (no) edits.
+	const HAS_CUT = !!ed.paper.cut;
 	const LINES = ed.paper.lines;
 	const ANSWERS = Object.fromEntries(Object.entries(ANSWER_SLOTS).map(([id, slot]) => [id, {...slot, lines: ed.answers[id]}]));
 	const svg = root.querySelector('svg');
@@ -119,6 +127,8 @@
 	const q2 = el(stage, 'g');
 	mono(q2, 16, 440, L.q2.label);
 	L.q2.lines.forEach((s, i) => serif(q2, 16, 461 + 20 * i, s, {fs: 16, style: 'italic'}));
+	// Optional (business): what the reviewer adds once both have answered (labels.q2.more).
+	const q2More = L.q2.more ? serif(stage, 16, 461 + 20 * L.q2.lines.length, L.q2.more, {fs: 16, style: 'italic'}) : null;
 	// The key: its grey half arrives with the first AI text, its red half with the first red mark.
 	const keyGrey = el(stage, 'g');
 	el(keyGrey, 'rect', {x: COL.a, y: 513, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
@@ -141,7 +151,7 @@
 		const shadow = el(g, 'rect', {x: 3, y: 4, width: P.w, rx: 1, fill: C.ink, 'fill-opacity': 0.06});
 		const sheet = el(g, 'rect', {x: 0, y: 0, width: P.w, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
 		// The second paper ends where the cut sentence starts (line 5, before its space).
-		const lines = withCut ? LINES : LINES.slice(0, 5).map((l, i) => (i === 4 ? l.slice(0, l.findIndex(([, k]) => k === 'cut') - 1) : l));
+		const lines = withCut || !HAS_CUT ? LINES : LINES.slice(0, 5).map((l, i) => (i === 4 ? l.slice(0, l.findIndex(([, k]) => k === 'cut') - 1) : l));
 		const clip = clipGroup(g, lines.map((_, i) => ({x: 0, y: baseY(i) - 26, height: P.lh + 2})));
 		const bandLayer = el(clip.g, 'g'), overLayer = el(clip.g, 'g'), textLayer = el(clip.g, 'g');
 		const segs = [];
@@ -175,12 +185,12 @@
 	const tagB = tag();
 
 	// The cut sentence, once lifted out: a one-line card in the first column's top row.
-	const cutCard = el(stage, 'g');
-	const cutBand = el(cutCard, 'rect', {x: 6, y: 9, height: 22, rx: 2, fill: C.band});
-	const cutText = serif(cutCard, 10, 25, ed.paper.cut, {fs: CUT_CARD.fs, fill: C.grey});
-	const cutStrike = el(cutCard, 'line', {y1: 20, y2: 20, x1: 8, stroke: C.red, 'stroke-width': 2.2});
+	const cutCard = HAS_CUT ? el(stage, 'g') : null;
+	const cutBand = HAS_CUT ? el(cutCard, 'rect', {x: 6, y: 9, height: 22, rx: 2, fill: C.band}) : null;
+	const cutText = HAS_CUT ? serif(cutCard, 10, 25, ed.paper.cut, {fs: CUT_CARD.fs, fill: C.grey}) : null;
+	const cutStrike = HAS_CUT ? el(cutCard, 'line', {y1: 20, y2: 20, x1: 8, stroke: C.red, 'stroke-width': 2.2}) : null;
 	// Says plainly what the first student did: the struck words are the AI's.
-	const cutLabel = text(stage, COL.a + 6, 132, L.cutLabel, {fs: 13, weight: 600, fill: C.red});
+	const cutLabel = HAS_CUT ? text(stage, COL.a + 6, 132, L.cutLabel, {fs: 13, weight: 600, fill: C.red}) : null;
 
 	// The second student's note.
 	const note = el(stage, 'g');
@@ -262,10 +272,12 @@
 		const cuts = paperA.segs.filter((s) => s.k === 'cut');
 		cuts.forEach((c, i) => set(strike[i], {y1: baseY(c.li) - 6.5, y2: baseY(c.li) - 6.5, x1: c.x, x2: c.x}));
 		cutLen = cuts.map((c) => c.w);
-		cutStart = {x: cuts[0].x, y: baseY(cuts[0].li)};
-		const cw = cutText.getComputedTextLength();
-		set(cutBand, {width: cw + 8});
-		set(cutStrike, {x2: 12 + cw});
+		if (HAS_CUT) {
+			cutStart = {x: cuts[0].x, y: baseY(cuts[0].li)};
+			const cw = cutText.getComputedTextLength();
+			set(cutBand, {width: cw + 8});
+			set(cutStrike, {x2: 12 + cw});
+		}
 		noteW = noteText.map((n) => n.getComputedTextLength());
 		noteClip.rects.forEach((r) => set(r, {x: NOTE.x - 4}));
 		for (const p of Object.values(panels)) {
@@ -291,6 +303,12 @@
 			const t0 = T.readA + T.read * i;
 			segA.push([t0, t0 + T.read, lineStart(PA.big, i), lineEnd(paperA, PA.big, i)]);
 		});
+		if (!HAS_CUT) {
+			// No cut: the dot rests at the end of the last line, then goes up to its column.
+			paperA.sweepW = paperA.lineW.slice(0, 5);
+			paperB.sweepW = paperB.lineW.slice(0, 5);
+			segA.push([T.cellA[0], T.cellA[1], lineEnd(paperA, PA.big, paperA.lines.length - 1), DOT_A.head, E.inOutStrong]);
+		} else {
 		const [c5, c6] = cuts;
 		const split = T.strike[0] + (T.strike[1] - T.strike[0]) * (cutLen[0] / (cutLen[0] + cutLen[1]));
 		const sy5 = baseY(c5.li) - 6.5, sy6 = baseY(c6.li) - 6.5;
@@ -304,6 +322,7 @@
 		const rest = world(PA.big, BIG, esc.x + esc.w + 8, baseY(4) + 6);
 		segA.push([T.lift[0], T.lift[1], world(PA.big, BIG, c6.x + c6.w, sy6), rest, E.inOut]);
 		segA.push([T.cellA[0], T.cellA[1], rest, DOT_A.head, E.inOutStrong]);
+		}
 		dotAAt = pathAt(segA, DOT_A.start);
 
 		// The second student's dot: down to the note, write, back up; later read the draft.
@@ -324,7 +343,7 @@
 			const t0 = T.readB + T.read * i;
 			segB.push([t0, t0 + T.read, lineStart(PB.big, i), lineEnd(paperB, PB.big, i)]);
 		});
-		segB.push([T.cellB[0], T.cellB[1], lineEnd(paperB, PB.big, 4), DOT_B.head, E.inOutStrong]);
+		segB.push([T.cellB[0], T.cellB[1], lineEnd(paperB, PB.big, paperB.lines.length - 1), DOT_B.head, E.inOutStrong]);
 		dotBAt = pathAt(segB, DOT_B.head);
 		noteTiming = (() => { let a = T.write[0]; return noteW.map((w) => { const d = (T.write[1] - T.write[0]) * (w / totalW); const r = [a, a + d]; a += d; return r; }); })();
 		ready = true;
@@ -363,7 +382,7 @@
 		const inA = prog(t, ...T.sheetA, E.house);
 		set(paperA.g, {opacity: inA});
 		const lift = prog(t, ...T.lift, E.inOut);
-		const hA = mix(sheetH(6), sheetH(5), lift);
+		const hA = HAS_CUT ? mix(sheetH(6), sheetH(5), lift) : sheetH(LINES.length);
 		set(paperA.sheet, {height: hA});
 		set(paperA.shadow, {height: hA});
 		paperA.clip.rects.forEach((r, i) => set(r, {width: (paperA.lineW[i] + 10) * prog(t, T.composeA + T.line * i, T.composeA + T.line * (i + 1))}));
@@ -377,12 +396,14 @@
 		});
 		paperA.runs.forEach((r) => { if (r.cut) set(r.rect, {opacity: t < T.lift[0] ? 1 : 0}); });
 		// The lifted card: from where the cut words sat to the first column's top row.
+		if (HAS_CUT) {
 		const from = world(PA.big, BIG, cutStart.x - 10 * (BIG * P.fs / CUT_CARD.fs) / BIG, cutStart.y - 25 * (BIG * P.fs / CUT_CARD.fs) / BIG);
 		const cardS = mix(BIG * P.fs / CUT_CARD.fs, 1, lift);
 		place(cutCard, lerpPos(from, {x: CUT_CARD.x, y: CUT_CARD.y}, lift), cardS);
 		// Half see-through mid-flight, so the lines it crosses stay readable.
 		set(cutCard, {opacity: t >= T.lift[0] ? 1 - 0.5 * Math.sin(Math.PI * lift) : 0});
 		set(cutLabel, {opacity: prog(t, ...T.cutLabel)});
+		}
 
 		// Tags.
 		// One label fades out before the next fades in, so they never overlap.
@@ -415,8 +436,8 @@
 		place(paperB.g, posB, sB);
 		const inB = prog(t, ...T.sheetB, E.house);
 		set(paperB.g, {opacity: inB});
-		set(paperB.sheet, {height: sheetH(5)});
-		set(paperB.shadow, {height: sheetH(5)});
+		set(paperB.sheet, {height: sheetH(paperB.lines.length)});
+		set(paperB.shadow, {height: sheetH(paperB.lines.length)});
 		paperB.clip.rects.forEach((r, i) => set(r, {width: (paperB.lineW[i] + 10) * prog(t, T.composeB + T.line * i, T.composeB + T.line * (i + 1))}));
 		const sweepOut = 1 - prog(t, T.cellB[0], T.cellB[0] + 0.4); // holds until the paper moves
 		const step = (T.sweep[1] - T.sweep[0]) / 5;
@@ -448,6 +469,7 @@
 		const rise = (g, span) => { const k = prog(t, ...span, E.house); set(g, {opacity: k, transform: `translate(0 ${mix(6, 0, k).toFixed(2)})`}); };
 		rise(q1, T.q1);
 		rise(q2, T.q2);
+		if (q2More) rise(q2More, T.fact2);
 
 		// Answers: the panel opens, then the words arrive at speaking pace, in ink.
 		// After the changed fact (beat 9), all four take their origin colours.
@@ -485,20 +507,25 @@
 		const sec = section('draftA', NW.draft);
 		const para = h('p', 'fs-n-ai', sec);
 		h('span', 'fs-n-band', para, PARA);
-		para.append(' ');
-		N.draftA.cut = h('span', 'fs-n-band', para, ed.paper.cut);
+		if (HAS_CUT) {
+			para.append(' ');
+			N.draftA.cut = h('span', 'fs-n-band', para, ed.paper.cut);
+		}
 	}
 	{
 		const sec = section('own', NW.own);
 		const row = pair(sec);
-		const a = h('div', 'fs-n-cell', row);
-		h('span', 'fs-n-who', a, L.first);
-		h('p', 'fs-n-act', a, NW.cutAct);
-		const cutP = h('p', 'fs-n-ai fs-n-sm', a);
-		h('span', 'fs-n-band fs-n-struck', cutP, ed.paper.cut);
+		// With no cut, the first person has no own work outside the draft: only the note shows.
+		if (HAS_CUT) {
+			const a = h('div', 'fs-n-cell fs-n-cell-a', row);
+			h('span', 'fs-n-who', a, L.first);
+			h('p', 'fs-n-act', a, NW.cutAct);
+			const cutP = h('p', 'fs-n-ai fs-n-sm', a);
+			h('span', 'fs-n-band fs-n-struck', cutP, ed.paper.cut);
+			N.own.a = a;
+		} else row.classList.add('fs-n-solo');
 		const b = h('div', 'fs-n-cell', row);
 		N.own.bWho = h('span', 'fs-n-who', b, L.second);
-		N.own.a = a;
 		N.own.note = h('p', 'fs-n-note', b, NW.note);
 	}
 	{
@@ -525,7 +552,8 @@
 	};
 	for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
 		const sec = section(q, NW[q].label);
-		h('p', 'fs-n-q', sec, NW[q].question);
+		const qp = h('p', 'fs-n-q', sec, NW[q].question);
+		if (NW[q].more) N[q].more = h('span', 'fs-n-more', qp, ` ${NW[q].more}`);
 		const row = pair(sec);
 		N[q].a = say(row, L.first, NW.answers[ids[0]]);
 		N[q].b = say(row, L.second, NW.answers[ids[1]]);
@@ -541,13 +569,15 @@
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
 	function renderNarrow(t) {
 		const bi = beatIndex(t);
-		const show = new Set(SHOW[bi]);
+		const show = new Set(SHOW[Math.min(bi, SHOW.length - 1)]); // added beats keep the last layout
 		// Optional (business): the task stays on the stacked stage to the end, as one line from beat 3.
 		if (NW.keepTask) {
 			show.add('task');
 			N.task.sec.classList.toggle('is-compact', bi >= 2);
 			// With the task kept, the shared paper goes inline with its label from beat 8.
-			N.paper.sec.classList.toggle('is-inline', bi >= 7);
+			N.paper.sec.classList.toggle('is-inline', bi >= 7 && !NW.paperFull);
+			// With the whole paper kept, its label runs into the text from beat 7, so it wraps compactly.
+			N.paper.sec.classList.toggle('is-flow', bi >= 6 && !!NW.paperFull);
 		}
 		// Optional (business): from beat 7 the second person's note stays on the stacked
 		// stage under one label, so the final frame still shows why the two differ.
@@ -561,19 +591,23 @@
 		fade(N.task.sec, prog(t, ...T.card));
 		// Once the papers are set aside (beat 7), the shared paper shrinks to a two-line
 		// tile, and to one line when the fact changes (beat 8), so the phone player fits.
-		N.paper.tile.classList.toggle('is-clamped', t >= BEATS[6].at);
-		N.paper.tile.classList.toggle('is-one-line', t >= BEATS[7].at);
+		// Optional (business): narrow.paperFull keeps the whole shared paper in view.
+		N.paper.tile.classList.toggle('is-clamped', t >= BEATS[6].at && !NW.paperFull);
+		N.paper.tile.classList.toggle('is-one-line', t >= BEATS[7].at && !NW.paperFull);
 		N.draftA.lab.textContent = t >= (T.tagA[0] + T.tagA[1]) / 2 ? NW.draftKept : NW.draft;
 		fade(N.draftA.sec, prog(t, ...T.sheetA));
-		N.draftA.cut.classList.toggle('fs-n-struck', t >= T.strike[0] + 0.3);
-		N.draftA.cut.hidden = t >= T.lift[1];
-		fade(N.own.a, prog(t, ...T.lift));
+		if (N.draftA.cut) {
+			N.draftA.cut.classList.toggle('fs-n-struck', t >= T.strike[0] + 0.3);
+			N.draftA.cut.hidden = t >= T.lift[1];
+		}
+		if (N.own.a) fade(N.own.a, prog(t, ...T.lift));
 		fade(N.own.note, prog(t, ...T.write));
 		fade(N.draftB.sec, prog(t, ...T.sheetB));
 		fade(N.draftB.same, prog(t, ...T.sweep));
 		const rv = prog(t, ...T.reveal, E.inOut);
 		for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
 			fade(N[q].sec, q === 'q1' ? prog(t, ...T.q1) : prog(t, ...T.q2));
+			if (N[q].more) fade(N[q].more, prog(t, ...T.fact2));
 			[N[q].a, N[q].b].forEach((sv, i) => {
 				fade(sv.box, prog(t, T[ids[i]][0], T[ids[i]][1]));
 				sv.parts.forEach((pt) => {
@@ -619,7 +653,7 @@
 		}
 	};
 
-	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
+	const BEATS = beatAt.map((at, i) => ({at, ...ed.beats[i]}));
 	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
 
 	{

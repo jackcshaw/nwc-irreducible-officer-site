@@ -52,12 +52,30 @@
 .fs-n-sec.is-compact .fs-n-label { display: inline; margin: 0 6px 0 0; }
 .fs-n-sec.is-compact .fs-n-task { display: inline; padding: 0; border: 0; background: none; font-size: 14px; }
 /* Business (task kept): tighter stacked rows so the phone player still fits 844 px. */
-.fs-keep-task .fs-n-sec { margin-bottom: 6px; }
+.fs-keep-task .fs-n-sec { margin-bottom: 4px; }
 .fs-keep-task .fs-n-q { font-size: 13px; }
 .fs-keep-task .fs-n-txt { font-size: 13.5px; }
+/* Business: the answer boxes and the flowed paper set their own line height (an inline
+   span alone can't shrink the line box), so the phone final frame fits 844 px. */
+.fs-keep-task .fs-n-say { font-size: 13.5px; line-height: 1.4; }
+.fs-keep-task .fs-n-paper.is-flow { font-size: 13px; line-height: 1.5; }
+.fs-keep-task .fs-n-label { margin-bottom: 4px; }
+.fs-keep-task .fs-n-q { margin-bottom: 4px; }
+#fluency-substitution.is-stacked.fs-keep-task .fs-narrow { padding-top: 6px; }
+.fs-keep-task .fs-n-say { padding: 4px 7px; }
+.fs-keep-task .fs-n-who { margin-bottom: 2px; }
+.fs-keep-task .fs-n-key { margin-top: 2px; }
 /* Business (narrow.noteKept): from beat 7 only the second person's note stays in the
    own-work section, under one label, so the final frame keeps it. */
-.fs-n-sec.is-note-only > .fs-n-label, .fs-n-sec.is-note-only .fs-n-cell:first-child { display: none; }
+.fs-n-sec.is-note-only > .fs-n-label, .fs-n-sec.is-note-only .fs-n-cell-a { display: none; }
+/* Business: with no cut, the own-work section holds only the note, full width. */
+.fs-n-pair.fs-n-solo { display: block; }
+.fs-n-paper.is-flow .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-paper.is-flow .fs-n-tile { display: inline; padding: 0; border: 0; }
+.fs-n-paper.is-flow .fs-n-tile p { display: inline; }
+/* Business: AI words in an answer take the answer's size (the draft's 15 px class
+   otherwise applies to answer segments too). */
+.fs-keep-task .fs-n-txt .fs-n-ai { font: inherit; }
 .fs-n-sec.is-note-only .fs-n-pair { display: block; }
 .fs-n-sec.is-note-only .fs-n-note { padding: 0; border: 0; background: none; font-size: 13.5px; }
 .fs-n-paper.is-inline { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
