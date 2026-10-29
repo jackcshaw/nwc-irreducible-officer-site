@@ -161,14 +161,18 @@
 	const TB = CONCEPT ? {
 		home0: [29.5, 29.9], ask: [30.0, 30.5], answer: [30.8, 31.3], redB: 32.45, homeB: [34.3, 34.8],
 		try12: [36.85, 37.5], check12: [37.6, 38.6], x: [38.7, 39.1], note: [39.2, 39.7], retract: [39.8, 40.1],
-		pulseB: [30.0, 30.4], xBright: [40.9, 41.3], toFix: [41.3, 41.6], red34: [42.4, 42.9],
+		pulseB: [30.0, 30.4], xBright: [40.2, 40.6], toFix: [40.6, 40.9], red34: [41.7, 42.2],
+		// The dot's name stays 2.2 s, long enough to read.
+		labelBOut: [28.6, 28.9],
 		// Beat 9's payoff starts as its caption does.
 		ringPulseB: [73.0, 73.4], learned: [73.4, 73.9], ansB: [74.2, 79.2],
 	} : T;
 	// Conceptual flow, beat 3: the first person takes the AI's code as written. No tracing:
 	// the dot pulses once and every line turns solid together.
 	const TAKE = [16.5, 17.0];
-	const FIX = {'1-4': [41.6, 42.1]};
+	// Stacked stage: when the main connection is named (conceptual flow: with the code sheet, so it holds 5 s).
+	const MAIN_N = CONCEPT ? [19.4, 19.8] : T.heavyA;
+	const FIX = {'1-4': [40.9, 41.4]};
 	const RED_T = (() => { let j = 0; return redB.map((l, i) => { if (CONCEPT && FIX[l.k]) return FIX[l.k]; const k = CONCEPT ? j++ : i; return [TB.redB + T.redStep * k + 0.15, TB.redB + T.redStep * (k + 1)]; }); })();
 	const RED34_T = TB.red34;
 	const XBRIGHT_T = TB.xBright;
@@ -646,7 +650,7 @@
 		const pb = pathB(t);
 		const growB = spring(t, T.dotB, {stiffness: 300, damping: 20});
 		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * growB + 2.5 * pulse(t, TB.pulseB)), opacity: cardsOut});
-		set(labB, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...T.labelBOut))});
+		set(labB, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...TB.labelBOut))});
 		dotsF.forEach((d, row) => {
 			const p = pathF[row](t);
 			const g = spring(t, T.rows[0], {stiffness: 300, damping: 20});
@@ -766,9 +770,9 @@
 		N.mapA.chips.forEach((c, i) => {
 			fade(c, prog(t, ...T.sweepA));
 			c.classList.toggle('is-taken', t >= (CONCEPT ? TAKE[1] : T.traceA + T.trace * (i + 1)));
-			c.classList.toggle('is-main', linesA[i].k === '2-5' && t >= T.heavyA[0]);
+			c.classList.toggle('is-main', linesA[i].k === '2-5' && t >= MAIN_N[0]);
 		});
-		fade(N.mapA.main, prog(t, ...T.heavyA));
+		fade(N.mapA.main, prog(t, ...MAIN_N));
 		fade(N.paperA.box, prog(t, ...T.sheetA));
 		if (!CONCEPT) N.mapB.chips.forEach((c, i) => fade(c, prog(t, T.redB + T.redStep * i, T.redB + T.redStep * (i + 1))));
 		else N.mapB.chips.forEach((c, i) => fade(c, prog(t, RED_T[i][0] - 0.15, RED_T[i][1])));
@@ -787,7 +791,7 @@
 			fade(N.mapB.c34, prog(t, ...RED34_T));
 			N.mapB.c34.classList.add('is-own');
 			N.mapB.c34.classList.remove('is-ai');
-			fade(N.mapB.match, prog(t, 43.5, 44.0));
+			fade(N.mapB.match, prog(t, FIX['1-4'][0], FIX['1-4'][0] + 0.4));
 		}
 		fade(N.papers.a, 1);
 		fade(N.papers.b, prog(t, ...T.sheetB));
@@ -796,7 +800,14 @@
 		fade(N.rows.b.sk, prog(t, T.sketchB, T.sketchB + 1.4));
 		// Optional (editions whose final stacked view needs the room): the sketches,
 		// shown in beat 7, step back in the final beat.
-		if (NW.hideSketchAtEnd) { const end = beatIndex(t) === BEATS.length - 1; N.rows.a.sk.hidden = end; N.rows.b.sk.hidden = end; }
+		if (NW.hideSketchAtEnd) {
+			const end = beatIndex(t) === BEATS.length - 1;
+			// Optional: in the final beat, a short line per row (how each sketch was made) replaces the full sketch line.
+			[[N.rows.a.sk, NW.sketchA, NW.sketchEndA], [N.rows.b.sk, NW.sketchB, NW.sketchEndB]].forEach(([sk, full, short]) => {
+				if (short) { sk.textContent = end ? short : (full || NW.sketch); sk.style.marginTop = end ? '0' : ''; }
+				sk.hidden = end && !short;
+			});
+		}
 		fade(N.q2.sec, prog(t, ...T.q2));
 		const ka = prog(t, T.ansA[0] + 0.15, T.ansA[1]), kb = prog(t, TB.ansB[0] + 0.15, TB.ansB[1]);
 		N.q2.a.textContent = words(ANS[0], ka);
