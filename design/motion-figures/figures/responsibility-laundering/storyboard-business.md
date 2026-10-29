@@ -18,7 +18,10 @@ Cold read 2 passed on the point. These are its final fixes.
 2. **The source line carries its context:** "Related case: Moffatt v. Air Canada (2024), where a company was held responsible for its chatbot's answer."
    - On the drawn stage it is three right-aligned lines of serif italic 13 at the top right, beside the task card, the final frame's widest free space. That area is empty in beat 9; the "doesn't see this" tag that uses it is gone after beat 6.
    - It keeps a clear gap from the card at 1280 × 720 and 1440 × 900.
-   - On phones it is one wrapped line under the controls.
+   - On phones it sits inside the player, under the key, in two lines of serif italic 13 (`narrow.sourceInView`). Its space is held from the start, so the player doesn't move, and it fades in with the drawn stage's line.
+     - Verification found the earlier position, under the controls, below the fold at 390 × 844 (829–868 px).
+     - To make room, the note is two lines on the phone: "Rests on last quarter's questions. / Recent: similar."
+     - The player measures 841 px in every beat.
    - It now fades in 0.5 s after the line under the check (87.4–87.9 s core). A 1.0 s hold at core 93.1 lets its 16 words get their reading time plus 1.5 s before the figure rests.
    - The run is now 96.6 s on the figure's clock and 99.6 s in the player.
 3. **Attribution.** The agents/servants/representatives sentence is presented as the tribunal's summary of the airline's position, quoted from "Air Canada argues…" (para. 27).
@@ -71,7 +74,7 @@ Evidence follows option A. There is no evidence beat, because the case isn't the
 - **Setup:** "The retailer, the analysts, their AI, the chatbot and the 97% are constructed. Related case: *Moffatt v. Air Canada* (2024), in which a tribunal held an airline responsible for its chatbot's answers."
 - **In the final frame:** "Related case: Moffatt v. Air Canada (2024), where a company was held responsible for its chatbot's answer."
   - On the drawn stage it is three lines of serif italic 13, right-aligned at x 936 on baselines 28, 43 and 58, beside the task card. It fades in 0.5 s after the line under the check.
-  - On the stacked phone view it sits under the controls, outside the fixed-height player.
+  - On the stacked phone view it sits inside the player, under the key.
 - **On the page,** "A related case", after the check. In order:
   - how the case relates, and how it differs;
   - what the chatbot said (quoted, with an ellipsis), the link to the bereavement page, and what that page said (as the decision reports it);
@@ -124,13 +127,13 @@ The cast supplies the role words: "student" becomes "analyst", "faculty" becomes
 | --- | --- | --- |
 | 1 · The task | Two analysts, one task. | Task card: "Should the support chatbot answer refund questions?"; dots "First analyst", "Second analyst" |
 | 2 · Same prompt, same draft | (same) | Draft: "The analysis estimates / 97% accuracy." and "It is recommended that the chatbot / go live."; tags "FIRST/SECOND ANALYST'S COPY · DRAFTED WITH AI" |
-| 4 · Signs; notes first | The first analyst signs. The second notes what the estimate rests on, then signs. | Key "AN ANALYST'S DECISION"; row "THEIR OWN NOTE · NOT SENT"; note "Rests on last quarter's questions. / Recent ones match." |
+| 4 · Signs; notes first | The first analyst signs. The second notes what the estimate rests on, then signs. | Key "AN ANALYST'S DECISION"; row "THEIR OWN NOTE · NOT SENT"; note "Rests on last quarter's questions. / Recent: similar." |
 | 5 · The manager asks | The manager asks each analyst. | "THE MANAGER DOESN'T SEE THIS"; frame "WHAT THE MANAGER SEES"; "1 · If it misleads a customer, who made this call?"; both answer "I did. I signed it." |
 | 6 · Why | The manager asks why. | First: "The analysis estimated 97%. It seemed solid." Second: "It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't test exceptions." |
 | 8 · Suppose it proves wrong | (role word only) | As the first weight lands, the first analyst's dot is whole again; the grey ring stays |
 | 9 · Reviewer's check | Reviewer's check: Who owns the recommendation if it proves wrong? / Name one way it could prove wrong. Ask why they relied on it. | **New:** "Related case: Moffatt v. Air Canada (2024), / where a company was held responsible / for its chatbot's answer." at the top right |
 
-The wording stays parallel to PME: the note's "Rests on…" comes back in the answer's "It rests on…", as PME's open port does. At 390 × 844 the player measures 821 px in every beat.
+The wording stays parallel to PME: the note's "Rests on…" comes back in the answer's "It rests on…", as PME's open port does. At 390 × 844 the player measures 841 px in every beat, with the source line inside it.
 
 ## 4. Workplace check (for Jack)
 
@@ -149,13 +152,13 @@ The rule: every beat lasts at least (caption words + new on-screen words) ÷ 3 +
 | 1 · The task | 0.0–7.4 | 4 | 13 (task card 9, names 4) | 7.2 | 7.4 | 0.2 |
 | 2 · Same prompt, same draft | 7.4–18.0 | 10 | 17 (draft 13, tags 4) | 10.5 | 10.6 | 0.1 |
 | 3 · Both read it closely | 18.0–25.2 | 7 | 3 (key) | 4.8 | 7.2 | 2.4 |
-| 4 · Signs; notes first | 25.2–37.5 | 14 | 16 (key 3, note row 5, note 8) | 11.5 | 12.3 | 0.8 |
+| 4 · Signs; notes first | 25.2–37.5 | 14 | 15 (key 3, note row 5, note 7) | 11.2 | 12.3 | 1.1 |
 | 5 · The manager asks | 37.5–50.1 | 5 | 28 (overlays 9, question 9, answers 5 + 5) | 12.5 | 12.6 | 0.1 |
 | 6 · Why | 50.1–63.7 | 4 | 30 (question 6, answers 7 + 17) | 12.8 | 13.6 | 0.8 |
 | 7 · Whose reason (staged) | 63.7–78.1 | 11 | 5 (key) | 6.8 | 14.4 | 7.6 |
 | 8 · Suppose it proves wrong | 78.1–86.4 | 13 | 1 ("Answerable") | 6.2 | 8.3 | 2.1 |
 | 9 · Reviewer's check | 86.4–96.6 | 8 + 13 second line | 2 ("Reviewer's check"); source 16 | 9.2 | 10.2, then rests | 1.0 |
-| **Total** | | **89** | **115** (+16 source) | | **96.6 figure, 99.6 player** | |
+| **Total** | | **89** | **114** (+16 source) | | **96.6 figure, 99.6 player** | |
 
 Checks:
 - Every beat meets the rule. Every cut lands in a static hold and leaves at least 1.5 s after the last movement.
@@ -192,11 +195,11 @@ The text was read in two CanLII-stamped PDF copies of *Moffatt v. Air Canada*, 2
   - The rerun matched the baseline 209/209, and the two captures differed from each other in exactly those frames, so that run was a capture flake.
 - **Business baseline:** `regression/baseline-business` (212 shots), re-captured after the final fixes.
   - Phone captures of moving moments (the travelling half, the falling weight) vary by a few pixels between runs under that load.
-  - The baseline is the capture that agrees with at least one other run at 211 of 212 frames. At t = 86.0 (a weight mid-fall) all three runs differed.
+  - After the phone source moved inside the player, two fresh business captures matched each other 212/212, and the baseline is one of them. PME matched 209/209 again.
 - **Both editions:**
   - 1440 × 900 and 1280 × 720 fit on the drawn stage and autoplay (controls end at 693 px at 1280 × 720);
   - the caption band is 144 px on desktop, 194 px on phones and 188 px at 768;
-  - the business phone player is 821 px in every beat;
+  - the business phone player is 841 px in every beat, source line included;
   - no horizontal scroll at 390 or 768;
   - reduced motion shows the final frame with ten beat details;
   - print view;

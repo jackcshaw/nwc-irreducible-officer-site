@@ -222,7 +222,7 @@
 	if (SRC.length === 1) sourceLine = serif(sceneBase, 936, 530, SRC[0], {fs: 13, style: 'italic', anchor: 'end'});
 	else if (SRC.length) { sourceLine = el(sceneBase, 'g'); SRC.forEach((str, i) => serif(sourceLine, 936, 28 + 15 * i, str, {fs: 13, style: 'italic', anchor: 'end'})); }
 	const stackedSource = root.querySelector('[data-rl-source]');
-	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
+	if (stackedSource && NW.source && !NW.sourceInView) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	// ---- dots -------------------------------------------------------------------
 	const dot = (col, label) => {
@@ -552,6 +552,10 @@
 		N.keyRed = h('span', 'rl-n-red', s); h('i', 'rd', N.keyRed); N.keyRed.append(NW.keyDecision);
 		N.keyHanded = h('span', 'rl-n-grey', s); h('i', 'rg', N.keyHanded); N.keyHanded.append(NW.keyHanded);
 	}
+	// Optional (business, narrow.sourceInView): the source line inside the stacked view, under the
+	// key, so a phone screen shows it with the player. Its space is held from the start (fixed
+	// layout); it fades in with the drawn stage's source line.
+	if (NW.source && NW.sourceInView) N.source = h('p', 'rl-n-src', body, NW.source);
 	const op = (node, k) => { node.style.opacity = Math.max(0, Math.min(1, k)).toFixed(3); };
 	function renderNarrow(t) {
 		if (!root.classList.contains('is-stacked')) return;
@@ -642,6 +646,7 @@
 		op(N.keyGrey, prog(t, ...T.keyGrey));
 		op(N.keyRed, prog(t, ...T.keyRed));
 		op(N.keyHanded, prog(t, ...T.keyHanded));
+		if (N.source) op(N.source, prog(t, ...T.source));
 	}
 	// The stacked stage takes over whenever the smallest picture text would render
 	// under 11 px at the runtime's letterboxed scale.
