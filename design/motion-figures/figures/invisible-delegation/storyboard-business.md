@@ -4,12 +4,45 @@ Edition `business`, workplace cast. Built from `editions/business.json` on the u
 
 Open it with `index.html?edition=business`, or with the page's "See this with: Workplace" link.
 
+## Round 2: changes after business cold read 1 (`tests/business-figure-read-1.md`)
+
+1. **No pronoun trap.** The unsaid lines now ask "whose criteria?", "whose outline?" and "whose meaning?", so the unsaid part plainly belongs to whoever should decide.
+2. **The emails differ only where the standard doesn't settle it.**
+   - The notes are "Cut the jargon", "Formal phrasing" and "Add a recap".
+   - The first analyst keeps all three, and the AI's recap stays in their email as a grey row (`notes.extraRow`).
+   - The second analyst strikes "Add a recap", "not in my outline", while their outline card pulses (`notes.judgedBy`).
+   - Both emails put the bad news first with the new date, so both meet the firm's standard. Reading the emails can't tell the manager who decided; only the question can.
+3. **No magic words.** Lee et al. describe stewardship as deciding what you want and then assessing the AI's response against your quality standards. So the second analyst asks in the same words as the first, and their requests carry no clause. They write each decision down first and judge the same notes against those decisions. Nothing implies the AI received their criteria.
+4. **The same access.** The first analyst's dot visits the standard in beat 1, while it is highlighted (`firstReadsStandard`). The beat 1 caption is "An analyst improves a client email to the firm's standard." Only the second analyst decides from the standard before asking.
+5. **Consistent standard and ticks.** The second analyst's cards are short, single-line decisions: "New date, and why", "Date, reason, plan" and "Clear and courteous". Ticking "Cut the jargon" and "Formal phrasing" fits "clear and courteous", and nothing claims the standard says "plain".
+6. **The 1280 × 720 stacked view.**
+   - Each cell is a two-lane track under "ANALYST DECIDES | AI DECIDES", and the first analyst's chips slide across it as their request carries them.
+   - The paper line reads "Email revised with AI", so "only the emails" names something on screen.
+   - The source line is inside the player, above the controls: "Based on a 2025 study of knowledge workers (Lee et al.)."
+   - The player measures 717 px at 1280 × 720 and 835 px at 390 × 844.
+7. **Beat 6 at reading pace.** Three short decisions (9 words) and three plain requests replace six red lines.
+8. **Source line:** "Illustration based on a 2025 study of knowledge workers' AI use (Lee et al.)." The setup has the same line, and "CHI" is gone.
+9. **Page copy.**
+   - The PME edition note is hidden on the business edition (`page.editionNote` is PME-only).
+   - Military education is mentioned once, in the original-essay link.
+   - The meta description is business ("two analysts improve the same client email…"), and "agency" became "firm".
+10. **Sources:** see section 6 (numbers and quotes with PDF pages).
+
+**Core changes, all gated on edition data,** with PME at 0 differing frames of 203:
+- `firstReadsStandard`: the first person reads the standard.
+- requests with no clause: a single-line quote and no pointer.
+- a one-line written card: 40 units tall.
+- `notes.judgedBy`: which card pulses.
+- `notes.extraRow`: the kept note's AI text in the first paper.
+- `narrow.lanes`: the sliding two-lane track on a wide stacked stage.
+- `narrow.source`: the source line inside the stacked player.
+
 ## 1. Source and evidence (option A)
 
 *Illustration based on Lee, Sarkar, Tankelevitch, Drosos, Rintel, Banks & Wilson (2025), "The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers," CHI '25. doi:10.1145/3706598.3713778.* The scenario is BUSINESS-EXAMPLES.md §5, the approved client email.
 
-- **Setup:** "Illustration based on Lee et al. (2025). The analysts, their AI, the email and the firm's standard are constructed."
-- **Under the final frame:** "Illustration based on / Lee et al., CHI (2025)." It sits in the SVG's right column under the second answer and fades in 1 s after the check (figure 84.6–85.1 s). On the stacked view it sits under the controls, outside the fixed-height player.
+- **Setup:** "Illustration based on a 2025 study of knowledge workers' AI use (Lee et al.). The analysts, their AI, the email and the firm's standard are constructed."
+- **Under the final frame:** "Illustration based on a 2025 / study of knowledge workers' / AI use (Lee et al.)." (round 2 wording) It sits in the SVG's right column under the second answer and fades in 1 s after the check (figure 84.6–85.1 s). On the stacked view it sits under the controls, outside the fixed-height player.
 - **On the page:** "The study behind this example", after the check. It gives:
   - the headline finding in the paper's words;
   - P275 (the "make a passage professional" request);
@@ -83,7 +116,8 @@ Beats 1 and 6 carry more picture words than the beat holds at 3 words a second, 
 ## 6. Verified figures and quotes (for the source spine)
 
 All checked against the full paper PDF (advait.org; DOI above). Page numbers are the PDF's.
-- 319 knowledge workers surveyed; 936 first-hand examples (p. 1; also pp. 2, 4, 6).
+- 319 knowledge workers surveyed (p. 1; also pp. 4, 6). 936 first-hand examples of GenAI use at work (p. 1; also pp. 2, 4, 6, 9).
+- Participants self-reported critical thinking for 555 of the 936 examples, 59.29% (p. 6; "approximately 60% (555 out of 936)", p. 9). This is verified but not used in the figure.
 - "higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking" (abstract, p. 1).
 - P275: "It's a simple task [make a passage professional] and I knew ChatGPT could do it without difficulty, so I just never thought about it, as critical thinking didn't feel relevant." (p. 11)
 - P144: "whether the AI added irrelevant content and if it changed up my main point of the letter" (p. 8).

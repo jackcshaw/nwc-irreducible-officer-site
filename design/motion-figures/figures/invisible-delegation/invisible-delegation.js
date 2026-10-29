@@ -23,6 +23,8 @@
 	const T = {
 		// beat 1: the draft and the three decisions
 		card: [1.0, 1.6], dotA: [1.7, 2.1], paperA: [2.2, 2.8], rubric: [3.0, 3.4],
+		// optional (an edition with firstReadsStandard): the first person reads the standard in beat 1
+		readA: [6.5, 7.0], readBackA: [7.6, 8.0],
 		ledgerA: [3.6, 4.2], cardsA: 4.4, cardStep: 0.45, cardDur: 0.35, slotsA: [5.9, 6.3],
 		// beats 2-3: first student, three requests
 		toRowA: [[10.5, 10.9], [21.8, 22.1]],
@@ -73,6 +75,14 @@
 	const LABELS = ed.decisions, REQ_A = ed.requests.first, UNSAID = ed.requests.unsaid, REQ_B = ed.requests.second;
 	const NOTES = ed.notes.items, REASON = ed.notes.reason, DECIDED = ed.decided;
 	const SPEECH = {a: {name: L.first, lines: ed.answers.first}, b: {name: L.second, lines: ed.answers.second}};
+	// Optional (business): the second person's requests can carry no clause of their own (same words as the
+	// first's); the first person can read the standard too; the note they keep can leave AI text in their
+	// paper; the card a struck note is judged against can be named; a written card can hold one line.
+	const plainB = REQ_B.every((r) => !r[1]);
+	const FIRST_READS = !!ed.firstReadsStandard;
+	const EXTRA_ROW = ed.notes.extraRow;
+	const JUDGED = ed.notes.judgedBy ?? 0;
+	const cardH = (k) => (DECIDED[k].length > 1 ? BH : 40);
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 	el(el(defs, 'marker', {id: 'id-arrow', viewBox: '0 0 6 6', refX: 5, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto'}), 'path', {d: 'M0 0L6 3L0 6Z', fill: C.red});
@@ -180,7 +190,8 @@
 			let t1;
 			if (isA) t1 = serif(q, X.req, qY(k), `“${REQ_A[k]}”`, {fs: 15, style: 'italic'});
 			else {
-				t1 = serif(q, X.req, qY(k), `“${REQ_B[k][0]}`, {fs: 15, style: 'italic'});
+				t1 = serif(q, X.req, qY(k), plainB ? `“${REQ_B[k][0]}”` : `“${REQ_B[k][0]}`, {fs: 15, style: 'italic'});
+				if (plainB) return {q, wash, t1};
 				const t2 = serif(q, X.req, qY(k) + 18, '', {fs: 15, style: 'italic'});
 				el(t2, 'tspan', {fill: C.red}, REQ_B[k][1]);
 				el(t2, 'tspan', {}, '”');
@@ -200,7 +211,7 @@
 			el(o.key, 'rect', {x: 424, y: 2, width: 14, height: 11, fill: 'none', stroke: C.grey, 'stroke-width': 1.3, 'stroke-dasharray': '3 2'});
 			mono(o.key, 444, 12, L.unsaidKey, {fs: 13, ls: 0.5});
 		} else {
-			o.pointers = [0, 1, 2].map((k) => el(o.led, 'path', {d: `M${X.req - 2} ${qY(k) + 13}C${X.req - 6} ${qY(k) + 13} ${X.req - 6} ${rowY(k) + BH / 2} ${X.own + CW + 3} ${rowY(k) + BH / 2}`, fill: 'none', stroke: C.red, 'stroke-width': 1.3, 'marker-end': 'url(#id-arrow)'}));
+			o.pointers = plainB ? [] : [0, 1, 2].map((k) => el(o.led, 'path', {d: `M${X.req - 2} ${qY(k) + 13}C${X.req - 6} ${qY(k) + 13} ${X.req - 6} ${rowY(k) + BH / 2} ${X.own + CW + 3} ${rowY(k) + BH / 2}`, fill: 'none', stroke: C.red, 'stroke-width': 1.3, 'marker-end': 'url(#id-arrow)'}));
 		}
 		// Request bubbles (moving; drawn above the ledger).
 		o.bubbles = [0, 1, 2].map((k) => {
@@ -208,6 +219,7 @@
 			const shape = el(b, 'path', {fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.3, 'stroke-width': 1.2});
 			const t = serif(b, isA ? X.own + 10 : X.req + 12, isA ? rowY(k) - 10 : rowY(k) + 22, '', {fs: 14});
 			if (isA) t.textContent = REQ_A[k];
+			else if (plainB) t.textContent = REQ_B[k][0];
 			else { el(t, 'tspan', {}, REQ_B[k][0] + ' '); el(t, 'tspan', {fill: C.red}, REQ_B[k][1]); }
 			if (isA) el(b, 'rect', {x: X.own + 20, y: rowY(k) - 4, width: 3, height: 7, fill: C.ink, 'fill-opacity': 0.6});
 			return {b, shape, t, w: 160};
@@ -241,8 +253,6 @@
 	};
 	// An edition's source line, drawn only when the edition has one (business, option A).
 	const sourceLines = L.source ? L.source.map((ln, i) => serif(facLayer, 724, 500 + 17 * i, ln, {fs: 13, style: 'italic'})) : [];
-	const stackedSource = root.querySelector('[data-id-source]');
-	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 	const spA = speech('a', Y.a1 + 36);
 	const spB = speech('b', Y.b + 36);
 
@@ -288,7 +298,13 @@
 		const R = (k) => ({x: 173, y: rowY(k) - 15}); // beside a first-student bubble
 		const Ptop = {x: 60, y: 34}, Pbot = {x: 60, y: 86};
 		const tk = T.tickA;
+		const readA = FIRST_READS ? (() => {
+			const a0 = {x: 12, y: 0}, a1 = {x: 12, y: RUB.y - Y.a0}, ar = {x: 30, y: RUB.y - 4 - Y.a0}, [u0, u1] = T.readA, [d0, d1] = T.readBackA;
+			return [[u0, u0 + 0.1, HOME, a0, E.inOut], [u0 + 0.1, u1 - 0.1, a0, a1, E.inOut], [u1 - 0.1, u1, a1, ar, E.inOut],
+				[d0, d0 + 0.1, ar, a1, E.inOut], [d0 + 0.1, d1 - 0.1, a1, a0, E.inOut], [d1 - 0.1, d1, a0, HOME, E.inOut]];
+		})() : [];
 		A.path = pathAt([
+			...readA,
 			[T.toRowA[0][0], T.toRowA[0][1], HOME, R(0), E.inOut],
 			[T.toNotesA[0], T.toNotesA[1], R(0), N(0), E.inOut], [tk[0][1] + 0.35, tk[1][0], N(0), N(1), E.inOut], [tk[1][1] + 0.35, tk[2][0], N(1), N(2), E.inOut],
 			[T.homeA[0], T.homeA[1], N(2), HOME, E.inOut],
@@ -328,7 +344,7 @@
 	const draftLabel = (t, d2, d3, d4, word = L.draft) => (t >= d4 ? `${word} 4` : t >= d3 ? `${word} 3` : t >= d2 ? `${word} 2` : '');
 	const draftsA = (t) => draftLabel(t, T.draftA2[0], T.workA3[1] - 0.1, T.workA4[1] - 0.2);
 	const draftsB = (t) => draftLabel(t, T.revB[0], T.workB3[1] - 0.1, T.workB4[1] - 0.2);
-	function renderPaper(o, t, {ticks, head, work3, para, work4}) {
+	function renderPaper(o, t, {ticks, head, work3, para, work4}, extra = null) {
 		const W0 = o.isA ? ROWS_A : ROWS_B;
 		const fb = ticks.map((s) => prog(t, ...s, E.inOut));
 		const kH = prog(t, ...head), k3 = prog(t, ...work3, E.inOut), kP = prog(t, ...para), k4 = prog(t, ...work4, E.inOut);
@@ -337,7 +353,7 @@
 			let w = mix(W0[0][i], W0[1][i], fbK);
 			w = mix(w, W0[2][i], k3);
 			w = mix(w, W0[3][i], k4);
-			const greyK = i === 0 || i === 3 ? kH : i === 5 || i === 6 ? kP : 0;
+			const greyK = i === 0 || i === 3 ? kH : i === 5 || i === 6 ? kP : i === extra ? fb[2] || 0 : 0;
 			set(r.ink, {width: w, 'fill-opacity': 0.75 * (1 - greyK)});
 			set(r.grey, {opacity: greyK});
 			set(r.band, {width: w + 2});
@@ -360,7 +376,8 @@
 		// Task card and rubric. The second student's visit enlarges and highlights the rubric line.
 		const kc = prog(t, ...T.card, E.house);
 		set(card, {opacity: kc, transform: `translate(0 ${mix(6, 0, kc)})`});
-		const hi = prog(t, ...T.rubricHi, E.house) - prog(t, ...T.rubricBack, E.inOut);
+		const hiA = FIRST_READS ? 0.5 * (prog(t, T.readA[1], T.readA[1] + 0.3, E.house) - prog(t, T.readBackA[0], T.readBackA[0] + 0.3)) : 0;
+		const hi = prog(t, ...T.rubricHi, E.house) - prog(t, ...T.rubricBack, E.inOut) + hiA;
 		const sc = 1 + ((S.rubricScale || 1.3) - 1) * hi;
 		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(${RUB.x} ${RUB.y}) scale(${sc}) translate(${-RUB.x} ${-RUB.y})`});
 		set(rubricWash, {'fill-opacity': 0.09 * hi, width: ((S.rubricX || 108) - 40 + (S.rubricW || 196)) * sc + 14});
@@ -371,7 +388,7 @@
 		set(gA, {transform: `translate(0 ${mix(Y.a0, Y.a1, prog(t, ...T.moveA, E.inOutStrong))})`});
 		set(A.name, {opacity: prog(t, ...T.dotA)});
 		set(A.paper, {opacity: prog(t, ...T.paperA)});
-		renderPaper(A, t, {ticks: T.tickA, head: T.headA, work3: T.workA3, para: T.paraA, work4: T.workA4});
+		renderPaper(A, t, {ticks: T.tickA, head: T.headA, work3: T.workA3, para: T.paraA, work4: T.workA4}, EXTRA_ROW ?? null);
 		A.draft.textContent = draftsA(t);
 		set(A.draft, {opacity: prog(t, ...T.draftA2)});
 		set(A.rev, {opacity: prog(t, ...T.revA)});
@@ -431,9 +448,9 @@
 			const [w0, w1] = T.writeB[k];
 			const w = prog(t, w0, w1);
 			const grow = prog(t, w0, w0 + 0.25, E.house);
-			const pulse = k === 0 ? bump(t, ...T.pulseCrit) : 0;
+			const pulse = k === JUDGED ? bump(t, ...T.pulseCrit) : 0;
 			set(c.c, {opacity: 1});
-			set(c.rect, {height: mix(CH, BH, grow), fill: C.bright, stroke: w > 0 ? C.red : C.ink, 'stroke-opacity': w > 0 ? 1 : 0.45, 'stroke-dasharray': w > 0 ? 'none' : '4 3', 'stroke-width': (w > 0 ? 1.6 : 1.2) + 1.6 * pulse});
+			set(c.rect, {height: mix(CH, cardH(k), grow), fill: C.bright, stroke: w > 0 ? C.red : C.ink, 'stroke-opacity': w > 0 ? 1 : 0.45, 'stroke-dasharray': w > 0 ? 'none' : '4 3', 'stroke-width': (w > 0 ? 1.6 : 1.2) + 1.6 * pulse});
 			set(c.label, {fill: mixColor(C.ink, C.red, Math.min(1, w * 2))});
 			const mid = w0 + (w1 - w0) * 0.5;
 			c.lines.forEach((l, li) => set(l.clip, {width: l.w * (li ? prog(t, mid + 0.05, w1) : prog(t, w0 + 0.05, mid - 0.05))}));
@@ -506,10 +523,13 @@
 			});
 			if (!isA) c.reason = h('p', 'id-n-reason', c.notes, REASON);
 			c.ledger = h('div', 'id-n-ledger', c.el);
+			// Optional (an edition with narrow.lanes): lane names over the cells, for a stage wide enough to slide chips across.
+			if (NW.lanes) { const ln = h('p', 'id-n-lanes', c.ledger); h('span', null, ln, NW.lanes[0]); h('span', null, ln, NW.lanes[1]); }
 			c.cells = [0, 1, 2].map((k) => {
 				const cell = h('div', 'id-n-cell', c.ledger);
 				const q = h('p', 'id-n-q', cell);
 				if (isA) q.textContent = `“${REQ_A[k]}”`;
+				else if (plainB) q.textContent = `“${REQ_B[k][0]}”`;
 				else { q.append(`“${REQ_B[k][0]} `); h('span', 'is-red', q, REQ_B[k][1]); q.append('”'); }
 				let uns = null;
 				if (isA) { uns = h('p', 'id-n-uns', cell, NW.unsaid); h('span', 'id-n-ghost', uns, UNSAID[k]); }
@@ -523,9 +543,12 @@
 		};
 		NR.a = column('a');
 		NR.b = column('b');
+		NR.source = NW.source ? h('p', 'id-n-source', narrow, NW.source) : null;
+		if (NW.lanes) narrow.classList.add('has-lanes');
 	}
 	const fade = (node, k) => { node.style.opacity = Math.max(0, Math.min(1, k)).toFixed(3); };
 	const vis = (node, on) => { node.style.visibility = on ? 'visible' : 'hidden'; };
+	const wideStack = matchMedia('(min-width: 600px)');
 	function renderNarrow(t) {
 		if (!root.classList.contains('is-stacked')) return;
 		const dimK = prog(t, ...T.dim) - prog(t, ...T.undim);
@@ -533,7 +556,7 @@
 		fade(NR.task, prog(t, ...T.card));
 		vis(NR.rubric, t >= T.rubric[0]);
 		NR.rubric.classList.toggle('is-consulted', t >= T.rubricHi[0]);
-		NR.rubric.classList.toggle('is-lit', t >= T.rubricHi[0] && t < T.rubricBack[1]);
+		NR.rubric.classList.toggle('is-lit', (t >= T.rubricHi[0] && t < T.rubricBack[1]) || (FIRST_READS && t >= T.readA[1] && t < T.readBackA[1]));
 		vis(NR.fac, t >= T.fac[0]);
 		fade(NR.fac, prog(t, ...T.fac));
 		// First student.
@@ -555,7 +578,7 @@
 			const crossed = t >= c1 - 0.4;
 			vis(c.chip, t >= T.cardsA + k * T.cardStep);
 			c.chip.classList.toggle('is-ai', crossed);
-			c.chip.style.transform = `translateX(${(carry > 0 && carry < 1 ? 40 * Math.sin(Math.PI * carry) : 0).toFixed(1)}px)`;
+			c.chip.style.transform = NW.lanes && wideStack.matches ? `translateX(calc(${(carry * 100).toFixed(2)}% + ${(carry * 6).toFixed(2)}px))` : `translateX(${(carry > 0 && carry < 1 ? 40 * Math.sin(Math.PI * carry) : 0).toFixed(1)}px)`;
 			// The request shows when it is asked, before its decision crosses.
 			vis(c.q, t >= T.bubA[k][0]);
 			vis(c.uns, t >= T.uns[k][0]);
@@ -585,6 +608,7 @@
 			vis(c.q, t >= T.bubB[k][0]);
 		});
 		vis(b.say, t >= T.panelB[0]);
+		if (NR.source) vis(NR.source, t >= T.check + 1.0);
 	}
 	// The narrow stage keeps the height of its tallest moment, so the caption band and
 	// controls never move while it plays.

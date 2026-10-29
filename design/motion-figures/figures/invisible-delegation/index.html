@@ -77,6 +77,15 @@
 .id-n-chip.is-own b { color: var(--red); }
 .id-n-decided { display: block; font: italic 400 13px/1.25 var(--serif); color: var(--red); }
 .id-n-chip.is-pulse { border-width: 3px; }
+.id-n-source { margin: 6px 0 0 !important; font: italic 400 13px/1.35 var(--serif); color: var(--ink); }
+.id-n-lanes { display: none; }
+@media (min-width: 600px) {
+	/* Wide stacked stage with lanes: each cell is a two-lane track, and a chip slides across it. */
+	#invisible-delegation .has-lanes .id-n-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 0 !important; font: 600 13px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; }
+	#invisible-delegation .has-lanes .id-n-lanes span:first-child { color: var(--red); }
+	#invisible-delegation .has-lanes .id-n-lanes span:last-child { color: var(--stone); }
+	#invisible-delegation .has-lanes .id-n-chip { width: calc(50% - 3px); }
+}
 .id-n-say b { display: block; font: 600 12px/1.3 var(--sans); color: var(--red); }
 .id-n-say { margin: 2px 0 0 !important; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); font: 400 13px/1.3 var(--serif); color: var(--ink); }
 @media (min-width: 600px) {
@@ -99,7 +108,7 @@
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
 	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
-	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+	<p class="fig-edition-note" data-ed-section="page.editionNote">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="invisible-delegation" aria-labelledby="id-title">
 		<p class="sr-only" id="id-title" data-ed="page.srTitle"></p>
