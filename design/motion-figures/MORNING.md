@@ -47,6 +47,28 @@ What the cold reads caught along the way: two figures contradicted their study (
 
 **Also done:** the shared player now waits for a slow edition rather than swapping it, survives a missing data file, and shows a notice without JavaScript. The integration plan requires pre-rendering each edition and making business the default on standalone pages, per your decision. The switch reads "Military education" rather than "PME", because business testers didn't know the acronym; revert if you prefer.
 
+## Classroom cast (in progress, October 29)
+
+You said to build the classroom cast after business, so it's underway. [CLASSROOM-PLAN.md](CLASSROOM-PLAN.md) has the full plan.
+- **What it is:** the business scenarios worked by students as a class case, with faculty (higher ed) or a teacher (high school) as reviewer.
+- **What it takes:**
+  - Seven figures need only role words and a few framing lines.
+  - Uncalibrated reliance needs a real change: the shop's records become an exhibit in the case packet every student gets.
+  - Nothing is skipped.
+- **Order:**
+  1. The mechanism is being built now. Gate: every existing edition stays identical frame for frame.
+  2. Frame capture follows as the pilot, built on the plan's recommended defaults.
+  3. **It stops for you after the pilot,** before the other seven.
+
+Decisions, each with a recommendation in the plan:
+1. Overrides on the business edition, or a separate classroom file per figure.
+2. A high-school cast ("the teacher") beside higher ed's "faculty".
+3. The business checks under "Faculty check", or the site's verbatim checks.
+4. The switch: "Workplace · Classroom · Military education", with high school reached through the K–12 setting.
+5. The race line in frame capture for high school: on screen with a teacher note.
+6. Uncalibrated reliance as a case packet, or skip its classroom version.
+7. Fluency substitution (patent law) for high school only if its read passes.
+
 ## Editions: decisions for Jack (added October 28, evening)
 
 The business editions are in progress: every figure's words now live in data files, PME is unchanged frame for frame, and each business edition goes through two cold reads. These came up along the way:
