@@ -4,7 +4,7 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 
 ## Where it stands
 
-- **Done (8 of 8):** frame capture, fluency substitution, premature synthesis, uncalibrated reliance, invisible delegation, institutional monoculture, responsibility laundering, appropriate reliance. Each passed two storyboard cold reads and two figure cold reads; a separate verifier checked the final fixes. All eight are switched on in the book.
+- **Done (8 of 8, military-education editions):** frame capture, fluency substitution, premature synthesis, uncalibrated reliance, invisible delegation, institutional monoculture, responsibility laundering, appropriate reliance. Each passed two storyboard cold reads and two figure cold reads; a separate verifier checked the final fixes. All eight are switched on in the book.
 - **Nameplate (added October 28):** every figure opens on its failure mode's name, keeps it in the corner throughout, and closes with the name and a role-neutral definition above the check ([NAMEPLATE-DEFINITIONS.md](NAMEPLATE-DEFINITIONS.md)). It's verified on all eight ([NAMEPLATE-VERIFY.md](NAMEPLATE-VERIFY.md)).
 - **Appropriate reliance** is interactive: it opens on a live question, gives you one check to spend, and locks every answer until you make your call.
 - **Consistency:** a cross-figure review matched all figures on posters, red "First student" and "Second student" labels, a stacked text view whenever labels would fall under 11px, fixed control heights on phones, and reading pace (every caption at 3 words per second plus a 1.5-second hold). See [CONSISTENCY.md](CONSISTENCY.md).
@@ -41,7 +41,7 @@ Every figure now has two editions: **Military education** (the essay's examples,
 | Invisible delegation | Bad-news client email; the firm's standard (Lee et al., 2025) | Done: two cold reads, verified |
 | Institutional monoculture | Ten analysts answer a low-cost rival with one frame (trendslop research; Bottesch, 2025) | Done: two cold reads, verified |
 | Responsibility laundering | Support chatbot go-live; related case *Moffatt v. Air Canada* (2024) | Done: two cold reads, verified |
-| Appropriate reliance | The BCG consulting tasks (Dell'Acqua et al., 2023) | Round 2 in progress |
+| Appropriate reliance | The BCG consulting tasks (Dell'Acqua et al., 2023) | Done: two cold reads, verified across 9 paths; no answer reaches readers or the accessibility tree before a call |
 
 What the cold reads caught along the way: two figures contradicted their study (the cost frame in frame capture, and the engineer's workflow in premature synthesis), plus straw men, second differences between the two people, and overstated sources. All were fixed. Every business edition's sources were checked against the paper or decision; the remaining limits are noted on each page.
 
