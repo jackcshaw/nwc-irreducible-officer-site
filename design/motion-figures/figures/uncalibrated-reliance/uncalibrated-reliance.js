@@ -42,6 +42,7 @@
 		a1: [73.6, 74.6], b1: [74.8, 75.8], outlineMove: [76.1, 76.6], a2: [76.8, 79.8], b2: [80.1, 82.4],
 		// 10 · the check
 		check: 83.9, follow: 87.2, end: 90.6,
+		source: [84.9, 85.4], // used only by editions that supply labels.source (business)
 	};
 	const BEAT_AT = [0, 8.6, 15.6, 23.1, 30.3, 37.6, 48.6, 58.4, 67.9, 83.9];
 
@@ -273,18 +274,46 @@
 	el(panel, 'rect', {x: 104, y: 145, width: 760, height: 260, fill: C.ink, 'fill-opacity': 0.07});
 	el(panel, 'rect', {x: 100, y: 140, width: 760, height: 260, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
 	text(panel, 128, 182, L.panel.title, {fs: 18, weight: 600});
-	text(panel, 128, 238, L.panel.without, {fs: 16});
-	text(panel, 128, 290, L.panel.with, {fs: 16});
-	mono(panel, 128, 309, L.panel.groups, {weight: 500});
-	const BAR = {x: 272, k: 4, h: 18};
-	const bars = [{y: 224, v: 84.5}, {y: 274, v: 60}, {y: 298, v: 70}].map((b, i) => ({...b, label: L.panel.bars[i]})).map((b) => ({
-		...b, r: el(panel, 'rect', {x: BAR.x, y: b.y, height: BAR.h, fill: C.ink, 'fill-opacity': 0.85}),
-		t: text(panel, BAR.x + b.v * BAR.k + 10, b.y + 14, b.label, {fs: 16, weight: 600}),
-	}));
-	const bracket = el(panel, 'path', {d: 'M610 274H620V316H610', fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
-	const bracketText = el(panel, 'g');
-	L.panel.bracket.forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
+	let bars, bracket, bracketText;
+	if (L.panel.rows) {
+		// Optional (business): signed results on rows around a zero line, for a study that
+		// reports changes rather than rates. A bar grows from zero toward its sign; a zero
+		// result is a short tick. Each value label sits just right of its bar or of zero.
+		const Z = {x: 360, k: 6, h: 18, ys: [214, 262, 296]};
+		el(panel, 'path', {d: `M${Z.x} ${Z.ys[0] - 8}V${Z.ys[2] + Z.h + 8}`, stroke: C.ink, 'stroke-opacity': 0.45, 'stroke-width': 1.2});
+		bars = L.panel.rows.map((row, i) => {
+			const y = Z.ys[i], w = Math.abs(row.v) * Z.k;
+			text(panel, 128, y + 14, row.label, {fs: 16});
+			const r = el(panel, 'rect', {x: Z.x, y, height: Z.h, width: 0, fill: C.ink, 'fill-opacity': 0.85});
+			const tick = row.v ? null : el(panel, 'rect', {x: Z.x - 2, y: y - 2, width: 4, height: Z.h + 4, fill: C.ink});
+			const t = text(panel, Z.x + (row.v > 0 ? w : 0) + 12, y + 14, row.value, {fs: 16, weight: 600});
+			const draw = (k) => { set(r, {x: row.v < 0 ? Z.x - w * k : Z.x, width: w * k}); if (tick) set(tick, {opacity: k}); };
+			return {r, t, draw};
+		});
+		const bx = Math.round(Math.max(...bars.map((b) => b.t.getComputedTextLength() + Number(b.t.getAttribute('x'))))) + 16;
+		bracket = el(panel, 'path', {d: `M${bx} ${Z.ys[1]}H${bx + 10}V${Z.ys[2] + Z.h}H${bx}`, fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
+		bracketText = el(panel, 'g');
+		L.panel.bracket.forEach((s, i) => serif(bracketText, bx + 24, Z.ys[1] + 8 + 19 * i, s, {fs: 16, style: 'italic'}));
+	} else {
+		text(panel, 128, 238, L.panel.without, {fs: 16});
+		text(panel, 128, 290, L.panel.with, {fs: 16});
+		mono(panel, 128, 309, L.panel.groups, {weight: 500});
+		const BAR = {x: 272, k: 4, h: 18};
+		bars = [{y: 224, v: 84.5}, {y: 274, v: 60}, {y: 298, v: 70}].map((b, i) => ({...b, label: L.panel.bars[i]})).map((b) => ({
+			...b, r: el(panel, 'rect', {x: BAR.x, y: b.y, height: BAR.h, fill: C.ink, 'fill-opacity': 0.85}),
+			t: text(panel, BAR.x + b.v * BAR.k + 10, b.y + 14, b.label, {fs: 16, weight: 600}),
+		}));
+		bars.forEach((b) => { b.draw = (k) => set(b.r, {width: b.v * BAR.k * k}); });
+		bracket = el(panel, 'path', {d: 'M610 274H620V316H610', fill: 'none', stroke: C.ink, 'stroke-width': 1.6});
+		bracketText = el(panel, 'g');
+		L.panel.bracket.forEach((s, i) => serif(bracketText, 634, 278 + 19 * i, s, {fs: 16, style: 'italic'}));
+	}
 	text(panel, 128, 380, L.panel.source, {fs: MONO, family: FONT.mono, weight: 500, ls: 0.8, fill: mixColor(C.ink, C.paper, 0.35)});
+	// Optional (business): a one-line source under the final frame. On the stacked stage it
+	// sits just under the controls, outside the fixed-height player.
+	const sourceLine = L.source ? text(sceneBase, 480, 522, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink, anchor: 'middle'}) : null;
+	const stackedSource = root.querySelector('[data-ur-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	// ---- measure (after fonts load) -------------------------------------------------------
 	const W = (node) => node.getComputedTextLength();
@@ -443,11 +472,12 @@
 		set(panel, {opacity: kP * (1 - prog(t, ...T.undim)), transform: `translate(0 ${mix(10, 0, kP)})`});
 		bars.forEach((b, i) => {
 			const span = i ? T.bars2 : T.bar1;
-			set(b.r, {width: b.v * BAR.k * prog(t, ...span, E.outCubic)});
+			b.draw(prog(t, ...span, E.outCubic));
 			set(b.t, {opacity: prog(t, span[1] - 0.1, span[1] + 0.1)});
 		});
 		set(bracket, {opacity: prog(t, ...T.bracket)});
 		set(bracketText, {opacity: prog(t, ...T.bracketText)});
+		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 
 		// Beat 9: faculty see only the briefs, and point to each part in turn.
 		set(facLabel, {opacity: prog(t, ...T.facLabel)});
@@ -523,14 +553,15 @@
 			const ready = h('span', 'ur-n-ready', r, NW.ready);
 			return {r, ready, p};
 		};
-		N.ai1 = item(NW.parts[0], ANS.p1.join(' '));
+		// Optional narrow.answers / narrow.speech: shorter wordings for the stacked stage (business).
+		N.ai1 = item(NW.parts[0], NW.answers ? NW.answers.p1 : ANS.p1.join(' '));
 		N.front = h('div', 'ur-n-front', s);
 		const fl = h('div', 'ur-n-flabels', N.front);
 		h('span', null, fl, NW.inside);
 		h('span', null, fl, NW.outside);
 		const zig = el(N.front, 'svg', {viewBox: '0 0 200 10', preserveAspectRatio: 'none', 'aria-hidden': 'true'});
 		el(zig, 'polyline', {points: '0,5 9,1 16,9 27,3 33,8 45,1 55,9 66,4 74,7 83,1 93,9 105,4 113,2 121,8 132,5 141,1 150,9 161,3 170,7 180,2 192,8 200,5', fill: 'none', stroke: C.ink, 'stroke-width': 1.4, 'vector-effect': 'non-scaling-stroke'});
-		N.ai2 = item(NW.parts[1], ANS.p2.join(' '));
+		N.ai2 = item(NW.parts[1], NW.answers ? NW.answers.p2 : ANS.p2.join(' '));
 		N.cap = h('span', 'ur-n-tag', N.ai2.p, NW.capacity);
 	}
 	{
@@ -560,7 +591,7 @@
 		const row = h('div', 'ur-n-pair', s);
 		N.say = ['a', 'b'].map((k) => {
 			const c = h('div', 'ur-n-say', row);
-			return SPEECH[k].rows.map((r) => h('p', 'ur-n-line', c, `${r.n} · ${r.lines.join(' ')}`));
+			return SPEECH[k].rows.map((r, ri) => h('p', 'ur-n-line', c, `${r.n} · ${NW.speech ? NW.speech[k][ri] : r.lines.join(' ')}`));
 		});
 		N.sayBox = [...row.children];
 	}
@@ -618,8 +649,7 @@
 		const onP1 = t >= T.outline[0] && t < T.outlineMove[0], onP2 = t >= T.outlineMove[0];
 		[N.a1.p, N.b1.p].forEach((n) => n.classList.toggle('is-pointed', onP1));
 		[N.a2.p, N.b2.p].forEach((n) => n.classList.toggle('is-pointed', onP2));
-		op(N.ev[0], prog(t, ...T.bar1));
-		op(N.ev[1], prog(t, ...T.bars2));
+		N.ev.forEach((r, i) => op(r, prog(t, ...(i ? T.bars2 : T.bar1))));
 		op(N.evq, prog(t, ...T.bracketText));
 		op(N.facLabel, prog(t, ...T.facLabel));
 		N.sayBox.forEach((b) => op(b, prog(t, ...T.panels)));

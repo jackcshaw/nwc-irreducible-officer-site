@@ -1,0 +1,383 @@
+{
+ "_doc": "Uncalibrated reliance, business edition: a print-and-internet shop in Nairobi, illustration based on Otis et al. (2026). Every visible word of the scenario; the timeline, layout, colour grammar and nameplate are core (uncalibrated-reliance.js). The people are shop owners and their reviewer is a mentor, so their role words are written here; only {check} comes from the workplace cast. Optional features drawn only when present: labels.panel.rows (signed results around a zero line), labels.source and narrow.source (the one-line source under the final frame), page.evidence (the study, in paragraphs). See storyboard-business.md.",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Part 1 · Keep printing in blackouts",
+   "Part 2 · Win back customers"
+  ],
+  "text": "Part 1 · Keep printing in blackouts. Part 2 · Win back customers."
+ },
+ "reports": [
+  "BATTERY QUOTE",
+  "BATTERY QUOTE",
+  "RIVAL'S FLYER",
+  "SALES BOOK"
+ ],
+ "callouts": {
+  "survey": {
+   "heading": "THEIR PRICES",
+   "lines": [
+    [
+     "10% below ours"
+    ],
+    [
+     "(the new shop)",
+     "off"
+    ]
+   ]
+  },
+  "log": {
+   "heading": "OUR SALES",
+   "lines": [
+    [
+     "Mostly same-day"
+    ],
+    [
+     "Margin: under 10%",
+     "off"
+    ]
+   ]
+  }
+ },
+ "answers": {
+  "p1": [
+   "Buy battery A:",
+   "runs 6 hours, costs less"
+  ],
+  "p2": [
+   "Cut prices 10%:",
+   "match the new shop"
+  ],
+  "corrected": {
+   "l1": [
+    [
+     "Cut prices 10%",
+     "ai"
+    ],
+    [
+     " Keep prices",
+     "red"
+    ],
+    [
+     ":",
+     "ai"
+    ]
+   ],
+   "l2": [
+    [
+     "match",
+     "ai"
+    ],
+    [
+     " outpace",
+     "red"
+    ],
+    [
+     " the new shop",
+     "ai"
+    ]
+   ]
+  }
+ },
+ "speech": {
+  "a": [
+   {
+    "n": "1",
+    "lines": [
+     "“The battery quotes.”"
+    ]
+   },
+   {
+    "n": "2",
+    "lines": [
+     "“Part 1 checked out, so I",
+     "trusted the rest.”"
+    ]
+   }
+  ],
+  "b": [
+   {
+    "n": "1",
+    "lines": [
+     "“The battery quotes.”"
+    ]
+   },
+   {
+    "n": "2",
+    "lines": [
+     "“Our sales book. They come",
+     "for speed.”"
+    ]
+   }
+  ]
+ },
+ "labels": {
+  "given": "GIVEN TO THE AI",
+  "aiHead": "AI'S ANSWERS",
+  "parts": [
+   "PART 1",
+   "PART 2"
+  ],
+  "ready": "READY",
+  "capacity": "THEIR PRICES",
+  "inside": "INSIDE THE FRONTIER",
+  "outside": "OUTSIDE THE FRONTIER",
+  "briefA": "FIRST OWNER'S PLAN",
+  "briefB": "SECOND OWNER'S PLAN",
+  "slot": {
+   "label": "FLYER AND SALES BOOK",
+   "lines": [
+    "Flyer: new shop 10% cheaper.",
+    "Book: same-day jobs, thin margin."
+   ]
+  },
+  "marks": {
+   "checked": "✓ CHECKED",
+   "used": "USED AS IS"
+  },
+  "faculty": "THE MENTOR SEES ONLY THE PLANS",
+  "key": {
+   "ai": "WRITTEN BY AI",
+   "own": "AN OWNER'S OWN WORK"
+  },
+  "names": {
+   "first": "First owner",
+   "second": "Second owner"
+  },
+  "dot": {
+   "a": "Owner",
+   "a2": "First owner",
+   "b": "Second owner"
+  },
+  "panel": {
+   "title": "Effect on revenue and profit",
+   "rows": [
+    {
+     "label": "On average",
+     "v": 0,
+     "value": "no clear change"
+    },
+    {
+     "label": "Started weaker",
+     "v": -9.5,
+     "value": "nearly 10% worse"
+    },
+    {
+     "label": "Started stronger",
+     "v": 15,
+     "value": "may have gained over 15%"
+    }
+   ],
+   "bracket": [
+    "The gap seems to",
+    "come from which",
+    "advice they acted on"
+   ],
+   "source": "OTIS ET AL. (2026) · KENYAN ENTREPRENEURS · MANAGEMENT SCIENCE"
+  },
+  "source": "Illustration based on Otis et al., Management Science (2026)."
+ },
+ "narrow": {
+  "taskLabel": "Example task ",
+  "taskLines": [
+   "Part 1 · Keep printing in blackouts. ",
+   "Part 2 · Win back customers."
+  ],
+  "who": "Owner",
+  "reports": [
+   "2 quotes",
+   "Rival's flyer",
+   "Sales book"
+  ],
+  "survey": {
+   "head": "Flyer · their prices: ",
+   "text": "10% below ours."
+  },
+  "log": {
+   "head": "Sales book · most jobs: ",
+   "text": "same-day."
+  },
+  "closed": "Margin: under 10%.",
+  "aiHead": "AI's answers",
+  "given": "Given all four documents",
+  "parts": [
+   "1",
+   "2"
+  ],
+  "ready": "Ready",
+  "inside": "Inside the frontier ↑",
+  "outside": "Outside the frontier ↓",
+  "capacity": "Their prices",
+  "first": "First owner",
+  "second": "Second owner",
+  "answers": {
+   "p1": "Battery A: 6 hours, cheaper",
+   "p2": "Cut prices 10%"
+  },
+  "briefs": {
+   "p1": "Battery A: 6 hours, cheaper",
+   "p2": "Cut prices 10%"
+  },
+  "corrected": [
+   [
+    "Cut prices 10%",
+    "struck"
+   ],
+   [
+    " Keep prices; outpace them",
+    "ins"
+   ]
+  ],
+  "speech": {
+   "a": [
+    "“The quotes.”",
+    "“Part 1 checked out, so I trusted the rest.”"
+   ],
+   "b": [
+    "“The quotes.”",
+    "“Our sales book: they come for speed.”"
+   ]
+  },
+  "marks": {
+   "checked": "✓ Checked",
+   "used": "Used as is"
+  },
+  "faculty": "The mentor sees only the plans",
+  "evidence": {
+   "label": "Effect on revenue and profit",
+   "rows": [
+    [
+     "On average",
+     "no clear change"
+    ],
+    [
+     "Started weaker",
+     "nearly 10% worse"
+    ],
+    [
+     "Started stronger",
+     "may have gained over 15%"
+    ]
+   ],
+   "quality": "The gap seems to come from which advice they acted on.",
+   "source": "Otis et al. (2026) · Kenyan entrepreneurs · Management Science"
+  },
+  "source": "Illustration based on Otis et al., Management Science (2026)."
+ },
+ "beats": [
+  {
+   "text": "A shop owner gives an AI two questions and four documents.",
+   "detail": "a task card appears at the top left: \"Example task. Part 1: Keep printing in blackouts. Part 2: Win back customers.\" A red dot labelled Owner appears below. Four documents appear across the top: Battery quote, Battery quote, Rival's flyer and Sales book. The dot pulses, and a grey copy of each document slides into a small stack labelled \"Given to the AI\", where it stays."
+  },
+  {
+   "text": "It answers both with equal confidence.",
+   "detail": "two answer cards labelled \"AI's answers\" write in together, in grey on a beige band. Part 1: \"Buy battery A: runs 6 hours, costs less.\" Part 2: \"Cut prices 10%: match the new shop.\" Each gets the same grey \"Ready\" tag at the same moment."
+  },
+  {
+   "text": "The owner checks Part 1 against the two battery quotes. It's right.",
+   "detail": "the dot opens both battery quotes. A sheet labelled \"First owner's plan\" appears, Part 1 slides into it, and the dot marks it \"Checked\" in red."
+  },
+  {
+   "text": "Part 2 looks just as sure, so they use it.",
+   "detail": "the \"Ready\" tag on the AI's Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first plan, and the dot marks it \"Used as is\". The quotes close."
+  },
+  {
+   "text": "Another owner, with the same answers, checks each at its source.",
+   "detail": "a second red dot labelled Second owner and an empty sheet labelled \"Second owner's plan\" appear. The dot pulses and both \"Ready\" tags blink. The dot opens both battery quotes, and Part 1 slides into its plan, marked \"Checked\"."
+  },
+  {
+   "text": "That owner checks Part 2 against the flyer and the sales book, and changes it.",
+   "detail": "the dot opens the rival's flyer, headed \"Their prices\": \"10% below ours\". Its note appears large in the second plan: \"Flyer: new shop 10% cheaper.\" The dot opens the sales book, headed \"Our sales\": \"Mostly same-day\", and set apart, \"Margin: under 10%\". Its note appears: \"Book: same-day jobs, thin margin.\" After a pause, Part 2 slides into the second plan. The dot strikes out \"Cut prices 10%\" and writes \"Keep prices\", strikes out \"match\" and writes \"outpace\", so it reads \"Keep prices: outpace the new shop\", and marks it \"Checked\". The first plan still says to cut prices 10%."
+  },
+  {
+   "text": "Part 2 depends on why customers come here. A jagged frontier marks where an AI stops being reliable.",
+   "detail": "the sales book's \"Mostly same-day\" is underlined. The AI's \"match the new shop\" is underlined and marked \"Their prices\". Then an uneven line is drawn between the AI's two answer cards, labelled \"Inside the frontier\" above and \"Outside the frontier\" below, and the two cards, alike in form, pulse together."
+  },
+  {
+   "text": "In a field experiment in Kenya, the same AI assistant split owners' results.",
+   "detail": "the picture dims and a panel rises: effect on revenue and profit. On average: no clear change. Started weaker: nearly 10% worse, a bar to the left of zero. Started stronger: may have gained over 15%, a bar to the right. A bracket beside the two bars: \"The gap seems to come from which advice they acted on.\" Source: Otis et al. (2026), Kenyan entrepreneurs, Management Science."
+  },
+  {
+   "text": "The mentor points to each part in turn and asks what justified relying on it.",
+   "detail": "the panel goes. The red marks and the second owner's notes lift off both plans, the documents and the AI's column fade back, and \"The mentor sees only the plans\" appears. Part 1 is outlined in both plans, and each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our sales book. They come for speed.\""
+  },
+  {
+   "text": "{check}: What evidence justified relying on the AI here?",
+   "list": "{check}: What evidence justified relying on the AI here? Ask part by part: was the evidence about that part?",
+   "detail": "both lines appear under the picture at the same size. The plans, both owners' answers, the AI's answers, the frontier and the sales book stay in view. Under the picture: \"Illustration based on Otis et al., Management Science (2026).\""
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What evidence justified relying on the AI here?",
+  "follow": "Ask part by part: was the evidence about that part?"
+ },
+ "page": {
+  "kicker": "Failure mode 4 of 7",
+  "title": "Uncalibrated reliance",
+  "description": "A teaching figure: two AI answers look equally sure, a shop owner checks one and acts on both, and a mentor finds the difference by asking about each part.",
+  "setup": "The owner of a print-and-internet shop in Nairobi asks an AI assistant two things: how to keep printing through power blackouts, and how to win back customers from a new shop nearby. They check its first answer, find it right, and act on both. What can happen next is uncalibrated reliance: confident output is accepted without knowing whether the task fits the tool. Illustration based on Otis et al. (2026). The owners, their documents and the numbers in their plans are constructed.",
+  "srTitle": "Uncalibrated reliance, an animated figure in twelve beats",
+  "srSummary": "An animated figure. A red dot stands for the owner of a print shop, with an example task in two parts: keep printing in blackouts, and win back customers. The owner gives an AI four documents: two battery quotes, a rival's flyer and their own sales book. Copies of all four stay in a small stack labelled given to the AI. The AI answers both in the same form, in grey, each marked ready: \"Buy battery A: runs 6 hours, costs less\" and \"Cut prices 10%: match the new shop\". The owner checks Part 1 against both battery quotes, finds it right, and puts both answers into their plan, marking Part 1 checked and Part 2 used as is. A second owner gets the same answers and checks each part at its source. Part 1 checks out. For Part 2, the new shop's flyer, headed their prices, says 10% below ours, and the sales book, headed our sales, says most jobs are same-day, with a margin under 10%. The second owner notes both, then changes the plan to \"Keep prices: outpace the new shop\". Part 2 depends on why customers come here: the sales book's most jobs same-day is underlined, and the AI's \"match the new shop\" is marked their prices. Then an uneven line is drawn between the AI's answers, with Part 1 inside and Part 2 outside: a jagged frontier, which marks where an AI stops being reliable. A panel shows a field experiment with Kenyan entrepreneurs given an AI assistant: on average, no clear change in revenue and profit; owners who started weaker did nearly 10% worse, and those who started stronger may have gained over 15%. The gap seems to come from which advice they acted on. The owners' working marks come off the plans, the AI's column fades back, and the mentor sees only the plans. The mentor points to Part 1 in both: each owner says, \"The battery quotes.\" Then Part 2: the first owner says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"Our sales book. They come for speed.\" The figure ends on the reviewer's check, with a line under the picture: illustration based on Otis et al., Management Science (2026). Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What evidence justified relying on the AI here?",
+   "Ask part by part: was the evidence about that part?"
+  ],
+  "checkFollow": "Both owners give the same reason for Part 1. For Part 2, the first owner's evidence is about Part 1, and the second owner's is about Part 2. Nothing on either plan shows where the AI stopped being reliable. The second owner found it by checking each part against the documents it rests on: the battery against the quotes, the price cut against their own sales.",
+  "evidenceHeading": "The study behind this example",
+  "evidence": [
+   "Otis, Clarke, Delecourt, Holtz and Koning ran a field experiment with Kenyan entrepreneurs, \"randomizing access to a GPT-4-powered AI business assistant\" (*Management Science*, 2026, abstract). On average they were \"unable to reject the null hypothesis of no average treatment effect on firm revenues and profits.\" The averages hid a split: \"low performers did nearly 10% worse because of the AI assistant, whereas high performers may have benefited by over 15%.\" The effect for owners who started weaker was \"over 0.20-standard-deviations lower than for initial high performers.\"",
+   "Where the gap came from: \"This differential impact does not appear to result from differences in the questions posed to the AI or the advice that it provided but rather, from the advice that entrepreneurs chose to implement.\" That's the act the figure slows down. Both owners get the same answers; what differs is which ones they act on, and on what evidence.",
+   "The limits. \"Low\" and \"high\" mean how each business was doing before the study. The group results are less certain than the average, which is why the paper says high performers \"may have benefited.\" The assistant was built on GPT-4.",
+   "The working paper (HBS 24-042, February 2024 version) adds detail that the published abstract doesn't give. It puts the sample at 640 entrepreneurs, randomly assigned either to the assistant on WhatsApp or to standard business guides (pp. 3, 8). They ran businesses \"from fast-food joints to poultry farms to cybershops,\" which offer internet access and printing (p. 8). In an analysis the authors call exploratory, \"treated low performers were especially likely to implement 'generic' advice focused on lowering prices and investing in advertising,\" while high performers found \"tailored and specific changes,\" from \"finding alternative ways to get power during blackouts\" to a new car wash detergent (pp. 3–4). The figure's two parts echo that reading. Treat it as a lead from the paper, not a measured result. The published abstract doesn't mention it.",
+   "Everything in the figure is constructed: the owners, the battery, the 10% and the sales book. Neither owner stands for a group in the study. The jagged frontier is the essay's term, taken from Dell'Acqua et al. (2023); the appropriate reliance figure shows that study's numbers."
+  ],
+  "quoteHeading": "From the original essay",
+  "quotes": [
+   {
+    "text": [
+     "Uncalibrated reliance begins with a reasonable impulse: AI is useful, the output is confident, and parts of the task feel tedious. The problem is that AI performance is uneven in ways that are not always visible from the outside. Tasks that look similar may differ significantly in whether AI helps or hurts."
+    ],
+    "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like"
+   },
+   {
+    "text": [
+     "The distinction between trust and reliance matters here. Trust is a subjective disposition, a feeling of confidence that a system will perform well. Reliance is the observable act of accepting its output and acting on it. Appropriate reliance is harder and more discriminating: accepting support when it is warranted, refusing or verifying when it is not, and being able to give an account of the difference (",
+     {
+      "text": "Raees & Papangelis, 2026",
+      "href": "https://arxiv.org/abs/2604.23896"
+     },
+     ")."
+    ],
+    "cite": "*The Irreducible Officer*, Section V, Appropriate Reliance as a Teachable Competency"
+   }
+  ],
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "The study:",
+    "text": "Otis et al. (2026), Management Science",
+    "href": "https://doi.org/10.1287/mnsc.2024.06909"
+   },
+   {
+    "lead": "The working paper:",
+    "text": "HBS working paper 24-042 (2024 version)",
+    "href": "https://escholarship.org/uc/item/40s41244"
+   },
+   {
+    "lead": "Make the call yourself:",
+    "text": "in the appropriate reliance figure, decide which of two AI answers to check",
+    "href": "../appropriate-reliance/?edition=business"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section II",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ]
+ }
+}

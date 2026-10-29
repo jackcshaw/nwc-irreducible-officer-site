@@ -73,6 +73,9 @@
 .ur-n-ev { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 4px; padding: 4px 0; border-bottom: 1px solid var(--navy-line); font: 400 15px/1.4 var(--sans); color: var(--ink); }
 .ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
 .ur-n-src { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); }
+/* Optional (business): the one-line source, under the controls on the stacked stage only. */
+.ur-source { display: none; }
+#uncalibrated-reliance.is-stacked .ur-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 </style>
 </head>
 <body>
@@ -103,6 +106,7 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:33</span>
 		</div>
+		<p class="ur-source" data-ur-source hidden></p>
 		<figcaption>
 			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
@@ -113,6 +117,12 @@
 		<h2 id="ur-check-h" data-ed="page.checkHeading"></h2>
 		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
 		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+	</section>
+
+	<!-- Business: the study behind the example, in paragraphs (hidden when the edition has none). -->
+	<section class="fig-section" aria-labelledby="ur-study-h" data-ed-section="page.evidence" hidden>
+		<h2 id="ur-study-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
 	</section>
 
 	<section class="fig-section" aria-labelledby="ur-essay-h">
@@ -127,7 +137,7 @@
 		</blockquote>
 	</section>
 
-	<section class="fig-section" aria-labelledby="ur-evidence-h">
+	<section class="fig-section" aria-labelledby="ur-evidence-h" data-ed-section="page.evidenceText">
 		<h2 id="ur-evidence-h" data-ed="page.evidenceHeading"></h2>
 		<p class="fig-follow" data-ur-linked="page.evidenceText"></p>
 	</section>
