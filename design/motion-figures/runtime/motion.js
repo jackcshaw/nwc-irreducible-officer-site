@@ -627,6 +627,11 @@
 	}
 
 	// ---- editions (additive; figures that don't call these are unchanged) ----
+	// Hold page copy back until an edition fills it, so no edition's words flash on load (and
+	// nothing jumps when a block an edition doesn't use is hidden). Opt-in by markup: only pages
+	// with data-ed attributes, i.e. pages that call fillPage. figures.css hides .fig-page while
+	// html[data-ed-pending] is set, and reveals it after 4 s regardless, in case loading fails.
+	if (document.querySelector('[data-ed], [data-ed-rich], [data-ed-section]')) document.documentElement.setAttribute('data-ed-pending', '');
 	/** Load a figure's words. The edition comes from ?edition=, else data-edition on
 	    the root, else `fallback` (default 'pme'); an unknown edition falls back. The
 	    cast comes from ?cast=, else the edition's own "cast", else 'classroom'. Every
@@ -636,7 +641,8 @@
 		const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${u}: ${r.status}`); return r.json(); });
 		let id = params.get('edition') || root.dataset.edition || fallback, raw;
 		try { raw = await get(`${base}${id}.json`); } catch (e) { id = fallback; raw = await get(`${base}${fallback}.json`); }
-		const all = await get(casts);
+		let all;
+		try { all = await get(casts); } catch (e) { document.documentElement.removeAttribute('data-ed-pending'); throw e; }
 		let castId = params.get('cast') || raw.cast || 'classroom';
 		if (!all[castId]) castId = 'classroom';
 		const cast = all[castId];
@@ -694,6 +700,7 @@
 			if (a.dataset.editionLink === ed.id) a.setAttribute('aria-current', 'page');
 			else a.removeAttribute('aria-current');
 		});
+		doc.documentElement.removeAttribute('data-ed-pending');
 	}
 
 	const FONT = {serif: '"Source Serif 4", Georgia, serif', sans: '"Source Sans 3", system-ui, sans-serif', mono: '"IBM Plex Mono", ui-monospace, monospace'};

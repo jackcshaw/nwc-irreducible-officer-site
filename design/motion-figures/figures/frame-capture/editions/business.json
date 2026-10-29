@@ -148,7 +148,7 @@
    [
     "taskLine",
     "papers",
-    "ask"
+    "check"
    ],
    [
     "taskLine",
@@ -223,12 +223,12 @@
   {
    "core": "turn",
    "text": "The second analyst checks it: at the same predicted cost, some patients are sicker.",
-   "detail": "under \"Why this frame?\", the manager's second question appears: \"What would change it?\". A red panel, \"The check\", draws two patients with the same predicted cost: equal cost bars, then dots for chronic conditions, two for one patient and five for the other. Under them: \"Checked: at the same predicted cost, some patients are sicker.\""
+   "detail": "under \"Why this frame?\", the manager's second question appears: \"What would change it?\". Then a red panel, \"Same predicted cost\", draws two patients: equal cost bars, and dots for chronic conditions, two for one patient and five for the other. Then: \"Checked: some patients are sicker.\""
   },
   {
    "core": "turn2",
    "text": "So the frame changes, and so does the ranking. The cost ranking put sicker patients lower.",
-   "detail": "in the second analyst's chosen frame, chronic illness replaces next year's costs, which joins the set-aside four. Then the second ranking is rewritten with red change bars under a new title, \"Which patients are sickest?\". Then a red note on the first ranking: \"Sicker patients ranked lower\". Last, under the first analyst's frame: \"Nothing to check\"."
+   "detail": "in the second analyst's chosen frame, chronic illness replaces next year's costs, which joins the set-aside four. Then the second ranking is rewritten with red change bars under a new title, \"Which patients are sickest?\". Then a red note on the first ranking, \"Sicker patients ranked lower\", and under the first analyst's frame, \"Nothing to check\"."
   },
   {
    "text": "{check}: What problem did {the_person} choose to solve?",
@@ -248,7 +248,7 @@
   "description": "An analyst builds on an AI's reasonable first frame, and the finished ranking can't show who chose it. One question can.",
   "setup": "{A_person} at a health system asks an AI which patients most need a care program's help, and the AI proposes a reasonable way to frame the problem. {The_person} works hard from there. What can happen next is frame capture: the first plausible frame becomes the working frame, unexamined. It can happen whenever a measure stands in for what you actually care about, like sales for customer value or tickets closed for problems solved. Illustration based on Obermeyer et al. (2019). The analysts, their AI and the task are constructed.",
   "srTitle": "Frame capture, an animated figure in fourteen beats",
-  "srSummary": "An animated figure. On the left, a red dot stands for {a_person}, surrounded by six dashed considerations. An AI's grey frame takes in two of them, next year's costs and the program budget, and turns the task question, \"which patients need the most help from the program?\", into \"which patients cost the most?\". {The_person} steps into the frame and builds and revises a ranking there. The view moves to {side}, where the ranking arrives and the signs of the AI's frame drain out of it. {A_second}, also using AI, gets the same proposed frame, weighs all six considerations, keeps cost for now and writes down what would change it: if some patients cost less because they get less care. That analyst's ranking is identical. Asked why this frame and what would change it, the first {person} has nothing to check. The second checks two patients with the same predicted cost and finds one has more chronic conditions: some patients are sicker. Their frame changes from next year's costs to chronic illness, and their ranking is rewritten as \"which patients are sickest?\". A note on the first ranking says sicker patients were ranked lower. The figure ends on the {check_l}, with the source under the picture: in the study, at a given risk score, Black patients were considerably sicker than White patients. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. On the left, a red dot stands for {a_person}, surrounded by six dashed considerations. An AI's grey frame takes in two of them, next year's costs and the program budget, and turns the task question, \"which patients need the most help from the program?\", into \"which patients cost the most?\". {The_person} steps into the frame and builds and revises a ranking there. The view moves to {side}, where the ranking arrives and the signs of the AI's frame drain out of it. {A_second}, also using AI, gets the same proposed frame, weighs all six considerations, keeps cost for now and writes down what would change it: if some patients cost less because they get less care. That analyst's ranking is identical. Asked why this frame and what would change it, the first {person} has nothing to check. The second checks two patients with the same predicted cost; one has more chronic conditions, so some patients are sicker. Their frame changes from next year's costs to chronic illness, and their ranking is rewritten as \"which patients are sickest?\". A note on the first ranking says sicker patients were ranked lower. The figure ends on the {check_l}, with the source under the picture: in the study, at a given risk score, Black patients were considerably sicker than White patients. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "What problem did {the_person} choose to solve?",
@@ -262,7 +262,7 @@
    "The authors trace it to what the algorithm was built to predict: \"The bias arises because the algorithm predicts health care costs rather than illness, but unequal access to care means that we spend less money caring for Black patients than for White patients.\"",
    "Cost looked like a good stand-in by some accuracy measures, and the bias was there anyway: \"despite health care cost appearing to be an effective proxy for health by some measures of predictive accuracy, large racial biases arise.\"",
    "Their conclusion is about choosing the measure, the step this figure calls the frame: \"We suggest that the choice of convenient, seemingly effective proxies for ground truth can be an important source of algorithmic bias in many contexts.\" *Science*'s editor's summary of the paper adds: \"Reformulating the algorithm so that it no longer uses costs as a proxy for needs eliminates the racial bias in predicting who needs extra care.\"",
-   "In the figure, the second analyst writes down what would change the frame and then checks it. The check follows the study's comparison: how sick patients were at the same risk score, where the score was the algorithm's prediction of cost. Chronic illness is this illustration's measure of need, not the study's.",
+   "In the figure, the second analyst writes down what would change the frame and then checks it. The check follows the study's comparison: how sick patients were at the same risk score, where the score was the algorithm's prediction of cost. The figure uses chronic illness as its measure of need.",
    "Source: Obermeyer, Powers, Vogeli & Mullainathan, \"Dissecting racial bias in an algorithm used to manage the health of populations,\" *Science* 366 (2019): 447–453. Quotes are from the abstract (p. 447) and the journal's editor's summary. The analysts, their AI, the six considerations, the rankings and the check are constructed. The figure shows none of the study's data."
   ],
   "quoteHeading": null,
@@ -317,12 +317,12 @@
    },
    {
     "at": 79.45,
-    "hold": 6.8,
+    "hold": 9.9,
     "id": "turn"
    },
    {
     "at": 79.45,
-    "hold": 7.0,
+    "hold": 8.7,
     "id": "turn2"
    }
   ]
@@ -330,12 +330,7 @@
  "turn": {
   "askQ2": "What would change it?",
   "check": {
-   "label": "THE CHECK",
-   "intro": "Two patients, same predicted cost:",
-   "patients": [
-    "Patient A",
-    "Patient B"
-   ],
+   "label": "SAME PREDICTED COST",
    "conditions": [
     2,
     5
@@ -345,8 +340,7 @@
     "chronic condition"
    ],
    "result": [
-    "Checked: at the same predicted cost,",
-    "some patients are sicker."
+    "Checked: some patients are sicker."
    ]
   },
   "swap": {
@@ -360,10 +354,11 @@
   ],
   "nothing": "NOTHING TO CHECK",
   "narrow": {
-   "check": "Checked: at the same predicted cost, some are sicker.",
+   "q2": "What would change it?",
+   "check": "Checked: some patients are sicker.",
    "nothing": "Nothing to check.",
    "askQ2": " What would change it?",
-   "callout": "↑ Sicker patients ranked lower"
+   "callout": "↓ Sicker ranked lower"
   }
  }
 }

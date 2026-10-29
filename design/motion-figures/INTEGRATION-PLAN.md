@@ -252,6 +252,12 @@ Per `book-v0` Option A, the book replaces `.method-band` ("One method, different
   - The figures show PME examples and say "faculty" and "seminar".
   - Default *(recommended)*: wait for edition variants or educator review (concepts-v0 §10 Q6, `book-v0` §9 Q4).
   - Alternative: cards at the editions' own failure-mode paragraphs (HE 5, high school 4), quoting that edition's paragraph and labelled "The figure's example is the PME one."
+- **A static page per edition** (added after the frame-capture business verification).
+  - In the motion-figures prototype, `?edition=` picks an edition at runtime. The page's copy and meta description are filled in by JavaScript (`MotionFigures.fillPage`).
+  - A link preview, or a crawler that runs no JavaScript, sees only the static fallback: role-neutral meta, and empty page copy.
+  - The build should emit one static page per edition, e.g. `/failure-modes/frame-capture/` for the default edition and `/failure-modes/frame-capture/business/`. Each page bakes in that edition's title, meta description, Open Graph tags and page copy from `editions/<id>.json` and `casts.json`. The figure is set with `data-edition`.
+  - The edition switch then links between these static paths rather than `?edition=`.
+  - At minimum, emit static meta per edition, so social previews and search results carry the right wording.
 
 ---
 

@@ -1,8 +1,8 @@
 # Frame capture: business edition storyboard
 
-Edition `business`, workplace cast. Round 3 makes the final fixes after `tests/business-figure-read-2.md`. Built from `editions/business.json` on the core in `storyboard.md` (layout, motion, colour grammar, nameplate). This file lists what differs from PME. If it and the data disagree, the data is what ships.
+Edition `business`, workplace cast. Round 3 makes the final fixes after `tests/business-figure-read-2.md`, then the fixes from `tests/business-verify.md`. Built from `editions/business.json` on the core in `storyboard.md` (layout, motion, colour grammar, nameplate). This file lists what differs from PME. If it and the data disagree, the data is what ships.
 
-Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page. Runtime: 95.8 s on the figure clock, 98.8 s in the player (PME: 86.2 and 89.2).
+Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page. Runtime: 100.6 s on the figure clock, 103.6 s in the player (PME: 86.2 and 89.2).
 
 ## 1. Source and evidence
 
@@ -17,10 +17,10 @@ Open it with `index.html?edition=business`, or the "See this with: Workplace" li
 - **On the page:** "The study behind this example".
   - Abstract quotes, word for word: what the algorithm was for; the race finding, with 17.7% to 46.5%; the cause; cost "by some measures of predictive accuracy"; and the conclusion on proxies.
   - *Science*'s editor's summary, quoted and attributed: "Reformulating the algorithm so that it no longer uses costs as a proxy for needs eliminates the racial bias in predicting who needs extra care."
-  - "Chronic illness is this illustration's measure of need, not the study's."
+  - "The figure uses chronic illness as its measure of need." It says nothing either way about what the study measured.
   - It says the study's algorithm was a prediction model, with no generative AI involved.
   - It states that the figure's people, considerations, rankings and check are constructed.
-- **The figure's check** draws two patients with the same predicted cost, one with more chronic conditions. It reads "Checked: at the same predicted cost, some patients are sicker."
+- **The figure's check:** under "SAME PREDICTED COST", it draws two patients with equal cost bars, one with more chronic conditions, then "Checked: some patients are sicker." Phones draw it too.
 
 ### Source notes for the companion's source spine
 
@@ -63,6 +63,21 @@ BUSINESS-EXAMPLES.md still lists these as verified.
 - **The final frame keeps the point.** The first ranking carries "Sicker patients ranked lower". The source line names who the study found sicker.
 - **The keyboard:** see CONVENTIONS.md, Runtime. If focus enters the player before autoplay fires, it doesn't autoplay.
 
+**Verification fixes** (`tests/business-verify.md`):
+- **Reading time for picture text.** Each new label or panel line keeps the screen for its words ÷ 3 + 1.5 s before the next change:
+  - the question, 2.85 s;
+  - the panel, drawn in one step (7 words), 3.85 s;
+  - the result (5 words), 3.2 s;
+  - the rewritten ranking (6 words), 3.5 s;
+  - the note on the first ranking with "Nothing to check" (7 words, together on the left), 3.85 s.
+- **Words cut first:** the panel lost its intro line and the patient names; the result is now "Checked: some patients are sicker."
+- **Timeline:** beat 12 is 9.9 s and beat 13 is 8.75 s; the run is 103.6 s.
+- **Phones:**
+  - Beat 12 gets its own check section: the question, the note, two equal cost bars with condition dots and a legend, and the result.
+  - "↓ Sicker ranked lower" sits inside the first ranking's box. Its space is kept from the start, so nothing jumps.
+  - The ask line leaves at a beat boundary, never mid-beat.
+- **Page load:** the runtime keeps the page hidden until the edition fills it, so the PME note no longer flashes on the business page. The static meta is role-neutral. INTEGRATION-PLAN.md asks the build for a static page per edition.
+
 **From round 2, still in place:**
 - the beat 7 split (the caption's claim waits until the key has gone);
 - the note's own 5.8 s hold;
@@ -75,11 +90,11 @@ BUSINESS-EXAMPLES.md still lists these as verified.
   - beat 6, 1.8 s;
   - beat 10, 1.8 s;
   - beat 11, 2.3 s, before its reveal.
-- Holds add 19.9 s:
+- Holds add 24.7 s:
   - beat 8, 2.0 s;
   - beat 9's note, 4.1 s;
-  - beat 12, 6.8 s;
-  - beat 13, 7.0 s.
+  - beat 12, 9.9 s;
+  - beat 13, 8.7 s.
 
 ## 3. Words that differ, beat by beat
 
@@ -97,13 +112,13 @@ The cast supplies the role words: "student" becomes "analyst", "faculty" becomes
 | 9 | A second analyst, also using AI, weighs all six and keeps cost, for now. | "WOULD CHANGE IT / If some patients cost less / because they get less care" |
 | 10 | That analyst writes the same ranking; the weighing doesn't show. | "Second analyst" |
 | 11 | Ask each analyst why this frame. One knows what would change it. | "THE MANAGER ASKS EACH ANALYST / Why this frame?" |
-| 12 | The second analyst checks it: at the same predicted cost, some patients are sicker. | "What would change it?"; "THE CHECK / Two patients, same predicted cost: / Patient A, Patient B / predicted cost, chronic condition / Checked: at the same predicted cost, / some patients are sicker." |
-| 13 | So the frame changes, and so does the ranking. The cost ranking put sicker patients lower. | chip swap; "Which patients are sickest?", "Chronic illness"; "Sicker patients / ranked lower"; "NOTHING TO CHECK" |
+| 12 | The second analyst checks it: at the same predicted cost, some patients are sicker. | "What would change it?"; "SAME PREDICTED COST", two equal bars with 2 and 5 dots, "predicted cost · chronic condition"; "Checked: some patients are sicker." |
+| 13 | So the frame changes, and so does the ranking. The cost ranking put sicker patients lower. | chip swap; "Which patients are sickest?", "Chronic illness"; "Sicker patients / ranked lower" with "NOTHING TO CHECK" (phone: "↓ Sicker ranked lower") |
 | 14 | Reviewer's check: What problem did the analyst choose to solve? / Why this frame? What would change it? | Two source lines under the picture |
 
 **Moments:**
-- **Beat 12** (seconds in): 0.3, the question; 1.2, the panel; 1.9–2.6, the patients and cost bars; 2.9–3.9, the dots one by one; 4.3, the result; then a 2.1 s hold.
-- **Beat 13:** 0.6–1.6, the swap; 2.0–3.4, the rewrite; 3.9, the note on the first ranking; 4.6, "Nothing to check"; then a 2 s hold.
+- **Beat 12** (seconds in): 0.0, the question; 2.85–3.45, the panel drawn in one step; 6.7, the result; the beat ends at 9.9.
+- **Beat 13:** 0.3–1.1, the swap; 1.3–2.7, the rewrite; 4.8, the note on the first ranking and "Nothing to check"; the beat ends at 8.75.
 
 ## 4. Pace
 
@@ -122,14 +137,14 @@ Reading time is caption words ÷ 3. Each beat runs at least its reading time plu
 | 9 | 51.1 | 13.5 | 14 | 6.2 (note: 5.8 s of its own) |
 | 10 | 64.6 | 5.0 | 10 | 4.8 |
 | 11 | 69.6 | 5.65 | 12 | 5.5 |
-| 12 | 75.25 | 6.8 | 14 | 6.2 |
-| 13 | 82.05 | 7.05 | 16 | 6.8 |
-| 14 | 89.1 | 6.7, then rests | 10 + 7 | 4.8 |
-| **Total** | | **95.8 (98.8 player)** | **162** | |
+| 12 | 75.25 | 9.9 | 14 | 6.2 |
+| 13 | 85.15 | 8.75 | 16 | 6.8 |
+| 14 | 93.9 | 6.7, then rests | 10 + 7 | 4.8 |
+| **Total** | | **100.6 (103.6 player)** | **162** | |
 
 ## 5. Final frame (business)
 
-Player 98.8 s.
+Player 103.6 s.
 - **Right:** the task card ("need the most help"); "THE MANAGER ASKS EACH ANALYST / Why this frame? / What would change it?"; and the check panel, showing two patients with the same predicted cost, one with more chronic conditions, and "Checked: …".
 - **Left, under "WHAT THE MANAGER RECEIVES":**
   - "First analyst": "Which patients cost the most?", with the red note "↓ Sicker patients ranked lower". The AI's grey frame and "NOTHING TO CHECK" are under it.
@@ -139,12 +154,12 @@ Player 98.8 s.
 
 **On phones,** the final stacked view shows:
 - the task line;
-- both titles, with "↑ Sicker patients ranked lower";
+- both titles, with "↓ Sicker ranked lower" in the first box;
 - both columns;
 - set-aside, the note and the check, full width;
 - the source.
 
-The ask line is left out, because the caption band asks the same questions. The player is 831 px at 390 × 844.
+Beat 12 shows the drawn check. The player is 827 px at 390 × 844.
 
 Stills: `shots/business/` (a still per beat, `final.png`, `final-1440.png`, `final-390.png`, reduced and page views). Preview: `shots/frame-capture-business.mp4`, `.webm` and `.gif`.
 

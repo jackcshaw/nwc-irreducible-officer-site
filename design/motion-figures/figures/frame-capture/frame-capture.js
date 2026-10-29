@@ -278,37 +278,38 @@
 
 	// ---- the turn (business): asked what would change it, the second person checks the
 	// condition they wrote down; it holds, so their frame and their ranking change. ----------
-	// One region at a time: the check (right column), then the frame (middle), the rewritten
-	// ranking (top), the note on the first ranking and "nothing to check" (left).
+	// One region at a time, and each new text keeps the screen for its reading time (words ÷ 3
+	// + 1.5 s) before the next change: the question (4 words, 2.85 s), the panel drawn in one
+	// step (7 words, 3.85 s), the result (5 words, 3.2 s); then the frame swap (no new words),
+	// the rewritten ranking (6 words, 3.5 s), the note on the first ranking with "nothing to
+	// check" (7 words, 3.85 s).
 	const TU = TURN && (() => {
 		const o = TURN2;
-		return {q2: [0.3, 0.7], panel: [1.2, 1.6], rows: [1.9, 2.6], dots: 2.9, dotStep: 0.14, result: [4.3, 4.7],
-			swap: [o + 0.6, o + 1.6], title: [o + 2.0, o + 2.4], rewrite: [o + 2.0, o + 3.4], callout: [o + 3.9, o + 4.3], nothing: [o + 4.6, o + 5.0]};
+		return {q2: [0.0, 0.4], panel: [2.85, 3.45], dots: 2.95, dotStep: 0.06, result: [6.7, 7.1],
+			swap: [o + 0.3, o + 1.1], title: [o + 1.3, o + 1.7], rewrite: [o + 1.3, o + 2.7], callout: [o + 4.8, o + 5.2], nothing: [o + 4.8, o + 5.2]};
 	})();
 	let turnEls = null;
 	if (TURN) {
 		const tc = TURN.check, X0 = DX + 670;
 		const q2 = text(cam, X0, 216, TURN.askQ2, {fs: 24, family: FONT.serif, style: 'italic'});
-		// The check draws what it says: two patients with the same predicted cost (equal bars),
-		// one with more chronic conditions (dots).
+		// The check draws what it says, in one step: two patients with the same predicted cost
+		// (equal bars), one with more chronic conditions (dots), and a legend.
 		const panel = el(cam, 'g');
 		mono(panel, X0, 256, tc.label, {fill: C.red});
-		text(panel, X0, 280, tc.intro, {fs: 15, family: FONT.serif});
-		const rows = el(cam, 'g');
+		const rows = panel;
 		let di = 0;
-		const pats = tc.patients.map((name, i) => {
-			const y = 304 + 26 * i;
-			text(rows, X0, y, name, {fs: 13, weight: 600});
-			const bar = el(rows, 'rect', {x: X0 + 72, y: y - 10, width: 0, height: 10, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
-			const dots = Array.from({length: tc.conditions[i]}, (_, k) => ({n: el(rows, 'circle', {cx: X0 + 152 + 13 * k, cy: y - 5, r: 4.5, fill: C.ink, opacity: 0}), k: di++}));
+		const pats = tc.conditions.map((nc, i) => {
+			const y = 282 + 24 * i;
+			const bar = el(rows, 'rect', {x: X0, y: y - 10, width: 0, height: 10, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
+			const dots = Array.from({length: nc}, (_, k) => ({n: el(rows, 'circle', {cx: X0 + 82 + 13 * k, cy: y - 5, r: 4.5, fill: C.ink, opacity: 0}), k: di++}));
 			return {bar, dots};
 		});
-		el(rows, 'rect', {x: X0, y: 345, width: 14, height: 8, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
-		text(rows, X0 + 20, 353, tc.legend[0], {fs: 13});
-		el(rows, 'circle', {cx: X0 + 128, cy: 349, r: 4.5, fill: C.ink});
-		text(rows, X0 + 138, 353, tc.legend[1], {fs: 13});
+		el(rows, 'rect', {x: X0, y: 322, width: 14, height: 8, rx: 2, fill: C.ink, 'fill-opacity': 0.55});
+		text(rows, X0 + 20, 330, tc.legend[0], {fs: 13});
+		el(rows, 'circle', {cx: X0 + 128, cy: 326, r: 4.5, fill: C.ink});
+		text(rows, X0 + 138, 330, tc.legend[1], {fs: 13});
 		const result = el(cam, 'g');
-		tc.result.forEach((ln, i) => text(result, X0, 380 + 18 * i, ln, {fs: 15, family: FONT.serif, style: 'italic', fill: C.red}));
+		tc.result.forEach((ln, i) => text(result, X0, 360 + 18 * i, ln, {fs: 15, family: FONT.serif, style: 'italic', fill: C.red}));
 		const nothing = mono(cam, SA.x, 344, TURN.nothing, {ls: 0.6});
 		// What the check showed about the first ranking: a red note on it.
 		const callout = el(cam, 'g');
@@ -453,8 +454,7 @@
 		set(E2.q2, {opacity: prog(u, ...TU.q2)});
 		const pk = prog(u, ...TU.panel, E.house);
 		set(E2.panel, {opacity: pk, transform: `translate(0 ${mix(6, 0, pk).toFixed(2)})`});
-		const rk = prog(u, ...TU.rows, E.outCubic);
-		set(E2.rows, {opacity: prog(u, TU.rows[0], TU.rows[0] + 0.3)});
+		const rk = prog(u, ...TU.panel, E.outCubic);
 		E2.pats.forEach((pt) => {
 			set(pt.bar, {width: 64 * rk});
 			pt.dots.forEach(({n, k}) => set(n, {opacity: prog(u, TU.dots + TU.dotStep * k, TU.dots + TU.dotStep * k + 0.12)}));
@@ -679,15 +679,16 @@
 			const sec = section('papers', NW.receive);
 			const pair = h('div', 'fc-n-pair', sec);
 			N.papers.a = paperBlock(pair, L.first, false, !!NW.compactPapers);
+			// The turn's note on the first ranking, inside its box; its space is kept from the
+			// start (visibility only), so nothing moves when it appears.
+			if (TURN) { N.papers.callout = h('p', 'fc-n-callout', N.papers.a.box, TURN.narrow.callout); N.papers.callout.style.visibility = 'hidden'; }
 			N.papers.b = paperBlock(pair, L.second, false, !!NW.compactPapers);
 			N.papers.note = h('p', 'fc-n-small', sec, NW.weighingNote);
-			// The turn's note on the first ranking: one line under the pair, pointing up at it.
-			if (TURN) N.papers.callout = h('p', 'fc-n-callout', sec, TURN.narrow.callout);
+
 		}
 		{
 			const sec = section('ask');
 			N.ask.q = h('p', 'fc-n-q', sec, NW.askQ);
-			if (TURN) N.ask.q2 = h('span', null, N.ask.q, TURN.narrow.askQ2);
 			const pair = h('div', 'fc-n-pair', sec);
 			const col = (who) => { const c = h('div', null, pair); h('span', 'fc-n-who', c, who); return c; };
 			const a = col(L.first);
@@ -716,6 +717,21 @@
 				N.ask.cols = [a, b];
 				if (TURN) N.ask.check = h('p', 'fc-n-note', b, TURN.narrow.check);
 			}
+		}
+		// Optional (business): the check as its own section in the stacked view, drawn as on
+		// the stage: the question, the note, two patients (equal cost bars, condition dots), the result.
+		if (TURN) {
+			const sec = section('check');
+			N.check.q2 = h('p', 'fc-n-q', sec, TURN.narrow.q2);
+			h('p', 'fc-n-note', sec, NW.askNote || NW.changeNote);
+			const box = h('div', 'fc-n-chk', sec);
+			h('span', 'fc-n-tag is-red', box, TURN.check.label);
+			TURN.check.conditions.forEach((nc) => { const r = h('div', 'fc-n-chkrow', box); h('i', 'fc-n-bar', r); for (let k = 0; k < nc; k++) h('b', 'fc-n-dot', r); });
+			const lg = h('p', 'fc-n-legend', box);
+			h('i', 'fc-n-bar is-key', lg); lg.append(` ${TURN.check.legend[0]}`);
+			h('b', 'fc-n-dot is-key', lg); lg.append(` ${TURN.check.legend[1]}`);
+			N.check.box = box;
+			N.check.result = h('p', 'fc-n-note', sec, TURN.narrow.check);
 		}
 		if (sourceInView && NW.source) { const sec = section('source'); h('p', 'fc-n-src', sec, NW.source); }
 	}
@@ -779,22 +795,24 @@
 		if (N.second.note) fade(N.second.note, prog(t, ...T.note));
 		// Both papers, then what each student can show when asked.
 		fade(N.papers.b.box, prog(t, ...T.sweep));
-		N.papers.note.hidden = show.has('ask');
-		if (NW.compactPapers) N.papers.label.hidden = show.has('ask');
+		N.papers.note.hidden = show.has('ask') || show.has('check');
+		if (NW.compactPapers) N.papers.label.hidden = show.has('ask') || show.has('check');
 		fade(N.papers.note, prog(t, ...T.hideB));
 		fade(N.ask.q, prog(t, ...T.ask));
 		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));
 		if (TURN) {
 			// The turn: the second question, the check, then the new frame and title.
 			const u = tau - TURN_AT;
-			fade(N.ask.q2, prog(u, ...TU.q2));
 			fade(N.ask.check, prog(u, ...TU.result));
 			N.ask.check.hidden = u < TU.result[0];
-			// The last beat's caption band asks the questions, so the stacked view drops its own.
-			N.ask.q.hidden = show.has('source');
+			// After the ask beat, the questions belong to the check (and then the caption band).
+			N.ask.q.hidden = u >= 0;
+			fade(N.check.q2, prog(u, ...TU.q2));
+			fade(N.check.box, prog(u, ...TU.panel));
+			fade(N.check.result, prog(u, ...TU.result));
 			fade(N.ask.nothing, prog(u, ...TU.nothing));
+			N.papers.callout.style.visibility = u >= TU.callout[0] ? 'visible' : 'hidden';
 			fade(N.papers.callout, prog(u, ...TU.callout));
-			N.papers.callout.hidden = u < TU.callout[0];
 			const swapped = u >= (TU.swap[0] + TU.swap[1]) / 2;
 			const sw = (k) => (swapped && k === TURN.swap.out ? TURN.swap.in : swapped && k === TURN.swap.in ? TURN.swap.out : k);
 			N.ask.bKept.forEach((n, i) => { n.textContent = sw(KEPT[i]); });

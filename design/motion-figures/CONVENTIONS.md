@@ -276,6 +276,13 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 **A turn where the finding is the payoff** (FC business, Jack's evidence exception). Stage it one region at a time, at reading pace (FC round 3 splits it in two):
 - **The check:** the question, then the evidence drawn as it is described (FC: two patients with equal predicted-cost bars and chronic-condition dots, 2 and 5), then a plain result line. Don't write "the condition holds".
 - **The consequences:** the frame, the rewritten deliverable, what the old frame got wrong marked on the old deliverable (FC: "↓ Sicker patients ranked lower"), then "Nothing to check".
+- **Reading time for picture text, not just captions** (FC business verification).
+  - Each new label or panel line keeps the screen for its words ÷ 3 + 1.5 s before the next change in the picture.
+  - Draw a panel in one step (label, bars, dots and legend together), so it counts as one change.
+  - Cut words before adding time. FC dropped the panel's intro and the patient names, and shortened the result to "Checked: some patients are sicker."
+  - FC's turn grew from 13.85 s to 18.6 s, and the run is 103.6 s.
+- **Draw the evidence on phones too.** FC's stacked view gives the check its own section in beat 12: the question, the note, two equal cost bars with condition dots and a legend, and the result. It isn't words only.
+- **No layout jumps in the stacked view.** Reserve space for anything that appears mid-beat (`visibility`, not `hidden`), such as FC's note inside the first ranking's box. Drop or swap content only at beat boundaries, with whole sections.
 - **Back-to-back holds:** holds at the same core time run in list order (FC: `turn` then `turn2`).
 - **Moving a static stretch:** a cut can move one from before a reveal to after it (FC beat 11).
 - When asked what would change the frame, the second person checks the condition they wrote down. The check shows it holds, and their frame and their deliverable change.
@@ -298,6 +305,12 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - `data-ed-content="path"`: a meta description, with the PME text kept as the static fallback;
   - `data-ed-section="path"`: hidden when empty, as for PME's evidence;
   - `data-edition-link="id"`: switch links, with href set and `aria-current` on the current edition.
+- **No flash of the wrong edition** (runtime, FC business verification).
+  - When the runtime loads on a page with `data-ed` attributes, it sets `html[data-ed-pending]`. `figures.css` hides `.fig-page` (visibility) until `fillPage` removes the attribute.
+  - The page appears once, already filled: no default-edition words flash, and nothing jumps when an edition hides a block.
+  - A CSS animation reveals the page after 4 s regardless, and a failed casts load clears the flag.
+  - It is additive: pages without `data-ed` attributes are unaffected. FC's PME and premature synthesis frame-diffed identical with the old and new runtime.
+  - The static meta description is the role-neutral fallback. `data-ed-content` sets each edition's own description once the edition loads. A crawler or link preview without JavaScript sees only the fallback, so the site build should emit static pages or meta per edition (INTEGRATION-PLAN.md §3.5).
 - **Default:** PME with the classroom cast, so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
 
@@ -322,6 +335,7 @@ The current edition's link is bold and underlined (`aria-current`). Classroom jo
   - An open "submitted version" isn't the published wording or pagination.
   - List what is verified, and what isn't, in the edition's storyboard, for the companion's source spine.
 - Say what the study did, without merging analyses. FC: "how sick patients were at the same risk score", not "checking illness against cost".
+- Don't make claims about the study's methods that you can't read in the source. FC says "The figure uses chronic illness as its measure of need", and says nothing about what the study itself measured.
 - A stacked phone view too tight for the source shows it under the controls instead (`[data-fc-source]`, outside the fixed-height player).
 - Shared classes for editions are prefixed `fig-ed-`. IM already has its own `.fig-evidence`, and a shared rule with that name would collide.
 
