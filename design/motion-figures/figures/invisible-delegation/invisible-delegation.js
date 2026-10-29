@@ -24,7 +24,7 @@
 		// beat 1: the draft and the three decisions
 		card: [1.0, 1.6], dotA: [1.7, 2.1], paperA: [2.2, 2.8], rubric: [3.0, 3.4],
 		// optional (an edition with firstReadsStandard): the first person reads the standard in beat 1
-		readA: [6.5, 7.0], readBackA: [7.6, 8.0],
+		readA: [6.4, 6.9], readBackA: [9.0, 9.4],
 		ledgerA: [3.6, 4.2], cardsA: 4.4, cardStep: 0.45, cardDur: 0.35, slotsA: [5.9, 6.3],
 		// beats 2-3: first student, three requests
 		toRowA: [[10.5, 10.9], [21.8, 22.1]],
@@ -83,6 +83,11 @@
 	const EXTRA_ROW = ed.notes.extraRow;
 	const JUDGED = ed.notes.judgedBy ?? 0;
 	const cardH = (k) => (DECIDED[k].length > 1 ? BH : 40);
+	// Optional (business): a follow-up question. Both answer the first question alike, together; the
+	// follow-up separates them. It needs about 1.8 s more before the check.
+	const FOLLOW = ed.followUp ? {q: L.askQ2, split: ed.answers.split} : null;
+	if (FOLLOW) Object.assign(T, {panelB: [73.3, 73.7], words1: [73.7, 74.7], q2: [75.6, 76.1], wordsA: [78.0, 79.6], wordsB: [80.2, 82.0], check: 85.4, undim: [87.4, 88.4], follow: 88.8, end: 92.3});
+	if (ed.notes.judgedBy != null) T.pulseCrit = [64.6, 66.6];
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 	el(el(defs, 'marker', {id: 'id-arrow', viewBox: '0 0 6 6', refX: 5, refY: 3, markerWidth: 5, markerHeight: 5, orient: 'auto'}), 'path', {d: 'M0 0L6 3L0 6Z', fill: C.red});
@@ -238,18 +243,22 @@
 	const fac = el(facLayer, 'g');
 	mono(fac, 724, 44, L.askLabel);
 	serif(fac, 724, 70, L.askQ, {fs: 19, style: 'italic'});
+	const facQ2 = FOLLOW ? el(facLayer, 'g') : null;
+	if (FOLLOW) FOLLOW.q.forEach((ln, i) => serif(facQ2, 724, 96 + 20 * i, ln, {fs: 17, style: 'italic'}));
 	const speech = (key, y0) => {
-		const x = 724, w = 212, h = 88, r = 8;
+		const n = SPEECH[key].lines.length, gap = FOLLOW ? 8 : 0;
+		const x = 724, w = 212, h = 88 + 19 * Math.max(0, n - 3) + gap, r = 8;
 		const g = el(facLayer, 'g');
 		el(g, 'path', {d: `M${x + r} ${y0}H${x + w - r}Q${x + w} ${y0} ${x + w} ${y0 + r}V${y0 + h - r}Q${x + w} ${y0 + h} ${x + w - r} ${y0 + h}H${x + r}Q${x} ${y0 + h} ${x} ${y0 + h - r}V${y0 + 30}L${x - 8} ${y0 + 24}L${x} ${y0 + 18}V${y0 + r}Q${x} ${y0} ${x + r} ${y0}Z`,
 			fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.25});
 		text(g, x + 12, y0 + 19, SPEECH[key].name, {fs: 13, weight: 600, fill: C.red});
-		const words = [];
+		const words = [], words2 = [];
 		SPEECH[key].lines.forEach((ln, li) => {
-			const t = serif(g, x + 12, y0 + 39 + 19 * li, '', {fs: 15});
-			ln.split(' ').forEach((wd, wi) => words.push(el(t, 'tspan', {'fill-opacity': 0}, (wi ? ' ' : '') + wd)));
+			const second = FOLLOW && li >= FOLLOW.split;
+			const t = serif(g, x + 12, y0 + 39 + 19 * li + (second ? gap : 0), '', {fs: 15});
+			ln.split(' ').forEach((wd, wi) => (second ? words2 : words).push(el(t, 'tspan', {'fill-opacity': 0}, (wi ? ' ' : '') + wd)));
 		});
-		return {g, words};
+		return {g, words, words2};
 	};
 	// An edition's source line, drawn only when the edition has one (business, option A).
 	const sourceLines = L.source ? L.source.map((ln, i) => serif(facLayer, 724, 500 + 17 * i, ln, {fs: 13, style: 'italic'})) : [];
@@ -376,13 +385,14 @@
 		// Task card and rubric. The second student's visit enlarges and highlights the rubric line.
 		const kc = prog(t, ...T.card, E.house);
 		set(card, {opacity: kc, transform: `translate(0 ${mix(6, 0, kc)})`});
-		const hiA = FIRST_READS ? 0.5 * (prog(t, T.readA[1], T.readA[1] + 0.3, E.house) - prog(t, T.readBackA[0], T.readBackA[0] + 0.3)) : 0;
+		const hiA = FIRST_READS ? prog(t, T.readA[1] - 0.3, T.readA[1] + 0.2, E.house) - prog(t, T.readBackA[0], T.readBackA[0] + 0.4, E.inOut) : 0;
 		const hi = prog(t, ...T.rubricHi, E.house) - prog(t, ...T.rubricBack, E.inOut) + hiA;
 		const sc = 1 + ((S.rubricScale || 1.3) - 1) * hi;
 		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(${RUB.x} ${RUB.y}) scale(${sc}) translate(${-RUB.x} ${-RUB.y})`});
 		set(rubricWash, {'fill-opacity': 0.09 * hi, width: ((S.rubricX || 108) - 40 + (S.rubricW || 196)) * sc + 14});
-		const kr = prog(t, ...T.rubricHi, E.inOut);
-		set(rubricLine, {x2: (S.rubricX || 108) + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - 0.6 * prog(t, ...T.rubricBack) : 0});
+		const kr = Math.max(prog(t, ...T.rubricHi, E.inOut), hiA);
+		const krBack = FIRST_READS ? (t < T.rubricHi[0] ? 0 : prog(t, ...T.rubricBack)) : 0.6 * prog(t, ...T.rubricBack);
+		set(rubricLine, {x2: (S.rubricX || 108) + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - krBack : 0});
 
 		// ---- first student --------------------------------------------------------------
 		set(gA, {transform: `translate(0 ${mix(Y.a0, Y.a1, prog(t, ...T.moveA, E.inOutStrong))})`});
@@ -474,8 +484,16 @@
 		set(spA.g, {opacity: prog(t, ...T.panelA)});
 		set(spB.g, {opacity: prog(t, ...T.panelB)});
 		const words = (sp, [t0, t1]) => sp.words.forEach((w, i) => { const ti = t0 + ((t1 - t0) * i) / sp.words.length; set(w, {'fill-opacity': prog(t, ti, ti + 0.15)}); });
-		words(spA, T.wordsA);
-		words(spB, T.wordsB);
+		if (FOLLOW) {
+			set(facQ2, {opacity: prog(t, ...T.q2)});
+			words(spA, T.words1);
+			words(spB, T.words1);
+			words({words: spA.words2}, T.wordsA);
+			words({words: spB.words2}, T.wordsB);
+		} else {
+			words(spA, T.wordsA);
+			words(spB, T.wordsB);
+		}
 		sourceLines.forEach((n) => set(n, {opacity: prog(t, T.check + 1.0, T.check + 1.5)}));
 
 		renderNarrow(t);
@@ -500,6 +518,7 @@
 		NR.fac = h('p', 'id-n-fac', narrow);
 		h('b', null, NR.fac, NW.askLabel);
 		NR.fac.append(L.askQ);
+		NR.q2 = FOLLOW ? h('span', 'id-n-q2', NR.fac, ' ' + FOLLOW.q.join(' ')) : null;
 		// One key for the cells, in place of a tag on every chip.
 		NR.key = h('p', 'id-n-keys', narrow);
 		NR.keyItems = ['is-open', 'is-ai', 'is-own', 'is-uns'].map((cls, i) => [cls, NW.keys[i]]).map(([cls, txt]) => h('span', cls, NR.key, txt));
@@ -538,7 +557,8 @@
 				const decided = isA ? null : h('i', 'id-n-decided', chip, DECIDED[k].join(' '));
 				return {cell, q, uns, chip, label, decided};
 			});
-			c.say = h('p', 'id-n-say', c.el, SPEECH[key].lines.join(' '));
+			c.say = h('p', 'id-n-say', c.el, FOLLOW ? SPEECH[key].lines.slice(0, FOLLOW.split).join(' ') : SPEECH[key].lines.join(' '));
+			c.say2 = FOLLOW ? h('span', 'id-n-say2', c.say, ' ' + SPEECH[key].lines.slice(FOLLOW.split).join(' ')) : null;
 			return c;
 		};
 		NR.a = column('a');
@@ -604,10 +624,11 @@
 			// Once written, the chip shows the decision itself in place of its name.
 			c.decided.hidden = !own;
 			c.label.hidden = own;
-			c.chip.classList.toggle('is-pulse', k === 0 && t >= T.pulseCrit[0] && t < T.pulseCrit[1]);
+			c.chip.classList.toggle('is-pulse', k === JUDGED && t >= T.pulseCrit[0] && t < T.pulseCrit[1]);
 			vis(c.q, t >= T.bubB[k][0]);
 		});
 		vis(b.say, t >= T.panelB[0]);
+		if (FOLLOW) { vis(NR.q2, t >= T.q2[0]); vis(a.say2, t >= T.wordsA[0]); vis(b.say2, t >= T.wordsB[0]); }
 		if (NR.source) vis(NR.source, t >= T.check + 1.0);
 	}
 	// The narrow stage keeps the height of its tallest moment, so the caption band and
@@ -641,6 +662,7 @@
 	};
 
 	const BEATS = BEAT_AT.map((at, i) => ({at, ...ed.beats[i]}));
+	if (FOLLOW) BEATS[BEATS.length - 1].at = T.check;
 	BEATS[BEATS.length - 1].check = {...ed.check, followAt: T.follow};
 
 	// The faces the picture uses must be loaded before text is measured: the SVG is built

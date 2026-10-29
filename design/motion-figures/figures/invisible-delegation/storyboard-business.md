@@ -4,6 +4,31 @@ Edition `business`, workplace cast. Built from `editions/business.json` on the u
 
 Open it with `index.html?edition=business`, or with the page's "See this with: Workplace" link.
 
+## Round 3: final fixes after business cold read 2 (`tests/business-figure-read-2.md`)
+
+1. **No straw man.**
+   - The manager asks "Better by whose standard?", and both analysts answer the same, at the same time: "The firm's standard."
+   - The follow-up, "What did you turn down, and why?", separates them. The first says "None. They all made it clearer." The second says "'Add a recap.' It wasn't in my outline."
+   - The workplace check matches (section 3).
+   - Beat 8's caption: "The manager has only the emails, and asks each analyst two questions."
+   - Business needs 1.8 s more before the check (check at 85.4 s figure time; 95.3 s total).
+2. **One difference only.**
+   - Caption 5 now reads "A second analyst reads the same standard, then decides before asking."
+   - The first analyst's read in beat 1 gets the same highlight as the second's in beat 5: it grows, is washed and is underlined, and the underline clears afterwards on both sides.
+   - The first analyst now stays at the standard for 2.1 s.
+3. **Stacked layouts.**
+   - At 1280 × 720 and 390, the outline card ("Date, reason, plan") pulses when "Add a recap" is struck, as in the wide layout.
+   - The pulse lasts 2 s in all layouts, up from 0.6 s.
+   - Beat 2's caption no longer says "across": "The analyst asks an AI for feedback. The request hands the criteria to the AI." It is true at 390, where the chip greys in place.
+4. **Sources:** see section 6, with the spine entry and Microsoft Research PDF pages.
+
+**Core changes, gated on edition data,** with PME pixel-identical (0 of 203 frames) to `regression/baseline`:
+- `followUp`, with `labels.askQ2` and `answers.split`: the follow-up question, a shared first answer, and the timing overrides.
+- The pulse for `notes.judgedBy` now also applies in the stacked view.
+- The first person's read uses the same highlight as the second's.
+
+A note on noise: two frame-diff runs showed a one-pixel, six-level difference at 390 from 60 s onwards. The committed state of 75a90fa showed it too, and it flipped between runs of identical code. A third capture of the current code is pixel-identical to the baseline.
+
 ## Round 2: changes after business cold read 1 (`tests/business-figure-read-1.md`)
 
 1. **No pronoun trap.** The unsaid lines now ask "whose criteria?", "whose outline?" and "whose meaning?", so the unsaid part plainly belongs to whoever should decide.
@@ -64,9 +89,12 @@ Two additive changes, both inert in PME (frame-diff 0):
 
 > REVIEWER'S CHECK
 > *What did the AI decide for them?*
-> *To find out, ask each analyst: better by whose standard?* (same size)
+> *Ask: whose standard? What did you turn down, and why?* (same size, round 3)
 
-The draft in EDITIONS-PLAN.md reads "What did the AI decide for them? Better by whose standard?". The figure keeps PME's bridge, "To find out, ask each …", for the reason PME needs it: an analyst who didn't notice can honestly answer "nothing" to the first question.
+Round 3 changed this after business cold read 2. Both analysts read the same standard, so both honestly answer "whose standard?" the same way ("The firm's standard"). The follow-up is what separates them: the first turned nothing down, and the second can name the recap and the reason. Both questions sit at equal weight on one line, which fits on one line at 1280 and 1440, so the controls never move.
+- The manager in the figure asks "Better by whose standard?" and then "What did you turn down, and why?"
+- The longer forms ("To find out, ask each analyst: better by whose standard? Which suggestions did you turn down, and why?") wrap to a second line at desktop widths and push the controls down 29 px.
+- Earlier drafts: "To find out, ask each analyst: better by whose standard?" (rounds 1 to 2); EDITIONS-PLAN.md's "What did the AI decide for them? Better by whose standard?"
 
 ## 4. Words that differ, beat by beat
 
@@ -96,26 +124,28 @@ The page is fully business: no PME words, and no PME-only links. The links are t
 
 ## 5. Pace table
 
-The timeline is PME's. Each caption needs its words ÷ 3 plus a 1.5 s hold, and the PME rule needs twice the reading time; both have to fit the beat. Every business caption is at or under its PME length.
+The timeline is PME's except beat 8, which is 1.8 s longer in business (round 3). Each caption needs its words ÷ 3 plus a 1.5 s hold, and the PME rule needs twice the reading time; both have to fit the beat. Every business caption is at or under its PME length.
 
 | Beat | Caption words | Read + 1.5 s hold | 2× reading | Beat (s) | New on-screen words |
 | --- | --- | --- | --- | --- | --- |
 | 0 · Name card | — | — | — | 3.0 | 6 (universal) |
 | 1 | 14 | 6.2 | 9.3 | 9.5 | 35 (task card, standard, lanes, cards; on screen to the end) |
-| 2 | 13 | 5.8 | 8.7 | 11.3 | 15 |
+| 2 | 15 | 6.5 | 10.0 | 11.3 | 15 |
 | 3 | 10 | 4.8 | 6.7 | 12.1 | 8 |
 | 4 | 13 | 5.8 | 8.7 | 8.7 | 15 |
-| 5 | 8 | 4.2 | 5.3 | 7.3 | 2 |
-| 6 | 10 | 4.8 | 6.7 | 11.4 | 42 (three requests and three written decisions; on screen to the end) |
+| 5 | 10 | 4.8 | 6.7 | 7.3 | 2 |
+| 6 | 10 | 4.8 | 6.7 | 11.4 | 18 (three plain requests and three one-line decisions; on screen to the end) |
 | 7 | 14 | 6.2 | 9.3 | 10.2 | 3 |
-| 8 | 13 | 5.8 | 8.7 | 13.1 | 30 (answers at 3 words a second) |
-| 9 | 8 + 9 | — | 5.7 | 6.9, then rests | 6 (source line) |
+| 8 | 12 | 5.5 | 8.0 | 14.9 | 26: the shared answer (3 words, 1.0 s), then the follow-up question (6 words, 2 s to read), then the first answer (5 words, 1.6 s) and the second (6 words, 1.8 s) |
+| 9 | 8 + 10 | — | 6.0 | 6.9, then rests | 11 (source line) |
 
-Beats 1 and 6 carry more picture words than the beat holds at 3 words a second, as in PME. Those words stay on screen to the end and are read again in later beats. The second answer is shorter than PME's: 9 words over the same 4.0 s.
+Beats 1 and 6 carry more picture words than the beat holds at 3 words a second, as in PME. Those words stay on screen to the end and are read again in later beats. In beat 8 each new line waits until the one before it has been read: the follow-up question at 2.2 s, the first answer 1.9 s after the question, and the second answer 0.6 s after the first, with 3.4 s to read it before the check.
 
 ## 6. Verified figures and quotes (for the source spine)
 
-All checked against the full paper PDF (advait.org; DOI above). Page numbers are the PDF's.
+Checked against the full paper PDF; the round-2 tester confirmed the same page numbers in the copy hosted by Microsoft Research (microsoft.com/en-us/research/wp-content/uploads/2025/01/lee_2025_ai_critical_thinking_survey.pdf). The ACM Digital Library copy returned 403 and is unchecked, so cite the Microsoft Research copy's pages, as the page now says.
+
+For the companion's source spine (Workplace Evidence), the entry I'd add: Lee, Sarkar, Tankelevitch, Drosos, Rintel, Banks & Wilson, "The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers", CHI '25, DOI 10.1145/3706598.3713778. It is a self-report survey, not an observational study. Figures and quotes, with Microsoft Research PDF pages:
 - 319 knowledge workers surveyed (p. 1; also pp. 4, 6). 936 first-hand examples of GenAI use at work (p. 1; also pp. 2, 4, 6, 9).
 - Participants self-reported critical thinking for 555 of the 936 examples, 59.29% (p. 6; "approximately 60% (555 out of 936)", p. 9). This is verified but not used in the figure.
 - "higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking" (abstract, p. 1).
