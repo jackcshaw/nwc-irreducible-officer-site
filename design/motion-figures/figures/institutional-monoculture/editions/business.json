@@ -3,7 +3,7 @@
  "id": "business",
  "cast": "workplace",
  "timeline": {
-  "_doc": "Cuts to the core clock, in core seconds; each skips a static stretch (storyboard-business.md, Pace).",
+  "_doc": "Edits to the core clock, in core seconds: a cut skips a static stretch, a hold freezes the core and adds time (storyboard-business.md, Pace).",
   "edits": [
    {
     "at": 8.9,
@@ -18,16 +18,20 @@
     "cut": 1.5
    },
    {
+    "at": 43.7,
+    "hold": 1.0
+   },
+   {
+    "at": 49.4,
+    "hold": 1.0
+   },
+   {
     "at": 52.2,
     "cut": 2.2
    },
    {
     "at": 65.5,
     "cut": 1.0
-   },
-   {
-    "at": 73.9,
-    "cut": 0.9
    }
   ]
  },
@@ -51,16 +55,16 @@
   ]
  ],
  "problems": [
-  "Outserve everyone",
-  "Own high-spec niches",
-  "Bundle maintenance in",
-  "Brand our engineering",
-  "Add smart monitoring",
-  "Customize every order",
-  "Lengthen warranties",
-  "Outpace on delivery",
-  "Sell uptime contracts",
-  "Upgrade dealer support"
+  "How do we stand out?",
+  "Why pay more for ours?",
+  "Why are we worth more?",
+  "What can't they copy?",
+  "Where do we add value?",
+  "Can we stay premium?",
+  "Can we out-serve them?",
+  "Which features win?",
+  "Can we keep our edge?",
+  "What earns a premium?"
  ],
  "aiOpening": "Differentiate on value",
  "aiChallenge": [
@@ -69,16 +73,16 @@
  ],
  "imagined": {
   "problems": [
-   "Outserve everyone",
-   "Own high-spec niches",
-   "Bundle maintenance in",
-   "Launch basic models",
-   "Cut unit costs",
-   "Price-match bids",
-   "License our designs",
-   "Win price-led buyers",
-   "Supply the competitor",
-   "Service their machines"
+   "How do we stand out?",
+   "Why pay more for ours?",
+   "Why are we worth more?",
+   "Can we win on cost?",
+   "Who buys on price?",
+   "Can we cut unit costs?",
+   "Should we partner?",
+   "Who is switching?",
+   "License our designs?",
+   "Supply the rival?"
   ],
   "goals": [
    {
@@ -129,6 +133,7 @@
    "What frames",
    "are missing?"
   ],
+  "unseen": "NOT SEEN BY {reviewer|upper}",
   "runB": "Same {group}, imagined",
   "seqB": [
    "DEFINE PROBLEM",
@@ -136,13 +141,13 @@
    "WRITE"
   ],
   "spread": "ONE IMAGINED SPREAD",
-  "answer": "ONE IMAGINED ANSWER",
+  "answer": "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?",
   "source": "Illustration based on Romasanta et al., HBR (2026), and Bottesch, ACIS (2025)."
  },
  "narrow": {
   "taskLabel": "Example task",
   "ai": "AI",
-  "opened": "Almost every AI outline opened with:",
+  "opened": "Almost every outline opened:",
   "asks": "The AI asks:",
   "runA": "The {group}",
   "seqA": [
@@ -160,7 +165,10 @@
   "aiFrame": "AI’s frame",
   "spread": "One imagined spread",
   "askQ": "{reviewer_ask}: What frames are missing?",
-  "answer": "One imagined answer",
+  "answer": "Sent back: what else could the problem be?",
+  "unseen": "Not seen by {reviewer}",
+  "keep": true,
+  "more": "and seven more",
   "source": "Illustration based on Romasanta et al., HBR (2026), and Bottesch, ACIS (2025)."
  },
  "beats": [
@@ -169,7 +177,7 @@
    "detail": "a task card appears at the top right: \"Example task. How should we respond to a low-cost competitor?\" Ten blank plans appear in two rows of five, each with a red dot, labelled \"The {group}\". Under a line on the card, the context appears one item at a time: its prices, our patents, dealers, price-led buyers, service revenue."
   },
   {
-   "text": "Each asks an AI for an outline. They come back alike.",
+   "text": "Each asks the company's AI for an outline. They come back alike.",
    "detail": "a grey box marked AI appears at the top left. A small mark travels from each red dot up to it, and ten grey outlines drop back into the plans, all in the same pattern."
   },
   {
@@ -178,7 +186,7 @@
   },
   {
    "text": "{reviewer_lines} up each plan's problem.",
-   "detail": "each plan's first line is outlined, then lifts out and joins a list at the right: outserve everyone, own high-spec niches, bundle maintenance in, brand our engineering, add smart monitoring, customize every order, lengthen warranties, outpace on delivery, sell uptime contracts, upgrade dealer support. The plans stay where they are, ticked."
+   "detail": "each plan's first line is outlined, then lifts out and joins a list at the right: \"How do we stand out?\", \"Why pay more for ours?\", \"Why are we worth more?\", \"What can't they copy?\", \"Where do we add value?\", \"Can we stay premium?\", \"Can we out-serve them?\", \"Which features win?\", \"Can we keep our edge?\", \"What earns a premium?\". The plans stay where they are, ticked."
   },
   {
    "text": "Different words, one frame: each plan differentiates.",
@@ -186,23 +194,23 @@
   },
   {
    "text": "{reviewer_doesnt_see}: almost every AI outline opened with that frame.",
-   "detail": "a grey card comes out of the AI box: \"Almost every outline opened: Differentiate on value\". A grey line runs from it to the bracket, which turns grey, and a grey tag beside the bracket reads \"AI's frame\". The manager sees only the finished plans; the card and the grey are for the viewer."
+   "detail": "a grey card comes out of the AI box: \"Almost every outline opened: Differentiate on value\". A grey label above the card reads \"Not seen by the manager\". A grey line runs from it to the bracket, which turns grey, and settles dashed; a grey tag beside the bracket reads \"AI's frame\". The manager sees only the finished plans; the card and the grey are for the viewer."
   },
   {
    "text": "{reviewer_ask} what frames are missing.",
    "detail": "beside the bracket, in open space, a dashed box appears, labelled \"{reviewer_ask}\", with the question inside: \"What frames are missing?\""
   },
   {
-   "text": "Now imagine {each_person} defines the problem first.",
-   "detail": "the first run moves to the upper half and dims, with the grey card above its list and the question box beside it. Below a line, \"Same {group}, imagined\" appears with ten blank plans. Each dot writes a red first line, and its label begins \"Define problem\"."
+   "text": "Imagine the manager sends them back: what else could the problem be?",
+   "detail": "the first run moves to the upper half and dims, with the grey card above its list and the question box beside it. A navy line runs from the question box down to a heading: \"Sent back: what else could the problem be?\". Below a line, \"Same {group}, imagined\" appears with ten blank plans. Each dot writes a red first line, and its label begins \"Define problem\"."
   },
   {
-   "text": "Each asks the AI to challenge it, then writes.",
+   "text": "Each defines the problem first, then asks the AI to challenge it.",
    "detail": "a copy of each red line goes up to the AI box. A grey speech bubble appears: \"What did you assume? What other frames fit?\", and small grey speech bubbles land on each plan under its red line. Each dot writes its plan. The label now reads \"Define problem, AI challenges, write\", and the plans are marked \"All drafted with AI\"."
   },
   {
    "text": "These hold up too. {reviewer_lines} them up again.",
-   "detail": "the speech bubble fades, the first run returns to full strength, and a navy ring ticks each imagined plan. A navy line runs from the manager's question box down to a new heading, \"One imagined answer\". Group by group, their problem lines lift out as words into three labelled columns: differentiate (outserve everyone, own high-spec niches, bundle maintenance in); match on cost (launch basic models, cut unit costs, price-match bids, win price-led buyers); partner or license (license our designs, supply the competitor, service their machines). Brackets close around them."
+   "detail": "the speech bubble fades, the first run returns to full strength, and a navy ring ticks each imagined plan. Group by group, their problem lines lift out as words into three labelled columns under the heading: differentiate (\"How do we stand out?\", \"Why pay more for ours?\", \"Why are we worth more?\"); match on cost (\"Can we win on cost?\", \"Who buys on price?\", \"Can we cut unit costs?\", \"Who is switching?\"); partner or license (\"Should we partner?\", \"License our designs?\", \"Supply the rival?\"). Brackets close around them."
   },
   {
    "text": "{check}: What frames are missing across the {group}?",
@@ -222,16 +230,16 @@
   "setup": "Ten {people} at an industrial-equipment maker each use the company's AI to help answer the CEO's question: how should we respond to a low-cost competitor? Each writes their own plan, and each plan holds up when read alone. What can still go wrong is institutional monoculture: shared systems and defaults narrow the range of frames a group considers. It can happen wherever people ask the same AI, like a nonprofit's program team asking how to respond to a funder's new priority. Illustration based on Romasanta, Thomas & Levina (2026) and Bottesch (2025). The {group}, the question and the plans are constructed.",
   "editionNote": null,
   "srTitle": "Institutional monoculture, an animated figure in eleven beats",
-  "srSummary": "An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten {people} at an industrial-equipment maker with an example task, the CEO's question: how should we respond to a low-cost competitor? The context lists its prices, our patents, dealers, price-led buyers and service revenue. Each {person} asks the company's AI for an outline, and ten grey outlines come back in the same pattern. Each {person} writes their own plan, in ten different layouts, all marked \"All drafted with AI\". {reviewer_sees} that each plan holds up, and the ticks stay. Then the manager lines up the one-line problem statement from every finished plan: outserve everyone, own high-spec niches, bundle maintenance in, brand our engineering, add smart monitoring, customize every order, lengthen warranties, outpace on delivery, sell uptime contracts, upgrade dealer support. Each line is read, and a bracket closes around all ten, labelled \"One frame: differentiate\". The manager sees only the finished plans, but the figure shows the viewer where the frame came from: a grey card comes out of the AI box, saying almost every outline opened with \"Differentiate on value\". A grey line runs from it to the bracket, which turns grey, with a grey tag: \"AI's frame\". {reviewer_ask} what frames are missing: a dashed box with that question appears beside the bracket. Next, while the first run dims above, the figure imagines the same {group} defining the problem first. Each {person} writes the problem in red first, then asks the AI to challenge it (\"What did you assume? What other frames fit?\"), and a grey speech bubble lands on each plan before they write. These plans hold up too. A navy line runs from the manager's question to the heading \"One imagined answer\", and the problems are lined up in three groups: differentiate (outserve everyone, own high-spec niches, bundle maintenance in); match on cost (launch basic models, cut unit costs, price-match bids, win price-led buyers); partner or license (license our designs, supply the competitor, service their machines). The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten {people} at an industrial-equipment maker with an example task, the CEO's question: how should we respond to a low-cost competitor? The context lists its prices, our patents, dealers, price-led buyers and service revenue. Each {person} asks the company's AI for an outline, and ten grey outlines come back in the same pattern. Each {person} writes their own plan, in ten different layouts, all marked \"All drafted with AI\". {reviewer_sees} that each plan holds up, and the ticks stay. Then the manager lines up the one-line problem statement from every finished plan: \"How do we stand out?\", \"Why pay more for ours?\", \"Why are we worth more?\", \"What can't they copy?\", \"Where do we add value?\", \"Can we stay premium?\", \"Can we out-serve them?\", \"Which features win?\", \"Can we keep our edge?\", \"What earns a premium?\". Each line is read, and a bracket closes around all ten, labelled \"One frame: differentiate\". The manager sees only the finished plans, but the figure shows the viewer where the frame came from: a grey card comes out of the AI box, saying almost every outline opened with \"Differentiate on value\", labelled \"Not seen by the manager\". A dashed grey line runs from it to the bracket, which turns grey, with a grey tag: \"AI's frame\". {reviewer_ask} what frames are missing: a dashed box with that question appears beside the bracket. Next, while the first run dims above, the figure imagines the manager sending the plans back: a navy line runs from the question box to the heading \"Sent back: what else could the problem be?\", over the same {group}, imagined. Each {person} writes the problem in red first, then asks the AI to challenge it (\"What did you assume? What other frames fit?\"), and a grey speech bubble lands on each plan before they write. These plans hold up too. Their problems are lined up under the heading in three groups: differentiate (\"How do we stand out?\", \"Why pay more for ours?\", \"Why are we worth more?\"); match on cost (\"Can we win on cost?\", \"Who buys on price?\", \"Can we cut unit costs?\", \"Who is switching?\"); partner or license (\"Should we partner?\", \"License our designs?\", \"Supply the rival?\"). The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "What frames are missing across the {group}?",
    "Line up the problems. What else could the problem be?"
   ],
-  "checkFollow": "Read one at a time, every plan holds up. The plans differ in their details, like names, numbers and products, but lined up, they share one problem definition, the one almost every AI outline opened with. The manager never sees those outlines; the lineup of finished plans is enough to show the shared frame. Lining up shows which frames a {group} has. It can't show which are missing. For that, {reviewer_ask_l} what else the problem could be, drawing on their own knowledge of the market or on frames the {group} names before discussion settles on one. The imagined {group} follows a proposal from the original essay, *The Irreducible Officer*: each person writes a problem frame without AI, then asks an AI to find assumptions they missed and suggest other frames. Whether framing first spreads frames across a {group} is untested, and the imagined board is one possible answer. Agreement can also come from a shared purpose or strong evidence, and a different frame isn't better by itself. A {group} can compare several frames and still agree on one.",
+  "checkFollow": "Read one at a time, every plan holds up. The plans differ in their details, like names, numbers and products, but lined up, they share one problem definition, the one almost every AI outline opened with. The manager never sees those outlines; the lineup of finished plans is enough to show the shared frame. Lining up shows which frames a {group} has. It can't show which are missing. For that, {reviewer_ask_l} what else the problem could be, drawing on their own knowledge of the market or on frames the {group} names before discussion settles on one. In the imagined rerun the manager sends the plans back with that question. Each analyst then writes a problem frame without AI and asks an AI to find assumptions they missed and suggest other frames, as the original essay, *The Irreducible Officer*, proposes. Whether framing first spreads frames across a {group} is untested, and the imagined board is one possible answer. Agreement can also come from a shared purpose or strong evidence, and a different frame isn't better by itself. A {group} can compare several frames and still agree on one.",
   "about": {
    "lead": "About the example.",
-   "text": "Each plan's first line stands for its problem statement: what the plan sets out to solve. The figure groups problems by the goal they set, and names three goals for the imagined {group} as one possible answer. Telling real frames apart takes reading. The plans, their problem lines and the AI's opening line are constructed. They don't show the output of any model or the plans of any real company."
+   "text": "Each plan's first line is its problem statement: the question the plan sets out to answer. The figure groups problems by the goal they set, and names three goals for the imagined {group} as one possible answer. Telling real frames apart takes reading. The plans, their problem lines and the AI's opening line are constructed. They don't show the output of any model or the plans of any real company."
   },
   "studyHeading": "The studies behind this example",
   "study": [

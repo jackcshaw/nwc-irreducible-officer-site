@@ -1,8 +1,28 @@
 # Institutional monoculture: business edition storyboard
 
-Edition `business`, workplace cast, round 2. It is built from `editions/business.json` on top of the core in `storyboard.md`: the layout, motion, colour grammar and nameplate. This file lists only what differs from the PME edition. The words live in the data files: `editions/business.json` holds the scenario and `../../casts.json` (workplace) holds the role words. If this file and the data disagree, the data is what ships.
+Edition `business`, workplace cast, round 2 with final fixes. It is built from `editions/business.json` on top of the core in `storyboard.md`: the layout, motion, colour grammar and nameplate. This file lists only what differs from the PME edition. The words live in the data files: `editions/business.json` holds the scenario and `../../casts.json` (workplace) holds the role words. If this file and the data disagree, the data is what ships.
 
 Open it with `index.html?edition=business`, or with the "See this with: Workplace" link on the page.
+
+## Final fixes after figure cold read 2
+
+Source: `tests/business-figure-read-2.md` and the coordinator's notes. Round 2 passed on the point; these are final fixes.
+
+1. **The lines are problem definitions.**
+   - The first run's ten lines are now questions that define the problem, all in the one frame: How do we stand out? · Why pay more for ours? · Why are we worth more? · What can't they copy? · Where do we add value? · Can we stay premium? · Can we out-serve them? · Which features win? · Can we keep our edge? · What earns a premium?
+   - The imagined run keeps the first three. It adds four in the cost frame (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?) and three in the partner frame (Should we partner? · License our designs? · Supply the rival?).
+   - Every line is 22 characters or fewer, so it fits its bracket at 13 units.
+2. **The manager's move on today's plans is visible.**
+   - Beat 8 is now "Imagine the manager sends them back: what else could the problem be?". A navy line runs from the question box to the heading "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?", drawn at core 61.2–61.9, before the imagined run writes. The spread forms under that question in beat 10.
+   - Beat 9 is now "Each defines the problem first, then asks the AI to challenge it."
+3. **The viewer-only layer is marked on the picture.**
+   - A grey label "NOT SEEN BY THE MANAGER" sits above the AI's card (`labels.unseen`), and the trace line settles dashed.
+   - On phones the AI line stays to the end, inline: "AI Almost every outline opened: Differentiate on value · NOT SEEN BY THE MANAGER" (`narrow.unseen`, `narrow.keep`). A compact first-run list also stays: the first three questions "and seven more" (`narrow.more`).
+   - To keep the phone player at 832 px, the paper rows give way once the goals form.
+4. **Beats 5, 6 and 9 get more time.** Holds of 1.0 s after the bracket (core 43.7) and after the grey trace (core 49.4), and the cut before beat 10 is gone. Every new text holds at least (words ÷ 3) + 1.5 s (§5).
+5. **Beat 2** says "the company's AI", so the shared system is in the caption.
+
+The run is 94.0 s in the player.
 
 ## Round 2: changes after figure cold read 1
 
@@ -56,14 +76,18 @@ Scenario and sensitivity rules: BUSINESS-EXAMPLES.md, section 6. Evidence follow
 
 The beats, motion and turn are the core's. Every change is gated on data or measurement, so PME draws exactly as before: frame-diff 297 of 297 identical against the PME baseline with the switch, transitions frozen.
 
-- **An edition clock** (`timeline.edits`), as in frame capture. Business cuts six static stretches, in core seconds:
-  - 8.9 (1.8 s), 17.4 (0.8 s) and 38.9 (1.5 s);
-  - 52.2 (2.2 s), 65.5 (1.0 s) and 73.9 (0.9 s).
+- **An edition clock** (`timeline.edits`), as in frame capture. A cut skips a static stretch and a hold freezes the core. In core seconds, business has:
+  - cuts at 8.9 (1.8 s), 17.4 (0.8 s), 38.9 (1.5 s), 52.2 (2.2 s) and 65.5 (1.0 s);
+  - holds at 43.7 (1.0 s) and 49.4 (1.0 s).
 
   PME has no edits, so its clock is unchanged.
 - **The question in the box** (`labels.askQ`) replaces the "?".
-- **The answer link** (`labels.answer`): the imagined heading reads "ONE IMAGINED ANSWER" and arrives with the goals, with a navy line from the question box. It is drawn at core 76.6–77.3.
-- **Phone keys:** `narrow.askQ` puts the question as a labelled line under the first run's list, and `narrow.answer` heads the imagined groups from that same moment.
+- **The sent-back link** (`labels.answer`): the imagined heading reads "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?" and arrives in beat 8, with a navy line from the question box. It is drawn at core 61.2–61.9.
+- **The viewer-only label** (`labels.unseen`) above the AI's card, with the trace line settling dashed.
+- **Phone keys:**
+  - `narrow.askQ` puts the question as a labelled line under the first run's list;
+  - `narrow.answer` heads the imagined run from beat 8;
+  - `narrow.keep`, `narrow.unseen` and `narrow.more` keep the AI line and a compact first-run list to the end.
 - **The source line** (`labels.source` / `narrow.source`).
 - **A question-box label wider than the box** ends at the box's right edge.
 - **Page sections gated on data:**
@@ -89,15 +113,15 @@ The cast supplies the role words: "students" becomes "analysts", "seminar" becom
 | Beat | Caption (business) | Picture words that differ from PME |
 | --- | --- | --- |
 | 1 · The team, one question | Ten analysts get the CEO's question. | Task card: "How should we respond to / a low-cost competitor?". Context: "Its prices, our patents, dealers, / price-led buyers, service revenue.". Label: "The team" |
-| 2 · The outlines come back alike | (same caption) | none |
+| 2 · The outlines come back alike | Each asks the company's AI for an outline. They come back alike. | none |
 | 3 · Their own plans | Each writes their own plan. The manager sees that each holds up. | none |
-| 4 · The manager lines up the problems | The manager lines up each plan's problem. | Ten lines: Outserve everyone, Own high-spec niches, Bundle maintenance in, Brand our engineering, Add smart monitoring, Customize every order, Lengthen warranties, Outpace on delivery, Sell uptime contracts, Upgrade dealer support |
+| 4 · The manager lines up the problems | The manager lines up each plan's problem. | Ten lines: How do we stand out? · Why pay more for ours? · Why are we worth more? · What can't they copy? · Where do we add value? · Can we stay premium? · Can we out-serve them? · Which features win? · Can we keep our edge? · What earns a premium? |
 | 5 · One frame | Different words, one frame: each plan differentiates. | "ONE FRAME: DIFFERENTIATE"; compact: "ONE FRAME" / "DIFFERENTIATE" |
-| 6 · Where the frame came from | The manager doesn't see this: almost every AI outline opened with that frame. | Card: "ALMOST EVERY OUTLINE OPENED / Differentiate on value" |
+| 6 · Where the frame came from | The manager doesn't see this: almost every AI outline opened with that frame. | "NOT SEEN BY THE MANAGER" over the card "ALMOST EVERY OUTLINE OPENED / Differentiate on value"; the trace settles dashed |
 | 7 · The manager asks | The manager asks what frames are missing. | "THE MANAGER ASKS" over the box, which holds "What frames / are missing?" |
-| 8 · Imagine framing first | Now imagine each analyst defines the problem first. | "Same team, imagined"; no heading yet |
-| 9 · The AI challenges each frame | (same caption) | The AI's questions: "What did you assume? / What other frames fit?" |
-| 10 · Lined up again | These hold up too. The manager lines them up again. | A navy line from the box to "ONE IMAGINED ANSWER". Goals: DIFFERENTIATE (the first three lines); MATCH ON COST (Launch basic models, Cut unit costs, Price-match bids, Win price-led buyers); PARTNER OR LICENSE (License our designs, Supply the competitor, Service their machines) |
+| 8 · Sent back | Imagine the manager sends them back: what else could the problem be? | A navy line from the box to "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?"; "Same team, imagined" |
+| 9 · Define first, then the AI challenges | Each defines the problem first, then asks the AI to challenge it. | The AI's questions: "What did you assume? / What other frames fit?" |
+| 10 · Lined up again | These hold up too. The manager lines them up again. | Under the sent-back question: DIFFERENTIATE (the first three lines); MATCH ON COST (Can we win on cost? · Who buys on price? · Can we cut unit costs? · Who is switching?); PARTNER OR LICENSE (Should we partner? · License our designs? · Supply the rival?) |
 | 11 · Reviewer's check | Reviewer's check: What frames are missing across the team? / Line up the problems. What else could the problem be? | The source line under the picture |
 
 ## 4. The workplace check
@@ -109,7 +133,7 @@ The second line is the separating follow-up, set at equal weight.
 - "Across the team" fits one line at 768 px and on laptops.
 - "Line up the problems" keeps the method in the check.
 
-The beat 7 box asks the check's first question, and the imagined board is one answer to it. The check then hands the question to the viewer for their own team.
+The beat 7 box asks the check's first question. The manager sends the plans back with the second, and the imagined board is one answer. The check then hands the question to the viewer for their own team.
 
 ## 5. Pace
 
@@ -121,37 +145,38 @@ PME's stricter combined rule (caption and picture words together, and twice the 
 
 Times are on the business clock (figure time; add 3.0 s for the player).
 
-| Beat | Time (s) | Beat (s) | Caption words | Caption read + 1.5 (s) | New labels (words): on screen from → read + 1.5 by |
+| Beat | Time (s) | Beat (s) | Caption words | Caption read + 1.5 (s) | New texts (words): on screen from → read + 1.5 by |
 | --- | --- | --- | --- | --- | --- |
 | 0 · Name card | player 0.0–3.0 | 3.0 | 0 | — | name and kicker (7), runtime standard |
 | 1 | 0.0–9.1 | 9.1 | 6 | 3.5 | task card (10): 1.6 → 6.4; context (9): last item 6.9 → 9.1; "The team" (2): 2.3 → 4.5 |
-| 2 | 9.1–15.7 | 6.6 | 11 | 5.2 | "AI" (1): 10.5 → 12.3 |
+| 2 | 9.1–15.7 | 6.6 | 12 | 5.5 | "AI" (1): 10.5 → 12.3 |
 | 3 | 15.7–23.7 | 8.0 | 12 | 5.5 | "AI OUTLINE → WRITE", "ALL DRAFTED WITH AI" (7): 19.8 → 23.6 |
-| 4 | 23.7–36.3 | 12.6 | 7 | 3.8 | ten lines (28): 25.7–32.7 → 36.5, and they stay to the end |
-| 5 | 36.3–41.9 | 5.6 | 7 | 3.8 | "ONE FRAME: DIFFERENTIATE" (3): 39.5 → 42.0, and it stays |
-| 6 | 41.9–48.1 | 6.2 | 13 | 5.8 | card (7): 43.7 → 47.5; "AI'S FRAME" (2): 45.2 → 47.4 |
-| 7 | 48.1–52.6 | 4.5 | 7 | 3.8 | "THE MANAGER ASKS" and the question (7, echoing the caption): 50.2 → 54.0, and it stays |
-| 8 | 52.6–59.2 | 6.6 | 8 | 4.2 | "Same team, imagined", "DEFINE PROBLEM" (5): 56.0 → 59.2 |
-| 9 | 59.2–66.6 | 7.4 | 9 | 4.5 | the AI's questions (8): 62.4 → 66.6, on screen to 67.1; "AI CHALLENGES" (2): 62.5 → 64.7 |
-| 10 | 66.6–79.6 | 13.0 | 10 | 4.8 | heading and line (3): 68.4–69.1; three goal groups (26 new words): 69.1–72.5. All 29 read by 79.6 |
-| 11 | 79.6–88.1 | 8.5 | 7 + 10 | follow-up at +3.0, read by +7.8 | source line (12): 81.1 → 86.6 |
-| **Total** | | **88.1 figure, 91.1 player** (PME 96.3, 99.3) | **107** | | **139 label words** |
+| 4 | 23.7–36.3 | 12.6 | 7 | 3.8 | ten lines of 3–5 words: each 2.5–3.2 s; the last at 32.7 → 35.9. All stay to the end |
+| 5 | 36.3–42.9 | 6.6 | 7 | 3.8 | "ONE FRAME: DIFFERENTIATE" (3): 39.5 → 42.0 |
+| 6 | 42.9–50.1 | 7.2 | 13 | 5.8 | card and "NOT SEEN BY THE MANAGER" (12): 44.7 → 50.2, and they stay; "AI'S FRAME" (2): 46.2 → 48.4 |
+| 7 | 50.1–54.6 | 4.5 | 7 | 3.8 | "THE MANAGER ASKS" and the question (7, echoing the caption): 52.2 → 56.0, and it stays |
+| 8 | 54.6–61.2 | 6.6 | 12 | 5.5 | "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?" (8): 57.6 → 61.8, and it stays; "Same team, imagined", "DEFINE PROBLEM" (5): 58.0 → 61.2 |
+| 9 | 61.2–69.0 | 7.8 | 12 | 5.5 | the AI's questions (8): 64.4 → 68.6, on screen to 70.0; "AI CHALLENGES" (2): 64.5 → 66.7 |
+| 10 | 69.0–82.5 | 13.5 | 10 | 4.8 | three goal groups: 72.0, 73.2 and 74.4; the last group (12 words) settles at 75.4 → 80.9 |
+| 11 | 82.5–91.0 | 8.5 | 7 + 10 | follow-up at +3.0, read by +7.8 | source line (12): 84.0 → 89.5 |
+| **Total** | | **91.0 figure, 94.0 player** (PME 96.3, 99.3) | **115** | | |
 
 Notes:
-- Beat 6's caption is the longest (13 words). The card starts 1.0 s in, as the reader reaches "this", and settles at 1.8 s.
-- The beat 7 box starts 1.5 s into the beat and settles at 2.1 s, earlier than round 1's 3.0 s. It echoes the caption's words.
+- The holds give beats 5 and 6 a second each after their main change. The ask card in beat 9 stays 5.6 s, against 4.2 s needed.
+- The beat 7 box starts 1.5 s into the beat and settles at 2.1 s. It echoes the caption's words.
 - Settled labels render at 11.1 px or more at 1366 × 657 and 12.6 px at 1280 × 720 (`figure-shots.mjs`).
 
 ## 6. Final frame (business)
 
-Player 91.1 s.
-- **Top:** the AI panel; the grey card "ALMOST EVERY OUTLINE OPENED / Differentiate on value", traced to the first run's grey bracket and its "AI'S FRAME" pill; the task card with its context.
-- **First run:** "The team", ten ticked plans, and "ONE FRAME / DIFFERENTIATE" over the ten lines. "THE MANAGER ASKS" sits over a dashed box holding "What frames are missing?". A navy line runs from that box down to "ONE IMAGINED ANSWER".
-- **Below:** "Same team, imagined" with ten ticked plans, and three bracketed goals: DIFFERENTIATE, MATCH ON COST and PARTNER OR LICENSE. The source line runs under them.
+Player 94.0 s.
+- **Top:** the AI panel; "NOT SEEN BY THE MANAGER" over the grey card "ALMOST EVERY OUTLINE OPENED / Differentiate on value", traced by a dashed line to the first run's grey bracket and its "AI'S FRAME" pill; the task card with its context.
+- **First run:** "The team", ten ticked plans, and "ONE FRAME / DIFFERENTIATE" over the ten lines. "THE MANAGER ASKS" sits over a dashed box holding "What frames are missing?". A navy line runs from that box down to "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?".
+- **Below:** "Same team, imagined" with ten ticked plans, and, under the sent-back question, three bracketed goals: DIFFERENTIATE, MATCH ON COST and PARTNER OR LICENSE. The source line runs under them.
+- **Phone:** the task card; the AI line marked unseen; the first run's frame, its first three questions "and seven more", and the manager's question; then the sent-back question over the three goal groups.
 - **Caption band:** the name and definition, then the reviewer's check and follow-up.
 
 **Fit:**
-- The phone player measures 841 px at 390 × 844.
+- The phone player measures 832 px at 390 × 844.
 - The controls hold their place at every moment, at 1440 × 900, 1366 × 657, 1280 × 720, 768 × 1024 and 390 × 844.
 - There is no horizontal scroll and there are no console errors.
 
@@ -200,4 +225,5 @@ Terwiesch et al. is paraphrased as on the PME page and wasn't re-read today.
 
 1. **The cast:** ten analysts and "the manager", in place of the example's ten managers and a head of strategy.
 2. **The workplace check:** "Reviewer's check: What frames are missing across the team? / Line up the problems. What else could the problem be?"
-3. **The answer link:** the imagined board is now labelled as one answer to the manager's question. In PME the question box stays empty, by design.
+3. **The send-back:** the imagined run is now the manager sending the plans back with "What else could the problem be?". In PME the question box stays empty, by design.
+4. **A cast key to add:** `reviewer_sends`, "faculty send" (classroom) and "the manager sends" (workplace). Beat 8 writes "the manager sends" literally until it exists.

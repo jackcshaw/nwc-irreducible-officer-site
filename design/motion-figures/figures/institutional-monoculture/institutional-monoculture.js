@@ -43,7 +43,7 @@
 		askOut: [75.3, 75.8], undim: [75.3, 76.5], ringB: 75.3, ringBStep: 0.1,
 		groups: [[77.3, 78.3], [78.5, 79.5], [79.7, 80.7]], brackets: [80.9, 81.7],
 		check: 87.8, follow: 90.8, qPulse: [90.8, 91.6], end: 96.3,
-		source: [88.8, 89.3], answer: [76.6, 77.3], // used only by editions that supply them
+		source: [88.8, 89.3], answer: [61.2, 61.9], // used only by editions that supply them
 	};
 	const AT = [0, 10.9, 18.3, 26.3, 39.8, 46.0, 52.9, 58.9, 66.1, 74.3, 87.8]; // beat starts
 
@@ -92,12 +92,20 @@
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
 	const LINES = ed.problems, LINES_B = ed.imagined.problems, GOALS = ed.imagined.goals, CTX = ed.context;
-	// An edition's own clock (business): cuts to the core clock, in core seconds, each skipping
-	// a static stretch. With no edits (PME) both maps are the identity, so the core renders
-	// exactly as before.
+	// An edition's own clock (business): edits to the core clock, in core seconds. A cut skips a
+	// static stretch; a hold freezes the core and adds time. With no edits (PME) both maps are
+	// the identity, so the core renders exactly as before.
 	const EDITS = ((ed.timeline && ed.timeline.edits) || []).slice().sort((a, b) => a.at - b.at);
-	const toCore = (tau) => { let o = 0; for (const e of EDITS) { if (tau < e.at + o) break; o -= e.cut; } return tau - o; };
-	const toBiz = (t) => { let o = 0; for (const e of EDITS) { if (e.at >= t) break; o -= Math.min(e.cut, t - e.at); } return t + o; };
+	const toCore = (tau) => {
+		let o = 0;
+		for (const e of EDITS) {
+			const bs = e.at + o;
+			if (tau < bs) break;
+			if (e.hold) { if (tau < bs + e.hold) return e.at; o += e.hold; } else o -= e.cut;
+		}
+		return tau - o;
+	};
+	const toBiz = (t) => { let o = 0; for (const e of EDITS) { if (e.at >= t) break; o += e.hold ? e.hold : -Math.min(e.cut, t - e.at); } return t + o; };
 	el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
 
@@ -227,6 +235,8 @@
 	mono(callout, 14, 24, L.opened, {fill: C.grey, ls: 0.4});
 	const callBand = el(callout, 'rect', {x: 10, y: 33, height: 26, rx: 2, fill: C.band});
 	const callText = serif(callout, 14, 52, ed.aiOpening, {fs: 18, fill: C.grey});
+	// Optional (business): the card is the viewer's view, labelled as unseen by the reviewer.
+	if (L.unseen) mono(callout, 0, -7, L.unseen, {fill: C.grey, ls: 0.4});
 	const leader = el(gA, 'line', {stroke: C.grey, 'stroke-width': 1.4, opacity: 0});
 	// The faculty's question: dashed, empty, in open space, aligned with nothing that answers it.
 	const qGroup = el(gA, 'g', {opacity: 0});
@@ -376,7 +386,9 @@
 		set(pill, {opacity: kG, transform: `translate(${pAt.x} ${pAt.y})`});
 		const la = {x: cAt.x + 220, y: cAt.y + CALL_H}, lb = {x: pAt.x + (M.pillW || 100) / 2, y: pAt.y};
 		const len = Math.hypot(lb.x - la.x, lb.y - la.y);
-		set(leader, {x1: la.x, y1: la.y, x2: lb.x, y2: lb.y, 'stroke-dasharray': len, 'stroke-dashoffset': len * (1 - kG), opacity: kG > 0 ? 1 : 0});
+		// With an unseen card (business) the drawn line settles dashed: a link for the viewer only.
+		const dashed = L.unseen && kG >= 1;
+		set(leader, {x1: la.x, y1: la.y, x2: lb.x, y2: lb.y, 'stroke-dasharray': dashed ? '5 4' : len, 'stroke-dashoffset': dashed ? 0 : len * (1 - kG), opacity: kG > 0 ? 1 : 0});
 		// The faculty's question.
 		const kQ = prog(t, ...T.qmark, E.house);
 		const qAt = lerp(Q_L, Q_C, kC);
@@ -453,11 +465,12 @@
 		p1.append(` ${ed.task.text}`);
 		NR.ctxP = h('p', 'im-n-ctx', NR.task);
 		NR.ctx = CTX.flat().map((s, j) => h('span', null, NR.ctxP, `${j ? ' ' : ''}${s}`));
-		NR.ai = h('p', 'im-n-ai', narrow);
+		NR.ai = h('p', NW.keep ? 'im-n-ai is-keep' : 'im-n-ai', narrow);
 		h('b', null, NR.ai, NW.ai);
 		NR.open = h('span', 'im-n-open', NR.ai);
 		NR.open.append(`${NW.opened} `);
 		h('i', null, NR.open, ed.aiOpening);
+		if (NW.unseen) h('span', 'im-n-unseen', NR.open, NW.unseen);
 		NR.asks = h('span', 'im-n-open', NR.ai);
 		NR.asks.append(`${NW.asks} `);
 		h('i', null, NR.asks, ed.aiChallenge.join(' '));
@@ -469,7 +482,7 @@
 			r.seq = h('span', 'im-n-seq', who);
 			if (key === 'a') { h('span', 'g', r.seq, NW.seqA[0]); r.seq.append(` → ${NW.seqA[1]}`); }
 			else { r.s1 = h('span', 'r', r.seq, NW.seqB[0]); r.s2 = h('span', 'g', r.seq, ` → ${NW.seqB[1]}`); r.s3 = h('span', null, r.seq, ` → ${NW.seqB[2]}`); }
-			const grid = h('div', 'im-n-grid', r.el);
+			const grid = r.grid = h('div', 'im-n-grid', r.el);
 			r.papers = Array.from({length: N}, () => {
 				const p = h('span', 'im-n-paper', grid);
 				h('i', 'ln', p); h('i', 'note', p); h('i', 'body', p); h('i', 'tick', p, '✓');
@@ -486,6 +499,7 @@
 		NR.a.q = h('span', 'im-n-q', NR.a.frame, '?');
 		NR.a.lines = h('ol', 'im-n-lines', NR.a.board);
 		NR.a.items = LINES.map((s) => h('li', null, NR.a.lines, s));
+		if (NW.keep) NR.a.compact = h('p', 'im-n-compact', NR.a.board, [...LINES.slice(0, 3), NW.more].join(' · '));
 		if (NW.askQ) NR.a.ask = h('p', 'im-n-ask', NR.a.board, NW.askQ);
 		NR.b = run('b');
 		NR.b.head = h('p', 'im-n-frame', NR.b.board, NW.answer || NW.spread);
@@ -506,9 +520,9 @@
 		show(NR.ctxP, t < T.lift);
 		NR.ctx.forEach((s, j) => vis(s, t >= T.ctx + T.ctxStep * j));
 		vis(NR.ai, t >= T.panel[0]);
-		show(NR.ai, t < T.askOut[0]);
+		show(NR.ai, NW.keep || t < T.askOut[0]);
 		NR.ai.classList.toggle('is-pulse', near(t, T.req, 1.6) || near(t, T.send, 1.2) || near(t, T.callout[0], 0.8));
-		show(NR.open, t >= T.callout[0] && t < T.send);
+		show(NR.open, t >= T.callout[0] && (t < T.send || (NW.keep && t >= T.askOut[0])));
 		show(NR.asks, t >= T.ask[0] && t < T.askOut[0]);
 		// First seminar.
 		const a = NR.a;
@@ -524,6 +538,9 @@
 			p.classList.toggle('is-pulse', near(t, o0, 0.6) || near(t, w0, T.writeDur) || near(t, r0, 0.3) || near(t, l0, 0.7));
 		});
 		vis(a.tag, t >= T.tagA[0]);
+		// Business keeps more words to the end, so the paper rows give way once the goals form.
+		const rows = !(NW.keep && t >= T.groups[0][0]);
+		show(a.grid, rows); show(a.tag, rows);
 		show(a.board, t >= T.lift);
 		vis(a.frameText, t >= T.bracket[0]);
 		show(a.pill, t >= T.grey[0]);
@@ -531,6 +548,7 @@
 		if (a.ask) { show(a.ask, t >= T.qmark[0]); a.ask.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8)); }
 		a.q.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8));
 		show(a.lines, t < T.compact[0]);
+		if (a.compact) show(a.compact, t >= T.compact[0]);
 		a.items.forEach((li, i) => { vis(li, t >= T.lift + T.liftStep * i + 0.3); li.classList.toggle('is-read', t >= T.read + T.readStep * i); });
 		a.lines.classList.toggle('is-open', t < T.bracket[0]);
 		a.lines.classList.toggle('is-ai', t >= T.grey[0]);
@@ -550,6 +568,7 @@
 			p.classList.toggle('is-pulse', near(t, r0, 0.6) || near(t, T.send + T.sendStep * i, 0.5) || near(t, n0, 0.5) || near(t, w0, 0.5) || near(t, T.groups[g][0], 1.0));
 		});
 		vis(b.tag, t >= T.tagB[0]);
+		show(b.grid, rows); show(b.tag, rows);
 		b.groups.forEach((g, k) => {
 			show(g, t >= T.groups[k][0]);
 			g.style.borderColor = t >= T.brackets[0] ? '' : 'transparent';

@@ -50,6 +50,9 @@
 .im-n-ctx { margin-top: 3px !important; padding-top: 3px; border-top: 1px solid var(--navy-line); }
 .im-n-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 0 0 8px !important; padding: 4px 8px; border: 1.5px solid rgba(91, 86, 79, 0.7); border-radius: 5px; background: rgba(222, 213, 196, 0.45); color: var(--stone); font: 400 13px/1.3 var(--serif); transition: box-shadow 160ms ease; }
 .im-n-ai.is-pulse { box-shadow: 0 0 0 3px rgba(10, 34, 66, 0.25); }
+/* Business keeps the AI line to the end, so it runs inline after the label to save height. */
+.im-n-ai.is-keep { display: block; }
+.im-n-ai.is-keep b { margin-right: 8px; }
 .im-n-open i { padding: 0 3px; background: #ded5c4; }
 .im-n-run { margin: 0 0 8px; padding-top: 6px; border-top: 1px solid var(--navy-line); }
 .im-n-who { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; margin: 0 0 6px !important; font: 600 13px/1.3 var(--sans); color: var(--red); }
@@ -84,6 +87,9 @@
 /* An edition can put the manager's question in words under the list (business). */
 .im-n-ask { margin: 6px 0 0 !important; padding: 2px 10px; border: 1.5px dashed rgba(10, 34, 66, 0.5); font: italic 400 14px/1.3 var(--serif); color: var(--ink); transition: border-color 160ms ease; }
 .im-n-ask.is-pulse { border-color: var(--ink); }
+/* Business keeps the AI's opening line (marked unseen by the manager) and a compact first-run list to the end. */
+.im-n-unseen { display: inline-block; margin-left: 6px; font: 600 11px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); }
+.im-n-compact { margin: 2px 0 0 !important; padding: 2px 8px 3px; border: 1.5px solid var(--stone); font: 400 13px/1.3 var(--serif); color: var(--ink); }
 .im-n-lines { list-style: none; margin: 0; padding: 3px 8px; border: 1.5px solid var(--ink); columns: 2; column-gap: 12px; font: 400 13px/1.3 var(--serif); color: var(--ink); }
 .im-n-lines li { break-inside: avoid; padding-left: 10px; text-indent: -10px; }
 .im-n-lines li::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 5px; border-radius: 50%; background: transparent; vertical-align: 2px; }
@@ -93,6 +99,10 @@
 .im-n-group { margin: 0 0 4px !important; padding: 2px 8px 3px; border: 1.5px solid var(--ink); font: 400 13px/1.3 var(--serif); color: var(--ink); }
 .im-n-group b { margin-right: 6px; font: 600 12px/1.3 var(--mono); text-transform: uppercase; color: var(--ink); }
 </style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; show it after 3 s regardless (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { d.classList.remove('ed-pending'); }, 3000); })(document.documentElement);</script>
 </head>
 <body>
 <header class="fig-top">
@@ -101,6 +111,7 @@
 </header>
 
 <main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 6 of 7</p><h1>Institutional monoculture</h1><p class="fig-setup">Shared systems and defaults narrow the range of frames a group considers.</p><p><strong>Faculty check:</strong> What frames are missing across the seminar? Line up each paper&#x27;s problem, then ask what other frames the task could take.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
 	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
 	     (MotionFigures.fillPage, plus the figure's own fill for text with links:
 	     data-im-linked, data-im-linked-items, data-im-lead); see CONVENTIONS.md, Editions. -->
