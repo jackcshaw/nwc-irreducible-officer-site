@@ -1,0 +1,263 @@
+{
+ "_doc": "Appropriate reliance, business edition: the study's own consulting tasks with the workplace cast. Every visible word of the scenario; role words come from casts.json ({key}); %move% is filled by the figure. The timeline, layout, gates and nameplate are core and stay in appropriate-reliance.js. Schema: CONVENTIONS.md, Editions.",
+ "id": "business",
+ "cast": "workplace",
+ "results": {
+  "inside": [
+   {
+    "value": "12.2%",
+    "label": "more tasks"
+   },
+   {
+    "value": "25.1%",
+    "label": "faster"
+   },
+   {
+    "value": "40%+",
+    "label": "higher quality"
+   }
+  ],
+  "outside": [
+   {
+    "name": "Without AI",
+    "value": 84.5,
+    "label": "84.5%"
+   },
+   {
+    "name": "GPT-4 alone",
+    "value": 70.6,
+    "label": "70.6%"
+   },
+   {
+    "name": "GPT-4 + overview",
+    "value": 60,
+    "label": "60%"
+   }
+  ]
+ },
+ "labels": {
+  "source": "DELL'ACQUA ET AL. · FIELD EXPERIMENT, 2023 · 758 BCG CONSULTANTS · SOME WITH GPT-4",
+  "cardA": "TASK A",
+  "cardB": "TASK B",
+  "taskA": [
+   "Segment the footwear industry market",
+   "based on users."
+  ],
+  "taskB": {
+   "pre": "Use a spreadsheet and ",
+   "mark": "insider interviews",
+   "post": " to",
+   "line2": "pick the brand a clothing firm should back."
+  },
+  "inside": "INSIDE THE FRONTIER",
+  "outside": "OUTSIDE THE FRONTIER",
+  "aiAnswer": "AI'S ANSWER",
+  "ready": "READY",
+  "cond1": "IF IT'S YOUR TEAM'S FIRST DRAFT",
+  "cond2": "IF IT GOES STRAIGHT INTO THE LAUNCH PLAN",
+  "budget": "TIME FOR ONE CHECK · A CHECK: WORK IT YOURSELF, THEN COMPARE",
+  "yourCall": "Your call",
+  "noCall": "No call made",
+  "checkThis": "Check this one",
+  "youRely": "You rely on it",
+  "moved": "Check moved to Task A",
+  "factA": {
+   "label": "WHAT THE EVIDENCE SUGGESTS",
+   "text": "No hidden facts: a weak answer shows when read."
+  },
+  "factB": [
+   "THE DECIDING DETAILS WERE IN THE INTERVIEWS",
+   "THE SPREADSHEET ONLY LOOKED COMPLETE"
+  ],
+  "sugA": "RELY ON IT",
+  "noteA": "A CHECK HERE LEAVES TASK B UNCHECKED",
+  "sugB": "WORK IT FROM THE INTERVIEWS, THEN COMPARE",
+  "options2": {
+   "rely": "Rely on it, after a careful read",
+   "move": {
+    "keep": "Keep my check here",
+    "move": "Move my check here",
+    "put": "Put my check here"
+   },
+   "time": "Ask for a week to check both"
+  },
+  "noteMove": "TASK B: READ-THROUGH ONLY",
+  "noteTime": "LAUNCH SLIPS A WEEK",
+  "sug2": "RELY ON IT · READ IT BEFORE IT'S BUILT",
+  "insideTitle": "WITH AI, ACROSS TASKS INSIDE THE FRONTIER",
+  "outsideTitle": "RIGHT ANSWERS ON TASK B",
+  "bracket": "Rated higher in quality, right or wrong",
+  "keySuggested": "SUGGESTED CALL · REASONED FROM THE RESULTS",
+  "keyYours": "YOUR CALLS"
+ },
+ "narrow": {
+  "source": "DELL'ACQUA ET AL. · FIELD EXPERIMENT, 2023 · 758 BCG CONSULTANTS · SOME WITH GPT-4",
+  "cardA": "Task A",
+  "cardB": "Task B",
+  "inside": "Inside the frontier",
+  "outside": "Outside the frontier",
+  "factA": {
+   "label": "What the evidence suggests",
+   "text": "No hidden facts: a weak answer shows when read."
+  },
+  "factB": [
+   "The deciding details were in the interviews.",
+   "The spreadsheet only looked complete."
+  ],
+  "aiAnswer": "AI's answer",
+  "ready": "Ready",
+  "cond1": "If it's your team's first draft",
+  "cond2": "If it goes straight into the launch plan",
+  "sugA": "Rely on it",
+  "noteA": "A check here leaves Task B unchecked",
+  "sugB": "Work it from the interviews, then compare",
+  "noteMove": "Task B: read-through only",
+  "noteTime": "Launch slips a week",
+  "sug2": "Rely on it · read it before it's built",
+  "insideTitle": "With AI, across tasks inside the frontier",
+  "outsideTitle": "Right answers on Task B",
+  "bracket": "Rated higher in quality, right or wrong",
+  "budget": "Time for one check · A check: work it yourself, then compare",
+  "keyYours": "Your calls",
+  "keySuggested": "Suggested call · reasoned from the results"
+ },
+ "gates": {
+  "legends": [
+   "Your one check goes to",
+   "If your segmentation goes straight into the launch plan, Task A"
+  ],
+  "options": {
+   "a": "Task A, segment the footwear market",
+   "b": "Task B, pick the clothing brand",
+   "rely": "Rely on it, after a careful read",
+   "time": "Ask for a week to check both"
+  },
+  "prompt": "Make your call first, or skip this question.",
+  "continue": "Continue",
+  "skip": "Skip this question",
+  "locked": "Make your call to see this.",
+  "ask": [
+   "Question 1. You have time to check one of the two tasks. Choose Task A or Task B, then press Enter or Continue. You can also skip the question.",
+   "Question 2. Now your segmentation goes straight into the launch plan. For Task A, choose Rely on it after a careful read, %move%, or Ask for a week to check both, then press Enter or Continue."
+  ],
+  "verdict1": {
+   "base": "Suggested call, reasoned from the results: rely on Task A, and work Task B yourself from the interviews, then compare. A check on Task A leaves Task B unchecked.",
+   "a": " You checked Task A and relied on Task B.",
+   "b": " You checked Task B and relied on Task A.",
+   "none": " You made no call."
+  },
+  "verdict2": {
+   "base": "Suggested call: Task A is still inside the frontier, so rely on it, and read it before it's built. Task B needs the check. Moving the check leaves Task B to a read-through only; asking for a week slips the launch a week.",
+   "rely": " You chose to rely on it after a careful read.",
+   "move": " You chose: %move%.",
+   "time": " You chose to ask for a week to check both.",
+   "none": " You made no call."
+  }
+ },
+ "beats": [
+  {
+   "text": "Two tasks from one study.",
+   "detail": "two task cards. Task A: \"Segment the footwear industry market based on users.\" Task B: \"Use a spreadsheet and insider interviews to pick the brand a clothing firm should back.\" At top left: \"Dell'Acqua et al. · Field experiment, 2023 · 758 BCG consultants · some with GPT-4\"."
+  },
+  {
+   "text": "An AI answers both. The two answers look equally finished.",
+   "detail": "under each task, \"AI's answer\" and two grey lines of writing on a beige band. Each gets the same grey \"Ready\" tag at the same moment."
+  },
+  {
+   "text": "You have time to check one. Which one?",
+   "detail": "along the bottom, \"Time for one check. A check: work it yourself, then compare.\" Each card gets the line \"If it's your team's first draft\" and a \"Check this one\" button. The figure waits for your choice. Your choice shows as a red dot on that card, and \"You rely on it\" in red on the other. If you skip, both cards say \"No call made\"."
+  },
+  {
+   "text": "A jagged frontier marks where an AI stops being reliable. Inside it, AI helped.",
+   "detail": "an uneven line is drawn down between the cards, labelled \"Inside the frontier\" over Task A and \"Outside the frontier\" over Task B. On Task A's card: with AI, across tasks inside the frontier, 12.2% more tasks, 25.1% faster, more than 40% higher quality."
+  },
+  {
+   "text": "On Task B, consultants with AI were right less often. Graders still rated their work higher.",
+   "detail": "the picture dims and a panel rises: right answers on Task B. Without AI, 84.5%. GPT-4 alone, 70.6%. GPT-4 plus a prompt-engineering overview, 60%. A bracket under the two GPT-4 bars: \"Rated higher in quality, right or wrong.\" The panel settles onto Task B's card."
+  },
+  {
+   "text": "Task B's deciding details were in the interviews. For Task A, the evidence suggests none.",
+   "detail": "in Task B, \"insider interviews\" is underlined, with \"The deciding details were in the interviews. The spreadsheet only looked complete.\" Then under Task A, labelled \"What the evidence suggests\": \"No hidden facts: a weak answer shows when read.\""
+  },
+  {
+   "text": "The evidence suggests relying on Task A and working Task B yourself from the interviews.",
+   "detail": "a key at bottom right: \"Suggested call · reasoned from the results\". The options you didn't choose fade. Task A gets a navy \"Rely on it\" tag, with the note \"A check here leaves Task B unchecked\". Task B gets \"Work it from the interviews, then compare\". Your choice stays in red."
+  },
+  {
+   "text": "Now your segmentation goes straight into the launch plan. What about Task A?",
+   "detail": "a second line appears on Task A: \"If it goes straight into the launch plan\", with three buttons: \"Rely on it, after a careful read\", \"Move my check here\" and \"Ask for a week to check both\". The figure waits for your choice. If you move your check from Task B, Task B's mark turns to a ring that says \"Check moved to Task A\"."
+  },
+  {
+   "text": "Still inside the frontier: rely on it, and read it before it's built. Task B needs the check.",
+   "detail": "the options you didn't choose fade. Beside \"Move my check here\": \"Task B: read-through only\". Beside \"Ask for a week to check both\": \"Launch slips a week\". Task A's second line gets a navy tag: \"Rely on it. Read it before it's built.\""
+  },
+  {
+   "text": "{check}: What evidence justified relying on the AI here, and what would have changed the call?",
+   "list": "{check}: What evidence justified relying on the AI here, and what would have changed the call? Change one condition and ask for the call again.",
+   "detail": "both lines under the picture at the same size. Both tasks, both answers, the frontier, the evidence and every suggested call stay in view."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What evidence justified relying on the AI here, and what would have changed the call?",
+  "follow": "Change one condition and ask for the call again."
+ },
+ "page": {
+  "kicker": "The skill",
+  "title": "Appropriate reliance",
+  "description": "An interactive teaching figure: with time to check one of two tasks from the Dell'Acqua et al. field experiment, you decide where the check goes, see what the study found, and make one more call when a condition changes.",
+  "setup": "You have time to check one of two AI answers. Decide where the check goes, then see what the study found.",
+  "printKicker": "The question",
+  "printCaption": "You have time to check one. Which one? The answer follows on the next page.",
+  "srTitle": "Appropriate reliance, an interactive figure in ten beats",
+  "srSummary": [
+   "An interactive figure with two tasks from a 2023 field experiment with BCG consultants. Task A: segment the footwear industry market based on users. Task B: use a spreadsheet and insider interviews to pick the brand a clothing firm should back. An AI answers both in the same form, each marked ready, and both answers will go into your team's first draft. You have time to check one task; a check means working it yourself, then comparing with the AI's answer. You choose which task gets the check and rely on the AI for the other. The rest of this description, and the rest of the beat list, appear after you answer or skip each question.",
+   "After the first question: a jagged line, the frontier, is drawn between the tasks: Task A inside, Task B outside. On tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster, at more than 40% higher quality. On Task B, consultants without AI were right 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus a prompt-engineering overview 60%, and graders rated the AI users' work higher in quality, right or wrong. Task B's deciding details were in the interviews; the spreadsheet only looked complete. For Task A, the evidence suggests no hidden facts: a weak answer shows when read. The suggested call, reasoned from the results, is to rely on Task A, since a check there leaves Task B unchecked, and to work Task B from the interviews yourself, then compare. Then your segmentation goes straight into the launch plan, and you choose again for Task A: rely on it after a careful read, move or put your check there, or ask for a week to check both.",
+   "After the second question: the suggested call is to rely on Task A and read it before it's built: it is still inside the frontier and a weak answer shows on a careful read. Task B needs the check. Moving the check leaves Task B to a read-through only; asking for a week to check both slips the launch a week. The figure ends on the {check_l}."
+  ],
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What evidence justified relying on the AI here, and what would have changed the call?",
+   "Change one condition and ask for the call again."
+  ],
+  "howHeading": "How this figure works",
+  "how": "Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two consulting tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning. Illustration based on Dell'Acqua et al. (2023): the tasks and results are the study's, and the time budget, the first draft and the launch plan are this figure's.",
+  "afterLocked": "After you make your call: make or skip both calls to open this.",
+  "afterSummary": "After you make your call: what a good answer says, the evidence, the tasks",
+  "after": [
+   {
+    "heading": "What a good answer says",
+    "text": "A good answer says where the check went and why. This is the figure's reasoning from the study's results; the study itself didn't test checking, a time budget, or what the work was for. Task B's deciding details were in the interviews, and the spreadsheet only looked complete. Graders rated the AI users' recommendations higher whether or not they were right, so a read-through wouldn't show a miss. That's where the one check belongs, and it starts from the interviews. Task A is the kind of work the study found inside the frontier, and the figure reads it as having no hidden facts: a weak segmentation shows when read. As a first draft it can go without a check. When the segmentation goes straight into the launch plan, it is still inside the frontier, so the call is still to rely on it, but now someone has to read it carefully before it's built. Moving the one check would leave Task B, the risky task, to a read-through; asking for a week to check both is defensible, and it slips the launch a week. Changing one condition and asking again shows whether {the_person} has a reason for the call."
+   },
+   {
+    "heading": "Evidence",
+    "text": "Dell'Acqua et al., [Navigating the Jagged Technological Frontier](https://www.hbs.edu/faculty/Pages/item.aspx?num=64700), HBS working paper 24-013 (2023). In the field experiment, 758 BCG consultants were split between two sets of tasks and randomly assigned to work without AI, with GPT-4, or with GPT-4 plus a prompt-engineering overview. On the tasks inside the frontier, consultants with AI finished 12.2% more tasks, 25.1% faster and at more than 40% higher quality. On the task chosen to fall outside it, consultants without AI were right about 84.5% of the time, with GPT-4 alone 70.6%, and with GPT-4 plus the overview 60%: in the working paper's words, with the two AI groups pooled, \"19 percentage points less likely to produce correct solutions\" (abstract). Graders still rated the AI users' recommendations higher in quality \"regardless of the correctness of their answer\" (p. 15). Two limits: the gap between the two AI groups is significant only at the 10% level, and so is the higher rating among wrong answers alone. The study examined GPT-4 as it was in 2023."
+   },
+   {
+    "heading": "About the tasks",
+    "text": "The tasks inside the frontier were 18 product-development questions for a fictional footwear company. Consultants generated ideas for a new shoe, segmented the market by users, listed the steps to launch it, and wrote a press release and a persuasive memo. On the task built to fall outside the frontier, consultants told a fictional clothing company's CEO which of its brands to invest in, working from a spreadsheet of financial data and interviews with company insiders. The spreadsheet was designed to look complete, but the deciding details were in the interviews, and the authors designed the task so that GPT-4 would get it wrong. In the study each consultant worked one set of tasks; the choice of where to spend one check, and the launch-plan condition, are this figure's. The task wording on screen is paraphrased. The frontier moves as models change; this is where it sat in 2023, with GPT-4."
+   }
+  ],
+  "quoteHeading": null,
+  "quotes": null,
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "The study:",
+    "text": "Dell'Acqua et al. (2023), HBS working paper 24-013",
+    "href": "https://www.hbs.edu/faculty/Pages/item.aspx?num=64700"
+   },
+   {
+    "lead": "See the failure:",
+    "text": "Uncalibrated reliance",
+    "href": "../uncalibrated-reliance/?edition=business"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section V",
+    "href": "https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency"
+   }
+  ],
+  "linksNote": "The skill and the reviewer's question come from an essay about judgment in military education. This page shows them with the consulting tasks from the study the essay cites."
+ }
+}

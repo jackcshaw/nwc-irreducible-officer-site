@@ -467,3 +467,5 @@ An operations pair: summarize renewal dates from 40 supplier contracts (inside),
 | *Moffatt v. Air Canada* 2024 | Decision text, BC Civil Resolution Tribunal decisions site |
 | Brynjolfsson, Li & Raymond 2025 | arXiv 2304.11771 v2 full text |
 | Dell'Acqua et al. 2023 | BCG-VERIFY.md (not re-read) |
+
+> **Verification note (October 28, frame-capture build):** the 97th-percentile, calibration, "reasonable" and 7,758/84% details for Obermeyer et al. could not be re-checked against the full text (a bot check blocked it). They were removed from the figure, whose page quotes the abstract only. Treat them as unverified until someone reads the full paper.

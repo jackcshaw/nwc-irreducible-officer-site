@@ -104,6 +104,7 @@
 	const rubricWash = el(topLayer, 'rect', {x: 32, y: 57, height: 30, rx: 3, fill: C.ink, 'fill-opacity': 0});
 	const rubric = el(topLayer, 'g');
 	mono(rubric, 40, RUB.y, ed.task.rubricLabel);
+	const rubricLabel = rubric.lastChild;
 	const rubricText = serif(rubric, 108, RUB.y, ed.task.rubric, {fs: 16, style: 'italic'});
 	const rubricLine = el(rubric, 'line', {x1: 108, y1: RUB.y + 5, x2: 108, y2: RUB.y + 5, stroke: C.ink, 'stroke-width': 1.6});
 
@@ -238,6 +239,10 @@
 		});
 		return {g, words};
 	};
+	// An edition's source line, drawn only when the edition has one (business, option A).
+	const sourceLines = L.source ? L.source.map((ln, i) => serif(facLayer, 724, 500 + 17 * i, ln, {fs: 13, style: 'italic'})) : [];
+	const stackedSource = root.querySelector('[data-id-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 	const spA = speech('a', Y.a1 + 36);
 	const spB = speech('b', Y.b + 36);
 
@@ -272,6 +277,12 @@
 			}
 		}
 		S.rubricW = W(rubricText);
+		// A longer standard label pushes the text right; PME's "RUBRIC ·" keeps it at 108.
+		S.rubricX = Math.max(108, 40 + W(rubricLabel) + 2);
+		set(rubricText, {x: S.rubricX});
+		set(rubricLine, {x1: S.rubricX, x2: S.rubricX});
+		// The enlarged rubric stays inside the task card.
+		S.rubricScale = Math.min(1.3, (416 - RUB.x) / (S.rubricX + S.rubricW - RUB.x));
 		// Dot paths (block-local).
 		const N = (i) => ({x: 16, y: NOTE_Y[i] - 5});
 		const R = (k) => ({x: 173, y: rowY(k) - 15}); // beside a first-student bubble
@@ -350,11 +361,11 @@
 		const kc = prog(t, ...T.card, E.house);
 		set(card, {opacity: kc, transform: `translate(0 ${mix(6, 0, kc)})`});
 		const hi = prog(t, ...T.rubricHi, E.house) - prog(t, ...T.rubricBack, E.inOut);
-		const sc = 1 + 0.3 * hi;
+		const sc = 1 + ((S.rubricScale || 1.3) - 1) * hi;
 		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(${RUB.x} ${RUB.y}) scale(${sc}) translate(${-RUB.x} ${-RUB.y})`});
-		set(rubricWash, {'fill-opacity': 0.09 * hi, width: (108 - 40 + (S.rubricW || 196)) * sc + 14});
+		set(rubricWash, {'fill-opacity': 0.09 * hi, width: ((S.rubricX || 108) - 40 + (S.rubricW || 196)) * sc + 14});
 		const kr = prog(t, ...T.rubricHi, E.inOut);
-		set(rubricLine, {x2: 108 + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - 0.6 * prog(t, ...T.rubricBack) : 0});
+		set(rubricLine, {x2: (S.rubricX || 108) + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - 0.6 * prog(t, ...T.rubricBack) : 0});
 
 		// ---- first student --------------------------------------------------------------
 		set(gA, {transform: `translate(0 ${mix(Y.a0, Y.a1, prog(t, ...T.moveA, E.inOutStrong))})`});
@@ -448,6 +459,7 @@
 		const words = (sp, [t0, t1]) => sp.words.forEach((w, i) => { const ti = t0 + ((t1 - t0) * i) / sp.words.length; set(w, {'fill-opacity': prog(t, ti, ti + 0.15)}); });
 		words(spA, T.wordsA);
 		words(spB, T.wordsB);
+		sourceLines.forEach((n) => set(n, {opacity: prog(t, T.check + 1.0, T.check + 1.5)}));
 
 		renderNarrow(t);
 	};

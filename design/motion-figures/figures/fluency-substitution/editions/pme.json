@@ -158,7 +158,7 @@
 		],
 		"rowRecv": "{receive|upper}",
 		"q1": {
-			"label": "FACULTY ASK",
+			"label": "{reviewer_ask|upper}",
 			"lines": [
 				"Papers aside: what do you",
 				"recommend, and why?"
@@ -195,7 +195,7 @@
 		"same": "Suppose it matches the first {person}'s paper word for word.",
 		"paper": "Both handed in this paper",
 		"q1": {
-			"label": "Faculty ask",
+			"label": "{reviewer_ask}",
 			"question": "Papers aside: what do you recommend, and why?"
 		},
 		"q2": {
@@ -307,7 +307,7 @@
 			"Can {the_person} independently explain the judgment in plain speech?",
 			"Then change one fact. What would you recommend now?"
 		],
-		"checkFollow": "Both students in the figure explain the call clearly without the paper. The second line separates them. Section VIII of the essay looks for the student who \"revises under challenge rather than retreating to the artifact's language\". In the oral defense in Section IX, faculty ask what evidence would change the recommendation.",
+		"checkFollow": "Both students in the figure explain the call clearly without the paper. The second line separates them. Section VIII of the essay looks for the student who \"revises under challenge rather than retreating to the artifact's language\". In the oral defense in Section IX, {reviewer_ask_l} what evidence would change the recommendation.",
 		"quoteHeading": "From the essay",
 		"quote": "Fluency substitution is easier to miss. AI produces the tone of analytic maturity (balanced paragraphs, caveats in the right places, the measured voice of a considered judgment) and the student mistakes well-ordered language for well-owned reasoning. Researchers studying AI's effects on student cognition have introduced the concept of epistemic confinement to describe this condition: an illusion of competence while operating entirely within AI-constructed analytical boundaries, where the student believes they are thinking independently while the frame doing the work was never theirs ([Chow et al., 2026](https://ojs.aut.ac.nz/pjtel/article/view/246)). In strategy, fluency substitutes for deciding. A paragraph that balances every consideration may never identify which risk actually matters most.",
 		"cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",

@@ -1,17 +1,20 @@
 // Stills for an interactive figure's branches: for each preset of the reader's calls
 // (passed as ?calls=…), a still at chosen beats' settled moments and the final frame;
 // plus each question with its controls open, and a 390px final still.
-// usage: node figure-branches.mjs <slug> [port]   (serve motion-figures/ first)
+// usage: node figure-branches.mjs <slug> [port] [--edition=id]   (serve motion-figures/ first)
+// --edition=id loads ?edition=id and writes to shots/<id>/, as figure-shots.mjs does.
 // The presets live in figures/<slug>/branches.json:
 //   {"branches": {"name": "g1:a,g2:rely", …}, "beats": [7, 9], "gates": [0, 1],
 //    "gateSteps": {"1": ["selector to click", …]}}
 import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
 import { mkdirSync, readFileSync } from "node:fs";
 
-const [slug, portArg] = process.argv.slice(2);
+const argv = process.argv.slice(2);
+const [slug, portArg] = argv.filter((a) => !a.startsWith("--"));
+const edition = (argv.find((a) => a.startsWith("--edition=")) || "").split("=")[1] || "";
 const base = `http://127.0.0.1:${portArg || 5291}/figures/${slug}/index.html`;
 const dir = new URL(`../figures/${slug}/`, import.meta.url).pathname;
-const out = `${dir}shots/`;
+const out = `${dir}shots/${edition ? `${edition}/` : ""}`;
 mkdirSync(out, { recursive: true });
 const cfg = JSON.parse(readFileSync(`${dir}branches.json`, "utf8"));
 const b = await chromium.launch();
@@ -23,7 +26,7 @@ async function open(query, opts = {}) {
   const p = await c.newPage();
   p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   p.on("pageerror", (e) => errors.push(e.message));
-  await p.goto(`${base}?${query}`);
+  await p.goto(`${base}?${[edition && `edition=${edition}`, query].filter(Boolean).join("&")}`);
   await p.evaluate(() => document.fonts.ready);
   await p.waitForFunction((id) => window.__motionFigures?.[id], slug);
   await p.waitForTimeout(200);

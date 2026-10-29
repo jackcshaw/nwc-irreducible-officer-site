@@ -1,99 +1,173 @@
 # Frame capture: business edition storyboard
 
-Edition `business`, workplace cast. Built from `editions/business.json` on top of the unchanged core in `storyboard.md` (timeline, layout, motion, colour grammar, nameplate). This file lists only what differs from the PME edition. The words live in the data files: `editions/business.json` for the scenario and `../../casts.json` (workplace) for role words. If this file and the data disagree, the data is what ships.
+Edition `business`, workplace cast, round 2 (after `tests/business-figure-read-1.md`). Built from `editions/business.json` on the core in `storyboard.md` (layout, motion, colour grammar, nameplate). This file lists what differs from PME. If it and the data disagree, the data is what ships.
 
-Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page.
+Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page. Runtime: 91.9 s on the figure clock, 94.9 s in the player (PME: 86.2 and 89.2).
 
-## 1. Source and evidence treatment
+## 1. Source and evidence
 
-*Illustration based on Obermeyer, Powers, Vogeli & Mullainathan (2019), "Dissecting racial bias in an algorithm used to manage the health of populations," Science 366: 447–453.* Scenario and sensitivity rules: BUSINESS-EXAMPLES.md, section 1. Evidence follows option A (EDITIONS-PLAN.md), with no new evidence beat:
+*Illustration based on Obermeyer, Powers, Vogeli & Mullainathan (2019), "Dissecting racial bias in an algorithm used to manage the health of populations," Science 366: 447–453.* Option A (EDITIONS-PLAN.md), with one exception Jack approved where the finding is the turn: the check in beat 12.
 
 - **Setup:** "Illustration based on Obermeyer et al. (2019). The analysts, their AI and the task are constructed."
-- **Under the final frame:** "Illustration based on Obermeyer et al., Science (2019)." It is in the SVG on the picture stage (fades in 80.5–81.0 s). On the stacked phone view it sits just under the controls, outside the fixed-height player, because the phone budget has no room under the final beat.
-- **On the page:** "The study behind this example", a section after the check. The race finding is quoted from the abstract word for word, as are the other passages (verified in BUSINESS-EXAMPLES.md and against the PubMed abstract record). It says the study's algorithm was a prediction model with no generative AI. It ties the second analyst's note to the condition the study found, and states that the figure's people, considerations and ranking are constructed.
+- **Under the final frame:**
+  - "Illustration based on Obermeyer et al., Science (2019)." is in the SVG, fading in 1 s after the check.
+  - On the stacked phone view, it sits just under the controls.
+- **On the page:** "The study behind this example".
+  - Every quote is from the abstract, word for word, checked against the PubMed record (PMID 31649194).
+  - The race finding is stated in the abstract's words.
+  - The section says the study's algorithm was a prediction model, with no generative AI involved.
+  - It says what the paper did: it compared how sick patients were at the same risk score, and that score was the algorithm's prediction of cost.
+  - It states that the figure's people, considerations, rankings and check are constructed.
+- **The figure's check** is worded as "At the same predicted cost, some patients are sicker." This is the abstract's "At a given risk score, … considerably sicker", with the race named only on the page.
 
-Sensitivity handling kept from BUSINESS-EXAMPLES.md:
+Sensitivity handling:
 - Race appears only on the page, in the paper's words.
 - The chips never mention race. "Access to care" is the chip.
 - Neither analyst is biased; the frame produces the effect.
-- The last word in the figure is the reviewer's check. Nothing in the figure says "AI is biased".
 
-## 2. Core change (for Jack to confirm)
+### Source notes for the companion's source spine
 
-**What stays:**
+**Verified, abstract (p. 447), from the PubMed record retrieved October 28, 2026:**
+- "Health systems rely on commercial prediction algorithms to identify and help patients with complex health needs."
+- "a widely used algorithm, typical of this industry-wide approach and affecting millions of patients, exhibits significant racial bias"
+- "At a given risk score, Black patients are considerably sicker than White patients, as evidenced by signs of uncontrolled illnesses."
+- "Remedying this disparity would increase the percentage of Black patients receiving additional help from 17.7 to 46.5%."
+- "The bias arises because the algorithm predicts health care costs rather than illness, but unequal access to care means that we spend less money caring for Black patients than for White patients."
+- "Thus, despite health care cost appearing to be an effective proxy for health by some measures of predictive accuracy, large racial biases arise."
+- "We suggest that the choice of convenient, seemingly effective proxies for ground truth can be an important source of algorithmic bias in many contexts."
+- Citation: *Science* 2019 Oct 25; 366(6464): 447–453. doi:10.1126/science.aax2342.
+
+**Not verified, so removed from the page.** These need a check against the published full text. A bot check blocked the full text from this session. The open copy (eScholarship) is the *submitted* version, so its wording and pages may differ from *Science*'s.
+- the 97th-percentile automatic enrolment (cited p. 448);
+- "well calibrated across races" (p. 449);
+- "reasonable" and "by no means the only reasonable choice" (pp. 450–451);
+- "7758, an 84% reduction in bias" (p. 453);
+- "high-risk care management";
+- "roughly 200 million people".
+
+BUSINESS-EXAMPLES.md still lists these as verified.
+
+## 2. Core changes (for Jack to confirm)
+
+**The payoff is the study's finding** (cold read 1, problem 1).
+- In round 1, the second analyst kept cost and shipped the same ranking. In the real case the condition they named held, so both rankings would have been wrong.
+- **What happens now:**
+  - The second analyst keeps cost for now and writes down what would change it (beat 9).
+  - When the manager asks "What would change it?", the second analyst checks that condition (beat 12). It holds: at the same predicted cost, some patients are sicker.
+  - Their frame changes: chronic illness replaces next year's costs, and next year's costs joins the set-aside four.
+  - Their ranking is rewritten, with red change bars, as "Which patients are sickest?".
+  - Under the first analyst's frame: "Nothing to check". They never named what would change it.
+- The final frame shows both titles beside the task card's "need": "cost the most?" and "sickest?".
+
+**Still core:**
 - the reasonable first frame becomes the working frame (beats 3–5);
-- the turn that makes the unexamined frame visible (beat 6, the pull-back);
-- the final copy carries no sign of where its frame came from (beats 7 and 9);
-- "Why this frame? What would change it?" (beats 10–11).
+- the pull-back turn (beat 6);
+- the final copy carries no sign of the AI (beats 7–8);
+- identical rankings until someone asks (beat 10);
+- "Why this frame? What would change it?" (beats 11–13).
 
-The identical-paper beat stays too: two identical rankings, because both analysts keep the same frame.
+**Beat 7 is split** (problem 2).
+- "The manager receives the final ranking." plays while the key, the wipe and the brackets are on screen.
+- "Nothing in it shows the frame came from the AI." starts only after the key and brackets have gone (core 52.45 s). A 2.0 s hold gives it reading time.
 
-**What changes:** beat 8 and the reveal.
-- In PME the second student weighs all six considerations and *chooses* the AI's frame.
-- In the study, the cost frame is reasonable but fails exactly when some patients cost less because they get less care. A second analyst who simply chose cost would show the figure endorsing the frame the study found biased.
-- So the second analyst weighs all six, **keeps cost for now and writes down what would change it**. The figure shows a red note under "SET ASIDE": "WOULD CHANGE IT / If some patients cost less / because they get less care".
-- The note is hidden with the weighing in beat 9 and returns with it in beat 10. The beat 10 caption becomes "One knows what would change it" instead of "One can show what they weighed".
-- Owning the frame now includes knowing how it fails. The page then shows that this condition is the one the study found.
+**The note has its own hold** (problem 3). After it lands, the picture holds for 5.8 s (13 words ÷ 3 + 1.5 s) before the next caption and before the second ranking is drawn. It fades with the weighing in beat 10, so it no longer hangs alone.
 
-**Smaller changes:**
-- the paper becomes a ranking;
-- the conclusion becomes a cut-off;
-- the task is a question, "Which patients need the most help from the program?";
-- the AI narrows it to "Which patients cost the most?". "need" and "help from the program" fade, and "cost" and "?" appear.
+**The phone keeps the task to the end** (problem 5).
+- An "EXAMPLE TASK" line stays from beat 9 to the final frame, beside the rankings' titles.
+- The note uses the same words as on desktop.
+- To fit 844 px, these beats use compact papers (title only), a one-line ask, the note and the check full width, and 8 px section gaps (business only). The player measures 826 px at 390 × 844.
 
-BUSINESS-EXAMPLES.md suggested a one-word swap ("greatest needs" to "greatest costs"). The question form reads more naturally on the card and still makes the swap of need for cost visible. Same layout, same timings.
+**How the clock differs.** `timeline.edits` in the edition data changes the clock; the core is untouched, and PME has no edits.
+- Cuts trim static holds by 8.9 s in all, all within reading time plus 1.5 s:
+  - beat 1, 1.5 s;
+  - beat 2, 2.0 s;
+  - beat 6, 1.8 s;
+  - beat 10, 1.8 s;
+  - beat 11, 1.8 s.
+- Holds add 14.6 s:
+  - beat 8 (7b), 2.0 s;
+  - beat 9's note, 4.1 s;
+  - the turn, 8.5 s.
 
 ## 3. Words that differ, beat by beat
 
-The cast supplies the role words: "student" becomes "analyst", "faculty" becomes "the manager", and "Faculty check" becomes "Reviewer's check". The table lists every visible difference. Beats not listed (0, 2, 4, 6) differ only in the role word, or not at all.
+The cast supplies the role words: "student" becomes "analyst", "faculty" becomes "the manager", and "Faculty check" becomes "Reviewer's check".
 
-| Beat | Caption (business) | Picture words that differ from PME |
+| # | Caption | Picture words that differ from PME |
 | --- | --- | --- |
-| 1 · The task | An analyst gets an open care-program task. | Task card: "Which patients need the most / help from the program?"; dot label "Analyst" |
-| 2 · Many things could matter | (same caption) | Six chips: Chronic illness, Next year's costs, Avoidable visits (top row); Program budget, Access to care, Who it can help (bottom row). The AI's two are Next year's costs and Program budget |
-| 3 · A narrower frame | The analyst asks an AI. It proposes a reasonable, narrower frame. | Title "Which patients cost the most?" (kept: Which, patients, the, most; added: cost, ?) |
-| 4–5 · Takes it up, revisions | …adding evidence and a firmer cut-off. | "ANALYST'S DRAFT 1/2/3"; stacked view: "a ranking under the AI's two headings", "and a firmer cut-off" |
-| 7 · What the manager receives | The manager receives the final ranking. Nothing shows the frame came from the AI. | "WHAT THE MANAGER RECEIVES: THE FINAL RANKING", "WHAT THE MANAGER RECEIVES", "FROM THIS ANALYST" |
-| 8 · A second analyst | A second analyst, also using AI, weighs all six and keeps cost, for now. | "First analyst", "Second analyst"; **new:** red "WOULD CHANGE IT / If some patients cost less / because they get less care" under "SET ASIDE" (fades in 62.5–63.0 s). Stacked view: "Would change it: if low cost reflects less care." |
-| 9 · The same ranking | That analyst writes the same ranking; the weighing doesn't show. | Stacked view: "The weighing doesn't show in either ranking." Strip B hides 240 units up instead of 185, to clear the note |
-| 10 · Ask each analyst | Ask each analyst why this frame. One knows what would change it. | "THE MANAGER ASKS EACH ANALYST / Why this frame?"; the note returns with strip B |
-| 11 · Reviewer's check | Reviewer's check: What problem did the analyst choose to solve? / Why this frame? What would change it? | **New:** source line under the picture (80.5–81.0 s) |
+| 1 | An analyst gets an open care-program task. | Task card: "Which patients need the most / help from the program?"; "Analyst" |
+| 2 | Many things could matter. Framing means picking which ones define the problem. | Chips: Chronic illness, Next year's costs, Avoidable visits; Program budget, Access to care, Who it can help |
+| 3 | The analyst asks an AI. It proposes a reasonable, narrower frame. | Title "Which patients cost the most?" (kept: Which, patients, the, most; added: cost, ?) |
+| 4–5 | …takes up the frame… / …adding evidence and a firmer cut-off. | "ANALYST'S DRAFT n" |
+| 6 | Step back with us: every revision stayed inside the AI's frame. | — |
+| 7 | The manager receives the final ranking. | "WHAT THE MANAGER RECEIVES: THE FINAL RANKING", "AI-SUPPLIED" |
+| 8 | Nothing in it shows the frame came from the AI. | "WHAT THE MANAGER RECEIVES", "FROM THIS ANALYST" |
+| 9 | A second analyst, also using AI, weighs all six and keeps cost, for now. | "WOULD CHANGE IT / If some patients cost less / because they get less care" |
+| 10 | That analyst writes the same ranking; the weighing doesn't show. | "Second analyst" |
+| 11 | Ask each analyst why this frame. One knows what would change it. | "THE MANAGER ASKS EACH ANALYST / Why this frame?" |
+| 12 | The second analyst checks it: at the same predicted cost, some patients are sicker. The frame changes. | "What would change it?"; red panel "THE CHECK / Patients at the same predicted cost: / fewer illnesses / more illnesses / Some are sicker. The condition holds."; chip swap; "Which patients are sickest?", "Chronic illness"; "NOTHING TO CHECK" |
+| 13 | Reviewer's check: What problem did the analyst choose to solve? / Why this frame? What would change it? | Source line under the picture |
+
+**The turn's moments** (seconds into beat 12):
+- 0.3: "What would change it?";
+- 1.0: the panel;
+- 1.6–2.4: the bars grow;
+- 2.6: the result;
+- 3.6–4.6: the chip swap, and "Nothing to check";
+- 4.4–6.0: the rewritten ranking (title, then rows);
+- then a 2.5 s hold.
 
 ## 4. Pace
 
-Reading time is caption words ÷ 3; each beat must also hold at least 1.5 s after the reading. The PME rule (total at least twice the reading time) still holds for every beat; beat 6's caption is unchanged from PME and has PME's margin. Label words are new words inside the picture.
+Reading time is caption words ÷ 3. Each beat runs at least its reading time plus 1.5 s. Times are on the figure clock; add 3.0 s for the player.
 
-| Beat | Time (s, figure; player +3.0) | Caption words | Reading (s) | Reading + 1.5 (s) | 2× reading (s) | Label words (PME) | Beat (s) |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 0.0–6.0 | 7 | 2.3 | 3.8 | 4.7 | 12 (11) | 6.0 |
-| 2 | 6.0–14.0 | 12 | 4.0 | 5.5 | 8.0 | 16 (13) | 8.0 |
-| 3 | 14.0–23.0 | 11 | 3.7 | 5.2 | 7.3 | 7 (5) | 9.0 |
-| 4 | 23.0–31.0 | 12 | 4.0 | 5.5 | 8.0 | 3 (3) | 8.0 |
-| 5 | 31.0–38.0 | 10 | 3.3 | 4.8 | 6.7 | 2 (2) | 7.0 |
-| 6 | 38.0–45.3 | 11 | 3.7 | 5.2 | 7.3 | 0 (0) | 7.3 |
-| 7 | 45.3–55.3 | 14 | 4.7 | 6.2 | 9.3 | 15 (13) | 10.0 |
-| 8 | 55.3–64.7 | 14 | 4.7 | 6.2 | 9.3 | 22 (9) | 9.4 |
-| 9 | 64.7–71.5 | 10 | 3.3 | 4.8 | 6.7 | 3 (3) | 6.8 |
-| 10 | 71.5–79.5 | 12 | 4.0 | 5.5 | 8.0 | 10 (9) | 8.0 |
-| 11 | 79.5–86.2 | 10 + 7 | 3.3 + 2.3 | 4.8 (check) | 6.7 (check) | 7 (0) | 6.7, then rests |
-| **Total** | | **130** (PME 130) | **43.3** | | | **97** (73) | **86.2 figure, 89.2 player** |
+| # | Start | Length (s) | Words | Reading (s) | Reading + 1.5 (s) |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 0.0 | 4.5 | 7 | 2.3 | 3.8 |
+| 2 | 4.5 | 6.0 | 12 | 4.0 | 5.5 |
+| 3 | 10.5 | 9.0 | 11 | 3.7 | 5.2 |
+| 4 | 19.5 | 8.0 | 12 | 4.0 | 5.5 |
+| 5 | 27.5 | 7.0 | 10 | 3.3 | 4.8 |
+| 6 | 34.5 | 5.5 | 11 | 3.7 | 5.2 |
+| 7 | 40.0 | 7.15 | 6 | 2.0 | 3.5 |
+| 8 | 47.15 | 4.85 | 10 | 3.3 | 4.8 |
+| 9 | 52.0 | 13.5 | 14 | 4.7 | 6.2 (note: 5.8 s of its own) |
+| 10 | 65.5 | 5.0 | 10 | 3.3 | 4.8 |
+| 11 | 70.5 | 6.15 | 12 | 4.0 | 5.5 |
+| 12 | 76.65 | 8.55 | 17 | 5.7 | 7.2 |
+| 13 | 85.2 | 6.7, then rests | 10 + 7 | 3.3 + 2.3 | 4.8 |
+| **Total** | | **91.9 (94.9 player)** | **149** | | |
 
-Notes:
-- Beat 8 carries the most new picture words (the note, 13 words). The note appears 7.2 s into the beat, after the caption has been read twice. It stays readable until strip B hides, about 3.3 s into beat 9, and it is back in beats 10 and 11, so it is on screen for about 17 s in all.
-- The beat 11 source line appears 1.0 s after the check and is small italic ink at the bottom of the stage, so the check stays the last word.
+The turn adds about 31 picture words. They arrive in steps over 6 s and stay through the final beat (about 15 s on screen).
 
 ## 5. Final frame (business)
 
-Player 89.2 s. The task card ("Which patients need the most help from the program?") and "THE MANAGER ASKS EACH ANALYST / Why this frame?" are on the right. "WHAT THE MANAGER RECEIVES" sits over two identical rankings titled "Which patients cost the most?", headed "First analyst" and "Second analyst". Under the first is the AI's grey frame with the dot inside. Under the second is the red chosen frame, the four set aside, and "WOULD CHANGE IT / If some patients cost less / because they get less care". Under the picture is "Illustration based on Obermeyer et al., Science (2019)." The caption band reads "FRAME CAPTURE · The first plausible frame becomes the working frame, unexamined." and "REVIEWER'S CHECK · What problem did the analyst choose to solve? / Why this frame? What would change it?"
+Player 94.9 s.
+- On the right: the task card ("Which patients need the most help from the program?"), then "THE MANAGER ASKS EACH ANALYST / Why this frame? / What would change it?", then the red check panel.
+- On the left, under "WHAT THE MANAGER RECEIVES":
+  - "First analyst": "Which patients cost the most?" (next year's costs, program budget), with the AI's grey frame and "NOTHING TO CHECK" under it.
+  - "Second analyst": "Which patients are sickest?" (chronic illness, program budget), with red change bars. Under it are the red chosen frame with chronic illness, the set-aside four (now including next year's costs) and the note.
+- Under the picture: the source line.
+- Caption band: the definition, "REVIEWER'S CHECK", and both question lines.
 
-Stills: `shots/business/` (a still per beat, `final.png`, `final-1440.png` and `final-390.png`, reduced and page views). Preview: `shots/frame-capture-business.mp4`, `.webm` and `.gif`.
+On the phone, the final view is the task line, the two rankings' titles, the ask, both columns, the note and the check.
+
+Stills: `shots/business/` (a still per beat, `final.png`, `final-1440.png`, `final-390.png`, reduced and page views). Preview: `shots/frame-capture-business.mp4`, `.webm` and `.gif`.
 
 ## 6. Page
 
-All page copy is in `editions/business.json` → `page`: setup, check heading, lines and follow-up, the evidence section, the essay quote (unchanged; it is the source of the failure mode) and links. The edition switch reads "See this with: Workplace · PME", with the current one bold, and under it "PME: example from *The Irreducible Officer*, the National War College essay." Both lines are the same in every edition. The copy was checked with writing-as-jack (mechanical pass).
+All copy is in `editions/business.json` → `page`.
+- **Setup and check:** the setup, then the check with "Before the check, both analysts…" as the follow-up.
+- **Evidence:** "The study behind this example", abstract quotes only.
+- **No essay quote:** the PME quote's "student" and "adversary" wording is gone.
+- **"Go further":** a line on where the failure mode comes from, then two links: "The study" (doi) and "The original essay, written for military education" (*The Irreducible Officer*, Section II).
+- **Removed:** the PME-only links (book chapter, companion).
+- **Switch:** "See this with: Workplace · PME", then "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay."
+
+The copy passed writing-as-jack's mechanical check.
 
 ## 7. Questions for Jack
 
-1. The beat 8 change: the second analyst keeps cost "for now" and writes what would change it. Confirm this is the faithful variant.
-2. The workplace check: "Reviewer's check: What problem did the analyst choose to solve? / Why this frame? What would change it?"
-3. The phone view shortens the note to "if low cost reflects less care" (two lines) to stay inside 844 px. The desktop wording is longer.
+1. The payoff: the second analyst checks, the condition holds, and the frame changes to chronic illness. Confirm this is the faithful variant, with the evidence exception it uses.
+2. The workplace check wording (unchanged): "Reviewer's check: What problem did the analyst choose to solve? / Why this frame? What would change it?"
+3. The four unverified passages (section 1) need a check against the published full text before they return to the page or reach the source spine.

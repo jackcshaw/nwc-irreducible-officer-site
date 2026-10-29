@@ -763,6 +763,9 @@
 		let tallest = 0;
 		const at = (tau) => renderNarrow(toCore(tau).t, tau);
 		BEATS.forEach((b, i) => { at(i < BEATS.length - 1 ? BEATS[i + 1].at - 0.02 : END); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
+		// An edition with its own clock can open a beat taller than it ends (business beat 8
+		// opens on the longer "the final ranking" label), so measure each opening too.
+		if (EDITS.length) BEATS.forEach((b) => { at(b.at + 0.05); tallest = Math.max(tallest, narrow.getBoundingClientRect().height); });
 		narrow.style.minHeight = `${Math.ceil(tallest)}px`;
 		at(player ? player.time() : 0);
 	};

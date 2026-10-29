@@ -138,7 +138,7 @@
    "checked": "✓ CHECKED",
    "used": "USED AS IS"
   },
-  "faculty": "FACULTY SEE ONLY THE BRIEFS",
+  "faculty": "{reviewer_sees|upper} ONLY THE BRIEFS",
   "key": {
    "ai": "WRITTEN BY AI",
    "own": "{A_person|upper}'S OWN WORK"
@@ -237,7 +237,7 @@
    "checked": "✓ Checked",
    "used": "Used as is"
   },
-  "faculty": "Faculty see only the briefs",
+  "faculty": "{reviewer_sees} only the briefs",
   "evidence": {
    "label": "Right answers on a task outside the jagged frontier",
    "rows": [
@@ -272,11 +272,11 @@
    "detail": "the \"Ready\" tag on the AI's Part 2 swells, and the dot moves down to the Part 2 row. Part 2 slides into the first brief, and the dot marks it \"Used as is\". The aid reports close."
   },
   {
-   "text": "Another student, with the same answers, checks each at its source.",
+   "text": "{Another}, with the same answers, checks each at its source.",
    "detail": "a second red dot labelled {second} and an empty sheet labelled \"{second}'s brief\" appear. The dot pulses and both \"Ready\" tags blink. The dot opens both aid reports, and Part 1 slides into its brief, marked \"Checked\"."
   },
   {
-   "text": "That student checks Part 2 against the port reports, and corrects it.",
+   "text": "{That_person} checks Part 2 against the port reports, and corrects it.",
    "detail": "the dot opens the port survey, headed \"Capacity\": \"4 docks, 5 each\". Its note appears large in the second brief: \"Survey: 4 docks, 5 ships each.\" The dot opens the harbor log, headed \"Open today\": \"Docks 1, 3, 4\", and set apart, \"Dock 2: closed\". Its note appears: \"Log: dock 2 closed for repairs.\" After a pause, Part 2 slides into the second brief. The dot strikes out \"20\" and writes \"15\", strikes out \"4\" and writes \"3 open\", so it reads \"15 ships a day: 3 open docks at 5 each\", and marks it \"Checked\". The first brief still says 20."
   },
   {
@@ -288,8 +288,8 @@
    "detail": "the picture dims and a panel rises: right answers on a task outside the jagged frontier. Without AI: about 84.5%. With AI, two groups: 60% and 70%. A bracket beside the AI bars: \"Rated higher in quality than without AI, regardless of correctness.\" Source: Dell'Acqua et al. (2023), BCG consultants, HBS working paper 24-013."
   },
   {
-   "text": "Faculty point to each part in turn and ask what justified relying on it.",
-   "detail": "the panel goes. The red marks and the second student's note lift off both briefs, the reports and the AI's column fade back, and \"Faculty see only the briefs\" appears. Part 1 is outlined in both briefs, and each student says, \"The aid reports.\" Then Part 2: the first student says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"The harbor log. One dock is closed.\""
+   "text": "{reviewer_points} to each part in turn and ask what justified relying on it.",
+   "detail": "the panel goes. The red marks and the second {person}'s note lift off both briefs, the reports and the AI's column fade back, and \"{reviewer_sees} only the briefs\" appears. Part 1 is outlined in both briefs, and {each_person} says, \"The aid reports.\" Then Part 2: {the_first} says, \"Part 1 checked out, so I trusted the rest.\" The second says, \"The harbor log. One dock is closed.\""
   },
   {
    "text": "{check}: What evidence justified relying on the system here?",

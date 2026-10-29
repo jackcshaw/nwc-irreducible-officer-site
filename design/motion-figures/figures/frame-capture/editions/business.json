@@ -75,7 +75,7 @@
    "Draft 3: adds evidence, a chart",
    "and a firmer cut-off"
   ],
-  "receiveFinal": "{receive}: the final ranking",
+  "receiveFinal": "{receive}: the ranking",
   "receive": "{receive}",
   "fromThis": "From this {person}",
   "paperBody": "A ranked list, a chart and a cut-off.",
@@ -240,7 +240,7 @@
    "What problem did {the_person} choose to solve?",
    "Why this frame? What would change it?"
   ],
-  "checkFollow": "Both {people} in the figure would answer the first question the same way. The second line separates them. It comes from Section VIII of *The Irreducible Officer*, a National War College essay, which asks: why this problem, why this frame, what would change it?",
+  "checkFollow": "Before the check, both {people} in the figure would answer the first question the same way. The second line separates them. It comes from Section VIII of *The Irreducible Officer*, a National War College essay, which asks: why this problem, why this frame, what would change it?",
   "evidenceHeading": "The study behind this example",
   "evidence": [
    "The study looked at a commercial prediction algorithm of the kind health systems use \"to identify and help patients with complex health needs\". It was a prediction model. No generative AI was involved.",

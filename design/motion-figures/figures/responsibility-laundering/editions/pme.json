@@ -1,5 +1,5 @@
 {
- "_doc": "Responsibility laundering, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in responsibility-laundering.js. Schema: CONVENTIONS.md, Editions; figure-specific keys: draft (the AI's draft, as SVG lines, and the phrase the first person's answer leans on), note, questions, answers. page.checkFollow and page.quotes use [text](href) links and *em*, filled by the figure (data-rl-rich).",
+ "_doc": "Responsibility laundering, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in responsibility-laundering.js. Schema: CONVENTIONS.md, Editions; figure-specific keys: draft (the AI's draft, as SVG lines, and the phrase the first person's answer leans on), note, questions, answers. page.checkFollow and page.quotes use [text](href) links and *em*, filled by the figure (data-rl-rich). labels.dontSee and narrow.dontSee stay literal: the cast key {reviewer_doesnt_see} has a straight apostrophe, and these labels use a curly one.",
  "id": "pme",
  "cast": "classroom",
  "task": {
@@ -43,7 +43,7 @@
   "noteRow": "THEIR OWN NOTE · NOT HANDED IN",
   "noNote": "—",
   "dontSee": "FACULTY DON’T SEE THIS",
-  "frame": "WHAT FACULTY SEE",
+  "frame": "{what_reviewer_sees|upper}",
   "copyFirst": "{first|upper}’S COPY",
   "copySecond": "{second|upper}’S COPY",
   "drafted": "DRAFTED WITH AI",
@@ -58,7 +58,7 @@
   "taskLabel": "Example task",
   "noteRow": "Their own note · not handed in →",
   "dontSee": "Faculty don’t see this",
-  "frame": "What faculty see",
+  "frame": "{what_reviewer_sees}",
   "weight": "Answerable",
   "keyAI": "Written by AI",
   "keyDecision": "{A_person}’s decision",
@@ -83,7 +83,7 @@
   },
   {
    "text": "{reviewer_asks_each}.",
-   "detail": "the note row dims under \"Faculty don't see this\", and a frame labelled \"What faculty see\" goes round the two copies. \"1. Suppose the port closes. Who made this call?\" The first {person} says, \"I signed it. The analysis said ships could do it.\" The second says, \"I did. I chose to rely on the estimate.\""
+   "detail": "the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two copies. \"1. Suppose the port closes. Who made this call?\" The first {person} says, \"I signed it. The analysis said ships could do it.\" The second says, \"I did. I chose to rely on the estimate.\""
   },
   {
    "text": "They ask why.",
@@ -114,7 +114,7 @@
   "description": "A teaching figure: two {people} sign the same AI-drafted recommendation, and faculty find out who can account for it by asking why they relied on the AI's estimate.",
   "setup": "Suppose two {people} give an AI the same prompt, get the same draft, and sign it as written. *The Irreducible Officer* calls the risk responsibility laundering: a recommendation becomes easier to defend because the model generated it, or easier to soften because the model's language distributes agency. The figure runs about a minute and a half. The task, the draft and both {people} are a constructed example.",
   "srTitle": "Responsibility laundering, an animated figure in nine beats after its name card",
-  "srSummary": "An animated figure, \"Responsibility laundering\", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two {people} with an example task: recommend when to evacuate a port city. Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: \"The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships.\" The draft divides into two copies, one for each {person}, both marked \"drafted with AI\". Both {people} read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled \"their own note, not handed in\": \"Rests on an open port. Today's harbor reports: normal.\" Then they sign. While faculty ask, the note row dims under \"Faculty don't see this\", and a frame labelled \"What faculty see\" goes round the two identical copies. {reviewer_asks_each}: \"Suppose the port closes. Who made this call?\" The first says, \"I signed it. The analysis said ships could do it.\" The second says, \"I did. I chose to rely on the estimate.\" Then: \"Why did you rely on it?\" The first says, \"It was the AI's estimate. It seemed solid.\" The second says, \"It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures.\" Then the note returns. \"The analysis\" is outlined in the first {person}'s answer and on their copy, and the first {person}'s dot halves: one half stays at the signature, and the other moves beside \"The analysis estimates\" and becomes a hollow dashed grey ring, keyed \"reason handed to the AI\", where it stays. A red bracket marks the second {person}'s answer, their own reason; their dot stays whole. Two navy weights labelled \"Answerable\" fall, one down each paper's margin, past the AI's sentences, and rest on each {person}'s dot at the signature. The figure ends on the name and its definition, \"The model’s recommendation makes agency feel shared, or easier to defend.\", above the {check_l}. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure, \"Responsibility laundering\", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two {people} with an example task: recommend when to evacuate a port city. Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: \"The analysis estimates ships can carry everyone out. It is recommended that civilians wait for ships.\" The draft divides into two copies, one for each {person}, both marked \"drafted with AI\". Both {people} read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled \"their own note, not handed in\": \"Rests on an open port. Today's harbor reports: normal.\" Then they sign. While {reviewer_ask_l}, the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two identical copies. {reviewer_asks_each}: \"Suppose the port closes. Who made this call?\" The first says, \"I signed it. The analysis said ships could do it.\" The second says, \"I did. I chose to rely on the estimate.\" Then: \"Why did you rely on it?\" The first says, \"It was the AI's estimate. It seemed solid.\" The second says, \"It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures.\" Then the note returns. \"The analysis\" is outlined in the first {person}'s answer and on their copy, and the first {person}'s dot halves: one half stays at the signature, and the other moves beside \"The analysis estimates\" and becomes a hollow dashed grey ring, keyed \"reason handed to the AI\", where it stays. A red bracket marks the second {person}'s answer, their own reason; their dot stays whole. Two navy weights labelled \"Answerable\" fall, one down each paper's margin, past the AI's sentences, and rest on each {person}'s dot at the signature. The figure ends on the name and its definition, \"The model’s recommendation makes agency feel shared, or easier to defend.\", above the {check_l}. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "Who owns the recommendation if it proves wrong?",

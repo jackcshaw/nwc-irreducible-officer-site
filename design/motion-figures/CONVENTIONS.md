@@ -246,7 +246,32 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - `check {label, question, follow}`;
 - `page {kicker, title, description, setup, srTitle, srSummary, checkHeading, checkLines[], checkFollow, evidenceHeading?, evidence[]?, quoteHeading, quote, cite, linksHeading, links[{lead, text, href}]}`.
 
-**Optional scenario features are gated on data,** so other editions draw exactly as before. Business adds `labels.changeNote {label, lines[]}` and `narrow.changeNote` (the second person's "what would change it"), and `labels.source` / `narrow.source` (the one-line source under the final frame). The core draws a feature only when its key exists.
+**Optional scenario features are gated on data,** so other editions draw exactly as before. The core draws a feature only when its key exists. Business adds:
+- `labels.changeNote {label, lines[]}` and `narrow.changeNote`: the second person's "what would change it";
+- `labels.source` / `narrow.source`: the one-line source under the final frame;
+- `turn {askQ2, check, swap, title, nothing, narrow}`: the payoff beat, below;
+- phone-view keys:
+  - `narrow.show[]`: sections per beat, for an edition with a different beat count;
+  - `narrow.taskLine {label, text}`: a one-line task kept to the end;
+  - `narrow.compactPapers`: title-only papers, with the label hidden once the ask is shown;
+  - `narrow.askNote`: the note full width under the columns;
+- page keys:
+  - `page.quote: null` hides the essay quote (`data-ed-section`);
+  - `page.linksNote` adds a line above the links.
+
+**An edition's own clock** (business, round 2). It lets an edition add beats or holds without touching the core timeline.
+- **`timeline.edits`:** a list of `{at, cut}` and `{at, hold, id?}` in core seconds.
+  - A `cut` skips a static stretch of a hold, so put it only where nothing moves.
+  - A `hold` freezes the core and adds time. Put a hold just before a beat start (e.g. 79.45 before 79.5), so the beat begins after it.
+- **Beat starts:** each edition beat may name its start as `core: seconds`, or `core: "<hold id>"` for a beat that lives inside a hold (FC's turn). Without `core`, beat i starts at the core's `BEAT_AT[i]`.
+- **Mapping:** the figure maps edition time to core time (`toCore`) and back (`toBiz`). It renders the core at the mapped time and draws edition-only elements, such as the turn, from edition time. It passes `duration`, the beat starts, `followAt` and the poster to `mount()` in edition time.
+- **PME has no edits,** so both maps are the identity and PME is frame-identical (diffed).
+- **Phone heights:** with edits, the stacked view also measures each beat's opening, since a beat can open taller than it ends.
+
+**A turn where the finding is the payoff** (FC business, Jack's evidence exception).
+- When asked what would change the frame, the second person checks the condition they wrote down. The check shows it holds, and their frame and their deliverable change.
+- The person who never named a condition has "Nothing to check".
+- The check's words stay within what the source supports. FC says "At the same predicted cost, some patients are sicker", from the abstract's "At a given risk score…".
 
 **Loader** (runtime, additive):
 - `MotionFigures.loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'})` returns a promise of the filled edition plus `{id, castId, cast}`.
@@ -277,6 +302,12 @@ The current edition's link is bold and underlined (`aria-current`). Classroom jo
 - "Illustration based on [study]" in the setup.
 - `labels.source` as one line under the final frame (FC: fades in 1 s after the check).
 - The full finding on the page in `.fig-ed-evidence` paragraphs: quotes word for word with page numbers, the finding stated in the paper's words, and what kind of system the study examined.
+- Quote only what you have read in the source itself.
+  - FC's page quotes the abstract only (PubMed record).
+  - Passages cited from the full text stay off the page until someone checks them against the published article.
+  - An open "submitted version" isn't the published wording or pagination.
+  - List what is verified, and what isn't, in the edition's storyboard, for the companion's source spine.
+- Say what the study did, without merging analyses. FC: "how sick patients were at the same risk score", not "checking illness against cost".
 - A stacked phone view too tight for the source shows it under the controls instead (`[data-fc-source]`, outside the fixed-height player).
 - Shared classes for editions are prefixed `fig-ed-`. IM already has its own `.fig-evidence`, and a shared rule with that name would collide.
 
@@ -332,3 +363,4 @@ Added by figure 8 ("AR"), the one interactive figure. Everything here is optiona
 - **`.mf-shot` overflow with a sticky caption** (AR). The nameplate sets `overflow: hidden` on the shot, which makes it a scroll container and stops a sticky caption band inside it from sticking to the screen. A figure with a sticky phone band uses `overflow: clip` there instead.
 - **A sticky phone band may grow at the last beat** (AR). With the caption band and controls sticky at the bottom, a taller last caption (name, definition, check) grows upward without moving the controls, so AR fixes the band for beats 1 to 9 (182 px) and lets the last caption take its height (264 px at 390). At desktop widths the band stays fixed for every beat: AR sets its definition at 16 px and both check lines at 20 px so the last caption fits the runtime's 144 px from 1024 px up (156 px from 720 to 1023, with `--mf-plate` raised by the extra 12 px).
 - **Edition copy with links, and the interactive figure's regression set** (AR, editions step one). The runtime's `rich()` handles only `*em*`, so AR writes a link in an edition string as `[text](href)` and fills those elements itself (`data-ar-ed-rich`: escaped text, then links, then `*em*`). Words the figure assembles at run time use `%name%` placeholders (AR: `%move%`, the move option's label as shown), so they never collide with `{cast}` keys. Data that drives drawing (AR's results: the bar values and the inside numbers) sits in the edition beside its labels; the bracket spans the AI bars out to the longest. `frame-diff.mjs` seeks past the gates, so AR's `regression/ar-regress.mjs` adds every `branches.json` preset through both questions, the reader's real paths (Play with no call, a call, End clamping at question 2, Start over re-locking, both skipped, reduced motion, print) and a text snapshot per state (every word in the DOM, the visible text, the live region, the locks).
+- **An edition switch that costs the first view nothing** (AR, business edition). AR's first view must fit the live question, and the standard switch under the setup would push the figure down about 40 px (at 1440 × 900 the first view would drop to the stacked stage). So AR puts "See this with: Workplace · PME" on the kicker's row, right-aligned, in the kicker's line box (`.ar-toprow`, 14 px text on a 15.6 px line), and the PME note under "How this figure works", with `aria-describedby` from the PME link. The figure doesn't move, so only the whole-page stills change with the switch; the frames and shot stills match with or without `--hide`. `figure-branches.mjs` and AR's `ar-regress.mjs` take `--edition=id` (stills to `shots/<id>/`), and `ar-regress.mjs` takes `--hide=css` too, which also removes the hidden elements from its text snapshots.

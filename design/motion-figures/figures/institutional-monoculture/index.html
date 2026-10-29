@@ -39,6 +39,10 @@
 	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 18px; }
 	#institutional-monoculture .mf-caption { min-height: 220px; padding-top: 10px; padding-bottom: 10px; }
 }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.im-source { display: none; }
+#institutional-monoculture.is-stacked .im-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 .im-narrow p { margin: 0; }
 .im-n-task { margin: 0 0 6px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.35 var(--serif); color: var(--ink); }
 .im-n-task b, .im-n-ai b { font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
@@ -100,6 +104,8 @@
 	<p class="fig-kicker" data-ed="page.kicker"></p>
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="institutional-monoculture" aria-labelledby="im-title">
 		<p class="sr-only" id="im-title" data-ed="page.srTitle"></p>
@@ -116,6 +122,7 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:39</span>
 		</div>
+		<p class="im-source" data-im-source hidden></p>
 		<figcaption>
 			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
@@ -129,7 +136,12 @@
 		<p class="fig-follow" data-im-lead="page.about"></p>
 	</section>
 
-	<section class="fig-section" aria-labelledby="im-essay-h">
+	<section class="fig-section" aria-labelledby="im-study-h" data-ed-section="page.study" hidden>
+		<h2 id="im-study-h" data-ed="page.studyHeading"></h2>
+		<div data-ed-lines="page.study" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="im-essay-h" data-ed-section="page.quote">
 		<h2 id="im-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
 			<p data-im-linked="page.quote"></p>
@@ -146,6 +158,7 @@
 	<section class="fig-section" aria-labelledby="im-links-h">
 		<h2 id="im-links-h" data-ed="page.linksHeading"></h2>
 		<ul class="fig-links" data-ed-links="page.links"></ul>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
 	</section>
 </main>
 

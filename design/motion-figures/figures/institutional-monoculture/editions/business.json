@@ -1,0 +1,239 @@
+{
+ "_doc": "Institutional monoculture, business edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in institutional-monoculture.js. labels.source and narrow.source are this edition's optional source line. Words and evidence: storyboard-business.md. Schema: CONVENTIONS.md, Editions.",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "How should we respond to",
+   "a low-cost competitor?"
+  ],
+  "text": "How should we respond to a low-cost competitor?"
+ },
+ "context": [
+  [
+   "Its prices,",
+   "our patents,",
+   "dealers,"
+  ],
+  [
+   "price-led buyers,",
+   "service revenue."
+  ]
+ ],
+ "problems": [
+  "Outserve everyone",
+  "Own high-spec niches",
+  "Bundle maintenance in",
+  "Brand our engineering",
+  "Add smart monitoring",
+  "Customize every order",
+  "Lengthen warranties",
+  "Outpace on delivery",
+  "Sell uptime contracts",
+  "Upgrade dealer support"
+ ],
+ "aiOpening": "Differentiate on value",
+ "aiChallenge": [
+  "What did you assume?",
+  "What other frames fit?"
+ ],
+ "imagined": {
+  "problems": [
+   "Outserve everyone",
+   "Own high-spec niches",
+   "Bundle maintenance in",
+   "Launch basic models",
+   "Cut unit costs",
+   "Price-match bids",
+   "License our designs",
+   "Win price-led buyers",
+   "Supply the competitor",
+   "Service their machines"
+  ],
+  "goals": [
+   {
+    "label": "DIFFERENTIATE",
+    "name": "Differentiate",
+    "who": [
+     0,
+     1,
+     2
+    ]
+   },
+   {
+    "label": "MATCH ON COST",
+    "name": "Match on cost",
+    "who": [
+     3,
+     4,
+     5,
+     7
+    ]
+   },
+   {
+    "label": "PARTNER OR LICENSE",
+    "name": "Partner or license",
+    "who": [
+     6,
+     8,
+     9
+    ]
+   }
+  ]
+ },
+ "labels": {
+  "ai": "AI",
+  "runA": "The {group}",
+  "seqA": [
+   "AI OUTLINE",
+   "WRITE"
+  ],
+  "drafted": "ALL DRAFTED WITH AI",
+  "frame": "ONE FRAME: DIFFERENTIATE",
+  "oneFrame": "ONE FRAME",
+  "frameGoal": "DIFFERENTIATE",
+  "aiFrame": "AI’S FRAME",
+  "opened": "EVERY OUTLINE OPENED",
+  "ask": "{reviewer_ask|upper}",
+  "runB": "Same {group}, imagined",
+  "seqB": [
+   "DEFINE PROBLEM",
+   "AI CHALLENGES",
+   "WRITE"
+  ],
+  "spread": "ONE IMAGINED SPREAD",
+  "source": "Illustration based on Romasanta et al., HBR (2026), and Bottesch, ACIS (2025)."
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "ai": "AI",
+  "opened": "Every AI outline opened with:",
+  "asks": "The AI asks:",
+  "runA": "The {group}",
+  "seqA": [
+   "AI outline",
+   "write"
+  ],
+  "runB": "Same {group}, imagined",
+  "seqB": [
+   "Define problem",
+   "AI challenges",
+   "write"
+  ],
+  "drafted": "All drafted with AI",
+  "frame": "One frame: differentiate",
+  "aiFrame": "AI’s frame",
+  "spread": "One imagined spread",
+  "source": "Illustration based on Romasanta et al., HBR (2026), and Bottesch, ACIS (2025)."
+ },
+ "beats": [
+  {
+   "text": "Ten {people} get the CEO's question.",
+   "detail": "a task card appears at the top right: \"Example task. How should we respond to a low-cost competitor?\" Ten blank plans appear in two rows of five, each with a red dot, labelled \"The {group}\". Under a line on the card, the context appears one item at a time: its prices, our patents, dealers, price-led buyers, service revenue."
+  },
+  {
+   "text": "Each asks an AI for an outline. They come back alike.",
+   "detail": "a grey box marked AI appears at the top left. A small mark travels from each red dot up to it, and ten grey outlines drop back into the plans, all in the same pattern."
+  },
+  {
+   "text": "Each writes their own plan. {reviewer_sees} that each holds up.",
+   "detail": "each dot writes over its outline, and each plan turns to ink in its own layout: headings, bullets, a chart, a table, dense text, two columns, a numbered list, a pull quote, a timeline, a map. \"AI outline, write\" and \"All drafted with AI\" appear. A navy ring steps across the plans and leaves a tick on each."
+  },
+  {
+   "text": "The manager lines up each plan's problem.",
+   "detail": "each plan's first line is outlined, then lifts out and joins a list at the right: outserve everyone, own high-spec niches, bundle maintenance in, brand our engineering, add smart monitoring, customize every order, lengthen warranties, outpace on delivery, sell uptime contracts, upgrade dealer support. The plans stay where they are, ticked."
+  },
+  {
+   "text": "Different words, one frame: each plan differentiates.",
+   "detail": "a navy reading mark appears beside each line in turn. Then a bracket closes around all ten, labelled \"One frame: differentiate\"."
+  },
+  {
+   "text": "Every AI outline opened with that frame.",
+   "detail": "a grey card comes out of the AI box: \"Every outline opened: Differentiate on value\". A grey line runs from it to the bracket, which turns grey, and a grey tag beside the bracket reads \"AI's frame\"."
+  },
+  {
+   "text": "{reviewer_ask} what else the problem could be.",
+   "detail": "beside the bracket, in open space, a dashed, empty box with a question mark appears, labelled \"{reviewer_ask}\". Nothing fills it."
+  },
+  {
+   "text": "Now imagine {each_person} defines the problem first.",
+   "detail": "the first run moves to the upper half and dims, with the grey card above its list and the question box beside it. Below a line, \"Same {group}, imagined\" appears with ten blank plans and the heading \"One imagined spread\". Each dot writes a red first line, and its label begins \"Define problem\"."
+  },
+  {
+   "text": "Each asks the AI to challenge it, then writes.",
+   "detail": "a copy of each red line goes up to the AI box. A grey speech bubble appears: \"What did you assume? What other frames fit?\", and small grey speech bubbles land on each plan under its red line. Each dot writes its plan. The label now reads \"Define problem, AI challenges, write\", and the plans are marked \"All drafted with AI\"."
+  },
+  {
+   "text": "These hold up too. The manager lines them up again.",
+   "detail": "the speech bubble fades, the first run returns to full strength, and a navy ring ticks each imagined plan. Group by group, their problem lines lift out as words into three labelled columns: differentiate (outserve everyone, own high-spec niches, bundle maintenance in); match on cost (launch basic models, cut unit costs, price-match bids, win price-led buyers); partner or license (license our designs, supply the competitor, service their machines). Brackets close around them."
+  },
+  {
+   "text": "{check}: What frames are missing across the {group}?",
+   "list": "{check}: What frames are missing across the {group}? Line up the problems. What else could the problem be?",
+   "detail": "the questions appear under the picture at the same size, and the dashed question box beside the first run's frame pulses once. It stays empty. A source line appears under the picture: \"Illustration based on Romasanta et al., HBR (2026), and Bottesch, ACIS (2025).\""
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What frames are missing across the {group}?",
+  "follow": "Line up the problems. What else could the problem be?"
+ },
+ "page": {
+  "kicker": "Failure mode 6 of 7",
+  "title": "Institutional monoculture",
+  "description": "A teaching figure: plans that each hold up can share one definition of the problem, the one the AI's outlines opened with. {reviewer_sees} it by lining up every plan's problem statement.",
+  "setup": "Ten {people} at an industrial-equipment maker each use the company's AI to help answer the CEO's question: how should we respond to a low-cost competitor? Each writes their own plan, and each plan holds up when read alone. What can still go wrong is institutional monoculture: shared systems and defaults narrow the range of frames a group considers. Illustration based on Romasanta, Thomas & Levina (2026) and Bottesch (2025). The {group}, the question and the plans are constructed.",
+  "srTitle": "Institutional monoculture, an animated figure in eleven beats",
+  "srSummary": "An animated figure that opens on its name, Institutional monoculture, failure mode 6 of 7. Ten red dots stand for ten {people} at an industrial-equipment maker with an example task, the CEO's question: how should we respond to a low-cost competitor? The context lists its prices, our patents, dealers, price-led buyers and service revenue. Each {person} asks the company's AI for an outline, and ten grey outlines come back in the same pattern. Each {person} writes their own plan, in ten different layouts, all marked \"All drafted with AI\". {reviewer_sees} that each plan holds up, and the ticks stay. Then the one-line problem statement from every plan is lined up: outserve everyone, own high-spec niches, bundle maintenance in, brand our engineering, add smart monitoring, customize every order, lengthen warranties, outpace on delivery, sell uptime contracts, upgrade dealer support. Each line is read, and a bracket closes around all ten, labelled \"One frame: differentiate\". A grey card comes out of the AI box: every outline opened with \"Differentiate on value\". A grey line runs from it to the bracket, which turns grey, with a grey tag: \"AI's frame\". {reviewer_ask} what else the problem could be: a dashed, empty box with a question mark appears beside the bracket and stays empty. Next, while the first run dims above, the figure imagines the same {group} defining the problem first, under the heading \"One imagined spread\". Each {person} writes the problem in red first, then asks the AI to challenge it (\"What did you assume? What other frames fit?\"), and a grey speech bubble lands on each plan before they write. These plans hold up too, and their problems are lined up in three groups: differentiate (outserve everyone, own high-spec niches, bundle maintenance in); match on cost (launch basic models, cut unit costs, price-match bids, win price-led buyers); partner or license (license our designs, supply the competitor, service their machines). The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What frames are missing across the {group}?",
+   "Line up the problems. What else could the problem be?"
+  ],
+  "checkFollow": "Read one at a time, every plan holds up, and the plans look nothing alike. Lined up, they share one problem definition, the one every AI outline opened with. Lining up shows which frames a {group} has. It can't show which are missing. For that, {reviewer_ask_l} what else the problem could be, drawing on their own knowledge of the market or on frames the {group} names before discussion settles on one. The imagined {group} follows a proposal from *The Irreducible Officer*, an essay about judgment in military education: each person writes a problem frame without AI, then asks an AI to find assumptions they missed and suggest other frames. Whether framing first spreads frames across a {group} is untested, and the imagined board is one possible spread. Agreement can also come from a shared purpose or strong evidence, and a different frame isn't better by itself. A {group} can compare several frames and still agree on one.",
+  "about": {
+   "lead": "About the example.",
+   "text": "Each plan's first line stands for its problem statement: what the plan sets out to solve. The figure groups problems by the goal they set, and names three goals for the imagined {group} as one possible spread. Telling real frames apart takes reading. The plans, their problem lines and the AI's opening line are constructed. They don't show the output of any model or the plans of any real company."
+  },
+  "studyHeading": "The studies behind this example",
+  "study": [
+   "Romasanta, Thomas and Levina asked leading AI models for strategic advice. Their summary of the work reports: \"Across thousands of simulations, we saw LLMs almost uniformly select the same trendy strategies, regardless of context.\" They name the pattern: \"We call the propensity for AI to opt for buzzy ideas over reasoned solutions 'trendslop.'\"",
+   "That work appeared as a *Harvard Business Review* article, a practitioner piece, and this page quotes only the authors' summary. It doesn't report which strategies the models favoured. The figure's shared frame, differentiate, is constructed.",
+   "Bottesch ran a field experiment with \"99 knowledge workers from a multinational industrial corporation\" and found \"that indeed significant homogenisation effects occur in terms of style and content when knowledge workers are supported by GenAI (versus when they are not)\". The abstract also offers \"initial evidence that these effects might be mitigated through advanced prompting and (more) critical handling of GenAI output by knowledge workers.\" It is a single-author conference paper from one company, and the abstract gives no effect sizes.",
+   "Neither study lined up a team's plans or tested defining the problem first. The lineup and the imagined {group} are this figure's illustration of what the findings could mean for a team that drafts with one AI.",
+   "Counter-evidence: Terwiesch et al. (*Production and Operations Management*, 2026) found that better prompting, assigned personas and pooling several vendors brought the diversity of AI-generated ideas close to human levels. With Bottesch's mitigation finding, that suggests sameness is the default, and deliberate design can push against it.",
+   "Sources: Romasanta, Thomas & Levina, \"Researchers Asked LLMs for Strategic Advice. They Got 'Trendslop' in Return,\" *Harvard Business Review* (March 2026), quoted from the authors' summary on NYU Stern's research highlights page. Bottesch, \"Towards Generative Monoculture? Insights from a Field Experiment on Style and Content Homogenisation Effects in GenAI-Supported Knowledge Work,\" ACIS 2025 Proceedings, quoted from the abstract. The {group}, the question, the plans and the AI's outlines are constructed. The figure shows none of either study's data."
+  ],
+  "quoteHeading": null,
+  "quote": null,
+  "cite": null,
+  "evidenceHeading": null,
+  "evidence": null,
+  "evidenceList": null,
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "Study:",
+    "text": "Romasanta, Thomas & Levina (2026), Harvard Business Review",
+    "href": "https://hbr.org/2026/03/researchers-asked-llms-for-strategic-advice-they-got-trendslop-in-return"
+   },
+   {
+    "lead": "The authors' summary:",
+    "text": "NYU Stern research highlight",
+    "href": "https://www.stern.nyu.edu/experience-stern/faculty-research/research-highlights/researchers-asked-llms-strategic-advice-they-got-trendslop-return"
+   },
+   {
+    "lead": "Study:",
+    "text": "Bottesch (2025), ACIS Proceedings",
+    "href": "https://aisel.aisnet.org/acis2025/290/"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section II",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ],
+  "linksNote": "The failure mode and the reviewer's question come from an essay about judgment in military education. This page shows the same move on a company's strategy team."
+ }
+}

@@ -25,6 +25,8 @@
    The long name wraps in its label column, and the check is set a little smaller. */
 @media (min-width: 720px) {
 	#responsibility-laundering .mf-check.has-final { grid-template-columns: min-content minmax(0, 1fr); }
+	/* A check label longer than the name's longest word ("REVIEWER'S CHECK") stays on one line. */
+	#responsibility-laundering .mf-check.has-final > .mf-check-label { white-space: nowrap; }
 	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: clamp(22px, 2.4vw, 27px); }
 	#responsibility-laundering.is-stacked .mf-caption { height: 188px; }
 }
@@ -57,6 +59,10 @@
 .rl-n-framelabel { position: absolute; left: 8px; top: -9px; padding: 0 5px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
 .rl-n-drop { position: absolute; left: 3px; width: 12px; height: 16px; background: var(--ink); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); visibility: hidden; }
 .rl-n-reader { position: absolute; left: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); visibility: hidden; }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.rl-source { display: none; }
+#responsibility-laundering.is-stacked .rl-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 .is-outlined { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 2px; white-space: nowrap; }
 .rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
 .rl-n-row { position: relative; margin: 0 0 2px; font: 400 13px/1.32 var(--serif); color: var(--stone); }
@@ -87,9 +93,13 @@
 </header>
 
 <main class="fig-page">
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage, and data-rl-rich for paragraphs with links); see CONVENTIONS.md, Editions. -->
 	<p class="fig-kicker" data-ed="page.kicker"></p>
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
 		<p class="sr-only" id="rl-title" data-ed="page.srTitle"></p>
@@ -106,6 +116,7 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:36</span>
 		</div>
+		<p class="rl-source" data-rl-source hidden></p>
 		<figcaption>
 			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
@@ -118,7 +129,12 @@
 		<p class="fig-follow" data-rl-rich="page.checkFollow"></p>
 	</section>
 
-	<section class="fig-section" aria-labelledby="rl-essay-h">
+	<section class="fig-section" aria-labelledby="rl-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="rl-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-essay-h" data-ed-section="page.quotes">
 		<h2 id="rl-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
 			<div data-ed-lines="page.quotes.0.paras"></div>
@@ -132,6 +148,7 @@
 
 	<section class="fig-section" aria-labelledby="rl-links-h">
 		<h2 id="rl-links-h" data-ed="page.linksHeading"></h2>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
 		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>

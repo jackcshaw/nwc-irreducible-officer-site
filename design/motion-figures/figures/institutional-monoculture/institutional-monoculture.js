@@ -43,6 +43,7 @@
 		askOut: [75.3, 75.8], undim: [75.3, 76.5], ringB: 75.3, ringBStep: 0.1,
 		groups: [[77.3, 78.3], [78.5, 79.5], [79.7, 80.7]], brackets: [80.9, 81.7],
 		check: 87.8, follow: 90.8, qPulse: [90.8, 91.6], end: 96.3,
+		source: [88.8, 89.3], // used only by editions that supply one
 	};
 	const AT = [0, 10.9, 18.3, 26.3, 39.8, 46.0, 52.9, 58.9, 66.1, 74.3, 87.8]; // beat starts
 
@@ -223,7 +224,7 @@
 	const leader = el(gA, 'line', {stroke: C.grey, 'stroke-width': 1.4, opacity: 0});
 	// The faculty's question: dashed, empty, in open space, aligned with nothing that answers it.
 	const qGroup = el(gA, 'g', {opacity: 0});
-	mono(qGroup, 0, 0, L.ask, {ls: 0.6});
+	const askLabel = mono(qGroup, 0, 0, L.ask, {ls: 0.6});
 	const qPath = el(qGroup, 'path', {d: bracketPath({x: 0, y: 10, w: QW, h: QH}, 14), fill: 'none', stroke: C.ink, 'stroke-opacity': 0.5, 'stroke-width': 2, 'stroke-dasharray': '5 4'});
 	el(qGroup, 'rect', {x: 0, y: 10, width: QW, height: QH, fill: 'none', stroke: C.ink, 'stroke-opacity': 0.25, 'stroke-dasharray': '4 4'});
 	serif(qGroup, QW / 2, 10 + QH / 2 + 10, '?', {fs: 28, style: 'italic', anchor: 'middle', fill: mixColor(C.ink, C.paper, 0.35)});
@@ -253,6 +254,12 @@
 	});
 	const slotOf = {};
 	GOALS.forEach((g, k) => g.who.forEach((i, j) => { slotOf[i] = {g: k, x: COLS[k] + 12, y: lineYB(j)}; }));
+	// Optional (business): a one-line source under the final frame, below the imagined goals.
+	const sourceLine = L.source ? text(gB, 340, YB + 176, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink}) : null;
+	// The stacked view has no room under its last beat, so the source sits just under the
+	// controls there (outside the fixed-height player).
+	const stackedSource = root.querySelector('[data-im-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 	const linesB = LINES_B.map((str) => {
 		const g = el(flyLayer, 'g', {opacity: 0});
 		const t = serif(g, 0, 0, str, {fs: 16});
@@ -270,6 +277,9 @@
 		set(callBand, {width: callText.getComputedTextLength() + 8});
 		M.pillW = pillText.getComputedTextLength() + 20;
 		set(pillBox, {width: M.pillW});
+		// A label wider than the question box ends at the box's right edge (business:
+		// "THE MANAGER ASKS"), so it stays clear of the stage edge; PME's fits and is unchanged.
+		if (askLabel.getComputedTextLength() > QW) set(askLabel, {x: QW, 'text-anchor': 'end'});
 	}
 
 	// ---- render ---------------------------------------------------------------------------
@@ -404,6 +414,7 @@
 		});
 		goalLabels.forEach((g, k) => set(g, {opacity: prog(t, T.groups[k][0] + 0.3, T.groups[k][1])}));
 		goalBrackets.forEach((b) => set(b, {opacity: prog(t, ...T.brackets, E.house)}));
+		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 		set(divider, {opacity: 1});
 
 		renderNarrow(t);

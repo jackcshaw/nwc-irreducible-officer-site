@@ -44,6 +44,7 @@
 		weights: [76.3, 76.7], aFall: [78.8, 80.2], aRest: [80.2, 80.6], bFall: [80.8, 81.8], bRest: [81.8, 82.1],
 		// 9 · the check
 		check: 84.0, follow: 86.9, end: 93.2,
+		source: [87.9, 88.4], // used only by editions that supply a source line
 	};
 	const BEAT_AT = [0, 7.4, 19.4, 26.6, 38.9, 53.5, 67.1, 75.3, 84.0];
 
@@ -187,6 +188,11 @@
 	const keyHanded = el(sceneBase, 'g');
 	const keyHandedRing = el(keyHanded, 'circle', {cx: 0, cy: 525, r: 6, fill: 'none', stroke: C.grey, 'stroke-width': 1.8, 'stroke-dasharray': '3 2.2'});
 	const keyHandedT = mono(keyHanded, 0, 530, L.keyHanded, {fill: C.grey});
+	// Optional (business): a one-line source under the final frame, right of the key. The
+	// stacked view has no room under its last beat, so its source sits under the controls.
+	const sourceLine = L.source ? serif(sceneBase, 936, 530, L.source, {fs: 13, style: 'italic', anchor: 'end'}) : null;
+	const stackedSource = root.querySelector('[data-rl-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	// ---- dots -------------------------------------------------------------------
 	const dot = (col, label) => {
@@ -364,6 +370,7 @@
 		set(keyGrey, {opacity: prog(t, ...T.keyGrey)});
 		set(keyRed, {opacity: prog(t, ...T.keyRed)});
 		set(keyHanded, {opacity: prog(t, ...T.keyHanded)});
+		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 
 		// Beat 8: a weight per copy, in that copy's own units. The first falls, then the second.
 		const kW = prog(t, ...T.weights);

@@ -263,6 +263,11 @@
 	el(lx, 'line', {x1: -4, y1: -4, x2: 4, y2: 4, stroke: C.red, 'stroke-width': 2, 'stroke-linecap': 'round'});
 	el(lx, 'line', {x1: -4, y1: 4, x2: 4, y2: -4, stroke: C.red, 'stroke-width': 2, 'stroke-linecap': 'round'});
 	NOTE_LINES.forEach((s, i) => serif(learned, 640, 498 + 18 * i, s, {fs: 15, style: 'italic', fill: C.red}));
+	// Optional (editions that cite a study): a one-line source under the final frame,
+	// bottom left. On the stacked stage it sits under the controls, outside the fitted player.
+	const sourceLine = L.source ? serif(facLayer, 24, 524, L.source, {fs: 13, style: 'italic'}) : null;
+	const stackedSource = root.querySelector('[data-ps-source]');
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 
 	// ---- dots ------------------------------------------------------------------------------
 	const dotA = el(dotLayer, 'circle', {r: 0, fill: C.red});
@@ -547,6 +552,7 @@
 			set(p.g, {opacity: prog(t, span[0], span[0] + 0.25), display: hidden ? 'none' : 'inline'});
 			reveal(p.lines, t, span[0] + 0.15, span[1]);
 		});
+		if (sourceLine) set(sourceLine, {opacity: prog(t, T.check, T.check + 0.5)});
 		const lk = prog(t, ...T.learned, E.house);
 		set(learned, {opacity: lk, transform: `translate(0 ${mix(6, 0, lk).toFixed(2)})`, display: learnedLabel.getAttribute('visibility') === 'hidden' ? 'none' : 'inline'});
 
@@ -576,6 +582,9 @@
 	const section = (k, label) => { const sec = h('div', 'ps-n-sec', narrow); if (label) h('p', 'ps-n-label', sec, label); N[k] = {sec}; return sec; };
 	const chip = (parent, txt, cls) => h('span', `ps-n-chip ${cls}`, parent, txt);
 	const LINK = (k) => k.replace('-', '–');
+	// Optional (business): the task as one line, kept to the final frame.
+	const taskLine = NW.taskLine ? h('p', 'ps-n-tl', narrow) : null;
+	if (taskLine) { h('span', 'ps-n-tlk', taskLine, NW.taskLabel); taskLine.append(' ' + NW.taskLine); }
 	{
 		const sec = section('task', NW.taskLabel);
 		h('p', 'ps-n-task', sec, ed.task.text);
@@ -656,8 +665,9 @@
 	function renderNarrow(t) {
 		if (!narrow) return;
 		const show = new Set(SHOW[beatIndex(t)]);
-		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k);
+		for (const [k, v] of Object.entries(N)) v.sec.hidden = !show.has(k) || (k === 'task' && !!taskLine);
 		fade(N.task.sec, prog(t, ...T.card));
+		if (taskLine) fade(taskLine, prog(t, ...T.card));
 		const studentB = t >= T.fadeA[1];
 		N.readings.cards.forEach((c, i) => {
 			const id = IDS[i], a = T.cardsIn + T.cardStep * i;
@@ -685,6 +695,9 @@
 		fade(N.rows.sec, prog(t, ...T.rows));
 		fade(N.rows.a.sk, prog(t, T.sketchA, T.sketchA + 1.4));
 		fade(N.rows.b.sk, prog(t, T.sketchB, T.sketchB + 1.4));
+		// Optional (editions whose final stacked view needs the room): the sketches,
+		// shown in beat 7, step back in the final beat.
+		if (NW.hideSketchAtEnd) { const end = beatIndex(t) === BEATS.length - 1; N.rows.a.sk.hidden = end; N.rows.b.sk.hidden = end; }
 		fade(N.q2.sec, prog(t, ...T.q2));
 		const ka = prog(t, T.ansA[0] + 0.15, T.ansA[1]), kb = prog(t, T.ansB[0] + 0.15, T.ansB[1]);
 		N.q2.a.textContent = words(ANS[0], ka);

@@ -54,9 +54,9 @@
   "sameArgInline": "· SAME ARGUMENT, OWN WORDS",
   "sameArg": "SAME ARGUMENT, OWN WORDS",
   "bothAI": "BOTH SAY AI HELPED",
-  "q1Label": "FACULTY ASK, PAPERS ASIDE",
+  "q1Label": "{reviewer_ask|upper}, PAPERS ASIDE",
   "q1": "Sketch how the readings connect.",
-  "q2Label": "THEN THEY ASK",
+  "q2Label": "{then_ask|upper}",
   "q2": [
    "What evidence would change",
    "this connection?"
@@ -113,7 +113,7 @@
   "pairA": "{first}",
   "pairB": "{second}",
   "aside": "Papers set aside: same argument, own words. Both say AI helped.",
-  "rows": "Faculty ask, papers aside: sketch it",
+  "rows": "{reviewer_ask}, papers aside: sketch it",
   "rowA": "{first}",
   "rowB": "{second}",
   "orderA": [
@@ -148,7 +148,7 @@
    }
   ],
   "sketch": "Sketch: 1–4 · 4–6 · 3–4 · 3–5 · 2–5",
-  "q2Label": "Then they ask, pointing to 2–5",
+  "q2Label": "{then_ask}, pointing to 2–5",
   "q2": "What evidence would change this connection?",
   "sayA": "{first}",
   "sayB": "{second}",
@@ -182,11 +182,11 @@
   },
   {
    "text": "Without the papers, both {people} sketch the same connections.",
-   "detail": "the papers shrink and slide up into a strip at the top left, next to \"Both say AI helped\". \"Faculty ask, papers aside: Sketch how the readings connect.\" appears. Each row is labelled: \"{first}: read, AI connects, writes\" and \"{second}: read, tries, AI checks, writes\". Each {person} draws six numbered points joined by the same five lines, in the same ink."
+   "detail": "the papers shrink and slide up into a strip at the top left, next to \"Both say AI helped\". \"{reviewer_ask}, papers aside: Sketch how the readings connect.\" appears. Each row is labelled: \"{first}: read, AI connects, writes\" and \"{second}: read, tries, AI checks, writes\". Each {person} draws six numbered points joined by the same five lines, in the same ink."
   },
   {
-   "text": "Faculty ask about the main connection. The first {person} recalls Reading 1 but can't apply it.",
-   "detail": "\"Then they ask: What evidence would change this connection?\" appears, and on both sketches the line from 2 to 5 is ringed. The first {person} says: \"In Reading 1, trade went overland. I don't see how that bears on this.\""
+   "text": "{reviewer_ask} about the main connection. The first {person} recalls Reading 1 but can't apply it.",
+   "detail": "\"{then_ask}: What evidence would change this connection?\" appears, and on both sketches the line from 2 to 5 is ringed. The first {person} says: \"In Reading 1, trade went overland. I don't see how that bears on this.\""
   },
   {
    "text": "The second {person} applies it, from the connection that didn't hold.",
@@ -209,13 +209,13 @@
   "description": "A teaching figure: two {people} hand in the same argument and can redraw the same map, but only the one who built the connections can say what evidence would change one.",
   "setup": "{A_person} reads six readings closely, then asks an AI to connect them for a seminar paper. The map is sound, and {the_person} writes a good paper from it. *The Irreducible Officer* calls the risk premature synthesis: the model connects material before {the_person} has built the map. The task and answers are a constructed example.",
   "srTitle": "Premature synthesis, an animated figure in ten beats",
-  "srSummary": "An animated figure. A red dot stands for {a_person} with an example task: using six readings, explain when a blockade works. Six reading cards sit unconnected: a northern blockade, an island blockade, trade routes, allies split, a long blockade and coercion theory. {The_person} reads each card closely, then asks an AI to connect them, and the AI draws five grey connections at once. {The_person} follows each one and writes a paper titled \"Blockades work when the navy holds the sea\", whose main claim rests on the connection between readings 2 and 5, with a note that AI helped connect the readings. {A_second} reads each card just as closely, then draws four connections of their own. They try a fifth, between readings 1 and 2, check both readings and drop it, noting: \"In Reading 1, trade went overland through a neighbour.\" That {person} then asks an AI, which draws the same five connections. Four match, and {the_person} checks the fifth, between readings 3 and 4, before keeping it. The second {person} writes their own paper with the same argument. Faculty put both papers aside and ask each {person} to sketch how the readings connect; both sketch the same map. The first {person}'s row reads \"read, AI connects, writes\"; the second's reads \"read, tries, AI checks, writes\". Faculty point to the connection between readings 2 and 5 and ask what evidence would change it. The first {person} says, \"In Reading 1, trade went overland. I don't see how that bears on this.\" The second {person}, remembering what they learned, says, \"An overland route, like Reading 1's. Then my main claim no longer holds.\" The figure ends on the {check_l}. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. A red dot stands for {a_person} with an example task: using six readings, explain when a blockade works. Six reading cards sit unconnected: a northern blockade, an island blockade, trade routes, allies split, a long blockade and coercion theory. {The_person} reads each card closely, then asks an AI to connect them, and the AI draws five grey connections at once. {The_person} follows each one and writes a paper titled \"Blockades work when the navy holds the sea\", whose main claim rests on the connection between readings 2 and 5, with a note that AI helped connect the readings. {A_second} reads each card just as closely, then draws four connections of their own. They try a fifth, between readings 1 and 2, check both readings and drop it, noting: \"In Reading 1, trade went overland through a neighbour.\" That {person} then asks an AI, which draws the same five connections. Four match, and {the_person} checks the fifth, between readings 3 and 4, before keeping it. The second {person} writes their own paper with the same argument. {reviewer_puts} both papers aside and ask each {person} to sketch how the readings connect; both sketch the same map. The first {person}'s row reads \"read, AI connects, writes\"; the second's reads \"read, tries, AI checks, writes\". {reviewer_points} to the connection between readings 2 and 5 and ask what evidence would change it. The first {person} says, \"In Reading 1, trade went overland. I don't see how that bears on this.\" The second {person}, remembering what they learned, says, \"An overland route, like Reading 1's. Then my main claim no longer holds.\" The figure ends on the {check_l}. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "Can {the_person} explain why these connections matter?",
    "Point to one connection. What evidence would change it?"
   ],
-  "checkFollow": "Both {people} in the figure can sketch the map, and both know the fact that matters. The second line separates them. The {person} who worked out the connections can say what evidence would change one and what depends on it. In the essay's oral defense (Section IX), faculty ask what evidence would change the recommendation.",
+  "checkFollow": "Both {people} in the figure can sketch the map, and both know the fact that matters. The second line separates them. The {person} who worked out the connections can say what evidence would change one and what depends on it. In the essay's oral defense (Section IX), {reviewer_ask_l} what evidence would change the recommendation.",
   "quoteHeading": "From the essay",
   "quote": "Premature synthesis appears when a student asks AI to connect material before doing enough work to know what should be connected. The output links sources, themes, and concepts in ways that feel coherent. But if the student cannot reconstruct why those connections matter, the synthesis belongs to the model. The student has bypassed the developmental struggle of forming a mental map and inherited one instead.",
   "cite": "*The Irreducible Officer*, Section II, What the Problem Looks Like",
@@ -243,6 +243,7 @@
     "text": "Section VI, Friction as Developmental Design",
     "href": "https://judgmentlab.net/#vi-friction-as-developmental-design"
    }
-  ]
+  ],
+  "evidence": null
  }
 }

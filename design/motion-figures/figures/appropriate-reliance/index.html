@@ -18,6 +18,11 @@
 .ar-page h1 { margin-bottom: 4px; font-size: clamp(28px, 3vw, 38px); }
 .ar-lede { margin: 0; font-size: 18px; line-height: 1.45; color: var(--body); }
 .ar-page .mf { margin-top: 12px; }
+/* The edition switch shares the kicker's row and its line box, so it adds no height: the
+   first view still fits the live question. The note on what PME is sits under "How this
+   figure works", and the PME link points to it (aria-describedby). */
+.ar-toprow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; column-gap: 16px; }
+.ar-toprow .fig-editions { margin: 0; font-size: 14px; line-height: 15.6px; }
 
 /* ---- gates: hit targets over the drawn options, and Continue / Skip ---------- */
 #appropriate-reliance .mf-shot { position: relative; }
@@ -180,7 +185,10 @@
 </header>
 
 <main class="fig-page ar-page">
-	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<div class="ar-toprow">
+		<p class="fig-kicker" data-ed="page.kicker"></p>
+		<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme" aria-describedby="ar-edition-note">PME</a></nav>
+	</div>
 	<h1 data-ed="page.title"></h1>
 	<p class="ar-lede" data-ed-rich="page.setup"></p>
 
@@ -244,6 +252,7 @@
 	<section class="fig-section" aria-labelledby="ar-how-h">
 		<h2 id="ar-how-h" data-ed="page.howHeading"></h2>
 		<p class="fig-follow" data-ed-rich="page.how"></p>
+		<p class="fig-edition-note" id="ar-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 	</section>
 
 	<p class="ar-after-locked" data-ar-after-locked data-ed="page.afterLocked"></p>
@@ -257,7 +266,7 @@
 		<p class="fig-follow" data-ar-ed-rich="page.after.2.text"></p>
 	</details>
 
-	<section class="fig-section" aria-labelledby="ar-essay-h">
+	<section class="fig-section" aria-labelledby="ar-essay-h" data-ed-section="page.quotes">
 		<h2 id="ar-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
 			<p data-ar-ed-rich="page.quotes.0.text"></p>
@@ -271,6 +280,7 @@
 
 	<section class="fig-section" aria-labelledby="ar-links-h">
 		<h2 id="ar-links-h" data-ed="page.linksHeading"></h2>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
 		<ul class="fig-links" data-ed-links="page.links"></ul>
 	</section>
 </main>

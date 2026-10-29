@@ -1,0 +1,255 @@
+{
+ "_doc": "Premature synthesis, business edition (workplace cast). Illustration based on Shen & Tamkin (2026), Anthropic. The cast's generic roles (analyst, manager) don't fit a code review, so this scenario writes its roles literally (engineers, tech lead) and uses the cast for the check heading. See storyboard-business.md.",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "lines": [
+   "Using a library new to you, fetch",
+   "three records at the same time."
+  ],
+  "text": "Using a library new to you, fetch three records at the same time."
+ },
+ "readings": {
+  "1": "Retry on error",
+  "2": "Task groups",
+  "3": "Timeouts",
+  "4": "Error handling",
+  "5": "Fetching records",
+  "6": "Channels"
+ },
+ "paper": {
+  "title": [
+   "Fetch all three records",
+   "in one task group."
+  ],
+  "tags": [
+   "MAIN · 2 · 5",
+   "3 · 4 · 5",
+   "1 · 4 · 6"
+  ],
+  "aiNote": "AI HELPED WITH THE CODE"
+ },
+ "note": [
+  "When one task failed, the",
+  "group canceled the rest."
+ ],
+ "answers": [
+  [
+   "“The docs say one failure cancels the",
+   "group. I don't see why that matters.”"
+  ],
+  [
+   "“An error one task doesn't catch.",
+   "The group then cancels the other two.”"
+  ]
+ ],
+ "labels": {
+  "dotA": "Engineer",
+  "dotB": "Second engineer",
+  "aiMap": "AI'S VERSION",
+  "paperA": "FIRST ENGINEER'S CHANGE",
+  "paperB": "SECOND ENGINEER'S CHANGE",
+  "receive": "WHAT THE TECH LEAD REVIEWS",
+  "sameArgInline": "· SAME CODE, OWN DESCRIPTIONS",
+  "sameArg": "SAME CODE, OWN DESCRIPTIONS",
+  "bothAI": "BOTH SAY AI HELPED",
+  "q1Label": "IN REVIEW, CODE CLOSED",
+  "q1": "Sketch how the pieces connect.",
+  "q2Label": "THEN THE TECH LEAD ASKS",
+  "q2": [
+   "What would make this",
+   "connection fail?"
+  ],
+  "rowA": "First engineer",
+  "rowB": "Second engineer",
+  "seqA": [
+   {
+    "t": "READ → "
+   },
+   {
+    "t": "AI WRITES",
+    "role": "ai"
+   },
+   {
+    "t": " → SHIPS"
+   }
+  ],
+  "seqB": [
+   {
+    "t": "READ → "
+   },
+   {
+    "t": "TRIES",
+    "role": "own"
+   },
+   {
+    "t": " → "
+   },
+   {
+    "t": "AI REVIEWS",
+    "role": "ai"
+   },
+   {
+    "t": " → SHIPS"
+   }
+  ],
+  "learned": "WHAT THEY LEARNED",
+  "source": "Illustration based on Shen & Tamkin, Anthropic (2026)."
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "taskLine": "Using a library new to you, fetch three records at the same time.",
+  "readingsLabel": "Six sections of the library's docs",
+  "mapA": "First engineer: the AI's code",
+  "mapAMain": "The change rests mainly on 2–5.",
+  "paperA": "First engineer’s change",
+  "paperTitle": "Fetch all three records in one task group.",
+  "paperTags": "Main: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6",
+  "paperAI": "AI helped with the code",
+  "mapB": "Second engineer: writes it first",
+  "note": "When one task failed, the group canceled the rest.",
+  "aiMap": "The AI’s review: the same five connections.",
+  "match": "Four match their own. Nothing at 1–2. They check 3–4, then keep it.",
+  "papers": "What the tech lead reviews · same code, own descriptions",
+  "pairA": "First engineer",
+  "pairB": "Second engineer",
+  "aside": "Changes set aside: same code, own descriptions. Both say AI helped.",
+  "rows": "In review, code closed: sketch it",
+  "rowA": "First engineer",
+  "rowB": "Second engineer",
+  "orderA": [
+   {
+    "t": "Read → "
+   },
+   {
+    "t": "AI writes",
+    "role": "ai"
+   },
+   {
+    "t": " → ships"
+   }
+  ],
+  "orderB": [
+   {
+    "t": "Read → "
+   },
+   {
+    "t": "tries",
+    "role": "own"
+   },
+   {
+    "t": " → "
+   },
+   {
+    "t": "AI reviews",
+    "role": "ai"
+   },
+   {
+    "t": " → ships"
+   }
+  ],
+  "sketch": "Sketch: 1–4 · 4–6 · 3–4 · 3–5 · 2–5",
+  "q2Label": "The tech lead points to 2–5",
+  "q2": "What would make this connection fail?",
+  "sayA": "First engineer",
+  "sayB": "Second engineer",
+  "learned": "What they learned",
+  "learnedNote": "✕ When one task failed, the group canceled the rest.",
+  "source": "Illustration based on Shen & Tamkin, Anthropic (2026).",
+  "hideSketchAtEnd": true
+ },
+ "beats": [
+  {
+   "text": "An engineer must build a feature with a new library.",
+   "detail": "a task card appears at the top right: \"Example task: Using a library new to you, fetch three records at the same time.\" A red dot labelled Engineer appears on the left. Six numbered cards for sections of the library's docs appear one at a time: 1 Retry on error, 2 Task groups, 3 Timeouts, 4 Error handling, 5 Fetching records, 6 Channels. Nothing joins them yet."
+  },
+  {
+   "text": "The engineer reads the docs closely, then has an AI write the code.",
+   "detail": "the dot visits each card, and each opens to show notes. The dot pulses. Five dashed grey lines appear all at once, labelled \"AI's version\", joining 1 to 4, 4 to 6, 3 to 4, 3 to 5 and 2 to 5."
+  },
+  {
+   "text": "The code makes sense to the engineer, who ships it.",
+   "detail": "the dot runs along each grey line once, and each turns solid: the engineer takes the code as written. The dot writes up the change on the left, labelled \"First engineer's change\" and titled \"Fetch all three records in one task group.\" As the title appears, the line from 2 to 5 turns heavy. The first paragraph, tagged \"Main\", cites sections 2 and 5; the others cite 3, 4 and 5, and 1, 4 and 6. A grey note at the foot says \"AI helped with the code\"."
+  },
+  {
+   "text": "A second engineer reads them just as closely, then writes it first. One part breaks.",
+   "detail": "the grey lines and the first dot leave, and the cards close. A second red dot labelled Second engineer visits each card the same way, and each opens to show notes. The dot draws four red lines: 2 to 5, 3 to 5, 1 to 4 and 4 to 6. It draws a fifth, from 1 to 2, and goes back to both cards. A red cross appears on that line, with a red note: \"When one task failed, the group canceled the rest.\" The line pulls back; the cross and the note stay."
+  },
+  {
+   "text": "That engineer then has an AI review it and checks its version against theirs.",
+   "detail": "the dot pulses. The AI's version appears in grey dashes, the same five lines it wrote for the first engineer. Four lie on the red lines and merge into them. The cross brightens: no line appears there. The fifth line, 3 to 4, is new: the dot checks cards 3 and 4, and the line turns red."
+  },
+  {
+   "text": "That engineer ships the same change, described in their own words.",
+   "detail": "the dot writes up a second change under the first, labelled \"Second engineer's change\", with the same title, citations and grey note, and lines of different lengths. The cards, lines and note leave. \"What the tech lead reviews. Same code, own descriptions.\" appears above the two changes."
+  },
+  {
+   "text": "With the code closed, both engineers sketch the same connections.",
+   "detail": "the changes shrink and slide up into a strip at the top left, next to \"Both say AI helped\". \"In review, code closed: Sketch how the pieces connect.\" appears. Each row is labelled: \"First engineer: read, AI writes, ships\" and \"Second engineer: read, tries, AI reviews, ships\". Each engineer draws six numbered points joined by the same five lines, in the same ink."
+  },
+  {
+   "text": "The tech lead points to the main connection. The first engineer can't apply what they know.",
+   "detail": "\"Then the tech lead asks: What would make this connection fail?\" appears, and on both sketches the line from 2 to 5 is ringed. The first engineer says: \"The docs say one failure cancels the group. I don't see why that matters.\""
+  },
+  {
+   "text": "The second engineer applies it, from the part that broke.",
+   "detail": "in the second engineer's row, \"What they learned\" appears in red over the note: \"When one task failed, the group canceled the rest.\" The second engineer says: \"An error one task doesn't catch. The group then cancels the other two.\""
+  },
+  {
+   "text": "{check}: Can they say why these connections matter?",
+   "list": "{check}: Can they say why these connections matter? Point to one: what would make it fail?",
+   "detail": "the questions appear under the picture at the same size, with the source at the bottom left: \"Illustration based on Shen & Tamkin, Anthropic (2026).\" The set-aside changes, the row labels, the sketches, both answers and the note stay in view."
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "Can they say why these connections matter?",
+  "follow": "Point to one: what would make it fail?"
+ },
+ "page": {
+  "kicker": "Failure mode 3 of 7",
+  "title": "Premature synthesis",
+  "description": "A teaching figure: two engineers ship the same code and can sketch the same design, but only the one who built it first can say what would make it fail.",
+  "setup": "A junior engineer reads a new library's docs closely, then has an AI write the feature. The code makes sense, and the engineer ships it. What can happen next is premature synthesis: the model connects the material before anyone has built the map. Illustration based on Shen & Tamkin (2026). The engineers, their AI and the task are constructed.",
+  "srTitle": "Premature synthesis, an animated figure in ten beats",
+  "srSummary": "An animated figure. A red dot stands for an engineer with an example task: using a library new to them, fetch three records at the same time. Six cards stand for sections of the library's docs: retry on error, task groups, timeouts, error handling, fetching records and channels. The engineer reads each section closely, then has an AI write the code, which joins the sections with five grey connections at once. The engineer takes the code as written and ships the change, titled \"Fetch all three records in one task group\", whose main claim rests on the connection between sections 2 and 5, with a note that AI helped with the code. A second engineer reads each section just as closely, then writes the code first: four connections of their own, and a fifth, between sections 1 and 2, that breaks, with the note \"When one task failed, the group canceled the rest.\" That engineer then has an AI review the code. Its version has the same five connections, and the engineer checks the one they missed, between sections 3 and 4, before keeping it. Both ship the same change, described in their own words. In review, with the code closed, both sketch the same connections. The tech lead points to the connection between sections 2 and 5 and asks what would make it fail. The first engineer says, \"The docs say one failure cancels the group. I don't see why that matters.\" The second, remembering the bug, says, \"An error one task doesn't catch. The group then cancels the other two.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "Can they say why these connections matter?",
+   "Point to one: what would make it fail?"
+  ],
+  "checkFollow": "Both engineers in the figure can sketch the design, and both know the rule that matters. The second line separates them. The engineer who wrote the code first, and saw it break, can say what would make a connection fail and what rests on it. The question adapts one from the oral defense in *The Irreducible Officer*, a National War College essay: what evidence would change the recommendation?",
+  "evidenceHeading": "The study behind this example",
+  "evidence": [
+   "Judy Hanwen Shen and Alex Tamkin at Anthropic ran randomized experiments with 52 software engineers, \"mostly junior\" in Anthropic's summary, learning Trio, a Python library for asynchronous programming: running tasks at the same time. Each had up to 35 minutes for two tasks, one of them a function that handles missing-record errors, then took a quiz on the library.",
+   "Engineers given an AI assistant scored lower. The paper puts it this way: \"For a 27-point quiz, this translates into a 17% score difference or 2 grade points\" (Cohen's d = 0.738, p = 0.01). Anthropic's summary gives the averages as 50% with AI and about 67% by hand. The AI did not make them significantly faster.",
+   "\"Among the different types of questions, the largest score gap occurs in the debugging questions.\" The paper adds: \"The control group with no access to AI assistance encountered more errors during the task and became more capable at debugging.\"",
+   "How people used the AI mattered. Seven who \"only asked conceptual questions\" and resolved their own errors averaged 65% or higher. Four who handed the coding to the AI averaged under 40%. Two who had the AI write code and then asked it follow-up questions also showed \"a high level of understanding\". In the figure, the first engineer hands the coding over and asks no follow-up questions; the second writes the code first and uses the AI to review it.",
+   "Limits: one task, about an hour, with the quiz straight after; 52 people, and interaction groups of two to seven from an exploratory analysis. As the authors note, \"there was not the same incentive to learn the library as if it were required for their actual job.\" Other evidence points the other way: a field study of 5,172 customer support agents found \"evidence that AI assistance facilitates worker learning\" (Brynjolfsson, Li & Raymond, \"Generative AI at Work\")."
+  ],
+  "quoteHeading": null,
+  "quote": null,
+  "cite": null,
+  "quote2": null,
+  "cite2": null,
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "The study:",
+    "text": "Shen & Tamkin (2026), How AI Impacts Skill Formation",
+    "href": "https://arxiv.org/abs/2601.20245"
+   },
+   {
+    "lead": "Anthropic's summary:",
+    "text": "How AI assistance impacts the formation of coding skills",
+    "href": "https://www.anthropic.com/research/AI-assistance-coding-skills"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section II",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ]
+ }
+}

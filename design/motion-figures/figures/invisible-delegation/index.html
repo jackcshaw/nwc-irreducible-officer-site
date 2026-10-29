@@ -14,6 +14,9 @@
    880 px), the stage switches to a stacked text view driven by the same clock. */
 .fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
 .id-narrow { display: none; }
+/* An edition's source line: in the SVG on the drawn stage; under the controls on the stacked stage. */
+.id-source { display: none; }
+#invisible-delegation.is-stacked .id-source:not([hidden]) { display: block; margin: 8px 0 0; padding: 0 clamp(12px, 2vw, 18px); font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
 /* Collapsed, not display:none: the SVG keeps its width so it can still be measured. */
 #invisible-delegation.is-stacked .mf-stage { height: 0; overflow: hidden; }
 #invisible-delegation.is-stacked .id-narrow { display: block; padding: 3px clamp(10px, 3vw, 24px) 1px; background: var(--paper); }
@@ -95,6 +98,8 @@
 	<p class="fig-kicker" data-ed="page.kicker"></p>
 	<h1 data-ed="page.title"></h1>
 	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 
 	<figure class="mf" id="invisible-delegation" aria-labelledby="id-title">
 		<p class="sr-only" id="id-title" data-ed="page.srTitle"></p>
@@ -111,6 +116,7 @@
 			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
 			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:33</span>
 		</div>
+		<p class="id-source" data-id-source hidden></p>
 		<figcaption>
 			<p class="sr-only" data-ed="page.srSummary"></p>
 			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
@@ -123,7 +129,12 @@
 		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
 	</section>
 
-	<section class="fig-section" aria-labelledby="id-essay-h">
+	<section class="fig-section" aria-labelledby="id-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="id-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="id-essay-h" data-ed-section="page.quotes">
 		<h2 id="id-essay-h" data-ed="page.quoteHeading"></h2>
 		<blockquote class="fig-quote">
 			<p data-ed-rich="page.quotes.0.text"></p>

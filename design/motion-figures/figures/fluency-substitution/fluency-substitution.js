@@ -33,7 +33,7 @@
 		dim: [50.4, 51.0], q1: [51.2, 51.8], a1: [54.3, 55.6], b1: [55.8, 57.1],
 		q2: [64.9, 65.5],
 		a2: [71.4, 72.7], b2: [72.9, 74.2], reveal: [75.4, 76.2], bright: [75.4, 76.0], unbright: [78.0, 78.5],
-		check: 81.4, follow: 84.9,
+		check: 81.4, follow: 84.9, source: [82.4, 82.9], // source: used only by editions that supply one
 		end: 88.6,
 	};
 
@@ -65,7 +65,7 @@
 	const root = document.querySelector('#fluency-substitution');
 	// The page's quote carries a link: [text](href), filled after fillPage's *em*.
 	const fillQuote = (ed) => document.querySelectorAll('[data-fs-quote]').forEach((n) => {
-		n.innerHTML = rich(ed.page.quote).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+		if (ed.page.quote) n.innerHTML = rich(ed.page.quote).replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
 	});
 	// The page copy now arrives with the edition, so the faces the figure measures with
 	// are loaded explicitly before it builds (static page text used to trigger them).
@@ -117,6 +117,12 @@
 	const keyGrey = el(stage, 'g');
 	el(keyGrey, 'rect', {x: COL.a, y: 513, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
 	mono(keyGrey, COL.a + 26, 524, L.keyAI, {fill: C.grey});
+	// Optional (business): a one-line source under the final frame, right of the key.
+	const sourceLine = L.source ? text(stage, 944, 524, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink, anchor: 'end'}) : null;
+	// In the stacked view the source sits just under the controls, outside the fixed-height player.
+	const stackedSource = root.querySelector('[data-fs-source]');
+	root.classList.toggle('fs-keep-task', !!NW.keepTask);
+	if (stackedSource && NW.source) { stackedSource.textContent = NW.source; stackedSource.hidden = false; }
 	const keyRed = el(stage, 'g');
 	el(keyRed, 'circle', {cx: COL.a + 186, cy: 520, r: 5, fill: C.red});
 	mono(keyRed, COL.a + 198, 524, L.keyOwn, {fill: C.red});
@@ -418,6 +424,7 @@
 		set(rowRecv, {opacity: prog(t, ...T.rowRecv)});
 		set(keyGrey, {opacity: prog(t, ...T.keyGrey)});
 		set(keyRed, {opacity: prog(t, ...T.keyRed)});
+		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
 
 		// Beat 7: papers set aside. Sheets and bands fade; the words stay readable.
 		const dim = prog(t, ...T.dim, E.inOut);
@@ -495,6 +502,7 @@
 	}
 	{
 		const sec = section('paper', NW.paper);
+		sec.classList.add('fs-n-paper');
 		// The border sits on the tile; the clamp sits on the paragraph inside it, so a
 		// clamped line can't show through the tile's padding.
 		const tile = h('div', 'fs-n-tile', sec);
@@ -525,7 +533,15 @@
 	const beatIndex = (t) => { let i = 0; BEATS.forEach((b, j) => { if (t >= b.at) i = j; }); return i; };
 	const fade = (node, k) => { node.style.opacity = k.toFixed(3); };
 	function renderNarrow(t) {
-		const show = new Set(SHOW[beatIndex(t)]);
+		const bi = beatIndex(t);
+		const show = new Set(SHOW[bi]);
+		// Optional (business): the task stays on the stacked stage to the end, as one line from beat 3.
+		if (NW.keepTask) {
+			show.add('task');
+			N.task.sec.classList.toggle('is-compact', bi >= 2);
+			// With the task kept, the shared paper goes inline with its label from beat 8.
+			N.paper.sec.classList.toggle('is-inline', bi >= 7);
+		}
 		for (const [k, v] of Object.entries(N)) v.sec.hidden = !(show.has(k) || k === 'key');
 		fade(N.task.sec, prog(t, ...T.card));
 		// Once the papers are set aside (beat 7), the shared paper shrinks to a two-line

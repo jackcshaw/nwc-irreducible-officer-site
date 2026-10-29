@@ -1,0 +1,192 @@
+{
+ "_doc": "Invisible delegation, business edition (workplace cast): an analyst's bad-news email to a client. Illustration based on Lee et al., CHI 2025. The timeline, layout, colour grammar and nameplate are core and stay in invisible-delegation.js. Schema: CONVENTIONS.md, Editions.",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "text": "Tell the client the project slips three weeks.",
+  "rubricLabel": "STANDARD ·",
+  "rubric": "Bad news first, with the new date."
+ },
+ "decisions": [
+  "The criteria",
+  "How the email runs",
+  "“Professional” means"
+ ],
+ "requests": {
+  "first": [
+   "Give me feedback",
+   "Suggest a better structure",
+   "Make it more professional"
+  ],
+  "unsaid": [
+   "against your criteria",
+   "for your outline",
+   "as you define it"
+  ],
+  "second": [
+   [
+    "Give me feedback",
+    "against my criteria"
+   ],
+   [
+    "Suggest a better structure",
+    "for my outline"
+   ],
+   [
+    "Make it more professional,",
+    "as I define it"
+   ]
+  ]
+ },
+ "decided": [
+  [
+   "Client leaves knowing",
+   "the new date and why"
+  ],
+  [
+   "Date first, then the",
+   "reason, then the plan"
+  ],
+  [
+   "Plain, as our",
+   "standard says"
+  ]
+ ],
+ "notes": {
+  "label": "AI'S NOTES",
+  "items": [
+   "Cut the jargon",
+   "Formal phrasing",
+   "Reassure first"
+  ],
+  "reason": "bad news first"
+ },
+ "answers": {
+  "first": [
+   "“The AI’s notes, I",
+   "suppose. I worked through",
+   "what it flagged.”"
+  ],
+  "second": [
+   "“Ours, set first from our",
+   "standard: bad news first.”"
+  ]
+ },
+ "labels": {
+  "first": "{first}",
+  "second": "{second}",
+  "draft": "DRAFT",
+  "revised": [
+   "REVISED",
+   "WITH AI"
+  ],
+  "laneOwn": "THE {person|upper} DECIDES",
+  "laneRequests": "REQUESTS",
+  "laneAI": "THE AI DECIDES",
+  "unsaid": "UNSAID",
+  "unsaidKey": "LEFT UNSAID",
+  "askLabel": "{reviewer_ask|upper}",
+  "askQ": "Better by whose standard?",
+  "source": [
+   "Illustration based on",
+   "Lee et al., CHI (2025)."
+  ]
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "rubricLabel": "Standard ·",
+  "askLabel": "{reviewer_ask}",
+  "draft1": "Draft 1",
+  "draftWord": "DRAFT",
+  "revised": "Revised with AI",
+  "notesLabel": "AI's notes",
+  "keys": [
+   "Undecided",
+   "AI decides",
+   "{Person} decides",
+   "Left unsaid"
+  ],
+  "unsaid": "Unsaid",
+  "source": "Illustration based on Lee et al., CHI (2025)."
+ },
+ "beats": [
+  {
+   "text": "{A_person} is improving a bad-news email to a client. We'll track three decisions.",
+   "detail": "a task card at the top left: \"Example task. Tell the client the project slips three weeks. Standard: bad news first, with the new date.\" A red dot labelled {first} appears with a draft email. Beside it, a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three dashed cards, still undecided, sit in the {person}'s lane: \"The criteria\", \"How the email runs\" and \"'Professional' means\". The AI's lane shows three empty slots."
+  },
+  {
+   "text": "{The_person} asks an AI for feedback. The request carries the criteria across.",
+   "detail": "a speech bubble, \"Give me feedback\", clips onto the criteria card, and the two travel slowly across into the AI's lane, where the card turns grey. The request settles in the middle lane. The AI's notes appear under the email: \"Cut the jargon\", \"Formal phrasing\", \"Reassure first\". {The_person} ticks all three: draft 2, revised with AI."
+  },
+  {
+   "text": "Then for a better structure, and a more professional version.",
+   "detail": "\"Suggest a better structure\" carries \"How the email runs\" across, and \"Make it more professional\" carries \"'Professional' means\". Both turn grey in the AI's lane. The AI's grey headings and paragraph appear in the email, and {the_person} revises to draft 4."
+  },
+  {
+   "text": "Each request left out whose standard to use. The AI used its own.",
+   "detail": "a key appears, \"Left unsaid\". Under each request, a line marked \"unsaid\" with the words in a dashed box: against your criteria; for your outline; as you define it. The three grey cards pulse."
+  },
+  {
+   "text": "{A_second} starts from the firm's standard.",
+   "detail": "{the_first}'s ledger moves up, and {a_second} appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the standard, \"Bad news first, with the new date\", grows larger and is highlighted."
+  },
+  {
+   "text": "Before each request, the second {person} writes the decision down.",
+   "detail": "the dot writes on the criteria card, which turns red: \"Client leaves knowing the new date and why.\" Then it asks, \"Give me feedback against my criteria,\" with a red pointer back to the card. It writes \"Date first, then the reason, then the plan\" on \"How the email runs\" and asks, \"Suggest a better structure for my outline.\" It writes \"Plain, as our standard says\" on \"'Professional' means\" and asks, \"Make it more professional, as I define it.\" All three cards stay red in the {person}'s lane; the AI's lane stays empty."
+  },
+  {
+   "text": "Both get the same AI notes. The second {person} judges them against their decisions.",
+   "detail": "the same notes appear under the second email: \"Cut the jargon\", \"Formal phrasing\", \"Reassure first\". The second {person} ticks the first two. The criteria card pulses as they strike \"Reassure first\" in red and write underneath: \"bad news first\". The same grey headings and paragraph appear in this email, up to draft 4."
+  },
+  {
+   "text": "{reviewer_has} only the emails, and asks each {person} about the standard.",
+   "detail": "the ledgers and notes fade; the two emails stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears. The first {person} says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Ours, set first from our standard: bad news first.\""
+  },
+  {
+   "text": "{check}: What did the AI decide for them?",
+   "list": "{check}: What did the AI decide for them? To find out, ask each {person}: better by whose standard?",
+   "detail": "both lines appear under the picture at the same size, and the ledgers and notes return: the first {person}'s three decisions in the AI's lane, the second's three in their own, in their words. A source line appears: \"Illustration based on Lee et al., CHI (2025).\""
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "What did the AI decide for them?",
+  "follow": "To find out, ask each {person}: better by whose standard?"
+ },
+ "page": {
+  "kicker": "Failure mode 5 of 7",
+  "title": "Invisible delegation",
+  "description": "A teaching figure: ordinary requests for AI help can hand over the criteria, the structure and what 'professional' means. Asking whose standard the help followed shows who decided.",
+  "setup": "{A_person} at an agency asks an AI for feedback on an email telling a client their project will slip three weeks, then for a better structure, then for a more professional version, and revises after each. What can happen next is invisible delegation: a request for help hands over criteria, structure or meaning, and nobody notices. Illustration based on Lee et al. (2025). The analysts, their AI, the email and the firm's standard are constructed.",
+  "srTitle": "Invisible delegation, an animated figure in nine beats",
+  "srSummary": "An animated figure. A red dot stands for {a_person} improving a draft email that tells a client their project slips three weeks. The task card carries the firm's standard: bad news first, with the new date. Beside the email is a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the {person}'s lane: the criteria, how the email runs, and what \"professional\" means. {The_person} asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Cut the jargon\", \"Formal phrasing\", \"Reassure first\"), and {the_person} ticks all three and revises. {The_person} then asks, \"Suggest a better structure,\" and \"Make it more professional.\" Each request carries a card across, and {the_person} revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out, in a dashed box: against your criteria, for your outline, as you define it. {A_second} starts from the firm's standard, which is enlarged and highlighted. Before each request, they write the decision on its card in red: \"Client leaves knowing the new date and why\"; \"Date first, then the reason, then the plan\"; \"Plain, as our standard says\". Then they ask: \"Give me feedback against my criteria,\" \"Suggest a better structure for my outline,\" \"Make it more professional, as I define it.\" Their cards stay in their lane. Both get the same AI notes. The second {person} judges them against their decisions: they tick two and strike \"Reassure first\", writing \"bad news first\". Their email gets the same grey help. {reviewer_has} only the two emails, both marked \"Revised with AI\", and asks each {person}, \"Better by whose standard?\" The first says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Ours, set first from our standard: bad news first.\" The figure ends on the {check_l}, with the source under the picture: Lee et al., CHI (2025). Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "What did the AI decide for them?",
+   "To find out, ask each {person}: better by whose standard?"
+  ],
+  "checkFollow": "{A_person} who didn't notice what they handed over can honestly answer the first question with \"nothing\". The second line is a question they can answer, and the answer shows whose standard the help followed. In the figure, both {people} have the same standard and get the same AI notes. The first followed the notes. The second wrote their decisions down first, from the standard, and judged the notes against them, turning one down. The questions come from *The Irreducible Officer*, an essay written for military education.",
+  "evidenceHeading": "The study behind this example",
+  "evidence": [
+   "Lee and colleagues surveyed 319 knowledge workers, who shared 936 first-hand examples of using generative AI in their work. In the paper's words, \"higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking\" (p. 1).",
+   "One participant described the kind of request in this figure: \"It's a simple task [make a passage professional] and I knew ChatGPT could do it without difficulty, so I just never thought about it, as critical thinking didn't feel relevant\" (P275, p. 11). Another checked \"whether the AI added irrelevant content and if it changed up my main point of the letter\" (P144, p. 8).",
+   "The paper calls what the second analyst does stewardship: \"translating intentions into queries, steering AI responses, and assessing if the AI response meets their quality standards for work, while retaining accountability for the work\" (p. 13).",
+   "Its limits: the survey is self-reported, so \"critical thinking\" means what participants perceived they did, and the links it reports are correlations. Each quote is one participant's. The authors are at Microsoft Research and Carnegie Mellon University.",
+   "Source: Lee, Sarkar, Tankelevitch, Drosos, Rintel, Banks & Wilson, \"The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers,\" *CHI '25* (2025). Page numbers are the PDF's. The analysts, their AI, the email, the notes and the standard are constructed."
+  ],
+  "linksHeading": "Go further",
+  "links": [
+   {
+    "lead": "The study:",
+    "text": "Lee et al. (2025), CHI",
+    "href": "https://doi.org/10.1145/3706598.3713778"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section II",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ]
+ }
+}

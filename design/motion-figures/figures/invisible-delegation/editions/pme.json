@@ -87,13 +87,13 @@
   "laneAI": "THE AI DECIDES",
   "unsaid": "UNSAID",
   "unsaidKey": "LEFT UNSAID",
-  "askLabel": "FACULTY ASK",
+  "askLabel": "{reviewer_ask|upper}",
   "askQ": "Better by whose standard?"
  },
  "narrow": {
   "taskLabel": "Example task",
   "rubricLabel": "Rubric ·",
-  "askLabel": "Faculty ask",
+  "askLabel": "{reviewer_ask}",
   "draft1": "Draft 1",
   "draftWord": "DRAFT",
   "revised": "Revised with AI",
@@ -125,7 +125,7 @@
   },
   {
    "text": "{A_second}, with the same task, starts from the rubric.",
-   "detail": "the first student's ledger moves up, and {a_second} appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, \"Evidence must back the call\", grows larger and is highlighted."
+   "detail": "{the_first}'s ledger moves up, and {a_second} appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, \"Evidence must back the call\", grows larger and is highlighted."
   },
   {
    "text": "Before each request, the second {person} writes the decision down.",
@@ -136,13 +136,13 @@
    "detail": "the same notes appear under the second paper: \"Tighter opening\", \"Add the costs\", \"Be more decisive\". {The_person} ticks the first two. The criteria card pulses as {the_person} strikes \"Be more decisive\" in red and writes underneath: \"evidence too thin\". The same grey headings and paragraph appear in this paper, up to draft 4."
   },
   {
-   "text": "Faculty have only the papers. They ask each {person} about the standard.",
-   "detail": "the ledgers and notes fade; the two papers stay, both at draft 4 and marked \"Revised with AI\". \"Faculty ask: Better by whose standard?\" appears. The first student says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\""
+   "text": "{reviewer_has} only the papers. They ask each {person} about the standard.",
+   "detail": "the ledgers and notes fade; the two papers stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears. The first student says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\""
   },
   {
    "text": "{check}: What did the AI decide for {the_person}?",
    "list": "{check}: What did the AI decide for {the_person}? To find out, ask each {person}: better by whose standard?",
-   "detail": "both lines appear under the picture at the same size, and the ledgers and notes return: the first student's three decisions in the AI's lane, the second {person}'s three in their own, in their words."
+   "detail": "both lines appear under the picture at the same size, and the ledgers and notes return: {the_first}'s three decisions in the AI's lane, the second {person}'s three in their own, in their words."
   }
  ],
  "check": {
