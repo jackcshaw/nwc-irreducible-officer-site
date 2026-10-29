@@ -28,6 +28,25 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 7. **Appropriate reliance opens on a live question** rather than autoplaying like the others, so the reader makes the call first.
 8. **Institutional monoculture is flat, not 3D.** Faculty read across a seminar rather than rotate it; the testers read the line-up clearly.
 
+## Business editions (October 28–29)
+
+Every figure now has two editions: **Military education** (the essay's examples, frame-for-frame as you approved them) and **Business** (a workplace example grounded in a real study, with analysts and a manager). Open a figure and use "See this with: Workplace · Military education", or the Business links on the [review page](index.html).
+
+| Figure | Business example (source) | Status |
+| --- | --- | --- |
+| Frame capture | Health-system care program; the check reveals sicker patients at the same predicted cost (Obermeyer et al., 2019) | Done: two cold reads, verified |
+| Fluency substitution | Patent firm associates; an older patent covers the draft's fallback (Autor et al., 2026) | Done: two cold reads, verified |
+| Premature synthesis | Product engineers; conceptual questions versus delegation (Shen & Tamkin, 2026) | Done: two cold reads, verified |
+| Uncalibrated reliance | Nairobi print shop owners; advice that turns on records the AI never saw (Otis et al., 2026) | Done: two cold reads, verified |
+| Invisible delegation | Bad-news client email; the firm's standard (Lee et al., 2025) | Done: two cold reads, verified |
+| Institutional monoculture | Ten analysts answer a low-cost rival with one frame (trendslop research; Bottesch, 2025) | Done: two cold reads, verified |
+| Responsibility laundering | Support chatbot go-live; related case *Moffatt v. Air Canada* (2024) | Done: two cold reads, verified |
+| Appropriate reliance | The BCG consulting tasks (Dell'Acqua et al., 2023) | Round 2 in progress |
+
+What the cold reads caught along the way: two figures contradicted their study (the cost frame in frame capture, and the engineer's workflow in premature synthesis), plus straw men, second differences between the two people, and overstated sources. All were fixed. Every business edition's sources were checked against the paper or decision; the remaining limits are noted on each page.
+
+**Also done:** the shared player now waits for a slow edition rather than swapping it, survives a missing data file, and shows a notice without JavaScript. The integration plan requires pre-rendering each edition and making business the default on standalone pages, per your decision. The switch reads "Military education" rather than "PME", because business testers didn't know the acronym; revert if you prefer.
+
 ## Editions: decisions for Jack (added October 28, evening)
 
 The business editions are in progress: every figure's words now live in data files, PME is unchanged frame for frame, and each business edition goes through two cold reads. These came up along the way:
