@@ -261,7 +261,7 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - `narrow.askNote`: the note full width under the columns;
 - page keys:
   - `page.quote: null` hides the essay quote (`data-ed-section`);
-  - `page.editionNote` is the note under the switch: PME's names PME; business has none, since the switch carries it;
+  - `page.editionNote` is the note under the switch: PME's names military education; business has none, since the switch carries it;
   - `page.linksNote` adds a line above the links.
 
 **An edition's own clock** (business, round 2). It lets an edition add beats or holds without touching the core timeline.
@@ -325,9 +325,9 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
 
 **Edition switch:** the links are page furniture, the same in every edition, so they stay in the HTML under the setup:
-- `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>`;
+- `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">Military education</a></nav>`;
 - then `<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">`.
-  - PME's note reads "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
+  - PME's note reads "Military education: the original example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
   - The business edition sets no note (round 3: the military wording sat above a workplace figure), so the line is hidden there.
 
 The current edition's link is bold and underlined (`aria-current`). Classroom joins as a third link later. Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels. An edition that hides the note sits 24 px higher.

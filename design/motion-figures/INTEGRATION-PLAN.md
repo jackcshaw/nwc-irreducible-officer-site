@@ -252,6 +252,12 @@ Per `book-v0` Option A, the book replaces `.method-band` ("One method, different
   - The figures show PME examples and say "faculty" and "seminar".
   - Default *(recommended)*: wait for edition variants or educator review (concepts-v0 §10 Q6, `book-v0` §9 Q4).
   - Alternative: cards at the editions' own failure-mode paragraphs (HE 5, high school 4), quoting that edition's paragraph and labelled "The figure's example is the PME one."
+- **Default edition** (Jack's decision, EDITIONS-PLAN.md, "Jack's decisions").
+  - Business with the workplace cast is the default for standalone pages and articles.
+  - The design pages still fall back to PME, so the PME regression baselines stay simple.
+  - So the site build must set the default to business on `/failure-modes/<slug>/` pages (`data-edition="business"` on the figure, or the static business page below).
+  - The military-education edition stays reachable from the edition switch, and the essay's figure cards and the PME setting page link to it.
+  - Each edition's text and meta must still be pre-rendered (the next requirement).
 - **Requirement: pre-render every edition** (added after the frame-capture business recheck).
   - The build must pre-render each edition's text into static HTML: the title, setup, check, beat list, evidence, links and meta.
   - Readers without JavaScript, and crawlers, then get the full text.
@@ -259,7 +265,7 @@ Per `book-v0` Option A, the book replaces `.method-band` ("One method, different
 - **A static page per edition** (added after the frame-capture business verification).
   - In the motion-figures prototype, `?edition=` picks an edition at runtime. The page's copy and meta description are filled in by JavaScript (`MotionFigures.fillPage`).
   - A link preview, or a crawler that runs no JavaScript, sees only the static fallback: role-neutral meta, and empty page copy.
-  - The build should emit one static page per edition, e.g. `/failure-modes/frame-capture/` for the default edition and `/failure-modes/frame-capture/business/`. Each page bakes in that edition's title, meta description, Open Graph tags and page copy from `editions/<id>.json` and `casts.json`. The figure is set with `data-edition`.
+  - The build should emit one static page per edition, e.g. `/failure-modes/frame-capture/` for the default (business) edition and `/failure-modes/frame-capture/pme/`. Each page bakes in that edition's title, meta description, Open Graph tags and page copy from `editions/<id>.json` and `casts.json`. The figure is set with `data-edition`.
   - The edition switch then links between these static paths rather than `?edition=`.
   - At minimum, emit static meta per edition, so social previews and search results carry the right wording.
 
