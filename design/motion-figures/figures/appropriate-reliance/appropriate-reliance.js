@@ -693,6 +693,16 @@
 			// The page copy that explains both answers stays shut until both questions are done.
 			if (after) after.hidden = !(resolved.g1 && resolved.g2);
 			if (afterLocked) afterLocked.hidden = resolved.g1 && resolved.g2;
+			// Optional (business): page check lines that name what would move the check join the
+			// question only once both calls are made, so the page doesn't hint at the answer first.
+			// They exist in the DOM only from then.
+			if (ed.page.checkLinesAfter) {
+				const both = resolved.g1 && resolved.g2;
+				ed.page.checkLinesAfter.forEach((line, i) => {
+					const n = document.querySelector(`[data-ed="page.checkLines.${ed.page.checkLines.length + i}"]`);
+					if (n) n.textContent = both ? line : '';
+				});
+			}
 		}
 		const say = (msg) => { live.textContent = ''; requestAnimationFrame(() => { live.textContent = msg; }); };
 		// What the live region says: each question as it opens, then each suggested call and the

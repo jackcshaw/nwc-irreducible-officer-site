@@ -127,7 +127,7 @@
   "noteA": "A check here leaves Task B unchecked",
   "sugB": "Work it from the interviews, then compare",
   "noteMove": "Task B: read-through only",
-  "noteTime": "Defensible · launch slips a week",
+  "noteTime": "Defensible · a week late",
   "sug2": "Rely on it · read it first",
   "insideTitle": "With AI, across tasks inside the frontier",
   "outsideTitle": "Right answers on Task B",
@@ -245,8 +245,7 @@
   ],
   "checkHeading": "{check}",
   "checkLines": [
-   "What evidence justified relying on the AI here, and what would have changed the call?",
-   "Change one condition, like details AI tends to miss, and ask again."
+   "What evidence justified relying on the AI here, and what would have changed the call?"
   ],
   "howHeading": "How this figure works",
   "how": "Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two consulting tasks from a 2023 field experiment and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning. Illustration based on Dell'Acqua et al. (2023): the tasks and results are the study's, and the time budget, the first draft and the launch plan are this figure's.",
@@ -286,7 +285,10 @@
     "href": "https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency"
    }
   ],
-  "linksNote": "The skill and the reviewer's question come from an essay on judgment with AI. This page shows them with the consulting tasks from the study it cites."
+  "linksNote": "The skill and the reviewer's question come from an essay on judgment with AI. This page shows them with the consulting tasks from the study it cites.",
+  "checkLinesAfter": [
+   "Change one condition, like details AI tends to miss, and ask again."
+  ]
  },
  "layout": {
   "holdFirstView": true
