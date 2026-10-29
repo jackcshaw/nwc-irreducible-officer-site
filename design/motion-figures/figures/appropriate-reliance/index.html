@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Appropriate Reliance</title>
-<meta name="description" data-ed-content="page.description" content="An interactive teaching figure: with time to check one of two tasks from the Dell'Acqua et al. field experiment, you decide where the check goes, see what the study found, and make one more call when a condition changes.">
+<meta name="description" data-ed-content="page.description" content="Appropriate reliance: accept AI support where it’s warranted, check or refuse it where it isn’t, and be able to say why. An interactive figure with two AI answers and time to check only one.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
@@ -19,10 +19,12 @@
 .ar-lede { margin: 0; font-size: 18px; line-height: 1.45; color: var(--body); }
 .ar-page .mf { margin-top: 12px; }
 /* The edition switch shares the kicker's row and its line box, so it adds no height: the
-   first view still fits the live question. The note on what PME is sits under "How this
-   figure works", and the PME link points to it (aria-describedby). */
+   first view still fits the live question. The note on the military-education example sits
+   under "How this figure works", and that link points to it (aria-describedby). */
 .ar-toprow { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; column-gap: 16px; }
 .ar-toprow .fig-editions { margin: 0; font-size: 14px; line-height: 15.6px; }
+/* On phones "See this with:" is read but not shown, so the switch keeps the kicker's row. */
+@media (max-width: 480px) { .ar-ed-lead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 
 /* ---- gates: hit targets over the drawn options, and Continue / Skip ---------- */
 #appropriate-reliance .mf-shot { position: relative; }
@@ -88,6 +90,9 @@
 @media (min-width: 720px) and (max-width: 1023px) {
 	#appropriate-reliance.has-nameplate { --mf-plate: 43px; }
 	#appropriate-reliance .mf-caption { height: 156px; }
+	/* The business follow-up names a condition and takes two lines here (176 px at 768). */
+	#appropriate-reliance.has-nameplate[data-edition-id="business"] { --mf-plate: 67px; }
+	#appropriate-reliance[data-edition-id="business"] .mf-caption { height: 180px; }
 }
 /* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the 144 px band the
    picture would be letterboxed under 11 px and give way to the stacked stage. Below 717 px
@@ -201,7 +206,7 @@
 	<noscript><div class="fig-noscript"><p class="fig-kicker">The skill</p><h1>Appropriate reliance</h1><p class="fig-setup">Accept AI support where it’s warranted, check or refuse it where it isn’t, and be able to say why.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
 	<div class="ar-toprow">
 		<p class="fig-kicker" data-ed="page.kicker"></p>
-		<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme" aria-describedby="ar-edition-note">PME</a></nav>
+		<nav class="fig-editions" aria-label="Choose an example"><span class="ar-ed-lead">See this with: </span><a data-edition-link="business">Workplace</a> · <a data-edition-link="pme" aria-describedby="ar-edition-note">Military education</a></nav>
 	</div>
 	<h1 data-ed="page.title"></h1>
 	<p class="ar-lede" data-ed-rich="page.setup"></p>
@@ -266,7 +271,7 @@
 	<section class="fig-section" aria-labelledby="ar-how-h">
 		<h2 id="ar-how-h" data-ed="page.howHeading"></h2>
 		<p class="fig-follow" data-ed-rich="page.how"></p>
-		<p class="fig-edition-note" id="ar-edition-note">PME (professional military education): the example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+		<p class="fig-edition-note" id="ar-edition-note">Military education: the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>
 	</section>
 
 	<p class="ar-after-locked" data-ar-after-locked data-ed="page.afterLocked"></p>

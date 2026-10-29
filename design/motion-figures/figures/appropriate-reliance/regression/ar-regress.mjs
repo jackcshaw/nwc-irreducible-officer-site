@@ -77,6 +77,8 @@ const snapshot = (p) => p.evaluate(([id, hide]) => {
   // --hide removes intended page additions from the word list too, as it does from the stills.
   const body = document.body.cloneNode(true);
   if (hide) body.querySelectorAll(hide).forEach((n) => n.remove());
+  // <noscript> content is raw text while scripts run, never shown: not a page word.
+  body.querySelectorAll("noscript").forEach((n) => n.remove());
   return {
     domText: sq(body.textContent),
     visibleText: sq(document.body.innerText),

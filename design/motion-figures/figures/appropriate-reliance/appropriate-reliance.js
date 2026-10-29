@@ -226,7 +226,17 @@
 		const keySugSw = el(keySug, 'rect', {y: 516.5, width: 16, height: 11, rx: 2, fill: C.ink});
 		const keyYou = el(scene, 'g');
 		el(keyYou, 'circle', {cx: 29, cy: 521.5, r: 5, fill: C.red});
-		mono(keyYou, 40, 526, L.keyYours, {fill: C.red});
+		const keyYouT = mono(keyYou, 40, 526, L.keyYours, {fill: C.red});
+		// Optional (business): from the last beat the key sets the reader's calls against the
+		// suggested calls in words, so the comparison doesn't rest on colour. It exists in the DOM
+		// only from that beat.
+		const verdict = (V) => {
+			const first = calls.g1 === 'b' ? V.matches : calls.g1 === 'a' ? V.differs : V.none;
+			const plan = calls.g2 === 'rely' ? V.matches : calls.g2 === 'time' ? V.defensible : calls.g2 === 'move' ? V.differs : V.none;
+			return `${V.lead} · ${V.first}: ${first} · ${V.plan}: ${plan}`;
+		};
+		const verdictK = (t) => (L.keyVerdict ? prog(t, BEAT_AT[9], BEAT_AT[9] + 0.4) : 0);
+		const keyText = (t, V, plain) => (V && t >= BEAT_AT[9] - 1e-6 ? verdict(V) : plain);
 
 		// Task B's evidence: above the dim, centre stage at first, then in its slot.
 		const panelBg = el(topLayer, 'g');
@@ -389,7 +399,8 @@
 			set(sugA.g, {opacity: prog(t, ...T.sugA)});
 			set(noteA, {opacity: prog(t, ...T.noteA)});
 			set(sugB.g, {opacity: prog(t, ...T.sugB)});
-			set(keyYou, {opacity: Math.max(calls.g1 ? prog(t, ...T.call1Off) : 0, calls.g2 ? prog(t, ...T.call2Off) : 0)});
+			set(keyYou, {opacity: Math.max(calls.g1 ? prog(t, ...T.call1Off) : 0, calls.g2 ? prog(t, ...T.call2Off) : 0, verdictK(t))});
+			if (L.keyVerdict) { const want = keyText(t, L.keyVerdict, L.keyYours); if (keyYouT.textContent !== want) keyYouT.textContent = want; }
 
 			// 8–9 · the launch plan, and the call it suggests.
 			set(cond2, {opacity: prog(t, ...T.cond2)});
@@ -561,7 +572,8 @@
 			op(N.a.sug, prog(t, ...T.sugA)); op(N.a.note, prog(t, ...T.noteA));
 			op(N.b.sug, prog(t, ...T.sugB));
 			op(N.keySug, prog(t, ...T.key));
-			op(N.keyYou, Math.max(calls.g1 ? prog(t, ...T.call1Off) : 0, calls.g2 ? prog(t, ...T.call2Off) : 0));
+			op(N.keyYou, Math.max(calls.g1 ? prog(t, ...T.call1Off) : 0, calls.g2 ? prog(t, ...T.call2Off) : 0, verdictK(t)));
+			if (NW.keyVerdict) { const want = keyText(t, NW.keyVerdict, NW.keyYours); if (N.keyYou.textContent !== want) N.keyYou.textContent = want; }
 			op(N.band, prog(t, ...T.band));
 			const kF2 = prog(t, ...T.fade2);
 			op(N.a.cond2, prog(t, ...T.cond2));
@@ -697,7 +709,11 @@
 			if (g < 0 || !api) return;
 			if (skip) calls[GKEY[g]] = null;
 			if (prompt) prompt.hidden = true;
-			if (g === 0) releaseFit();
+			// Optional (business, layout.holdFirstView): where the first view already shows the
+			// drawn picture, it keeps that size, so nothing jumps when the reader continues. A
+			// stacked first view (short windows) still gives way to the drawn picture.
+			const hold = g === 0 && ed.layout && ed.layout.holdFirstView && fitOn && !root.classList.contains('is-stacked');
+			if (g === 0 && !hold) releaseFit();
 			if (reducedNow()) {
 				resolve(g);
 				if (g === 0) api.openGate(1);
@@ -707,7 +723,7 @@
 				toggle.focus({preventScroll: true});
 				// After the first question the picture carries the next beats: bring the cards
 				// into view (on a phone, the top of the stacked stage).
-				if (g === 0) requestAnimationFrame(() => showPicture());
+				if (g === 0 && !hold) requestAnimationFrame(() => showPicture());
 			}
 		};
 		// Play at a question asks for the call; only Skip passes it without one.

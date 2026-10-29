@@ -1,6 +1,6 @@
 # Appropriate reliance: business edition
 
-Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`, workplace cast · October 28, 2026
+Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`, workplace cast · round 2, revised after business cold read 1 (`tests/business-figure-read-1.md`) · October 28, 2026
 
 **Example.** The study's own consulting tasks, as built (BUSINESS-EXAMPLES.md §8, approved). Dell'Acqua et al. (2023) ran the field experiment with BCG consultants on business tasks, so the PME scenario already is the business scenario. This edition is a cast change plus fully business page copy.
 
@@ -9,16 +9,36 @@ Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`,
 ## The workplace check, for Jack
 
 > **Reviewer's check:** What evidence justified relying on the AI here, and what would have changed the call?
-> Change one condition and ask for the call again.
+> Change one condition, like facts the AI couldn't see, and ask again.
 
-The question is the EDITIONS-PLAN.md draft, word for word. PME says "relying on the system", and this says "relying on the AI". The follow-up is unchanged and set at the same size, so it keeps its equal weight. The heading comes from the cast (`{check}`).
+The question is the EDITIONS-PLAN.md draft, word for word. PME says "relying on the system", and this says "relying on the AI". The follow-up is set at the same size, so it keeps its equal weight. Round 2 makes it name a condition that would move the check. The cold read pointed out that the figure's own changed condition, the launch plan, doesn't move the call. A question about what would change it should come with a modelled answer. Beat 9 models that answer just before the check: "Facts the AI couldn't see would move the check." PME keeps "Change one condition and ask for the call again." The heading comes from the cast (`{check}`).
+
+## Round 2: changes after business cold read 1
+
+All of these are gated to the business edition through `business.json` or `[data-edition-id="business"]`, so PME is unchanged. PME regression: 0 differing frames.
+
+1. **Task A's line is labelled as reasoning.** "What the evidence suggests" becomes "WHY READING IS ENOUGH"; the line under it is unchanged. Beat 6's caption becomes "Task B's deciding details were in the interviews. Task A, the figure reasons, has none." It stays at 15 words. Under "What a good answer says", the unlocked panel adds the blind spot: reliance on Task A is warranted for quality, but the study found AI users' ideas less varied, and a careful read of one segmentation won't show that. The Evidence paragraph quotes the finding with its page (p. 12).
+2. **What would move the check is shown.** Beat 9: "Inside the frontier: rely on it, read it first. Facts the AI couldn't see would move the check." That's 18 words, as in PME, and it also drops "before it's built", which the reader found unclear. The tag becomes "RELY ON IT · READ IT FIRST". The check's follow-up names the same condition, and the unlocked panel spells it out: if the segmentation rested on customer data the AI never had, Task A would need working through too.
+3. **Asking for a week reads as defensible on screen.** Its cost note becomes "DEFENSIBLE · A WEEK LATE", which differs from the move option's "TASK B: READ-THROUGH ONLY". In the last frame, the key sets the reader's calls against the suggested ones in words, so the comparison doesn't rest on colour: "YOUR CALLS · FIRST DRAFT: MATCHES / DIFFERS / NO CALL · LAUNCH PLAN: MATCHES / DIFFERS / DEFENSIBLE / NO CALL". The stacked view does the same. That text exists only from beat 10.
+4. **No jump on Continue where the first view shows the picture.** `layout.holdFirstView` keeps the first view's stage size for the rest of the figure at 1440 × 900 and 1280 × 900, so Continue doesn't resize or scroll anything (measured: same shot height, same scroll). Labels are 11.7 px there. Where the first view is the compact stacked stage (1280 × 720, 1366 × 657, phones), Continue still opens the drawn picture or the full stacked stage. Reserving that space would push the question and Continue off the first screen, and lesson 7 needs the drawn picture there.
+5. **Sources:** listed below, with their references.
+6. **JS-off "Faculty check":** left to the runtime's noscript fix.
+
+At 768 × 1024 the business follow-up takes two lines, so the business caption band is 180 px there (176 measured). PME keeps 156.
 
 ## Words that differ from PME, beat by beat
 
-Every picture word is the same in both editions: the tasks, labels, results, options, costs and suggested calls. So are beats 0–9.
+Beats 0–5, 7 and 8 have the same words in both editions. In round 2 the business edition changes these:
 
 | Beat | PME | Business |
 | --- | --- | --- |
+| 6 · caption | "…For Task A, the evidence suggests none." | "…Task A, the figure reasons, has none." |
+| 6 · Task A label | WHAT THE EVIDENCE SUGGESTS | WHY READING IS ENOUGH |
+| 9 · caption | "Still inside the frontier: rely on it, and read it before it's built. Task B needs the check." | "Inside the frontier: rely on it, read it first. Facts the AI couldn't see would move the check." |
+| 9 · tag | RELY ON IT · READ IT BEFORE IT'S BUILT | RELY ON IT · READ IT FIRST |
+| 9 · cost note | LAUNCH SLIPS A WEEK | DEFENSIBLE · A WEEK LATE |
+| 10 · key | YOUR CALLS | YOUR CALLS · FIRST DRAFT: … · LAUNCH PLAN: … |
+| 10 · follow-up | "Change one condition and ask for the call again." | "Change one condition, like facts the AI couldn't see, and ask again." |
 | 10 · caption | "Faculty check: What evidence justified relying on the system here, and what would have changed the call?" | "Reviewer's check: What evidence justified relying on the AI here, and what would have changed the call?" |
 | 10 · check band | FACULTY CHECK / "…relying on the system here…" | REVIEWER'S CHECK / "…relying on the AI here…" |
 | Screen-reader summary, part 3 | "The figure ends on the faculty check." | "The figure ends on the reviewer's check." |
@@ -48,7 +68,7 @@ Every picture word is the same in both editions: the tasks, labels, results, opt
 
 ## The edition switch
 
-"See this with: Workplace · PME" shares the kicker's row, at the right, and its line box, so it adds no height. Under the setup it would have pushed the figure down about 40 px, and at 1440 × 900 the first view would have dropped to the stacked stage. The note "PME (professional military education): the example from *The Irreducible Officer*, the National War College essay." sits under "How this figure works". The PME link points to it (`aria-describedby`).
+"See this with: Workplace · Military education" shares the kicker's row, at the right, and its line box, so it adds no height. Under the setup it would have pushed the figure down about 40 px, and at 1440 × 900 the first view would have dropped to the stacked stage. On phones "See this with:" is read but not shown, so the switch still fits the row. The note "Military education: the original example from *The Irreducible Officer*, the National War College essay." sits under "How this figure works". The military-education link points to it (`aria-describedby`). The static meta description is role-neutral: the name, the definition and one clause. The business edition fills it with business wording.
 
 ## Round-1 lessons (BUSINESS-BRIEF.md, 7–12)
 
@@ -76,11 +96,11 @@ Every caption and on-screen text at 3 words a second, plus a 1.5 s hold, and the
 | 3 · One check | 21.7–31.7 | 8 | 4.2 | 22 | 10.0 | 5.3 | 10.0 | Yes (waits at the question) |
 | 4 · The frontier | 31.7–43.7 | 14 | 6.2 | 21 | 11.7 | 9.3 | 12.0 | Yes |
 | 5 · Outside the frontier | 43.7–56.7 | 16 | 6.8 | 22 | 12.7 | 10.7 | 13.0 | Yes |
-| 6 · What set them apart | 56.7–70.2 | 15 | 6.5 | 25 | 13.3 | 10.0 | 13.5 | Yes |
+| 6 · What set them apart | 56.7–70.2 | 15 | 6.5 | 25 | 13.3 | 10.0 | 13.5 | Yes ("WHY READING IS ENOUGH" has as many words as PME's label) |
 | 7 · The suggested call | 70.2–83.2 | 15 | 6.5 | 23 | 12.7 | 10.0 | 13.0 | Yes |
 | 8 · One thing changes | 83.2–96.2 | 13 | 5.8 | 25 | 12.7 | 8.7 | 13.0 | Yes (waits at the question) |
-| 9 · The call | 96.2–108.2 | 18 | 7.5 | 16 | 11.3 | 12.0 | 12.0 | Yes |
-| 10 · Reviewer's check | 108.2–117.9 | 15 + 9 | 9.5 | 0 | 8.0 | 16.0 | 9.7, then rests | Yes (the last frame rests) |
+| 9 · The call | 96.2–108.2 | 18 | 7.5 | 15 | 11.0 | 12.0 | 12.0 | Yes. The new note "DEFENSIBLE · A WEEK LATE" (4 words) appears at 103.6 and holds 4.2 s, over its 1.3 s plus 1.5 s |
+| 10 · Reviewer's check | 108.2–117.9 | 15 + 12 | 10.5 | 9 (the key's verdict) | 12.0 | 18.0 | 9.7, then rests | Yes (the last frame rests) |
 
 The name card (3 s before 0.0) is unchanged, as is the nameplate's definition in the last caption. No new note or label is added in this edition. On phones the task cards stay on the stacked stage through the final frame.
 
@@ -88,7 +108,9 @@ The name card (3 s before 0.0) is unchanged, as is the nameplate's definition in
 
 These are checked against the full working paper text (HBS Working Paper 24-013, September 2023) and BCG-VERIFY.md. Each reference gives the printed page first, then the PDF page in brackets.
 
-- 758 BCG consultants, about 7% of BCG's individual-contributor consultants: abstract [4]; p. 5 [9]. The split was 385 inside the frontier and 373 outside: p. 6 [10].
+- 758 BCG consultants: abstract [4]; p. 6 [10]. They were about 7% of BCG's individual-contributor consultants: abstract [4] ("758 consultants comprising about 7% of the individual contributor-level consultants"); p. 5 [9]. BCG-VERIFY.md has the abstract; I read p. 5 in the working paper text.
+- The split: 385 consultants on the tasks inside the frontier and 373 on the task outside it, p. 6 [10] ("Approximately half of the participants (385 consultants) … The other half (373 consultants)"). Tables 1–3 have N = 385 and Tables 4–6 N = 373 (pp. 34–38).
+- Less varied ideas inside the frontier: p. 12 [16]. On the first inside task (shoe ideas), AI users' ideas were better but showed "a marked reduction in the variability of these ideas compared to those not using AI". This suggests "it might lead to more homogenized outputs" (Figure 6; Appendix D).
 - Inside the frontier, 12.2% more tasks, 25.1% more quickly and more than 40% higher quality: abstract [4]. The 12.2% is also on p. 11 [15].
 - 18 product-development tasks for a fictional footwear company, including "Segment the footwear industry market based on users.": p. 9 [13]; Appendix A, p. 41 [45].
 - The outside task's spreadsheet and insider interviews, with the spreadsheet "designed to seem to be comprehensive": p. 13 [17]. The task was built so GPT-4 would err: p. 8 [12].
@@ -96,9 +118,9 @@ These are checked against the full working paper text (HBS Working Paper 24-013,
   - 84.5% without AI: p. 14 [18];
   - 70.6% with GPT-4 alone and 60.0% with the overview: Figure 7, p. 33 [37]. The text rounds them to "60% and 70%".
 - "19 percentage points less likely to produce correct solutions", with the two AI groups pooled: abstract [4]; p. 14 [18].
-- "regardless of the correctness of their answer": p. 15 [19].
-- Limits:
-  - the gap between the two AI groups: p = 0.082, Table 4, column 1, p. 37 [41];
-  - the higher rating among wrong answers alone: significant only at the 10% level (Table 6, column 3, n = 105, from BCG-VERIFY.md).
+- "regardless of the correctness of their answer": p. 15 [19], in the working paper text and BCG-VERIFY.md (Claim 6 table).
+- Limits, both significant only at the 10% level:
+  - the gap between the two AI groups: p = 0.082, Table 4, column 1, p. 37 [41]; BCG-VERIFY.md, Claim 3;
+  - the higher rating among wrong answers alone: Table 6, column 3, n = 105; BCG-VERIFY.md, Claim 6. The paper's sentence on p. 15 [19] is unqualified.
 
 **Not verified here.** "No hidden facts: a weak answer shows when read" is the figure's reasoning about Task A, and it is labelled that way ("What the evidence suggests"). The study doesn't test checking, a time budget or a launch plan, and the page says so. I took the Table 6 figure from BCG-VERIFY.md and didn't reopen it.
