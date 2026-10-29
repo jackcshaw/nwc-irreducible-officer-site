@@ -1,6 +1,6 @@
 # Appropriate reliance: business edition
 
-Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`, workplace cast · round 2, revised after business cold read 1 (`tests/business-figure-read-1.md`) · October 28, 2026
+Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`, workplace cast · round 3, final fixes after business cold read 2 (`tests/business-figure-read-2.md`) · October 28, 2026
 
 **Example.** The study's own consulting tasks, as built (BUSINESS-EXAMPLES.md §8, approved). Dell'Acqua et al. (2023) ran the field experiment with BCG consultants on business tasks, so the PME scenario already is the business scenario. This edition is a cast change plus fully business page copy.
 
@@ -9,9 +9,25 @@ Motion figure 8 of 8 · slug `appropriate-reliance` · `editions/business.json`,
 ## The workplace check, for Jack
 
 > **Reviewer's check:** What evidence justified relying on the AI here, and what would have changed the call?
-> Change one condition, like facts the AI couldn't see, and ask again.
+> Change one condition, like details AI tends to miss, and ask again.
 
-The question is the EDITIONS-PLAN.md draft, word for word. PME says "relying on the system", and this says "relying on the AI". The follow-up is set at the same size, so it keeps its equal weight. Round 2 makes it name a condition that would move the check. The cold read pointed out that the figure's own changed condition, the launch plan, doesn't move the call. A question about what would change it should come with a modelled answer. Beat 9 models that answer just before the check: "Facts the AI couldn't see would move the check." PME keeps "Change one condition and ask for the call again." The heading comes from the cast (`{check}`).
+The question is the EDITIONS-PLAN.md draft, word for word. PME says "relying on the system", and this says "relying on the AI". The follow-up is set at the same size, so it keeps its equal weight. Round 2 makes it name a condition that would move the check. The cold read pointed out that the figure's own changed condition, the launch plan, doesn't move the call. A question about what would change it should come with a modelled answer. Beat 9 models that answer just before the check: "Details AI tends to miss would move the check." Round 3 changes the wording from "facts the AI couldn't see", which pointed at data access. In Task B the consultants could give GPT-4 every file, and it still missed the deciding details. PME keeps "Change one condition and ask for the call again." The heading comes from the cast (`{check}`).
+
+## Round 3: final fixes after business cold read 2
+
+All of these are business-only and gated by `business.json`. PME regression: 0 differing frames.
+
+1. **Finding and reasoning are separate.**
+   - Caption 7 becomes "AI helped on tasks like A. The suggested call: rely on A, work B yourself." That's 15 words: the study's finding, then the figure's call.
+   - Task A's label becomes "REASONING: READING IS ENOUGH", which stays 4 words in beat 6's budget. It's set in the reasoning style (mono 500 over italic serif), which differs from the study's facts.
+2. **Bar labels:**
+   - "With GPT-4" and "With GPT-4 + tips" (the stacked view says "With GPT-4 + prompting tips"). "Prompting tips" doesn't fit before the bars at 14 px.
+   - In the last frame, two notes sit under the bars: "TIPS: A SHORT PROMPTING OVERVIEW" and "THE GAP BETWEEN THE AI GROUPS IS UNCERTAIN". The gap is significant only at the 10% level. Beat 5 has no reading time left for them, so they come in with the final frame, which rests.
+3. **The closing rule matches Task B:**
+   - beat 9: "Inside the frontier: rely on it, read it first. Details AI tends to miss would move the check." (18 words);
+   - the follow-up: "Change one condition, like details AI tends to miss, and ask again.";
+   - the panel: "a detail the AI tends to miss: if the segmentation turned on something buried in the source material, as Task B's answer did".
+4. **Go further:** the note reads "The skill and the reviewer's question come from an essay on judgment with AI." Only the original-essay link mentions military education.
 
 ## Round 2: changes after business cold read 1
 
@@ -97,10 +113,10 @@ Every caption and on-screen text at 3 words a second, plus a 1.5 s hold, and the
 | 4 · The frontier | 31.7–43.7 | 14 | 6.2 | 21 | 11.7 | 9.3 | 12.0 | Yes |
 | 5 · Outside the frontier | 43.7–56.7 | 16 | 6.8 | 22 | 12.7 | 10.7 | 13.0 | Yes |
 | 6 · What set them apart | 56.7–70.2 | 15 | 6.5 | 25 | 13.3 | 10.0 | 13.5 | Yes ("WHY READING IS ENOUGH" has as many words as PME's label) |
-| 7 · The suggested call | 70.2–83.2 | 15 | 6.5 | 23 | 12.7 | 10.0 | 13.0 | Yes |
+| 7 · The suggested call | 70.2–83.2 | 15 | 6.5 | 23 | 12.7 | 10.0 | 13.0 | Yes (round 3 caption: 15 words) |
 | 8 · One thing changes | 83.2–96.2 | 13 | 5.8 | 25 | 12.7 | 8.7 | 13.0 | Yes (waits at the question) |
 | 9 · The call | 96.2–108.2 | 18 | 7.5 | 15 | 11.0 | 12.0 | 12.0 | Yes. The new note "DEFENSIBLE · A WEEK LATE" (4 words) appears at 103.6 and holds 4.2 s, over its 1.3 s plus 1.5 s |
-| 10 · Reviewer's check | 108.2–117.9 | 15 + 12 | 10.5 | 9 (the key's verdict) | 12.0 | 18.0 | 9.7, then rests | Yes (the last frame rests) |
+| 10 · Reviewer's check | 108.2–117.9 | 15 + 12 | 10.5 | 9 (the key's verdict) + 13 (the bar notes) | 16.3 | 18.0 | 9.7, then rests | Yes (the last frame rests) |
 
 The name card (3 s before 0.0) is unchanged, as is the nameplate's definition in the last caption. No new note or label is added in this edition. On phones the task cards stay on the stacked stage through the final frame.
 

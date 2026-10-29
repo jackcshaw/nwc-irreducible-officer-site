@@ -267,6 +267,9 @@
 		lazy(cond2, L.cond2, T.cond2[0]);
 		lazy(r2.rely.t, L.options2.rely, T.pills2[0]); lazy(r2.move.t, moveLabel, T.pills2[0]); lazy(r2.time.t, L.options2.time, T.pills2[0]);
 		lazy(sug2.t, L.sug2, T.sug2[0]); lazy(noteMove, L.noteMove, T.noteMove[0]); lazy(noteAsk, L.noteTime, T.noteAsk[0]);
+		// Optional (business): short notes under Task B's bars in the last frame, such as what
+		// the tips were and that the gap between the two AI groups is uncertain.
+		const barNotes = (L.barNotes || []).map((str, i) => lazy(mono(evB, BAR.x + bracketV / 2 * BAR.k, 436 + i * 16, '', {anchor: 'middle'}), str, BEAT_AT[9]));
 		const fillLazy = (t) => {
 			for (const [n, str, at] of LAZY) {
 				const want = t >= at - 1e-6 ? (typeof str === 'function' ? str() : str) : '';
@@ -385,6 +388,7 @@
 			});
 			set(bracket, {opacity: prog(t, ...T.bracket)});
 			set(bracketText, {opacity: prog(t, ...T.bracketText)});
+			for (const n of barNotes) set(n, {opacity: prog(t, BEAT_AT[9], BEAT_AT[9] + 0.4)});
 
 			// 6 · what set them apart.
 			set(tagA1, {opacity: prog(t, ...T.tagA1)});
@@ -497,9 +501,10 @@
 		}
 		col('b');
 		// Task B's evidence, written once and used in the slot and in the overlay.
-		const evHtml = (parent) => {
+		const evHtml = (parent, withNotes = false) => {
 			h('p', 'ar-n-evtitle', parent, NW.outsideTitle);
-			const rows = R.outside.map(({name: l, value: v, label: s}) => {
+			const rows = R.outside.map(({name, narrowName, value: v, label: s}) => {
+				const l = narrowName ?? name;
 				const r = h('div', 'ar-n-bar', parent);
 				h('span', 'ar-n-barl', r, l);
 				const trk = h('span', 'ar-n-bart', r);
@@ -509,9 +514,11 @@
 				return {r, fill};
 			});
 			const q = h('p', 'ar-n-evq', parent, NW.bracket);
-			return {rows, q};
+			// Optional (business): the last frame's notes under the bars, in the slot only.
+			const notes = withNotes ? (NW.barNotes || []).map((str) => lazy(h('p', 'ar-n-note', parent, ''), str, BEAT_AT[9])) : [];
+			return {rows, q, notes};
 		};
-		N.evSlot = evHtml(N.b.evIn);
+		N.evSlot = evHtml(N.b.evIn, true);
 		N.band = h('p', 'ar-n-band', nBody, NW.budget);
 		N.keys = h('div', 'ar-n-keys', nBody, null, '2');
 		N.keyYou = h('span', 'ar-n-keyyou', N.keys, NW.keyYours);
@@ -565,6 +572,7 @@
 					op(r.r, j ? Math.min(1, k * 3) : 1);
 				});
 				op(ev.q, j ? prog(t, ...T.bracketText) : 1);
+				for (const n of ev.notes) op(n, prog(t, BEAT_AT[9], BEAT_AT[9] + 0.4));
 			});
 			op(N.a.pat1, prog(t, ...T.tagA1)); op(N.a.pat2, prog(t, ...T.tagA2));
 			op(N.b.pat1, prog(t, ...T.tagB1)); op(N.b.pat2, prog(t, ...T.tagB2));
