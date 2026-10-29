@@ -95,6 +95,13 @@
 
 	function build(ed) {
 	const L = ed.labels, NW = ed.narrow;
+	// Business ("conceptual"): the second person asks the AI only why, as the study's
+	// high-scoring Conceptual Inquiry group did, and writes and fixes the code themselves;
+	// the AI writes no code for them. PME (no flow) draws exactly as before.
+	const CONCEPT = ed.flow === 'conceptual';
+	// Mono label size: 12 by default; an edition can raise it (business: 13) so the picture
+	// keeps every label at 11 px or more in a 1280×720 window.
+	const MONO = L.monoSize || 12;
 	IDS.forEach((id) => { CARDS[id].title = ed.readings[id]; });
 	PANEL.rows.forEach((r, i) => { r.lines = ed.answers[i]; });
 	// The first paragraph carries the main claim; its tag says so.
@@ -111,7 +118,7 @@
 		if (dataFs !== false) attrs['data-fs'] = dataFs ?? fs;
 		return el(parent, 'text', attrs, str);
 	};
-	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: MONO, family: FONT.mono, weight: 600, ls: 1.2, ...opts});
 	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, ...opts});
 	let clipN = 0;
 	const clipRect = (parent, r) => {
@@ -148,6 +155,18 @@
 	const red34 = {k: '3-4', s: seg('3', '4'), node: solid(C.red, 2.4)};
 	const try12 = {s: seg('1', '2'), node: solid(C.red, 2.4)};
 	const aiB = AI_LINES.map(([a, b]) => ({k: key(a, b), s: seg(a, b), dash: dashed(C.grey)}));
+	// The second person's timings. Conceptual flow, beat 4: read, go home, ask how it works,
+	// get the answer, draw three own lines. Beat 5: try 1–2, it breaks, then the fix
+	// (1–4, then 3–4) by their own hand. PME uses T unchanged.
+	const TB = CONCEPT ? {
+		home0: [29.5, 29.9], ask: [30.0, 30.5], answer: [30.8, 31.3], redB: 32.45, homeB: [34.3, 34.8],
+		try12: [36.85, 37.5], check12: [37.6, 38.6], x: [38.7, 39.1], note: [39.2, 39.7], retract: [39.8, 40.1],
+		pulseB: [30.0, 30.4], xBright: [40.9, 41.3], toFix: [41.3, 41.6], red34: [42.4, 42.9],
+	} : T;
+	const FIX = {'1-4': [41.6, 42.1]};
+	const RED_T = (() => { let j = 0; return redB.map((l, i) => { if (CONCEPT && FIX[l.k]) return FIX[l.k]; const k = CONCEPT ? j++ : i; return [TB.redB + T.redStep * k + 0.15, TB.redB + T.redStep * (k + 1)]; }); })();
+	const RED34_T = TB.red34;
+	const XBRIGHT_T = TB.xBright;
 
 	// ---- cards ------------------------------------------------------------------------
 	const cards = {};
@@ -168,11 +187,24 @@
 	el(cross, 'line', {x1: -6, y1: -6, x2: 6, y2: 6, stroke: C.red, 'stroke-width': 2.6, 'stroke-linecap': 'round'});
 	el(cross, 'line', {x1: -6, y1: 6, x2: 6, y2: -6, stroke: C.red, 'stroke-width': 2.6, 'stroke-linecap': 'round'});
 	const noteG = el(markLayer, 'g');
-	const noteClips = NOTE_LINES.map((s, i) => {
+	// Optional: the note as first written can differ from the note recalled at the end (business: "Bug: …").
+	const noteClips = (L.noteStage || NOTE_LINES).map((s, i) => {
 		const c = clipRect(noteG, {x: 0, y: 140 + 18 * i - 14, height: 20});
 		const n = serif(c.g, X_AT.x, 140 + 18 * i, s, {fs: 15, style: 'italic', fill: C.red, anchor: 'middle'});
 		return {...c, n, w: 0};
 	});
+
+	// Optional (conceptual flow): beside the second person's dot, their question in red and the
+	// AI's general answer in grey on its band. It sits away from the cross, so the cross can't read as striking it.
+	const EX_R = HOME_B.x - 20;
+	const explain = L.aiExplain ? (() => {
+		const q = el(markLayer, 'g', {opacity: 0});
+		serif(q, EX_R, HOME_B.y - 30, L.aiAsk, {fs: 15, style: 'italic', fill: C.red, anchor: 'end'});
+		const g = el(markLayer, 'g', {opacity: 0});
+		const band = el(g, 'rect', {y: HOME_B.y - 15, height: 42, rx: 3, fill: '#ded5c4'});
+		const lines = L.aiExplain.map((str, i) => serif(g, EX_R - 8, HOME_B.y + 1 + 18 * i, str, {fs: 15, fill: C.grey, anchor: 'end'}));
+		return {q, g, band, lines};
+	})() : null;
 
 	// ---- papers --------------------------------------------------------------------------
 	const paper = (which) => {
@@ -287,6 +319,7 @@
 			p.title.forEach((tl) => { tl.w = tl.n.getComputedTextLength(); });
 		}
 		panels.forEach((p) => p.lines.forEach((l) => { l.w = l.n.getComputedTextLength(); }));
+		if (explain) { const w = Math.max(...explain.lines.map((n) => n.getComputedTextLength())) + 16; set(explain.band, {x: EX_R - w, width: w}); }
 		head2X = 24 + head1.getComputedTextLength() + 10;
 
 		// Reading: the dot visits each card's left edge, 0.45 s a card.
@@ -348,22 +381,47 @@
 		{
 			const {segs, prev: afterRead} = readSegs(HOME_B, T.readB);
 			let prev = afterRead;
-			redB.forEach((l, i) => {
-				const a = T.redB + T.redStep * i;
-				segs.push([a, a + 0.15, prev, l.s[0], E.inOut]);
-				segs.push([a + 0.15, a + T.redStep, l.s[0], l.s[1]]);
-				prev = l.s[1];
-			});
-			const [t0, t1] = T.try12;
-			segs.push([t0, t0 + 0.15, prev, try12.s[0], E.inOut]);
-			segs.push([t0 + 0.15, t1, try12.s[0], try12.s[1]]);
-			// Check: stop at card 2, run back along the line, stop at card 1.
-			segs.push([T.check12[0] + 0.45, T.check12[0] + 0.6, try12.s[1], try12.s[0], E.inOut]);
-			segs.push([T.homeB[0], T.homeB[1], try12.s[0], HOME_B, E.inOut]);
-			const c3 = {x: CARDS['3'].x - 9, y: CARDS['3'].y + 20}, c4 = {x: CARDS['4'].x + CARD.w + 9, y: CARDS['4'].y + 20};
-			segs.push([T.check34[0], T.check34[0] + 0.2, HOME_B, c3, E.inOut]);
-			segs.push([T.check34[0] + 0.5, T.check34[0] + 0.7, c3, c4, E.inOut]);
-			segs.push([T.homeB2[0], T.homeB2[1], c4, HOME_B, E.inOut]);
+			if (!CONCEPT) {
+				redB.forEach((l, i) => {
+					const a = T.redB + T.redStep * i;
+					segs.push([a, a + 0.15, prev, l.s[0], E.inOut]);
+					segs.push([a + 0.15, a + T.redStep, l.s[0], l.s[1]]);
+					prev = l.s[1];
+				});
+				const [t0, t1] = T.try12;
+				segs.push([t0, t0 + 0.15, prev, try12.s[0], E.inOut]);
+				segs.push([t0 + 0.15, t1, try12.s[0], try12.s[1]]);
+				// Check: stop at card 2, run back along the line, stop at card 1.
+				segs.push([T.check12[0] + 0.45, T.check12[0] + 0.6, try12.s[1], try12.s[0], E.inOut]);
+				segs.push([T.homeB[0], T.homeB[1], try12.s[0], HOME_B, E.inOut]);
+				const c3 = {x: CARDS['3'].x - 9, y: CARDS['3'].y + 20}, c4 = {x: CARDS['4'].x + CARD.w + 9, y: CARDS['4'].y + 20};
+				segs.push([T.check34[0], T.check34[0] + 0.2, HOME_B, c3, E.inOut]);
+				segs.push([T.check34[0] + 0.5, T.check34[0] + 0.7, c3, c4, E.inOut]);
+				segs.push([T.homeB2[0], T.homeB2[1], c4, HOME_B, E.inOut]);
+			} else {
+				// Home to ask, then their own three lines, then home.
+				segs.push([TB.home0[0], TB.home0[1], prev, HOME_B, E.inOut]);
+				prev = HOME_B;
+				redB.forEach((l, i) => {
+					if (FIX[l.k]) return;
+					const [a0, a1] = RED_T[i];
+					segs.push([a0 - 0.15, a0, prev, l.s[0], E.inOut]);
+					segs.push([a0, a1, l.s[0], l.s[1]]);
+					prev = l.s[1];
+				});
+				segs.push([TB.homeB[0], TB.homeB[1], prev, HOME_B, E.inOut]);
+				// Beat 5: try 1–2, check it, then the fix: 1–4 (each fetch handles its own error), then 3–4.
+				const [t0, t1] = TB.try12;
+				segs.push([t0, t0 + 0.15, HOME_B, try12.s[0], E.inOut]);
+				segs.push([t0 + 0.15, t1, try12.s[0], try12.s[1]]);
+				segs.push([TB.check12[0] + 0.45, TB.check12[0] + 0.6, try12.s[1], try12.s[0], E.inOut]);
+				const fix = redB.find((l) => l.k === '1-4');
+				segs.push([TB.toFix[0], TB.toFix[1], try12.s[0], fix.s[0], E.inOut]);
+				segs.push([FIX['1-4'][0], FIX['1-4'][1], fix.s[0], fix.s[1]]);
+				segs.push([FIX['1-4'][1], RED34_T[0], fix.s[1], red34.s[0], E.inOut]);
+				segs.push([RED34_T[0], RED34_T[1], red34.s[0], red34.s[1]]);
+				segs.push([T.homeB2[0], T.homeB2[1], red34.s[1], HOME_B, E.inOut]);
+			}
 			const write = writeSegs('b', T.titleB, paraSpansB);
 			segs.push([T.toSheetB[0], T.toSheetB[1], HOME_B, write[0][2], E.inOut]);
 			segs.push(...write);
@@ -419,10 +477,10 @@
 			const open = studentA ? openAmount(t, T.readA, id, T.fadeA) : openAmount(t, T.readB, id);
 			// Flashes when a student goes back to a card to check.
 			let fl = 0;
-			if (id === '2') fl = flash(t, T.check12[0], T.check12[0] + 0.45);
-			if (id === '1') fl = flash(t, T.check12[0] + 0.6, T.check12[1]);
-			if (id === '3') fl = flash(t, T.check34[0] + 0.2, T.check34[0] + 0.5);
-			if (id === '4') fl = flash(t, T.check34[0] + 0.7, T.check34[1]);
+			if (id === '2') fl = flash(t, TB.check12[0], TB.check12[0] + 0.45);
+			if (id === '1') fl = flash(t, TB.check12[0] + 0.6, TB.check12[1]);
+			if (id === '3' && !CONCEPT) fl = flash(t, T.check34[0] + 0.2, T.check34[0] + 0.5);
+			if (id === '4' && !CONCEPT) fl = flash(t, T.check34[0] + 0.7, T.check34[1]);
 			set(c.g, {opacity: inK * cardsOut});
 			set(c.box, {height: CARD.h + CARD.open * open, 'stroke-opacity': 0.15 + 0.6 * fl, 'stroke-width': 1 + fl});
 			c.bars.forEach((b) => set(b, {opacity: open * (0.7 + 0.3 * fl), height: 3 + fl}));
@@ -443,12 +501,12 @@
 			set(l.dash, {opacity: (sweepA > 0 ? 1 : 0) * outA, 'stroke-width': w});
 			set(l.solid, {opacity: (taken > 0 ? 1 : 0) * outA, 'stroke-width': w});
 		});
-		set(aiTag, {opacity: (prog(t, ...T.tagA) * outA) + prog(t, ...T.tagB) * cardsOut});
+		set(aiTag, {opacity: (prog(t, ...T.tagA) * outA) + (CONCEPT ? 0 : prog(t, ...T.tagB) * cardsOut)});
 
 		// The second student's map.
 		const heavyB = prog(t, ...T.heavyB, E.inOut);
 		const mergeK = prog(t, ...T.merge, E.inOut);
-		const brighten = pulse(t, T.merge);
+		const brighten = CONCEPT ? 0 : pulse(t, T.merge);
 		const redW = (k) => {
 			let w = 2.4 + 1.2 * brighten;
 			if (k === '2-5') w = mix(w, 3.9, heavyB);
@@ -459,28 +517,29 @@
 			return w;
 		};
 		redB.forEach((l, i) => {
-			const a = T.redB + T.redStep * i + 0.15;
-			drawLine(l.node, l.s, prog(t, a, T.redB + T.redStep * (i + 1)));
+			const [a, b] = RED_T[i];
+			drawLine(l.node, l.s, prog(t, a, b));
 			set(l.node, {opacity: (t >= a ? 1 : 0) * cardsOut, 'stroke-width': redW(l.k)});
 		});
-		drawLine(red34.node, red34.s, prog(t, ...T.red34));
-		set(red34.node, {opacity: (t >= T.red34[0] ? 1 : 0) * cardsOut, 'stroke-width': redW('3-4')});
+		drawLine(red34.node, red34.s, prog(t, ...RED34_T));
+		set(red34.node, {opacity: (t >= RED34_T[0] ? 1 : 0) * cardsOut, 'stroke-width': redW('3-4')});
+		if (explain) { set(explain.q, {opacity: prog(t, ...TB.ask) * cardsOut}); set(explain.g, {opacity: prog(t, ...TB.answer) * cardsOut}); }
 		// The connection from 1 to 2: drawn, checked, crossed, pulled back.
-		const tryK = prog(t, T.try12[0] + 0.15, T.try12[1]) * (1 - prog(t, ...T.retract, E.inOut));
+		const tryK = prog(t, TB.try12[0] + 0.15, TB.try12[1]) * (1 - prog(t, ...TB.retract, E.inOut));
 		drawLine(try12.node, try12.s, tryK);
-		set(try12.node, {opacity: t >= T.try12[0] + 0.15 && tryK > 0.001 ? 1 : 0});
-		const xIn = spring(t, T.x[0], {stiffness: 260, damping: 18});
-		const xHalf = mix(1, 0.5, prog(t, ...T.retract));
-		const xBright = pulse(t, T.xBright);
-		set(cross, {opacity: (t >= T.x[0] ? Math.min(1, xHalf + 0.5 * xBright) : 0) * cardsOut, transform: `translate(${X_AT.x} ${X_AT.y}) scale(${(Math.max(0, xIn) * (1 + 0.35 * xBright)).toFixed(3)})`});
-		reveal(noteClips, t, ...T.note);
+		set(try12.node, {opacity: t >= TB.try12[0] + 0.15 && tryK > 0.001 ? 1 : 0});
+		const xIn = spring(t, TB.x[0], {stiffness: 260, damping: 18});
+		const xHalf = mix(1, 0.5, prog(t, ...TB.retract));
+		const xBright = pulse(t, XBRIGHT_T);
+		set(cross, {opacity: (t >= TB.x[0] ? Math.min(1, xHalf + 0.5 * xBright) : 0) * cardsOut, transform: `translate(${X_AT.x} ${X_AT.y}) scale(${(Math.max(0, xIn) * (1 + 0.35 * xBright)).toFixed(3)})`});
+		reveal(noteClips, t, ...TB.note);
 		set(noteG, {opacity: cardsOut});
 		// The AI's map for the second student: dashed sweep; four merge into the red; 3–4 waits for the check.
 		const sweepB = prog(t, ...T.sweepB, E.inOut);
 		aiB.forEach((l) => {
 			drawLine(l.dash, l.s, sweepB);
 			const fade = l.k === '3-4' ? 1 - prog(t, ...T.red34) : 1 - mergeK;
-			set(l.dash, {opacity: (sweepB > 0 ? 1 : 0) * fade * cardsOut});
+			set(l.dash, {opacity: CONCEPT ? 0 : (sweepB > 0 ? 1 : 0) * fade * cardsOut});
 		});
 
 		// Papers: sheets fade in; titles, bars, tags and notes are written.
@@ -563,7 +622,7 @@
 		set(labA, {opacity: prog(t, T.dotIn, T.dotIn + 0.4) * (1 - prog(t, ...T.labelAOut))});
 		const pb = pathB(t);
 		const growB = spring(t, T.dotB, {stiffness: 300, damping: 20});
-		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * growB + 2.5 * pulse(t, T.pulseB)), opacity: cardsOut});
+		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * growB + 2.5 * pulse(t, TB.pulseB)), opacity: cardsOut});
 		set(labB, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...T.labelBOut))});
 		dotsF.forEach((d, row) => {
 			const p = pathF[row](t);
@@ -618,9 +677,13 @@
 		N.mapB.chips = redB.map((l) => chip(row, LINK(l.k), 'is-own'));
 		N.mapB.try = chip(row, '1–2', 'is-own is-try');
 		N.mapB.note = h('p', 'ps-n-note', sec, NW.note);
+		// Optional (conceptual flow): their question and the AI's answer come before their lines.
+		if (NW.ask) N.mapB.ask = sec.insertBefore(h('p', 'ps-n-small', sec, NW.ask), row);
 		const ai = h('div', 'ps-n-links', sec);
 		N.mapB.aiLabel = h('span', 'ps-n-inline', ai, NW.aiMap);
 		N.mapB.c34 = chip(ai, '3–4', 'is-ai');
+		// Conceptual flow: 1–4 is part of the fix, so it sits with 3–4.
+		if (CONCEPT) ai.insertBefore(N.mapB.chips[redB.findIndex((l) => l.k === '1-4')], N.mapB.c34);
 		N.mapB.match = h('p', 'ps-n-small', sec, NW.match);
 	}
 	{
@@ -652,7 +715,9 @@
 		const say = (who) => { const b = h('div', 'ps-n-say', sec); h('span', 'ps-n-who', b, who); return h('span', 'ps-n-txt', b, ''); };
 		N.q2.a = say(NW.sayA);
 		N.q2.b = say(NW.sayB);
-		const l = h('div', 'ps-n-learned', sec);
+		// Optional: the note sits inside the second person's box, so it can't read as anyone else's.
+		const l = h('div', 'ps-n-learned', NW.learnedInBox ? N.q2.b.parentNode : sec);
+		if (NW.learnedInBox) N.q2.b.parentNode.insertBefore(l, N.q2.b);
 		h('span', 'ps-n-llabel', l, NW.learned);
 		h('p', 'ps-n-lnote', l, NW.learnedNote);
 		N.q2.learned = l;
@@ -681,15 +746,25 @@
 		});
 		fade(N.mapA.main, prog(t, ...T.heavyA));
 		fade(N.paperA.box, prog(t, ...T.sheetA));
-		N.mapB.chips.forEach((c, i) => fade(c, prog(t, T.redB + T.redStep * i, T.redB + T.redStep * (i + 1))));
-		fade(N.mapB.try, prog(t, ...T.try12));
-		N.mapB.try.classList.toggle('is-struck', t >= T.x[0]);
-		fade(N.mapB.note, prog(t, ...T.note));
-		fade(N.mapB.aiLabel, prog(t, ...T.sweepB));
-		fade(N.mapB.c34, prog(t, ...T.sweepB));
-		N.mapB.c34.classList.toggle('is-own', t >= T.red34[0]);
-		N.mapB.c34.classList.toggle('is-ai', t < T.red34[0]);
-		fade(N.mapB.match, prog(t, ...T.merge));
+		if (!CONCEPT) N.mapB.chips.forEach((c, i) => fade(c, prog(t, T.redB + T.redStep * i, T.redB + T.redStep * (i + 1))));
+		else N.mapB.chips.forEach((c, i) => fade(c, prog(t, RED_T[i][0] - 0.15, RED_T[i][1])));
+		fade(N.mapB.try, prog(t, ...TB.try12));
+		N.mapB.try.classList.toggle('is-struck', t >= TB.x[0]);
+		fade(N.mapB.note, prog(t, ...TB.note));
+		if (N.mapB.ask) fade(N.mapB.ask, prog(t, ...TB.ask));
+		if (!CONCEPT) {
+			fade(N.mapB.aiLabel, prog(t, ...T.sweepB));
+			fade(N.mapB.c34, prog(t, ...T.sweepB));
+			N.mapB.c34.classList.toggle('is-own', t >= T.red34[0]);
+			N.mapB.c34.classList.toggle('is-ai', t < T.red34[0]);
+			fade(N.mapB.match, prog(t, ...T.merge));
+		} else {
+			fade(N.mapB.aiLabel, prog(t, TB.toFix[0], FIX['1-4'][0]));
+			fade(N.mapB.c34, prog(t, ...RED34_T));
+			N.mapB.c34.classList.add('is-own');
+			N.mapB.c34.classList.remove('is-ai');
+			fade(N.mapB.match, prog(t, 43.5, 44.0));
+		}
 		fade(N.papers.a, 1);
 		fade(N.papers.b, prog(t, ...T.sheetB));
 		fade(N.rows.sec, prog(t, ...T.rows));
@@ -703,7 +778,7 @@
 		N.q2.a.textContent = words(ANS[0], ka);
 		N.q2.b.textContent = words(ANS[1], kb);
 		N.q2.a.parentNode.hidden = ka <= 0;
-		N.q2.b.parentNode.hidden = kb <= 0;
+		N.q2.b.parentNode.hidden = kb <= 0 && !(NW.learnedInBox && t >= T.learned[0]);
 		fade(N.q2.learned, prog(t, ...T.learned));
 	}
 
@@ -723,7 +798,7 @@
 			const r = svg.getBoundingClientRect();
 			if (!r.width) return;
 			const scale = r.height ? Math.min(r.width / VW, r.height / 540) : r.width / VW;
-			const stacked = 12 * scale < 11;
+			const stacked = MONO * scale < 11;
 			if (stacked) root.classList.add('is-narrow');
 			if (stacked !== root.classList.contains('is-stacked')) {
 				root.classList.toggle('is-stacked', stacked);
