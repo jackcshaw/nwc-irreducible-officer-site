@@ -56,6 +56,7 @@ What the cold reads caught along the way: two figures contradicted their study (
 - **The PME polish pass:** apply the business testers' fixes to PME too (items 5–8 below).
 - **Companion PR #13:** merged.
 - **Refused subagent commits:** I commit them after checking the diff.
+- **The higher-ed reviewer** is "the instructor" (singular): "The instructor asks each student", "Instructor’s check". PME keeps "Faculty", now through its own `seminar` cast, so its frames don't change. High school keeps "the teacher".
 
 ## Classroom cast (in progress, October 29)
 
