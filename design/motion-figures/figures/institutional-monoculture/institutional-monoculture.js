@@ -35,15 +35,18 @@
 		read: 40.8, readStep: 0.12, readDur: 0.3, bracket: [42.8, 43.6],
 		callout: [47.0, 47.8], grey: [48.5, 49.3],
 		qmark: [55.9, 56.5],
-		compact: [59.9, 61.1], blockB: [61.2, 61.8],
-		red: 61.9, redStep: 0.1, redDur: 0.6, define: [61.9, 62.3],
+		// Beat 8's re-layout, one move at a time: the papers, then the lineup, then the AI's card
+		// and the question box, then the dim; then the imagined run arrives.
+		compact: [59.9, 63.2], cPapers: [59.9, 60.9], cLineup: [61.0, 62.0], cAside: [62.1, 62.8], dimAt: [62.8, 63.2],
+		blockB: [63.2, 63.8],
+		red: 63.9, redStep: 0.1, redDur: 0.6, define: [63.9, 64.3],
 		send: 67.1, sendStep: 0.06, sendDur: 0.5, ask: [69.1, 69.7],
 		note: 69.4, noteStep: 0.1, noteDur: 0.5, challenges: [69.4, 69.8],
 		writeB: 71.0, writeBStep: 0.08, writeBDur: 0.5, seqWrite: [71.0, 71.4], tagB: [71.8, 72.2],
 		askOut: [75.3, 75.8], undim: [75.3, 76.5], ringB: 75.3, ringBStep: 0.1,
 		groups: [[77.3, 78.3], [78.5, 79.5], [79.7, 80.7]], brackets: [80.9, 81.7],
 		check: 87.8, follow: 90.8, qPulse: [90.8, 91.6], end: 96.3,
-		source: [88.8, 89.3], answer: [61.2, 61.9], // used only by editions that supply them
+		source: [88.8, 89.3], answer: [63.2, 63.9], choose: [82.0, 82.5], // used only by editions that supply them
 	};
 	const AT = [0, 10.9, 18.3, 26.3, 39.8, 46.0, 52.9, 58.9, 66.1, 74.3, 87.8]; // beat starts
 
@@ -276,6 +279,8 @@
 	});
 	const slotOf = {};
 	GOALS.forEach((g, k) => g.who.forEach((i, j) => { slotOf[i] = {g: k, x: COLS[k] + 12, y: lineYB(j)}; }));
+	// Optional (business): under the goals, that the spread widens the choice rather than settling it.
+	const chooseLine = L.choose ? mono(gB, 340, YB + 136, L.choose, {ls: 0.4}) : null;
 	// Optional (business): a one-line source under the final frame, below the imagined goals.
 	const sourceLine = L.source ? text(gB, 340, YB + 176, L.source, {fs: 13, family: FONT.serif, style: 'italic', fill: C.ink}) : null;
 	// The stacked view has no room under its last beat, so the source sits just under the
@@ -300,9 +305,14 @@
 		M.pillW = pillText.getComputedTextLength() + 20;
 		M.headW = headB.getComputedTextLength();
 		set(pillBox, {width: M.pillW});
-		// A label wider than the question box ends at the box's right edge (business:
-		// "THE MANAGER ASKS"), so it stays clear of the stage edge; PME's fits and is unchanged.
-		if (askLabel.getComputedTextLength() > QW) set(askLabel, {x: QW, 'text-anchor': 'end'});
+		// A label wider than the question box takes two lines over it ("THE INSTRUCTOR" / "ASKS"),
+		// so it stays clear of the lineup's bracket and the stage edge; PME's fits and is unchanged.
+		if (askLabel.getComputedTextLength() > QW) {
+			const cut = L.ask.lastIndexOf(' ');
+			askLabel.textContent = L.ask.slice(0, cut);
+			set(askLabel, {y: -16});
+			mono(qGroup, 0, 0, L.ask.slice(cut + 1), {ls: 0.6});
+		}
 	}
 
 	// ---- render ---------------------------------------------------------------------------
@@ -313,8 +323,10 @@
 	}
 
 	const render = (t) => {
-		const kC = prog(t, ...T.compact, E.inOutStrong);
-		const dim = 1 - 0.65 * (prog(t, ...T.compact) - prog(t, ...T.undim));
+		const kC = prog(t, ...T.cPapers, E.inOutStrong);   // the papers and their labels
+		const kL2 = prog(t, ...T.cLineup, E.inOutStrong);  // the lineup, its bracket and the pill
+		const kA3 = prog(t, ...T.cAside, E.inOutStrong);   // the AI's card, the panel and the question box
+		const dim = 1 - 0.65 * (prog(t, ...T.dimAt) - prog(t, ...T.undim));
 
 		// Task card and context.
 		const kc = prog(t, ...T.card, E.house);
@@ -324,7 +336,7 @@
 
 		// AI panel.
 		set(panel, {opacity: prog(t, ...T.panel)});
-		set(panelBox, {height: mix(PANEL.h, PANEL_HC, kC)});
+		set(panelBox, {height: mix(PANEL.h, PANEL_HC, kA3)});
 
 		// ---- first seminar ------------------------------------------------------------
 		set(gA, {opacity: dim});
@@ -363,26 +375,26 @@
 			const kL = prog(t, l0, l0 + T.liftDur, E.inOut);
 			const P = placeA(i, kC);
 			const from = {x: P.x + 8, y: P.y + 13, s: 0.36};
-			const at = {x: mix(LIST.x, CLIST.x, kC), y: mix(LIST.y0 + LIST.dy * i, CLIST.y0 + CLIST.dy * i, kC), s: mix(1, CLIST.s, kC)};
+			const at = {x: mix(LIST.x, CLIST.x, kL2), y: mix(LIST.y0 + LIST.dy * i, CLIST.y0 + CLIST.dy * i, kL2), s: mix(1, CLIST.s, kL2)};
 			const q = lerp(from, at, kL);
 			set(l.g, {opacity: Math.min(1, kL * 3), transform: `translate(${q.x} ${q.y}) scale(${q.s})`});
-			set(l.mark, {opacity: staged(t, T.read, T.readStep, T.readDur, i) * (1 - prog(t, T.compact[0], T.compact[0] + 0.4))});
+			set(l.mark, {opacity: staged(t, T.read, T.readStep, T.readDur, i) * (1 - prog(t, T.cLineup[0], T.cLineup[0] + 0.4))});
 		});
 		const kB = prog(t, ...T.bracket, E.house);
 		const kG = prog(t, ...T.grey);
-		const box = lerpBox(BR_L, BR_C, kC);
+		const box = lerpBox(BR_L, BR_C, kL2);
 		set(bracketA, {opacity: kB});
-		set(brPath, {d: bracketPath(box, mix(20, 14, kC)), stroke: mixColor(C.ink, C.grey, kG)});
+		set(brPath, {d: bracketPath(box, mix(20, 14, kL2)), stroke: mixColor(C.ink, C.grey, kG)});
 		set(brLine, {x: box.x, y: box.y, width: box.w, height: box.h, stroke: mixColor(C.ink, C.grey, kG)});
-		set(brLabelL, {opacity: kB * (1 - prog(t, T.compact[0], T.compact[0] + 0.5))});
-		const kCL = prog(t, T.compact[1] - 0.5, T.compact[1]);
+		set(brLabelL, {opacity: kB * (1 - prog(t, T.cLineup[0], T.cLineup[0] + 0.5))});
+		const kCL = prog(t, T.cLineup[1] - 0.5, T.cLineup[1]);
 		set(oneFrame, {opacity: kCL});
 		set(colLabelA, {opacity: kCL});
 		// The AI's opening line comes out of the panel, and a grey line traces it to the bracket.
 		const kCa = prog(t, ...T.callout, E.house);
-		const cAt = lerp(CALL_L, CALL_C, kC);
+		const cAt = lerp(CALL_L, CALL_C, kA3);
 		set(callout, {opacity: Math.min(1, kCa * 2), transform: `translate(${mix(150, cAt.x, kCa)} ${mix(40, cAt.y, kCa)}) scale(${mix(0.3, 1, kCa)})`});
-		const pAt = lerp(PILL_L, PILL_C, kC);
+		const pAt = lerp(PILL_L, PILL_C, kL2);
 		set(pill, {opacity: kG, transform: `translate(${pAt.x} ${pAt.y})`});
 		const la = {x: cAt.x + 220, y: cAt.y + CALL_H}, lb = {x: pAt.x + (M.pillW || 100) / 2, y: pAt.y};
 		const len = Math.hypot(lb.x - la.x, lb.y - la.y);
@@ -391,7 +403,7 @@
 		set(leader, {x1: la.x, y1: la.y, x2: lb.x, y2: lb.y, 'stroke-dasharray': dashed ? '5 4' : len, 'stroke-dashoffset': dashed ? 0 : len * (1 - kG), opacity: kG > 0 ? 1 : 0});
 		// The faculty's question.
 		const kQ = prog(t, ...T.qmark, E.house);
-		const qAt = lerp(Q_L, Q_C, kC);
+		const qAt = lerp(Q_L, Q_C, kA3);
 		set(qGroup, {opacity: kQ, transform: `translate(${qAt.x} ${qAt.y + mix(6, 0, kQ)})`});
 		set(qPath, {'stroke-width': 2 + 1.6 * bump(t, ...T.qPulse), 'stroke-opacity': 0.5 + 0.4 * bump(t, ...T.qPulse)});
 
@@ -403,7 +415,7 @@
 		set(tagB, {opacity: prog(t, ...T.tagB)});
 		set(headB, {opacity: L.answer ? prog(t, ...T.answer) : 1});
 		if (answerLine) {
-			const q = lerp(Q_L, Q_C, kC), x0 = q.x + QW / 2, y0 = q.y + 10 + QH + 4, x1 = 348 + (M.headW || 160) + 10, y1 = YB - 1;
+			const q = lerp(Q_L, Q_C, kA3), x0 = q.x + QW / 2, y0 = q.y + 10 + QH + 4, x1 = 348 + (M.headW || 160) + 10, y1 = YB - 1;
 			const len = (y1 - y0) + (x0 - x1), kA = prog(t, ...T.answer);
 			set(answerLine, {d: `M${x0} ${y0}V${y1}H${x1}`, 'stroke-dasharray': len, 'stroke-dashoffset': len * (1 - kA), opacity: kA > 0 ? 1 : 0});
 			set(answerHead, {d: `M${x1 + 6} ${y1 - 5}L${x1} ${y1}L${x1 + 6} ${y1 + 5}`, opacity: prog(kA, 0.85, 1)});
@@ -446,6 +458,7 @@
 		goalLabels.forEach((g, k) => set(g, {opacity: prog(t, T.groups[k][0] + 0.3, T.groups[k][1])}));
 		goalBrackets.forEach((b) => set(b, {opacity: prog(t, ...T.brackets, E.house)}));
 		if (sourceLine) set(sourceLine, {opacity: prog(t, ...T.source)});
+		if (chooseLine) set(chooseLine, {opacity: prog(t, ...T.choose)});
 		set(divider, {opacity: 1});
 
 		renderNarrow(t);
@@ -499,7 +512,7 @@
 		NR.a.q = h('span', 'im-n-q', NR.a.frame, '?');
 		NR.a.lines = h('ol', NW.oneColumn ? 'im-n-lines is-one' : 'im-n-lines', NR.a.board);
 		NR.a.items = LINES.map((s) => h('li', null, NR.a.lines, s));
-		if (NW.keep) NR.a.compact = h('p', 'im-n-compact', NR.a.board, [...LINES.slice(0, 3), NW.more].join(' · '));
+		if (NW.keep) NR.a.compact = h('p', 'im-n-compact', NR.a.board, [...LINES.slice(0, NW.keepCount || 3), NW.more].join(' · '));
 		if (NW.askQ) NR.a.ask = h('p', 'im-n-ask', NR.a.board, NW.askQ);
 		NR.b = run('b');
 		NR.b.head = h('p', 'im-n-frame', NR.b.board, NW.answer || NW.spread);
@@ -509,6 +522,7 @@
 			d.append(g.who.map((i) => LINES_B[i]).join(' · '));
 			return d;
 		});
+		if (NW.choose) NR.b.choose = h('p', 'im-n-choose', NR.b.board, NW.choose);
 	}
 	const fade = (node, k) => { node.style.opacity = Math.max(0, Math.min(1, k)).toFixed(3); };
 	const vis = (node, on) => { node.style.visibility = on ? 'visible' : 'hidden'; };
@@ -526,7 +540,7 @@
 		show(NR.asks, t >= T.ask[0] && t < T.askOut[0]);
 		// First seminar.
 		const a = NR.a;
-		const dim = 1 - 0.65 * (prog(t, ...T.compact) - prog(t, ...T.undim));
+		const dim = 1 - 0.65 * (prog(t, ...T.dimAt) - prog(t, ...T.undim));
 		fade(a.el, prog(t, T.papersIn, T.papersIn + 0.6) * dim);
 		vis(a.seq, t >= T.tagA[0]);
 		a.papers.forEach((p, i) => {
@@ -538,9 +552,10 @@
 			p.classList.toggle('is-pulse', near(t, o0, 0.6) || near(t, w0, T.writeDur) || near(t, r0, 0.3) || near(t, l0, 0.7));
 		});
 		vis(a.tag, t >= T.tagA[0]);
-		// Business keeps more words to the end, so the paper rows give way as the goals form:
-		// the first run's at once, the imagined run's once its ticks have had their time.
-		const rowsA = !(NW.keep && t >= T.groups[0][0]);
+		// Business keeps more words to the end, so the paper rows give way one run at a time: the
+		// first run's as it moves up (beat 8), the imagined run's when its first goal group takes
+		// their place (beat 10), after its ticks have shown for 2 s.
+		const rowsA = !(NW.keep && t >= T.cPapers[0]);
 		show(a.grid, rowsA); show(a.tag, rowsA);
 		show(a.board, t >= T.lift);
 		vis(a.frameText, t >= T.bracket[0]);
@@ -548,8 +563,8 @@
 		show(a.q, !a.ask && t >= T.qmark[0]);
 		if (a.ask) { show(a.ask, t >= T.qmark[0]); a.ask.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8)); }
 		a.q.classList.toggle('is-pulse', near(t, T.qPulse[0], 0.8));
-		show(a.lines, t < T.compact[0]);
-		if (a.compact) show(a.compact, t >= T.compact[0]);
+		show(a.lines, t < T.cLineup[0]);
+		if (a.compact) show(a.compact, t >= T.cLineup[0]);
 		a.items.forEach((li, i) => { vis(li, t >= T.lift + T.liftStep * i + 0.3); li.classList.toggle('is-read', t >= T.read + T.readStep * i); });
 		a.lines.classList.toggle('is-open', t < T.bracket[0]);
 		a.lines.classList.toggle('is-ai', t >= T.grey[0]);
@@ -564,17 +579,18 @@
 			p.classList.toggle('is-red', t >= r0);
 			p.classList.toggle('has-note', t >= n0 + 0.3);
 			p.classList.toggle('is-written', t >= w0 + 0.25);
-			p.classList.toggle('is-ticked', t >= k0 + 0.1);
+			p.classList.toggle('is-ticked', t >= (NW.keep ? T.ringB : k0 + 0.1));
 			const g = slotOf[i].g;
 			p.classList.toggle('is-pulse', near(t, r0, 0.6) || near(t, T.send + T.sendStep * i, 0.5) || near(t, n0, 0.5) || near(t, w0, 0.5) || near(t, T.groups[g][0], 1.0));
 		});
 		vis(b.tag, t >= T.tagB[0]);
-		const rowsB = !(NW.keep && t >= T.groups[1][0] - 0.1);
+		const rowsB = !(NW.keep && t >= T.groups[0][0]);
 		show(b.grid, rowsB); show(b.tag, rowsB);
 		b.groups.forEach((g, k) => {
 			show(g, t >= T.groups[k][0]);
 			g.style.borderColor = t >= T.brackets[0] ? '' : 'transparent';
 		});
+		if (b.choose) show(b.choose, t >= T.choose[0]);
 	}
 	let fitWidth = 0, player = null;
 	const fitNarrow = () => {

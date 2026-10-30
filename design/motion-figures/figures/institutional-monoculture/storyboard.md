@@ -4,6 +4,18 @@ Motion figure 6 of 8 · slug `institutional-monoculture` · storyboard round 5, 
 
 Starting point: `concepts-v0/proposal.md` §2.6, "Turn the seminar" (9.4 s, sketched in CSS 3D in `concepts-v0/monoculture.html`). This version keeps the sketch's idea: the class's papers really do differ on the surface, and the sameness sits in how each one defines the problem, which only shows when you read them a different way. It drops the 3D turn for a flat move faculty can make themselves: lining up the one-line problem statement from every paper. The papers never move or merge; only copies of their problem lines do. The unit is the seminar, so the contrast is seminar to seminar: a thought experiment that imagines the same ten students working in the order the essay's pilot proposes, defining the problem first and then asking the AI to challenge it. Faculty then ask what other frames the task could take, in a beat of its own before the imagined seminar, and the question stays open to the end. The shared runtime and `CONVENTIONS.md` apply throughout.
 
+## Change after the classroom light read (October 30)
+
+**Beat 8's re-layout is staged, one move at a time** (core, so every edition):
+- core 59.9–60.9: the papers;
+- 61.0–62.0: the lineup, its bracket and the pill;
+- 62.1–62.8: the AI's card, the panel and the question box;
+- 62.8–63.2: the dim;
+- 63.2–63.8: the imagined seminar arrives;
+- 63.9: the red lines start, 2.0 s later than before.
+
+Before, everything moved and dimmed together in 1.2 s. The beat's length and every other moment are unchanged. A frame-diff of the old and new builds on the same runtime, with transitions frozen, changes only the frames at player 64, 66 and 68 s, at every size (285 of 297 identical). The regression baselines are recaptured.
+
 ## 1. Intent
 
 *The cold-read tester does not see this section.*

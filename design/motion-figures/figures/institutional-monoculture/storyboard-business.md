@@ -4,6 +4,31 @@ Edition `business`, workplace cast, round 2 with final fixes. It is built from `
 
 Open it with `index.html?edition=business`, or with the "See this with: Workplace" link on the page.
 
+## Changes after the classroom light read
+
+Source: `tests/classroom-light-read.md` and the coordinator's notes. The point landed in both classroom casts.
+
+1. **High school gets its own case words** (`byCast["high-school"]`, 39 patches built from one vocabulary). The structure is the same: a business class and a bike company facing a cheaper rival.
+   - Context: "Its prices, our designs, bike shops, budget buyers, repairs."
+   - The frames keep their meaning: STAND OUT (differentiate), COMPETE ON PRICE (match on cost), TEAM UP (partner).
+   - The AI's line is "Stand out on quality", and caption 5 says "each plan aims to stand out".
+   - The lineup and spread are plain questions: "Can we stay the best?", "Is our service better?", "Can we sell for less?", "Who just wants cheap?", "Should we team up?", "Could we sell to them?".
+2. **Beat 8's re-layout is staged, one move at a time** (core; every edition):
+   - core 59.9–60.9: the papers;
+   - 61.0–62.0: the lineup, its bracket and the pill;
+   - 62.1–62.8: the AI's card, the panel and the question box;
+   - 62.8–63.2: the dim;
+   - 63.2–63.8: the imagined run arrives, and in business the sent-back line is drawn (63.2–63.9);
+   - 63.9: the red lines start, 2.0 s later than before.
+
+   Beat 8's length is unchanged, so PME stays 99.3 s and business 94.0 s. PME before and after (same runtime, transitions frozen): only the frames at player 64, 66 and 68 s differ, at every size; the other 285 of 297 are identical. On phones (business), the first run's paper rows go as it moves up (beat 8). The imagined run's rows give way when its first goal group takes their place (beat 10), with all ten ticks showing for 2.0 s before that.
+3. **The spread isn't the answer.** A line under the goals, "MORE FRAMES TO WEIGH BEFORE THE {GROUP} CHOOSES", fades in at core 82.0 (`labels.choose`, `narrow.choose`). On phones it sits under the groups.
+4. **"The imagined board"** became "the imagined rerun" on the page.
+5. **Room for the reviewer's label.** A label wider than the question box now takes two lines over it ("THE INSTRUCTOR / ASKS", "THE TEACHER / ASKS", "THE MANAGER / ASKS"), clear of the lineup's bracket at every size. Classroom's "INSTRUCTOR ASKS" patch is gone. PME's "FACULTY ASK" fits on one line and is unchanged.
+6. **The switch round trip** (Classroom from Workplace or PME opens higher ed) is by design and unchanged.
+
+To fit the line under the groups, the phone's compact first-run list is now "How do we stand out? · and nine more like it". The phone player is 833 px in all three casts.
+
 ## Final fixes after figure cold read 2
 
 Source: `tests/business-figure-read-2.md` and the coordinator's notes. Round 2 passed on the point; these are final fixes.
@@ -138,7 +163,7 @@ The second line is the separating follow-up, set at equal weight.
 - "Across the team" fits one line at 768 px and on laptops.
 - "Line up the problems" keeps the method in the check.
 
-The beat 7 box asks the check's first question. The manager sends the plans back with the second, and the imagined board is one answer. The check then hands the question to the viewer for their own team.
+The beat 7 box asks the check's first question. The manager sends the plans back with the second, and the imagined rerun is one answer. The check then hands the question to the viewer for their own team.
 
 ## 5. Pace
 
@@ -160,9 +185,9 @@ Times are on the business clock (figure time; add 3.0 s for the player).
 | 5 | 36.3–42.9 | 6.6 | 7 | 3.8 | "ONE FRAME: DIFFERENTIATE" (3): 39.5 → 42.0 |
 | 6 | 42.9–50.1 | 7.2 | 13 | 5.8 | card and "NOT SEEN BY THE MANAGER" (12): 44.7 → 50.2, and they stay; "AI'S FRAME" (2): 46.2 → 48.4 |
 | 7 | 50.1–54.6 | 4.5 | 7 | 3.8 | "THE MANAGER ASKS" and the question (7, echoing the caption): 52.2 → 56.0, and it stays |
-| 8 | 54.6–61.2 | 6.6 | 12 | 5.5 | "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?" (8): 57.6 → 61.8, and it stays; "Same team, imagined", "DEFINE PROBLEM" (5): 58.0 → 61.2 |
+| 8 | 54.6–61.2 | 6.6 | 12 | 5.5 | moves at 55.6, 56.7, 57.8 and 58.5; "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?" (8): 59.6 → 63.8, and it stays; "Same team, imagined", "DEFINE PROBLEM" (5): 60.0 → 63.2, and they stay |
 | 9 | 61.2–69.0 | 7.8 | 12 | 5.5 | the AI's questions (8): 64.4 → 68.6, on screen to 70.0; "AI CHALLENGES" (2): 64.5 → 66.7 |
-| 10 | 69.0–82.5 | 13.5 | 10 | 4.8 | three goal groups: 72.0, 73.2 and 74.4; the last group (12 words) settles at 75.4 → 80.9 |
+| 10 | 69.0–82.5 | 13.5 | 10 | 4.8 | three goal groups: 72.0, 73.2 and 74.4; the last group (12 words) settles at 75.4 → 80.9; "MORE FRAMES TO WEIGH…" (8): 77.2 → 81.4 |
 | 11 | 82.5–91.0 | 8.5 | 7 + 10 | follow-up at +3.0, read by +7.8 | source line (12): 84.0 → 89.5 |
 | **Total** | | **91.0 figure, 94.0 player** (PME 96.3, 99.3) | **115** | | |
 
@@ -254,7 +279,9 @@ The business edition in two more casts, through data in `editions/business.json`
 - The links note names the cast's check and "a strategy class working a company's case".
 - The hidden summary has the class and the school's AI.
 
-**One label differs by cast.** Classroom's question box is headed "INSTRUCTOR ASKS". "THE INSTRUCTOR ASKS" would reach the lineup's bracket in the large layout. High school keeps "THE TEACHER ASKS", which fits like "THE MANAGER ASKS". So `byCast["high-school"]` is classroom's patches without that one label.
+**The reviewer's label** takes two lines over the question box when it is wider than the box: "THE INSTRUCTOR / ASKS", "THE TEACHER / ASKS" (after the light read; before, classroom had a shortened "INSTRUCTOR ASKS").
+
+**High school's own case words** (after the light read). `byCast["high-school"]` starts from classroom's patches. The generator then applies one vocabulary across every string: a business class, a bike company and a cheaper rival; STAND OUT, COMPETE ON PRICE and TEAM UP; and plainer questions in the lineup and spread. The result is 39 patches.
 
 **Words that differ from workplace** (classroom / high school):
 
@@ -264,9 +291,10 @@ The business edition in two more casts, through data in `editions/business.json`
 | Caption 2 | Each asks the school's AI for an outline. They come back alike. | same |
 | Captions 3, 4, 6, 7, 8, 10 | The instructor sees… / lines up… / doesn't see this… / asks… / Imagine the instructor sends them back… / lines them up again. | The teacher… |
 | Check | Instructor's check: What frames are missing across the class? / Line up the problems. What else could the problem be? | Teacher's check: … |
-| Picture | "The class", "Same class, imagined", "NOT SEEN BY THE INSTRUCTOR", "INSTRUCTOR ASKS" | "NOT SEEN BY THE TEACHER", "THE TEACHER ASKS" |
+| Picture | "The class", "Same class, imagined", "NOT SEEN BY THE INSTRUCTOR", "THE INSTRUCTOR / ASKS", "MORE FRAMES TO WEIGH BEFORE THE CLASS CHOOSES" | the same roles with "the teacher", plus: task "How should we respond to / a cheaper rival?"; context "Its prices, our designs, bike shops, / budget buyers, repairs."; AI line "Stand out on quality"; "ONE FRAME: STAND OUT"; lineup "How do we stand out? · Why pay more for ours? · Why are we worth more? · What can't they copy? · Where do we add value? · Can we stay the best? · Is our service better? · Which features win? · How do we stay ahead? · Why is ours special?"; goals STAND OUT, COMPETE ON PRICE (Can we sell for less? · Who just wants cheap? · Can we cut our costs? · Who is leaving us?) and TEAM UP (Should we team up? · Who wants our designs? · Could we sell to them?) |
+| Caption 5 | (workplace) | Different words, one frame: each plan aims to stand out. |
 | Phone | "The instructor asks: What frames are missing?", "Not seen by the instructor" | "The teacher asks…", "Not seen by the teacher" |
-| Setup | "Ten students in a strategy class each use the school's AI to help answer the same case question: how should an industrial-equipment maker respond to a low-cost competitor? The class allows AI, and each student says they used it. … The case is an illustration based on Romasanta, Thomas & Levina (2026), a study of AI models' strategy advice, and Bottesch (2025), a field experiment with knowledge workers at an industrial company. Neither study looked at students. The class, the case and the plans are constructed." | same |
+| Setup (classroom; high school says "a business class" and "how should a bike company respond to a cheaper rival?") | "Ten students in a strategy class each use the school's AI to help answer the same case question: how should an industrial-equipment maker respond to a low-cost competitor? The class allows AI, and each student says they used it. … The case is an illustration based on Romasanta, Thomas & Levina (2026), a study of AI models' strategy advice, and Bottesch (2025), a field experiment with knowledge workers at an industrial company. Neither study looked at students. The class, the case and the plans are constructed." | same |
 
 The task card, context, problem lines, goals and source line are the same in every cast.
 
