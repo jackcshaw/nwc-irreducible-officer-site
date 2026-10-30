@@ -233,11 +233,7 @@
 		"keepTask": true,
 		"source": "Illustration based on Autor et al., NBER (2026).",
 		"noteKept": "Second associate's note, not handed in",
-		"paperFull": true,
-		"sameAt": [
-			37.0,
-			37.4
-		]
+		"paperFull": true
 	},
 	"beats": [
 		{

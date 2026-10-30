@@ -1,6 +1,10 @@
 {
 	"id": "pme",
 	"cast": "classroom",
+	"picture": {
+		"minText": 13,
+		"laptop": true
+	},
 	"task": {
 		"label": "EXAMPLE TASK",
 		"lines": [
@@ -174,7 +178,7 @@
 		"keyAI": "WRITTEN BY AI",
 		"keyOwn": "{A_person|upper}'S OWN WORK",
 		"tagDraft": "AI'S DRAFT",
-		"tagKept": "{Person|upper}'S PAPER",
+		"tagKept": "THEIR PAPER",
 		"tagDisclosed": " · DRAFTED WITH AI",
 		"cutLabel": "Cut one sentence from the AI's draft:",
 		"noteLabel": "{second|upper}'S NOTE",
@@ -187,7 +191,7 @@
 	"narrow": {
 		"task": "Example task",
 		"draft": "AI's draft",
-		"draftKept": "{Person}'s paper · drafted with AI",
+		"draftKept": "Their paper · drafted with AI",
 		"own": "Their own work, not handed in",
 		"cutAct": "Cut one sentence from the AI's draft:",
 		"note": "Send them. The ally's trust matters most, and troops show we mean it.",
@@ -258,7 +262,7 @@
 		},
 		{
 			"text": "{The_person} reads closely, cuts a weak line, and agrees with the rest.",
-			"detail": "the dot reads along each line, then strikes out \"Either choice carries real consequences.\" in red, and the key adds \"{A_person}'s own work\" in red. The struck sentence moves above the paper, under a red label: \"Cut one sentence from the AI's draft\". The rest stays grey, and the label changes to \"Student's paper, drafted with AI\"."
+			"detail": "the dot reads along each line, then strikes out \"Either choice carries real consequences.\" in red, and the key adds \"{A_person}'s own work\" in red. The struck sentence moves above the paper, under a red label: \"Cut one sentence from the AI's draft\". The rest stays grey, and the label changes to \"Their paper, drafted with AI\"."
 		},
 		{
 			"text": "{A_second} writes their own call first, in plain words.",
@@ -270,7 +274,7 @@
 		},
 		{
 			"text": "{reviewer_receives} two identical papers, both drafted with AI.",
-			"detail": "the second paper moves into its column beside the first, in a row labelled \"What faculty receive\"; the top row is labelled \"Their own work, not handed in\". Both papers are tagged \"Student's paper, drafted with AI\"."
+			"detail": "the second paper moves into its column beside the first, in a row labelled \"What faculty receive\"; the top row is labelled \"Their own work, not handed in\". Both papers are tagged \"Their paper, drafted with AI\"."
 		},
 		{
 			"text": "Without the papers, both explain the call clearly.",

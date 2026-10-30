@@ -28,7 +28,7 @@
 		strike: [19.8, 20.6], keyRed: [20.0, 20.4], lift: [20.8, 21.5], cutLabel: [21.5, 21.9], tagA: [21.6, 22.0],
 		cellA: [24.5, 25.7], dotB: 25.8, noteIn: [26.3, 26.7], toNote: [26.8, 27.2], write: [27.3, 29.3], backB: [29.4, 29.8],
 		noteUp: [33.0, 33.8], pulseB: [34.1, 34.4], sheetB: [34.4, 34.8], composeB: 34.9,
-		toLineB: [37.0, 37.4], readB: 37.4, sweep: [40.5, 41.3], tagB: [41.4, 41.8],
+		toLineB: [37.0, 37.4], readB: 37.4, sameAt: [37.0, 37.4], sweep: [40.5, 41.3], tagB: [41.4, 41.8],
 		cellB: [44.4, 45.6], rowRecv: [45.7, 46.2], rowOwn: [45.7, 46.2],
 		dim: [50.4, 51.0], q1: [51.2, 51.8], a1: [54.3, 55.6], b1: [55.8, 57.1],
 		q2: [64.9, 65.5],
@@ -603,9 +603,9 @@
 		if (N.own.a) fade(N.own.a, prog(t, ...T.lift));
 		fade(N.own.note, prog(t, ...T.write));
 		fade(N.draftB.sec, prog(t, ...T.sheetB));
-		// Optional (business): narrow.sameAt shows "Suppose it matches…" once the draft is
-		// composed, so it stays up long enough to read before beat 6 swaps the layout.
-		fade(N.draftB.same, prog(t, ...(NW.sameAt || T.sweep)));
+		// "Suppose it matches…" arrives once the second draft is composed, so it is fully
+		// shown for 6 s before beat 6 swaps the layout (it needs 4.8 s).
+		fade(N.draftB.same, prog(t, ...T.sameAt));
 		const rv = prog(t, ...T.reveal, E.inOut);
 		for (const [q, ids] of [['q1', ['a1', 'b1']], ['q2', ['a2', 'b2']]]) {
 			fade(N[q].sec, q === 'q1' ? prog(t, ...T.q1) : prog(t, ...T.q2));

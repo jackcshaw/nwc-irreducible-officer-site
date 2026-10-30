@@ -92,7 +92,7 @@ Related:
 
 **Changes after the consistency review** (`../../CONSISTENCY.md`, fluency substitution items 1–7):
 - *Poster.* The stage shows beat 1 settled (5.98 s: the task and the student) before play.
-- *Stacked stage at short windows.* The stage switches to the stacked text view whenever its 12-unit mono would render under 11 px at the runtime's letterboxed scale (`syncStacked`, as in figures 4, 5 and 7). At 1280×720 the stage is stacked, so no label vanishes; at 1440×900 it is the full picture.
+- *Stacked stage at short windows.* The stage switches to the stacked text view whenever its 13-unit mono would render under 11 px at the runtime's letterboxed scale (`syncStacked`, as in figures 4, 5 and 7). PME polish (October 30): laptop windows keep the drawn picture. `picture: {minText: 13, laptop: true}` in `pme.json` sets 13-unit mono and 65% cells, and at 720 px wide or more and 860 px high or less, a compact 92 px caption band. Labels render at 12.6 px at 1280×720 and 11.1 px at 1366×657. The stacked view is for phones and narrow windows.
 - *Controls never move.* The stacked stage takes the height of its tallest beat layout at the current width. The caption band is fixed at 136 px stacked on desktop, 166 px below 720 px and 160 px below 480 px. Measured control travel during the run is 0 px at 1440×900, 1280×720, 600×900 and 390×844. At 390×844 the whole player measures 815 px.
 - *Stacked-stage labels at 13 px* (letter-spacing 0.04em), as in premature synthesis.
 - *Task card at Serif 16 on a 20-unit step,* as in figures 1, 3 and 5. It stays top left.
@@ -118,7 +118,7 @@ Related:
 - *The 390 px view showed empty boxes for the student who reasons.* Below 480 px the stage now switches to a stacked text view driven by the same clock. It shows what the current beat is about at 13–16 px, and its final frame shows the note and all four answers.
 - *Smaller fixes.*
   - The key's grey half arrives with the first AI text (beat 2) and its red half with the first strike (beat 3); before, the key arrived in beat 6.
-  - The papers keep "STUDENT'S PAPER · DRAFTED WITH AI" to the end.
+  - The papers keep "THEIR PAPER · DRAFTED WITH AI" to the end.
   - Label swaps fade out before they fade in, so the labels no longer overlap.
   - The highlight on the repeated words gains a navy underline.
 
@@ -154,7 +154,7 @@ A war-college student must recommend whether to send forces to reassure a threat
 
 **The colour rule.** Grey is what the AI wrote: both drafts, which stay grey on the papers, the sentence the first student cut, and the AI's sentence when a student repeats it. Red is a student's own work (the first student's strike, the second student's note and answers) plus the name labels beside the dots. Navy ink is the page: the task, the labels, the questions and the key. A small key says grey is "written by AI" and red is "a student's own work".
 
-**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-written text, red `#b81b2b`. Type: Source Serif 4 for drafts, the note, answers, questions and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (12 units, never smaller).
+**Palette.** Paper `#f6f1e8`, paper-bright `#fffdfa`, ink `#0a2242`, machine grey `#5b564f` with a `#ded5c4` band behind AI-written text, red `#b81b2b`. Type: Source Serif 4 for drafts, the note, answers, questions and captions; Source Sans 3 for name labels; IBM Plex Mono for small labels (13 units, never smaller; 12 before the October 30 polish).
 
 **Stage.** An SVG with a 960 × 540 viewBox. One view, no camera moves. The picture builds toward a table.
 - **Label column** (x 16–236): the task card at top, then each row's label as its row fills.
@@ -185,16 +185,16 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
 | First red dot | The first student | Solid red circle, radius 5. Labelled "Student" (Sans 600 13, red) in beats 1–3; from beat 4 it heads its column, labelled "First student" | Starts at (120, 300); from beat 4 at (260, 88) |
 | The AI's draft for the first student | The paragraph the AI writes | Paper-bright sheet, hairline border, soft shadow, with a grey mono tag "AI'S DRAFT" above it. Grey Serif text on a grey band per line: "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences." | At 85%: x 300–691, y 212–406 (six lines); after the cut, y 212–377 |
 | The cut | The first student's edit | A red strike through "Either choice carries real consequences." The struck words then lift out of the paper and settle, still struck, as a one-line card in the first column's top row, under a red Sans 600 13 label: "Cut one sentence from the AI's draft:". The card is half see-through mid-flight, so the lines it crosses stay readable | Label baseline (258, 132); card from x 252, y 140–176 (Serif 15 grey on a band, red strike) |
-| Paper A | The paper the first student hands in | The same sheet, still grey on its bands, five lines. From beat 3 its tag reads navy "STUDENT'S PAPER" plus grey "· DRAFTED WITH AI", to the end. Label swaps fade the old label out before the new one fades in | From beat 4: 62% at x 252–537, y 212–332; tag baseline 204 |
+| Paper A | The paper the first student hands in | The same sheet, still grey on its bands, five lines. From beat 3 its tag reads navy "THEIR PAPER" plus grey "· DRAFTED WITH AI", to the end ("STUDENT'S PAPER" ran into the second tag in beat 5 at 13 units). Label swaps fade the old label out before the new one fades in | From beat 4: 65% at x 252–551, y 212–338; tag baseline 204 |
 | Second red dot | The second student | Solid red circle, radius 5, labelled "Second student" (Sans 600 13, red), at the head of its column | (614, 88) from beat 4 |
-| The note | The second student's own call | Paper-bright card, hairline border. Written at full size under a red mono label "SECOND STUDENT'S NOTE": Serif 20 red over three lines, "Send them. The ally's trust / matters most, and troops / show we mean it." Then it shrinks to 62% into the second column's top row (the label fades) and stays to the end | Large: x 606–944, y 212–330. Settled: x 606–816, y 112–185 |
+| The note | The second student's own call | Paper-bright card, hairline border. Written at full size under a red mono label "SECOND STUDENT'S NOTE": Serif 20 red over three lines, "Send them. The ally's trust / matters most, and troops / show we mean it." Then it shrinks to 65% into the second column's top row (the label fades) and stays to the end | Large: x 606–944, y 212–330. Settled: x 606–826, y 112–189 |
 | The AI's draft for the second student | The paragraph the AI writes from the note | A sheet the same size, grey tag "AI'S DRAFT", the same five grey lines on bands as paper A | At 85%: x 552–943, y 212–377 |
 | Match sweep | Word for word | A navy hairline runs under each line of the new draft and the same line of paper A at once, 0.16 s a line, then fades | Beat 5 |
-| Paper B | The paper the second student hands in | Identical to paper A, with the same tag, "STUDENT'S PAPER · DRAFTED WITH AI" | From beat 6: 62% at x 606–891, y 212–332 |
+| Paper B | The paper the second student hands in | Identical to paper A, with the same tag, "THEIR PAPER · DRAFTED WITH AI" | From beat 6: 65% at x 606–905, y 212–338 |
 | Row labels | What each row is | Mono 12 ink. Row 1: "THEIR OWN WORK" over "NOT HANDED IN" (weight 500). Row 2: "WHAT FACULTY RECEIVE" | (16, 140) and (16, 156); (16, 236) |
 | Set aside | Faculty ask without the paper | Both papers dim: each sheet fades into the page and its grey bands lighten to 55%. The words and tags stay at full strength, so the text stays readable (5.6:1) | Beats 7–9 |
-| Question 1 | What faculty ask first | Row label: mono 12 "FACULTY ASK" over Serif italic 16 in two lines, "Papers aside: what do you / recommend, and why?" | Mono baseline (16, 362); lines 383, 403 |
-| Question 2 | The changed fact | Row label: mono 12 "THEN ONE FACT CHANGES" over Serif italic 16 in two lines, "What if the ally doesn't want / our troops on its soil?" | Mono baseline (16, 440); lines 461, 481 |
+| Question 1 | What faculty ask first | Row label: mono 13 "FACULTY ASK" over Serif italic 16 in two lines, "Papers aside: what do you / recommend, and why?" | Mono baseline (16, 362); lines 383, 403 |
+| Question 2 | The changed fact | Row label: mono 13 "THEN ONE FACT CHANGES" over Serif italic 16 in two lines, "What if the ally doesn't want / our troops on its soil?" | Mono baseline (16, 440); lines 461, 481 |
 | Speech panels | What each student says | Paper-bright box, rounded 8, hairline ink border (25%). Serif 15, two lines, inside quotation marks. Both students' words arrive in plain ink, as faculty hear them, left to right at the same speaking pace. At the turn (beat 9) they take their origin colours: the first student's turn grey on a beige band, the second student's turn red | Row 3: y 350–408. Row 4: y 428–486. First column x 252–590, second x 606–944 |
 | Source highlight | Where the repeated words come from | At the turn (beat 9) only: on paper A, the band behind "On balance, losing that trust is the greater risk: the forces should go" returns to full strength and a navy underline runs under those words. Both fade after about 2.5 s | Paper A, lines 2–4 |
 | Colour key | How to read the colours | Mono 12: a grey band swatch with grey "WRITTEN BY AI" (from beat 2, with the first AI text), then a red dot with red "A STUDENT'S OWN WORK" (from beat 3, with the first strike) | Baseline 524, from x 252 |
@@ -209,12 +209,12 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
 | Second student (ink, then red from the turn) | "Send them. The ally's trust matters most, and troops show we mean it." | "Then troops would cost the ally's trust. I'd send arms and aid instead." |
 
 **Short windows and phones.**
-- *Trigger.* Whenever the stage's smallest text (12-unit mono) would render under 11 px at the runtime's letterboxed scale, the SVG collapses and a stacked text stage takes its place, driven by the same clock (`.is-stacked`, set by `syncStacked`). That covers a 1280×720 laptop window as well as phones. At 1440×900 the full picture shows.
+- *Trigger.* Whenever the stage's smallest text (13-unit mono) would render under 11 px at the runtime's letterboxed scale, the SVG collapses and a stacked text stage takes its place, driven by the same clock (`.is-stacked`, set by `syncStacked`). That covers phones and narrow windows. Laptop windows (1280×720, 1366×657) keep the full picture, with the compact caption band.
 - *What the stacked stage shows, at 13–16 px:*
   - beat 1: the task;
   - beats 2–3: the AI's draft, then struck and relabelled;
   - beat 4: the two students' own work, side by side: "Cut one sentence from the AI's draft" over the struck sentence, and the note;
-  - beat 5: that row plus the AI's draft from the note, with "Suppose it matches the first student's paper word for word";
+  - beat 5: that row plus the AI's draft from the note, with "Suppose it matches the first student's paper word for word". The line arrives once the draft is composed (37.0–37.4 s), so it is fully shown for 6.0 s before beat 6 (it needs 4.8 s; it arrived with the match sweep and showed 2.1 s before the October 30 polish);
   - beat 6: that row plus a compact tile, "Both handed in this paper", which stays to the end;
   - beats 7–9: the paper tile, shortened to two lines at beat 7 and one line from beat 8, and the two question rows, each with both students' answers side by side, in ink, then in their colours at the turn;
   - beat 10: the one-line paper tile and both question rows.
@@ -258,7 +258,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
   3. 19.8–20.6: the dot draws a red strike through "Either choice carries real consequences." As it starts (20.0–20.4), the key's red half fades in: a red dot and "A STUDENT'S OWN WORK".
   4. 20.6–20.8: pause.
   5. 20.8–21.5: the struck words lift out of the paper and settle, still struck, as a one-line card above it, in what becomes the first column's top row. The card is half see-through mid-flight. The sheet's lower edge rises to fit the five lines left. Then (21.5–21.9) a red label appears over the card: "Cut one sentence from the AI's draft:".
-  6. 21.6–22.0: the tag "AI'S DRAFT" fades out, then navy "STUDENT'S PAPER" with grey "· DRAFTED WITH AI" fades in. It stays to the end.
+  6. 21.6–22.0: the tag "AI'S DRAFT" fades out, then navy "THEIR PAPER" with grey "· DRAFTED WITH AI" fades in. It stays to the end.
   7. 22.0–23.5: hold.
 - **Caption:** "The student reads closely, cuts a weak line, and agrees with the rest."
 - **Notice:** the student reads every line, then cuts the one sentence that says nothing. The cut stays on screen. The rest stays exactly as the AI wrote it, still grey, and the paper is now the student's, tagged as drafted with AI.
@@ -267,7 +267,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 ### Beat 4 · 23.5–32.0 s · A second student writes their own call
 
 - **What moves:**
-  1. 24.5–25.7: paper A shrinks to 62% into the first column (x 252–537, y 212–332), its tag travelling with it. In the same move, the first student's dot rises to the head of the column (260, 88), and its label becomes "First student".
+  1. 24.5–25.7: paper A shrinks to 65% into the first column (x 252–551, y 212–338), its tag travelling with it. In the same move, the first student's dot rises to the head of the column (260, 88), and its label becomes "First student".
   2. 25.8–26.2: a second red dot grows in at the head of the second column (614, 88), labelled "Second student".
   3. 26.3–26.7: a blank note card fades in, large, in the second column (x 606–944, y 212–336), under the red mono label "SECOND STUDENT'S NOTE".
   4. 26.8–27.2: the dot moves down to the card's first line.
@@ -281,14 +281,14 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 ### Beat 5 · 32.0–43.4 s · An AI drafts from the note
 
 - **What moves:**
-  1. 33.0–33.8: the note shrinks to 62% and moves up into the second column's top row (x 606–816, y 112–185). Its label fades.
+  1. 33.0–33.8: the note shrinks to 65% and moves up into the second column's top row (x 606–826, y 112–189). Its label fades.
   2. 34.1–34.4: the second dot pulses once. The student asks.
   3. 34.4–34.8: a sheet with the grey tag "AI'S DRAFT" fades in below the note, at 85% (x 552–943, y 212–377).
   4. 34.9–36.9: the AI's paragraph composes line by line in grey, 0.4 s a line. The figure supposes it comes out the same five lines as paper A.
   5. 37.0–37.4: the dot moves down to the start of line 1.
   6. 37.4–40.4: the dot reads along each line at the first student's pace, 0.6 s a line.
   7. 40.5–41.3: a navy hairline runs under each line of the new draft and the same line of paper A at once, line by line. The hairlines stay until the paper moves (44.4–44.8).
-  8. 41.4–41.8: the tag "AI'S DRAFT" fades out, then navy "STUDENT'S PAPER" with grey "· DRAFTED WITH AI" fades in.
+  8. 41.4–41.8: the tag "AI'S DRAFT" fades out, then navy "THEIR PAPER" with grey "· DRAFTED WITH AI" fades in.
   9. 41.8–43.4: hold.
 - **Caption:** "An AI drafts from the note. Suppose it matches the first paper word for word."
 - **Notice:**
@@ -300,7 +300,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 ### Beat 6 · 43.4–49.4 s · What faculty receive
 
 - **What moves:**
-  1. 44.4–45.6: the new paper shrinks to 62% into the second column (x 606–891, y 212–332), its tag travelling with it. In the same move, the second dot returns to the head of its column.
+  1. 44.4–45.6: the new paper shrinks to 65% into the second column (x 606–905, y 212–338), its tag travelling with it. In the same move, the second dot returns to the head of its column.
   2. 45.7–46.2: the row labels fade in: "WHAT FACULTY RECEIVE" beside the papers, and "THEIR OWN WORK / NOT HANDED IN" beside the row above.
   3. 46.2–49.4: hold.
 - **Caption:** "Faculty receive two identical papers, both drafted with AI."
@@ -366,7 +366,7 @@ The still at 88.6 s figure time (91.6 s player time). It is also the reduced-mot
 - **Their own work:**
   - First student: the red label "Cut one sentence from the AI's draft:" over the cut sentence, grey on a band with a red strike: "Either choice carries real consequences."
   - Second student: the red note, "Send them. The ally's trust matters most, and troops show we mean it."
-- **What faculty receive:** two identical papers, set aside (sheets faded, bands lightened), grey on bands, each tagged "STUDENT'S PAPER · DRAFTED WITH AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation."
+- **What faculty receive:** two identical papers, set aside (sheets faded, bands lightened), grey on bands, each tagged "THEIR PAPER · DRAFTED WITH AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation."
 - **Faculty ask** (the answers in their origin colours, revealed at the turn):
   - First student, grey on the band: "On balance, losing that trust is the greater risk: the forces should go."
   - Second student, red: "Send them. The ally's trust matters most, and troops show we mean it."
@@ -383,7 +383,7 @@ The still at 88.6 s figure time (91.6 s player time). It is also the reduced-mot
 
 **In the reduced-motion and print views,** the name and definition sit above the check, and the beat list (beat 0, the name card, then all ten captions with their "On screen" lines) is readable below the controls. Clicking a beat shows its settled still.
 
-**In the stacked stage** (a 1280×720 window or a phone), the final frame is the "Both handed in this paper" tile, both question rows with the two students' answers side by side in their colours, and the key. At 390×844, with the check and the controls, it measures 815 px.
+**In the stacked stage** (a phone or narrow window), the final frame is the "Both handed in this paper" tile, both question rows with the two students' answers side by side in their colours, and the key. At 390×844, with the check and the controls, it measures 815 px.
 
 **What the still says alone:** two students handed in the same paper, drafted with AI. One cut a line from the AI's draft; the other wrote their own call first. Asked why, both answered well. When one fact changed, the first stayed with the paper's call in its words, and the second changed course for the same reason. The check below says what to ask.
 
@@ -404,10 +404,10 @@ A student asks an AI to draft a strategy recommendation, reads it closely and ag
 0. **Fluency substitution · Failure mode 2 of 7.** *On screen:* the name, "Fluency substitution", appears large over the stage with "Failure mode 2 of 7" above it, then moves into the top-left corner, where it stays. *(Added by the runtime.)*
 1. **A student gets a task that needs a decision.** *On screen:* a task card appears at the top left: "Example task: Recommend whether to send forces to reassure a threatened ally." A red dot labelled Student appears below it.
 2. **The student asks an AI for a draft. It writes a polished recommendation.** *On screen:* the dot pulses. A sheet labelled "AI's draft" appears, and a paragraph writes itself line by line in grey on a beige band, and a key below names that band "Written by AI": "Any course must weigh escalation against the ally's trust. On balance, losing that trust is the greater risk: the forces should go, with clear limits to contain escalation. Either choice carries real consequences."
-3. **The student reads closely, cuts a weak line, and agrees with the rest.** *On screen:* the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student's own work" in red. The struck sentence moves above the paper, under a red label: "Cut one sentence from the AI's draft". The rest stays grey, and the label changes to "Student's paper, drafted with AI".
+3. **The student reads closely, cuts a weak line, and agrees with the rest.** *On screen:* the dot reads along each line, then strikes out "Either choice carries real consequences." in red, and the key adds "A student's own work" in red. The struck sentence moves above the paper, under a red label: "Cut one sentence from the AI's draft". The rest stays grey, and the label changes to "Their paper, drafted with AI".
 4. **A second student writes their own call first, in plain words.** *On screen:* the first paper moves into a column headed First student. A second red dot heads a column labelled Second student and writes on a large note card in red: "Send them. The ally's trust matters most, and troops show we mean it."
 5. **An AI drafts from the note. Suppose it matches the first paper word for word.** *On screen:* the note moves into the top row, beside the first student's cut sentence. The dot pulses, and a sheet labelled "AI's draft" fills with a grey paragraph. Suppose it is the same as the first paper, word for word. The dot reads each line at the same pace, and a thin line pairs each line with the same line of the first paper.
-6. **Faculty receive two identical papers, both drafted with AI.** *On screen:* the second paper moves into its column beside the first, in a row labelled "What faculty receive"; the top row is labelled "Their own work, not handed in". Both papers are tagged "Student's paper, drafted with AI".
+6. **Faculty receive two identical papers, both drafted with AI.** *On screen:* the second paper moves into its column beside the first, in a row labelled "What faculty receive"; the top row is labelled "Their own work, not handed in". Both papers are tagged "Their paper, drafted with AI".
 7. **Without the papers, both explain the call clearly.** *On screen:* both papers dim. A row labelled "Faculty ask: Papers aside: what do you recommend, and why?" fills. In plain ink, the first student says, "On balance, losing that trust is the greater risk: the forces should go." The second student says, "Send them. The ally's trust matters most, and troops show we mean it."
 8. **Change one fact.** *On screen:* a new row appears: "Then one fact changes: What if the ally doesn't want our troops on its soil?"
 9. **One student stays with the paper's call. The other reworks it from their reason.** *On screen:* in plain ink, the first student says, "On balance, losing that trust is still the greater risk. The forces should go." The second student says, "Then troops would cost the ally's trust. I'd send arms and aid instead." Then the answers take their colours: the first student's words turn grey on a beige band, the mark for words the AI wrote, except "still", which turns red; the paper's matching words are underlined. The second student's answers turn red, their own words.
@@ -458,7 +458,7 @@ Checks:
 - Other changes a caption names also wait until it can be read once: the cut (beat 3, 5.1 s in), the note (beat 4, 3.8 s), the match sweep (beat 5, 8.5 s), the first answers (beat 7, 4.9 s), and the line under the check (beat 10, 3.3 s after the check).
 - Every hold is at least 1.5 s.
 - **In-picture reading.**
-  - The first draft (33 words) is on screen at full size from 8.0 s to 24.5 s, alongside two 13-word captions: 59 words in 16.5 s, about 3.6 words a second. It doesn't need a full read here. It returns in beat 5 and stays readable at 62% to the end.
+  - The first draft (33 words) is on screen at full size from 8.0 s to 24.5 s, alongside two 13-word captions: 59 words in 16.5 s, about 3.6 words a second. It doesn't need a full read here. It returns in beat 5 and stays readable at 65% to the end.
   - Beat 5's draft is the same 28 words, so viewers recognise it more than read it.
   - Beat 7 carries 44 words (caption, question, two answers) in 14.5 s, 3.0 words a second.
   - Beat 8 carries 18 words in 6.5 s.
