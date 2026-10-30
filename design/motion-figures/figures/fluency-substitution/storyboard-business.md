@@ -1,6 +1,6 @@
 # Fluency substitution: business edition storyboard
 
-Edition `business`, round 3: final fixes after business cold read 2 (`tests/business-figure-read-2.md`), which passed on the point. It is built from `editions/business.json` on top of the core in `storyboard.md`: motion, colour grammar and nameplate, plus the timeline up to beat 9. This file lists only what differs from the PME edition. Role words are written literally in `editions/business.json` ("associate", "the partner"), so the edition takes no words from the workplace cast. A per-edition cast override can replace them later. If this file and the data disagree, the data is what ships.
+Edition `business`, round 3: final fixes after business cold read 2 (`tests/business-figure-read-2.md`), which passed on the point. It is built from `editions/business.json` on top of the core in `storyboard.md`: motion, colour grammar and nameplate, plus the timeline up to beat 9. This file lists only what differs from the PME edition. Role words are cast keys; `castOverrides.workplace` gives the workplace edition its associate and partner (see "Classroom cast", below). If this file and the data disagree, the data is what ships.
 
 Open it with `index.html?edition=business`, or with the "See this with: Workplace" link on the page.
 
@@ -120,5 +120,48 @@ Reading is words ÷ 3 s, plus a 1.5 s hold. The PME rule, a beat at least twice 
 
 ## 8. Open points for Jack
 
-- **Role words.** "Associate" and "the partner" are written literally in this edition; they can move to the per-edition cast override when it lands.
+- **Role words.** Done: "associate" and "the partner" are now `castOverrides.workplace` (see "Classroom cast").
 - **Run time.** The changed fact's second line and the captioned colour beat bring the business edition to 1:38, against 1:31 for PME.
+
+## Classroom cast (CLASSROOM-PLAN.md §2)
+
+The business edition in two more casts, through data in `editions/business.json`: `casts: ["workplace", "classroom", "high-school"]`, `castOverrides` and `byCast`. The scenario, timeline, picture, answers, changed fact and evidence numbers stay as built and verified. Open it with `?edition=business&cast=classroom` (higher ed: "the instructor", "Instructor's check") or `&cast=high-school` ("the teacher", "Teacher's check"). Both reviewers are singular, so every patch serves both casts' grammar, and no patch writes a reviewer word.
+
+**Role conversion.** The 59 literal role words are now keys. `castOverrides.workplace` carries associate and partner for 21 existing keys: `person`, `Person`, `people`, `a_person`, `A_person`, `the_person`, `The_person`, `first`, `second`, `A_second`, `the_first`, `The_first`, `the_second`, `The_second`, `reviewer`, `check` ("Partner’s check"), `check_l`, `receive` ("What the partner receives"), `reviewer_receives`, `reviewer_ask` and `reviewer_ask_l`. The workplace edition resolves to the same strings as before, checked string for string with the runtime's `resolveEdition`. It frame-diffs 230/230 identical with the switch hidden (a first run showed 4 phone frames at 13 px of raster noise; a rerun gave 230/230). No new cast keys are needed.
+
+**The switch and the note.** The switch reads "Workplace · Classroom · PME" (`data-cast-link="classroom"`; on a high-school page "Classroom" is current and keeps `cast=high-school`). The note under it is now data, as in FC: `page.editionNote` in `pme.json` holds the PME line, and business sets none, so the military note no longer sits above the workplace and classroom figures. PME frame-diffs 206/206 identical with the switch hidden.
+
+**`byCast` patches** (13 for classroom; high school is the same set, with "class" for "course"):
+- **Task:** "Draft the patent claims: / what does the inventor's / wearable protect?" (card lines 2–3, the phone task and beat 1's detail).
+- **Caption 1:** "A student in an invention course (class) drafts patent claims." It has 9 words, read in 6.0 s within the 6.0 s beat.
+- **Received row:** "{reviewer_receives|upper}" ("THE INSTRUCTOR RECEIVES"), since "WHAT THE INSTRUCTOR RECEIVES" at 13 units ran into the first paper.
+- **Beat 10's detail:** "under the changed fact comes one more line from the instructor (the teacher): …", with no verb after the reviewer.
+- **Setup:** "Two students in an invention course (class) get the same task, the same inventor's notes and the same AI: draft patent claims for the inventor's wearable, the sentences that set what an invention protects. The course allows AI, and both say they used it. … The same goes for any polished work a student hands in: change one fact, and you find out whether the reasoning in it is theirs. … Illustration based on Autor et al. (2026). The study followed practising patent lawyers; no students took part. The students, the course, the invention and the older patent are constructed."
+- **Description:** "A classroom example: two students hand in the same AI-drafted patent claims. Changing one fact shows which of them owns the reasoning."
+- **Screen-reader summary:** the class framing, "The course allows AI, and its use is disclosed", and the partner's line as "one more line from the instructor".
+- **Study framing, kept at the top of the evidence.** Paragraph 1 adds: "The participants were practising lawyers; no students took part. Tested without AI after three months, senior lawyers gained, and junior lawyers split, with more poor and more good scores (below)." Paragraph 6 opens "The figure's two students show one way such a split could arise in a class. The study's participants were practising lawyers, and its tested results are scores", and ends "is an illustration; the study didn't test it". The source line lists the course among the constructed parts.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Caption 1 | A student in an invention course drafts patent claims. | …invention class… |
+| Captions 2–4, 9 | The student… / A second student… / One student takes the draft's fallback, the other the sensor. | same |
+| Caption 6 | The instructor receives two identical drafts, made with AI. | The teacher receives… |
+| Caption 12 | Instructor’s check: Can the student explain the call plainly, without the draft? | Teacher’s check: … |
+| Picture | Student / First student / Second student, SECOND STUDENT'S NOTE, THE INSTRUCTOR RECEIVES, THE INSTRUCTOR ASKS, STUDENT'S OWN WORK; task card "…what does the inventor's / wearable protect?" | THE TEACHER RECEIVES, THE TEACHER ASKS |
+| Phone | Second student's note, not handed in; The instructor asks; Student's own work | The teacher asks |
+
+**Checks** (October 30):
+- `edition-check` passes for all four casts it resolves (seminar for PME; workplace, classroom and high school for business).
+- Workplace frame-diffs 230/230 and PME 206/206 identical with the switch hidden. Baselines: `regression/baseline` (PME), `baseline-business`, `baseline-business-classroom` and `baseline-business-high-school`, all with `--freeze`.
+- **Pacing** (words ÷ 3 + 1.5 s, and a beat at least twice the reading time): every caption passes in both casts. Picture and phone texts are the workplace ones with role words swapped.
+- **Layout,** in both casts:
+  - drawn picture at 1440 × 900, 1366 × 657 and 1280 × 720, labels at 14.1, 11.1 and 12.6 px;
+  - player 846, 640 and 703 px, with no control travel;
+  - phone player 842 px at 390 × 844;
+  - no horizontal scroll and no console errors.
+- The new copy passes the writing-as-jack check.
+- Stills and finals: `shots/business-classroom/` and `shots/business-high-school/` (beats, final, final-390, final-1366, final-1280, poster, player-390, reduced and page views).
+
+**High school** is the weakest fit (patent claims), built anyway. Its light read decides whether it ships or high-school links fall back to the workplace edition (CLASSROOM-PLAN.md decision 7).
