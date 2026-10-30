@@ -174,3 +174,32 @@ These are checked against the full working paper text (HBS Working Paper 24-013,
 - At 1440 × 900, 1366 × 657, 1280 × 720, 768 × 1024, 390 × 844 and 360 × 740 there's no overflow and no horizontal scroll. The last caption fits its band in every cast, and the drawn picture keeps 11 px labels after question 1 at 1280 × 720 and 1366 × 657.
 - The pace is unchanged: no caption or picture word changes, apart from the check heading.
 - The figure still never autoplays: it opens on question 1 and waits.
+
+### After the classroom light read (`tests/classroom-light-read.md`)
+
+**The class frame is on the stage.** These are `byCast` patches, for both classroom casts:
+- "IF IT'S YOUR GROUP'S FIRST DRAFT" and "IF IT GOES STRAIGHT INTO THE CASE WRITE-UP" on the cards.
+- Caption 8 is "Now your segmentation goes straight into the case write-up. What about Task A?"
+- The key reads "FIRST DRAFT: … · CASE WRITE-UP: …".
+- Asking for a week "misses the deadline by a week" in the text. On the card it's still "DEFENSIBLE · A WEEK LATE", which fits a class.
+- "AI USE ALLOWED" opens the budget line ("AI USE ALLOWED · TIME FOR ONE CHECK: WORK IT YOURSELF, THEN COMPARE"). It's on screen from beat 3, before the first call, and the first question's screen-reader prompt says it too ("Your group may use AI").
+- The figure waits at question 1, so the two extra words cost no reading time.
+
+**High school in plainer words**, with the same structure and the same study facts:
+- Tasks: "Group shoe customers by how they use the shoes." and "Use a spreadsheet and interviews to pick which brand to invest in."
+- Reasons and verdicts:
+  - "Nothing hidden: a weak answer shows when read.";
+  - "THE KEY FACTS WERE IN THE INTERVIEWS / THE SPREADSHEET JUST LOOKED COMPLETE";
+  - "DO IT FROM THE INTERVIEWS, THEN COMPARE";
+  - "THEN NOBODY CHECKS TASK B";
+  - "TASK B: QUICK READ ONLY".
+- Caption 6: "Task B's key facts were in the interviews. Task A, the figure reasons, has none." That's 15 words, as before.
+- Every patched label keeps or lowers its word count in its beat.
+
+**Projection.** In the classroom casts the stage's mono labels are 15.5 units instead of 13: 14 px at 1440 × 900, 13.2 px at 1280 × 720 and 13.1 px at 1366 × 657, with no overflow and the player still fitting.
+- Some labels keep 13 units for room: the key line, the READY tags, the bar notes and the cost note beside "Ask for a week".
+- Classroom (higher ed) shortens two labels so they fit the card at the larger size: "THE KEY DETAILS WERE IN THE INTERVIEWS" and "WORK FROM THE INTERVIEWS, THEN COMPARE". Caption 6 says "key details" to match.
+- Workplace and PME draw exactly as before.
+
+**The verdict on phones (every business cast; PME has no verdict).** The last beat's line "Your calls · first draft: … · …" sat at the foot of the stacked stage, under the sticky panel. In play, the page now brings it above the caption band once the last caption has grown, and the reduced-motion step to the end does the same. Measured at 390 × 844 in all three casts, in play and reduced: the line is at 402–453 px, above the band at 459 px.
+

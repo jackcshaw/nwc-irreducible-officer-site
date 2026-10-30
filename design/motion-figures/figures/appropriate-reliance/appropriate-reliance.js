@@ -98,6 +98,12 @@
 
 	function build(ed) {
 		const L = ed.labels, NW = ed.narrow, G = ed.gates, R = ed.results;
+		// The classroom casts are projected in class, so the stage's mono labels go a size up
+		// where the layout allows (15.5 units: 13 px or more at 1280 × 720 and 1440 × 900). The
+		// key line, the READY tags, the bar notes and the cost note beside "Ask for a week" keep
+		// 13, which is all the room they have. Other casts draw exactly as before.
+		const LBL = ed.castId === 'classroom' || ed.castId === 'high-school' ? 15.5 : MONO;
+		const big = {fs: LBL};
 		const moveLabel = () => L.options2.move[calls.g1 === 'a' ? 'keep' : calls.g1 === 'b' ? 'move' : 'put'];
 		const movedFromB = () => calls.g1 === 'b' && calls.g2 === 'move';
 		const svg = root.querySelector('svg');
@@ -118,15 +124,15 @@
 		const lazy = (node, str, at) => { LAZY.push([node, str, at]); return node; };
 
 		// ---- top band -------------------------------------------------------------------------
-		const srcLine = mono(scene, 24, 18, L.source);
-		const fIn = mono(scene, 456, 40, L.inside, {anchor: 'end'});
-		const fOut = mono(scene, 504, 40, L.outside);
+		const srcLine = mono(scene, 24, 18, L.source, big);
+		const fIn = mono(scene, 456, 40, L.inside, {...big, anchor: 'end'});
+		const fOut = mono(scene, 504, 40, L.outside, big);
 
 		// ---- cards -------------------------------------------------------------------------------
 		const card = (k) => {
 			const x0 = X[k], g = el(scene, 'g');
 			el(g, 'rect', {x: x0, y: CY, width: CW, height: CH, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.15});
-			mono(g, x0 + 16, 68, k === 'a' ? L.cardA : L.cardB);
+			mono(g, x0 + 16, 68, k === 'a' ? L.cardA : L.cardB, big);
 			return g;
 		};
 		const cardA = card('a'), cardB = card('b');
@@ -141,7 +147,7 @@
 		const aiBlock = (k) => {
 			const x0 = X[k], g = el(scene, 'g');
 			const head = el(g, 'g');
-			mono(head, x0 + 16, 172, L.aiAnswer, {fill: C.grey});
+			mono(head, x0 + 16, 172, L.aiAnswer, {...big, fill: C.grey});
 			el(head, 'rect', {x: x0 + 16, y: 180, width: 400, height: 20, rx: 2, fill: C.band});
 			const l1 = el(g, 'rect', {x: x0 + 26, y: 185, width: 0, height: 3.5, rx: 1.75, fill: C.grey, 'fill-opacity': 0.8});
 			const l2 = el(g, 'rect', {x: x0 + 26, y: 192.5, width: 0, height: 3.5, rx: 1.75, fill: C.grey, 'fill-opacity': 0.8});
@@ -166,14 +172,14 @@
 		const tag = (parent, x, y, str) => {
 			const g = el(parent, 'g');
 			const rect = el(g, 'rect', {x, y, width: 10, height: 17, rx: 3, fill: C.ink});
-			const t = mono(g, x + 7, y + 12.6, str, {fill: C.bright});
+			const t = mono(g, x + 7, y + 12.6, str, {...big, fill: C.bright});
 			return {g, rect, t, x};
 		};
 
 		// Row 1 on both cards: the first-draft condition and the one check.
 		const row1 = (k) => {
 			const x0 = X[k];
-			const cond = mono(scene, x0 + 16, 220, L.cond1);
+			const cond = mono(scene, x0 + 16, 220, L.cond1, big);
 			const yourCall = sans600(scene, x0 + 416, 220, L.yourCall, {fill: C.red, anchor: 'end'});
 			const p = pill(scene, x0 + 16, 228, 160, 26, L.checkThis);
 			const rely = sans600(scene, x0 + 192, 246, L.youRely, {fill: C.red});
@@ -181,24 +187,24 @@
 		};
 		const r1 = {a: row1('a'), b: row1('b')};
 		const sugA = tag(scene, 40, 262, L.sugA);
-		const noteA = mono(scene, 40, 294, L.noteA);
+		const noteA = mono(scene, 40, 294, L.noteA, big);
 		const sugB = tag(scene, 520, 262, L.sugB);
 
 		// Row 2 on card A: the launch plan. The pills stack, each cost note beside its pill.
-		const cond2 = mono(scene, 40, 316, L.cond2);
+		const cond2 = mono(scene, 40, 316, L.cond2, big);
 		const yourCall2 = sans600(scene, 440, 340.5, L.yourCall, {fill: C.red, anchor: 'end'});
 		const r2 = {
 			rely: pill(scene, 40, 324, 220, 24, L.options2.rely),
 			move: pill(scene, 40, 352, 150, 24, L.options2.move.move),
 			time: pill(scene, 40, 380, 200, 24, L.options2.time),
 		};
-		const noteMove = mono(scene, 0, 368.5, L.noteMove);
+		const noteMove = mono(scene, 0, 368.5, L.noteMove, big);
 		const noteAsk = mono(scene, 0, 396.5, L.noteTime);
 		const sug2 = tag(scene, 40, 410, L.sug2);
 
 		// Card A's evidence slot: the study, inside the frontier.
 		const inRule = el(scene, 'line', {x1: 40, y1: 435, x2: 440, y2: 435, stroke: C.ink, 'stroke-opacity': 0.15});
-		const inTitle = mono(scene, 40, 449, L.insideTitle);
+		const inTitle = mono(scene, 40, 449, L.insideTitle, big);
 		const outRule = el(scene, 'line', {x1: 520, y1: 302, x2: 920, y2: 302, stroke: C.ink, 'stroke-opacity': 0.15});
 		const nums = R.inside.map(({value, label}, i) => [value, ' ' + label, [40, 172, 290][i]]).map(([n, l, x]) => {
 			const t = serif(scene, x, 468, '', {fs: 17, weight: 600});
@@ -209,18 +215,18 @@
 
 		// What set the tasks apart: Task B's line is the study's; Task A's is reasoning, so it
 		// sits under its own label in italic serif.
-		const tagA1 = mono(scene, 40, 136, L.factA.label, {weight: 500});
+		const tagA1 = mono(scene, 40, 136, L.factA.label, {...big, weight: 500});
 		const tagA2 = serif(scene, 40, 153, L.factA.text, {fs: 15, style: 'italic'});
 		const underB = el(scene, 'line', {stroke: C.ink, 'stroke-width': 1.5});
-		const tagB1 = mono(scene, 520, 136, L.factB[0]);
-		const tagB2 = mono(scene, 520, 151, L.factB[1]);
+		const tagB1 = mono(scene, 520, 136, L.factB[0], big);
+		const tagB2 = mono(scene, 520, 151, L.factB[1], big);
 
 		// The frontier.
 		const frontier = el(scene, 'path', {d: 'M' + FRONTIER.map((p) => p.join(' ')).join('L'), fill: 'none', stroke: C.ink, 'stroke-width': 1.8, 'stroke-linejoin': 'round'});
 		let fLen = 0;
 
 		// Bottom band: the budget and the definition, then the keys.
-		const bandLine = mono(scene, 480, 498, L.budget, {anchor: 'middle'});
+		const bandLine = mono(scene, 480, 498, L.budget, {...big, anchor: 'middle'});
 		const keySug = el(scene, 'g');
 		const keySugT = mono(keySug, 936, 526, L.keySuggested, {anchor: 'end'});
 		const keySugSw = el(keySug, 'rect', {y: 516.5, width: 16, height: 11, rx: 2, fill: C.ink});
@@ -243,7 +249,7 @@
 		el(panelBg, 'rect', {x: 172, y: 170, width: 624, height: 212, fill: C.ink, 'fill-opacity': 0.07});
 		el(panelBg, 'rect', {x: 168, y: 166, width: 624, height: 212, fill: C.bright, stroke: C.ink, 'stroke-opacity': 0.18, 'stroke-width': 1.2});
 		const evB = el(topLayer, 'g');
-		mono(evB, 520, 316, L.outsideTitle);
+		mono(evB, 520, 316, L.outsideTitle, big);
 		const bars = R.outside.map(({name, value, label}, i) => ({y: [329, 351, 373][i], v: value, label, name})).map((b) => ({
 			...b, name: text(evB, 520, b.y + 11, b.name, {fs: 14}),
 			r: el(evB, 'rect', {x: BAR.x, y: b.y, height: BAR.h, width: 0, fill: C.ink, 'fill-opacity': 0.85}),
@@ -629,7 +635,10 @@
 		}
 		let followT = 0;
 		const FOLLOW = () => [[BEAT_AT[3], N.a.flab], [T.inTitle[0], N.a.ev], [BEAT_AT[4], N.panel], [BEAT_AT[5], N.b.pat], [T.tagA1[0], N.a.pat],
-			[BEAT_AT[6], N.a.sug], [T.sugB[0], N.b.sug], [BEAT_AT[7], N.a.cond2], [BEAT_AT[8], N.a.sug2p]];
+			[BEAT_AT[6], N.a.sug], [T.sugB[0], N.b.sug], [BEAT_AT[7], N.a.cond2], [BEAT_AT[8], N.a.sug2p],
+			// Business (every cast): the last beat's verdict line sits at the foot of the stacked
+			// stage, so bring it above the caption band once the last caption has grown.
+			...(NW.keyVerdict ? [[BEAT_AT[9] + 0.6, N.keys]] : [])];
 		function follow(t) {
 			const prev = followT;
 			followT = t;
@@ -735,7 +744,10 @@
 			if (reducedNow()) {
 				resolve(g);
 				if (g === 0) api.openGate(1);
-				else { api.seek(T.end); if (after) after.open = true; toggle.focus(); }
+				else {
+					api.seek(T.end); if (after) after.open = true; toggle.focus();
+					if (NW.keyVerdict && stickyOn()) requestAnimationFrame(() => bringIntoView(N.keys, false));
+				}
 			} else {
 				api.resume(g);
 				toggle.focus({preventScroll: true});
