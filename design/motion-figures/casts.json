@@ -36,7 +36,11 @@
     "each_person": "each student",
     "group": "seminar",
     "reviewer_lines": "Faculty line",
-    "reviewer_sends": "faculty send"
+    "reviewer_sends": "faculty send",
+    "Each_person": "Each student",
+    "The_first": "The first student",
+    "the_second": "the second student",
+    "The_second": "The second student"
   },
   "high-school": {
     "person": "student",
@@ -74,7 +78,11 @@
     "each_person": "each student",
     "group": "class",
     "reviewer_lines": "The teacher lines",
-    "reviewer_sends": "the teacher sends"
+    "reviewer_sends": "the teacher sends",
+    "Each_person": "Each student",
+    "The_first": "The first student",
+    "the_second": "the second student",
+    "The_second": "The second student"
   },
   "workplace": {
     "person": "analyst",
@@ -112,6 +120,10 @@
     "each_person": "each analyst",
     "group": "team",
     "reviewer_lines": "The manager lines",
-    "reviewer_sends": "the manager sends"
+    "reviewer_sends": "the manager sends",
+    "Each_person": "Each analyst",
+    "The_first": "The first analyst",
+    "the_second": "the second analyst",
+    "The_second": "The second analyst"
   }
 }
