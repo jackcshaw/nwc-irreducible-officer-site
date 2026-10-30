@@ -337,6 +337,31 @@ Picture texts keep workplace's word counts or fewer. "THE INSTRUCTOR SEES ONLY T
   - The phone player is 841 px at 390 × 844, with no overflow and a clean console.
   - Classroom and high-school baselines re-captured; workplace still resolves string for string.
 
+**After classroom read 2** (`tests/classroom-read-2.md`, final fixes):
+- **The checking is drawn.** As each student answers in beat 9, that part of their plan gets a red tag, kept to the end:
+  - both students' Part 1: "✓ CHECKED: QUOTES";
+  - the first student's Part 2: "USED AS IS", the beat 4 working mark's words;
+  - the second student's Part 2: "✓ CHECKED: RECORDS".
+
+  The phone tags read "✓ Quotes", "Used as is" and "✓ Records".
+  - This is a core change, gated on data: `labels.finalTags` and `narrow.finalTags`. They're empty in the workplace edition, so nothing is drawn there, and `byCast` fills them for the classroom casts.
+  - The tags sit where the working marks were, which lifted off at hand-in.
+- **The final frame leads with the checks.** The key is relabelled "AI-DRAFTED (DISCLOSED)" and "A STUDENT'S CHECKS AND EDITS". Red still means a person's own decisions, as in every figure: the checks, the edit and the names.
+- **Why the records stay out:** "The second question seems to be about the rival's lower prices, so a student asks an AI and shares the quotes and the flyer." Beat 1's caption still says the records stay out.
+- **Phone:**
+  - In the classroom casts the tabs are 11 px, set by a CSS rule keyed to the page's cast attribute. They now clear the names and the plan text.
+  - The names read "Student 1" and "Student 2".
+  - A compact key (`narrow.key`: "AI-drafted (disclosed)", "● Checks and edits") sits under the answers.
+  - "(not given to AI)" moved into the records line.
+  - The player is 844 px.
+- **Checked:**
+  - `edition-check` passes, and the voice check passes on the new copy.
+  - At 1280 × 720 the smallest label is 11.1 px; at 1366 × 657 it's 11.0 px.
+  - Phone 844 px, no overflow, clean console.
+  - PME diffs 209/209 against its baseline.
+  - Workplace: every frame that differs between before and after also differs between two captures of one build (the load noise in CONVENTIONS.md). No frame differs in every before/after pairing, measured with the stable recipe (`--disable-partial-raster`, a 120 ms settle).
+  - Classroom and high-school baselines re-captured.
+
 **Stills:** `shots/business-classroom/` and `shots/business-high-school/`. Each has a still per beat, `final.png`, `final-1440.png`, `final-1366.png`, `final-390.png`, `player-390-final.png`, and reduced and page views.
 
 **Baselines** (switch hidden, `--freeze`): `regression/baseline` (PME), `baseline-business`, `baseline-business-classroom`, `baseline-business-high-school`.

@@ -183,7 +183,13 @@
    ],
    "source": "OTIS ET AL. (2026) · KENYAN ENTREPRENEURS · MANAGEMENT SCIENCE"
   },
-  "source": "Illustration based on Otis et al. (2026) and its working paper."
+  "source": "Illustration based on Otis et al. (2026) and its working paper.",
+  "finalTags": {
+   "a1": "",
+   "a2": "",
+   "b1": "",
+   "b2": ""
+  }
  },
  "narrow": {
   "taskLabel": "Example task ",
@@ -266,7 +272,17 @@
    "quality": "Change in revenue and profit.",
    "source": "Otis et al. (2026) · Kenyan entrepreneurs · Management Science"
   },
-  "source": "Based on Otis et al. (2026) and its working paper."
+  "source": "Based on Otis et al. (2026) and its working paper.",
+  "finalTags": {
+   "a1": "",
+   "a2": "",
+   "b1": "",
+   "b2": ""
+  },
+  "key": {
+   "ai": "",
+   "own": ""
+  }
  },
  "beats": [
   {
@@ -415,11 +431,11 @@
  "byCast": {
   "classroom": {
    "page.description": "Two AI answers look equally sure. A student checks one and uses both, and {reviewer} finds the difference by asking about each part.",
-   "page.setup": "In a business {group}, {reviewer} gives every student the same case packet on a print-and-internet shop in Nairobi: two battery quotes, a new rival's flyer and, as a separate exhibit at the back, the shop's sales records. The case asks two things: how to keep printing through power blackouts, and how to win back customers lost to the new shop. A student asks an AI and shares the quotes and the flyer, judging the records beside the point for a pricing question. They check the first answer, find it right, and use both. What can happen next is uncalibrated reliance: confident output is accepted without knowing whether the task fits the tool. The {group} allows AI, and the students say they used it. {Reviewer} sees only the plans and asks about each part. Illustration based on Otis et al. (2026) and its working paper, a study of shop owners in Kenya. No students took part in it; the figure's students, the shop's documents and every number in their plans are constructed.",
+   "page.setup": "In a business {group}, {reviewer} gives every student the same case packet on a print-and-internet shop in Nairobi: two battery quotes, a new rival's flyer and, as a separate exhibit at the back, the shop's sales records. The case asks two things: how to keep printing through power blackouts, and how to win back customers lost to the new shop. The second question seems to be about the rival's lower prices, so a student asks an AI and shares the quotes and the flyer. They check the first answer, find it right, and use both. What can happen next is uncalibrated reliance: confident output is accepted without knowing whether the task fits the tool. The {group} allows AI, and the students say they used it. {Reviewer} sees only the plans and asks about each part. Illustration based on Otis et al. (2026) and its working paper, a study of shop owners in Kenya. No students took part in it; the figure's students, the shop's documents and every number in their plans are constructed.",
    "beats.0.text": "A student asks an AI two questions about the shop's case, sharing everything but the sales records.",
    "beats.0.detail": "a task card appears at the top left: \"Example task. Part 1: Keep printing in blackouts. Part 2: Win back customers.\" A red dot labelled {Person} appears below. The case packet's four documents appear across the top: Battery quote, Battery quote, Rival's flyer and Sales records. The dot pulses, and grey copies of the two quotes and the flyer slide into a small stack labelled \"Given to the AI\", where they stay. The sales records stay in the packet.",
    "beats.8.text": "{Reviewer}, who sees only the plans, asks what each part rests on and why customers left.",
-   "beats.8.detail": "the panel goes. The red marks lift off both plans, the documents and the AI's column fade back, and \"{reviewer_sees} only the plans\" appears, with a key: \"AI-drafted, disclosed\" and \"{A_person}'s own work\". Part 1 is outlined in both plans, and {each_person} says, \"The battery quotes.\" Then Part 2, and why customers left: {the_first} says, \"The flyer. They left because the rival is cheaper.\" The second says, \"The shop's records. Rush customers left.\"",
+   "beats.8.detail": "the panel goes. The red marks lift off both plans, the documents and the AI's column fade back, and \"{reviewer_sees} only the plans\" appears, with a key: \"AI-drafted (disclosed)\" and \"{A_person}'s checks and edits\". Part 1 is outlined in both plans, and {each_person} says, \"The battery quotes.\" As each answers, that part gets a red tag, \"Checked: quotes\". Then Part 2, and why customers left: {the_first} says, \"The flyer. They left because the rival is cheaper.\", and their Part 2 is tagged \"Used as is\". The second says, \"The shop's records. Rush customers left.\", and theirs is tagged \"Checked: records\".",
    "speech.b.1.lines.0": "“The shop’s records. Rush",
    "speech.b.1.lines.1": "customers left.”",
    "narrow.speech.b.1": "“The shop’s records: rush customers left.”",
@@ -430,7 +446,22 @@
    "labels.inside": "COVERED BY ITS INPUT",
    "labels.outside": "NEEDS FACTS IT WASN'T GIVEN",
    "labels.capacity": "FLYER ONLY",
-   "labels.key.ai": "AI-DRAFTED, DISCLOSED",
+   "labels.key.ai": "AI-DRAFTED (DISCLOSED)",
+   "labels.key.own": "{A_person|upper}'S CHECKS AND EDITS",
+   "labels.finalTags.a1": "✓ CHECKED: QUOTES",
+   "labels.finalTags.a2": "USED AS IS",
+   "labels.finalTags.b1": "✓ CHECKED: QUOTES",
+   "labels.finalTags.b2": "✓ CHECKED: RECORDS",
+   "narrow.finalTags.a1": "✓ Quotes",
+   "narrow.finalTags.a2": "Used as is",
+   "narrow.finalTags.b1": "✓ Quotes",
+   "narrow.finalTags.b2": "✓ Records",
+   "narrow.key.ai": "AI-drafted (disclosed)",
+   "narrow.key.own": "Checks and edits",
+   "narrow.first": "Student 1",
+   "narrow.second": "Student 2",
+   "narrow.log.head": "Sales records (not given to AI) · lost: ",
+   "narrow.closed": "",
    "narrow.inside": "Input covers it ↑",
    "narrow.outside": "Needs facts it lacked ↓",
    "narrow.capacity": "Flyer only",
@@ -448,7 +479,7 @@
    "page.checkFollow": "Both {people} give the same reason for Part 1. For Part 2, both point to evidence about Part 2, so ask what that part turns on: why did the customers leave? {The_first}'s flyer shows only that the rival is cheaper. {The_second}'s records show the shop lost rush jobs, so a discount chases the wrong customers. {Reviewer} knows the case, so the first plan's discount may already look off; the question shows how it got in. Part 2 turned on facts the AI wasn't given, and even with the records, its answer would still need checking against them. The move is to check each part against the evidence for that part, including what the AI didn't see.",
    "page.evidence.1": "Also from the abstract, where the gap came from: \"This differential impact does not appear to result from differences in the questions posed to the AI or the advice that it provided but rather, from the advice that entrepreneurs chose to implement.\" It's a study of shop owners advising their own businesses. No students took part, and it didn't measure checking, so the two students in the figure don't stand for its groups. The figure's lesson, to check each part against evidence for that part, is what the result suggests. The study didn't test it.",
    "page.evidence.3": "The same revised working paper adds detail the published abstract doesn't give. It describes 640 entrepreneurs randomly assigned to the assistant on WhatsApp (p. 3) or to business training guides (p. 7). The median entrepreneur was 26, had run the business for a year and held a college degree, and the businesses ranged \"from fast-food joints to poultry farms to cybershops,\" which offer internet access and printing (p. 8). In an analysis the authors call exploratory, \"treated low performers were especially likely to implement 'generic' advice focused on lowering prices and investing in advertising,\" while high performers found \"tailored and specific changes,\" from \"finding alternative ways to get power during blackouts\" to a new car wash detergent (pp. 3–4). The figure's two parts echo that reading. Treat it as a lead. It isn't a measured result. The published abstract doesn't mention it, and the February 2024 version of the working paper gave a different explanation in its abstract: weaker owners \"sought help on more challenging business tasks.\"",
-   "page.srSummary": "An animated figure. A red dot stands for a student working a print shop's case, with an example task in two parts: keep printing in blackouts, and win back customers. Every student gets the same case packet: two battery quotes, a rival's flyer and the shop's sales records. {The_person} gives the AI copies of the quotes and the flyer and leaves the sales records out. The AI answers both in the same form, in grey, each marked ready: \"Buy battery A: runs 6 hours, costs less\" and \"Win them back: loyalty discount\". {The_person} checks Part 1 against both battery quotes, finds it right, and puts both answers into their plan, marking Part 1 checked and Part 2 used as is. {A_second} asks the same AI the same questions, gets the same answers, and checks each part at its source. Part 1 checks out. For Part 2, the flyer, headed their offer, says cheaper prints, and the shop's sales records, headed shop's sales and not given to the AI, say it lost rush jobs. {The_second} changes the plan to \"Win them back: same-day service\". Part 2 turns on facts the AI wasn't given: the records' lost rush jobs is underlined, and the AI's \"loyalty discount\" is marked flyer only. An uneven line is drawn between the AI's answers, with Part 1 covered by its input and Part 2 needing facts it wasn't given. Even with them, its answer would still need checking. A panel headed a real study of shop owners shows a field experiment that gave some Kenyan entrepreneurs an AI assistant. On revenue and profit, weaker businesses did nearly 10% worse, and stronger ones may have gained over 15%, a less certain result. The study suggests what mattered was which AI advice owners acted on. The working marks come off the plans, the AI's column fades back, a key reads AI-drafted, disclosed, and {reviewer} sees only the plans. {Reviewer} asks what each part rests on: each student says, \"The battery quotes.\" Then Part 2, and why customers left: {the_first} says, \"The flyer. They left because the rival is cheaper.\" The second says, \"The shop's records. Rush customers left.\" The figure ends on the {check_l}, with a line under the picture: illustration based on Otis et al. (2026) and its working paper. Each beat is listed below with what is on screen."
+   "page.srSummary": "An animated figure. A red dot stands for a student working a print shop's case, with an example task in two parts: keep printing in blackouts, and win back customers. Every student gets the same case packet: two battery quotes, a rival's flyer and the shop's sales records. {The_person} gives the AI copies of the quotes and the flyer and leaves the sales records out. The AI answers both in the same form, in grey, each marked ready: \"Buy battery A: runs 6 hours, costs less\" and \"Win them back: loyalty discount\". {The_person} checks Part 1 against both battery quotes, finds it right, and puts both answers into their plan, marking Part 1 checked and Part 2 used as is. {A_second} asks the same AI the same questions, gets the same answers, and checks each part at its source. Part 1 checks out. For Part 2, the flyer, headed their offer, says cheaper prints, and the shop's sales records, headed shop's sales and not given to the AI, say it lost rush jobs. {The_second} changes the plan to \"Win them back: same-day service\". Part 2 turns on facts the AI wasn't given: the records' lost rush jobs is underlined, and the AI's \"loyalty discount\" is marked flyer only. An uneven line is drawn between the AI's answers, with Part 1 covered by its input and Part 2 needing facts it wasn't given. Even with them, its answer would still need checking. A panel headed a real study of shop owners shows a field experiment that gave some Kenyan entrepreneurs an AI assistant. On revenue and profit, weaker businesses did nearly 10% worse, and stronger ones may have gained over 15%, a less certain result. The study suggests what mattered was which AI advice owners acted on. The working marks come off the plans, the AI's column fades back, a key reads AI-drafted (disclosed) and {A_person}'s checks and edits, and {reviewer} sees only the plans. {Reviewer} asks what each part rests on: each student says, \"The battery quotes.\" Then Part 2, and why customers left: {the_first} says, \"The flyer. They left because the rival is cheaper.\" The second says, \"The shop's records. Rush customers left.\" As they answer, each part is tagged: checked against the quotes for both Part 1s, used as is for the first student's Part 2, and checked against the records for the second's. The figure ends on the {check_l}, with a line under the picture: illustration based on Otis et al. (2026) and its working paper. Each beat is listed below with what is on screen."
   },
   "high-school": "classroom"
  }

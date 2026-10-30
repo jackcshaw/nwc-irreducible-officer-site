@@ -74,6 +74,11 @@
 .ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
 .ur-n-src { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); }
 /* Optional (business): the source line, the stacked stage's last line. */
+.ur-n-key { margin: 3px 0 0; font: 400 13px/1.3 var(--serif); color: var(--stone); }
+.ur-n-keyown { margin-left: 8px; font-weight: 600; color: var(--red); }
+.ur-n-keyown::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
+/* Classroom casts: smaller tabs (11 px), so a tab clears the plan text under it and the name above. */
+#uncalibrated-reliance[data-cast="classroom"] .ur-n-mark, #uncalibrated-reliance[data-cast="high-school"] .ur-n-mark { top: -7px; font-size: 11px; }
 .ur-n-srcline { margin: 2px 0 0; font: italic 400 13px/1.3 var(--serif); color: var(--ink); }
 /* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the
    144 px band the picture would letterbox under 11 px and give way to the stacked stage.

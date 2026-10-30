@@ -232,6 +232,11 @@
 		a1: markEl('a', 'p1', L.marks.checked), a2: markEl('a', 'p2', L.marks.used),
 		b1: markEl('b', 'p1', L.marks.checked), b2: markEl('b', 'p2', L.marks.checked),
 	};
+	// Optional (classroom casts, L.finalTags): each part's check, written onto the plan as its
+	// student answers for it in beat 9, and kept to the end. Same place as the working marks,
+	// which have lifted off by then.
+	// Empty strings (the workplace edition) draw nothing; byCast fills them for the classroom casts.
+	const finalTags = L.finalTags ? Object.fromEntries(Object.entries(L.finalTags).filter(([, str]) => str).map(([id, str]) => [id, markEl(id[0], id[1] === '1' ? 'p1' : 'p2', str)])) : null;
 
 	// ---- faculty -----------------------------------------------------------------------------
 	const facLabel = mono(sceneBase, 480, 412, L.faculty, {anchor: 'middle'});
@@ -340,7 +345,7 @@
 			if (l.rect) set(l.rect, {x: l.x - 4, y: l.y - 16, height: 22});
 		}
 		for (const seg of [...secB2.l1, ...secB2.l2]) seg.w = W(seg.t);
-		for (const m of Object.values(marks)) { m.w = W(m.t); set(m.rect, {x: m.right - m.w - 3, y: m.y - 13, height: 17}); }
+		for (const m of [...Object.values(marks), ...Object.values(finalTags || {})]) { m.w = W(m.t); set(m.rect, {x: m.right - m.w - 3, y: m.y - 13, height: 17}); }
 		const cap = ai.p2.lines[1];
 		set(capLine, {x1: cap.x, y1: 364, x2: cap.x, y2: 364});
 		set(capTag, {x: cap.x + cap.w + 10});
@@ -467,6 +472,7 @@
 			set(m.g, {opacity: 1 - off, transform: `translate(0 ${-6 * off})`});
 		}
 		set(slot, {opacity: 1 - off, transform: `translate(0 ${-6 * off})`});
+		if (finalTags) for (const [id, m] of Object.entries(finalTags)) { const t0 = T[id][0]; set(m.rect, {width: (m.w + 6) * prog(t, t0, t0 + 0.5)}); }
 		set(slotLabel, {opacity: prog(t, ...T.slot1)});
 		set(slotL1, {opacity: prog(t, ...T.slot1)});
 		set(slotL2, {opacity: prog(t, ...T.slot2)});
@@ -601,6 +607,8 @@
 			else { const b = band(N.bEdit, str); if (kind === 'struck') b.classList.add('is-struck'); }
 		});
 		N.b2 = {p, m: h('span', 'ur-n-mark', p, NW.marks.checked)};
+		// Optional (classroom casts): each part's final check tag, in the working mark's place.
+		N.ft = NW.finalTags ? Object.fromEntries(Object.entries(NW.finalTags).filter(([, str]) => str).map(([id, str]) => [id, h('span', 'ur-n-mark', N[id].p, str)])) : null;
 	}
 	{
 		const s = h('div', 'ur-n-sec', body);
@@ -611,6 +619,8 @@
 			return SPEECH[k].rows.map((r, ri) => h('p', 'ur-n-line', c, `${r.n} · ${NW.speech ? NW.speech[k][ri] : r.lines.join(' ')}`));
 		});
 		N.sayBox = [...row.children];
+		// Optional (classroom casts): a compact key, so the beige band is explained on phones.
+		N.key = NW.key && NW.key.ai ? (() => { const k = h('p', 'ur-n-key', s); band(k, NW.key.ai); h('span', 'ur-n-keyown', k, NW.key.own); return k; })() : null;
 		// Optional (business): the source line, the stage's last line, so it stays in the player.
 		N.src = NW.source ? h('p', 'ur-n-srcline', s, NW.source) : null;
 	}
@@ -671,6 +681,8 @@
 		N.ev.forEach((r, i) => op(r, prog(t, ...(i ? T.bars2 : T.bar1))));
 		if (N.evq) op(N.evq, prog(t, ...(L.panel.bracket ? T.bracketText : T.panel)));
 		op(N.facLabel, prog(t, ...T.facLabel));
+		if (N.key) op(N.key, prog(t, ...T.facLabel));
+		if (N.ft) for (const [id, m] of Object.entries(N.ft)) op(m, prog(t, T[id][0], T[id][0] + 0.5));
 		N.sayBox.forEach((b) => op(b, prog(t, ...T.panels)));
 		if (N.src) op(N.src, prog(t, ...T.source));
 		N.say.forEach((rows, ci) => rows.forEach((r, ri) => { const at = SPEECH[ci ? 'b' : 'a'].rows[ri].at; op(r, prog(t, at[0], at[1])); }));
