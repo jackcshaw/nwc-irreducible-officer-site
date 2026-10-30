@@ -67,11 +67,12 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
   - so the drawn stage shows at 11.1 px instead of the stacked view.
 
   1280 × 720 and taller keep the 144 px band; their frames are unchanged. Both editions get it.
+- *The definition* (October 30): "The model's recommendation makes responsibility feel shared, or easier to defend." (was "agency"). PME frames changed only where the final caption shows it (88.0 s on) and in the reduced, print and page views. See storyboard-business.md, section 9.
 - *Pacing.* No beat's timing or caption changed, so every beat still meets (words ÷ 3) + 1.5 s at every size. Only beat 8's "On screen" line and the summary describe the whole dot.
 
 **Changes for the name anchor** (Jack: "anchor each figure in the stated name to help recall"; the runtime's `nameplate` option, `CONVENTIONS.md`):
 - *Beat 0, the name card (player 0.0–3.0 s).* "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, sits large and centred over the stage for 2 s, then moves and shrinks over 1 s into a reserved strip above the stage's top-left corner, where "RESPONSIBILITY LAUNDERING · 7 OF 7" stays in every beat and view. The caption band stays quiet. Before play, the waiting view shows the card over the poster. On phones the card's name scales with the width (about 28 px at 390) so it stays on one line inside the stage.
-- *Final frame.* The caption band reads "RESPONSIBILITY LAUNDERING" beside the definition Jack approved (`../../NAMEPLATE-DEFINITIONS.md`), "The model's recommendation makes agency feel shared, or easier to defend.", then "FACULTY CHECK" beside the check, then the move line. The long name wraps in the label column and the check is set at 22–27 px, so the band stays at the runtime's 144 px and the drawn stage still fits 1280 × 720.
+- *Final frame.* The caption band reads "RESPONSIBILITY LAUNDERING" beside the definition Jack approved (`../../NAMEPLATE-DEFINITIONS.md`), "The model's recommendation makes responsibility feel shared, or easier to defend.", then "FACULTY CHECK" beside the check, then the move line. The long name wraps in the label column and the check is set at 22–27 px, so the band stays at the runtime's 144 px and the drawn stage still fits 1280 × 720.
 - *Clock.* The figure's own times don't change. The player adds the 3.0 s card in front: 93.2 s on the figure's clock, 96.2 s in the player (readout 1:36). `?t=` and the export hooks are in player time.
 - *Phones.* The caption band is fixed at the measured final height, 194 px (188 px on tablets that stack). To keep the player inside 844 px, the stacked stage drops its separate names row: each student's red name now heads their card, the cards drop the "Drafted with AI" tag (the grey bands and the key's "WRITTEN BY AI" carry it), and the note row puts its label, "THEIR OWN NOTE · NOT HANDED IN →", in the first student's cell beside the second student's note. While faculty look, "FACULTY DON'T SEE THIS" replaces that label (the label fades out before it fades in) and only the note dims. The player measures 837 px in every beat.
 
@@ -358,7 +359,7 @@ Times are the figure's own clock. The player adds the runtime's 3.0 s name card 
   2. 84.2–84.8: the name and the faculty check rise into the caption band: "RESPONSIBILITY LAUNDERING" beside its definition, then "FACULTY CHECK" in navy mono beside the check in large italic.
   3. 86.9–87.4: directly under the check, at the same size: "Name one way it could prove wrong. Ask why they relied on it."
   4. 87.4–93.2: hold. At 93.2 the player shows Replay and the figure rests on this frame.
-- **Caption:** "Responsibility laundering: The model's recommendation makes agency feel shared, or easier to defend." Then "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
+- **Caption:** "Responsibility laundering: The model's recommendation makes responsibility feel shared, or easier to defend." Then "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
 - **Notice:** the picture answers the first line: both students, one weight each. The second line is what faculty did in beats 5 and 6, and the answers to it are what differ.
 - **Why:** the figure ends on the check and the move an educator can make. The move line appears 2.7 s after the check begins to rise, once the check can be read, and the beat holds both lines at 3 words a second plus 1.5 s before the figure rests.
 
@@ -379,7 +380,7 @@ The still at 93.2 s (96.2 s in the player). It is also the reduced-motion view, 
 
 **Caption band:**
 
-> RESPONSIBILITY LAUNDERING *(navy mono, label column)* · The model's recommendation makes agency feel shared, or easier to defend. *(Serif, about 19 px)*
+> RESPONSIBILITY LAUNDERING *(navy mono, label column)* · The model's recommendation makes responsibility feel shared, or easier to defend. *(Serif, about 19 px)*
 > FACULTY CHECK *(navy mono, label column)*
 > *Who owns the recommendation if it proves wrong?* *(Serif italic, about 30 px)*
 > *Name one way it could prove wrong. Ask why they relied on it.* *(the same size and style)*

@@ -19,7 +19,7 @@
 	const C = {paper: '#f6f1e8', bright: '#fffdfa', ink: '#0a2242', red: '#b81b2b', grey: '#5b564f', band: '#ded5c4'};
 	const VW = 960, VH = 540, MONO = 13;
 	// Universal across editions: the failure mode's name, kicker and role-neutral definition.
-	const NAMEPLATE = {name: 'Responsibility laundering', kicker: 'Failure mode 7 of 7', definition: 'The model’s recommendation makes agency feel shared, or easier to defend.'};
+	const NAMEPLATE = {name: 'Responsibility laundering', kicker: 'Failure mode 7 of 7', definition: 'The model’s recommendation makes responsibility feel shared, or easier to defend.'};
 
 	// ---- timeline (absolute seconds, from the storyboard) -------------------
 	const T = {
@@ -610,7 +610,8 @@
 				const k = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
 				const turn = prog(t, s1 - 0.4, s1);
 				const kW = prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut); // whole again as the weight lands
-				cd.di.style.transform = `translateX(${(-3 * kA * (1 - kW)).toFixed(2)}px) scale(${mix(mix(1, 0.75, kA), 1, kW).toFixed(3)})`;
+				// No transform once the dot is whole: an identity transform rasterized differently from run to run.
+				cd.di.style.transform = kW >= 1 ? '' : `translateX(${(-3 * kA * (1 - kW)).toFixed(2)}px) scale(${mix(mix(1, 0.75, kA), 1, kW).toFixed(3)})`;
 				const dotN = cd.di.parentNode, from = {x: dotN.offsetLeft + dotN.offsetWidth / 2 + 6 * kA, y: dotN.offsetTop + dotN.offsetHeight / 2};
 				const to = {x: 3, y: cd.r1.offsetTop + 9};
 				const size = mix(SP.narrowHalf, SP.narrowRing, turn);
@@ -623,7 +624,8 @@
 				hf.style.opacity = kA > 0 ? '1' : '0';
 			} else if (on) {
 				// Whole again as the weight lands at the signature row; the grey ring stays.
-				cd.di.style.transform = `scale(${mix(0.7, 1, prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut)).toFixed(3)})`;
+				const kW = prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut);
+				cd.di.style.transform = kW >= 1 ? '' : `scale(${mix(0.7, 1, kW).toFixed(3)})`;
 				// From the signature dot, up the card's left edge, to just left of "The analysis".
 				const k = prog(t, ...T.split, E.inOut);
 				const turn = prog(t, T.split[0] + 0.6, T.split[1]);

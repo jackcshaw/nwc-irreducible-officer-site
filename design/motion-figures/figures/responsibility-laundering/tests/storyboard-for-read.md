@@ -201,7 +201,7 @@ Times are the figure's own clock. The player adds the runtime's 3.0 s name card 
   2. 84.2–84.8: the name and the faculty check rise into the caption band: "RESPONSIBILITY LAUNDERING" beside its definition, then "FACULTY CHECK" in navy mono beside the check in large italic.
   3. 86.9–87.4: directly under the check, at the same size: "Name one way it could prove wrong. Ask why they relied on it."
   4. 87.4–93.2: hold. At 93.2 the player shows Replay and the figure rests on this frame.
-- **Caption:** "Responsibility laundering: The model's recommendation makes agency feel shared, or easier to defend." Then "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
+- **Caption:** "Responsibility laundering: The model's recommendation makes responsibility feel shared, or easier to defend." Then "Faculty check: Who owns the recommendation if it proves wrong?" Second line, same size: "Name one way it could prove wrong. Ask why they relied on it."
 - **Notice:** the picture answers the first line: both students, one weight each. The second line is what faculty did in beats 5 and 6, and the answers to it are what differ.
 - **Why:** the figure ends on the check and the move an educator can make. The move line appears 2.7 s after the check begins to rise, once the check can be read, and the beat holds both lines at 3 words a second plus 1.5 s before the figure rests.
 
@@ -222,7 +222,7 @@ The still at 93.2 s (96.2 s in the player). It is also the reduced-motion view, 
 
 **Caption band:**
 
-> RESPONSIBILITY LAUNDERING *(navy mono, label column)* · The model's recommendation makes agency feel shared, or easier to defend. *(Serif, about 19 px)*
+> RESPONSIBILITY LAUNDERING *(navy mono, label column)* · The model's recommendation makes responsibility feel shared, or easier to defend. *(Serif, about 19 px)*
 > FACULTY CHECK *(navy mono, label column)*
 > *Who owns the recommendation if it proves wrong?* *(Serif italic, about 30 px)*
 > *Name one way it could prove wrong. Ask why they relied on it.* *(the same size and style)*

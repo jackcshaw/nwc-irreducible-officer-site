@@ -10,5 +10,7 @@ Jack approved role-neutral one-line definitions for the nameplate on October 28,
 | Uncalibrated reliance | Failure mode 4 of 7 | Confident output is accepted without knowing whether the task fits the tool. |
 | Invisible delegation | Failure mode 5 of 7 | A request for help hands over criteria, structure, or meaning. |
 | Institutional monoculture | Failure mode 6 of 7 | Shared systems and defaults narrow the range of frames a group considers. |
-| Responsibility laundering | Failure mode 7 of 7 | The model’s recommendation makes agency feel shared, or easier to defend. |
+| Responsibility laundering | Failure mode 7 of 7 | The model’s recommendation makes responsibility feel shared, or easier to defend. |
 | Appropriate reliance | The skill | Accept AI support where it’s warranted, check or refuse it where it isn’t, and be able to say why. |
+
+On October 30, 2026, Jack changed responsibility laundering's definition from "makes agency feel shared" to "makes responsibility feel shared": a business tester read "agency" as a company or as principal–agent law. The essay's own table (PLAN.md, book-v0, book-v1) keeps "agency feel distributed".

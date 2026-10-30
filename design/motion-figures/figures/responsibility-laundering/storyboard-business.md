@@ -60,7 +60,7 @@ Cold read 2 passed on the point. These are its final fixes.
    - To keep question 2 the first point of difference (brief lesson 9), both analysts give the same answer to question 1: "I did. I signed it."
 5. **"Their own note · not sent"** replaces "not handed in", in the note row, the beat list and the summary.
 6. **At 390, the outline in a spoken answer hugs the phrase** (inline-block, line height 1.1, no offset), so its top edge no longer reads as an underline of the line above. On the drawn stage the outline starts 1.5 units later after an opening quote mark, so it doesn't cover it.
-7. **No PME/National War College note on the business page.** The note now comes from the edition (`page.editionNote`), and it is null for business. The definition's "agency" stays (universal; for Jack).
+7. **No PME/National War College note on the business page.** The note now comes from the edition (`page.editionNote`), and it is null for business. The definition's "agency" stayed for Jack to decide; on October 30 he changed it to "responsibility" in every edition.
 
 Also:
 - "I should have tested exceptions" is now "I didn't test exceptions". The question is hypothetical, so the answer states the gap without implying the failure happened.
@@ -208,3 +208,84 @@ The text was read in two CanLII-stamped PDF copies of *Moffatt v. Air Canada*, 2
 - **Voice:** the business visitor copy and beat list pass `jack_eval.py` with no findings.
 - **Stills:** `shots/business/` holds the poster, the beat-00 card, move and plate, beats 1–9, `final.png`, `final-390.png`, `player-390-final.png` and the reduced pages.
 - **Preview:** `shots/responsibility-laundering-business.mp4/.webm/.gif`.
+
+## 8. Classroom cast (CLASSROOM-PLAN.md section 7; Jack approved the defaults, October 30)
+
+These are the business edition in two more casts, set through data in `editions/business.json` (`casts`, `byCast`). The scenario, timeline, picture, answers and related case stay as built. Open it with `?edition=business&cast=classroom` (higher ed: "faculty", "seminar", "Faculty check") or `&cast=high-school` ("the teacher", "class", "Teacher's check").
+
+**Keys.**
+- The one literal `edition-check` flagged ("to the manager and the company", `page.evidence.4`) is now `{reviewer}`. The workplace text resolves exactly as before.
+- `casts` is `["workplace", "classroom", "high-school"]`, and `edition-check` passes for all three.
+- `byCast.classroom` patches nine strings, and `byCast["high-school"]` is `"classroom"` (inherits). The patches carry no verb after a reviewer key, so plural "Faculty" and singular "The teacher" both read right.
+
+**Framing.** Two students in a business seminar (class) work a retailer's case: should its support chatbot answer refund questions?
+- The setup says the course allows AI and both students say they used it, and each copy is tagged "drafted with AI". This keeps "who made this call?" from reading as an academic-integrity question (the plan's risk).
+- *Moffatt* stays a related case.
+- "Answer for it" means to faculty or the teacher, for the work they submit, in the check paragraph and the evidence.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Setup | "Suppose two students in a business seminar work a retailer's case: should its support chatbot answer refund questions? The seminar allows AI, and both say they used it; each copy is tagged "drafted with AI". They give an AI the same prompt, get the same draft, and sign it as written. …" | "…business class… The class allows AI…" |
+| Picture | FIRST/SECOND STUDENT'S COPY, A STUDENT'S DECISION, FACULTY DON'T SEE THIS, WHAT FACULTY SEE, First/Second student, "THEIR OWN NOTE · NOT HANDED IN" | THE TEACHER DOESN'T SEE THIS, WHAT THE TEACHER SEES; the rest as classroom |
+| Captions 1, 3, 4, 8 | Two students… / Both students… / The first student signs… / Both students will. | same |
+| Captions 5, 6 | Faculty ask each student. / Faculty ask why. | The teacher asks each student. / The teacher asks why. |
+| Caption 9 | Faculty check: Who owns the recommendation if it proves wrong? | Teacher's check: … |
+| Check paragraph | "…both answer for it to faculty, for the work they submit, and the AI can't." | "…to the teacher…" |
+| Evidence 1 | "It says nothing about students signing a recommendation for a class." | same |
+| Evidence 5 | "In the figure, "answer for it" means to faculty, for the work they submit." | "…to the teacher…" |
+| Links note | "…This page shows the same move in a business seminar working a retailer's case." | "…business class…" |
+
+The note row reads "not handed in" in both classroom casts: "not sent" was the workplace wording for the same thing. The "Was the reliance justified?" link still goes to uncalibrated reliance's workplace edition, since UR's classroom cast isn't built yet.
+
+**Switch:** "See this with: Workplace · Classroom · PME". Classroom is `data-edition-link="business" data-cast-link="classroom"`.
+- `aria-current` marks Classroom in both classroom casts.
+- On a high-school page the Classroom link keeps `cast=high-school`.
+
+**Pace** (caption + on-screen words ÷ 3 + 1.5 s, business clock):
+
+| Beat | Length (s) | Workplace | Classroom | High school |
+| --- | --- | --- | --- | --- |
+| 1 | 7.4 | 17 words, 7.2 | 17, 7.2 | 17, 7.2 |
+| 2 | 10.6 | 27, 10.5 | 27, 10.5 | 27, 10.5 |
+| 3 | 7.2 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
+| 4 | 12.3 | 29, 11.2 | 30, 11.5 | 30, 11.5 |
+| 5 | 12.6 | 33, 12.5 | 30, 11.5 | 33, 12.5 |
+| 6 | 13.6 | 34, 12.8 | 33, 12.5 | 34, 12.8 |
+| 7 | 14.4 | 16, 6.8 | 16, 6.8 | 16, 6.8 |
+| 8 | 8.3 | 14, 6.2 | 14, 6.2 | 14, 6.2 |
+| 9 | 10.2, then rests | 23 + source 16 | same | same |
+
+**Checks** (both classroom casts):
+- At 1440 × 900, 1280 × 720 and 1366 × 657 the drawn stage shows, with labels at 14.1, 11.1 and 11.07 px. The caption band holds 144, 144 and 92 px in every beat, with nothing clipped.
+- At 390 × 844 the stacked player is 841 px in every beat, with the source line inside it.
+- No horizontal scroll, and no console errors or loader warnings.
+- The new copy passes `jack_eval.py`.
+- Baselines: `regression/baseline-business-classroom` and `regression/baseline-business-high-school` (212 shots each).
+- Stills and finals: `shots/business-classroom/` and `shots/business-high-school/`.
+
+## 9. The definition: "agency" becomes "responsibility" (Jack, October 30)
+
+"The model's recommendation makes responsibility feel shared, or easier to defend." It changed in:
+- the nameplate (every edition and cast);
+- both `srSummary` strings;
+- the workplace setup;
+- the page's noscript block and meta description;
+- `../../NAMEPLATE-DEFINITIONS.md`.
+
+`book-v1` quotes the essay's own table verbatim, as PLAN.md and book-v0 do ("makes agency feel distributed…"), so it is unchanged.
+
+The final-frame definition still fits:
+- one line at 1440 × 900, 1280 × 720 and 1366 × 657;
+- two lines at 390, as before.
+
+The check and the controls don't move.
+
+**Frame-diff, before and after:**
+- **PME:** only the frames showing the final caption changed (player 88.0–96.2 s at all three sizes), plus the reduced, print and page views. Every earlier frame is identical.
+- **Workplace business:** the final-caption frames (89.4 s on) changed, plus the page views. The new word also makes the setup paragraph one line longer, which moves the figure down 32 px, and that re-rasterizes every frame.
+  - With the old word put back in the setup only, business differed in just the final-caption frames and the page views, which confirms the cause.
+- **Determinism fix:** the phone view's first dot now drops its CSS transform once it is whole. An identity transform there rasterized differently from run to run in business phone frames 74–99.6 s.
+  - Two fresh captures now match 212/212, and the PME output is pixel-identical.
+- Both baselines were re-captured, each confirmed by a second capture.
