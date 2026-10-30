@@ -98,7 +98,9 @@
 
 	const text = (parent, x, y, str, {fs, family = FONT.sans, weight = 400, fill = C.ink, anchor = 'start', ls = 0, style} = {}) =>
 		el(parent, 'text', {x, y, 'font-family': family, 'font-size': fs, 'font-weight': weight, fill, 'text-anchor': anchor, 'letter-spacing': ls, 'data-fs': fs, ...(style ? {'font-style': style} : {})}, str);
-	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 12, family: FONT.mono, weight: 600, ls: 1, ...opts});
+	// Mono labels at 13 units (PME polish): with the laptop caption band, the drawn picture holds at
+	// 1280 × 720 and 1366 × 657 with every picture text at 11 px or more.
+	const mono = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {fs: 13, family: FONT.mono, weight: 600, ls: 1, ...opts});
 	const serif = (parent, x, y, str, opts = {}) => text(parent, x, y, str, {family: FONT.serif, ...opts});
 	let clipN = 0;
 	const clip = (parent) => {
@@ -164,7 +166,7 @@
 		o.ledFrame = el(o.led, 'g');
 		el(o.ledFrame, 'line', {x1: X.div1, y1: 2, x2: X.div1, y2: 202, stroke: C.ink, 'stroke-opacity': 0.3});
 		el(o.ledFrame, 'line', {x1: X.div2, y1: 2, x2: X.div2, y2: 202, stroke: C.ink, 'stroke-opacity': 0.3});
-		mono(o.ledFrame, X.own, 12, L.laneOwn, {fill: C.red});
+		o.laneOwn = mono(o.ledFrame, X.own, 12, L.laneOwn, {fill: C.red});
 		mono(o.ledFrame, X.req, 12, L.laneRequests);
 		mono(o.ledFrame, X.ai, 12, L.laneAI, {fill: C.grey});
 		const slot = (x, k) => {
@@ -270,6 +272,9 @@
 	const W = (node) => node.getComputedTextLength();
 	function measure() {
 		for (const o of [A, B]) {
+			// The person's lane name ends clear of the lane rule: at 13 units, tighten its tracking to fit.
+			const room = X.div1 - 4 - X.own, n = o.laneOwn.textContent.length, lw = W(o.laneOwn);
+			if (lw > room) set(o.laneOwn, {'letter-spacing': Math.max(0, 1 - (lw - room) / n).toFixed(2)});
 			o.bubbles.forEach((b, k) => {
 				const tw = W(b.t);
 				if (o.isA) {
@@ -391,7 +396,8 @@
 		set(rubric, {opacity: prog(t, ...T.rubric), transform: `translate(${RUB.x} ${RUB.y}) scale(${sc}) translate(${-RUB.x} ${-RUB.y})`});
 		set(rubricWash, {'fill-opacity': 0.09 * hi, width: ((S.rubricX || 108) - 40 + (S.rubricW || 196)) * sc + 14});
 		const kr = Math.max(prog(t, ...T.rubricHi, E.inOut), hiA);
-		const krBack = FIRST_READS ? (t < T.rubricHi[0] ? 0 : prog(t, ...T.rubricBack)) : 0.6 * prog(t, ...T.rubricBack);
+		// The underline shows only while someone reads the standard, so no read leaves a trace the other lacks.
+		const krBack = prog(t, ...T.rubricBack);
 		set(rubricLine, {x2: (S.rubricX || 108) + (S.rubricW || 196) * kr, opacity: kr > 0 ? 1 - krBack : 0});
 
 		// ---- first student --------------------------------------------------------------
@@ -576,9 +582,8 @@
 		fade(NR.task, prog(t, ...T.card));
 		vis(NR.rubric, t >= T.rubric[0]);
 		const readingB = t >= T.rubricHi[0] && t < T.rubricBack[1], readingA = FIRST_READS && t >= T.readA[1] && t < T.readBackA[1];
-		// When both people read the standard (business), the underline shows only while either reads, as in
-		// the wide picture; PME keeps it from the second person's read on.
-		NR.rubric.classList.toggle('is-consulted', FIRST_READS ? readingA || readingB : t >= T.rubricHi[0]);
+		// Underlined only while either person reads it, as in the wide picture.
+		NR.rubric.classList.toggle('is-consulted', readingA || readingB);
 		NR.rubric.classList.toggle('is-lit', readingB || readingA);
 		vis(NR.fac, t >= T.fac[0]);
 		fade(NR.fac, prog(t, ...T.fac));
@@ -655,7 +660,7 @@
 		if (!r.width) return;
 		const vb = svg.viewBox.baseVal;
 		const scale = r.height ? Math.min(r.width / vb.width, r.height / vb.height) : r.width / VW;
-		const stacked = 12 * scale < 11;
+		const stacked = 13 * scale < 11;
 		if (stacked !== root.classList.contains('is-stacked')) {
 			root.classList.toggle('is-stacked', stacked);
 			renderNarrow(figTime());

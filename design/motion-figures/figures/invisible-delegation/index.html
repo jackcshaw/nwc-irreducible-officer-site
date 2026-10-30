@@ -20,6 +20,16 @@
 /* Collapsed, not display:none: the SVG keeps its width so it can still be measured. */
 #invisible-delegation.is-stacked .mf-stage { height: 0; overflow: hidden; }
 #invisible-delegation.is-stacked .id-narrow { display: block; padding: 3px clamp(10px, 3vw, 24px) 1px; background: var(--paper); }
+/* Laptop windows keep the drawn picture (IM's convention, as in PS): at 720 px wide or more and
+   860 px high or less, a compact caption band lets the picture scale up, so 13-unit text stays at
+   11 px or more at 1280 × 720 and 1366 × 657. */
+@media (min-width: 720px) and (max-height: 860px) {
+	#invisible-delegation { --mf-chrome: 166px; }
+	#invisible-delegation:not(.is-stacked) .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#invisible-delegation:not(.is-stacked) .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#invisible-delegation:not(.is-stacked) .mf-check-q, #invisible-delegation:not(.is-stacked) .mf-follow.is-equal { font-size: 20px; }
+	#invisible-delegation:not(.is-stacked) .mf-final-def { font-size: 15px; }
+}
 @media (max-width: 480px) {
 	/* The final frame, check and controls fit an 844 px phone screen: the caption band
 	   is fixed at the final caption's height (name, definition and check), and the

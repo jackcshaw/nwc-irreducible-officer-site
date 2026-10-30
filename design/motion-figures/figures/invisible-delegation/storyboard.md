@@ -4,6 +4,19 @@ Motion figure 5 of 8 · slug `invisible-delegation` · storyboard round 6: round
 
 Starting point: `concepts-v0/proposal.md` §2.5, "What crossed over" (8.5 s, not built). This version keeps v0's mechanism: a ledger of decisions, and ordinary requests that carry cards across it. It uses three of the essay's four request pairs, the three the site names (criteria, structure, meaning). The ledger has three lanes: what the student decides, what the student asked, and what the AI decides. Each of the first student's requests visibly carries a decision card across into the AI's lane. The turn shows what each request left unsaid: whose standard to use. The AI used its own. A second student, with the same task and rubric, starts from the rubric and writes each decision down before its request, with words that point back to it. That habit is the one difference. It shows in their working: they turn down one AI note that doesn't serve the rubric. Faculty can't see the ledger or the notes. They ask a question each student can answer honestly, and the answers show whose standard the help followed. The shared runtime and `CONVENTIONS.md` apply throughout.
 
+## PME polish pass (October 30, 2026)
+
+- **No trace of one read.** The rubric is underlined only while a student reads it, in the drawn picture and the stacked view. Before, the second student's read kept a 40% underline (drawn) or a full underline (stacked) to the end, which read as a second difference. This is core: business already did it, and its frames are unchanged.
+- **Laptops keep the picture.** Mono labels are now 13 units, and the stacked stage takes over only when 13-unit text would fall under 11 px (phones and narrow windows). In windows 720 px or wider and 860 px or shorter, a compact caption band applies (IM's convention, as in PS): 92 px, check and follow at 20 px, definition at 15 px, `--mf-chrome` 166 px.
+  - The drawn picture now shows at 1280 × 720, with the smallest text at 12.6 px, and at 1366 × 657, at 11.1 px.
+  - The controls hold still in both.
+  - The person's lane name tightens its tracking to stay clear of the lane rule at 13 units.
+- **Frames.**
+  - At 390 the only change is the underline row, from 54 s.
+  - At 1440 and 1280 every frame after the nameplate changes, from the 13-unit labels and the drawn picture.
+  - `regression/baseline` and `regression/baseline-business` are re-captured with `--freeze`.
+  - Business at 390 is identical.
+
 ## 1. Intent
 
 *The cold-read tester does not see this section.*
@@ -216,7 +229,7 @@ Times are figure seconds; add 3.0 for player time. In every beat the caption cha
 
 ### Beat 6 · 48.9–60.3 s · Before each request, a decision in words
 - **Moves:**
-  1. 49.9–50.3: the rubric returns to size, keeping a 40% underline.
+  1. 49.9–50.3: the rubric returns to size, and the underline clears (PME polish; it used to stay at 40%).
   2. 51.5–52.0: the dot comes down to "The criteria".
   3. 52.2–53.1: it writes the card: red outline and label, the card grows, and "Evidence must back / the call" is written line by line.
   4. 53.2–53.5: from the card's edge, it asks "Give me feedback against my criteria".
