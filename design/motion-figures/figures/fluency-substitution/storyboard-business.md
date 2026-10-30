@@ -29,12 +29,13 @@ Open it with `index.html?edition=business`, or with the "See this with: Workplac
 - **The deliverable includes the sensor.** The draft: "Claim reading through clothing broadly: no earlier device does it. Narrower claim: the sensor's fabric adjustment. Fallback: the battery design." So the second associate signs claims that do include their key point, as a narrower claim. Only they know it is the part that matters once an older patent appears.
 - **Beat 7 doesn't separate them.** Both answer "what do you claim, and why?" with a claim and a reason. The first restates the draft's ("No earlier device does it"), and the second gives the same reason in their own words.
 - **The changed fact decides it.** Asked "What if an older patent covers reading through clothing?", the first associate takes the draft's designated fallback in good faith: "Then lead with the battery design." The second leads with what their note says is new: "Then lead with the sensor that adjusts to each fabric." Then the partner adds, "It covers the battery too." The fallback fails against the fact, and of the claims both handed in only the sensor is still new. "As the draft says" is gone, because the picture now carries the verdict.
+- **The hinge, made visible (classroom light read, October 30; all business casts).** The reviewer's added line is now set at the answers' size in a strip under them ("The partner adds: “It covers the battery too.”"), not as a small italic line in the label column. With it, "the battery design" in the first associate's answer is struck through in ink, so the fallback visibly fails against the fact. Caption 9 now says why the first associate didn't lead with the sensor: "Both drafts list the sensor. Only the second associate knows it's new." PME has no added line or fallback (its first answer conflicts with the changed fact in its own words), so it is unchanged.
 - **The colours have their own beat and caption** ("The colours show whose words these are."). The first associate's own words ("Then lead with") now turn red, so every word in an answer is either the AI's (grey band) or the associate's own (red), matching the key.
 
 **Additions to the core, each drawn only when the edition supplies the data,** so PME draws exactly as before:
 - `paper.cut` absent: no strike, lifted card or cut label. The first dot rests after the last line, and both papers are the same length. The red half of the key arrives with the note instead (`timeline.times.keyRed`).
-- `timeline` (beats 9–12): `beatAt` adds two beats, and `times` moves the reveal, check, follow-up, source and end, and adds `fact2` for the partner's added line. Business runs 1:38; PME is unchanged at 1:31.
-- `labels.q2.more` / `narrow.q2.more`: "It covers the battery too." It sits under the changed fact in the picture and runs on after the question on phones.
+- `timeline` (beats 9–12): `beatAt` adds two beats, and `times` moves the reveal, check, follow-up, source and end, and adds `fact2` for the partner's added line. Beat 9 is 8.0 s for its 12-word caption. Business runs 1:40; PME is unchanged at 1:31.
+- `labels.q2.more` / `narrow.q2.more`: "{Reviewer} adds: “It covers the battery too.”" In the picture it is a strip at the answers' size (Serif 15) between the answers and the key (baseline 503). On phones it runs on after the question, upright and semibold. With it, the first person's AI words in the second answer get an ink strike (SVG line; `.fs-n-x` on phones), from `fact2` (78.8–79.3 s).
 - `picture: {minText: 13, laptop: true}` (round 2): the drawn picture holds at 1280 × 720 and 1366 × 657.
 - Phones: "Suppose it matches the first associate's draft word for word." arrives once the second draft is composed (37.0–37.4 s), so it is fully shown for 6.0 s before beat 6 (it needs 4.8 s). This was the business-only `narrow.sameAt`; since the October 30 PME polish it is core (`T.sameAt`), with the same frames. `narrow.noteKept` keeps the second associate's note. `narrow.paperFull` keeps the handed-in claims in full, with the label running into the text from beat 7. Answer segments in the AI's words take the answer's size, 13.5 px (the draft's 15 px class no longer leaks into them).
 - Core fixes for papers of any length: the second paper ends where the cut starts, and its sheet height and last-line dot position follow its line count. PME has five lines, so it draws the same.
@@ -54,8 +55,8 @@ Open it with `index.html?edition=business`, or with the "See this with: Workplac
 | 6 · Receives | The partner receives two identical drafts, made with AI. | "WHAT THE PARTNER RECEIVES"; the first associate's own-work cell is empty |
 | 7 · Drafts aside | Without the drafts, both explain the claims clearly. | "THE PARTNER ASKS"; "Reading through clothing. No earlier device does it." / "Reading through clothing. No one has done that before." |
 | 8 · Change one fact | Change one fact. | "What if an older patent covers / reading through clothing?" |
-| 9 · The answers | One associate takes the draft's fallback, the other the sensor. | "Then lead with the battery design." / "Then lead with the sensor that adjusts to each fabric." |
-| 10 · The fact decides | But the older patent covers the battery too. | **New:** "It covers the battery too." under the changed fact |
+| 9 · The answers | Both drafts list the sensor. Only the second associate knows it's new. | "Then lead with the battery design." / "Then lead with the sensor that adjusts to each fabric." |
+| 10 · The fact decides | But the older patent covers the battery too. | **New:** "The partner adds: “It covers the battery too.”" under the answers, at their size; "the battery design" struck through in ink |
 | 11 · The colours | The colours show whose words these are. | **New beat:** AI words go grey on the band (all of the first associate's first answer, and "the battery design"); own words go red; the draft's matching words are underlined for 2.6 s |
 | 12 · Check | Partner's check: Can the associate explain the call plainly, without the draft? / Then change one fact. What would you recommend now? | The source line, right of the key |
 
@@ -66,7 +67,13 @@ Open it with `index.html?edition=business`, or with the "See this with: Workplac
 
 ## 5. Verified figures (for the companion's source spine)
 
-All checked in the full paper text (revised October 2026); cold read 2 rechecked them against the NBER PDF:
+All checked in the full paper text (revised October 2026); cold read 2 rechecked them against the NBER PDF. **For the next spine update** (the classroom light read found these missing from `sources/source-spine.md`), the page references for the effect sizes:
+- 0.34 SD (p = 0.03) at 10 days and 0.38 SD (p = 0.01) at 90 days: abstract and p. 2 ("Lawyers provided with AI access outperformed controls by 0.34 SD at 10 days (p = 0.03) and 0.38 SD at 90 days (p = 0.01)").
+- 0.32 SD (p = 0.04) overall on the unassisted redline: abstract, p. 2 and p. 20 ("Treated subjects outperform controls on the redlining task by 0.32 SD overall (p = 0.04, column 2)").
+- 0.45 SD (p = 0.02) for seniors: abstract and p. 20 ("senior lawyers, whose work quality improved by 0.45 SD (p = 0.02)").
+- "All firms in the experiment have ongoing patent-drafting relationships with Google LLC" (p. 1).
+
+The quotes on the page:
 - "133 practicing patent lawyers at eleven U.S. intellectual property law firms" (abstract); "91 of whom completed the full protocol" (p. 1).
 - "AI access raised the quality of work delivered on benchmark patent drafting tasks at 10 days (0.34 SD, p = 0.03) and 90 days (0.38 SD, p = 0.01), with larger gains among junior lawyers." (abstract)
 - "Treated lawyers outperformed controls by 0.32 SD (p = 0.04), but this advantage was concentrated entirely among senior lawyers (0.45 SD, p = 0.02). Junior lawyers showed no average gain. Their scores instead bifurcated, …" (abstract)
@@ -94,14 +101,14 @@ Reading is words ÷ 3 s, plus a 1.5 s hold. The PME rule, a beat at least twice 
 | 6 | 9 | 4.5 | 6.0 | 6.0 | Yes (exactly) |
 | 7 | 8 | 4.2 | 5.3 | 14.5 | Yes |
 | 8 | 3 | 2.5 | 2.0 | 6.5 | Yes |
-| 9 | 10 | 4.8 | 6.7 | 6.7 | Yes (exactly) |
+| 9 | 12 | 5.5 | 8.0 | 8.0 | Yes (exactly) |
 | 10 | 8 | 4.2 | 5.3 | 5.6 | Yes |
 | 11 | 7 | 3.8 | 4.7 | 5.6 | Yes |
 | 12 | 10 (check) + 9 (follow-up) | check read by 3.3 s; follow-up at 3.5 s | — | 7.2 | Yes |
 
 **On-screen text with new words:**
 - Beat 4's note (15 words) is written 27.3–29.3 s and stays full size until 33.0 s.
-- Beat 9's answers (6 + 10 words) are typed 71.4–74.2 s. The partner's added line (5 words) arrives at 77.5 s and is read, with its hold, by 80.7 s. The colours come at 83.3 s, 5.8 s later.
+- Beat 9's answers (6 + 10 words) are typed 71.4–74.2 s. The partner's added line (8 words) and the strike arrive at 78.8 s, and the line is read, with its hold, by 83.0 s. The colours come at 84.6 s.
 
 ## 7. Checks (October 28, round 3)
 
@@ -121,7 +128,7 @@ Reading is words ÷ 3 s, plus a 1.5 s hold. The PME rule, a beat at least twice 
 ## 8. Open points for Jack
 
 - **Role words.** Done: "associate" and "the partner" are now `castOverrides.workplace` (see "Classroom cast").
-- **Run time.** The changed fact's second line and the captioned colour beat bring the business edition to 1:38, against 1:31 for PME.
+- **Run time.** The changed fact's second line, the captioned colour beat and the longer caption 9 bring the business edition to 1:40, against 1:31 for PME.
 
 ## Classroom cast (CLASSROOM-PLAN.md §2)
 
@@ -141,6 +148,15 @@ The business edition in two more casts, through data in `editions/business.json`
 - **Screen-reader summary:** the class framing, "The course allows AI, and its use is disclosed", and the partner's line as "one more line from the instructor".
 - **Study framing, kept at the top of the evidence.** Paragraph 1 adds: "The participants were practising lawyers; no students took part. Tested without AI after three months, senior lawyers gained, and junior lawyers split, with more poor and more good scores (below)." Paragraph 6 opens "The figure's two students show one way such a split could arise in a class. The study's participants were practising lawyers, and its tested results are scores", and ends "is an illustration; the study didn't test it". The source line lists the course among the constructed parts.
 
+**Light-read fixes** (`tests/classroom-light-read.md`, October 30; the high-school verdict was ship):
+- **The hinge** (all casts; see section 2): the reviewer's line at the answers' size, the struck fallback, and caption 9's "Both drafts list the sensor. Only the second student knows it's new."
+- **The check, for the assignment** (classroom and high school): "Can the student explain their claims plainly, without the draft?" and "Then change one fact. What would they claim now?" (caption 12, the beat list, the check card and the page's check lines). Workplace keeps "explain the call" and "recommend now".
+- **High school, plainer words:**
+  - The draft reads "Main claim: reading through clothing, since no earlier device does it. Second claim: the sensor's fabric adjustment. Backup claim: the battery design." It is patched segment by segment (`paper.lines`), so the four lines, the bands and the highlighted words keep their places.
+  - The setup adds "A claim has to be new: no earlier device does it."
+  - The summary says "backup claim".
+  - The study box is rewritten for teens in plain words, with the same facts: 133 lawyers at eleven firms; 91 finished; graders who didn't know who had the tool; no students; experienced lawyers gained and newer lawyers split, at the top; drafts scored higher with AI at 10 and 90 days; newer lawyers, under seven years, split; the 15 tests with signs of AI use; the limits; Google; and the figure as one possible way, untested. It drops the SD and p values and the jargon ("redlines", "bifurcated", "conventional significance"). The source citation stays as it is.
+
 **Words that differ from workplace** (classroom / high school):
 
 | Where | Classroom | High school |
@@ -148,18 +164,20 @@ The business edition in two more casts, through data in `editions/business.json`
 | Caption 1 | A student in an invention course drafts patent claims. | …invention class… |
 | Captions 2–4, 9 | The student… / A second student… / One student takes the draft's fallback, the other the sensor. | same |
 | Caption 6 | The instructor receives two identical drafts, made with AI. | The teacher receives… |
-| Caption 12 | Instructor’s check: Can the student explain the call plainly, without the draft? | Teacher’s check: … |
+| Caption 9 | Both drafts list the sensor. Only the second student knows it's new. | same |
+| Caption 12 | Instructor’s check: Can the student explain their claims plainly, without the draft? / Then change one fact. What would they claim now? | Teacher’s check: … |
 | Picture | Student / First student / Second student, SECOND STUDENT'S NOTE, THE INSTRUCTOR RECEIVES, THE INSTRUCTOR ASKS, STUDENT'S OWN WORK; task card "…what does the inventor's / wearable protect?" | THE TEACHER RECEIVES, THE TEACHER ASKS |
 | Phone | Second student's note, not handed in; The instructor asks; Student's own work | The teacher asks |
 
 **Checks** (October 30):
 - `edition-check` passes for all four casts it resolves (seminar for PME; workplace, classroom and high school for business).
+- **Hinge fix, before and after** (same runtime, page copy below the figure hidden): workplace frames change only from 74.0 s (beat 9's caption) to the end, at 1440 × 900, 1280 × 720 and 390 × 844, plus the page, print and reduced captures. PME is 206/206 identical. Baselines re-captured.
 - Workplace frame-diffs 230/230 and PME 206/206 identical with the switch hidden. Baselines: `regression/baseline` (PME), `baseline-business`, `baseline-business-classroom` and `baseline-business-high-school`, all with `--freeze`.
 - **Pacing** (words ÷ 3 + 1.5 s, and a beat at least twice the reading time): every caption passes in both casts. Picture and phone texts are the workplace ones with role words swapped.
 - **Layout,** in both casts:
   - drawn picture at 1440 × 900, 1366 × 657 and 1280 × 720, labels at 14.1, 11.1 and 12.6 px;
   - player 846, 640 and 703 px, with no control travel;
-  - phone player 842 px at 390 × 844;
+  - phone player 842 px at 390 × 844 in all three casts;
   - no horizontal scroll and no console errors.
 - Voice check (writing-as-jack), on all page copy in all three casts: passes, except the verbatim essay quote in the check note ("revises under challenge rather than retreating to the artifact's language"), which stays as quoted. Two workplace lines were reworded for it: beat 6's detail quotes the row label as "Their own work / not handed in", and the evidence ends "is an illustration; the study didn't test it." Figure frames are unchanged (225/225; only page, print and reduced captures differ).
 - Stills and finals: `shots/business-classroom/` and `shots/business-high-school/` (beats, final, final-390, final-1366, final-1280, poster, player-390, reduced and page views).

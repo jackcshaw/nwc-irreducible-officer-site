@@ -127,8 +127,9 @@
 	const q2 = el(stage, 'g');
 	mono(q2, 16, 440, L.q2.label);
 	L.q2.lines.forEach((s, i) => serif(q2, 16, 461 + 20 * i, s, {fs: 16, style: 'italic'}));
-	// Optional (business): what the reviewer adds once both have answered (labels.q2.more).
-	const q2More = L.q2.more ? serif(stage, 16, 461 + 20 * L.q2.lines.length, L.q2.more, {fs: 16, style: 'italic'}) : null;
+	// Optional (business): what the reviewer adds once both have answered (labels.q2.more), set
+	// at the answers' size in a strip between the answers and the key.
+	const q2More = L.q2.more ? serif(stage, COL.a + 2, 503, L.q2.more, {fs: PANEL.fs}) : null;
 	// The key: its grey half arrives with the first AI text, its red half with the first red mark.
 	const keyGrey = el(stage, 'g');
 	el(keyGrey, 'rect', {x: COL.a, y: 513, width: 18, height: 12, rx: 2, fill: C.band, stroke: C.grey, 'stroke-width': 1});
@@ -231,6 +232,7 @@
 	let dotAAt = () => DOT_A.start, dotBAt = () => DOT_B.head;
 	const world = (pos, s, lx, ly) => ({x: pos.x + s * lx, y: pos.y + s * ly});
 	let cutStart = {x: 0, y: 0}, cutLen = [0, 0], noteW = [], ready = false;
+	const fallbackStrikes = [];
 
 	function measure() {
 		const probe = serif(stage, 0, -100, '', {fs: P.fs});
@@ -293,6 +295,20 @@
 			});
 			p.clip.rects.forEach((r) => set(r, {x: p.x + PANEL.padX - 4}));
 		}
+		// Optional (business): once the reviewer's line says the fallback is covered too, the
+		// first person's AI words in that answer are struck through in ink.
+		if (q2More) panels.a2.lines.forEach((l, i) => {
+			let idx = 0;
+			l.parts.forEach((pt) => {
+				const off = idx ? l.node.getSubStringLength(0, idx) : 0;
+				const w = l.node.getSubStringLength(idx, pt.str.length);
+				idx += pt.str.length;
+				if (pt.k !== 'ai') return;
+				const y = ROWS.q2.top + PANEL.base[i] - 4.5;
+				const x = panels.a2.x + PANEL.padX + off;
+				fallbackStrikes.push(el(panels.a2.g, 'line', {x1: x, x2: x + w, y1: y, y2: y, stroke: C.ink, 'stroke-width': 2, opacity: 0}));
+			});
+		});
 
 		// The first student's dot: in, read each line, strike, rest, then up to its column.
 		const segA = [];
@@ -470,6 +486,7 @@
 		rise(q1, T.q1);
 		rise(q2, T.q2);
 		if (q2More) rise(q2More, T.fact2);
+		fallbackStrikes.forEach((l) => set(l, {opacity: prog(t, ...T.fact2)}));
 
 		// Answers: the panel opens, then the words arrive at speaking pace, in ink.
 		// After the changed fact (beat 9), all four take their origin colours.
@@ -616,6 +633,8 @@
 					if (!pt.k) return;
 					pt.node.style.color = mixColor(C.ink, pt.k === 'ai' ? C.grey : C.red, rv);
 					pt.node.style.backgroundColor = pt.k === 'ai' ? `rgba(222, 213, 196, ${rv.toFixed(3)})` : 'transparent';
+					// Optional (business): the fallback, covered too, is struck through with the reviewer's line.
+					if (q === 'q2' && i === 0 && N.q2.more && pt.k === 'ai') pt.node.classList.toggle('fs-n-x', t >= T.fact2[0]);
 				});
 			});
 		}
