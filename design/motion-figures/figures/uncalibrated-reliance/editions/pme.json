@@ -150,7 +150,8 @@
   "dot": {
    "a": "{Person}",
    "a2": "{first}",
-   "b": "{second}"
+   "b": "{second}",
+   "keepB": true
   },
   "panel": {
    "title": "Right answers on a task outside the jagged frontier",

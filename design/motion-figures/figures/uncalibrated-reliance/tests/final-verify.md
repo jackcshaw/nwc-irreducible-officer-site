@@ -152,3 +152,10 @@ Not on UR's list. The workplace captions and check render as in `storyboard-busi
   - The check and its second line are at full opacity.
   - All 11 "On screen" lines are visible.
   - The visible picture text equals the `seek(duration)` frame: none missing, none extra.
+
+## Fixes after this verification (October 30)
+
+1. **PME dot label (defect 1).** `editions/pme.json` sets `labels.dot.keepB`, as the other three versions do, so "Second student" stays by the second dot's home until the names appear. Sampled every 0.1 s at 1440×900, 1280×720 and 1366×657 it is up 34.4–62.6 s (the study panel dims it) and again from 72.1 s, handing off to the final names: the same spans as classroom and workplace. The only touch is a 0.1 s crossfade at 76.4 s with the speech panel arriving, as in the other versions. Frame diff against HEAD: only 1440×900 and 1280×720, t = 36–76 s, changed; 390×844, reduced and print are identical.
+2. **The study's sample (defect 2), classroom and high school.** The setup says "a study of entrepreneurs in Kenya"; evidence paragraph 2 says "The entrepreneurs used the assistant for their own small businesses.", which matches paragraphs 1 and 4; the panel heading is "A REAL STUDY OF ENTREPRENEURS" (picture, phone label, beat 8's "On screen" line and the summary to match). "Small-business owners" was the brief's example, but `edition-check` flags "owners" in a classroom patch outside its allowlist, so the heading uses the study's own word. It fits: the heading ends at x = 386 in the 760-wide panel, and the phone label is one line at 390. The workplace edition never described the sample as shop owners or as advising, so it is unchanged (frame diff: 209/209 identical). Classroom and high-school frame diffs: only t = 64–72 s at all three sizes, plus the page, reduced and print stills (page copy and the beat list).
+
+`regression/baseline`, `baseline-business-classroom` and `baseline-business-high-school` were recaptured.

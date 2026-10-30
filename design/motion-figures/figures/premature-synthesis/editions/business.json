@@ -348,7 +348,7 @@
    "Can they say why these connections matter?",
    "Point to one: what would make it fail?"
   ],
-  "checkFollow": "Both {people} can sketch the design. The second question separates them: {The_person} who asked how it works, then hit the bug and fixed it, can name what would make one connection fail and what that breaks.",
+  "checkFollow": "Both {people} can sketch the design. The second question separates them: {the_person} who asked how it works, then hit the bug and fixed it, can name what would make one connection fail and what that breaks.",
   "evidenceHeading": "The study behind this example",
   "evidence": [
    "Judy Hanwen Shen and Alex Tamkin at Anthropic ran a randomized experiment with 52 developers recruited online, most of them professional or freelance programmers: 29 had seven or more years of coding experience, 19 had four to six, and 4 had one to three. They were learning \"a new asynchronous programming library\", Trio. Each had up to 35 minutes for two short tasks, one of them a function that handles missing-record errors, then took a quiz on the library.",

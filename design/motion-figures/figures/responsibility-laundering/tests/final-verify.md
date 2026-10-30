@@ -105,3 +105,12 @@ In the final-frame screenshots at both laptop sizes, the plate, both copies, the
 ## Defects
 
 1. **The meta description loses the definition in every version once JavaScript runs.** `page.description` in `editions/pme.json` and `editions/business.json` replaces the static tag (item 1).
+
+## Fix after this verification (October 30)
+
+**Meta description (defect 1).** `page.description` now starts with the definition, then says what the figure shows, in each version's words:
+- PME (`editions/pme.json`): "The model’s recommendation makes responsibility feel shared, or easier to defend. A teaching figure: two students sign the same AI draft, and faculty ask each why they relied on its estimate."
+- Workplace, classroom, high school (`editions/business.json`, one string with cast keys; no `byCast` override exists): "…Two analysts (students) sign the same AI draft, and the manager (the instructor, the teacher) asks each why they relied on its estimate."
+- The static fallback in `index.html` now carries the definition word for word too: "The model’s recommendation makes responsibility feel shared, or easier to defend. Asking why each signer relied on the AI’s estimate shows who can account for it."
+
+Checked live in all four versions and with JavaScript off. Frame diff against HEAD: identical in all four versions (209/209 PME, 212/212 each business cast).

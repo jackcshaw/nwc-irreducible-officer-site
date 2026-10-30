@@ -250,7 +250,7 @@ The business edition in two more casts, through data in `editions/business.json`
 - **What the check does in class.** The reviewer knows the case, so the first plan's discount may already look off. In class, the check diagnoses rather than detects. The page says so in the check's follow-up: "The question shows why it went in: Part 1 was checked, and Part 2 was trusted because Part 1 checked out."
 - The second student's answer is "The shop's records. Rush customers left." It's 6 words, under the 7-word budget, and it claims only what the records show. Blackouts were the owner's own knowledge in the workplace version, so they're dropped here.
 
-**The study stays the study's.** The panel heading becomes "A REAL STUDY OF SHOP OWNERS" ("A real study of shop owners" on the phone). The key line still reads "…which AI advice owners acted on". Both name the study's people, and the setup and the evidence paragraph add that no students took part. The business sensitivity rules hold: no weak or strong labels on people, and Nairobi stays matter-of-fact.
+**The study stays the study's.** The panel heading becomes "A REAL STUDY OF ENTREPRENEURS" ("A real study of entrepreneurs" on the phone; it was "shop owners" until the final verification, which found the sample described wrongly). The key line still reads "…which AI advice owners acted on". Both name the study's people, and the setup and the evidence paragraph add that no students took part. The business sensitivity rules hold: no weak or strong labels on people, and Nairobi stays matter-of-fact.
 
 **Role conversion.**
 - The 55 literals that `edition-check` flagged are now keys:
@@ -270,7 +270,7 @@ The business edition in two more casts, through data in `editions/business.json`
 - the records callout heading, "SHOP'S SALES";
 - the phone's Part 1 line, "Part 1 · Printing in blackouts.", which keeps the phone player at 841 px;
 - the check follow-up;
-- evidence paragraphs 2 and 4 ("median entrepreneur");
+- evidence paragraphs 2 and 4: the study's entrepreneurs "used the assistant for their own small businesses", and the "median entrepreneur";
 - the screen-reader summary.
 
 **Words that differ from workplace** (the classroom and high-school wording is the same except for role words):
@@ -281,8 +281,8 @@ The business edition in two more casts, through data in `editions/business.json`
 | Captions 3, 5, 6 | The student checks… / Another student… / That student… |
 | Caption 9 | The instructor (The teacher), who sees only the plans, points to each part and asks what justified relying on it. |
 | Caption 10 | Instructor's check (Teacher's check): What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part? |
-| Picture | FIRST/SECOND STUDENT'S PLAN, Student, First/Second student, THE INSTRUCTOR (TEACHER) SEES ONLY THE PLANS, A STUDENT'S OWN WORK, SHOP'S SALES, A REAL STUDY OF SHOP OWNERS, "The shop's records. Rush customers left." |
-| Setup | "In a business class, the instructor (teacher) gives every student the same case packet… The class allows AI, and the students say they used it… a study of shop owners in Kenya. No students took part in it…" |
+| Picture | FIRST/SECOND STUDENT'S PLAN, Student, First/Second student, THE INSTRUCTOR (TEACHER) SEES ONLY THE PLANS, A STUDENT'S OWN WORK, SHOP'S SALES, A REAL STUDY OF ENTREPRENEURS, "The shop's records. Rush customers left." |
+| Setup | "In a business class, the instructor (teacher) gives every student the same case packet… The class allows AI, and the students say they used it… a study of entrepreneurs in Kenya. No students took part in it…" |
 
 **Pace** (caption words ÷ 3 + 1.5 s, figure clock):
 

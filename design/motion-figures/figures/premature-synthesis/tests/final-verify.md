@@ -132,3 +132,7 @@ Every page reads "See this with: Workplace · Classroom · PME".
   - `is-reduced` is set, and the time reads 1:33 / 1:33.
   - The caption carries the name, definition, check and follow-up (follow-up at opacity 1).
   - The picture and stacked text match the seek-drawn final frame exactly.
+
+## Fix after this verification (October 30)
+
+**Copy nit.** The check follow-up in `editions/business.json` now reads "The second question separates them: the engineer (student) who asked how it works…", lower case after the colon, in workplace, classroom and high school (one string serves all three). PME has no colon there. Frame diff against HEAD: only the full-page stills changed (`page-1440`, `page-390`); every figure frame, reduced and print still is identical. `regression/baseline-business`, `-classroom` and `-high-school` were recaptured.
