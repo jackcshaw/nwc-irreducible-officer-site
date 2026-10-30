@@ -142,3 +142,47 @@ Layout: at 1440 × 900 and 1280 × 720 the picture is drawn, every label at 11.1
 - The first engineer asks the AI no follow-up questions (AI Delegation), and the dot doesn't trace the AI's lines, so nothing reads as reviewing the code. The second asks only how it works, and the AI writes none of their code (Conceptual Inquiry).
 - The business page is fully business: no PME-only links; the essay is linked as "The original essay, written for military education".
 - The two code thumbnails in the strip (beat 7 on) are decoration. At 1280 × 720 their titles fall under 11 px and the runtime hides them; nothing depends on reading them, because the header "What the tech lead reviews · The same code" carries the point.
+
+## Classroom cast (CLASSROOM-PLAN.md §3)
+
+The business edition in two more casts, through data in `editions/business.json`: `casts: ["workplace", "classroom", "high-school"]`, `castOverrides` and `byCast`. The scenario, timeline, picture, answers and evidence numbers stay as built and cold-read. Open it with `?edition=business&cast=classroom` (higher ed: "faculty", "Faculty check") or `&cast=high-school` ("the teacher", "Teacher's check").
+
+**Role conversion.** The 55 literal role words are now keys. `castOverrides.workplace` carries the engineer and tech-lead words for 18 existing keys: `person`, `Person`, `people`, `first`, `second`, `A_person`, `a_person`, `A_second`, `That_person`, `The_person`, `the_person`, `the_first`, `reviewer`, `Reviewer`, `receive` ("What the tech lead reviews"), `reviewer_ask`, `then_ask` and `reviewer_points`. The workplace edition resolves to the same strings as before, checked string for string with the runtime's `resolveEdition`, and frame-diffs 206/206 identical. The only visible change is the switch's new Classroom link.
+
+**`byCast` patches** (18 for classroom; high school is the same set with "class" for "course"):
+- Five strings need a capitalised "Each …", "The first …" or "The second …" that no key gives. They are patched with `{person}` inside: the details of beats 7, 8 and 9, caption 9 and the screen-reader summary. The summary's patch also gives the question a form both reviewer numbers fit ("Faculty point… : what would make that fail?").
+- **Class words:** "In class, code closed" for "In review, code closed" (label, phone rows, beat 7 detail, summary). "Hands in" replaces "ships" (captions 3 and 6, the first row's sequence "READ → AI WRITES → HANDS IN", phone order, summary).
+- **Caption 1:** "A student in a programming course (class) must build a feature with a new library." It has 14 words, read in 6.2 s within the 6.8 s beat.
+- **Setup:** "Two students in a programming course (class) get the same docs and the same time limit to build a feature with a library new to them. The course (class) allows AI, and both say they used it. … Illustration based on Shen & Tamkin (2026), a study of developers learning a new library; the students, the course and the task are constructed."
+- **Description** and **edition note:** "A classroom example: two students hand in the same code…"; "Classroom edition. PME is the example from the original essay, linked below."
+- **Study framing.** The page never calls the study's participants students.
+  - Paragraph 1 adds: "The study's participants were working developers; the students in the figure are constructed." Table 1 shows 29 of 52 with seven or more years.
+  - Paragraph 2 brings forward the two limits that keep the page from reading as "AI harms learning". The top group also had the AI write code, then asked how it worked (Generation-Then-Comprehension, quoted below it). And the authors' incentive limit, quoted: "there was not the same incentive to learn the library as if it were required for their actual job."
+  - The limits paragraph then points back to it, and calls the figure's question "in class" constructed.
+- **Phone paper tags:** "Main: 2–5. Also 3–4–5 and 1–4–6." (as PME). The workplace string, "Main: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6", counts as 10 words and shows for 4.7 s against 4.8 s needed. It is left unchanged because workplace must stay identical; flagged.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Caption 1 | A student in a programming course must build a feature with a new library. | …programming class… |
+| Captions 2, 4, 5 | The student… / A second student… / That student… | same |
+| Captions 3, 6 | …the student hands it in as written. / That student hands in the same code, within the same time limit. | same |
+| Caption 8 | Faculty ask what would make the main connection fail. | The teacher asks… |
+| Caption 9 | The second student applies the rule, from the bug they fixed. | same |
+| Caption 10 | Faculty check: … | Teacher's check: … |
+| Picture | Student / Second student, FIRST (SECOND) STUDENT'S CODE, WHAT FACULTY RECEIVE, IN CLASS, CODE CLOSED, THEN THEY ASK, READ → AI WRITES → HANDS IN | WHAT THE TEACHER RECEIVES, THEN THE TEACHER ASKS |
+| Phone | Faculty point to 2–5; What faculty receive · the same code; In class, code closed: sketch it | The teacher points to 2–5; What the teacher receives… |
+
+**The switch:** "Workplace · Classroom · PME". `data-cast-link="classroom"`, and high school counts as a Classroom variant (the runtime's cast families).
+
+**Checks** (October 30):
+- `edition-check` passes for all three casts.
+- PME and workplace frame-diff 206/206 identical with the old switch line. With the new switch, only the switch differs.
+- The classroom and high-school stills are in `shots/business-classroom/` and `shots/business-high-school/`.
+- **Pacing** (words ÷ 3 + 1.5 s): every caption and every text that leaves early passes at 1440 × 900, 1366 × 657, 1280 × 720 and 390 × 844, in both casts.
+- **Layout:**
+  - The picture is drawn at 1440 × 900 and 1280 × 720, with labels at 11 px or more.
+  - The phone stage peaks at 462 of 466 px, with no horizontal scroll.
+  - At 1366 × 657 the stage is stacked and the 698 px player doesn't fit, so autoplay waits. Workplace does the same (pre-existing). The PME laptop band (`laptop: true`) would fix it, but would change workplace frames at short laptop sizes; flagged for a decision.
+- **Proposed keys for `casts.json`:** `Each_person`, `The_first`, `the_second` and `The_second` ("Each student", "The first student", "the second student", "The second student"; workplace "Each analyst" …). With them, the five role patches above become keys.
