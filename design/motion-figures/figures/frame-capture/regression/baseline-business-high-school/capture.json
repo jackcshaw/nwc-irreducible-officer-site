@@ -2,7 +2,7 @@
  "slug": "frame-capture",
  "edition": "business",
  "cast": "high-school",
- "hide": "",
+ "hide": ".fig-editions,.fig-edition-note",
  "freeze": false,
  "sizes": [
   [

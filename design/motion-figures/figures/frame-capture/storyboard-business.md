@@ -264,7 +264,19 @@ The picture's new texts keep workplace's word counts or fewer. For example, "THE
 - `shots/business-classroom/` and `shots/business-high-school/`, each with a still per beat, `final.png`, `final-1440.png`, `final-390.png`, and reduced and page views.
 - Previews: `shots/frame-capture-business-classroom.mp4` and `shots/frame-capture-business-high-school.mp4`, plus `.webm` and `.gif`.
 
-## 8. Questions for Jack
+## 8. PME polish pass (October 30)
+
+- **Beat 3, in every edition** (core).
+  - The AI's copy of the task now appears at the top of the frame, instead of flying from the card over a consideration.
+  - Then one change at a time: unkept words fade (core 17.7–18.1), kept words slide (18.1–18.5), and added words appear (18.5–18.9).
+  - The new title keeps the screen 3.2 s before the headings move in (21.7–22.4). Nothing overlaps.
+  - The business captions are unchanged; the classroom casts' caption 3 already names the change.
+  - Frame-diff, before against after: only beat 3's frames changed (player 12.6–21.6), plus the page, reduced and print shots, whose beat lists now say the copy "appears". That holds for PME, workplace, classroom and high school.
+  - Outside beat 3, the classroom casts show 9–27 pixels at one or two levels in their last beats. Fresh single-frame captures of those moments are identical before and after, so that's the long capture's paint history, not a change.
+- **Laptop windows:** see storyboard.md. At 1366 × 657 the picture now shows in every edition (13-unit labels at 11.0 px), through a 100 px caption band on short windows 1200 px or wider. 1280 × 720 already showed it (11.1 px).
+- **Baselines** (switch hidden): `regression/baseline-pme`, `baseline-business-nosw`, `baseline-business-classroom` and `baseline-business-high-school`. `baseline-pre-editions` is historical: its beat 3 is the old motion.
+
+## 9. Questions for Jack
 
 1. The payoff and its evidence exception (check, condition holds, frame changes): confirm it is the faithful variant.
 2. The four unverified passages (section 1) need a check against the published full text before they return to the page or reach the source spine.

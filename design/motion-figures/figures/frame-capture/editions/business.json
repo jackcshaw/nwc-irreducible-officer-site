@@ -182,7 +182,7 @@
   },
   {
    "text": "{The_person} asks an AI. It proposes a reasonable, narrower frame.",
-   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task question moves into the frame; \"need\" and \"help from the program\" fade, and \"cost\" appears, so it reads \"Which patients cost the most?\" Next year's costs and the program budget slide inside as grey headings.",
+   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task question appears in the frame; \"need\" and \"help from the program\" fade, and \"cost\" appears, so it reads \"Which patients cost the most?\" Next year's costs and the program budget slide inside as grey headings.",
    "core": 14.0
   },
   {

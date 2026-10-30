@@ -21,8 +21,11 @@
 		card: [1.0, 1.6], dotIn: 1.6,
 		chips: 7.0, chipStep: 0.45, chipDur: 0.35,
 		pulse: [15.0, 15.4], snap: 15.5, tag: [16.2, 16.5],
-		travel: [17.7, 18.5], fade: [18.5, 18.9], slide: [18.9, 19.2], deter: [19.2, 19.5],
-		heads: [20.8, 21.5],
+		// Beat 3 (polish pass): the AI's copy of the task appears in the frame (no flight over the
+		// card and chips), then one change at a time: unkept words fade, kept words slide, added
+		// words appear. The new title keeps the screen 3.2 s before the headings move in.
+		travel: [16.8, 17.2], fade: [17.7, 18.1], slide: [18.1, 18.5], deter: [18.5, 18.9],
+		heads: [21.7, 22.4],
 		labelOut: [24.0, 24.3], enter: [24.0, 24.8],
 		push: [25.0, 26.9], write: 27.1, row: 0.25,
 		d2: 32.0, chartHop: 34.1, chart: 34.35, conHop: 35.3, con: [35.5, 36.2],
@@ -509,9 +512,9 @@
 		set(hair, {x: r.x, y: r.y, width: r.w, height: r.h, opacity: fo});
 		set(tag, {opacity: prog(t, ...T.tag)});
 		if (ready) {
-			const tv = prog(t, ...T.travel, E.inOut);
-			const on = prog(t, T.travel[0], T.travel[0] + 0.15);
-			const ox = mix(684, TITLE.x, tv), oy = mix(68, 152, tv);
+			// The copy fades in where the title will be, in the task's own line breaks.
+			const on = prog(t, ...T.travel);
+			const ox = TITLE.x, oy = 152;
 			const fade = prog(t, ...T.fade), slide = prog(t, ...T.slide, E.inOut);
 			words.forEach((w) => {
 				let x = ox + w.x, y = oy + 22 * w.line, o = on;

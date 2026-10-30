@@ -93,7 +93,7 @@ Related:
 
 - *Beat 0, the name card (0.0–3.0 s player time).* "Frame capture", with "FAILURE MODE 1 OF 7" above it, sits large and centred over the stage for 2 s. Over 1 s it then moves and shrinks into the top-left corner. The caption band stays quiet. Before play, the waiting view shows this card over the poster.
 - *The plate.* "FRAME CAPTURE · 1 OF 7" stays in a reserved 23 px strip above the stage's top-left corner in every beat and view: drawn stage, stacked stage, reduced motion, print, stills and video. Because the strip is reserved, it never covers the picture.
-- *Final frame.* The caption band reads "FRAME CAPTURE: The first plausible frame becomes the working frame, unexamined." (the role-neutral definition Jack approved, from `../../NAMEPLATE-DEFINITIONS.md`), then "FACULTY CHECK" beside the question, then the follow-up. Labels sit on the left and words on the right, so the band grows only 8 px on desktop. Frame capture keeps its drawn stage at 1280 × 720 (13-unit text renders at 11.1 px).
+- *Final frame.* The caption band reads "FRAME CAPTURE: The first plausible frame becomes the working frame, unexamined." (the role-neutral definition Jack approved, from `../../NAMEPLATE-DEFINITIONS.md`), then "FACULTY CHECK" beside the question, then the follow-up. Labels sit on the left and words on the right, so the band grows only 8 px on desktop. Frame capture keeps its drawn stage at 1280 × 720 (13-unit text renders at 11.1 px). Since the polish pass (October 30) it also keeps it at 1366 × 657 (11.0 px). Short windows 1200 px or wider (716 px tall or less) get a 100 px caption band with the check at 20 px and a 168 px `--mf-chrome`, as UR and AR do. Taller windows, and so the frame-diff sizes, don't change.
 - *Timing.* The figure's own clock is unchanged; the player adds the 3.0 s card, so the total is 89.2 s. Section 4 gives figure times; add 3.0 for player time, ?t= and the scrubber. The pacing table gives both.
 - *Phones.* The caption band holds 222 px (the check with the name and definition). Stacked beats 6 and 11 no longer repeat the task card (it stays in beats 1–3 and 7), so the player fits at 780 px on a 390 × 844 screen.
 
@@ -209,14 +209,16 @@ Times in this section are the figure's own clock. The player adds the 3.0 s name
   1. 15.0–15.4: the red dot pulses once. The student asks.
   2. 15.5–16.2: grey brackets spring tight around the open space (x 140–510, y 130–410), with the hairline. The student is just outside.
   3. 16.2–16.5: the tag "AI'S FRAME" fades in.
-  4. 17.7–18.5: a grey copy of the task sentence lifts off the card, which stays as it is, and travels to the top of the frame.
-  5. 18.5–19.5: the copy narrows. Every word except "adversary" fades, the possessive included. "Adversary" slides to the end of the title line, and "Deter the" fades in in front of it on a grey band.
-  6. 19.5–20.8: "Deter the adversary" holds alone.
-  7. 20.8–21.5: Adversary's intent and Allies' interests slide into the frame as headings, shrinking to 85% and turning solid grey.
-  8. 21.5–23.0: hold.
-- **Caption:** "The student asks an AI. It proposes a reasonable, narrower frame."
-- **Notice:** the frame is labelled as the AI's first. Then "a response" visibly shrinks to "Deter the adversary", and the frame takes in two of the six.
-- **Why:** this is the moment the first plausible frame arrives. The narrowing starts 3.7 s in, after the caption can be read once, and holds before anything else moves.
+  4. 16.8–17.2: a grey copy of the task sentence appears at the top of the frame, in the card's own line breaks. The card stays as it is. (Polish pass, October 30: the copy used to fly from the card and briefly overprint the card and a consideration.)
+  5. 17.7–18.1: every word except "adversary" fades, the possessive included.
+  6. 18.1–18.5: "Adversary" slides to the end of the title line.
+  7. 18.5–18.9: "Deter the" fades in in front of it, on a grey band.
+  8. 18.9–21.7: "Deter the adversary" holds alone for its reading time (it is new from 18.5).
+  9. 21.7–22.4: Adversary's intent and Allies' interests slide into the frame as headings, shrinking to 85% and turning solid grey.
+  10. 22.4–23.0: hold.
+- **Caption:** "The student asks an AI. It narrows the task to deterrence: reasonable, but narrower." It is 13 words, so 4.3 s of reading, 8.7 s at twice that, and it names the change the picture makes.
+- **Notice:** the frame is labelled as the AI's first. Then "a response" visibly shrinks to "Deter the adversary", one change at a time with no overlapping text, and the frame takes in two of the six.
+- **Why:** this is the moment the first plausible frame arrives. The change starts 3.7 s in, after the caption can be read once. The new title keeps the screen 3.2 s before anything else moves.
 
 ### Beat 4 · 23.0–31.0 s · The student takes it up
 
@@ -358,7 +360,7 @@ A student asks an AI for help with a strategy paper, and the AI proposes a reaso
 0. **Frame capture · Failure mode 1 of 7.** *On screen:* the name, "Frame capture", appears large over the stage with "Failure mode 1 of 7" above it, then moves into the top-left corner, where it stays.
 1. **A student gets an open strategy task.** *On screen:* a task card appears at the top right: "Example task: Recommend a response to an adversary's military buildup." A red dot labelled Student appears on the left.
 2. **Many things could matter. Framing means picking which ones define the problem.** *On screen:* six considerations appear one at a time in dashed outline, three above an open space and three below: past buildups, allies' interests, adversary's intent, domestic politics, room to negotiate, and economic pressure.
-3. **The student asks an AI. It proposes a reasonable, narrower frame.** *On screen:* the dot pulses. Grey corner brackets labelled "AI's frame" snap around the open space beside the student. A grey copy of the task sentence moves into the frame; every word fades except "adversary", and "Deter the" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings.
+3. **The student asks an AI. It narrows the task to deterrence: reasonable, but narrower.** *On screen:* the dot pulses. Grey corner brackets labelled "AI's frame" snap around the open space beside the student. A grey copy of the task sentence appears in the frame; every word fades except "adversary", and "Deter the" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings.
 4. **The student takes up the frame. Up close, it's all they see.** *On screen:* the dot steps into the frame. The view moves in until the frame fills it, and the dot writes a rough first draft in two columns under the AI's headings.
 5. **The student revises twice, adding evidence and a firmer conclusion.** *On screen:* the dot straightens the rows, then adds a chart and a conclusion across both columns. Red change bars mark each revision. The red label reads Student's draft 3.
 6. **Step back with us: every revision stayed inside the AI's frame.** *On screen:* the view pulls back to the whole picture while the dot stays where it is. The four dashed considerations sit where they were. Every red mark is inside the grey brackets.
@@ -389,7 +391,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 0 · The name card | player 0.0–3.0 | 0 | 0 | 0 | 5 (kicker, name) | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 | 3.0 |
 | 1 · The task | 0.0–6.0 | 7 | 2.3 | 4.7 | 11 | 1.0 | 1.0 | 4.0 | 6.0 |
 | 2 · Many things could matter | 6.0–14.0 | 12 | 4.0 | 8.0 | 13 | 1.0 | 2.6 | 4.4 | 8.0 |
-| 3 · A narrower frame | 14.0–23.0 | 11 | 3.7 | 7.3 | 5 | 1.0 | 6.5 | 1.5 | 9.0 |
+| 3 · A narrower frame | 14.0–23.0 | 13 | 4.3 | 8.7 | 5 | 1.0 | 5.2 | 2.8 | 9.0 |
 | 4 · The student takes it up | 23.0–31.0 | 12 | 4.0 | 8.0 | 3 | 1.0 | 5.1 | 1.9 | 8.0 |
 | 5 · Revisions | 31.0–38.0 | 10 | 3.3 | 6.7 | 2 | 1.0 | 4.2 | 1.8 | 7.0 |
 | 6 · Step back with us | 38.0–45.3 | 11 | 3.7 | 7.3 | 0 | 1.0 | 2.4 | 3.9 | 7.3 |
@@ -398,11 +400,11 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 9 · The same paper | 64.7–71.5 | 10 | 3.3 | 6.7 | 3 | 1.0 | 3.2 | 2.6 | 6.8 |
 | 10 · Ask each student | 71.5–79.5 | 12 | 4.0 | 8.0 | 9 | 1.0 | 4.0 | 3.0 | 8.0 |
 | 11 · Faculty check | 79.5–86.2 | 10 + 7 second line | 3.3 + 2.3 | 6.7 (check) | 0 | 0.0 | 4.1 | 2.6 | 6.7, then rests |
-| **Total** | | **130** | **43.3** | | **73** | | **49.7** | | **86.2 figure, 89.2 player** |
+| **Total** | | **132** | **44.0** | | **73** | | **48.4** | | **86.2 figure, 89.2 player** |
 
 Checks:
 - One idea per beat; movements run one after another.
-- Changes a caption names wait until it can be read once: the narrowing (beat 3, 3.7 s in), the wipe (beat 7, 4.7 s), hiding the weighing (beat 9, 3.3 s), the reveal (beat 10, 4.0 s) and the second line (beat 11, 3.4 s after the check). In beat 8 the claim (grey to red) comes 6.1 s in.
+- Changes a caption names wait until it can be read once: the narrowing (beat 3, 3.7 s in, one step at a time, then 3.2 s on the new title), the wipe (beat 7, 4.7 s), hiding the weighing (beat 9, 3.3 s), the reveal (beat 10, 4.0 s) and the second line (beat 11, 3.4 s after the check). In beat 8 the claim (grey to red) comes 6.1 s in.
 - Every hold is at least 1.5 s.
 - The camera moves are 1.9 s in, 2.4 s out and 2.2 s across, all eased and all under 2.5 s; reduced motion removes them.
 - Total 86.2 s on the figure's clock; 89.2 s in the player, with the name card.

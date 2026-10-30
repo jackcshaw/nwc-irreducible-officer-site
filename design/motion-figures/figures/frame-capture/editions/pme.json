@@ -81,8 +81,8 @@
    "detail": "six considerations appear one at a time in dashed outline, three above an open space and three below: past buildups, allies' interests, adversary's intent, domestic politics, room to negotiate, and economic pressure."
   },
   {
-   "text": "{The_person} asks an AI. It proposes a reasonable, narrower frame.",
-   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task sentence moves into the frame; every word fades except \"adversary\", and \"Deter the\" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings."
+   "text": "{The_person} asks an AI. It narrows the task to deterrence: reasonable, but narrower.",
+   "detail": "the dot pulses. Grey corner brackets labelled \"AI's frame\" snap around the open space beside the {person}. A grey copy of the task sentence appears in the frame; every word fades except \"adversary\", and \"Deter the\" appears in front of it. Adversary's intent and allies' interests slide inside as grey headings."
   },
   {
    "text": "{The_person} takes up the frame. Up close, it's all they see.",

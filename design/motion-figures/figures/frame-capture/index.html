@@ -14,6 +14,17 @@
    from the start, so the controls never move. */
 @media (max-width: 719px) { #frame-capture .mf-caption { min-height: 222px; } }
 @media (max-width: 480px) { #frame-capture .mf-check-q, #frame-capture .mf-follow.is-equal { font-size: 20px; } }
+/* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the 144 px
+   band the picture would letterbox under 11 px and give way to the stacked stage. Below 717 px
+   tall the band is 100 px with tighter padding and the check at 20 px, so the picture keeps
+   11 px labels: 657 − 168 − 31 = 458 px of stage (as UR and AR do). Taller windows, and so the
+   frame-diff sizes (1440 × 900, 1280 × 720), don't change. */
+@media (min-width: 1200px) and (max-height: 716px) {
+	#frame-capture.has-nameplate { --mf-chrome: 168px; --mf-plate: 31px; }
+	#frame-capture .mf-caption { height: 100px; min-height: 0; padding-top: 10px; padding-bottom: 10px; overflow: hidden; }
+	#frame-capture .mf-check-q, #frame-capture .mf-follow.is-equal { font-size: 20px; }
+	#frame-capture .mf-final-def { font-size: 16px; }
+}
 /* Whenever a picture label would render under 11 px at the runtime's letterboxed scale,
    the stage switches to a stacked text view driven by the same clock (13–16 px).
    syncStacked() in the JS sets the class; the JS also fixes the view's height at its
