@@ -169,3 +169,24 @@ Every page reads "See this with: Workplace · Classroom · PME". I followed ever
   - `is-reduced` is set, and the time reads 1:29 / 1:29 (PME) or 1:43 / 1:43.
   - The caption carries the name, definition, check and follow-up, with the follow-up at opacity 1.
   - The picture text and stacked text match the final frame drawn by seek, exactly.
+
+---
+
+## Fixes after this verification (October 30)
+
+| # | Defect | Fix | Recheck (player clock) |
+|---|---|---|---|
+| 1 | Second-dot label, 1.9 s | Core: the label stays in place until 58.7–59.0 (figure clock) while the dot sets off on its visits, as premature synthesis's does. | 2.35 s in all four versions at 1440×900, 1366×657 and 1280×720 (PME 59.5–61.85, business casts 55.3–57.65); needs 2.17 s. |
+| 2 | PME phone, "…either paper.", 3.0 s | Core, stacked stage: the weighing note arrives with the second paper (66.0–67.2) as one change, instead of at 68.0. | 69.6–74.5, 4.9 s; needs 3.83 s. Words unchanged. |
+| 3 | Business phone, "…either ranking.", 1.2 s | The core change above, and the words cut to fit the business clock without adding time: "Neither shows the weighing." | 69.5–72.6, 3.1 s in workplace, classroom and high school; needs 2.83 s. |
+| 4 | Business phone, "The four dashed ones were never weighed.", 3.3 s | Words cut: "The dashed four: never weighed." Timing unchanged. | 38.8–42.1, 3.3 s in all three business casts; needs 3.17 s. PME keeps its line (5.1 s). |
+
+Run lengths are unchanged (PME 89.2 s, business casts 103.6 s). The new phone lines passed the writing-as-jack mechanical check.
+
+**Gates.**
+- Frame-diff, HEAD against the fix (`--freeze`, quiet ports, `--disable-partial-raster` and 120 ms waits as in CONVENTIONS.md). Only these frames changed:
+  - PME: 1 of 203, `390x844/t070.00` (the note, now arriving with paper B). A first run under machine load showed glyph noise across the phone frames; a rerun alone gave only this frame.
+  - Workplace, classroom and high school: 7 of 248 each, all at 390×844: `t038.00`, `t040.00`, `t042.00`, `t042.08` (the dashed-four line) and `t070.00`, `t072.00`, `t072.58` (the weighing line). Each difference is confined to that one line.
+  - No capture falls inside the label's new window (desktop, PME 61.2–62.0, business casts 57.0–57.8); the seek probe above covers it.
+- Re-baselined with `--freeze`: `regression/baseline`, `baseline-business`, and, with the switch hidden, `baseline-pme`, `baseline-business-nosw`, `baseline-business-classroom` and `baseline-business-high-school`.
+- `node scripts/edition-check.mjs`: passes (exit 0).

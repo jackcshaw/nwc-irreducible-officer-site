@@ -33,6 +33,9 @@
 		pan: [46.3, 48.5], centreLabel: [48.3, 48.7], key: [48.8, 49.2], wipe: [50.0, 51.4], bracketsA: [51.6, 52.4],
 		toSlot: [52.6, 53.6], slotLabels: [53.4, 53.8],
 		dotB: 56.3, chipsB: [56.8, 57.3], aiB: 57.4, aiTagB: [57.7, 58.0], visit: 58.2, visitStep: 0.5, claim: [61.4, 62.0], aside: [62.0, 62.4],
+		// The second dot's name stays in place 2.35 s, long enough to read, while the dot sets
+		// off on its visits (as premature synthesis does). It used to fade as the dot left (1.85 s).
+		dotBLabelOut: [58.7, 59.0],
 		nameSwap: 56.3, up: [65.7, 66.0], sweep: [66.0, 67.2], labelB: [67.2, 67.5], back: [67.5, 67.8], hideB: [68.0, 68.9],
 		ask: [72.5, 73.0], reveal: [75.5, 76.5],
 		note: [62.5, 63.0], source: [80.5, 81.0], // used only by editions that supply them
@@ -598,7 +601,7 @@
 		const pb = dotBAt(t);
 		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * bIn), opacity: inStrip ? 0 : 1});
 		set(stripBDot, {opacity: inStrip ? 1 : 0});
-		set(dotBLabel, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, T.visit, T.visit + 0.3))});
+		set(dotBLabel, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...T.dotBLabelOut))});
 		set(revealClip, {y: SHEET.y - 8, height: (SHEET.h + 16) * prog(t, ...T.sweep)});
 		set(labelB, {opacity: prog(t, ...T.labelB)});
 
@@ -800,7 +803,9 @@
 		fade(N.papers.b.box, prog(t, ...T.sweep));
 		N.papers.note.hidden = show.has('ask') || show.has('check');
 		if (NW.compactPapers) N.papers.label.hidden = show.has('ask') || show.has('check');
-		fade(N.papers.note, prog(t, ...T.hideB));
+		// The note arrives with the second paper, as one change, so it holds long enough to read
+		// before beat 10 (it used to wait for the weighing to hide on the drawn stage, at 68.0).
+		fade(N.papers.note, prog(t, ...T.sweep));
 		fade(N.ask.q, prog(t, ...T.ask));
 		N.ask.cols.forEach((c) => fade(c, prog(t, ...T.reveal)));
 		if (TURN) {

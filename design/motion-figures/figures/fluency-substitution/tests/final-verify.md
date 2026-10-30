@@ -125,3 +125,22 @@ Every page reads "See this with: Workplace · Classroom · PME".
   - `is-reduced` is set, and the time reads 1:31 / 1:31 (PME) or 1:39 / 1:39.
   - The caption carries the name, definition, check and follow-up (follow-up at opacity 1).
   - The picture and stacked text match the seek-drawn final frame exactly.
+
+---
+
+## Fixes after this verification (October 30)
+
+| # | Defect | Fix | Recheck (player clock) |
+|---|---|---|---|
+| 1 | Phone relabel, 1.7 s | The stacked stage's draft label changes as the cut is struck (figure 20.1 s; business has no cut, so the same moment), instead of with the drawn stage's tag swap at 21.8 s. The drawn stage is unchanged. | 390×844: "Their paper · drafted with AI" (PME) and "Their claims · drafted with AI" (workplace, classroom, high school) shown 23.1–26.5, 3.4 s; needs 3.17 s. |
+| 2 | High-school beat 5 detail, "narrower claim" | `byCast["high-school"]` patches `beats.4.detail` to "…the second claim on the sensor included…", the high-school draft's label. | No "narrower" or "fallback" left in any resolved high-school string (the classroom patch data aside). |
+
+Run lengths are unchanged (PME 91.6 s, business casts 99.8 s).
+
+**Gates.**
+- Frame-diff, HEAD against the fix (`--freeze`, quiet ports, `--disable-partial-raster` and 120 ms waits). Only these frames changed:
+  - PME, workplace and classroom: 1 frame each, `390x844/t024.00` (the label line).
+  - High school: that frame, plus the beat 5 detail line in `page-390`, `page-1440`, `reduced-390`, `reduced-1440` and `print`.
+  - The first HEAD capture ran under machine load and differed from itself: a second HEAD capture differed from it in 3 to 73 frames per version, but matched the fix everywhere except the frames above. Two captures of the fix were byte-identical, except one frame each in PME and workplace.
+- Re-baselined with `--freeze`: `regression/baseline`, `baseline-business`, `baseline-business-classroom` and `baseline-business-high-school`.
+- `node scripts/edition-check.mjs`: passes (exit 0).

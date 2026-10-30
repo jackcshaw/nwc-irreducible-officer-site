@@ -212,7 +212,7 @@ Positions are viewBox units. Widths of text-sized elements come from measured te
 - *Trigger.* Whenever the stage's smallest text (13-unit mono) would render under 11 px at the runtime's letterboxed scale, the SVG collapses and a stacked text stage takes its place, driven by the same clock (`.is-stacked`, set by `syncStacked`). That covers phones and narrow windows. Laptop windows (1280×720, 1366×657) keep the full picture, with the compact caption band.
 - *What the stacked stage shows, at 13–16 px:*
   - beat 1: the task;
-  - beats 2–3: the AI's draft, then struck and relabelled;
+  - beats 2–3: the AI's draft, then struck and relabelled. The label changes to "Their paper · drafted with AI" as the cut is struck (20.1 s; in business, with no cut, at the same moment), so it holds 3.4 s before beat 4 (it needs 3.17 s; it followed the drawn stage's tag swap at 21.8 s and held 1.7 s before the final-verification fix);
   - beat 4: the two students' own work, side by side: "Cut one sentence from the AI's draft" over the struck sentence, and the note;
   - beat 5: that row plus the AI's draft from the note, with "Suppose it matches the first student's paper word for word". The line arrives once the draft is composed (37.0–37.4 s), so it is fully shown for 6.0 s before beat 6 (it needs 4.8 s; it arrived with the match sweep and showed 2.1 s before the October 30 polish);
   - beat 6: that row plus a compact tile, "Both handed in this paper", which stays to the end;

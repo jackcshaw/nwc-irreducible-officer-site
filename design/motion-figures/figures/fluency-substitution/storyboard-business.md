@@ -183,3 +183,7 @@ The business edition in two more casts, through data in `editions/business.json`
 - Stills and finals: `shots/business-classroom/` and `shots/business-high-school/` (beats, final, final-390, final-1366, final-1280, poster, player-390, reduced and page views).
 
 **High school** is the weakest fit (patent claims), built anyway. Its light read decides whether it ships or high-school links fall back to the workplace edition (CLASSROOM-PLAN.md decision 7).
+
+**After the final verification** (tests/final-verify.md, defects 1–2):
+- Phone, every version: the draft's label changes to "Their claims · drafted with AI" ("Their paper · drafted with AI" in PME) at 20.1 s, as the cut is struck (business has no cut, so the label changes at the same moment), instead of with the drawn stage's tag swap at 21.8 s. It now holds 3.4 s before beat 4 (needs 3.17 s; it held 1.7 s). The drawn stage is unchanged.
+- High school: beat 5's "On screen" detail says "the second claim on the sensor included", the high-school draft's label, through a `byCast["high-school"]` patch of `beats.4.detail`.

@@ -164,7 +164,7 @@ Positions below are viewBox units on screen at 1×. Widths of text-sized element
 | 6 | All of the above again, with "The four dashed ones were never weighed." |
 | 7 | The task, and "What faculty receive: the final copy": the paper in a grey frame with its title and headings on the grey band, an "AI-SUPPLIED" key, then the drain to ink and the frame going |
 | 8 | The paper, now labelled red "First student", and the second student: "Its AI proposes the same frame", the six chips turning solid with red touch marks, the frame turning red as "Chosen", four "Set aside" |
-| 9 | Both papers side by side, red names, "The weighing doesn't show in either paper." |
+| 9 | Both papers side by side, red names, "The weighing doesn't show in either paper." The note arrives with the second paper (66.0–67.2), so it holds 4.9 s |
 | 10–11 | The papers, "Faculty ask each student: Why this frame?", and each student's column: "AI's frame" with two grey chips, or "Chosen" with two solid chips and "Set aside" with the four. Beat 11 adds the task back for the comparison with "Deter the adversary" |
 
 The JS measures the tallest beat whenever the width changes and holds it as the view's minimum height (511 px at 390 px wide). The caption band holds 166 px below 720 px, so the controls never move. At 390 × 844 the whole player measures 796 px.
@@ -276,7 +276,7 @@ Times in this section are the figure's own clock. The player adds the 3.0 s name
   1. 56.3–56.8: over the first paper, "FROM THIS STUDENT" fades out and red "First student" fades in. At the same moment a second red dot grows in at (500, 440), labelled "Second student".
   2. 56.8–57.3: the six considerations fade in. Adversary's intent and Allies' interests are tinted grey in the top row; the other four are dashed below.
   3. 57.4–58.0: grey brackets spring around the top two, and the tag "AI'S FRAME" fades in. This is the AI's proposal to the second student, the same frame the first student got.
-  4. 58.2–61.2: the dot visits each consideration in turn, 0.5 s each: the four outside first, then the AI's two. As it touches a chip, the chip turns solid ink and keeps a small red touch mark. The "Second student" label fades as the dot starts.
+  4. 58.2–61.2: the dot visits each consideration in turn, 0.5 s each: the four outside first, then the AI's two. As it touches a chip, the chip turns solid ink and keeps a small red touch mark. The "Second student" label stays where it is until 58.7–59.0, then fades, so it is readable for 2.35 s (it needs 2.17 s; it used to fade as the dot started).
   5. 61.4–62.0: the dot moves inside the brackets. The brackets turn from grey to red, and the tag changes from "AI'S FRAME" to "CHOSEN".
   6. 62.0–62.4: "SET ASIDE" fades in, in red, under the four.
   7. 62.4–64.7: hold.

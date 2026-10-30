@@ -3,7 +3,7 @@
  "edition": "business",
  "cast": "",
  "hide": "",
- "freeze": false,
+ "freeze": true,
  "sizes": [
   [
    1440,

@@ -611,7 +611,10 @@
 		// Optional (business): narrow.paperFull keeps the whole shared paper in view.
 		N.paper.tile.classList.toggle('is-clamped', t >= BEATS[6].at && !NW.paperFull);
 		N.paper.tile.classList.toggle('is-one-line', t >= BEATS[7].at && !NW.paperFull);
-		N.draftA.lab.textContent = t >= (T.tagA[0] + T.tagA[1]) / 2 ? NW.draftKept : NW.draft;
+		// The draft becomes theirs as the cut is struck (or, with no cut, at that moment), so
+		// "Their paper · drafted with AI" holds 3.4 s before beat 4 (it needs 3.17 s). It used to
+		// follow the drawn stage's tag swap, at 21.8, and hold only 1.7 s.
+		N.draftA.lab.textContent = t >= T.strike[0] + 0.3 ? NW.draftKept : NW.draft;
 		fade(N.draftA.sec, prog(t, ...T.sheetA));
 		if (N.draftA.cut) {
 			N.draftA.cut.classList.toggle('fs-n-struck', t >= T.strike[0] + 0.3);

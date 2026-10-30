@@ -3,7 +3,7 @@
  "edition": "business",
  "cast": "",
  "hide": ".fig-editions,.fig-edition-note",
- "freeze": false,
+ "freeze": true,
  "sizes": [
   [
    1440,

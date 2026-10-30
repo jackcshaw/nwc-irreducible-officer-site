@@ -275,6 +275,10 @@ The picture's new texts keep workplace's word counts or fewer. For example, "THE
   - Outside beat 3, the classroom casts show 9–27 pixels at one or two levels in their last beats. Fresh single-frame captures of those moments are identical before and after, so that's the long capture's paint history, not a change.
 - **Laptop windows:** see storyboard.md. At 1366 × 657 the picture now shows in every edition (13-unit labels at 11.0 px), through a 100 px caption band on short windows 1200 px or wider. 1280 × 720 already showed it (11.1 px).
 - **Baselines** (switch hidden): `regression/baseline-pme`, `baseline-business-nosw`, `baseline-business-classroom` and `baseline-business-high-school`. `baseline-pre-editions` is historical: its beat 3 is the old motion.
+- **After the final verification** (tests/final-verify.md, defects 1–4):
+  - Core: the second dot's label stays in place until core 58.7–59.0, as premature synthesis's does, so "Second analyst" ("Second student") reads 2.35 s (it needs 2.17 s; it faded as the dot left, 1.85 s).
+  - Core, phone: the weighing note arrives with the second ranking (core 66.0–67.2) instead of at 68.0.
+  - Business phone words, cut to fit the business clock without adding time: "Neither shows the weighing." (3.1 s, needs 2.83 s; was "The weighing doesn't show in either ranking.", 1.2 s) and "The dashed four: never weighed." (3.3 s, needs 3.17 s; was "The four dashed ones were never weighed."). PME keeps both of its lines.
 
 ## 9. Questions for Jack
 

@@ -75,7 +75,7 @@
  "narrow": {
   "taskLabel": "Example task",
   "fieldLabel": "Six considerations",
-  "fieldNote": "The four dashed ones were never weighed.",
+  "fieldNote": "The dashed four: never weighed.",
   "aiFrame": "AI's frame",
   "draftLines": [
    "Draft 1: a ranking under the AI’s two headings",
@@ -92,7 +92,7 @@
   "chosen": "Chosen",
   "setAside": "Set aside",
   "changeNote": "Would change it: if some patients cost less because they get less care.",
-  "weighingNote": "The weighing doesn’t show in either ranking.",
+  "weighingNote": "Neither shows the weighing.",
   "askQ": "Why this frame?",
   "source": "Illustration based on Obermeyer et al., Science (2019). In the study, at a given risk score, Black patients were considerably sicker than White patients.",
   "taskLine": {

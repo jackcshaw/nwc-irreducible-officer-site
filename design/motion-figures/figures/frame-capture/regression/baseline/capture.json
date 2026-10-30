@@ -3,7 +3,7 @@
  "edition": "",
  "cast": "",
  "hide": "",
- "freeze": false,
+ "freeze": true,
  "sizes": [
   [
    1440,
