@@ -227,7 +227,7 @@ These are the business edition in two more casts, set through data in `editions/
 
 | Where | Classroom | High school |
 | --- | --- | --- |
-| Setup | "Suppose two students in a business seminar work a retailer's case: should its support chatbot answer refund questions? The seminar allows AI, and both say they used it; each copy is tagged "drafted with AI". They give an AI the same prompt, get the same draft, and sign it as written. …" | "…business class… The class allows AI…" |
+| Setup | (light-read version) "In a business class working a retailer's case, the instructor gives every student the same AI-drafted recommendation to review, then sign or revise. … The class allows AI, and each copy is tagged "drafted with AI", so identical copies are expected. Two students read it closely and sign it as written. …" | "…the teacher gives…" |
 | Picture | FIRST/SECOND STUDENT'S COPY, A STUDENT'S DECISION, FACULTY DON'T SEE THIS, WHAT FACULTY SEE, First/Second student, "THEIR OWN NOTE · NOT HANDED IN" | THE TEACHER DOESN'T SEE THIS, WHAT THE TEACHER SEES; the rest as classroom |
 | Captions 1, 3, 4, 8 | Two students… / Both students… / The first student signs… / Both students will. | same |
 | Captions 5, 6 | Faculty ask each student. / Faculty ask why. | The teacher asks each student. / The teacher asks why. |
@@ -264,6 +264,46 @@ The note row reads "not handed in" in both classroom casts: "not sent" was the w
 - The new copy passes `jack_eval.py`.
 - Baselines: `regression/baseline-business-classroom` and `regression/baseline-business-high-school` (212 shots each).
 - Stills and finals: `shots/business-classroom/` and `shots/business-high-school/`.
+
+**After the classroom light read** (`tests/classroom-light-read.md`; October 30):
+
+1. **The identical copies are a handout.** Two identical signed copies read as collusion in class, especially in high school.
+   - The instructor (or teacher) now gives every student the same AI-drafted recommendation to review, then sign or revise. The setup says so, and that identical copies are expected; the AI-disclosure line stays.
+   - Caption 2 in both classroom casts is "{Reviewer} gives both the same AI draft to review.": "The instructor gives…" or "The teacher gives…". Its 10 words match the workplace caption's budget.
+   - Caption 1 stays "Two students, one task.", because beat 1 is at its reading limit (17 words, 7.2 s of 7.4).
+2. **High-school wording.**
+   - The crux, "I didn't test exceptions", is "I didn't try unusual requests" in the high-school cast: 18 words, within beat 6's budget, and six lines on the phone as before. The check paragraph gives the example: "unusual requests, like a refund asked for late".
+   - The page glosses the case's terms:
+     - bereavement fares: "the lower fares some airlines offer for travel after a death in the family";
+     - retroactive applications: "claims made after the trip";
+     - the tribunal: "which decides small claims (para. 7)", confirmed in both stamped copies.
+   - "Go live", "97% accuracy" and "last quarter" stay as everyday words.
+3. **Moffatt is a related question** (shared, so every cast changes).
+   - The evidence now reads: "*Moffatt v. Air Canada* (2024) is a related case at the scale of an organization: who answers for an AI's answer? … It differs from the figure: the airline disowned its chatbot's answer, and the first {person} owns the call and hands off only the reason."
+   - The stage line beside "Answerable" now says who was held responsible and for what: "Related case: Moffatt v. Air Canada (2024): / a company was held responsible / for what its chatbot told a customer." The phone line matches and stays two lines; the player is still 841 px.
+   - The setup's "for its chatbot's answers" now reads "for what its chatbot told a customer" in the classroom casts. The workplace setup is unchanged, so the figure doesn't reflow.
+4. **"Faculty ask"** is resolved by Jack's cast change. `classroom` is now the singular "the instructor" ("The instructor asks each student", "Instructor's check"), and PME uses the new `seminar` cast ("Faculty"). The classroom patches carry no reviewer word, only `{reviewer}` and `{Reviewer}` with singular verbs, which read right for the instructor and the teacher.
+
+**Also:** the summary and beat list quote the note row as it appears on screen ("Their own note · not sent" / "· not handed in").
+
+**Workplace changes** (from the shared fix only):
+- the stage and phone source line;
+- the first evidence paragraph;
+- the summary and beat 8 and beat 9 lines quoting the source.
+
+The picture is otherwise unchanged: frame-diff shows only the frames showing the new source line (94.0 s on) and the page-level views. PME's words are unchanged (now the `seminar` cast).
+
+**Checks:**
+- `edition-check` passes for business in all three casts.
+- Its one RL failure is in PME's verbatim essay quote ("…subordinates, partners, or commanders"). The new `seminar` casts list makes PME checked, and "partner" is on the workplace role list, so it needs an `ALLOW` entry in the shared script.
+- Both classroom casts at 1440 × 900, 1280 × 720, 1366 × 657 and 390 × 844: labels at 14.06, 11.10 and 11.07 px; bands of 144, 144 and 92 px, and 194 px on phones; the phone player 841 px; no overflow or console errors.
+- Pace holds in every beat.
+- The voice check passes for all three casts.
+
+**Capture notes:**
+- PME's and business's waiting views and page-level views now differ from their baselines because of the uncommitted runtime change to the autoplay gate: the waiting view now shows the name card without the poster. PME's animation frames are identical, and PME wasn't re-baselined.
+- Business phone frames during the split (74–84 s) still vary between runs under load: two captures differed in 19 of them.
+- Business, classroom and high-school baselines were re-captured.
 
 ## 9. The definition: "agency" becomes "responsibility" (Jack, October 30)
 
