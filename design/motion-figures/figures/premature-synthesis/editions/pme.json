@@ -1,7 +1,7 @@
 {
  "_doc": "Premature synthesis, PME edition: every visible word. Times, layout, colours and the nameplate stay in premature-synthesis.js. {key} and {key|upper} are filled from casts.json (classroom cast). See CONVENTIONS.md, Editions.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "lines": [

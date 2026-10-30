@@ -1,7 +1,7 @@
 {
  "_doc": "Institutional monoculture, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in institutional-monoculture.js. page.quote and page.evidenceList may hold [text](href) links; page.about is a bold lead and its text. Schema: CONVENTIONS.md, Editions.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "lines": [

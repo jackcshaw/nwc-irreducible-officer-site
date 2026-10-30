@@ -249,10 +249,11 @@ One figure, several scenarios: PME (the essay's own examples) and business (stud
   - the nameplate (name, kicker and the role-neutral definition are universal).
 - **Scenario:** `figures/<slug>/editions/<id>.json` holds every visible word: picture labels, stacked-view text, captions, the beat list, the check and follow-up, and page copy.
 - **Cast:** `casts.json` (shared) holds role words and check headings.
-  - `classroom`: "First student", "Faculty check", "What faculty receive", …; for higher education and PME. "Faculty" is plural: "Faculty ask".
-  - `high-school`: classroom's person words, with "the teacher", "Teacher’s check" and "class". Its verbs are singular, the same forms as workplace's ("The teacher asks", "What the teacher receives"), so the business editions' grammar holds.
+  - `seminar`: PME's cast. "First student", "Faculty check", "What faculty receive", "seminar"; "Faculty" is plural ("Faculty ask"). These are the words `classroom` had until October 30, so PME's frames didn't change (frame-diffed).
+  - `classroom`: higher education. Students, with "the instructor", "Instructor’s check" and "class". Jack's decision (October 30, CLASSROOM-PLAN.md decision 8): the instructor is singular, the same forms as workplace's ("The instructor asks each student", "What the instructor receives"), so the business editions' grammar holds.
+  - `high-school`: classroom's person words, with "the teacher", "Teacher’s check" and "class", singular in the same way.
   - `workplace`: "First analyst", "Reviewer's check", "What the manager receives", …
-  - `reviewer_sends` ("faculty send", "the teacher sends", "the manager sends") is in every cast. `scripts/edition-check.mjs` fails if a cast lacks a key another cast has.
+  - `reviewer_sends` ("faculty send", "the instructor sends", "the teacher sends", "the manager sends") is in every cast. `scripts/edition-check.mjs` fails if a cast lacks a key another cast has.
 
 Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Both are filled from its cast. Add a key to every cast at once, never in a figure.
 
@@ -309,7 +310,8 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 **Loader** (runtime, additive):
 - `MotionFigures.loadEdition(root, {base = 'editions/', casts = '../../casts.json', fallback = 'pme'})` returns a promise of the filled edition plus `{id, castId, cast, castWords, fellBack}`. `cast` stays the edition's own cast id (`"workplace"`); `castWords` holds the role words used. Before the classroom mechanism, the cast object overwrote `cast`.
   - Edition: `?edition=`, then `data-edition` on the root, then `fallback`. An unknown id falls back.
-  - Cast: `?cast=`, then the edition's `cast`, then `classroom`. If the edition lists `casts`, a `?cast=` outside the list falls back to the edition's own cast. A cast missing from `casts.json` falls back to `classroom`.
+  - Cast: `?cast=`, then the edition's `cast`, then `seminar`. If the edition lists `casts`, a `?cast=` outside the list falls back to the edition's own cast. A cast missing from `casts.json` falls back to `seminar`. (Both defaults were `classroom`, whose old words `seminar` now holds, so every fallback shows the same words as before.)
+  - **PME** sets `"cast": "seminar", "casts": ["seminar"]`. It lists only its own cast because its words are written for plural "Faculty" ("Faculty put both papers aside and ask…"): `?cast=classroom` or `?cast=high-school` on a PME page falls back to seminar instead of putting a singular instructor or teacher into plural sentences.
   - It sets `data-edition-id` and `data-cast` on the root.
   - The words come from `MotionFigures.resolveEdition(raw, casts, requestedCast)`, which is pure and fetches nothing. `edition-check.mjs` runs the same function in Node.
 - A figure builds after it loads: `Promise.all([loadEdition(root), document.fonts.ready]).then(([ed]) => { fillPage(document, ed); build(ed); })`.
@@ -339,7 +341,7 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
   - **No JavaScript:** each page has a `<noscript>` block after `<main>`. It is edition-neutral: the kicker, the name, the role-neutral definition (NAMEPLATE-DEFINITIONS.md) and "This figure needs JavaScript to play." The full text without JavaScript is the site build's job (INTEGRATION-PLAN.md §3.5).
   - **Additive:** FC's PME, premature synthesis and appropriate reliance frame-diffed identical with the old and new runtime and page.
   - The static meta description is the role-neutral fallback. `data-ed-content` sets each edition's own description once the edition loads. A crawler or link preview without JavaScript sees only the fallback, so the site build should emit static pages or meta per edition (INTEGRATION-PLAN.md §3.5).
-- **Default:** PME with the classroom cast, so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
+- **Default:** PME with its seminar cast (the words the classroom cast had), so existing links render exactly as before. Jack chose business with the workplace cast as the default for standalone pages and articles; the site sets it at integration with `data-edition="business"` or the link.
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
 
 **Edition switch:** the links are page furniture, the same in every edition, so they stay in the HTML under the setup:
@@ -364,7 +366,7 @@ The current edition's link is bold and underlined (`aria-current`). Both lines u
 - **`casts`**, e.g. `["workplace", "classroom", "high-school"]`: the casts the edition supports. A `?cast=` outside the list falls back to the edition's own `cast`, so `?cast=classroom` can't show "student" beside a literal "associate" before the figure is built. No list means any cast, as before.
 - **`castOverrides`**, e.g. `{"workplace": {"person": "associate", "Person": "Associate", "reviewer": "the partner", "check": "Partner’s check"}}`: this edition's role words, merged over `casts.json` for that cast. It lets a figure move literal roles into keys while its business edition renders the same. An override may only redefine a key `casts.json` has; any other is ignored, with a console warning. New keys go into `casts.json`, for every cast.
 - **`byCast`**, e.g. `{"classroom": {"page.setup": "…", "beats.0.text": "…"}, "high-school": "classroom"}`: whole-string replacements by path, with array indexes as numbers. A string value inherits another cast's patches, so one patch with keys in it serves both classroom casts. A patch that doesn't replace a string is skipped, with a warning.
-  - Where a verb follows a reviewer word, carry the verb in a key (`{reviewer_sends}`), or patch the two casts separately: "Faculty, who see…" against "The teacher, who sees…".
+  - Where a verb follows a reviewer word, carry the verb in a key (`{reviewer_sends}`). Classroom ("the instructor") and high school ("the teacher") are both singular, so one patch serves both; only PME's `seminar` is plural ("Faculty, who see…").
   - Patches change words only, never the timeline, layout or data that drives drawing. A patched string must fit where the original fit.
 - **Order:** the edition, then the `byCast` patches, then `{key}` filling from `casts.json[cast]` merged with `castOverrides[cast]`. Patches can therefore carry keys.
 - **Unchanged without them.** An edition without these fields resolves exactly as before: the runtime change frame-diffed to 0 for all eight figures' PME and business editions, with the switch hidden and transitions frozen.
@@ -377,10 +379,10 @@ The current edition's link is bold and underlined (`aria-current`). Both lines u
   - a cast in `casts.json` without a key another cast has;
   - a loader warning (an override key `casts.json` lacks, or a patch that doesn't replace a string);
   - an unfilled `{key}`;
-  - another cast's role words, for an edition with `casts`. The words are each cast's person, people and reviewer words, the edition's own `castOverrides`, and the literal workplace roles (analyst, manager, associate, partner, engineer, tech lead, owner, reviewer). A per-figure allowlist (`ALLOW` in the script) passes phrases that are right in every cast: UR's study owners and IM's "partner or license";
-  - a verb after a reviewer key that doesn't agree with the cast: "{reviewer_has} only the emails, and asks" breaks with plural "Faculty", and "{reviewer_puts} them aside and ask" with singular "The teacher".
+  - another cast's role words, for an edition that lists two or more casts: "Faculty" in a classroom patch, "instructor" in a high-school one. The words are each cast's person, people and reviewer words, the edition's own `castOverrides`, the literal workplace roles (analyst, manager, associate, partner, engineer, tech lead, owner, reviewer) and "seminar". Link targets are skipped. A per-figure allowlist (`ALLOW` in the script) passes phrases that are right in every cast: UR's study owners, IM's "partner or license", and, scoped to `page.quotes`, RL's essay quote ("subordinates, partners, or commanders");
+  - a verb after a reviewer key that doesn't agree with the cast. Only `seminar` is plural: "{reviewer_has} only the emails, and asks" breaks there. `classroom`, `high-school` and `workplace` are singular, so "{reviewer_puts} them aside and ask" breaks in those. The script reads the number from the cast's `reviewer_has` ("Faculty have").
 
-  An edition without `casts` whose own cast isn't classroom is also resolved in the classroom cast (`--todo=id` for another). What that would flag prints as a to-do for the figure work, and doesn't fail the check. `--counts` prints only the counts. Run it after any edition or `casts.json` change.
+  An edition without `casts` whose own cast isn't classroom is also resolved in the classroom cast (`--todo=id` for another); PME lists its cast, so it isn't. What that would flag prints as a to-do for the figure work, and doesn't fail the check. `--counts` prints only the counts. Run it after any edition or `casts.json` change.
 
 **Evidence, option A** (business):
 - "Illustration based on [study]" in the setup.

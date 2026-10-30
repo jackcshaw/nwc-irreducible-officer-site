@@ -1,7 +1,7 @@
 {
  "_doc": "Responsibility laundering, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in responsibility-laundering.js. Schema: CONVENTIONS.md, Editions; figure-specific keys: draft (the AI's draft, as SVG lines, and the phrase the first person's answer leans on), note, questions, answers. page.checkFollow and page.quotes use [text](href) links and *em*, filled by the figure (data-rl-rich).",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "text": "Recommend when to evacuate a port city."

@@ -4,7 +4,7 @@ October 29, 2026. A plan for Jack's review. Nothing here is built.
 
 ## Recommendation
 
-Give the eight business editions a classroom cast through data, keeping the scenarios. Students work the same study-grounded case as a class assignment, and faculty or a teacher review it.
+Give the eight business editions a classroom cast through data, keeping the scenarios. Students work the same study-grounded case as a class assignment, and an instructor or a teacher reviews it.
 
 - **Seven figures need only role words and a few framing sentences.** The picture, timeline, materials, answers and changed fact stay as built and cold-read.
 - **Uncalibrated reliance needs a real scenario change.** Its decisive evidence is the owner's own sales records. In class, those records become an exhibit in the case packet that every student gets.
@@ -17,9 +17,11 @@ Business is done and verified (MORNING.md), so Jack's "build classroom after bus
 
 - **Scenario:** the business edition's, unchanged: the task, materials, AI output, answers, changed fact, timeline and source line.
 - **Framing:** the people are students doing the company's case for a class. Each setup names the subject (health policy, programming, business writing, strategy) and says the study followed lawyers, engineers or owners, not students.
-- **Casts:**
-  - `classroom` (exists; PME uses it): student, faculty, seminar, "Faculty check". For higher ed.
+- **Casts** (as decided October 30, decision 8):
+  - `classroom`: student, the instructor, class, "Instructor’s check". For higher ed. Singular, like workplace: "The instructor asks each student".
   - `high-school` (new): student, the teacher, class, "Teacher's check". For high school.
+  - `seminar`: PME's own cast, holding the words `classroom` had before: student, faculty, seminar, "Faculty check". PME lists only `seminar`, so its frames are unchanged.
+  - Where the per-figure notes below say "faculty" for the classroom version, read "the instructor".
 - **Check:** the business check's questions under the classroom heading (decision 3). The follow-ups were tuned and cold-read against these scenarios.
 
 ## Per figure
@@ -128,7 +130,7 @@ Three additive fields in an edition, read by `loadEdition`:
 
 **The `high-school` cast** copies classroom's person keys. Its reviewer is "the teacher", with singular verbs ("The teacher asks", "What the teacher receives"), the same forms as workplace's, so the business editions' grammar holds. The group is "class", and the check heading "Teacher's check".
 
-**New key:** `reviewer_sends`, in every cast: "faculty send", "the teacher sends", "the manager sends".
+**New key:** `reviewer_sends`, in every cast: "faculty send" (seminar), "the instructor sends", "the teacher sends", "the manager sends".
 
 **The edition switch has a bug to fix first.** `fillPage` keeps every query parameter, so from `?cast=classroom` the "Workplace" link would stay classroom. Add `data-cast-link`:
 - each link sets `cast` or clears it;
@@ -161,7 +163,7 @@ Three additive fields in an edition, read by `loadEdition`:
 
 ## High school against higher ed
 
-- **One classroom version serves both.** The framing is level-neutral ("for a class"), and the cast supplies "faculty" and "seminar", or "the teacher" and "class".
+- **One classroom version serves both.** The framing is level-neutral ("for a class"), and the cast supplies "the instructor" or "the teacher", with "class".
 - **What the HE guide expects:** disciplinary evidence. Naming each case's subject lets an instructor see where it fits.
 - **What the K–12 guide expects:**
   - The teacher supplies the task and materials. Every case here is teacher-supplied, and UR's packet makes that literal.
@@ -222,7 +224,7 @@ Three additive fields in an edition, read by `loadEdition`:
 - **UR's held-back records** may read as contrived for a student. The fallback is to skip UR's classroom version and show the workplace edition.
 - **FS and PS** may be read as "AI harms learning". Their pages already carry the counter-findings; keep them prominent.
 - **RL** may be read as an academic-integrity story. The disclosure tag and the setup carry the fix.
-- **Plural "Faculty"** breaks literal verbs that follow a reviewer key. `edition-check.mjs` flags them.
+- **Reviewer grammar.** Plural "Faculty" broke literal verbs that follow a reviewer key ("Faculty have only the emails, and asks…"). With the singular instructor (decision 8), every classroom cast takes the business editions' singular verbs; only PME's `seminar` is plural. `edition-check.mjs` flags a verb that disagrees with its cast, and "Faculty" left in a classroom patch.
 
 ## Decisions for Jack
 
@@ -233,3 +235,4 @@ Three additive fields in an edition, read by `loadEdition`:
 5. **The race line in FC for high school:** keep it on screen with a teacher note on the page (recommended), or move it to the page.
 6. **UR:** students work the shop as a case, the packet holds the records and faculty see only the plans (recommended), or skip UR's classroom version.
 7. **FS for high school:** ship the classroom version only if the high-school read passes, and otherwise use the workplace edition.
+8. **The higher-ed reviewer** (decided October 30): "the instructor", singular ("The instructor asks each student", "Instructor’s check", "What the instructor receives"), with the group "class". It replaces "Faculty" in the `classroom` cast, so the business editions' singular grammar holds in every classroom cast. PME keeps "Faculty" through its own `seminar` cast, so its frames don't change (frame-diffed). A PME page lists only `seminar`, so `?cast=classroom` there falls back to "Faculty" instead of putting a singular instructor into PME's plural sentences.

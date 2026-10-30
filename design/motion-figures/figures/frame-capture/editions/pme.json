@@ -1,7 +1,7 @@
 {
  "_doc": "Frame capture, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout and nameplate are core and stay in frame-capture.js. Schema: CONVENTIONS.md, Editions.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "lines": [

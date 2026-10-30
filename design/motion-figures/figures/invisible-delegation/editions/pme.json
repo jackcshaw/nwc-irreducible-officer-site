@@ -1,7 +1,7 @@
 {
  "_doc": "Invisible delegation, PME edition: every visible word of the scenario. Role words come from casts.json ({key}). The timeline, layout, colour grammar and nameplate are core and stay in invisible-delegation.js. Schema: CONVENTIONS.md, Editions.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "text": "Recommend whether to keep a forward base.",

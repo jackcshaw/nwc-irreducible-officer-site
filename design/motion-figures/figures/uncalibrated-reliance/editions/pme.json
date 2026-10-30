@@ -1,7 +1,7 @@
 {
  "_doc": "Uncalibrated reliance, PME edition: every visible word of the scenario. Role words come from ../../casts.json ({key}, {key|upper}). The timeline, layout, colour grammar and nameplate are core and stay in uncalibrated-reliance.js. Schema: CONVENTIONS.md, Editions; figure-specific keys are listed in the storyboard.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "task": {
   "label": "EXAMPLE TASK",
   "lines": [

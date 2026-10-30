@@ -1,6 +1,6 @@
 {
 	"id": "pme",
-	"cast": "classroom",
+	"cast": "seminar", "casts": ["seminar"],
 	"picture": {
 		"minText": 13,
 		"laptop": true

@@ -1,7 +1,7 @@
 {
  "_doc": "Appropriate reliance, PME edition: every visible word of the scenario. Role words come from casts.json ({key}); %move% is filled by the figure with the move option's label. The timeline, layout, gates and nameplate are core and stay in appropriate-reliance.js. Schema: CONVENTIONS.md, Editions.",
  "id": "pme",
- "cast": "classroom",
+ "cast": "seminar", "casts": ["seminar"],
  "results": {
   "inside": [
    {

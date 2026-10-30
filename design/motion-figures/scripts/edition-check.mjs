@@ -9,11 +9,14 @@
 //   - a loader warning: an override key casts.json lacks, or a byCast patch that doesn't
 //     replace a string;
 //   - an unfilled {key};
-//   - another cast's role words (only for an edition with a `casts` list), less the
-//     figure's allowlist (ALLOW, below);
-//   - a verb after a reviewer key that doesn't agree with the cast: "{reviewer_has} only the
-//     emails, and asks" reads "Faculty have only the emails, and asks" with plural Faculty;
-//     a plural verb after a singular reviewer ("The teacher") breaks the same way.
+//   - another cast's role words (only for an edition that lists two or more casts), less
+//     the figure's allowlist (ALLOW, below): "Faculty" in a classroom patch, "instructor" in
+//     a high-school one;
+//   - a verb after a reviewer key that doesn't agree with the cast. Only seminar (PME's
+//     "Faculty") is plural: "{reviewer_has} only the emails, and asks" breaks there. The
+//     classroom ("the instructor"), high-school and workplace reviewers are singular, so
+//     "{reviewer_puts} them aside and ask" breaks in those. The number comes from the cast's
+//     reviewer_has ("Faculty have" is plural).
 // To-do: an edition without a `casts` list whose own cast isn't --todo (default classroom)
 // is also resolved in that cast. What that would flag is listed as a to-do for the figure
 // work and doesn't fail the check. --counts prints the counts without the items.
@@ -31,13 +34,17 @@ const only = args.filter((a) => !a.startsWith("--"));
 // cast. The workplace list holds the literal role words the business editions write
 // (CLASSROOM-PLAN.md); each figure's own come from its castOverrides once it has them.
 const ROLE_NOUNS = {
-  classroom: ["seminar"],
+  seminar: ["seminar"],
+  classroom: [],
   "high-school": [],
   workplace: ["analyst", "manager", "associate", "partner", "engineer", "tech lead", "owner", "reviewer"],
 };
 // Per figure: phrases where another cast's role word is right in every cast. A flagged word
-// inside one of these phrases (case-insensitive) passes.
+// inside one of these phrases (case-insensitive) passes. An entry is a phrase, or
+// {text, path} to pass it only in strings whose path starts with `path`.
 const ALLOW = {
+  // The essay's quote on the PME page: "subordinates, partners, or commanders".
+  "responsibility-laundering": [{ text: "subordinates, partners, or commanders", path: "page.quotes" }],
   // The study's shop owners, not the figure's (the panel and the evidence).
   "uncalibrated-reliance": ["advice owners acted on", "weaker owners", "study of shop owners"],
   // A strategy option and its question, not a role.
@@ -87,12 +94,15 @@ function check(slug, raw, castId) {
   for (const m of warnings) items.push({ kind: "loader", path: "", text: m });
   // Unfilled keys.
   for (const [path, s] of strings(ed)) for (const m of s.matchAll(/\{(\w+)(\|upper)?\}/g)) items.push({ kind: "unfilled", path, text: `${m[0]} — ${snippet(s, m.index, m[0].length)}` });
-  // Other casts' role words (to-do mode and listed casts only).
-  if (castId !== (raw.cast || "classroom") || Array.isArray(raw.casts)) {
+  // Other casts' role words (to-do mode, and editions that list two or more casts).
+  if (castId !== (raw.cast || "seminar") || (Array.isArray(raw.casts) && raw.casts.length > 1)) {
     const own = nounsFor(castId, raw);
     const other = new Set(castIds.filter((c) => c !== castId).flatMap((c) => [...nounsFor(c, raw)]).filter((n) => !own.has(n)));
-    const allow = (ALLOW[slug] || []).map((a) => a.toLowerCase());
-    for (const [path, s] of strings(ed)) {
+    const rules = (ALLOW[slug] || []).map((a) => (typeof a === "string" ? { text: a, path: "" } : a));
+    for (const [path, str] of strings(ed)) {
+      const allow = rules.filter((r) => path.startsWith(r.path)).map((r) => r.text.toLowerCase());
+      // Link targets aren't words: "hbs.edu/faculty/…" is no role.
+      const s = str.replace(/\]\([^)]*\)|https?:\/\/\S+/g, (u) => " ".repeat(u.length));
       const lower = s.toLowerCase();
       const found = new Map(); // by position: "analysts" matches both "analyst" and "analysts"
       for (const noun of other) {
@@ -101,7 +111,7 @@ function check(slug, raw, castId) {
           if (!allowed && !(found.get(m.index)?.length >= m[0].length)) found.set(m.index, m[0]);
         }
       }
-      for (const [i, w] of [...found].sort((a, b) => a[0] - b[0])) items.push({ kind: "role", path, text: `"${w}" — ${snippet(s, i, w.length)}` });
+      for (const [i, w] of [...found].sort((a, b) => a[0] - b[0])) items.push({ kind: "role", path, text: `"${w}" — ${snippet(str, i, w.length)}` });
     }
   }
   // Verbs after reviewer keys, against the cast's number (the patched words, before filling).
@@ -146,12 +156,12 @@ for (const slug of slugs) {
     const raw = JSON.parse(readFileSync(`${ROOT}figures/${slug}/editions/${file}`, "utf8"));
     const name = `${slug}/${file.replace(/\.json$/, "")}`;
     editions++;
-    const listed = Array.isArray(raw.casts) ? raw.casts : [raw.cast || "classroom"];
+    const listed = Array.isArray(raw.casts) ? raw.casts : [raw.cast || "seminar"];
     for (const c of listed) {
       if (!all[c]) { failures.push({ name, castId: c, kind: "loader", path: "casts", text: `"${c}" isn't a cast in casts.json` }); continue; }
       for (const it of check(slug, raw, c)) failures.push({ name, castId: c, ...it });
     }
-    if (!Array.isArray(raw.casts) && (raw.cast || "classroom") !== todoCast && all[todoCast]) todo[name] = check(slug, raw, todoCast);
+    if (!Array.isArray(raw.casts) && (raw.cast || "seminar") !== todoCast && all[todoCast]) todo[name] = check(slug, raw, todoCast);
   }
 }
 
