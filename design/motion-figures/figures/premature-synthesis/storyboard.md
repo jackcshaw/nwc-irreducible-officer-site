@@ -56,6 +56,14 @@ Related:
 - Beat 0, a 3 s name card, comes before beat 1; player time is figure time plus 3 s (93.0 s in all). The strip above the stage reads "PREMATURE SYNTHESIS · 3 OF 7" throughout, and the last caption sets the name and definition beside "FACULTY CHECK".
 - The phone caption band is fixed at 222 px (the measured final caption) and the stacked desktop band at 144 px; the narrow stage is 466 px. Players: 816 px at 1440×900, 698 px at 1280×720, 830 px at 390×844, with the controls still.
 
+**PME polish pass** (October 30, 2026, approved by Jack: the business testers' fixes applied to PME):
+- *Laptop windows keep the picture.* PME mono labels are 13 units (`labels.monoSize`), and in windows 720 px or wider and 860 px or shorter a compact caption band (92 px; check and second line at 20 px, definition at 15 px; `--mf-chrome` 166 px plus the 31 px plate) lets the picture scale up, as in IM and FS. The drawn picture now shows at 1366 × 657 and 1280 × 720 with every label at 11 px or more. The stacked stage takes over only when 13-unit labels would fall under 11 px (phones).
+- *Room for 13-unit labels* (layout, no wording change). The "AI'S MAP" tag moves from x 770 to 762, 12 units clear of card 3 and 16 clear of the 2–5 line. The row sequences drop their letter-spacing, so "READ → TRIES → AI CHECKS → WRITES" ends 24 units before the dot.
+- *The second dot's label holds.* "Second student" now stays from 26.3 to 28.9 s, 2.2 s, long enough to read; it used to fade at 26.8–27.1 (0.7 s). The change is core, so business has the same timing.
+- *Phone pacing* (stacked stage). "The paper's main claim rests on 2–5." appears with the paper's sheet (19.4 s), not with the heavy line, so it holds 5.1 s. The matching line appears from the AI tag (39.6 s) and holds about 6 s.
+- **Wording changes for Jack** (phone stage only; meaning kept): the paper tags "Main claim: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6" become "Main claim: 2–5. Also 3–4–5 and 1–4–6."; "Four match their own. Nothing at 1–2. They check 3–4, then keep it." becomes "Four match their own, nothing at 1–2. They check 3–4, then keep it." No picture or caption wording changed.
+- Pacing check (words ÷ 3 + 1.5 s, at 1440 × 900, 1366 × 657, 1280 × 720 and 390 × 844): every caption and every text that leaves before the end passes.
+
 **Changes after the consistency review** (`../../CONSISTENCY.md`, PS items 1–4):
 - *Students named in red.* The row names are red Sans 600 13, "First student" and "Second student", as the dots, the phone stage and the colour rule have it. The sequences under them stay mono.
 - *Stacked whenever a label would vanish.* The stacked text stage now takes over whenever mono 12 would render under 11 px at the letterboxed scale (`syncStacked`, as in figures 4, 5 and 7), so at 1280×720 no labels disappear. The 480 px media query is gone.
@@ -188,7 +196,7 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 
 **Line geometry.** Lines run centre to centre and are drawn under the cards, so only the gap between cards shows. Card centres: 1 (422, 180), 4 (422, 330), 6 (422, 480), 3 (662, 255), 2 (850, 180), 5 (850, 480). The line 2–5 runs straight down the right side, with nothing crossing it. The line 1–2 runs along the top, under the note.
 
-**Narrow screens and short windows.** Whenever mono 12 would render under 11 px at the letterboxed scale (phones, and windows like 1280×720), a stacked text stage on the same clock replaces the picture (the SVG is collapsed, not removed), with text at 13–16 px. Each beat shows the sections it is about: the task and the six readings (beat 1); the AI's map as link chips, dashed until taken up, with 2–5 marked as the main claim's (2–3); the first paper; the second student's red chips, the struck 1–2 and the note, then the AI's map with 3–4 checked (4–5); both papers under "Same argument, own words" (6); the papers set aside and each student's order and sketch (7); the question, both answers word by word, and "What they learned" (8–10). The narrow stage is fixed at 476 px and the caption band at 160 px, so nothing below them moves. The beat list's "On screen" lines show as well, and the caption band carries the captions at full size.
+**Narrow screens.** Whenever the 13-unit labels would render under 11 px at the letterboxed scale (phones; laptop windows such as 1366×657 and 1280×720 keep the picture, with a compact caption band), a stacked text stage on the same clock replaces the picture (the SVG is collapsed, not removed), with text at 13–16 px. Each beat shows the sections it is about: the task and the six readings (beat 1); the AI's map as link chips, dashed until taken up, with 2–5 marked as the main claim's (2–3); the first paper; the second student's red chips, the struck 1–2 and the note, then the AI's map with 3–4 checked (4–5); both papers under "Same argument, own words" (6); the papers set aside and each student's order and sketch (7); the question, both answers word by word, and "What they learned" (8–10). The narrow stage is fixed at 476 px and the caption band at 160 px, so nothing below them moves. The beat list's "On screen" lines show as well, and the caption band carries the captions at full size.
 
 ## 4. Beats
 
@@ -246,7 +254,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 - **What moves:**
   1. 25.7–26.2: the first dot, the grey lines and the "AI'S MAP" tag fade, and the cards close. Paper A stays.
   2. 26.3–26.7: a second red dot grows in at (312, 444), labelled "Second student".
-  3. 26.8–29.5: the dot reads each card closely, 0.45 s each, in the same order. Each card opens and shows its note bars, exactly as in beat 2. The label fades as the dot starts.
+  3. 26.8–29.5: the dot reads each card closely, 0.45 s each, in the same order. Each card opens and shows its note bars, exactly as in beat 2. The label stays to 28.9, 2.2 s in all, so it can be read, then fades.
   4. 29.7–31.7: the dot draws four red lines, 0.5 s each, travelling along each: 2–5, 3–5, 1–4, 4–6.
   5. 31.8–32.3: the dot draws a fifth red line along the top, from 1 to 2.
   6. 32.4–33.4: the dot stops at card 2 while its notes flash, runs back along the line, and stops at card 1 while its notes flash.

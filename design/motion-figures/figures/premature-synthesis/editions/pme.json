@@ -94,7 +94,10 @@
     "t": " → WRITES"
    }
   ],
-  "learned": "WHAT THEY LEARNED"
+  "learned": "WHAT THEY LEARNED",
+  "monoSize": 13,
+  "aiTagX": 762,
+  "seqLs": 0
  },
  "narrow": {
   "taskLabel": "Example task",
@@ -103,12 +106,12 @@
   "mapAMain": "The paper’s main claim rests on 2–5.",
   "paperA": "{first}’s paper",
   "paperTitle": "Blockades work when the navy holds the sea.",
-  "paperTags": "Main claim: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6",
+  "paperTags": "Main claim: 2–5. Also 3–4–5 and 1–4–6.",
   "paperAI": "AI helped connect the readings",
   "mapB": "{second}: own connections first",
   "note": "In Reading 1, trade went overland through a neighbour.",
   "aiMap": "AI’s map: the same five lines.",
-  "match": "Four match their own. Nothing at 1–2. They check 3–4, then keep it.",
+  "match": "Four match their own, nothing at 1–2. They check 3–4, then keep it.",
   "papers": "{receive} · same argument, own words",
   "pairA": "{first}",
   "pairB": "{second}",
@@ -246,5 +249,6 @@
   ],
   "evidence": null,
   "editionNote": "PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay."
- }
+ },
+ "laptop": true
 }

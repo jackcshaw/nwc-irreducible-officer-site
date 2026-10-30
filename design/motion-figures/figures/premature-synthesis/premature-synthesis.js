@@ -21,7 +21,7 @@
 		sweepA: [11.6, 12.8], tagA: [12.8, 13.2],
 		traceA: 16.5, trace: 0.5, toSheetA: [19.2, 20.2], sheetA: [19.8, 20.2], titleA: [20.2, 20.8], heavyA: [20.8, 21.2],
 		parasA: 21.2, para: 0.5, aiNoteA: [22.8, 23.2],
-		fadeA: [25.7, 26.2], dotB: 26.3, labelBOut: [26.8, 27.1], readB: 26.8,
+		fadeA: [25.7, 26.2], dotB: 26.3, labelBOut: [28.6, 28.9], readB: 26.8,
 		redB: 29.7, redStep: 0.5, try12: [31.8, 32.3], check12: [32.4, 33.4], x: [33.5, 33.9], note: [34.0, 34.5], retract: [34.6, 34.9],
 		homeB: [35.0, 35.6], pulseB: [37.4, 37.8], sweepB: [38.0, 39.2], xBright: [39.2, 39.6], tagB: [39.6, 40.0],
 		merge: [41.1, 41.7], check34: [41.8, 43.0], red34: [43.1, 43.5], homeB2: [43.6, 44.2],
@@ -102,6 +102,9 @@
 	// Mono label size: 12 by default; an edition can raise it (business: 13) so the picture
 	// keeps every label at 11 px or more in a 1280×720 window.
 	const MONO = L.monoSize || 12;
+	// Optional: a compact caption band in laptop windows (.ps-laptop, see index.html), so the
+	// drawn picture holds at 1280 × 720 and 1366 × 657 with 13-unit labels at 11 px or more.
+	root.classList.toggle('ps-laptop', !!ed.laptop);
 	IDS.forEach((id) => { CARDS[id].title = ed.readings[id]; });
 	PANEL.rows.forEach((r, i) => { r.lines = ed.answers[i]; });
 	// The first paragraph carries the main claim; its tag says so.
@@ -162,16 +165,14 @@
 		home0: [29.5, 29.9], ask: [30.0, 30.5], answer: [30.8, 31.3], redB: 32.45, homeB: [34.3, 34.8],
 		try12: [36.85, 37.5], check12: [37.6, 38.6], x: [38.7, 39.1], note: [39.2, 39.7], retract: [39.8, 40.1],
 		pulseB: [30.0, 30.4], xBright: [40.2, 40.6], toFix: [40.6, 40.9], red34: [41.7, 42.2],
-		// The dot's name stays 2.2 s, long enough to read.
-		labelBOut: [28.6, 28.9],
 		// Beat 9's payoff starts as its caption does.
 		ringPulseB: [73.0, 73.4], learned: [73.4, 73.9], ansB: [74.2, 79.2],
 	} : T;
 	// Conceptual flow, beat 3: the first person takes the AI's code as written. No tracing:
 	// the dot pulses once and every line turns solid together.
 	const TAKE = [16.5, 17.0];
-	// Stacked stage: when the main connection is named (conceptual flow: with the code sheet, so it holds 5 s).
-	const MAIN_N = CONCEPT ? [19.4, 19.8] : T.heavyA;
+	// Stacked stage: the main connection is named with the paper's sheet, so it holds 5 s.
+	const MAIN_N = [19.4, 19.8];
 	const FIX = {'1-4': [40.9, 41.4]};
 	const RED_T = (() => { let j = 0; return redB.map((l, i) => { if (CONCEPT && FIX[l.k]) return FIX[l.k]; const k = CONCEPT ? j++ : i; return [TB.redB + T.redStep * k + 0.15, TB.redB + T.redStep * (k + 1)]; }); })();
 	const RED34_T = TB.red34;
@@ -189,7 +190,9 @@
 		const bars = [120, 84].map((w, i) => el(g, 'rect', {x: c.x + 36, y: c.y + 42 + 7 * i, width: w, height: 3, rx: 1, fill: C.ink, opacity: 0}));
 		cards[id] = {g, box, bars};
 	}
-	const aiTag = mono(markLayer, 770, 300, L.aiMap, {fill: C.grey});
+	// Optional layout knobs for 13-unit labels: the AI tag's x (clear of card 3 and the 2–5 line)
+	// and the row sequences' letter-spacing (clear of the dots).
+	const aiTag = mono(markLayer, L.aiTagX || 770, 300, L.aiMap, {fill: C.grey});
 	// Optional: names the heavy line on the map when the paper's "MAIN" tag first appears.
 	const mainTag = L.mainOnMap ? mono(markLayer, 860, 330, L.mainOnMap) : null;
 	if (mainTag) set(mainTag, {opacity: 0});
@@ -263,7 +266,7 @@
 	serif(q2, 620, 204, L.q2[1], {fs: 17, style: 'italic'});
 
 	const seq = (parent, x, y, parts) => {
-		const n = mono(parent, x, y, '', {weight: 500, ls: 0.5});
+		const n = mono(parent, x, y, '', {weight: 500, ls: L.seqLs ?? 0.5});
 		parts.forEach(({t: s, role}) => { const sp = el(n, 'tspan', {fill: ROLE[role] || C.ink}); sp.textContent = s; });
 		return n;
 	};
@@ -650,7 +653,7 @@
 		const pb = pathB(t);
 		const growB = spring(t, T.dotB, {stiffness: 300, damping: 20});
 		set(dotB, {cx: pb.x, cy: pb.y, r: Math.max(0, 5 * growB + 2.5 * pulse(t, TB.pulseB)), opacity: cardsOut});
-		set(labB, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...TB.labelBOut))});
+		set(labB, {opacity: prog(t, T.dotB, T.dotB + 0.4) * (1 - prog(t, ...T.labelBOut))});
 		dotsF.forEach((d, row) => {
 			const p = pathF[row](t);
 			const g = spring(t, T.rows[0], {stiffness: 300, damping: 20});
@@ -785,7 +788,8 @@
 			fade(N.mapB.c34, prog(t, ...T.sweepB));
 			N.mapB.c34.classList.toggle('is-own', t >= T.red34[0]);
 			N.mapB.c34.classList.toggle('is-ai', t < T.red34[0]);
-			fade(N.mapB.match, prog(t, ...T.merge));
+			// From the AI tag, so the comparison holds about 6 s before beat 6 clears it.
+			fade(N.mapB.match, prog(t, 39.6, 40.0));
 		} else {
 			fade(N.mapB.aiLabel, prog(t, TB.toFix[0], FIX['1-4'][0]));
 			fade(N.mapB.c34, prog(t, ...RED34_T));

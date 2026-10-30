@@ -22,7 +22,7 @@ The core is the same layout, colours and nameplate as `storyboard.md` (round 7),
 - `labels.monoSize: 13`: mono labels at 13 units, so at 1280 × 720 the picture stays drawn (12 × scale would fall under 11 px) and every label renders at 11.1 px or more.
 - `narrow.learnedInBox`: on the stacked stage, "What they learned" sits inside the second engineer's box.
 - `page.editionNote`: the edition note is now edition text (PME's unchanged).
-- Round 3: `TAKE` (beat 3, lines taken together; no tracing), `labels.mainOnMap`, `labels.fixNotes` (`{lines, x, y, at}`), `labels.sketchNotes` (`{t, role}`), `narrow.sketchA` / `narrow.sketchB`, and the beat 9 timings in `TB` (`ringPulseB`, `learned`, `ansB`). Verify round: `TB.labelBOut`, `MAIN_N`, `narrow.sketchEndA` / `narrow.sketchEndB`, and the beat 5 fix moved 0.7 s earlier.
+- Round 3: `TAKE` (beat 3, lines taken together; no tracing), `labels.mainOnMap`, `labels.fixNotes` (`{lines, x, y, at}`), `labels.sketchNotes` (`{t, role}`), `narrow.sketchA` / `narrow.sketchB`, and the beat 9 timings in `TB` (`ringPulseB`, `learned`, `ansB`). Verify round: the dot label's hold (now core), `MAIN_N` (core since the PME polish pass), `narrow.sketchEndA` / `narrow.sketchEndB`, and the beat 5 fix moved 0.7 s earlier.
 - From round 1: `labels.source` / `narrow.source` (the source line), `narrow.taskLine`, `narrow.hideSketchAtEnd`.
 
 ## Workplace check (for Jack)
@@ -97,7 +97,7 @@ Beat lengths are the core's (figure time; the player adds the 3 s name card). Ea
 | 9 | 10.6 | 11 | 5.2 | yes | label 3, answer 15 | answer appears over 5.0 s from 74.2, then 4.1 s before the check | to the end |
 | 10 | 6.7, then rests | 16 (+ name and definition, universal) | 6.8 | yes, rests | source 8 | 4.2 | to the end |
 
-Beat 4 timing: the dot's name "Second engineer" shows 26.3–28.9 (2.25 s readable; PME keeps the core 0.7 s), read 26.8–29.3, home 29.5–29.9, question 30.0, answer 30.8–31.3, three lines 32.6–34.0, home 34.3. Beat 5: try 1–2 at 36.85, check 37.6–38.6, ✕ 38.7, note 39.2–39.7, line pulls back 39.8–40.1, ✕ brightens 40.2, fix 1–4 40.9–41.4 (note 41.3), 3–4 41.7–42.2 (note 42.1), home 43.6. Beats 4 and 5 each get about half the work, and the bug has 2.2 s from the ✕ before the fix starts.
+Beat 4 timing: the dot's name "Second engineer" shows 26.3–28.9 (2.25 s readable; core timing since the PME polish pass, so PME matches), read 26.8–29.3, home 29.5–29.9, question 30.0, answer 30.8–31.3, three lines 32.6–34.0, home 34.3. Beat 5: try 1–2 at 36.85, check 37.6–38.6, ✕ 38.7, note 39.2–39.7, line pulls back 39.8–40.1, ✕ brightens 40.2, fix 1–4 40.9–41.4 (note 41.3), 3–4 41.7–42.2 (note 42.1), home 43.6. Beats 4 and 5 each get about half the work, and the bug has 2.2 s from the ✕ before the fix starts.
 
 Stacked-stage pacing (verify round): "Main link: 2–5, the task group and fetches." (8 words) shows with the code sheet, 19.4 s, for 5.05 s; "Each fetch catches its own errors, timeouts included." (8 words) shows with the fix, 40.9 s, for 4.6 s. In the final beat the sketch lines become "Sketch redrawn from the AI's code" and "Sketch built, broken once, fixed", so the phone's final frame keeps the contrast. To fit, the phone question is "What would make fetching in one group fail?" and the learned note "✕ One failed fetch canceled the rest." 
 
