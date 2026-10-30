@@ -328,14 +328,14 @@ Every string in an edition may use `{key}`, or `{key|upper}` for mono labels. Bo
 - Figures that don't call the loader are unchanged. The seven other figures were frame-diffed against the HEAD runtime.
 
 **Edition switch:** the links are page furniture, the same in every edition, so they stay in the HTML under the setup:
-- `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">Military education</a></nav>`;
+- `<nav class="fig-editions">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="pme">PME</a></nav>`;
 - then `<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">`.
-  - PME's note reads "Military education: the original example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
+  - PME's note reads "PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay." Its static text stays as the no-JS fallback.
   - The business edition sets no note (round 3: the military wording sat above a workplace figure), so the line is hidden there.
 
 The current edition's link is bold and underlined (`aria-current`). Both lines use whole-pixel line heights (21 and 20 px), so the figure moves by whole pixels. An edition that hides the note sits 24 px higher.
 
-**A cast in the switch** (`data-cast-link`). Classroom is the business edition in another cast, so its link names both: `<a data-edition-link="business" data-cast-link="classroom">Classroom</a>`, giving "Workplace · Classroom · Military education".
+**A cast in the switch** (`data-cast-link`). Classroom is the business edition in another cast, so its link names both: `<a data-edition-link="business" data-cast-link="classroom">Classroom</a>`, giving "Workplace · Classroom · PME".
 - Each link sets `cast` (with `data-cast-link`) or clears it (without), so the edition shows in its own cast. "Workplace" from `?edition=business&cast=classroom` goes to the workplace cast. Before this, `fillPage` kept every query parameter, so that link stayed classroom.
 - `aria-current` needs both to match: the link's edition is the one on screen, and its cast (or, without `data-cast-link`, the edition's own `cast`) is the one on screen.
 - **Cast families** (FC classroom light read).

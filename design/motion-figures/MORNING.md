@@ -30,7 +30,7 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 
 ## Business editions (October 28–29)
 
-Every figure now has two editions: **Military education** (the essay's examples, frame-for-frame as you approved them) and **Business** (a workplace example grounded in a real study, with analysts and a manager). Open a figure and use "See this with: Workplace · Military education", or the Business links on the [review page](index.html).
+Every figure now has two editions: **PME** (the essay's examples, frame-for-frame as you approved them) and **Business** (a workplace example grounded in a real study, with analysts and a manager). Open a figure and use "See this with: Workplace · PME", or the Business links on the [review page](index.html).
 
 | Figure | Business example (source) | Status |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ Every figure now has two editions: **Military education** (the essay's examples,
 
 What the cold reads caught along the way: two figures contradicted their study (the cost frame in frame capture, and the engineer's workflow in premature synthesis), plus straw men, second differences between the two people, and overstated sources. All were fixed. Every business edition's sources were checked against the paper or decision; the remaining limits are noted on each page.
 
-**Also done:** the shared player now waits for a slow edition rather than swapping it, survives a missing data file, and shows a notice without JavaScript. The integration plan requires pre-rendering each edition and making business the default on standalone pages, per your decision. The switch reads "Military education" rather than "PME", because business testers didn't know the acronym; revert if you prefer.
+**Also done:** the shared player now waits for a slow edition rather than swapping it, survives a missing data file, and shows a notice without JavaScript. The integration plan requires pre-rendering each edition and making business the default on standalone pages, per your decision. The switch reads "PME", with a note under it spelling out professional military education (your call, October 30).
 
 ## Classroom cast (in progress, October 29)
 
@@ -68,14 +68,14 @@ You said to build the classroom cast after business, so it's underway. [CLASSROO
 Where it stands:
 - **Reads:** a light read by an educator found the point lands in both classroom versions, with no workplace wording and nothing that reads as "don't use AI". Its fixes are in.
 - **No regressions:** the workplace and military-education editions are unchanged frame for frame.
-- **The switch** reads "Workplace · Classroom · Military education". High school is a variant of Classroom, reached through the K–12 setting.
+- **The switch** reads "Workplace · Classroom · PME". High school is a variant of Classroom, reached through the K–12 setting.
 - **Previews:** the classroom preview video is stale, because the machine ran low on memory during export. The stills are current.
 
 Decisions, each with a recommendation in the plan:
 1. Overrides on the business edition, or a separate classroom file per figure.
 2. A high-school cast ("the teacher") beside higher ed's "faculty".
 3. The business checks under "Faculty check", or the site's verbatim checks.
-4. The switch: "Workplace · Classroom · Military education", with high school reached through the K–12 setting.
+4. The switch: "Workplace · Classroom · PME", with high school reached through the K–12 setting.
 5. The race line in frame capture for high school: on screen with a teacher note.
 6. Uncalibrated reliance as a case packet, or skip its classroom version.
 7. Fluency substitution (patent law) for high school only if its read passes.

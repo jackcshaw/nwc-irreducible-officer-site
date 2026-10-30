@@ -222,10 +222,10 @@ The business edition in two more casts, through data in `editions/business.json`
 - **The setup (classroom casts)** adds: "The seminar (class) allows AI, and both students say they used it, so the question is whose frame the ranking rests on." This answers the undisclosed-AI reading of beats 7–8.
 - **The switch:** on a high-school page, "Classroom" is current and keeps `cast=high-school` (the runtime's cast families).
 
-**Switch:** "See this with: Workplace · Classroom · Military education".
+**Switch:** "See this with: Workplace · Classroom · PME".
 - Classroom is `data-edition-link="business" data-cast-link="classroom"`. High school has no link; it is reached with `?cast=high-school`.
 - `aria-current` was checked in six states:
-  - no query, and `?edition=pme`: Military education;
+  - no query, and `?edition=pme`: PME;
   - `business` and `cast=workplace`: Workplace;
   - `cast=classroom`: Classroom;
   - `cast=high-school`: Classroom, with its link keeping `cast=high-school`.

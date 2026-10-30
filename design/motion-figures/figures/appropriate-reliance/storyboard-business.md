@@ -88,7 +88,7 @@ Beats 0–4 and 8 have the same words in both editions. This is the shipped busi
 
 ## The edition switch
 
-"See this with: Workplace · Military education" shares the kicker's row, at the right, and its line box, so it adds no height. Under the setup it would have pushed the figure down about 40 px, and at 1440 × 900 the first view would have dropped to the stacked stage. On phones "See this with:" is read but not shown, so the switch still fits the row. The note "Military education: the original example from *The Irreducible Officer*, the National War College essay." sits under "How this figure works". The military-education link points to it (`aria-describedby`). The static meta description is role-neutral: the name, the definition and one clause. The business edition fills it with business wording.
+"See this with: Workplace · PME" shares the kicker's row, at the right, and its line box, so it adds no height. Under the setup it would have pushed the figure down about 40 px, and at 1440 × 900 the first view would have dropped to the stacked stage. On phones "See this with:" is read but not shown, so the switch still fits the row. The note "PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay." sits under "How this figure works". The military-education link points to it (`aria-describedby`). The static meta description is role-neutral: the name, the definition and one clause. The business edition fills it with business wording.
 
 ## Round-1 lessons (BUSINESS-BRIEF.md, 7–12)
 

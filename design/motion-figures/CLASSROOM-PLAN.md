@@ -229,7 +229,7 @@ Three additive fields in an edition, read by `loadEdition`:
 1. **Mechanism:** overrides and patches on the business edition (recommended), or a separate classroom file per figure.
 2. **High school:** add a `high-school` cast ("the teacher", "Teacher's check", "class") beside `classroom` ("faculty", "seminar"). Recommended.
 3. **Check wording:** the business checks under "Faculty check" (recommended), or the site's verbatim faculty checks.
-4. **The switch:** "Workplace · Classroom · Military education", with high school reached through the site's K–12 setting or `?cast=high-school` (recommended). The alternative is a fourth "High school" link.
+4. **The switch:** "Workplace · Classroom · PME", with high school reached through the site's K–12 setting or `?cast=high-school` (recommended). The alternative is a fourth "High school" link.
 5. **The race line in FC for high school:** keep it on screen with a teacher note on the page (recommended), or move it to the page.
 6. **UR:** students work the shop as a case, the packet holds the records and faculty see only the plans (recommended), or skip UR's classroom version.
 7. **FS for high school:** ship the classroom version only if the high-school read passes, and otherwise use the workplace edition.
