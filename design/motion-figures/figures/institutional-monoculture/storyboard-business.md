@@ -231,4 +231,80 @@ Terwiesch et al. is paraphrased as on the PME page and wasn't re-read today.
 1. **The cast:** ten analysts and "the manager", in place of the example's ten managers and a head of strategy.
 2. **The workplace check:** "Reviewer's check: What frames are missing across the team? / Line up the problems. What else could the problem be?"
 3. **The send-back:** the imagined run is now the manager sending the plans back with "What else could the problem be?". In PME the question box stays empty, by design.
-4. **A cast key to add:** `reviewer_sends`, "faculty send" (classroom) and "the manager sends" (workplace). Beat 8 writes "the manager sends" literally until it exists.
+4. **Cast key:** `reviewer_sends` is now in `casts.json`, and beat 8 uses it (§10).
+
+## 10. Classroom cast (CLASSROOM-PLAN.md, section 6)
+
+The business edition in two more casts, through data in `editions/business.json`: `casts: ["workplace", "classroom", "high-school"]` and `byCast`. The scenario, timeline, picture and evidence stay as built.
+- Open it with `?edition=business&cast=classroom` (higher ed: "the instructor", "class", "Instructor's check").
+- Or with `&cast=high-school` ("the teacher", "class", "Teacher's check").
+- Both casts are singular, so the business grammar holds.
+
+**Keys.**
+- The twelve literals `edition-check` flagged are now keys: `{reviewer}`, `{Reviewer}`, `{reviewer_sees}`, `{reviewer_sends}`, `{reviewer_lines}` and `{Each_person}`. Ten of them were "manager".
+- The workplace text resolves as before, with two exceptions:
+  - the hidden summary says "The manager lines up…" where it said "Then the manager lines up…";
+  - the beat-9 detail and the summary say speech bubbles "appear" where they "land" (voice check).
+
+**Framing through `byCast`.** The classroom patch serves both casts, except one label (below):
+- Ten students in a strategy class answer the same case question with the school's AI.
+- Caption 1 is "Ten students get the same case question."; caption 2 is "Each asks the school's AI for an outline. They come back alike."
+- The setup says the class allows AI and each student says they used it.
+- The setup and the study section say neither study looked at students, and Bottesch's participants were knowledge workers at one industrial company.
+- The links note names the cast's check and "a strategy class working a company's case".
+- The hidden summary has the class and the school's AI.
+
+**One label differs by cast.** Classroom's question box is headed "INSTRUCTOR ASKS". "THE INSTRUCTOR ASKS" would reach the lineup's bracket in the large layout. High school keeps "THE TEACHER ASKS", which fits like "THE MANAGER ASKS". So `byCast["high-school"]` is classroom's patches without that one label.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Caption 1 | Ten students get the same case question. | same |
+| Caption 2 | Each asks the school's AI for an outline. They come back alike. | same |
+| Captions 3, 4, 6, 7, 8, 10 | The instructor sees… / lines up… / doesn't see this… / asks… / Imagine the instructor sends them back… / lines them up again. | The teacher… |
+| Check | Instructor's check: What frames are missing across the class? / Line up the problems. What else could the problem be? | Teacher's check: … |
+| Picture | "The class", "Same class, imagined", "NOT SEEN BY THE INSTRUCTOR", "INSTRUCTOR ASKS" | "NOT SEEN BY THE TEACHER", "THE TEACHER ASKS" |
+| Phone | "The instructor asks: What frames are missing?", "Not seen by the instructor" | "The teacher asks…", "Not seen by the teacher" |
+| Setup | "Ten students in a strategy class each use the school's AI to help answer the same case question: how should an industrial-equipment maker respond to a low-cost competitor? The class allows AI, and each student says they used it. … The case is an illustration based on Romasanta, Thomas & Levina (2026), a study of AI models' strategy advice, and Bottesch (2025), a field experiment with knowledge workers at an industrial company. Neither study looked at students. The class, the case and the plans are constructed." | same |
+
+The task card, context, problem lines, goals and source line are the same in every cast.
+
+**Switch:** "See this with: Workplace · Classroom · PME". Classroom is `data-edition-link="business" data-cast-link="classroom"`. `aria-current` was checked in six states:
+- no query, and `?edition=pme`: PME;
+- `business` and `cast=workplace`: Workplace;
+- `cast=classroom`: Classroom;
+- `cast=high-school`: Classroom, with its link keeping `cast=high-school`.
+
+**Pace** (caption words ÷ 3 + 1.5 s, on the business clock):
+
+| # | Length (s) | Workplace | Classroom | High school |
+| --- | --- | --- | --- | --- |
+| 1 | 9.1 | 6 words, 3.5 | 7, 3.8 | 7, 3.8 |
+| 2 | 6.6 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 3 | 8.0 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 4 | 12.6 | 7, 3.8 | 7, 3.8 | 7, 3.8 |
+| 5 | 6.6 | 7, 3.8 | same | same |
+| 6 | 7.2 | 13, 5.8 | 13, 5.8 | 13, 5.8 |
+| 7 | 4.5 | 7, 3.8 | 7, 3.8 | 7, 3.8 |
+| 8 | 6.6 | 12, 5.5 | 12, 5.5 | 12, 5.5 |
+| 9 | 7.8 | 12, 5.5 | same | same |
+| 10 | 13.5 | 10, 4.8 | 10, 4.8 | 10, 4.8 |
+| 11 | 8.5 | 7 + 10 | 7 + 10 | 7 + 10 |
+
+**Checks** (October 30):
+- `scripts/edition-check.mjs`: no failures, in all three casts.
+- At 1440 × 900, 1366 × 657, 1280 × 720, 768 × 1024 and 390 × 844, in both classroom casts:
+  - the picture shows at 1280 × 720 and 1366 × 657, not the stacked view;
+  - settled labels are 11.1 px or more at 1366 × 657 and 12.6 px at 1280 × 720;
+  - the controls hold their place and the caption band keeps its height at every moment;
+  - the phone player is 832 px;
+  - there is no horizontal scroll and there are no console errors.
+- The voice check (`jack_eval.py`) passes on the classroom copy, the captions, the beat details and the summaries.
+- **Workplace:** frame-identical apart from the switch line on the page captures. One run's reduced and page captures at 1440 differed with no change; a third capture matched the baseline. **PME:** only the page captures changed (the switch).
+
+New baselines (with the switch): `regression/baseline`, `baseline-still`, `baseline-business`, `baseline-business-classroom` and `baseline-business-high-school` (the last two with `--freeze`).
+
+**Stills:** `shots/business-classroom/` and `shots/business-high-school/`: beat-01 to beat-11, final, final-1440, final-1366, final-1280, final-390, reduced and page views.
+
+**PME polish (step 1):** PME already shows the drawn picture at 1280 × 720 and 1366 × 657, with labels at 12.6 px and 11.1 px, so nothing changed beyond the switch.
