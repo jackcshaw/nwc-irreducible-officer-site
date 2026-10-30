@@ -13,7 +13,7 @@ Open it with `index.html?edition=business`, or with the page's "See this with: W
    - Beat 8's caption: "The manager has only the emails, and asks each analyst two questions."
    - Business needs 1.8 s more before the check (check at 85.4 s figure time; 95.3 s total).
 2. **One difference only.**
-   - Caption 5 now reads "A second analyst reads the same standard, then decides before asking."
+   - Caption 5 now reads "A second analyst reads the standard, then decides before asking." (round 3 wording "reads the same standard, then decides before asking" was 11 words, 0.03 s over the 2× reading rule; shortened in the classroom pass).
    - The first analyst's read in beat 1 gets the same highlight as the second's in beat 5: it grows, is washed and is underlined, and the underline clears afterwards on both sides.
    - The first analyst now stays at the standard for 2.1 s.
 3. **Stacked layouts.**
@@ -176,3 +176,68 @@ Both editions were checked at 1440 × 900, 1280 × 720 (stacked) and 390 × 844,
 - **Nameplate:** unchanged.
 - **Regression:** PME frame-diffs to 0 of 203 against `regression/baseline`, which was recaptured with the edition switch. Before that, it diffed to 0 against `regression/baseline-pre-editions` with the switch hidden.
 - **Voice:** the visitor copy passes the writing-as-jack mechanical check.
+
+## 8. Classroom cast (CLASSROOM-PLAN.md section 5; Jack approved the defaults, October 30)
+
+These are the business edition in two more casts, set through data in `editions/business.json` (`casts`, `byCast`). The scenario, timeline, picture, notes, answers and check stay as built and cold-read. Open them with `?edition=business&cast=classroom` (higher ed: "faculty", "seminar", "Faculty check") or `&cast=high-school` ("the teacher", "class", "Teacher's check").
+
+**Keys.**
+- The eight items `edition-check` flagged are converted:
+  - `page.description`, `page.setup`, `page.evidence.4`: "analysts" → `{people}`;
+  - `page.evidence.2`: "the second analyst" → `{the_second}`;
+  - `page.checkFollow`: "the manager" → `{reviewer}`;
+  - `page.srSummary`: "Then the manager asks" → `{then_ask}`.
+- **Two verb fixes** for plural "Faculty", using the existing key `{reviewer_asks_each}`:
+  - caption 8: "{reviewer_has} only the emails, and asks each {person} two questions." → "{reviewer_asks_each} two questions, with only the emails to go on." It reads "Faculty ask each student…", "The teacher asks each student…" and "The manager asks each analyst…";
+  - the same fix in `page.srSummary`.
+- `casts` is `["workplace", "classroom", "high-school"]`, and `edition-check` passes for all three.
+- `byCast.classroom` patches five strings, and `byCast["high-school"]` is `"classroom"`. No patch has a verb after a reviewer key. No new cast key is needed.
+
+**Workplace wording changed.**
+- Captions 5 and 8. Caption 5 is now "A second analyst reads the standard, then decides before asking." The round-3 wording was 11 words, 0.03 s over the 2× reading rule in a 7.3 s beat.
+- Page text: the meta description, setup, summary, check paragraph and evidence render as before.
+- Business frames changed only in beats 5 and 8. `regression/baseline-business` is re-captured with `--freeze`.
+
+**Framing.** A business-writing assignment: two students work a case and email a client that the project slips three weeks, to the firm's standard.
+- The standard belongs to the case, so the answers stay "The firm's standard."
+- The setup says the course allows AI and both students say they used it. The picture's "Revised with AI" carries that on screen.
+- The setup and the first evidence paragraph note the sample: the study surveyed people at work and included no students.
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Setup | "Suppose two students in a business-writing seminar work a case: an email telling a client their project will slip three weeks, written to the firm's standard. The seminar allows AI, and both say they used it. … The study surveyed people at work; it included no students. The students, their AI, the email and the firm's standard are constructed." | "…business-writing class… The class allows AI…" |
+| Meta description | "Two students improve the same client email for a business-writing assignment, with the same AI notes. Asking what each turned down, and why, shows who decided." | same |
+| Caption 1 | "A student's assignment: a client email, to the firm's standard. We'll track three decisions." (14 words, as workplace) | same |
+| Caption 8 | "Faculty ask each student two questions, with only the emails to go on." | "The teacher asks each student two questions, …" |
+| Caption 9 / check | "Faculty check: What did the AI decide for them? Ask: whose standard? What did you turn down, and why?" | "Teacher's check: …" |
+| Picture | THE STUDENT DECIDES, First/Second student, FACULTY ASK | THE TEACHER ASKS; the rest as classroom |
+| Evidence 1 | "…Everyone surveyed was at work, and the study included no students. The students in this figure are constructed." | same |
+| Summary | "A red dot stands for a student in a business-writing seminar, improving a draft email for a case… The seminar allows AI, and the students say they used it." | "…class…" |
+
+**Switch:** "See this with: Workplace · Classroom · PME". Classroom is `data-edition-link="business" data-cast-link="classroom"`. `aria-current` marks Classroom in both classroom casts, and on a high-school page the link keeps `cast=high-school`.
+
+**Pace** (captions: words ÷ 3 + 1.5 s and 2× reading, business clock). Every caption passes in all three casts.
+
+| Beat | Length (s) | Workplace | Classroom | High school |
+| --- | --- | --- | --- | --- |
+| 1 | 9.5 | 14 | 14 | 14 |
+| 2 | 11.3 | 15 | 15 | 15 |
+| 3 | 12.1 | 10 | 10 | 10 |
+| 4 | 8.7 | 13 | 13 | 13 |
+| 5 | 7.3 | 10 | 10 | 10 |
+| 6 | 11.4 | 10 | 10 | 10 |
+| 7 | 10.2 | 14 | 14 | 14 |
+| 8 | 14.9 | 14 | 13 | 14 |
+
+Picture text is the same in every cast, except the role words, which are the same length or shorter.
+
+**Checks** (classroom and high school, at 1440 × 900, 1366 × 657, 1280 × 720 and 390 × 844).
+- The drawn picture shows at 1440, 1366 × 657 and 1280 × 720. The smallest text is 14.1, 11.1 and 12.6 px.
+- At 390 the stacked stage is used, and the player is 839 px.
+- The controls hold still, there is no overflow and there are no console errors.
+- The reduced view and the beat list are complete.
+- The voice check passes on the new copy.
+- `regression/baseline-business-classroom` and `-high-school` are captured with `--freeze`.
+- Stills are in `shots/business-classroom/` and `shots/business-high-school/`; previews aren't exported.
