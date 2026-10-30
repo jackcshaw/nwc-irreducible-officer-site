@@ -232,3 +232,102 @@ The final frame, at player time 93.6 s:
 2. **The workplace check:** the wording in section 4.
 3. **The held-back sales records.** The owner keeps them from the AI, so Part 2 depends on something it didn't have. Is that a fair stand-in for the study's owners, who asked questions over WhatsApp?
 4. **Phone wordings are shorter than desktop,** to keep the phone player within 844 px.
+
+## 10. Classroom cast (CLASSROOM-PLAN.md section 4: the case packet)
+
+The business edition in two more casts, through data in `editions/business.json` (`casts`, `castOverrides`, `byCast`). The timeline, picture, documents, answers and evidence stay as built. Open it with `?edition=business&cast=classroom` (higher ed: "the instructor", "class", "Instructor's check") or `&cast=high-school` ("the teacher", "class", "Teacher's check").
+
+**The scenario change: a case packet.**
+- The instructor or teacher gives every student the same packet: two battery quotes, the rival's flyer and the shop's sales records.
+- Each student gives the AI the quotes and the flyer and leaves the records out, as the owner does in the workplace version. The setup gives a reason, so this doesn't look contrived: the records are "a separate exhibit at the back", and the quotes and flyer "seem to be all the questions need".
+- The reviewer sees only the plans.
+- The setup adds the disclosure line: "The {group} allows AI, and the students say they used it."
+
+**Logic, kept.**
+- Same access: the same packet for both students.
+- No straw man: the first student checks Part 1 against both quotes.
+- First difference: Part 2.
+- **What the check does in class.** The reviewer knows the case, so the first plan's discount may already look off. In class, the check diagnoses rather than detects. The page says so in the check's follow-up: "The question shows why it went in: Part 1 was checked, and Part 2 was trusted because Part 1 checked out."
+- The second student's answer is "The shop's records. Rush customers left." It's 6 words, under the 7-word budget, and it claims only what the records show. Blackouts were the owner's own knowledge in the workplace version, so they're dropped here.
+
+**The study stays the study's.** The panel heading becomes "A REAL STUDY OF SHOP OWNERS" ("A real study of shop owners" on the phone). The key line still reads "…which AI advice owners acted on". Both name the study's people, and the setup and the evidence paragraph add that no students took part. The business sensitivity rules hold: no weak or strong labels on people, and Nairobi stays matter-of-fact.
+
+**Role conversion.**
+- The 55 literals that `edition-check` flagged are now keys:
+  - `{first}`, `{second}`, `{Person}`, `{people}`;
+  - `{A_person|upper}`, `{the_person}`, `{The_person}`;
+  - `{Another}`, `{That_person}`, `{each_person}`;
+  - `{the_first}`, `{the_second}`, `{The_second}`, `{A_second}`;
+  - `{reviewer_sees}`, `{Reviewer}`, `{reviewer}`.
+- `castOverrides.workplace` carries the owner and reviewer words (owner, First owner, the reviewer, The reviewer sees…). The workplace edition therefore resolves string for string as before; a Node check with the runtime's `resolveEdition` compared every string.
+- No new cast key was needed.
+
+**`byCast.classroom`** is one patch set for both casts, written for a singular reviewer ("The instructor, who sees…" / "The teacher, who sees…"). `byCast["high-school"]` inherits it. Patched paths:
+- the setup and the description;
+- beat 1's caption and description, and beat 9's caption and description;
+- the second student's spoken answer (picture and phone);
+- the panel heading (picture and phone) and the beat 8 description;
+- the records callout heading, "SHOP'S SALES";
+- the phone's Part 1 line, "Part 1 · Printing in blackouts.", which keeps the phone player at 841 px;
+- the check follow-up;
+- evidence paragraphs 2 and 4 ("median entrepreneur");
+- the screen-reader summary.
+
+**Words that differ from workplace** (the classroom and high-school wording is the same except for role words):
+
+| Where | Classroom (high school) |
+| --- | --- |
+| Caption 1 | A student asks an AI two questions about the shop's case, sharing everything but the sales records. |
+| Captions 3, 5, 6 | The student checks… / Another student… / That student… |
+| Caption 9 | The instructor (The teacher), who sees only the plans, points to each part and asks what justified relying on it. |
+| Caption 10 | Instructor's check (Teacher's check): What evidence justified relying on the AI here? / Ask part by part: was the evidence about that part? |
+| Picture | FIRST/SECOND STUDENT'S PLAN, Student, First/Second student, THE INSTRUCTOR (TEACHER) SEES ONLY THE PLANS, A STUDENT'S OWN WORK, SHOP'S SALES, A REAL STUDY OF SHOP OWNERS, "The shop's records. Rush customers left." |
+| Setup | "In a business class, the instructor (teacher) gives every student the same case packet… The class allows AI, and the students say they used it… a study of shop owners in Kenya. No students took part in it…" |
+
+**Pace** (caption words ÷ 3 + 1.5 s, figure clock):
+
+| # | Length (s) | Workplace | Classroom | High school |
+| --- | --- | --- | --- | --- |
+| 1 | 8.6 | 14, 6.2 | 17, 7.2 | 17, 7.2 |
+| 2 | 7.0 | 6, 3.5 | same | same |
+| 3 | 7.5 | 12, 5.5 | same | same |
+| 4 | 7.2 | 10, 4.8 | same | same |
+| 5 | 7.3 | 11, 5.2 | same | same |
+| 6 | 11.0 | 13, 5.8 | same | same |
+| 7 | 9.8 | 17, 7.2 | same | same |
+| 8 | 9.5 | 13, 5.8 | same | same |
+| 9 | 16.0 | 18, 7.5 | same | same |
+| 10 | 6.7, then rests | 20, 8.2 | same | same |
+
+Picture texts keep workplace's word counts or fewer. "THE INSTRUCTOR SEES ONLY THE PLANS" has 6 words, the same as the workplace label. The spoken answer drops from 7 words to 6.
+
+**The switch:** "See this with: Workplace · Classroom · PME". Classroom is `data-edition-link="business" data-cast-link="classroom"`. `aria-current` was checked in four states:
+- no query: PME;
+- `?edition=business`: Workplace;
+- `cast=classroom`: Classroom;
+- `cast=high-school`: Classroom, with the link keeping `cast=high-school`.
+
+**Checks** (classroom and high school):
+- `edition-check`: no failures for workplace, classroom or high school.
+- 1440 × 900: the picture, with the smallest label at 14.1 px.
+- 1280 × 720: the picture at 11.1 px.
+- 1366 × 657: the picture at 11.0 px.
+- 390 × 844: the player is 841 px, the same as workplace.
+- The controls never move, there's no horizontal scroll at 390 or 768, and the console is clean.
+- The writing-as-jack mechanical check passes on the new copy (setup, description, captions, check, follow-up, evidence paragraphs, summary).
+- **Workplace and PME after the change** (switch hidden, `--freeze`):
+  - PME diffs 209/209 identical.
+  - Workplace business resolves string for string as before. Its figure frames diff identical.
+  - The only differences came from the in-progress runtime's name-card timing: the waiting view and one print shot differed between captures. Three fresh captures of the waiting view match the before capture.
+
+**Stills:** `shots/business-classroom/` and `shots/business-high-school/`. Each has a still per beat, `final.png`, `final-1440.png`, `final-1366.png`, `final-390.png`, `player-390-final.png`, and reduced and page views.
+
+**Baselines** (switch hidden, `--freeze`): `regression/baseline` (PME), `baseline-business`, `baseline-business-classroom`, `baseline-business-high-school`.
+
+## 11. PME polish pass (October 30)
+
+PME already shows the drawn picture on laptop windows, through the short-window rule added in business round 2 (section 2, item 7). It applies to every edition:
+- 1280 × 720: the picture, smallest label 11.1 px ("AID REPORT");
+- 1366 × 657: the picture, 11.0 px, with a 100 px caption band.
+
+No PME change was needed. A before-and-after capture shows only the waiting view and the page and print shots changed since the old baseline, from other page work (load gate, switch); every figure frame is identical. The PME baseline was re-captured with `--freeze` and the switch hidden.

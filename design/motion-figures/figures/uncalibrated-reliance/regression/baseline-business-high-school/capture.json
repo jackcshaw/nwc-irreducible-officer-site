@@ -1,0 +1,22 @@
+{
+ "slug": "uncalibrated-reliance",
+ "edition": "business",
+ "cast": "high-school",
+ "hide": ".fig-editions,.fig-edition-note",
+ "freeze": true,
+ "sizes": [
+  [
+   1440,
+   900
+  ],
+  [
+   1280,
+   720
+  ],
+  [
+   390,
+   844
+  ]
+ ],
+ "captured": 209
+}

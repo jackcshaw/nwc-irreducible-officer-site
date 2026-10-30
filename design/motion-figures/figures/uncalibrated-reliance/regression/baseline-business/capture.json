@@ -2,7 +2,7 @@
  "slug": "uncalibrated-reliance",
  "edition": "business",
  "cast": "",
- "hide": "",
+ "hide": ".fig-editions,.fig-edition-note",
  "freeze": true,
  "sizes": [
   [

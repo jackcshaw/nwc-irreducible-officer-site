@@ -339,3 +339,7 @@ Checks:
 - The second student's reason for "15" is on screen, large, from 41.3 s; the 15 appears at 44.2 s.
 - Both port callouts stay open, at full strength, to the end.
 - **Phone:** the caption and controls stay put through the whole run (measured at 390, 768, 900 and 1280 px wide), and the player is 833 px tall at 390 × 844, final frame included.
+
+## PME polish pass (October 30)
+
+Laptop windows show the drawn picture: 1280 × 720 at 11.1 px and 1366 × 657 at 11.0 px. The second uses the short-window rule (a 100 px caption band and a 168 px `--mf-chrome` at 1200 px wide or more and 716 px tall or less), added with the business edition. No PME change was needed. Every figure frame matches before; `regression/baseline` was re-captured with `--freeze` and the switch hidden.
