@@ -260,6 +260,9 @@
 		}
 
 		let t = 0, playing = false, prev = 0, raf = 0, shown = -1, started = false;
+		// driving: the reader (or a script) has taken over (focus in the player, or a seek), so
+		// autoplay stands down. printing: never autoplay once a print has begun.
+		let driving = false, printing = false;
 		// Optional poster: while a figure waits to play, it shows this settled moment
 		// instead of an empty first frame. Play still starts from 0.
 		const poster = figure.poster == null ? figure.poster : figure.poster + C;
@@ -571,12 +574,12 @@
 			if (isReduced()) { pause(); draw(reducedAt); }
 		});
 		// Print the final frame, whatever moment is on screen.
-		addEventListener('beforeprint', () => { pause(); draw(duration); });
+		addEventListener('beforeprint', () => { printing = true; pause(); draw(duration); });
 
 		// Test and export hook: seek to any moment without the clock.
-		const seek = (time) => { pause(); draw(time + C); };
+		const seek = (time) => { driving = true; pause(); draw(time + C); };
 		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t), introCard, settleCard};
-		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C, introCard, settleCard};
+		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { driving = true; pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C, introCard, settleCard};
 
 		// Pause when scrolled away: once less than a quarter of the shot is in view, a playing
 		// figure pauses and shows Play. It doesn't resume by itself (the reader may be reading
@@ -599,12 +602,15 @@
 		if (root.dataset.mfAutoplay === 'off') return api;
 		// The reader is driving: once focus enters the figure (tabbing to Play scrolls it into
 		// view), autoplay stands down, so their first Enter plays instead of pausing.
-		let driving = false;
 		root.addEventListener('focusin', () => { driving = true; }, {once: true});
-		// Autoplay waits until the picture, its caption band and the controls can all be
-		// seen: half the shot (stage plus caption band) in view, and the caption band and
-		// controls fully in view. figures.css caps the stage height so the three fit the
-		// viewport together. A v0 figure without a shot keys on its root at 60%, as before.
+		// Autoplay starts when the picture and its caption band are substantially in view:
+		// 85% of the shot (stage plus caption band) and 85% of the caption band, even with the
+		// controls partly below the fold, where a reader scrolling down naturally stops. The
+		// earlier gate still counts too (half the shot, with the caption band and controls
+		// fully in view), so the change only adds stopping points. A shot taller than the
+		// window counts against what can fit. The view has to hold for 0.7 s, so scrolling past
+		// doesn't start it, and a seek, focus in the player or printing stands it down.
+		// A v0 figure without a shot keys on its root at 60%.
 		const shotEl = root.querySelector('[data-mf-shot]');
 		if (!shotEl) {
 			const io = new IntersectionObserver((entries) => {
@@ -614,15 +620,28 @@
 			return api;
 		}
 		const ctrlEl = root.querySelector('.mf-controls');
-		const need = [[shotEl, 0.5], [caption, 0.98], [ctrlEl, 0.98]].filter(([n]) => n);
-		const ratio = new Map(need.map(([n]) => [n, 0]));
+		const watch = [shotEl, caption, ctrlEl].filter(Boolean);
+		const seen = new Map(watch.map((n) => [n, 0]));
+		const at = (n, min) => !n || seen.get(n) >= min;
+		const inView = () => (at(shotEl, 0.85) && at(caption, 0.85)) || (at(shotEl, 0.5) && at(caption, 0.98) && at(ctrlEl, 0.98));
+		let dwell = 0;
 		const io = new IntersectionObserver((entries) => {
-			entries.forEach((e) => ratio.set(e.target, e.intersectionRatio));
+			// Each element's visible share, measured against what the window can show of it.
+			entries.forEach((e) => {
+				const fit = e.rootBounds && e.boundingClientRect.height ? Math.min(1, e.rootBounds.height / e.boundingClientRect.height) : 1;
+				seen.set(e.target, e.intersectionRatio / fit);
+			});
 			// Autoplay only if nobody has played yet: once the reader has started (or paused)
 			// the figure, scrolling it into view never restarts it.
-			if (need.every(([n, min]) => ratio.get(n) >= min)) { io.disconnect(); if (!started && !driving) play(); }
-		}, {threshold: [0, 0.25, 0.5, 0.75, 0.98, 1]});
-		need.forEach(([n]) => io.observe(n));
+			clearTimeout(dwell);
+			if (!inView()) return;
+			dwell = setTimeout(() => {
+				if (!inView()) return;
+				io.disconnect();
+				if (!started && !driving && !printing && !matchMedia('print').matches) play();
+			}, 700);
+		}, {threshold: Array.from({length: 21}, (_, i) => i / 20)});
+		watch.forEach((n) => io.observe(n));
 		return api;
 	}
 

@@ -179,7 +179,22 @@ Created for FC from `concepts-v0/motion.js` and `figures.css`, and backward comp
 - **Behaviour:**
   - **Controls never move on phones** (PS; every figure, per CONSISTENCY.md). Measure the tallest stage and caption band at 390 × 844 by seeking through the whole run, and fix both: the stacked stage's minimum height, and the caption band's minimum height (160 px, or 166 px when the check needs it). Set the check at 20 px below 480 px. FC measures its stacked stage's tallest beat whenever the width changes and holds it (511 px at 390 px wide), with the caption band at 166 px below 720 px; its player measures 796 px at 390 × 844.
   - **The player fits the viewport** (PS, shared; applies to every figure with a shot). `figures.css` caps the stage SVG at `100svh − --mf-chrome` (228 px on desktop, 250 px below 720 px wide: what the caption band and controls need), so the stage, caption band and controls fit together when first in view. The SVG letterboxes inside its box, and `legibility()` measures the letterboxed scale (`min` of the width and height fits). A figure with its own narrow stage should give it a fixed height (its tallest beat) and fix the caption band's height on phones, so the controls never move.
-  - **Autoplay waits for the whole player** (PS, shared). The figure plays once when half its shot (`[data-mf-shot]`) is in view and its caption band and controls are fully in view. Before PS it was 60% of the whole figure, which a long beat list kept from ever happening on phones or at 1280×720. A v0 figure without a shot still keys on its root at 60%. `data-mf-autoplay="off"` disables autoplay.
+  - **Autoplay when the picture is in view** (runtime; relaxed after a premature-synthesis test found it rarely started at 390 × 844 and 1280 × 720).
+    - **The gate:** the figure plays once when 85% of its shot (stage plus caption band) and 85% of the caption band are in view, even with the controls partly below the fold. That is where a reader scrolling down naturally stops.
+    - **The earlier gate still counts:** half the shot, with the caption band and controls fully in view. So the change only adds stopping points.
+    - **Tall shots:** a shot taller than the window is measured against what can fit.
+    - **A short dwell:** the view has to hold for 0.7 s, so scrolling past doesn't start the figure.
+    - **Taking over:** any seek (the scrubber, or the scripts' `window.__motionFigures[id].seek`) counts as the reader driving, like focus in the player. Printing (`beforeprint`, or print media) also stands autoplay down.
+    - **Why the last two:** without them, the relaxed gate let capture scripts' element screenshots, which scroll the shot into view, start playback mid-capture.
+    - **Measured (before the dwell):** the band of scroll positions that starts playback grew in frame capture, premature synthesis and responsibility laundering. At 390 × 844 it went from about 370–390 px to 520–540 px, at 1280 × 720 from 340 to 420–430, at 1366 × 657 from about 300–310 to 380–390, and at 1440 × 900 from about 460–470 to 540–550. A reader scrolling 100 px at a time, pausing 0.9 s, now starts playback one step earlier at every size, often with the controls partly below the fold.
+    - **Unchanged:**
+      - pausing when scrolled away;
+      - no autoplay under reduced motion;
+      - none once focus has entered the player;
+      - none on an interactive figure;
+      - `data-mf-autoplay="off"`;
+      - a v0 figure without a shot still keys on its root at 60%.
+    - (Before this, PS's rule was half the shot plus the caption band and controls fully in view; before PS, 60% of the whole figure.)
   - **The reader is driving: focus stops autoplay** (runtime, FC business round 3, from figure cold read 2).
     - Tabbing to Play scrolls the player into view, which used to autoplay it, so a keyboard reader's first Enter paused the figure.
     - Now, if focus enters the figure (`focusin` on the root) before autoplay fires, autoplay stands down. Play, Enter and the scrubber work as usual.
