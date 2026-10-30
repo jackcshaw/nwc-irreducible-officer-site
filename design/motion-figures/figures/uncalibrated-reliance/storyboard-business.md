@@ -320,6 +320,23 @@ Picture texts keep workplace's word counts or fewer. "THE INSTRUCTOR SEES ONLY T
   - Workplace business resolves string for string as before. Its figure frames diff identical.
   - The only differences came from the in-progress runtime's name-card timing: the waiting view and one print shot differed between captures. Three fresh captures of the waiting view match the before capture.
 
+**After classroom read 1** (`tests/classroom-read-1.md`). These are classroom-cast patches only; workplace and PME are unchanged.
+- **The edge is named for the case.** Workplace's "outside the frontier" framing blamed the AI's ability, while in class the gap is records the student didn't share, so the classroom casts reword it:
+  - beat 7's caption: "Part 2 turns on facts the AI wasn't given. Even with them, its answer would still need checking." (17 words, the same as workplace);
+  - the labels: "COVERED BY ITS INPUT" and "NEEDS FACTS IT WASN'T GIVEN" (phone: "Input covers it ↑", "Needs facts it lacked ↓");
+  - the tag: "FLYER ONLY" (workplace keeps "THEIR FLYER").
+  - The follow-up on the page ends on the move itself: "check each part against the evidence for that part, including what the AI didn't see." The study panel is unchanged.
+- **No confession.** The first student now gives a reasonable Part 2 answer that points to the flyer: "The flyer. They left because the rival is cheaper." (9 words, the same as workplace's). The second says "The shop's records. Rush customers left." Beat 9 asks a part-specific question: "The instructor (teacher), who sees only the plans, asks what each part rests on and why customers left." (17 words).
+- **The check, for Jack:** "Instructor's check (Teacher's check): What evidence justified relying on the AI here? / Ask part by part. Part 2: why did customers leave?" The two lines are at equal weight. The second line is the separating question: the flyer shows only that the rival is cheaper, and the records show why customers left.
+- **AI use is visible.** The key now reads "AI-DRAFTED, DISCLOSED" beside "A STUDENT'S OWN WORK". Beat 5's caption explains why the plans match: "Another student asks the same AI the same questions, then checks each answer at its source." (16 words; it needs 6.8 s, and the beat is 7.3 s.)
+- **Less telegraphed.** The setup now says the student shares the quotes and the flyer, "judging the records beside the point for a pricing question."
+- **Also fixed:** the beat 6 description and the summary say "Shop's sales" (they said "Our sales"), and the phone's frontier label row no longer runs off the edge.
+- **Checked:**
+  - `edition-check` passes, and the voice check passes on the new copy.
+  - Both classroom casts show the picture at 1280 × 720 (11.1 px) and 1366 × 657 (11.0 px), with the smallest label at 14.1 px at 1440 × 900.
+  - The phone player is 841 px at 390 × 844, with no overflow and a clean console.
+  - Classroom and high-school baselines re-captured; workplace still resolves string for string.
+
 **Stills:** `shots/business-classroom/` and `shots/business-high-school/`. Each has a still per beat, `final.png`, `final-1440.png`, `final-1366.png`, `final-390.png`, `player-390-final.png`, and reduced and page views.
 
 **Baselines** (switch hidden, `--freeze`): `regression/baseline` (PME), `baseline-business`, `baseline-business-classroom`, `baseline-business-high-school`.
