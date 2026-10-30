@@ -144,3 +144,33 @@ These are checked against the full working paper text (HBS Working Paper 24-013,
   - the higher rating among wrong answers alone: Table 6, column 3, n = 105; BCG-VERIFY.md, Claim 6. The paper's sentence on p. 15 [19] is unqualified.
 
 **Not verified here.** "No hidden facts: a weak answer shows when read" is the figure's reasoning about Task A, and it is labelled that way ("What the evidence suggests"). The study doesn't test checking, a time budget or a launch plan, and the page says so. I took the Table 6 figure from BCG-VERIFY.md and didn't reopen it.
+
+## Classroom cast (CLASSROOM-PLAN.md §8, a pure swap)
+
+`editions/business.json` lists `"casts": ["workplace", "classroom", "high-school"]`. Open it with `?edition=business&cast=classroom` for higher ed ("the student", "Instructor’s check", "class") or `&cast=high-school` ("Teacher’s check"). The scenario, timeline, picture, gates and evidence are the same as built. "Your team's first draft" and "the launch plan" read as a class team project, so they stay.
+
+**Keys.** The one literal `edition-check` flagged, "the reviewer's question" in the links note, is now `{check_l}`. Workplace now reads "the reviewer’s check", classroom "the instructor’s check" and high school "the teacher’s check".
+
+**Patches** (`byCast`; high school carries the same two, with its own link):
+- *How this figure works*: "…two consulting tasks from a 2023 field experiment as a team project for a class where AI use is allowed, and time to check only one… Illustration based on Dell'Acqua et al. (2023), a study of consultants: the tasks and results are the study's, and the class project, the time budget, the first draft and the launch plan are this figure's." The first of those sentences carries the line Jack asked for: AI use is allowed.
+- *Meta description*: "Appropriate reliance for a class using AI: …".
+- *Go further*: "See the failure: Uncalibrated reliance" links to that figure in the same cast (`&cast=classroom` or `&cast=high-school`).
+
+**Words that differ from workplace** (classroom / high school):
+
+| Where | Classroom | High school |
+| --- | --- | --- |
+| Caption 10 and the check band | Instructor’s check: What evidence justified relying on the AI here, and what would have changed the call? | Teacher’s check: … |
+| Page check heading | Instructor’s check | Teacher’s check |
+| What a good answer says, last line | …shows whether the student has a reason for the call. | same |
+| Screen-reader summary, part 3 | …ends on the instructor’s check. | …the teacher’s check. |
+| Links note | The skill and the instructor’s check come from an essay on judgment with AI… | …the teacher’s check… |
+
+**The switch:** "See this with: Workplace · Classroom · PME" on the kicker row. Classroom is `data-edition-link="business" data-cast-link="classroom"`; on a high-school page it's the current link. The row stays 22 px at 1440, 1366, 1280, 768, 390 and 360 wide. On phones "See this with:" is read but not shown.
+
+**Checks:**
+- `edition-check` passes for all three casts.
+- Gate and leak checks pass for both classroom casts: no reader route reaches an answer, and the "details AI tends to miss" line appears only after both calls.
+- At 1440 × 900, 1366 × 657, 1280 × 720, 768 × 1024, 390 × 844 and 360 × 740 there's no overflow and no horizontal scroll. The last caption fits its band in every cast, and the drawn picture keeps 11 px labels after question 1 at 1280 × 720 and 1366 × 657.
+- The pace is unchanged: no caption or picture word changes, apart from the check heading.
+- The figure still never autoplays: it opens on question 1 and waits.

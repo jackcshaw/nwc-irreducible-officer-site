@@ -72,7 +72,16 @@ const still = async (p, sel, path) => {
   await p.evaluate(() => { for (const el of document.querySelectorAll("figure *")) if (getComputedStyle(el).position === "sticky") { el.dataset.unstuck = "1"; el.style.position = "static"; } });
   await p.evaluate((sel) => { const el = document.querySelector(sel); window.scrollTo(0, Math.floor(window.scrollY + el.getBoundingClientRect().top)); }, sel);
   await p.waitForTimeout(60);
-  await p.locator(sel).first().screenshot({ path });
+  // Two matching shots in a row, so a still never catches raster still settling (seen in
+  // the stacked view at 1280 × 720 while other browsers loaded the machine).
+  let prev = await p.locator(sel).first().screenshot();
+  for (let i = 0; i < 4; i++) {
+    await p.waitForTimeout(150);
+    const cur = await p.locator(sel).first().screenshot();
+    if (cur.equals(prev)) break;
+    prev = cur;
+  }
+  writeFileSync(path, prev);
   await p.evaluate(() => { for (const el of document.querySelectorAll("[data-unstuck]")) { el.style.position = ""; delete el.dataset.unstuck; } });
 };
 const snapshot = (p) => p.evaluate(([id, hide]) => {

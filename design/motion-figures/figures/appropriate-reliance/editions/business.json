@@ -2,6 +2,23 @@
  "_doc": "Appropriate reliance, business edition: the study's own consulting tasks with the workplace cast. Every visible word of the scenario; role words come from casts.json ({key}); %move% is filled by the figure. The timeline, layout, gates and nameplate are core and stay in appropriate-reliance.js. Schema: CONVENTIONS.md, Editions.",
  "id": "business",
  "cast": "workplace",
+ "casts": [
+  "workplace",
+  "classroom",
+  "high-school"
+ ],
+ "byCast": {
+  "classroom": {
+   "page.how": "Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two consulting tasks from a 2023 field experiment as a team project for a {group} where AI use is allowed, and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning. Illustration based on Dell'Acqua et al. (2023), a study of consultants: the tasks and results are the study's, and the {group} project, the time budget, the first draft and the launch plan are this figure's.",
+   "page.description": "Appropriate reliance for a {group} using AI: with time to check one of two AI answers on consulting tasks from a BCG field experiment, decide where the check goes, then see what the study found.",
+   "page.links.1.href": "../uncalibrated-reliance/?edition=business&cast=classroom"
+  },
+  "high-school": {
+   "page.how": "Appropriate reliance means accepting AI support where it's warranted, checking or refusing it where it isn't, and being able to say why. Checking takes time, so the figure gives you two consulting tasks from a 2023 field experiment as a team project for a {group} where AI use is allowed, and time to check only one. You decide where the check goes before you see what happened, then make one more call after a condition changes. You can skip either question, and Start over plays the whole figure from the beginning. Illustration based on Dell'Acqua et al. (2023), a study of consultants: the tasks and results are the study's, and the {group} project, the time budget, the first draft and the launch plan are this figure's.",
+   "page.description": "Appropriate reliance for a {group} using AI: with time to check one of two AI answers on consulting tasks from a BCG field experiment, decide where the check goes, then see what the study found.",
+   "page.links.1.href": "../uncalibrated-reliance/?edition=business&cast=high-school"
+  }
+ },
  "results": {
   "inside": [
    {
@@ -285,7 +302,7 @@
     "href": "https://judgmentlab.net/#v-appropriate-reliance-as-a-teachable-competency"
    }
   ],
-  "linksNote": "The skill and the reviewer's question come from an essay on judgment with AI. This page shows them with the consulting tasks from the study it cites.",
+  "linksNote": "The skill and the {check_l} come from an essay on judgment with AI. This page shows them with the consulting tasks from the study it cites.",
   "checkLinesAfter": [
    "Change one condition, like details AI tends to miss, and ask again."
   ]
