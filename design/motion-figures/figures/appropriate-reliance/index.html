@@ -65,6 +65,15 @@
 	#appropriate-reliance.is-stacked .ar-capwrap { position: sticky; bottom: var(--ar-ctrl-h, 120px); z-index: 4; box-shadow: 0 -1px 0 var(--navy-line); }
 	#appropriate-reliance.is-stacked .mf-controls { position: sticky; bottom: 0; z-index: 5; }
 }
+/* Classroom casts: "AI use allowed" opens the budget line at the foot of the stacked stage,
+   and it has to be seen before the first call. In the phone first view the controls stay in
+   the page flow under the caption band (Continue and Skip are in the band), so the whole
+   compact stage shows above the band at 390 × 844 without moving the page. Both stick to
+   the bottom again once question 1 is answered. */
+@media (max-width: 719px) {
+	#appropriate-reliance.is-stacked.ar-firstq:is([data-cast="classroom"], [data-cast="high-school"]) .mf-controls { position: static; }
+	#appropriate-reliance.is-stacked.ar-firstq:is([data-cast="classroom"], [data-cast="high-school"]) .ar-capwrap { bottom: 0; }
+}
 /* The nameplate's card shows over the live first question; Continue and Skip wait with
    the caption band until it settles (any touch, key or focus settles it at once). */
 #appropriate-reliance .ar-gatebar { transition: opacity 0.3s; }

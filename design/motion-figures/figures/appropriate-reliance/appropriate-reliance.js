@@ -99,11 +99,16 @@
 	function build(ed) {
 		const L = ed.labels, NW = ed.narrow, G = ed.gates, R = ed.results;
 		// The classroom casts are projected in class, so the stage's mono labels go a size up
-		// where the layout allows (15.5 units: 13 px or more at 1280 × 720 and 1440 × 900). The
-		// key line, the READY tags, the bar notes and the cost note beside "Ask for a week" keep
-		// 13, which is all the room they have. Other casts draw exactly as before.
-		const LBL = ed.castId === 'classroom' || ed.castId === 'high-school' ? 15.5 : MONO;
+		// (15.5 units: 13 px or more at 1280 × 720 and 1440 × 900). At that size the budget and
+		// the two keys take three rows instead of two, and the bar notes centre on Task B's card.
+		// Only the cost note beside "Ask for a week" keeps 13: at 15.5 it would cross the card's
+		// edge, and a second line would run into the "Rely on it · read it first" tag below.
+		// Other casts draw exactly as before.
+		const CLASS = ed.castId === 'classroom' || ed.castId === 'high-school';
+		const LBL = CLASS ? 15.5 : MONO;
 		const big = {fs: LBL};
+		// The bottom band's rows: the budget line, the reader's key (left), the suggested-call key (right).
+		const ROW = CLASS ? {band: 494, you: 513, sug: 532} : {band: 498, you: 526, sug: 526};
 		const moveLabel = () => L.options2.move[calls.g1 === 'a' ? 'keep' : calls.g1 === 'b' ? 'move' : 'put'];
 		const movedFromB = () => calls.g1 === 'b' && calls.g2 === 'move';
 		const svg = root.querySelector('svg');
@@ -153,7 +158,8 @@
 			const l2 = el(g, 'rect', {x: x0 + 26, y: 192.5, width: 0, height: 3.5, rx: 1.75, fill: C.grey, 'fill-opacity': 0.8});
 			const ready = el(g, 'g');
 			el(ready, 'rect', {x: x0 + 344, y: 160, width: 72, height: 16, rx: 8, fill: C.grey});
-			mono(ready, x0 + 380, 172.5, L.ready, {anchor: 'middle', fill: C.bright, ls: 0.6});
+			// A larger tag sits a little lower, so its capitals stay centred in the pill.
+			mono(ready, x0 + 380, 172.5 + (LBL - MONO) * 0.35, L.ready, {...big, anchor: 'middle', fill: C.bright, ls: 0.6});
 			return {head, l1, l2, ready};
 		};
 		const ai = {a: aiBlock('a'), b: aiBlock('b')};
@@ -226,13 +232,13 @@
 		let fLen = 0;
 
 		// Bottom band: the budget and the definition, then the keys.
-		const bandLine = mono(scene, 480, 498, L.budget, {...big, anchor: 'middle'});
+		const bandLine = mono(scene, 480, ROW.band, L.budget, {...big, anchor: 'middle'});
 		const keySug = el(scene, 'g');
-		const keySugT = mono(keySug, 936, 526, L.keySuggested, {anchor: 'end'});
-		const keySugSw = el(keySug, 'rect', {y: 516.5, width: 16, height: 11, rx: 2, fill: C.ink});
+		const keySugT = mono(keySug, 936, ROW.sug, L.keySuggested, {...big, anchor: 'end'});
+		const keySugSw = el(keySug, 'rect', {y: ROW.sug - 9.5, width: 16, height: 11, rx: 2, fill: C.ink});
 		const keyYou = el(scene, 'g');
-		el(keyYou, 'circle', {cx: 29, cy: 521.5, r: 5, fill: C.red});
-		const keyYouT = mono(keyYou, 40, 526, L.keyYours, {fill: C.red});
+		el(keyYou, 'circle', {cx: 29, cy: ROW.you - 4.5, r: 5, fill: C.red});
+		const keyYouT = mono(keyYou, 40, ROW.you, L.keyYours, {...big, fill: C.red});
 		// Optional (business): from the last beat the key sets the reader's calls against the
 		// suggested calls in words, so the comparison doesn't rest on colour. It exists in the DOM
 		// only from that beat.
@@ -275,7 +281,10 @@
 		lazy(sug2.t, L.sug2, T.sug2[0]); lazy(noteMove, L.noteMove, T.noteMove[0]); lazy(noteAsk, L.noteTime, T.noteAsk[0]);
 		// Optional (business): short notes under Task B's bars in the last frame, such as what
 		// the tips were and that the gap between the two AI groups is uncertain.
-		const barNotes = (L.barNotes || []).map((str, i) => lazy(mono(evB, BAR.x + bracketV / 2 * BAR.k, 436 + i * 16, '', {anchor: 'middle'}), str, BEAT_AT[9]));
+		// In the classroom casts the larger notes are wider than the bracket allows, so they
+		// centre on the card instead.
+		const noteX = CLASS ? X.b + CW / 2 : BAR.x + bracketV / 2 * BAR.k;
+		const barNotes = (L.barNotes || []).map((str, i) => lazy(mono(evB, noteX, CLASS ? 435 + i * 18 : 436 + i * 16, '', {...big, anchor: 'middle'}), str, BEAT_AT[9]));
 		const fillLazy = (t) => {
 			for (const [n, str, at] of LAZY) {
 				const want = t >= at - 1e-6 ? (typeof str === 'function' ? str() : str) : '';
@@ -310,6 +319,7 @@
 				[taskA1, 456], [tagA2, 456], [noteA, 456], [noteMove, 456], [noteAsk, 456], [inTitle, 456], [cond2, 456], [nums[2], 456],
 				[taskB1, 936], [taskB2, 936], [tagB1, 936], [tagB2, 936], [bracketText, 936], [bars[0].t, 936],
 				[sugA.rect, 456], [sugB.rect, 936], [sug2.rect, 456], [r2.rely.rect, 456], [r2.time.rect, 456], [srcLine, 960],
+				...barNotes.map((n) => [n, 936]),
 			].filter(([n, lim]) => right(n) > lim - 8).map(([n]) => n.textContent || 'rect');
 			window.__arLayout = layout;
 		}
@@ -633,12 +643,17 @@
 			else if (r.bottom > bottom) dy = Math.min(r.bottom - bottom, r.top - top);
 			if (Math.abs(dy) > 2) scrollBy({top: dy, behavior: smooth && !reducedNow() ? 'smooth' : 'auto'});
 		}
+		// The last beat's answer: the second suggested call down to the key line at the foot of
+		// the stacked stage (in business, the verdict). Once the last caption has grown, the
+		// band covers both, so they are brought above it together; if they don't both fit, the
+		// suggested call stays in view (bringIntoView never scrolls a box's top off screen).
+		const lastAnswer = {getBoundingClientRect: () => {
+			const a = N.a.sug2p.getBoundingClientRect(), b = N.keys.getBoundingClientRect();
+			return a.height ? {top: Math.min(a.top, b.top), bottom: Math.max(a.bottom, b.bottom)} : b;
+		}};
 		let followT = 0;
 		const FOLLOW = () => [[BEAT_AT[3], N.a.flab], [T.inTitle[0], N.a.ev], [BEAT_AT[4], N.panel], [BEAT_AT[5], N.b.pat], [T.tagA1[0], N.a.pat],
-			[BEAT_AT[6], N.a.sug], [T.sugB[0], N.b.sug], [BEAT_AT[7], N.a.cond2], [BEAT_AT[8], N.a.sug2p],
-			// Business (every cast): the last beat's verdict line sits at the foot of the stacked
-			// stage, so bring it above the caption band once the last caption has grown.
-			...(NW.keyVerdict ? [[BEAT_AT[9] + 0.6, N.keys]] : [])];
+			[BEAT_AT[6], N.a.sug], [T.sugB[0], N.b.sug], [BEAT_AT[7], N.a.cond2], [BEAT_AT[8], N.a.sug2p], [BEAT_AT[9] + 0.6, lastAnswer]];
 		function follow(t) {
 			const prev = followT;
 			followT = t;
@@ -746,7 +761,7 @@
 				if (g === 0) api.openGate(1);
 				else {
 					api.seek(T.end); if (after) after.open = true; toggle.focus();
-					if (NW.keyVerdict && stickyOn()) requestAnimationFrame(() => bringIntoView(N.keys, false));
+					if (stickyOn()) requestAnimationFrame(() => bringIntoView(lastAnswer, false));
 				}
 			} else {
 				api.resume(g);
