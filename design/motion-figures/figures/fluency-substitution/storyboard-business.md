@@ -161,7 +161,7 @@ The business edition in two more casts, through data in `editions/business.json`
   - player 846, 640 and 703 px, with no control travel;
   - phone player 842 px at 390 × 844;
   - no horizontal scroll and no console errors.
-- The new copy passes the writing-as-jack check.
+- Voice check (writing-as-jack), on all page copy in all three casts: passes, except the verbatim essay quote in the check note ("revises under challenge rather than retreating to the artifact's language"), which stays as quoted. Two workplace lines were reworded for it: beat 6's detail quotes the row label as "Their own work / not handed in", and the evidence ends "is an illustration; the study didn't test it." Figure frames are unchanged (225/225; only page, print and reduced captures differ).
 - Stills and finals: `shots/business-classroom/` and `shots/business-high-school/` (beats, final, final-390, final-1366, final-1280, poster, player-390, reduced and page views).
 
 **High school** is the weakest fit (patent claims), built anyway. Its light read decides whether it ships or high-school links fall back to the workplace edition (CLASSROOM-PLAN.md decision 7).
