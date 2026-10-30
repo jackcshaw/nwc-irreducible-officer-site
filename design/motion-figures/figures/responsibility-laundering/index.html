@@ -33,6 +33,17 @@
 /* The opening name card is one line (the runtime sets it nowrap); this name is long, so on
    phones it scales with the width to keep about 16 px clear on each side. */
 @media (max-width: 559px) { #responsibility-laundering .mf-namecard-n { font-size: clamp(22px, calc((100vw - 70px) / 11.3), 34px); } }
+/* Laptop windows below 700 px high (1366 x 657): a compact caption band and a smaller chrome
+   allowance give the picture the height, so 13-unit labels stay at 11 px or more and the drawn
+   stage shows. The name sits on one line beside the definition; check and follow at 20 px. */
+@media (min-width: 720px) and (max-height: 700px) {
+	#responsibility-laundering { --mf-chrome: 166px; }
+	#responsibility-laundering.has-nameplate .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#responsibility-laundering .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#responsibility-laundering .mf-check.has-final { grid-template-columns: max-content minmax(0, 1fr); }
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 20px; }
+	#responsibility-laundering .mf-final-def { font-size: 15px; }
+}
 @media (max-width: 480px) {
 	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 18px; }
 	#responsibility-laundering .mf-final-def { font-size: 15px; }

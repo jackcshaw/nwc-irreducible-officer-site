@@ -414,8 +414,8 @@
 			return mix(WT.hang, restY, k) - 2 * bump(t, ...rest);
 		};
 		// The first student's dot is a half by now, so their weight comes to rest 1.5 lower.
-		// (Business with split.whole: the dot is whole again as the weight lands, so it rests like the second.)
-		const wyA = fallY(T.aFall, T.aRest, SP && SP.whole ? WT.rest : SIG.dot.y - (SP ? SP.half : SPLIT.half) - WT.h), wyB = fallY(T.bFall, T.bRest, WT.rest);
+		// The first person's dot is whole again as their weight lands (below), so both weights rest alike.
+		const wyA = fallY(T.aFall, T.aRest, WT.rest), wyB = fallY(T.bFall, T.bRest, WT.rest);
 		set(copies.a.weight, {opacity: kW, transform: `translate(0 ${wyA})`});
 		set(copies.b.weight, {opacity: kW, transform: `translate(0 ${wyB})`});
 
@@ -441,9 +441,9 @@
 			const kTravel = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
 			const kTurn = prog(t, s1 - 0.4, s1);
 			const base = st('a', SIG.dot), beside = st('a', SPLIT), dx = SP.apart / 2;
-			// split.whole: as the "Answerable" weight lands (beat 8), the remaining half grows back into
-			// a whole dot. The weight lands on a whole person; the grey ring stays with the AI's phrase.
-			const kWhole = SP.whole ? prog(t, T.aRest[0], T.aRest[0] + 0.6, E.inOut) : 0;
+			// As the "Answerable" weight lands (beat 8), the remaining half grows back into a whole dot.
+			// The weight lands on a whole person; the grey ring stays with the AI's phrase.
+			const kWhole = prog(t, T.aRest[0], T.aRest[0] + 0.6, E.inOut);
 			set(dots.a.c, {cx: base.x - dx * kApart * (1 - kWhole), r: mix(mix(5, SP.half, kApart), 5, kWhole)});
 			const hx = mix(base.x + dx * kApart, beside.x, kTravel), hy = mix(base.y, beside.y, kTravel);
 			set(dots.a.half, {
@@ -457,7 +457,9 @@
 			const kHalf = prog(t, T.split[0], T.split[0] + 0.3);
 			const kTurn = prog(t, T.split[0] + 0.6, T.split[1]);
 			const base = st('a', SIG.dot), beside = st('a', SPLIT);
-			set(dots.a.c, {r: mix(5, SPLIT.half, kHalf)});
+			// Whole again as the "Answerable" weight lands (beat 8); the grey ring stays.
+			const kWhole = prog(t, T.aRest[0], T.aRest[0] + 0.6, E.inOut);
+			set(dots.a.c, {r: mix(mix(5, SPLIT.half, kHalf), 5, kWhole)});
 			set(dots.a.half, {
 				cx: mix(base.x, beside.x, kSplit), cy: mix(base.y, beside.y, kSplit),
 				r: mix(SPLIT.half, SPLIT.r, kTurn), fill: C.red, 'fill-opacity': 1 - kTurn,
@@ -607,7 +609,7 @@
 				const kA = prog(t, s0, s0 + 0.3, E.inOut);
 				const k = prog(t, s0 + 0.3, s1 - 0.15, E.inOut);
 				const turn = prog(t, s1 - 0.4, s1);
-				const kW = SP.whole ? prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut) : 0; // whole again as the weight lands
+				const kW = prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut); // whole again as the weight lands
 				cd.di.style.transform = `translateX(${(-3 * kA * (1 - kW)).toFixed(2)}px) scale(${mix(mix(1, 0.75, kA), 1, kW).toFixed(3)})`;
 				const dotN = cd.di.parentNode, from = {x: dotN.offsetLeft + dotN.offsetWidth / 2 + 6 * kA, y: dotN.offsetTop + dotN.offsetHeight / 2};
 				const to = {x: 3, y: cd.r1.offsetTop + 9};
@@ -620,6 +622,8 @@
 				hf.style.boxShadow = `0 0 0 5px rgba(184, 27, 43, ${(0.22 * kA * (1 - turn)).toFixed(3)})`;
 				hf.style.opacity = kA > 0 ? '1' : '0';
 			} else if (on) {
+				// Whole again as the weight lands at the signature row; the grey ring stays.
+				cd.di.style.transform = `scale(${mix(0.7, 1, prog(t, T.aFall[1] - 0.1, T.aFall[1] + 0.4, E.inOut)).toFixed(3)})`;
 				// From the signature dot, up the card's left edge, to just left of "The analysis".
 				const k = prog(t, ...T.split, E.inOut);
 				const turn = prog(t, T.split[0] + 0.6, T.split[1]);

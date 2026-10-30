@@ -10,11 +10,11 @@ To open it, use `index.html?edition=business`, or the page's "See this with: Wor
 
 Cold read 2 passed on the point. These are its final fixes.
 
-1. **The first analyst's dot is whole again when "Answerable" lands** (`split.whole`, business only). After the split, the smaller dot left at the signature could read as "half the responsibility went to the AI".
+1. **The first analyst's dot is whole again when "Answerable" lands** (first built as `split.whole`, business only; since the PME polish of October 30 it is core, in both editions). After the split, the smaller dot left at the signature could read as "half the responsibility went to the AI".
    - Now, as the first weight comes to rest (beat 8), the remaining half grows back into a whole dot over 0.6 s, so the weight lands on a whole person.
    - The grey ring stays by "The analysis estimates" as the reason handed to the AI.
    - At 390 the stacked dot returns to full size as its chip appears. The weight rests where the second analyst's does.
-   - **PME has the same reading:** its weight rests on the half dot for the rest of the figure. That's left unchanged, for Jack to decide.
+   - **PME had the same reading.** Jack approved the fix for PME (October 30), so it is core now; business renders identically (212/212).
 2. **The source line carries its context:** "Related case: Moffatt v. Air Canada (2024), where a company was held responsible for its chatbot's answer."
    - On the drawn stage it is three right-aligned lines of serif italic 13 at the top right, beside the task card, the final frame's widest free space. That area is empty in beat 9; the "doesn't see this" tag that uses it is gone after beat 6.
    - It keeps a clear gap from the card at 1280 × 720 and 1440 × 900.
@@ -98,7 +98,7 @@ There is no change to PME. Everything below is gated on business data, so PME dr
   - Cuts: 1.4 s at 16.5 (beat 2), 2.0 s at 49.6 (beat 5), 0.4 s at 82.2 (beat 8).
   - Hold: 1.0 s at 93.1 (beat 9), for the source line's reading time.
   - Beat starts, the follow-up and the poster are mapped onto the edition clock. The core keeps its own times, and with no edits both maps are the identity.
-- **`split`: the staged split** (sizes and spacing). With it, the dot parts before the half travels; a halo and a dashed trail show the travelling half, and the trail fades on arrival. With `whole`, the dot is whole again as the "Answerable" weight lands. Without `split`, PME's split draws as before.
+- **`split`: the staged split** (sizes and spacing). With it, the dot parts before the half travels; a halo and a dashed trail show the travelling half, and the trail fades on arrival. The dot is whole again as the "Answerable" weight lands, in both editions (core). Without `split`, PME's split draws as before.
 - **The phrase outline** now sits on the first person's first answer that contains the phrase. That is answer 1 in PME, so nothing changes there, and answer 2 in business.
 - **`labels.source` / `narrow.source`:** the source line. A list of lines draws as a block at the top right; a single string draws right of the key.
 - **Page furniture:**
@@ -113,7 +113,7 @@ There is no change to PME. Everything below is gated on business data, so PME dr
 
 **Brief lessons, checked:**
 - **1. The contrast doesn't endorse what the record found wrong.** The airline's position, that the chatbot answered for its own words, is the first analyst's move made at company scale, and the figure shows that move as the failure. The second analyst isn't shown as right: they signed the same recommendation and name the test they didn't run.
-- **7. 1280 × 720 shows the drawn stage** at 11.1 px. At 1366 × 657 both editions fall back to the stacked view. Keeping the drawn stage there would need 15-unit labels, a core change to PME.
+- **7. Laptop sizes show the drawn stage:** 11.1 px at 1280 × 720, and 11.1 px at 1366 × 657 since the PME polish. Windows under 700 px high get a compact 92 px caption band and 166 px chrome, as institutional monoculture does. 1280 × 720 and taller are unchanged.
 - **8. No straw man.** The first analyst repeats the draft's own reasoning.
 - **9. Question 2 is the first point of difference:** both give the same answer to question 1.
 - **10. The second analyst's move is their own:** a note on what the estimate rests on. It isn't a fallback the draft offered.

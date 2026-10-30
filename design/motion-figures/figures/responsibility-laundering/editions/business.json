@@ -205,12 +205,11 @@
   ]
  },
  "split": {
-  "_doc": "The staged split: the halves part (apart, units), the travelling half (half, r) becomes the ring (ring, r); narrowHalf and narrowRing are the stacked view's sizes in px. whole: the first person's dot is whole again as the Answerable weight lands.",
+  "_doc": "The staged split: the halves part (apart, units), the travelling half (half, r) becomes the ring (ring, r); narrowHalf and narrowRing are the stacked view's sizes in px. (The dot is whole again as the Answerable weight lands in both editions: core.)",
   "apart": 11,
   "half": 4,
   "ring": 9,
   "narrowHalf": 10,
-  "narrowRing": 14,
-  "whole": true
+  "narrowRing": 14
  }
 }

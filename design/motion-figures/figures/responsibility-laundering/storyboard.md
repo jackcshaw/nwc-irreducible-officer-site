@@ -1,6 +1,6 @@
 # Responsibility laundering: storyboard
 
-Motion figure 7 of 8 · slug `responsibility-laundering` · storyboard round 8, the name anchor added after final verification · October 28, 2026
+Motion figure 7 of 8 · slug `responsibility-laundering` · storyboard round 8, the name anchor added after final verification; PME polish October 30, 2026
 
 Starting point: `concepts-v0/proposal.md` §2.7, "Who signs" (8.5 s, not built). This version keeps v0's mechanism: the red dot splits as agency spreads into the AI's wording, and when the recommendation proves wrong a navy weight comes down and the pieces snap back into one dot on the signature line. It applies the lessons of figures 1–5. As a stated supposition, two students give an AI the same prompt and get the same draft. Both read it equally closely and sign it as written, so faculty receive identical papers. The one difference is a habit: before signing, the second student notes what the AI's estimate rests on, in a note they don't hand in. Faculty name one way the call could go wrong, ask who made it, then ask why each student relied on the estimate. Only the second can say. While faculty ask, a frame marks what faculty see and the note row dims. Then the first student's dot halves, and one half travels to the AI's phrase their answers lean on and turns into a hollow dashed grey ring, the reason handed to the AI; a red bracket marks the second student's own reason. A weight labelled "ANSWERABLE" rests on both. The shared runtime and `CONVENTIONS.md` apply throughout.
 
@@ -54,6 +54,20 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 11. *Faculty knew what would go wrong.* They name one plausible way, the port closing, and ask both students the same two questions.
 12. *The check alone separates them.* It doesn't: both would say they own it. The line under it, "Ask why they relied on it", is the question that did. Flagged for Jack.
 13. *This is about legal liability.* The figure and page say only who answers for the recommendation.
+
+**PME polish** (October 30, 2026; Jack approved applying the business testers' fixes to PME):
+- *The dot is whole again as the weight lands.*
+  - Business testers read the first student's half dot under "ANSWERABLE" as "half the responsibility went to the AI".
+  - Now, as the first weight comes to rest (80.2–80.8 s), the half grows back into a whole dot, and the weight rests where the second student's does (y 122–156). The grey ring stays by "The analysis estimates" as the reason handed to the AI.
+  - On phones the stacked dot returns to full size as its chip appears. This is core code, so business, which already did this, renders identically.
+  - Frame-diff against the capture before the change: only the frames from the first landing to the end changed (player 84.0–96.2 s at all three sizes), plus the views that show the final frame and the beat list. Everything earlier is identical. PME was re-baselined.
+- *The picture at 1366 × 657.* Laptop windows under 700 px high get a compact caption band, as institutional monoculture does:
+  - the band is 92 px and `--mf-chrome` 166 px;
+  - the name sits on one line beside the definition (15 px), with the check and its follow-up at 20 px;
+  - so the drawn stage shows at 11.1 px instead of the stacked view.
+
+  1280 × 720 and taller keep the 144 px band; their frames are unchanged. Both editions get it.
+- *Pacing.* No beat's timing or caption changed, so every beat still meets (words ÷ 3) + 1.5 s at every size. Only beat 8's "On screen" line and the summary describe the whole dot.
 
 **Changes for the name anchor** (Jack: "anchor each figure in the stated name to help recall"; the runtime's `nameplate` option, `CONVENTIONS.md`):
 - *Beat 0, the name card (player 0.0–3.0 s).* "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, sits large and centred over the stage for 2 s, then moves and shrinks over 1 s into a reserved strip above the stage's top-left corner, where "RESPONSIBILITY LAUNDERING · 7 OF 7" stays in every beat and view. The caption band stays quiet. Before play, the waiting view shows the card over the poster. On phones the card's name scales with the width (about 28 px at 390) so it stays on one line inside the stage.
@@ -173,7 +187,7 @@ Two war-college students must recommend when to evacuate civilians from a port c
 - *Margin* x 0–72: the dot, its half and the weight move here. *Text column* x 80–428.
 - *Two rows,* Serif 17 (21 at 1.25), lines 28 units apart so the reading dot fits between them, fixed breaks so the copies match line for line. Row 1 baselines 40 and 68: "The analysis estimates ships can / carry everyone out." Row 2 baselines 108 and 136: "It is recommended that civilians / wait for ships."
 - *Signature line* at y 166, from x 20 to 300.
-- *The dot at rest* on the line: (36, 161). *The weight:* x −22 to 74; hangs at y −6 to 28; rests with its lower edge on the dot (y 122–156 on a whole dot, 123.5–157.5 on the first student's half dot).
+- *The dot at rest* on the line: (36, 161). *The weight:* x −22 to 74; hangs at y −6 to 28; rests with its lower edge on the dot (y 122–156). The first student's half dot grows back to whole as the weight lands.
 
 | Element | Stands for | How it looks | Where |
 | --- | --- | --- | --- |
@@ -329,7 +343,7 @@ Times are the figure's own clock. The player adds the runtime's 3.0 s name card 
 - **What moves:**
   1. 76.3–76.7: a navy weight labelled "ANSWERABLE" fades in at the top of each copy's margin.
   2. 78.8–80.2: the first student's weight falls down the margin, past the AI's sentences and past the grey ring, which stays where it is.
-  3. 80.2–80.6: it comes to rest just above the signature line, on the first student's half dot, which holds it up. A 2-unit settle.
+  3. 80.2–80.6: it comes to rest just above the signature line with a 2-unit settle. Over 80.2–80.8 the first student's half dot grows back into a whole dot and holds it up. The grey ring stays.
   4. 80.8–81.8: the second student's weight falls down its margin, past the same sentences.
   5. 81.8–82.1: it rests on the second student's whole dot.
   6. 82.1–84.0: hold.
@@ -357,7 +371,7 @@ The still at 93.2 s (96.2 s in the player). It is also the reduced-motion view, 
 **Stage:**
 - **Top left:** the task card, "EXAMPLE TASK · Recommend when to evacuate a port city."
 - **Note row,** "THEIR OWN NOTE · NOT HANDED IN": "—" for the first student; for the second, in red, "Rests on an open port. Today's harbor reports: normal."
-- **Left copy,** "FIRST STUDENT'S COPY · DRAFTED WITH AI", and **right copy,** "SECOND STUDENT'S COPY · DRAFTED WITH AI": the same two grey sentences, "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Each has a red signature, and in the margin the student's red dot holding up a weight, "ANSWERABLE": a half dot on the left, a whole dot on the right.
+- **Left copy,** "FIRST STUDENT'S COPY · DRAFTED WITH AI", and **right copy,** "SECOND STUDENT'S COPY · DRAFTED WITH AI": the same two grey sentences, "The analysis estimates ships can carry everyone out." "It is recommended that civilians wait for ships." Each has a red signature, and in the margin the student's red dot holding up a weight, "ANSWERABLE": a whole dot on each (the first student's half grew back as the weight landed).
 - **On the left copy only:** "The analysis" outlined in navy, and the hollow dashed grey ring beside it.
 - **Centre band:** "1 · Suppose the port closes. Who made this call?" / "2 · Why did you rely on it?"
 - **Speech panels:** under the left copy, red "First student", then "1 · I signed it. The analysis said ships could do it." (with "The analysis" outlined) / "2 · It was the AI's estimate. It seemed solid." Under the right, red "Second student", then "1 · I did. I chose to rely on the estimate." / "2 · It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures.", with a red bracket down the left of answer 2.
@@ -401,7 +415,7 @@ Suppose two students give an AI the same prompt, get the same draft, and sign it
 5. **Faculty ask each student.** *On screen:* the note row dims under "Faculty don't see this", and a frame labelled "What faculty see" goes round the two copies. "1. Suppose the port closes. Who made this call?" The first student says, "I signed it. The analysis said ships could do it." The second says, "I did. I chose to rely on the estimate."
 6. **They ask why.** *On screen:* "2. Why did you rely on it?" The first student says, "It was the AI's estimate. It seemed solid." The second says, "It assumes an open port. Today's reports looked normal, so I accepted it. I should have checked for closures."
 7. **The first gives the AI's reason. The second gives their own.** *On screen:* the frame goes and the note returns. "The analysis" is outlined in the first student's answer and on their copy. The first student's dot halves: one half stays at the signature, and the other moves beside "The analysis estimates" and becomes a hollow dashed grey ring, keyed "Reason handed to the AI". It stays. A red bracket marks the second student's second answer, their own reason; their dot stays whole.
-8. **Suppose it proves wrong. The AI can't answer for it. Both students will.** *On screen:* a navy weight labelled "Answerable" falls down the first paper's margin, past the AI's sentences and the grey ring, and rests on the first student's half dot at the signature. A second weight falls down the second paper's margin and rests on the second student.
+8. **Suppose it proves wrong. The AI can't answer for it. Both students will.** *On screen:* a navy weight labelled "Answerable" falls down the first paper's margin, past the AI's sentences and the grey ring, and comes to rest at the signature. As it does, the first student's dot is whole again; the grey ring stays. A second weight falls down the second paper's margin and rests on the second student.
 9. **Faculty check: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.** *On screen:* the questions appear under the picture at the same size. Both papers, the note, all four answers, the grey ring and both weights stay in view.
 
 **Faculty check:** Who owns the recommendation if it proves wrong?
