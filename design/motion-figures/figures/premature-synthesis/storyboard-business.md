@@ -56,8 +56,8 @@ The workplace cast's generic roles ("analyst", "the manager") don't fit a code r
 | Rows | First student · READ → AI CONNECTS → WRITES; Second student · READ → TRIES → AI CHECKS → WRITES | First engineer · READ → AI WRITES → SHIPS, "Redrawn from the AI's code"; Second engineer · READ → ASKS AI → TRIES → FIXES, "Built, broken once, fixed" |
 | Fix notes (beat 5) | none | "each fetch catches / its own error" (1–4); "a timeout counts / as an error" (3–4) |
 | Note | In Reading 1, trade went / overland through a neighbour. | Beats 4–5: "Bug: when one fetch failed, / the group canceled the rest." Beats 9–10: the same without "Bug:". |
-| First answer | "In Reading 1, trade went overland. I don't see how that bears on this." | "The docs say one failure cancels the group. I'm not sure that applies here." |
-| Second answer | "An overland route, like Reading 1's. Then my main claim no longer holds." | "If one fetch hits an error it doesn't catch, the group cancels the other two." |
+| First answer | "In Reading 1, trade went overland. I don't see how that bears on this." | "It fetches all three in one group. If the group fails, they all fail." (the AI's design restated in general terms) |
+| Second answer | "An overland route, like Reading 1's. Then my main claim no longer holds." | "A missing record. Its fetch fails, so the group cancels the other two." (a concrete failure and what it breaks) |
 | Source (final) | none | Illustration based on Shen & Tamkin, Anthropic (2026). |
 
 The final frame names the ringed connection in words ("The task group and the fetches, 2–5"), so the bare numbers on the sketches have a meaning.
@@ -70,11 +70,11 @@ The final frame names the ringed connection in words ("The task group and the fe
 | 2 | The engineer reads the docs closely, then takes an AI's code without asking how it works. | 16 |
 | 3 | The code runs, and the engineer ships it as written. | 10 |
 | 4 | A second engineer, with the same docs and time limit, asks the AI only how it works, then writes the code. | 21 |
-| 5 | One part breaks. That engineer finds the bug and fixes it alone. | 12 |
+| 5 | One part breaks. That engineer works out why and fixes it. | 11 |
 | 6 | That engineer ships the same code, within the same time limit. | 11 |
 | 7 | With the code closed, both engineers sketch the same connections. | 10 |
 | 8 | The tech lead asks what would make the main connection fail. | 11 |
-| 9 | The second engineer applies the rule, from the bug they fixed. | 11 |
+| 9 | The second engineer, who asked how it works and hit the bug, applies the rule. | 15 |
 | 10 | Reviewer's check: Can they say why these connections matter? / Point to one: what would make it fail? | 8 + 8 |
 
 The beat list's "On screen" lines, the stacked-stage words and the page copy are in `business.json`. Page copy has no military or classroom wording apart from the original-essay link; the edition note reads "Workplace edition. The other edition is the example from the original essay, linked below."
@@ -90,11 +90,11 @@ Beat lengths are the core's (figure time; the player adds the 3 s name card). Ea
 | 2 | 8.7 | 16 | 6.8 | yes | AI CODE 2 | 2.2 | 12.7 s |
 | 3 | 9.2 | 10 | 4.8 | yes | label 3, title 8, MAIN 1, MAIN LINK 2, note 5 | 7.8 | to beat 7 (28 s); MAIN LINK 4.9 s |
 | 4 | 11.7 | 21 | 8.5 | yes | dot label 2, question 4, answer 10 | 6.8 | about 20 s (to the end of beat 6) |
-| 5 | 9.3 | 12 | 5.5 | yes | note 9, fix notes 10 | 4.5 / 4.8 | note 11 s, then again from beat 9; fix notes 8 s |
+| 5 | 9.3 | 11 | 5.2 | yes | note 9, fix notes 10 | 4.5 / 4.8 | note 11 s, then again from beat 9; fix notes 8 s |
 | 6 | 7.3 | 11 | 5.2 | yes | label 3, header 6 | 4.5 | header to the end |
 | 7 | 7.9 | 10 | 4.8 | yes | sketch header 9, strip 4, rows 4, sequences 10, sketch notes 10 | header 4.5 (the rest stays to the end) | to the end |
 | 8 | 11.8 | 11 | 5.2 | yes | question 12, answer 14 | answer appears over 5.0 s, then 1.5 s hold | to the end |
-| 9 | 10.6 | 11 | 5.2 | yes | label 3, answer 15 | answer appears over 5.0 s from 74.2, then 4.1 s before the check | to the end |
+| 9 | 10.6 | 15 | 6.5 | yes | label 3, answer 13 | answer appears over 5.0 s from 74.2, then 4.1 s before the check | to the end |
 | 10 | 6.7, then rests | 16 (+ name and definition, universal) | 6.8 | yes, rests | source 8 | 4.2 | to the end |
 
 Beat 4 timing: the dot's name "Second engineer" shows 26.3–28.9 (2.25 s readable; core timing since the PME polish pass, so PME matches), read 26.8–29.3, home 29.5–29.9, question 30.0, answer 30.8–31.3, three lines 32.6–34.0, home 34.3. Beat 5: try 1–2 at 36.85, check 37.6–38.6, ✕ 38.7, note 39.2–39.7, line pulls back 39.8–40.1, ✕ brightens 40.2, fix 1–4 40.9–41.4 (note 41.3), 3–4 41.7–42.2 (note 42.1), home 43.6. Beats 4 and 5 each get about half the work, and the bug has 2.2 s from the ✕ before the fix starts.
@@ -145,12 +145,11 @@ Layout: at 1440 × 900 and 1280 × 720 the picture is drawn, every label at 11.1
 
 ## Classroom cast (CLASSROOM-PLAN.md §3)
 
-The business edition in two more casts, through data in `editions/business.json`: `casts: ["workplace", "classroom", "high-school"]`, `castOverrides` and `byCast`. The scenario, timeline, picture, answers and evidence numbers stay as built and cold-read. Open it with `?edition=business&cast=classroom` (higher ed: "faculty", "Faculty check") or `&cast=high-school` ("the teacher", "Teacher's check").
+The business edition in two more casts, through data in `editions/business.json`: `casts: ["workplace", "classroom", "high-school"]`, `castOverrides` and `byCast`. The scenario, timeline, picture, answers and evidence numbers stay as built and cold-read. Open it with `?edition=business&cast=classroom` (higher ed: "the instructor", "Instructor's check") or `&cast=high-school` ("the teacher", "Teacher's check").
 
-**Role conversion.** The 55 literal role words are now keys. `castOverrides.workplace` carries the engineer and tech-lead words for 18 existing keys: `person`, `Person`, `people`, `first`, `second`, `A_person`, `a_person`, `A_second`, `That_person`, `The_person`, `the_person`, `the_first`, `reviewer`, `Reviewer`, `receive` ("What the tech lead reviews"), `reviewer_ask`, `then_ask` and `reviewer_points`. The workplace edition resolves to the same strings as before, checked string for string with the runtime's `resolveEdition`, and frame-diffs 206/206 identical. The only visible change is the switch's new Classroom link.
+**Role conversion.** The 55 literal role words are now keys. `castOverrides.workplace` carries the engineer and tech-lead words for 22 existing keys, including the four ordinal keys added to `casts.json` (`Each_person`, `The_first`, `the_second`, `The_second`): `person`, `Person`, `people`, `first`, `second`, `A_person`, `a_person`, `A_second`, `That_person`, `The_person`, `the_person`, `the_first`, `reviewer`, `Reviewer`, `receive` ("What the tech lead reviews"), `reviewer_ask`, `then_ask` and `reviewer_points`. The workplace edition resolves to the same strings as before, checked string for string with the runtime's `resolveEdition`, and frame-diffs 206/206 identical. The only visible change is the switch's new Classroom link.
 
-**`byCast` patches** (18 for classroom; high school is the same set with "class" for "course"):
-- Five strings need a capitalised "Each …", "The first …" or "The second …" that no key gives. They are patched with `{person}` inside: the details of beats 7, 8 and 9, caption 9 and the screen-reader summary. The summary's patch also gives the question a form both reviewer numbers fit ("Faculty point… : what would make that fail?").
+**`byCast` patches** (15 for classroom; high school is the same set with "class" for "course", plus its computer-science note). Role words are all keys now, so the patches carry only class framing. The summary's patch also gives the question a form any reviewer number fits ("… points to the connection …: what would make that fail?").
 - **Class words:** "In class, code closed" for "In review, code closed" (label, phone rows, beat 7 detail, summary). "Hands in" replaces "ships" (captions 3 and 6, the first row's sequence "READ → AI WRITES → HANDS IN", phone order, summary).
 - **Caption 1:** "A student in a programming course (class) must build a feature with a new library." It has 14 words, read in 6.2 s within the 6.8 s beat.
 - **Setup:** "Two students in a programming course (class) get the same docs and the same time limit to build a feature with a library new to them. The course (class) allows AI, and both say they used it. … Illustration based on Shen & Tamkin (2026), a study of developers learning a new library; the students, the course and the task are constructed."
@@ -159,7 +158,7 @@ The business edition in two more casts, through data in `editions/business.json`
   - Paragraph 1 adds: "The study's participants were working developers; the students in the figure are constructed." Table 1 shows 29 of 52 with seven or more years.
   - Paragraph 2 brings forward the two limits that keep the page from reading as "AI harms learning". The top group also had the AI write code, then asked how it worked (Generation-Then-Comprehension, quoted below it). And the authors' incentive limit, quoted: "there was not the same incentive to learn the library as if it were required for their actual job."
   - The limits paragraph then points back to it, and calls the figure's question "in class" constructed.
-- **Phone paper tags:** "Main: 2–5. Also 3–4–5 and 1–4–6." (as PME). The workplace string, "Main: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6", counts as 10 words and shows for 4.7 s against 4.8 s needed. It is left unchanged because workplace must stay identical; flagged.
+- **Phone paper tags:** "Main: 2–5. Also 3–4–5 and 1–4–6." (as PME; since the light read, in every cast). The old workplace string, "Main: 2 · 5. Also 3 · 4 · 5, 1 · 4 · 6", counts as 10 words and shows for 4.7 s against 4.8 s needed. It is left unchanged because workplace must stay identical; flagged.
 
 **Words that differ from workplace** (classroom / high school):
 
@@ -168,11 +167,11 @@ The business edition in two more casts, through data in `editions/business.json`
 | Caption 1 | A student in a programming course must build a feature with a new library. | …programming class… |
 | Captions 2, 4, 5 | The student… / A second student… / That student… | same |
 | Captions 3, 6 | …the student hands it in as written. / That student hands in the same code, within the same time limit. | same |
-| Caption 8 | Faculty ask what would make the main connection fail. | The teacher asks… |
-| Caption 9 | The second student applies the rule, from the bug they fixed. | same |
-| Caption 10 | Faculty check: … | Teacher's check: … |
-| Picture | Student / Second student, FIRST (SECOND) STUDENT'S CODE, WHAT FACULTY RECEIVE, IN CLASS, CODE CLOSED, THEN THEY ASK, READ → AI WRITES → HANDS IN | WHAT THE TEACHER RECEIVES, THEN THE TEACHER ASKS |
-| Phone | Faculty point to 2–5; What faculty receive · the same code; In class, code closed: sketch it | The teacher points to 2–5; What the teacher receives… |
+| Caption 8 | The instructor asks what would make the main connection fail. | The teacher asks… |
+| Caption 9 | The second student, who asked how it works and hit the bug, applies the rule. | same |
+| Caption 10 | Instructor's check: … | Teacher's check: … |
+| Picture | Student / Second student, FIRST (SECOND) STUDENT'S CODE, WHAT THE INSTRUCTOR RECEIVES, IN CLASS, CODE CLOSED, THEN THE INSTRUCTOR ASKS, READ → AI WRITES → HANDS IN | WHAT THE TEACHER RECEIVES, THEN THE TEACHER ASKS |
+| Phone | The instructor points to 2–5; What the instructor receives · the same code; In class, code closed: sketch it | The teacher points to 2–5; What the teacher receives… |
 
 **The switch:** "Workplace · Classroom · PME". `data-cast-link="classroom"`, and high school counts as a Classroom variant (the runtime's cast families).
 
@@ -184,5 +183,20 @@ The business edition in two more casts, through data in `editions/business.json`
 - **Layout:**
   - The picture is drawn at 1440 × 900 and 1280 × 720, with labels at 11 px or more.
   - The phone stage peaks at 462 of 466 px, with no horizontal scroll.
-  - At 1366 × 657 the stage is stacked and the 698 px player doesn't fit, so autoplay waits. Workplace does the same (pre-existing). The PME laptop band (`laptop: true`) would fix it, but would change workplace frames at short laptop sizes; flagged for a decision.
-- **Proposed keys for `casts.json`:** `Each_person`, `The_first`, `the_second` and `The_second` ("Each student", "The first student", "the second student", "The second student"; workplace "Each analyst" …). With them, the five role patches above become keys.
+  - (Fixed after the light read, below.) At 1366 × 657 the stage was stacked and the 698 px player didn't fit, so autoplay waited, in workplace too. The PME laptop band (`laptop: true`) fixes it, and changes workplace frames at short laptop sizes; flagged for a decision.
+- **Keys:** `Each_person`, `The_first`, `the_second` and `The_second`, proposed here, are now in `casts.json`, and the role patches have become keys.
+
+**After the light read** (`tests/classroom-light-read.md`; both casts: the point comes across, with no cheating or "don't use AI" reading):
+- **What separates the two** now reads as engaging with how the code works, with writing it yourself as one way to do that.
+  - Setup (every cast) replaces "Who wrote the code isn't the difference; asking how it works is." with: "What separates them is engaging with how the code works: asking, trying, breaking it and seeing why. Writing it yourself is one way to do that. In the study, the top group had the AI write the code, then asked it follow-up questions to understand it."
+  - Caption 5: "One part breaks. That engineer (student) works out why and fixes it." (was "finds the bug and fixes it alone").
+  - Caption 9 leads with asking: "The second engineer (student), who asked how it works and hit the bug, applies the rule."
+  - Description: "…but only the one who asked how it works, then broke it and fixed it, can say what would make it fail."
+  - Check follow-up: "Both engineers can sketch the design. The second question separates them: the engineer who asked how it works, then hit the bug and fixed it, can name what would make one connection fail and what that breaks." This also settles the reader's "second line" ambiguity.
+- **Plainer answers** (every cast). First: "It fetches all three in one group. If the group fails, they all fail." This restates the AI's design in general terms; it isn't wrong, just general. Second: "A missing record. Its fetch fails, so the group cancels the other two." This names a concrete failure, the study task's own missing-record error, and what it breaks.
+- **High school:** the setup adds "This example suits computer-science classes."
+- **Study wording:** "Most of the study's participants were working developers; the students in the figure are constructed."
+- **Laptop band for business** (`laptop: true`, every cast). The picture now draws at 1366 × 657, as PME's does, and the compact band applies to windows 860 px or shorter.
+- **Workplace phone paper tags** get the full hold (the PME wording above).
+- **Workplace wording changed** (frames differ in beats 5, 8–10, plus the band at short laptop sizes): captions 5 and 9, both answers, the setup, the description, the check follow-up, the screen-reader summary, the beat 5, 8 and 9 "On screen" lines, the phone paper tags, and the edition note ("Workplace edition. PME is the example from the original essay, linked below.", since the switch has three links).
+- **Classroom reviewer:** Jack chose "the instructor" for higher ed (PME moves to the `seminar` cast, "Faculty"). The classroom patches use only keys (`{reviewer_points}`, `{then_ask}`, `{receive}`), so they follow the cast. The summary's question form ("… points to the connection …: what would make that fail?") fits either number.
