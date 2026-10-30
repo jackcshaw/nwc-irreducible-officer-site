@@ -47,6 +47,16 @@ What the cold reads caught along the way: two figures contradicted their study (
 
 **Also done:** the shared player now waits for a slow edition rather than swapping it, survives a missing data file, and shows a notice without JavaScript. The integration plan requires pre-rendering each edition and making business the default on standalone pages, per your decision. The switch reads "PME", with a note under it spelling out professional military education (your call, October 30).
 
+## Jack's decisions, October 30
+
+- **The edition switch** reads "PME" (with the note spelling out professional military education), not "Military education".
+- **The race line** stays on frame capture's final frame, in the abstract's words. High school adds the cause and a teacher note.
+- **Responsibility laundering's definition:** "agency" becomes "responsibility": "The model’s recommendation makes responsibility feel shared, or easier to defend."
+- **The classroom cast:** build the other seven with the plan's recommended defaults.
+- **The PME polish pass:** apply the business testers' fixes to PME too (items 5–8 below).
+- **Companion PR #13:** merged.
+- **Refused subagent commits:** I commit them after checking the diff.
+
 ## Classroom cast (in progress, October 29)
 
 You said to build the classroom cast after business, so it's underway. [CLASSROOM-PLAN.md](CLASSROOM-PLAN.md) has the full plan.
