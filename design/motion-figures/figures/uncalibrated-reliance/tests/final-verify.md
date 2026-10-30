@@ -1,78 +1,154 @@
 # Uncalibrated reliance: final verification
 
-October 28, 2026. Report only; no figure files changed.
+October 30, 2026. I'm a verifier, not a cold reader. I checked the polish, wording and classroom round against the intent in `storyboard.md`, `storyboard-business.md` (sections 10 and 11) and `tests/classroom-read-2.md`. This is a report only: no figure files changed. It replaces the earlier `final-verify.md` (October 28) in full.
 
-**Method.** I served `design/motion-figures/` on 127.0.0.1:5233 and used Playwright Chromium from the site repo's `node_modules`. I held moments with `window.__motionFigures['uncalibrated-reliance'].seek(t)` at 1280×800, 1280×900 and 390×844. At 1280 the SVG stage renders at scale 1.06. At 390 the stacked text stage is active (SVG scale 0.37). I sampled the picture state every 0.1 s from 0 to 90.6 s at each size to measure still stretches. Caption timings come from `BEAT_AT`, `T` and `BEATS` in `uncalibrated-reliance.js`. The stills in `shots/` (written 07:55:11–21) are newer than the code (07:55:10). They match my renders.
+**Build:** branch `motion-figures` at `7e607cb`. The figure's files were clean; the only modified file in the tree was another verifier's report.
 
-## Results
+**Method:**
+- **Server:** `python3 -m http.server 5361 --bind 127.0.0.1`, stopped afterwards.
+- **Browser:** Playwright Chromium from the site repo, one browser at a time, closed between viewports.
+- **Versions:**
+  - PME: no query, cast `seminar`;
+  - workplace: `?edition=business`;
+  - classroom: `&cast=classroom`;
+  - high school: `&cast=high-school`.
+- **Sampling:** I seeked with `window.__motionFigures[id].seek(t)` every 0.1 s at 1440×900 and 390×844 (937 samples per version). Each sample recorded the caption and every visible text, using effective opacity, clip-path reveals and rendered size (`getScreenCTM`). On the stacked stage I recorded text by block, plus text rectangles and page width. I saved a still of the shot every 0.5 s (188 per version and size). At 1280×720 and 1366×657 I sampled every 0.5 s.
+- **Pacing rule:**
+  - a caption needs (words ÷ 3) + 1.5 s inside its beat;
+  - a new text needs the same time on screen at 50% opacity or more, counted from when it first appears;
+  - a hand-off to the same words in another element counts as one stretch;
+  - text that stays to the end passes.
+- **Other checks:**
+  - reduced motion, both the emulated media query and `?reduced`, compared with `seek(duration)`;
+  - every switch link, followed from all four versions;
+  - a live load with no seek, for autoplay and the console;
+  - PME frame-diffed against `regression/baseline` with `scripts/frame-diff.mjs`. Captures went to the scratchpad; the baseline was read only.
 
-| # | Item | Result |
-|---|---|---|
-| 1 | Harbor log unambiguous | **Pass** |
-| 2 | Crux beat slow enough | **Pass** at 1280 (see the note on 390) |
-| 3 | 390: picture and caption agree | **Pass** |
-| 4 | About 90 s; captions at least words ÷ 3 + 1.5 s | **Pass** (see the note on beat 10) |
-| – | Final frame shows the faculty check verbatim, with a follow-up line at the same size | **Pass** |
-| – | Study numbers match the source spine | **Pass** |
+Times are on the player clock (figure time + 3.0 s), as the readout shows them. The run is 93.6 s in every version.
 
-### 1. Harbor log
+## Verdict
 
-- **1280** (`uncalibrated-reliance.js:111`, `shots/beat-06.png`): the callout is headed "OPEN TODAY" over "Docks 1, 3, 4". Set apart below it, in muted italic, is "✕ Dock 2: closed". The survey callout matches it: "CAPACITY / 4 docks, 5 each / (survey, last year)". The reading note in the second brief says "Log: dock 2 closed for repairs." In beat 7 the underline sits under "Docks 1, 3, 4" (y 92), above the closed-dock line. No layout reads as "dock 2 reopens today".
-- **390** (`uncalibrated-reliance.js:469–472`, `shots/player-390-final.png`): "Harbor log · open today: docks 1, 3, 4." sits over a separate line, "✕ Dock 2: closed for repairs." In beat 7 only "docks 1, 3, 4." is underlined.
+| # | Item | PME | Workplace | Classroom | High school |
+|---|---|---|---|---|---|
+| 1 | PME polish (no change expected) | **Pass** (209/209 frames identical) | — | — | — |
+| 2 | Drawn picture, labels ≥ 11 px at 1280×720 and 1366×657 | **Pass** | **Pass** | **Pass** | **Pass** |
+| 3 | Pacing at 1440×900 and 390×844 | **Fail** (minor, 1440 drawn stage) | **Pass** | **Pass** | **Pass** |
+| 4 | Workplace wording | — (none listed for UR) | — | — | — |
+| 5 | Classroom and high school | — | — | **Fail** (minor wording: the study) | **Fail** (same) |
+| 6 | Switch and `aria-current` | **Pass** | **Pass** | **Pass** | **Pass** |
+| 7 | 390 width, console, reduced motion | **Pass** | **Pass** | **Pass** | **Pass** |
 
-### 2. Crux beat (beat 6, 37.6–48.6 s, 11.0 s)
+## Defects
 
-- The survey note is fully shown at 40.1 s and the log note at 41.7 s. Part 2 doesn't move until 43.2 s, a still hold of 1.5 s. "15" starts to fade in at 44.2 s, so the log note has been readable for 2.5 s by then (2.9 s from the log line's first appearance).
-- The note is set at 16 units, about 17 px at 1280. The port callouts above it are 13 units. The note sits in the empty middle of the second brief under "PORT REPORTS" (`:186–188`).
-- Movements come one after another with no overlap: dot to survey, then survey opens, then note line 1, then dot to log, then log opens, then note line 2, then hold, then Part 2 slides in with the dot riding it, then strike 20, insert 15, strike 4, insert 3 open, mark, dot home. Nothing else in the scene moves from 37.6 to 48.6 s.
-- *Note on 390:* the phone stage has no enlarged reading note. The survey and log lines stay 13 px in the callout box at the top. The hold is still there: the log appears at 40.7–41.3 s and both corrections swap in together at 44.2 s. The storyboard only specifies the large note for the SVG.
+1. **PME, 1440×900 (and every drawn stage), 34.4–35.8 s.** The second dot's label, "Second student", is up 1.5 s; 2 words need 2.17 s.
+   - It fades with the dot's `bLabel` timing, and the dot then travels unlabelled until the names return at 76.4 s.
+   - "SECOND STUDENT'S BRIEF" appears at 34.9 s and stays, so the words remain readable nearby. The label naming the person doesn't.
+   - The workplace and classroom versions avoid this with `labels.dot.keepB`. PME was left unchanged in the polish pass, so this predates the round.
+   - On the phone stage, "Second student" stays from 34.9 s to the end.
+2. **Classroom and high school, page and picture (all viewports; the panel runs 62.9–72.1 s).** The study is described as shop owners, but its sample was entrepreneurs.
+   - Where it appears:
+     - the panel heading, "A REAL STUDY OF SHOP OWNERS" (phone: "A real study of shop owners");
+     - the setup, "a study of shop owners in Kenya";
+     - evidence paragraph 2, "It's a study of shop owners advising their own businesses."
+   - Why it's wrong:
+     - The source spine and the panel's own source line say "Kenyan entrepreneurs".
+     - The same page's fourth paragraph says the businesses ranged "from fast-food joints to poultry farms to cybershops".
+     - The study's owners didn't advise anyone; the AI assistant advised them.
+     - The storyboard's own Lesson 11 asks for the sample to be described accurately.
+   - The workplace edition's paragraph 2 doesn't have this sentence.
+   - Suggested wording: "a study of entrepreneurs in Kenya", "A REAL STUDY OF SMALL-BUSINESS OWNERS", and "It's a study of entrepreneurs acting on AI advice for their own businesses."
 
-### 3. 390 × 844
+Neither defect blocks the point landing, but both fail the rule as briefed.
 
-- **Student marker:** a red "● Student" marker appears in the task card at 2.7–3.0 s, inside beat 1 (`:459`, `:548`). From 0 to 2.7 s only the task card fades in, which matches the desktop dot's timing.
-- **Pointing:** from 72.6 to 76.1 s the Part 1 boxes in both briefs carry a 1.5 px navy outline. From 76.1 s to the end the outline is on the Part 2 boxes (`:581–583`). Both are visible in renders at t = 75 and 77.
-- **Stillness:** within a single caption, the longest still stretches at 390 are:
-  - 50.8–54.3 s (3.5 s): beat 7, between the CAPACITY tag and the frontier. Desktop has the same stretch (3.4 s).
-  - 62.9–68.9 s (6.0 s): the study panel's reading hold. It is identical on desktop.
-  - The final beat: there the caption and the follow-up line carry the change.
+## 1. PME polish: pass
 
-  Nothing like the 8 s phone freeze reported in figure read 2 remains. One minor gap: the phone stage has no counterpart to the desktop's 56.3–56.9 s pulse where the two answer cards pulse together.
+- No PME change was expected. `node scripts/frame-diff.mjs uncalibrated-reliance diff figures/uncalibrated-reliance/regression/baseline <scratch> --hide=".fig-editions,.fig-edition-note" --freeze` reported **209 compared, 209 identical**.
+- That baseline was taken at 11:02, before the classroom read-1 and read-2 core changes (`labels.finalTags`). PME therefore draws exactly as before those changes.
+- A capture with `--disable-partial-raster` differed from the baseline by 1–145 anti-aliasing pixels on the frontier line and card edges. Two captures with that flag were identical (209/209), so the flag accounts for the difference, not the code.
 
-### 4. Running time and caption budget
+## 2. Laptops: pass
 
-`T.end` = 90.6 s across 10 beats. The page setup says "about a minute and a half". The mp4 export runs 93.6 s, including its tail hold.
+| Size | PME | Workplace | Classroom | High school |
+|---|---|---|---|---|
+| 1280×720 | drawn, 11.10 px | drawn, 11.10 px | drawn, 11.10 px | drawn, 11.10 px |
+| 1366×657 | drawn, 11.03 px | drawn, 11.03 px | drawn, 11.03 px | drawn, 11.03 px |
 
-| Beat | On screen (s) | Words | Needed (s) |
-|---|---|---|---|
-| 1 | 0–8.6 (8.6) | 12 | 5.50 |
-| 2 | 8.6–15.6 (7.0) | 6 | 3.50 |
-| 3 | 15.6–23.1 (7.5) | 12 | 5.50 |
-| 4 | 23.1–30.3 (7.2) | 10 | 4.83 |
-| 5 | 30.3–37.6 (7.3) | 11 | 5.17 |
-| 6 | 37.6–48.6 (11.0) | 12 | 5.50 |
-| 7 | 48.6–58.4 (9.8) | 17 | 7.17 |
-| 8 | 58.4–67.9 (9.5) | 16 | 6.83 |
-| 9 | 67.9–83.9 (16.0) | 14 | 6.17 |
-| 10 (check) | 84.1–90.6, then rests (6.5+) | 10 | 4.83 |
-| 10 (follow-up) | 87.2–90.6, then rests (3.4+) | 10 | 4.83 |
+- Each cell gives the stage mode and the smallest visible picture text at any settled sample ("EXAMPLE TASK").
+- `.is-stacked` and `.is-narrow` were off in all 188 samples of every version at both sizes.
+- At 1440×900 the smallest label is 14.06 px.
 
-Every caption meets the budget. *Note on beat 10:* the follow-up line meets it only because the runtime rests on the final frame after 90.6 s (`motion.js` tick stops at `duration`; it doesn't loop). Inside the clock the follow-up gets 3.4 s. The mp4 tail gives it about 6.4 s.
+## 3. Pacing: PME fails (defect 1); the other three pass
 
-### Final frame
+**Captions.** Every caption meets (words ÷ 3) + 1.5 s in all four versions.
+- The tightest is classroom and high-school caption 5, "Another student asks the same AI the same questions, then checks each answer at its source.": 16 words need 6.83 s, and the beat is 7.3 s.
+- Workplace and PME's tightest is caption 3: 12 words need 5.5 s in 7.5 s.
+- The check's second line arrives at 90.3 s and the player then rests on the final frame, so it stays up.
 
-At 90.6 s the caption shows "FACULTY CHECK", then "What evidence justified relying on the system here?" verbatim, then "Point to each part. Was the evidence about that part?". The follow-up uses class `mf-follow is-equal`. Both lines are italic: 30 px at 1280 and 20 px at 390. Nothing is clipped: at 390 the caption's scrollHeight and clientHeight are both 165, and the follow-up ends 27 px above the band's bottom.
+**New text, 1440×900.** I checked 67–76 texts per version, 51–61 of which leave the screen before the end.
+- Workplace, classroom and high school: no shortfalls, including:
+  - the working marks;
+  - the panel lines;
+  - "FLYER ONLY" (from 53.7 s);
+  - "COVERED BY ITS INPUT" and "NEEDS FACTS IT WASN'T GIVEN" (from 55.6 s);
+  - the per-part tags (76.9 s and 83.4 s);
+  - the typed answers.
+- PME: defect 1 only.
+- Taken as one block, PME's study panel is 25 words in 9.3 s (62.9–72.1), against 9.8 s at 3 words a second. Every line meets the rule on its own, which is the convention ("each label or panel line"). I note it but don't count it.
 
-### Study numbers
+**New text, 390×844.** No shortfalls in any version, PME included. The study overlay's lines (63.1–72.1 s) each meet the rule. The scene dims under the overlay and returns.
 
-`sources/source-spine.md:62` gives "about 84.5%", "60% and 70%", "19 percentage points less likely to produce correct solutions" and "regardless of the correctness of their answer". These match:
+## 4. Workplace wording
 
-- the SVG panel (`:245`, `:251`): "about 84.5%", "60%", "70%", "Rated higher in quality / than without AI, / regardless of correctness";
-- the phone overlay (`:533–534`);
-- the beat 8 "On screen" line;
-- the screen-reader summary;
-- the page's Evidence section, which quotes both phrases verbatim. "19 percentage points" appears only in this section, not in the picture.
+Not on UR's list. The workplace captions and check render as in `storyboard-business.md` section 4, and the check's follow-up is "Ask part by part: was the evidence about that part?"
 
-## Nits (not failures)
+## 5. Classroom and high school: fail on one wording item (defect 2); the rest passes
 
-- **Timer:** `index.html` hard-codes `0:00 / 1:31`, and storyboard line 58 says the timer reads 1:31. The runtime rewrites it as `1:30`, because `fmt` floors 90.6. Visitors see 1:30.
-- **Stale storyboard rows:** `storyboard.md` lines 148 and 155 still describe the round 4 harbor log: "Dock 2: closed" / "for repairs.", and "OPEN TODAY" as a third line under it. That contradicts the round 5 notes (line 54) and the built figure. A rebuild from that table would bring back the "reopens today" misreading.
+- **`node scripts/edition-check.mjs`:** "8 figures, 16 editions … Listed casts: no failures", exit 0.
+- **Singular reviewer, no "Faculty":** I scanned every word each page shows: the page, beat list, summary, every caption, and all picture and stacked text across the run.
+  - There's no "Faculty" or "seminar" in either cast.
+  - Every reviewer verb agrees with a singular subject: "The instructor, who sees only the plans, asks what each part rests on and why customers left.", "The teacher sees only the plans and asks about each part.", "Instructor's check" and "Teacher's check".
+- **AI use disclosed:**
+  - The setup says "The class allows AI, and the students say they used it."
+  - On screen, the key "AI-DRAFTED (DISCLOSED)" with "A STUDENT'S CHECKS AND EDITS" shows from 73.4 s to the end. On the phone it reads "AI-drafted (disclosed) ● Checks and edits".
+- **The study:** the figures match the source spine: "nearly 10% worse", "may have gained over 15%" (less certain), the null average, "over 0.20-standard-deviations", 640 entrepreneurs, and the exploratory label. The setup and paragraph 2 say no students took part. The sample's wording fails (defect 2).
+- **The case packet:**
+  - The setup gives every student "the same case packet": two battery quotes, the rival's flyer and the sales records "as a separate exhibit at the back".
+  - On screen: BATTERY QUOTE ×2, RIVAL'S FLYER and SALES RECORDS, with "SHOP'S SALES / Lost: rush jobs / (not given to AI)" from 44.0 s.
+- **Why the records stay out:**
+  - The setup says "The second question seems to be about the rival's lower prices, so a student asks an AI and shares the quotes and the flyer."
+  - Caption 1 says only that the records were left out. The reason is on the page, not in the animation, as section 10 of the storyboard intends.
+- **Per-part tags,** written as each student answers and kept to the end:
+  - "✓ CHECKED: QUOTES" on both Part 1s, from 76.9 s;
+  - "USED AS IS" on the first student's Part 2;
+  - "✓ CHECKED: RECORDS" on the second student's Part 2, from 83.4 s.
+  - On the phone they read "✓ Quotes", "Used as is" and "✓ Records".
+- **Phone:**
+  - **No overlap.** A text-rectangle check every 0.5 s found none, apart from the study overlay's 0.4 s crossfade (72.0–72.4 s).
+  - **Tags.** They sit as tabs on each card's top edge, clear of the names and the plan text (stills at 52 s, 83 s and 93.5 s).
+  - **Key.** The compact key is one line.
+  - **Player.** It fits 844 px.
+- **Observations, not counted:**
+  - The phone tabs are 11 px, under the 13 px stacked-stage size in CONVENTIONS.md but at the 11 px legibility floor.
+  - The task card's "● Student" label stays to the end beside "Student 1" and "Student 2". Classroom read 2 (problem 5) raised it.
+
+## 6. Switch: pass
+
+- Every page reads "See this with: Workplace · Classroom · PME". The note on PME pages reads "PME (professional military education): the original example from *The Irreducible Officer*…"; the other pages hide it.
+- **`aria-current`:**
+  - PME page: PME;
+  - workplace: Workplace;
+  - classroom: Classroom;
+  - high school: Classroom, whose link keeps `cast=high-school`.
+- **Where the links land.** From all four pages:
+  - Workplace goes to `?edition=business`: edition `business`, cast `workplace`, Workplace current.
+  - Classroom goes to `cast=classroom`, or `cast=high-school` from the high-school page, with Classroom current.
+  - PME goes to `?edition=pme`: cast `seminar`, PME current.
+
+## 7. 390 width, console, reduced motion: pass
+
+- **Width:** `scrollWidth` was 390 at 390×844 in all 188 rect samples and on the reduced page, in every version.
+- **Console:** no errors, warnings or failed requests in any load: sampling, reduced, switch landings, or the live load. On the live load, autoplay started once the shot was in view ("0:01 / 1:33").
+- **Reduced motion:** under both the emulated media query and `?reduced`, at 1440×900 and 390×844, every version opens at 1:33 / 1:33 with `.is-reduced`.
+  - The check and its second line are at full opacity.
+  - All 11 "On screen" lines are visible.
+  - The visible picture text equals the `seek(duration)` frame: none missing, none extra.
