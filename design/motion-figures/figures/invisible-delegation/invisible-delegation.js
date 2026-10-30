@@ -84,9 +84,9 @@
 	const JUDGED = ed.notes.judgedBy ?? 0;
 	const cardH = (k) => (DECIDED[k].length > 1 ? BH : 40);
 	// Optional (business): a follow-up question. Both answer the first question alike, together; the
-	// follow-up separates them. It needs about 1.8 s more before the check.
+	// follow-up separates them. It needs about 4.4 s more before the check.
 	const FOLLOW = ed.followUp ? {q: L.askQ2, split: ed.answers.split} : null;
-	if (FOLLOW) Object.assign(T, {panelB: [73.3, 73.7], words1: [73.7, 74.7], q2: [75.6, 76.1], wordsA: [78.0, 79.6], wordsB: [80.2, 82.0], check: 85.4, undim: [87.4, 88.4], follow: 88.8, end: 92.3});
+	if (FOLLOW) Object.assign(T, {panelB: [73.3, 73.7], words1: [73.7, 74.7], q2: [75.6, 76.1], wordsA: [78.0, 80.7], wordsB: [81.3, 86.0], check: 88.0, undim: [90.0, 91.0], follow: 91.4, end: 94.9});
 	if (ed.notes.judgedBy != null) T.pulseCrit = [64.6, 66.6];
 	const defs = el(svg, 'defs');
 	el(svg, 'rect', {width: 960, height: 540, fill: C.paper});
@@ -649,12 +649,14 @@
 		const now = figTime();
 		narrow.style.minHeight = '0px';
 		let max = 0;
-		for (let t = 0; t <= T.end; t += 0.5) { renderNarrow(t); max = Math.max(max, narrow.scrollHeight); }
-		renderNarrow(T.end); max = Math.max(max, narrow.scrollHeight);
+		// Fractional heights (scrollHeight rounds), so a sub-pixel taller moment can't nudge the controls.
+		const hNow = () => Math.max(narrow.scrollHeight, narrow.getBoundingClientRect().height);
+		for (let t = 0; t <= T.end; t += 0.5) { renderNarrow(t); max = Math.max(max, hNow()); }
+		renderNarrow(T.end); max = Math.max(max, hNow());
 		narrow.style.minHeight = `${Math.ceil(max)}px`;
 		renderNarrow(now);
 	};
-	// The stacked stage takes over whenever the smallest picture text (12 units) would render under 11 px.
+	// The stacked stage takes over whenever the smallest picture text (13 units) would render under 11 px.
 	const syncStacked = () => {
 		const r = svg.getBoundingClientRect();
 		if (!r.width) return;

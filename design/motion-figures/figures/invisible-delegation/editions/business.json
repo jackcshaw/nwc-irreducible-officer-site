@@ -65,13 +65,14 @@
   "split": 1,
   "first": [
    "“The firm’s standard.”",
-   "“None. They all",
+   "“I kept them all. They",
    "made it clearer.”"
   ],
   "second": [
    "“The firm’s standard.”",
-   "“‘Add a recap.’ It",
-   "wasn’t in my outline.”"
+   "“Kept two that fit what I",
+   "decided. Struck the recap:",
+   "not in my outline.”"
   ]
  },
  "labels": {
@@ -95,7 +96,7 @@
    "AI use (Lee et al.)."
   ],
   "askQ2": [
-   "What did you turn down,",
+   "Which notes did you keep,",
    "and why?"
   ]
  },
@@ -134,7 +135,7 @@
    "detail": "\"Suggest a better structure\" carries \"How the email runs\" across, and \"Make it more professional\" carries \"'Professional' means\". Both turn grey in the AI's lane. The AI's grey headings and paragraph appear in the email, and {the_person} revises to draft 4."
   },
   {
-   "text": "Each request left out whose standard to use. The AI used its own.",
+   "text": "Each request left out whose criteria to use. The AI used its own.",
    "detail": "a key appears, \"Left unsaid\". Under each request, a line marked \"unsaid\" with words in a dashed box: whose criteria?; whose outline?; whose meaning? The three grey cards pulse."
   },
   {
@@ -151,32 +152,32 @@
   },
   {
    "text": "{reviewer_asks_each} two questions, with only the emails to go on.",
-   "detail": "the ledgers and notes fade; the two emails stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears, and both {people} give the same answer: \"The firm's standard.\" A second question appears: \"What did you turn down, and why?\" The first {person} says, \"None. They all made it clearer.\" The second says, \"'Add a recap.' It wasn't in my outline.\""
+   "detail": "the ledgers and notes fade; the two emails stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears, and both {people} give the same answer: \"The firm's standard.\" A second question appears: \"Which notes did you keep, and why?\" The first {person} says, \"I kept them all. They made it clearer.\" The second says, \"Kept two that fit what I decided. Struck the recap: not in my outline.\""
   },
   {
    "text": "{check}: What did the AI decide for them?",
-   "list": "{check}: What did the AI decide for them? Ask: whose standard? What did you turn down, and why?",
+   "list": "{check}: What did the AI decide for them? Ask: whose standard? Which notes did you keep, and why?",
    "detail": "both lines of the check appear under the picture at the same size, and the ledgers and notes return: the first {person}'s three decisions in the AI's lane, the second's three in their own, in their words. A source line appears: \"Illustration based on a 2025 study of knowledge workers' AI use (Lee et al.).\""
   }
  ],
  "check": {
   "label": "{check}",
   "question": "What did the AI decide for them?",
-  "follow": "Ask: whose standard? What did you turn down, and why?"
+  "follow": "Ask: whose standard? Which notes did you keep, and why?"
  },
  "page": {
   "kicker": "Failure mode 5 of 7",
   "title": "Invisible delegation",
-  "description": "Two {people} improve the same client email with the same AI notes. Asking what each turned down, and why, shows who decided.",
+  "description": "Two {people} improve the same client email with the same AI notes. Asking which notes each kept, and why, shows who decided.",
   "setup": "{A_person} asks an AI for feedback on an email telling a client their project will slip three weeks, then for a better structure, then for a more professional version, and revises after each. What can happen next is invisible delegation: a request for help hands over criteria, structure or meaning, and nobody notices. Illustration based on a 2025 study of knowledge workers' AI use (Lee et al.). The {people}, their AI, the email and the firm's standard are constructed.",
   "srTitle": "Invisible delegation, an animated figure in nine beats",
-  "srSummary": "An animated figure. A red dot stands for {a_person} improving a draft email that tells a client their project slips three weeks. The task card carries the firm's standard: bad news first, with the new date. {The_person} reads it. Beside the email is a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the {person}'s lane: the criteria, how the email runs, and what \"professional\" means. {The_person} asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Cut the jargon\", \"Formal phrasing\", \"Add a recap\"), and {the_person} ticks all three, keeping the AI's recap. {The_person} then asks, \"Suggest a better structure,\" and \"Make it more professional.\" Each request carries a card across, and {the_person} revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out: whose criteria, whose outline, whose meaning of professional. {A_second} reads the same standard. Before each request, they write the decision on its card in red: \"New date, and why\"; \"Date, reason, plan\"; \"Clear and courteous\". Then they ask in the same words. Their cards stay in their lane. Both get the same AI notes. The second {person} judges them against their decisions: they tick two and strike \"Add a recap\", writing \"not in my outline\". Both emails meet the standard. {reviewer_asks_each}, with only the two emails to go on, both marked \"Revised with AI\": \"Better by whose standard?\" Both say, \"The firm's standard.\" {then_ask}, \"What did you turn down, and why?\" The first says, \"None. They all made it clearer.\" The second says, \"'Add a recap.' It wasn't in my outline.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. A red dot stands for {a_person} improving a draft email that tells a client their project slips three weeks. The task card carries the firm's standard: bad news first, with the new date. {The_person} reads it. Beside the email is a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the {person}'s lane: the criteria, how the email runs, and what \"professional\" means. {The_person} asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Cut the jargon\", \"Formal phrasing\", \"Add a recap\"), and {the_person} ticks all three, keeping the AI's recap. {The_person} then asks, \"Suggest a better structure,\" and \"Make it more professional.\" Each request carries a card across, and {the_person} revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out: whose criteria, whose outline, whose meaning of professional. {A_second} reads the same standard. Before each request, they write the decision on its card in red: \"New date, and why\"; \"Date, reason, plan\"; \"Clear and courteous\". Then they ask in the same words. Their cards stay in their lane. Both get the same AI notes. The second {person} judges them against their decisions: they tick two and strike \"Add a recap\", writing \"not in my outline\". Both emails meet the standard. {reviewer_asks_each}, with only the two emails to go on, both marked \"Revised with AI\": \"Better by whose standard?\" Both say, \"The firm's standard.\" {then_ask}, \"Which notes did you keep, and why?\" The first says, \"I kept them all. They made it clearer.\" The second says, \"Kept two that fit what I decided. Struck the recap: not in my outline.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "What did the AI decide for them?",
-   "Ask: whose standard? What did you turn down, and why?"
+   "Ask: whose standard? Which notes did you keep, and why?"
   ],
-  "checkFollow": "{A_person} who didn't notice what they handed over can honestly answer the first question with \"nothing\", and both {people} name the same standard when asked whose it was. The follow-up separates them. In the figure, both {people} read the same standard, ask in the same words and get the same AI notes. The first takes every note. The second writes their decisions down first and judges the notes against them, turning down a recap that isn't in their outline. Both emails meet the standard, so the emails can't tell {reviewer} who decided. Asking what each {person} turned down, and why, can.",
+  "checkFollow": "{A_person} who didn't notice what they handed over can honestly answer the check's first line, \"What did the AI decide for them?\", with \"nothing\", and both {people} name the same standard when asked whose it was. The follow-up separates them. In the figure, both {people} read the same standard, ask in the same words and get the same AI notes. The first keeps every note because each made the email clearer: the AI's reason. The second wrote their decisions down first and gives their own reasons: they kept two notes that fit those decisions and struck a recap that isn't in their outline. A {person} who decided first could keep every note and still say why each fits. Both emails meet the standard, so the emails can't tell {reviewer} who decided. Asking which notes each {person} kept, and why, can.",
   "evidenceHeading": "The study behind this example",
   "evidence": [
    "Lee and colleagues surveyed 319 knowledge workers, who shared 936 first-hand examples of using generative AI in their work. In the paper's words, \"higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking\" (p. 1).",
@@ -209,8 +210,8 @@
  "byCast": {
   "classroom": {
    "page.setup": "Suppose two {people} in a business-writing {group} work a case: an email telling a client their project will slip three weeks, written to the firm's standard. The {group} allows AI, and both say they used it. Each asks an AI for feedback, then for a better structure, then for a more professional version, and revises after each. What can happen next is invisible delegation: a request for help hands over criteria, structure or meaning, and nobody notices. Illustration based on a 2025 study of knowledge workers' AI use (Lee et al.). The study surveyed people at work; it included no students. The {people}, their AI, the email and the firm's standard are constructed.",
-   "page.description": "Two {people} improve the same client email for a business-writing assignment, with the same AI notes. Asking what each turned down, and why, shows who decided.",
-   "page.srSummary": "An animated figure. A red dot stands for {a_person} in a business-writing {group}, improving a draft email for a case: telling a client their project slips three weeks. The {group} allows AI, and the {people} say they used it. The task card carries the firm's standard: bad news first, with the new date. {The_person} reads it. Beside the email is a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the {person}'s lane: the criteria, how the email runs, and what \"professional\" means. {The_person} asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Cut the jargon\", \"Formal phrasing\", \"Add a recap\"), and {the_person} ticks all three, keeping the AI's recap. {The_person} then asks, \"Suggest a better structure,\" and \"Make it more professional.\" Each request carries a card across, and {the_person} revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out: whose criteria, whose outline, whose meaning of professional. {A_second} reads the same standard. Before each request, they write the decision on its card in red: \"New date, and why\"; \"Date, reason, plan\"; \"Clear and courteous\". Then they ask in the same words. Their cards stay in their lane. Both get the same AI notes. The second {person} judges them against their decisions: they tick two and strike \"Add a recap\", writing \"not in my outline\". Both emails meet the standard. {reviewer_asks_each}, with only the two emails to go on, both marked \"Revised with AI\": \"Better by whose standard?\" Both say, \"The firm's standard.\" {then_ask}, \"What did you turn down, and why?\" The first says, \"None. They all made it clearer.\" The second says, \"'Add a recap.' It wasn't in my outline.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
+   "page.description": "Two {people} improve the same client email for a business-writing assignment, with the same AI notes. Asking which notes each kept, and why, shows who decided.",
+   "page.srSummary": "An animated figure. A red dot stands for {a_person} in a business-writing {group}, improving a draft email for a case: telling a client their project slips three weeks. The {group} allows AI, and the {people} say they used it. The task card carries the firm's standard: bad news first, with the new date. {The_person} reads it. Beside the email is a ledger in three lanes: \"The {person} decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the {person}'s lane: the criteria, how the email runs, and what \"professional\" means. {The_person} asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Cut the jargon\", \"Formal phrasing\", \"Add a recap\"), and {the_person} ticks all three, keeping the AI's recap. {The_person} then asks, \"Suggest a better structure,\" and \"Make it more professional.\" Each request carries a card across, and {the_person} revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out: whose criteria, whose outline, whose meaning of professional. {A_second} reads the same standard. Before each request, they write the decision on its card in red: \"New date, and why\"; \"Date, reason, plan\"; \"Clear and courteous\". Then they ask in the same words. Their cards stay in their lane. Both get the same AI notes. The second {person} judges them against their decisions: they tick two and strike \"Add a recap\", writing \"not in my outline\". Both emails meet the standard. {reviewer_asks_each}, with only the two emails to go on, both marked \"Revised with AI\": \"Better by whose standard?\" Both say, \"The firm's standard.\" {then_ask}, \"Which notes did you keep, and why?\" The first says, \"I kept them all. They made it clearer.\" The second says, \"Kept two that fit what I decided. Struck the recap: not in my outline.\" The figure ends on the {check_l}, with the source under the picture. Each beat is listed below with what is on screen.",
    "beats.0.text": "{A_person}'s assignment: a client email, to the firm's standard. We'll track three decisions.",
    "page.evidence.0": "Lee and colleagues surveyed 319 knowledge workers, who shared 936 first-hand examples of using generative AI in their work. In the paper's words, \"higher confidence in GenAI is associated with less critical thinking, while higher self-confidence is associated with more critical thinking\" (p. 1). Everyone surveyed was at work, and the study included no students. The {people} in this figure are constructed."
   },

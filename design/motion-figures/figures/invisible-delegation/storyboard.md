@@ -4,6 +4,23 @@ Motion figure 5 of 8 · slug `invisible-delegation` · storyboard round 6: round
 
 Starting point: `concepts-v0/proposal.md` §2.5, "What crossed over" (8.5 s, not built). This version keeps v0's mechanism: a ledger of decisions, and ordinary requests that carry cards across it. It uses three of the essay's four request pairs, the three the site names (criteria, structure, meaning). The ledger has three lanes: what the student decides, what the student asked, and what the AI decides. Each of the first student's requests visibly carries a decision card across into the AI's lane. The turn shows what each request left unsaid: whose standard to use. The AI used its own. A second student, with the same task and rubric, starts from the rubric and writes each decision down before its request, with words that point back to it. That habit is the one difference. It shows in their working: they turn down one AI note that doesn't serve the rubric. Faculty can't see the ledger or the notes. They ask a question each student can answer honestly, and the answers show whose standard the help followed. The shared runtime and `CONVENTIONS.md` apply throughout.
 
+## Classroom light read fixes (October 30, 2026), wording for Jack
+
+PME takes the business ending (a deliberate change):
+- **The separating question no longer rewards turning a note down** (classroom light read, problem 1). A student who decided first and agreed with every AI note would also have answered "None" to "What did you turn down?". The follow-up now asks for kept notes with reasons, so the difference is whose reasons they give.
+  - The manager, faculty or teacher asks "Better by whose standard?", then "Which notes did you keep, and why?"
+  - The check is "What did the AI decide for them? / Ask: whose standard? Which notes did you keep, and why?" PME's first line is "…for the student?". Both lines sit at equal weight, one line each at 1280 and 1440, and the controls don't move.
+  - Rejected: "Which notes did you keep or turn down, and why?" (the light read's example). It wraps to a second line at desktop widths, and "keep, and why" already draws out the turned-down notes, as the second answer shows.
+  - Answers: both say "The rubric's." The first says "I kept them all. They made it stronger." The second says "Kept two that fit what I decided. Struck 'decisive': too thin." This retires "The AI's notes, I suppose. I worked through what it flagged." and "Mine, set first from the rubric: does the evidence back my call?". The candid first answer was the straw man that business cold read 2 flagged.
+- Caption 8 is "Faculty ask each student two questions, with only the papers to go on." (`{reviewer_asks_each}`, so it reads for any reviewer noun). Caption 5 is "A second student starts from the same task and rubric." The old 11-word caption ran 0.03 s over the 2× reading rule.
+- **Timing.** PME uses the business timeline for beat 8: the check at 88.0 s, 97.9 s in all.
+- **Phones:** cards are indented under their own requests with a turn arrow, as in business. PME's phone player is 836 px.
+- **Frames:**
+  - At 1440 and 1280, frames before 73 s change only in the caption band during beat 5.
+  - From 73 s, the answers, the question and the caption band change, and the ledgers return later (90 s and 92 s).
+  - At 390 every frame changes.
+  - `regression/baseline` is re-captured.
+
 ## PME polish pass (October 30, 2026)
 
 - **No trace of one read.** The rubric is underlined only while a student reads it, in the drawn picture and the stacked view. Before, the second student's read kept a 40% underline (drawn) or a full underline (stacked) to the end, which read as a second difference. This is core: business already did it, and its frames are unchanged.

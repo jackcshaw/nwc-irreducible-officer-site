@@ -4,6 +4,26 @@ Edition `business`, workplace cast. Built from `editions/business.json` on the u
 
 Open it with `index.html?edition=business`, or with the page's "See this with: Workplace" link.
 
+## Classroom light read fixes (October 30, `tests/classroom-light-read.md`), wording for Jack
+
+- **The separating question no longer rewards turning a note down** (classroom light read, problem 1). A student who decided first and agreed with every AI note would also have answered "None" to "What did you turn down?". The follow-up now asks for kept notes with reasons, so the difference is whose reasons they give.
+  - The manager, faculty or teacher asks "Better by whose standard?", then "Which notes did you keep, and why?"
+  - The check is "What did the AI decide for them? / Ask: whose standard? Which notes did you keep, and why?" PME's first line is "…for the student?". Both lines sit at equal weight, one line each at 1280 and 1440, and the controls don't move.
+  - Rejected: "Which notes did you keep or turn down, and why?" (the light read's example). It wraps to a second line at desktop widths, and "keep, and why" already draws out the turned-down notes, as the second answer shows.
+  - Answers: both say "The firm's standard." Then the first says "I kept them all. They made it clearer." (reasonable, but the reason is the AI's), and the second says "Kept two that fit what I decided. Struck the recap: not in my outline."
+  - The page's check paragraph now says a person who decided first could keep every note and still say why each fits.
+- **"Standard" means one thing.** Caption 4 reads "Each request left out whose criteria to use. The AI used its own." The unsaid lines stay "whose criteria? / whose outline? / whose meaning?".
+- **Phones pair each request with its card.** Without lanes, each card is indented under its own request with a turn arrow (↳), so "Suggest a better structure" no longer reads as belonging to "The criteria" above it.
+  - The phone spacing is tighter, and the stacked pulse is a box-shadow, so it no longer grows the stage.
+  - The stage height is measured to the sub-pixel, so the controls hold still.
+- **Timing.** Beat 8 holds each line at reading pace: the follow-up at 75.6 s, the first answer typed 78.0–80.7 s, the second 81.3–86.0 s (14 words), and the check at 88.0 s figure time.
+  - That is 2.6 s more than round 3. Business, classroom and high school run 97.9 s.
+- **Frames** (captured before and after with `--freeze`):
+  - At 1440 and 1280, frames before 73 s change only in the caption band during beat 4.
+  - From 73 s, the answer panels, the question and the caption band change, and the ledgers return 2.6 s later.
+  - At 390 every frame changes (arrows and spacing).
+  - All four regression baselines are re-captured.
+
 ## Round 3: final fixes after business cold read 2 (`tests/business-figure-read-2.md`)
 
 1. **No straw man.**

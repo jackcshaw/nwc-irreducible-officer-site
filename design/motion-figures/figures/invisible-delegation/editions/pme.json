@@ -63,15 +63,17 @@
   "reason": "evidence too thin"
  },
  "answers": {
+  "split": 1,
   "first": [
-   "“The AI’s notes, I",
-   "suppose. I worked through",
-   "what it flagged.”"
+   "“The rubric’s.”",
+   "“I kept them all. They",
+   "made it stronger.”"
   ],
   "second": [
-   "“Mine, set first from the",
-   "rubric: does the evidence",
-   "back my call?”"
+   "“The rubric’s.”",
+   "“Kept two that fit what I",
+   "decided. Struck ‘decisive’:",
+   "too thin.”"
   ]
  },
  "labels": {
@@ -88,7 +90,11 @@
   "unsaid": "UNSAID",
   "unsaidKey": "LEFT UNSAID",
   "askLabel": "{reviewer_ask|upper}",
-  "askQ": "Better by whose standard?"
+  "askQ": "Better by whose standard?",
+  "askQ2": [
+   "Which notes did you keep,",
+   "and why?"
+  ]
  },
  "narrow": {
   "taskLabel": "Example task",
@@ -124,7 +130,7 @@
    "detail": "a key appears, \"Left unsaid\". Under each request, a line marked \"unsaid\" with the words in a dashed box: against your criteria; for your argument; as you define it. The three grey cards pulse."
   },
   {
-   "text": "{A_second}, with the same task, starts from the rubric.",
+   "text": "{A_second} starts from the same task and rubric.",
    "detail": "{the_first}'s ledger moves up, and {a_second} appears below with a draft and the same three dashed cards. Their dot goes up to the task card, and the rubric line, \"Evidence must back the call\", grows larger and is highlighted."
   },
   {
@@ -136,19 +142,19 @@
    "detail": "the same notes appear under the second paper: \"Tighter opening\", \"Add the costs\", \"Be more decisive\". {The_person} ticks the first two. The criteria card pulses as {the_person} strikes \"Be more decisive\" in red and writes underneath: \"evidence too thin\". The same grey headings and paragraph appear in this paper, up to draft 4."
   },
   {
-   "text": "{reviewer_has} only the papers. They ask each {person} about the standard.",
-   "detail": "the ledgers and notes fade; the two papers stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears. The first student says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\""
+   "text": "{reviewer_asks_each} two questions, with only the papers to go on.",
+   "detail": "the ledgers and notes fade; the two papers stay, both at draft 4 and marked \"Revised with AI\". \"{reviewer_ask}: Better by whose standard?\" appears, and both {people} give the same answer: \"The rubric's.\" A second question appears: \"Which notes did you keep, and why?\" {The_first} says, \"I kept them all. They made it stronger.\" The second says, \"Kept two that fit what I decided. Struck 'decisive': too thin.\""
   },
   {
    "text": "{check}: What did the AI decide for {the_person}?",
-   "list": "{check}: What did the AI decide for {the_person}? To find out, ask each {person}: better by whose standard?",
+   "list": "{check}: What did the AI decide for {the_person}? Ask: whose standard? Which notes did you keep, and why?",
    "detail": "both lines appear under the picture at the same size, and the ledgers and notes return: {the_first}'s three decisions in the AI's lane, the second {person}'s three in their own, in their words."
   }
  ],
  "check": {
   "label": "{check}",
   "question": "What did the AI decide for the student?",
-  "follow": "To find out, ask each {person}: better by whose standard?"
+  "follow": "Ask: whose standard? Which notes did you keep, and why?"
  },
  "page": {
   "kicker": "Failure mode 5 of 7",
@@ -156,13 +162,13 @@
   "description": "A teaching figure: ordinary requests for AI help can hand over the criteria, the argument and what 'strategic' means. Faculty find out by asking each student whose standard the help followed.",
   "setup": "A student asks an AI for feedback on a draft paper, then a better structure, then a more strategic version, and revises after each. *The Irreducible Officer* calls what can happen next invisible delegation: a request for help transfers criteria, structure or meaning, and the student doesn't notice. The task, the rubric, the requests and both students are a constructed example.",
   "srTitle": "Invisible delegation, an animated figure in nine beats",
-  "srSummary": "An animated figure. A red dot stands for a student improving a draft strategy paper, for an example task: recommend whether to keep a forward base. The task card carries a rubric: evidence must back the call. Beside the paper is a ledger in three lanes: \"The student decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the student's lane: the criteria, how the argument runs, and what \"strategic\" means. The student asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Tighter opening\", \"Add the costs\", \"Be more decisive\"), and the student ticks all three and revises. The student then asks, \"Suggest a better structure,\" and \"Make it more strategic.\" Each request carries a card across, and the student revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out, in a dashed box: against your criteria, for your argument, as you define it. A second student, with the same task, starts from the rubric, which is enlarged and highlighted. Before each request, they write the decision on its card in red: \"Evidence must back the call\"; \"Lead with the call, then its evidence\"; \"Serves the ally's long-term interest\". Then they ask: \"Give me feedback against my criteria,\" \"Suggest a better structure for my argument,\" \"Make it more strategic, as I define it.\" Their cards stay in their lane. Both get the same AI notes. The second student judges them against their decisions: they tick two and strike \"Be more decisive\", writing \"evidence too thin\". Their paper gets the same grey help. Faculty, who have only the two papers, both marked \"Revised with AI\", ask each student, \"Better by whose standard?\" The first says, \"The AI's notes, I suppose. I worked through what it flagged.\" The second says, \"Mine, set first from the rubric: does the evidence back my call?\" The figure ends on the faculty check. Each beat is listed below with what is on screen.",
+  "srSummary": "An animated figure. A red dot stands for a student improving a draft strategy paper, for an example task: recommend whether to keep a forward base. The task card carries a rubric: evidence must back the call. Beside the paper is a ledger in three lanes: \"The student decides\", \"Requests\" and \"The AI decides\". Three undecided cards start in the student's lane: the criteria, how the argument runs, and what \"strategic\" means. The student asks an AI, \"Give me feedback.\" The request carries the criteria card across into the AI's lane, where it turns grey. The AI's notes come back (\"Tighter opening\", \"Add the costs\", \"Be more decisive\"), and the student ticks all three and revises. The student then asks, \"Suggest a better structure,\" and \"Make it more strategic.\" Each request carries a card across, and the student revises to draft 4. Then, under each request, a line marked \"unsaid\" shows what it left out, in a dashed box: against your criteria, for your argument, as you define it. A second student, with the same task, starts from the rubric, which is enlarged and highlighted. Before each request, they write the decision on its card in red: \"Evidence must back the call\"; \"Lead with the call, then its evidence\"; \"Serves the ally's long-term interest\". Then they ask: \"Give me feedback against my criteria,\" \"Suggest a better structure for my argument,\" \"Make it more strategic, as I define it.\" Their cards stay in their lane. Both get the same AI notes. The second student judges them against their decisions: they tick two and strike \"Be more decisive\", writing \"evidence too thin\". Their paper gets the same grey help. {reviewer_asks_each}, with only the two papers to go on, both marked \"Revised with AI\": \"Better by whose standard?\" Both say, \"The rubric's.\" {then_ask}, \"Which notes did you keep, and why?\" The first says, \"I kept them all. They made it stronger.\" The second says, \"Kept two that fit what I decided. Struck 'decisive': too thin.\" The figure ends on the {check_l}. Each beat is listed below with what is on screen.",
   "checkHeading": "{check}",
   "checkLines": [
    "What did the AI decide for {the_person}?",
-   "To find out, ask each {person}: better by whose standard?"
+   "Ask: whose standard? Which notes did you keep, and why?"
   ],
-  "checkFollow": "A student who didn't notice what they handed over can honestly answer the first question with \"nothing\". The second line is a question they can answer, and the answer shows whose standard the help followed. In the figure, both students have the same rubric and get the same AI notes. The first followed the notes. The second wrote their decisions down first, the criteria from the rubric, and judged the notes against them, turning one down. The essay's own pairs give the follow-ups: feedback against which criteria, a better structure for which argument, more strategic in what sense. The companion's failure-mode lab adds a fair objection: an assistant can legitimately propose criteria. The trouble starts when a student accepts them without seeing how they relate to the task.",
+  "checkFollow": "{A_person} who didn't notice what they handed over can honestly answer the check's first line with \"nothing\", and both {people} name the rubric when asked whose standard it was. The follow-up separates them. In the figure, both {people} have the same rubric and get the same AI notes. The first keeps every note because each made the paper stronger: the AI's reason. The second wrote their decisions down first, the criteria from the rubric, and gives their own reasons: two notes fit those decisions, and \"Be more decisive\" doesn't, because the evidence is too thin. A {person} who decided first could keep every note and still say why each fits. The essay's own pairs give the follow-ups: feedback against which criteria, a better structure for which argument, more strategic in what sense. The companion's failure-mode lab adds a fair objection: an assistant can legitimately propose criteria. The trouble starts when a student accepts them without seeing how they relate to the task.",
   "quoteHeading": "From the essay",
   "quotes": [
    {
@@ -203,5 +209,6 @@
    }
   ],
   "editionNote": true
- }
+ },
+ "followUp": true
 }

@@ -42,6 +42,14 @@
 	#invisible-delegation .mf-controls .mf-toggle { min-width: 92px; }
 	#invisible-delegation .mf-check-q, #invisible-delegation .mf-follow.is-equal { font-size: 20px; }
 	#invisible-delegation .mf-caption { min-height: 184px; padding-top: 10px; padding-bottom: 10px; }
+	/* Tighter phone spacing, so the cards' turn arrows and the follow-up still fit 844 px. */
+	#invisible-delegation .id-n-cell { margin: 0; }
+	#invisible-delegation .id-n-q { line-height: 1.2; }
+	#invisible-delegation .id-n-fac { line-height: 1.25; }
+	#invisible-delegation .id-n-say { padding: 3px 6px; line-height: 1.25; }
+	#invisible-delegation .id-n-notes { margin-bottom: 2px; }
+	#invisible-delegation .id-n-chip { margin-top: 1px !important; }
+	#invisible-delegation .id-n-decided { line-height: 1.2; }
 }
 .id-narrow p { margin: 0; }
 .id-narrow [hidden] { display: none !important; }
@@ -80,13 +88,18 @@
 .id-n-uns { margin: 1px 0 0 !important; white-space: nowrap; font: 600 12px/1.45 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
 .id-n-ghost { display: inline-block; margin-left: 2px; padding: 0 2px; border: 1.5px dashed var(--stone); font: italic 400 12px/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--stone); }
 .id-n-chip { margin: 2px 0 0 !important; padding: 1px 6px 2px; border: 1.5px dashed rgba(10, 34, 66, 0.45); background: var(--paper-bright); font: 600 13px/1.25 var(--sans); color: var(--ink); }
+/* Without lanes (phones; wide stacked stages without lanes), each card hangs under its own request: indented, with a turn arrow,
+   so a request doesn't read as belonging to the card above it. */
+.id-narrow .id-n-chip { position: relative; margin-left: 13px !important; }
+.id-narrow .id-n-chip::before { content: "↳"; position: absolute; left: -14px; top: 0; font: 400 13px/1.3 var(--sans); color: rgba(10, 34, 66, 0.55); }
 .id-n-chip b { display: block; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
 .id-n-chip.is-ai { border: 1.5px solid var(--stone); background: #ded5c4; color: var(--stone); }
 .id-n-chip.is-ai b { color: var(--stone); }
 .id-n-chip.is-own { border: 1.5px solid var(--red); color: var(--red); }
 .id-n-chip.is-own b { color: var(--red); }
 .id-n-decided { display: block; font: italic 400 13px/1.25 var(--serif); color: var(--red); }
-.id-n-chip.is-pulse { border-width: 3px; }
+/* The pulse thickens the outline without changing the chip's size, so the stage never grows. */
+.id-n-chip.is-pulse { box-shadow: 0 0 0 1.5px var(--red); }
 .id-n-source { margin: 6px 0 0 !important; font: italic 400 13px/1.35 var(--serif); color: var(--ink); }
 .id-n-lanes { display: none; }
 @media (min-width: 600px) {
@@ -95,6 +108,8 @@
 	#invisible-delegation .has-lanes .id-n-lanes span:first-child { color: var(--red); }
 	#invisible-delegation .has-lanes .id-n-lanes span:last-child { color: var(--stone); }
 	#invisible-delegation .has-lanes .id-n-chip { width: calc(50% - 3px); }
+	#invisible-delegation .has-lanes .id-n-chip { margin-left: 0 !important; }
+	#invisible-delegation .has-lanes .id-n-chip::before { content: none; }
 }
 .id-n-say b { display: block; font: 600 12px/1.3 var(--sans); color: var(--red); }
 .id-n-say { margin: 2px 0 0 !important; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); font: 400 13px/1.3 var(--serif); color: var(--ink); }
