@@ -130,3 +130,74 @@ Measured against the top of the sticky caption band (the free view is above it).
 1. **PME, 390×844, after the second call:** the suggested call ("Rely on it · read it before it's built") ends under the sticky caption band from 1:51 to the end, in play and under reduced motion. Nothing scrolls it into view (item 2).
 2. **Classroom and high school, 1280×720:** 7 stage labels render at 11.10 px, under 13 px. They are kept at 13 units by design, the verdict line among them (item 3b).
 3. **Classroom and high school, 390×844, question 1:** "AI USE ALLOWED" is under the sticky band when the question opens, so it isn't seen before the first call unless the reader scrolls (item 3a; phone, minor).
+
+## Recheck (October 30, after the fixes and the 4.2 s name card)
+
+**Build:** `d54d0cb` (which includes `279d728`). Served on port 5463 (stopped afterwards), one headless Chromium at a time, closed between viewports. The player clock is now figure time + 4.2 s:
+- question 1 is at 0:29 (29.7 s);
+- question 2 is at 1:32;
+- the end is 2:02.
+
+**Method.** I ran three kinds of pass:
+- **Fast passes:** Playwright's fake clock, run along the three paths (own calls, always check, never check):
+  - PME and classroom at 1280×720 and 390×844;
+  - classroom and high school at 1280×720 for the text sizes.
+- **Real clock:** PME at 390×844, in play.
+- **Reduced motion:** a real `prefers-reduced-motion: reduce`, PME and classroom at 390×844.
+
+Scripts: scratchpad `recheck-final/` (`ar.mjs`, `ar-sizes.mjs`, `card.mjs`).
+
+| # | Check | Result |
+|---|---|---|
+| 1 | PME at 390×844: the answer to the second call is visible after it, in play and under reduced motion | **Pass** |
+| 2 | Classroom and high school at 390×844: "AI use allowed" visible at question 1 | **Pass** |
+| 3 | Classroom labels 13 px or more at 1280×720, the cost note excepted, and the cost note fits | **Pass** (one note) |
+| 4 | Leak check: nothing in the accessibility tree before a call (`ariaSnapshot`), PME and classroom | **Pass** |
+| 5 | The intro's "The skill" holds 2.17 s or more | **Pass** |
+
+**1. PME's second call at 390×844.**
+- **In play (real clock, own calls):**
+  - 1:46–1:52: the suggested call "Rely on it · read it before it's built" is in view (464–535, band at 543).
+  - At 1:52 the last caption grows (band at 461), and for under a second the call is under the band.
+  - At 1:53 the page scrolls. The suggested call is at 164–235 and the key line at 420–453, both above the band at 459. They stay there to the end (2:02) and 3 s after it.
+- **Reduced motion:** 0.6 s after call 2, the final frame shows the suggested call at 164–235 and the key line at 420–453, band at 459. They are unchanged at 2.5 s.
+- **Fast passes:** all three PME paths end the same way (164–235, 420–453, band 459).
+- **The other versions:** classroom ends with the verdict line in view, "Your calls · first draft: differs · case write-up: differs" (402–453), and the suggested call at 170–217. This held in the fast passes and under reduced motion.
+- **Screenshot:** `out/ar/pme-real-end.png`.
+
+**2. "AI use allowed" at question 1, 390×844.** The line reads "AI use allowed · Time for one check: work it yourself, then compare".
+
+| View | Classroom | High school |
+|---|---|---|
+| First view, unscrolled (controls in the page flow) | 626–660, band at 670 | 607–641, band at 651 |
+| Shot scrolled to 40 px from the top | 449–483, band at 493 | 430–464, band at 474 |
+| Shot at the top of the window | 409–443, band at 453 | 390–424, band at 434 |
+
+It is fully opaque in every view, and nothing needs a scroll.
+
+**3. Classroom labels at 1280×720.**
+- **Mono labels:** every visible one measures **13.23 px**, after question 1, at question 2 and at the end, on all three paths. The one exception is the cost note "DEFENSIBLE · A WEEK LATE" at **11.1 px**, by design. The high-school version matches.
+- **Question 1:** at this size it shows the compact stacked view, where every text is 13 px or more.
+- **The cost note fits:** its box is x 440.2–608.1, y 362.3–376.3, inside Task A's card (right edge 619.5, a margin of 11 px). It overlaps no other text; the "Rely on it · read it first" tag sits below it (screenshot `out/ar/classroom-1280x720-always-end.png`).
+- **Note, outside the mono-label scope of the original item:**
+  - some sans and serif stage text is still under 13 px at 1280×720 in both classroom casts;
+  - the reader's choice chips ("Check this one", "You rely on it", "Rely on it, after a careful read", "Move my check here", "Ask for a week to check both") are at 11.1 px;
+  - the bar rows ("Without AI", "84.5%", …) are at 11.95 px;
+  - the italic notes ("No hidden facts: …", "Rated higher in quality, right or wrong") are at 12.81 px.
+
+  Worth a decision if the casts are meant to be projected.
+
+**4. Leaks.**
+- **Question 1:** in PME and classroom, at 1280×720 and 390×844 on all three paths, nothing either call reveals appeared before call 1. I checked Playwright's `ariaSnapshot()` of `<body>`, `innerText`, the SVG's `textContent` and the live region (the word list from the October verification).
+- **Question 2:** none of the second call's answers appeared before call 2. The scan's only hit in classroom was "the gap between the two AI groups is uncertain". That is screen-reader summary part 1 ("After the first question: …"), which is first-call material, correctly shown by then.
+
+**5. The intro** (real clock, no input). "The skill" is fully opaque from the moment the shot is in view until the card moves:
+
+| Version | 1440×900 | 390×844 |
+|---|---|---|
+| PME | 2.26 s | 2.26 s |
+| Workplace | 2.25 s | 2.25 s |
+
+The card is in its corner about 3.0 s after the shot comes into view. The question underneath stays live: state `gate`, 0:29.
+
+The console showed 0 errors and 0 warnings on every load.

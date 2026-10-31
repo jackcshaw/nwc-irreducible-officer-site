@@ -144,3 +144,17 @@ Run lengths are unchanged (PME 91.6 s, business casts 99.8 s).
   - The first HEAD capture ran under machine load and differed from itself: a second HEAD capture differed from it in 3 to 73 frames per version, but matched the fix everywhere except the frames above. Two captures of the fix were byte-identical, except one frame each in PME and workplace.
 - Re-baselined with `--freeze`: `regression/baseline`, `baseline-business`, `baseline-business-classroom` and `baseline-business-high-school`.
 - `node scripts/edition-check.mjs`: passes (exit 0).
+
+---
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb`, served on port 5463 (stopped afterwards), one headless Chromium at a time. **Method:** the seek pass from `../frame-capture/tests/final-verify.md` (Recheck), in 0.05 s steps, plus the rendered page text. The player clock is now figure time + 4.2 s, so times are 1.2 s later than above. Scripts: scratchpad `recheck-final/` (`hold.mjs`, `copy.mjs`, `card.mjs`).
+
+| Check | Needs | Result |
+|---|---|---|
+| 390×844, the draft's relabel, all four versions | 3.17 s | **Pass.** PME "Their paper · drafted with AI" and workplace, classroom and high school "Their claims · drafted with AI" are fully opaque **24.3–27.7, 3.4 s**. The label sits inside the window (y 33 PME, 55–56 business casts) and clear of the caption band. |
+| High school, beat 5 in the beat list | "second claim" | **Pass.** It reads "…fills with the same grey paragraph, the second claim on the sensor included…". "narrower claim" appears 0 times on the high-school page. Workplace and classroom keep "the narrower claim", their own draft's label. |
+| Name card kicker, "Failure mode 2 of 7" | 3.17 s, fully shown | **Pass.** It is fully opaque and still 0–3.2 s, PME and workplace, at 1440×900 and 390×844 (`RUNTIME-VERIFY.md`, Recheck). |
+
+The console showed 0 errors and 0 warnings on every load.

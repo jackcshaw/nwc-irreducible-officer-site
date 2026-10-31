@@ -114,3 +114,18 @@ In the final-frame screenshots at both laptop sizes, the plate, both copies, the
 - The static fallback in `index.html` now carries the definition word for word too: "The model’s recommendation makes responsibility feel shared, or easier to defend. Asking why each signer relied on the AI’s estimate shows who can account for it."
 
 Checked live in all four versions and with JavaScript off. Frame diff against HEAD: identical in all four versions (209/209 PME, 212/212 each business cast).
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb`, served on port 5463 (stopped afterwards), one headless Chromium at a time. I read `meta[name=description]` after the edition had loaded, so the runtime's `fillPage` had already replaced the static tag. Script: scratchpad `recheck-final/copy.mjs`.
+
+| Version | Runtime `meta[name=description]` | Result |
+|---|---|---|
+| PME | "The model’s recommendation makes responsibility feel shared, or easier to defend. A teaching figure: two students sign the same AI draft, and faculty ask each why they relied on its estimate." | **Pass** |
+| Workplace | "The model’s recommendation makes responsibility feel shared, or easier to defend. Two analysts sign the same AI draft, and the manager asks each why they relied on its estimate." | **Pass** |
+| Classroom | "… Two students sign the same AI draft, and the instructor asks each why they relied on its estimate." | **Pass** |
+| High school | "… Two students sign the same AI draft, and the teacher asks each why they relied on its estimate." | **Pass** |
+
+- Each one contains the definition word for word, with the curly apostrophe.
+- **Name card kicker, "Failure mode 7 of 7":** fully opaque and still 0–3.2 s (needs 3.17 s), PME and workplace, at 1440×900 and 390×844. **Pass.**
+- The console showed 0 errors and 0 warnings.

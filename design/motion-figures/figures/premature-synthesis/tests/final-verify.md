@@ -136,3 +136,16 @@ Every page reads "See this with: Workplace · Classroom · PME".
 ## Fix after this verification (October 30)
 
 **Copy nit.** The check follow-up in `editions/business.json` now reads "The second question separates them: the engineer (student) who asked how it works…", lower case after the colon, in workplace, classroom and high school (one string serves all three). PME has no colon there. Frame diff against HEAD: only the full-page stills changed (`page-1440`, `page-390`); every figure frame, reduced and print still is identical. `regression/baseline-business`, `-classroom` and `-high-school` were recaptured.
+
+---
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb`, served on port 5463 (stopped afterwards), one headless Chromium at a time. I read the rendered page in all four versions at 1440×900, with the figure seeked to its end, and scanned the whole page text. Script: scratchpad `recheck-final/copy.mjs`.
+
+| Check | Result |
+|---|---|
+| Lower case after the colon in the check's follow-up, every version | **Pass.** Workplace, classroom and high school read "The second question separates them: **the** engineer (student) who asked how it works…". It is the only "separates them:" on each page. The caption's own colon is lower case too: "Point to one: what would make it fail?". PME's follow-up, "Point to one connection. What evidence would change it?", has no colon there. |
+| Name card kicker, "Failure mode 3 of 7" | **Pass.** It is fully opaque and still 0–3.2 s (needs 3.17 s), PME and workplace, at 1440×900 and 390×844 (`RUNTIME-VERIFY.md`, Recheck). |
+
+The console showed 0 errors and 0 warnings on every load.

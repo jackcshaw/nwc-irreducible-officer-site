@@ -190,3 +190,26 @@ Run lengths are unchanged (PME 89.2 s, business casts 103.6 s). The new phone li
   - No capture falls inside the label's new window (desktop, PME 61.2–62.0, business casts 57.0–57.8); the seek probe above covers it.
 - Re-baselined with `--freeze`: `regression/baseline`, `baseline-business`, and, with the switch hidden, `baseline-pme`, `baseline-business-nosw`, `baseline-business-classroom` and `baseline-business-high-school`.
 - `node scripts/edition-check.mjs`: passes (exit 0).
+
+---
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb`, which adds the 4.2 s name card to the fixes above. Served from `design/motion-figures/` on port 5463 (stopped afterwards); one headless Chromium at a time, closed between viewports.
+
+**Method.** A seek pass through `window.__motionFigures['frame-capture'].seek` in 0.05 s steps, with 0.02 s steps around the label's fades. At each step I logged each text's opacity, clip and occlusion. On phones I also checked that it sat inside the window and clear of the sticky caption band and controls. "Shown" follows this report's rule: from 50% opacity until the text leaves. The fully opaque span is given too. The player clock is now figure time + 4.2 s, so every time here is 1.2 s later than in the sections above. Scripts are in the session scratchpad, `recheck-final/` (`hold.mjs`, `probe-fc.mjs`, `probe-fc390.mjs`, `card.mjs`).
+
+| Check | Needs | PME | Workplace, classroom, high school | Result |
+|---|---|---|---|---|
+| Second-dot label, 1440×900, 1366×657 and 1280×720 | 2.17 s | "Second student" 60.7–63.05, **2.35 s** | "Second analyst" / "Second student" 56.5–58.85, **2.35 s** (all three) | **Pass** |
+| 390×844, "The weighing doesn’t show in either paper." | 3.83 s | 70.8–75.7, **4.9 s** (fully opaque 71.4–75.7, 4.3 s) | — | **Pass** |
+| 390×844, "Neither shows the weighing." | 2.83 s | — | 70.7–73.8, **3.1 s** (all three) | **Pass** |
+| 390×844, "The dashed four: never weighed." | 3.17 s | — | 40.0–43.3, **3.3 s** (all three) | **Pass** |
+| Name card kicker, "Failure mode 1 of 7" | 3.17 s, fully shown | Fully opaque and still 0–3.2 s on the seek pass. On the real clock it was 3.20 s after Play, and before Play in the waiting view | the same | **Pass** |
+
+**Notes:**
+- **Second-dot label.** It is identical at all three laptop sizes (14.06, 11.03 and 11.1 px). In PME it fades in from 60.4 and is fully opaque 60.9–62.9, about 2.0 s, then fades out to 63.2. The business casts run the same profile 4.2 s earlier (fully opaque 56.7–58.75). A fully-opaque reading would leave it about 0.15 s short; the 50% rule this report uses passes it.
+- **"Neither shows the weighing."** It fades in 70.1–71.3 and is fully opaque 71.3–73.8 (2.5 s).
+- **"The dashed four: never weighed."** It fades in slowly, 39.0–41.2, and is fully opaque 41.2–43.3 (2.1 s). It leaves at 43.3 with no fade. It meets the rule by about 0.1 s.
+- **Checks.** None of the three phone lines is under the caption band or controls at any step. The console showed 0 errors and 0 warnings on every load.
+- **Runtime.** The name card, beat timing, End and `?t=` are covered in `RUNTIME-VERIFY.md` (Recheck).

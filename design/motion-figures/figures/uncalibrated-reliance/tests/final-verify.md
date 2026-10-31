@@ -159,3 +159,32 @@ Not on UR's list. The workplace captions and check render as in `storyboard-busi
 2. **The study's sample (defect 2), classroom and high school.** The setup says "a study of entrepreneurs in Kenya"; evidence paragraph 2 says "The entrepreneurs used the assistant for their own small businesses.", which matches paragraphs 1 and 4; the panel heading is "A REAL STUDY OF ENTREPRENEURS" (picture, phone label, beat 8's "On screen" line and the summary to match). "Small-business owners" was the brief's example, but `edition-check` flags "owners" in a classroom patch outside its allowlist, so the heading uses the study's own word. It fits: the heading ends at x = 386 in the 760-wide panel, and the phone label is one line at 390. The workplace edition never described the sample as shop owners or as advising, so it is unchanged (frame diff: 209/209 identical). Classroom and high-school frame diffs: only t = 64–72 s at all three sizes, plus the page, reduced and print stills (page copy and the beat list).
 
 `regression/baseline`, `baseline-business-classroom` and `baseline-business-high-school` were recaptured.
+
+---
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb`, served on port 5463 (stopped afterwards), one headless Chromium at a time. **Method:** a seek pass in 0.05 s steps (as in `../frame-capture/tests/final-verify.md`, Recheck), with "shown" measured from 50% opacity until the text leaves, plus the rendered page text. The player clock is now figure time + 4.2 s, so times are 1.2 s later than above. Scripts: scratchpad `recheck-final/` (`hold.mjs`, `copy.mjs`).
+
+| Check | Needs | Result |
+|---|---|---|
+| PME, 1440×900: "Second student" by the second dot | 2.17 s | **Pass.** Shown **35.6–63.9, 28.3 s** (fully opaque from 35.75). The study panel dims it until 73.3. It is back 73.3–77.65 and hands off to the final name label, shown from 77.6 to the end. |
+| Classroom and high school: the study described as entrepreneurs | — | **Pass.** Details below. |
+| Name card kicker, "Failure mode 4 of 7" | 3.17 s, fully shown | **Pass.** Fully opaque and still 0–3.2 s (`RUNTIME-VERIFY.md`, Recheck). |
+
+**The study's sample, classroom and high school** (identical in both):
+- **Panel heading, 1440×900:** "A REAL STUDY OF ENTREPRENEURS", 14.06 px, shown 64.1–73.4.
+- **Phone label, 390×844:** "A real study of entrepreneurs", on one line (17 px tall), shown 64.3–73.4.
+- **Setup:** it ends "…its working paper, a study of entrepreneurs in Kenya. No students took part in it…".
+- **Evidence paragraph 2:** after the abstract's quotation, "The entrepreneurs used the assistant for their own small businesses."
+- **Evidence paragraph 4:** "It describes 640 entrepreneurs… The median entrepreneur was 26…".
+- **Beat 8's "On screen" line:** "…a panel rises, headed "A real study of entrepreneurs"…".
+- **"Shop owner(s)":** 0 matches on either page.
+
+**Note, not a failure.** "Owners" still appears twice in the classroom and high-school pages, both times meaning the study's entrepreneurs:
+- caption 8, shown under the panel, with its beat-list title and the screen-reader summary: "A real study suggests what mattered was which AI advice owners acted on.";
+- the last sentence of evidence paragraph 4, which ends: weaker owners "sought help on more challenging business tasks."
+
+These are accurate, but they don't use the heading's word. Workplace is unchanged ("A REAL STUDY, NOT THESE OWNERS").
+
+The console showed 0 errors and 0 warnings on every load.

@@ -125,3 +125,64 @@ None in the listed runtime items.
 **Notes:**
 - Autoplay needs the caption band about 85% visible, not just the drawn stage (item 1).
 - Restart under reduced motion animates (item 3).
+
+## Recheck (October 30, after the 4.2 s name card)
+
+**Build:** `d54d0cb` (`runtime/motion.js`: card 4.2 s, a 3.2 s hold then a 1 s move; player and figure conversions rounded to the microsecond). Served on 127.0.0.1:5463 (stopped afterwards), with one headless Chromium at a time, closed between viewports. Scripts are in the scratchpad `recheck-final/` (`card.mjs`, output `out/card/`).
+
+**Scope.** All eight figures, in PME and workplace (`?edition=business`), at 1440×900 and 390×844: 32 runs. Each run did six things:
+- **Seek pass:** 0–5.2 s of player time in 0.05 s steps. At each step it read the kicker's opacity (its own × the card's, plus visibility), its box (inside the shot and the window, unmoved) and whether anything was painted over it (`elementsFromPoint`).
+- **Real clock:** from the waiting view it clicked Play, then sampled every animation frame for 6.5 s.
+- **Beats:** it compared the player's beats with the figure's own (captured from `mount()`) + 4.2. It seeked to each beat and 0.05 s before it, and clicked each beat in the beat list.
+- **End:** focus on the scrubber, then the End key.
+- **`?t=`:** a beat constant in seconds, the same in m:ss, `?t=30`, and the duration.
+- **Appropriate reliance:** a logger from document start timed the intro over question 1, with no input.
+
+| # | Item | Result |
+|---|---|---|
+| 1 | Kicker "Failure mode N of 7" fully shown 3.17 s or more | **PASS**: all 28 failure-mode runs |
+| 2 | Appropriate reliance: "The skill" holds 2.17 s or more | **PASS**: 2.25–2.26 s |
+| 3 | Beats start on time | **PASS** |
+| 4 | End on the scrubber | **PASS** |
+| 5 | `?t=` | **PASS** |
+| 6 | `node scripts/edition-check.mjs` | **PASS** |
+| 7 | Console | **PASS**: 0 errors, 0 warnings, no failed requests |
+
+**1. The kicker.**
+- **Seek pass:** in every figure, version and size, it is fully opaque, still, inside the shot and uncovered from 0 to 3.2 s of player time. Its box doesn't move during the hold.
+- **Real clock:** after Play it stays fully shown for 3.20–3.23 s of wall clock in every run. It is already fully shown in the waiting view before Play, so a reader who waits sees it longer.
+- **The card:** it moves into the corner from 3.2 to 4.2 s, and the first caption starts at player 4.2 (wall clock 4.20–4.22 s).
+- **Reading time:** the hold covers "Failure mode N of 7" at 3.17 s.
+
+**2. Appropriate reliance's intro.**
+- **Hold:** "The skill" is fully opaque, measured from when the shot is in view until the card starts to move. PME holds 2.26 s at both sizes; workplace holds 2.25 s at both.
+- **Settle:** the card reaches its corner about 3.0 s after the shot comes into view.
+- **The question:** it stays live underneath (state `gate`, 0:29).
+- **Seek:** the window seek draws the card the same way as the other figures: fully shown 0–3.2 s.
+
+**3. Beats.**
+- **Constants:** in all 16 figure × version pairs, every player beat equals the figure's beat + 4.2 exactly (microsecond rounding), and the duration equals the figure's + 4.2.
+- **Seek:** a seek to each beat's player time shows that beat (`aria-current`, caption), and 0.05 s earlier shows the one before. No exceptions.
+- **Beat-list clicks:** in the seven failure-mode figures, each click lands on its beat, with the scrubber within 0.005 s of the beat's time.
+- **Appropriate reliance:** its beat list stays locked until the calls, as designed.
+
+**4. End.**
+- **Failure-mode figures:** in all 14 runs at each size, End goes to the duration, for example "1:30 / 1:30" for frame capture PME and "1:44 / 1:44" for frame capture workplace. The button then reads Replay, with the last beat current.
+- **Appropriate reliance:** End holds at question 1 (0:29, state `gate`), as designed.
+
+**5. `?t=`.**
+- **Beat constants:** the value in seconds (for example frame capture PME `?t=27.2`) and in m:ss (`?t=0:27.20`) both land on beat 4, at 27.2.
+- **`?t=30`:** it lands at 0:30.
+- **The duration:** it lands at the end ("1:30 / 1:30"). The button reads Play there, because the runtime always labels a `?t=` load Play. That behaviour is unchanged, not a regression.
+- **Appropriate reliance:** `?t=60` and `?t=1:55` hold at question 1 (0:29, `gate`). `?t=19.2`, its beat 2, lands on that beat.
+
+**6. `edition-check`.** It printed "edition-check: 8 figures, 16 editions, casts seminar, classroom, high-school, workplace / Listed casts: no failures." and exited 0.
+
+**7. Console.** No errors or warnings in any load of this recheck:
+- the 32 card runs;
+- the frame capture, fluency substitution, uncalibrated reliance, premature synthesis and responsibility laundering checks;
+- every appropriate reliance pass.
+
+The server log shows no failed requests.
+
+**Defects:** none.
