@@ -39,7 +39,7 @@ Read this first in a new session, then MORNING.md (status and Jack's decisions) 
    - autoplay and the failure paths.
 
    Each writes `figures/<slug>/tests/final-verify.md`; the runtime check writes `RUNTIME-VERIFY.md`.
-2. **In progress, October 30:** preview export pass, one figure at a time. Many previews (mp4, webm, gif) are stale after the polish and classroom changes. Re-export them one figure at a time: memory ran out twice when exports overlapped.
+2. **Done, October 31:** the preview export pass. All eight figures in four versions (previews, beat stills, finals at 1440 and 390, plus appropriate reliance's path stills), 100 of 100 jobs, one at a time. Media files are gitignored and stay on disk. Many previews (mp4, webm, gif) are stale after the polish and classroom changes. Re-export them one figure at a time: memory ran out twice when exports overlapped.
 3. **Done, October 30:** MORNING.md marks the classroom versions, the polish pass and the verification done.
 4. **Site integration** (INTEGRATION-PLAN.md), not started:
    - real paths `/failure-modes/<slug>/`;
