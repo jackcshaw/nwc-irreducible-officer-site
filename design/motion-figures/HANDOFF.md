@@ -29,7 +29,7 @@ Read this first in a new session, then MORNING.md (status and Jack's decisions) 
 
 ## Not finished
 
-1. **The final verification was stopped mid-run.** Rerun it: three verifiers, split FC/FS/PS, UR/ID/IM and RL/AR plus the runtime, briefed to check:
+1. **Done, October 30:** the final verification passed after fixes and a re-check (each figure's `tests/final-verify.md`, `RUNTIME-VERIFY.md`). The opening name card is now 4.2 s. ~~The final verification was stopped mid-run.~~ Rerun it: three verifiers, split FC/FS/PS, UR/ID/IM and RL/AR plus the runtime, briefed to check:
    - the PME polish changes;
    - the changed workplace wording (PS, ID, FS, RL, IM);
    - both classroom versions at 1440×900, 1280×720, 1366×657 and 390×844;
@@ -39,8 +39,8 @@ Read this first in a new session, then MORNING.md (status and Jack's decisions) 
    - autoplay and the failure paths.
 
    Each writes `figures/<slug>/tests/final-verify.md`; the runtime check writes `RUNTIME-VERIFY.md`.
-2. **Preview export pass.** Many previews (mp4, webm, gif) are stale after the polish and classroom changes. Re-export them one figure at a time: memory ran out twice when exports overlapped.
-3. **MORNING.md:** mark the classroom versions and the polish pass done once verification passes.
+2. **In progress, October 30:** preview export pass, one figure at a time. Many previews (mp4, webm, gif) are stale after the polish and classroom changes. Re-export them one figure at a time: memory ran out twice when exports overlapped.
+3. **Done, October 30:** MORNING.md marks the classroom versions, the polish pass and the verification done.
 4. **Site integration** (INTEGRATION-PLAN.md), not started:
    - real paths `/failure-modes/<slug>/`;
    - business as the default edition on standalone pages;

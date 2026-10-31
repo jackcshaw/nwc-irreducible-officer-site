@@ -1,6 +1,6 @@
 # Motion figures: status and decisions for Jack
 
-Updated October 28, 2026. Open [index.html](index.html) to play the figures, or [the book](book-v1/four-moves-book.html) to read them in place. Each figure has its storyboard and test reports beside it.
+Updated October 30, 2026. Open [index.html](index.html) to play the figures, or [the book](book-v1/four-moves-book.html) to read them in place. Each figure has its storyboard and test reports beside it.
 
 ## Where it stands
 
@@ -24,7 +24,7 @@ Updated October 28, 2026. Open [index.html](index.html) to play the figures, or 
 3. **Standalone pages:** real paths per figure (recommended in the integration plan) or hash routes.
 4. **The book mapping** of failure modes to moves (provisional).
 5. **Length:** 86–96 seconds each. Right for teaching?
-6. **A general edition:** five figures use PME examples. Make one broadly understandable edition (keeping the PME versions for the essay) rather than four per-domain versions? A pilot on frame capture is ready to start on your go.
+6. **(Resolved: business and classroom editions built.)** **A general edition:** five figures use PME examples. Make one broadly understandable edition (keeping the PME versions for the essay) rather than four per-domain versions? A pilot on frame capture is ready to start on your go.
 7. **Appropriate reliance opens on a live question** rather than autoplaying like the others, so the reader makes the call first.
 8. **Institutional monoculture is flat, not 3D.** Faculty read across a seminar rather than rotate it; the testers read the line-up clearly.
 
@@ -58,40 +58,30 @@ What the cold reads caught along the way: two figures contradicted their study (
 - **Refused subagent commits:** I commit them after checking the diff.
 - **The higher-ed reviewer** is "the instructor" (singular): "The instructor asks each student", "Instructor’s check". PME keeps "Faculty", now through its own `seminar` cast, so its frames don't change. High school keeps "the teacher".
 
-## Classroom cast (in progress, October 29)
+## Classroom and high school (done, October 30)
 
-You said to build the classroom cast after business, so it's underway. [CLASSROOM-PLAN.md](CLASSROOM-PLAN.md) has the full plan.
-- **What it is:** the business scenarios worked by students as a class case, with faculty (higher ed) or a teacher (high school) as reviewer.
-- **What it takes:**
-  - Seven figures need only role words and a few framing lines.
-  - Uncalibrated reliance needs a real change: the shop's records become an exhibit in the case packet every student gets.
-  - Nothing is skipped.
-- **Order:**
-  1. The mechanism is being built now. Gate: every existing edition stays identical frame for frame.
-  2. Frame capture follows as the pilot, built on the plan's recommended defaults.
-  3. **It stops for you after the pilot,** before the other seven.
+Every figure now has two classroom versions of its business scenario: **Classroom** (students and "the instructor", for higher ed) and **High school** (students and "the teacher"). Open a figure and use "See this with: Workplace · Classroom · PME", or the Classroom and High school links on the [review page](index.html). High school is a variant of Classroom, reached by its link or, later, the site's K–12 setting. [CLASSROOM-PLAN.md](CLASSROOM-PLAN.md) has the design.
 
-**The pilot is ready for your review.** Frame capture in three versions:
-- [higher ed](figures/frame-capture/index.html?edition=business&cast=classroom): students and faculty;
-- [high school](figures/frame-capture/index.html?edition=business&cast=high-school): students and the teacher, with a boxed "For teachers" note on the race finding;
-- [workplace](figures/frame-capture/index.html?edition=business), for comparison.
+- **Reads:** every figure had a light read by an educator, and its fixes are in. Uncalibrated reliance, the one real scenario change (the shop's records become an exhibit in a case packet), had two reads.
+- **High school:** plainer wording where the business case was technical (patent claims, concurrency, dealers and licensing). Frame capture adds the cause of the race finding and a boxed note for teachers.
+- **No cheating reading:** each classroom version says AI use was allowed and disclosed.
 
-Where it stands:
-- **Reads:** a light read by an educator found the point lands in both classroom versions, with no workplace wording and nothing that reads as "don't use AI". Its fixes are in.
-- **No regressions:** the workplace and military-education editions are unchanged frame for frame.
-- **The switch** reads "Workplace · Classroom · PME". High school is a variant of Classroom, reached through the K–12 setting.
-- **Previews:** the classroom preview video is stale, because the machine ran low on memory during export. The stills are current.
+## PME polish pass (done, October 30)
 
-Decisions, each with a recommendation in the plan:
-1. Overrides on the business edition, or a separate classroom file per figure.
-2. A high-school cast ("the teacher") beside higher ed's "faculty".
-3. The business checks under "Faculty check", or the site's verbatim checks.
-4. The switch: "Workplace · Classroom · PME", with high school reached through the K–12 setting.
-5. The race line in frame capture for high school: on screen with a teacher note.
-6. Uncalibrated reliance as a case packet, or skip its classroom version.
-7. Fluency substitution (patent law) for high school only if its read passes.
+Your October 30 call: apply the business testers' fixes to PME too. Done in all eight, each checked frame by frame so only the intended moments changed:
+- frame capture, beat 3;
+- premature synthesis, the dot label and laptop layout;
+- responsibility laundering, the split dot (now whole when "Answerable" lands) and the "responsibility" definition;
+- invisible delegation, the underline and the new check follow-up ("Which notes did you keep, and why?"), so PME's ending now runs 97.9 s;
+- monoculture, beat 8 staged one step at a time;
+- fluency substitution, phone pacing;
+- the drawn picture at laptop sizes (1280×720 and 1366×657) everywhere.
 
-## Editions: decisions for Jack (added October 28, evening)
+## Final verification (done, October 30)
+
+Three verifiers checked all eight figures in all four versions, plus the shared player. They covered pacing at every size, the switch, the edition check, appropriate reliance's leak and gate checks, autoplay, and slow and failed loads. Small misses were fixed and re-checked: dot-label and phone-line pacing, one high-school wording slip, a meta description, appropriate reliance's phone verdict, and the opening name card, now 4.2 s so "Failure mode N of 7" can be read. Verdicts: each figure's `tests/final-verify.md` and [RUNTIME-VERIFY.md](RUNTIME-VERIFY.md).
+
+## Editions: decisions for Jack (added October 28; all resolved October 30, see Jack's decisions above)
 
 The business editions are in progress: every figure's words now live in data files, PME is unchanged frame for frame, and each business edition goes through two cold reads. These came up along the way:
 
@@ -111,10 +101,8 @@ The business editions are in progress: every figure's words now live in data fil
 ## Not part of the figures, still waiting
 
 - **The open-call sign-up page** is reviewed and ready. It needs the updated script published (Deploy, then Manage deployments, then the pencil, then New version), then the inbox test and a release.
-- **The workplace-evidence correction** (companion PR #12) and the sign-up page can go out in one site release.
+- **The next site release** carries companion PRs #12–#14 (source corrections) and, once its script is published, the sign-up page.
 
-## Companion source-spine follow-ups (from the business-edition paper checks)
+## Companion source-spine follow-ups (done)
 
-To land as one companion PR once the editions settle:
-- **Correct** Shen & Tamkin (2026): "52 mostly junior engineers" is wrong; the paper's Table 1 shows 29 of 52 had 7+ years of experience. The study's assistant was GPT-4o.
-- **Add** the verified figures the editions use: Obermeyer et al. (2019) abstract (17.7% to 46.5%), Lee et al. (2025) (319 knowledge workers, 936 examples), Otis et al. (2026) published figures, Autor et al. (2026) (91 of 133 lawyers redlined; split among juniors only), Bottesch (2025), and *Moffatt v. Air Canada* (2024).
+Companion PRs #13 and #14 are merged. #13 corrected Shen & Tamkin ("mostly junior" was wrong) and added the business editions' sources; #14 added the classroom checks' verified figures. Both reach judgmentlab.net's References page at the next site release.
