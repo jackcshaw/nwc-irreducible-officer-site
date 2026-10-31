@@ -144,11 +144,11 @@ EDITIONS-PLAN.md drafted "Who owns the recommendation if it proves wrong? Ask wh
 
 ## 5. Pace
 
-The rule: every beat lasts at least (caption words + new on-screen words) ÷ 3 + 1.5 s. Lengths are on the business clock (figure time; the player adds the 3.0 s name card). Question numbers and repeated names aren't counted.
+The rule: every beat lasts at least (caption words + new on-screen words) ÷ 3 + 1.5 s. Lengths are on the business clock (figure time; the player adds the 4.2 s name card). Question numbers and repeated names aren't counted.
 
 | Beat | Time (s) | Caption words | On-screen words | Needed (s) | Length (s) | Spare (s) |
 | --- | --- | --- | --- | --- | --- | --- |
-| 0 · Name card | player 0.0–3.0 | 0 | 7 (runtime standard) | 3.8 | 3.0 | as in all eight |
+| 0 · Name card | player 0.0–4.2 | 0 | 7 (runtime standard) | 3.8 | 4.2 | as in all eight |
 | 1 · The task | 0.0–7.4 | 4 | 13 (task card 9, names 4) | 7.2 | 7.4 | 0.2 |
 | 2 · Same prompt, same draft | 7.4–18.0 | 10 | 17 (draft 13, tags 4) | 10.5 | 10.6 | 0.1 |
 | 3 · Both read it closely | 18.0–25.2 | 7 | 3 (key) | 4.8 | 7.2 | 2.4 |

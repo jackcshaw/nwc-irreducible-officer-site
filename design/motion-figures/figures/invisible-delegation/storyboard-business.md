@@ -150,7 +150,7 @@ The timeline is PME's except beat 8, which is 1.8 s longer in business (round 3)
 
 | Beat | Caption words | Read + 1.5 s hold | 2× reading | Beat (s) | New on-screen words |
 | --- | --- | --- | --- | --- | --- |
-| 0 · Name card | — | — | — | 3.0 | 6 (universal) |
+| 0 · Name card | — | — | — | 4.2 | 6 (universal) |
 | 1 | 14 | 6.2 | 9.3 | 9.5 | 35 (task card, standard, lanes, cards; on screen to the end) |
 | 2 | 15 | 6.5 | 10.0 | 11.3 | 15 |
 | 3 | 10 | 4.8 | 6.7 | 12.1 | 8 |

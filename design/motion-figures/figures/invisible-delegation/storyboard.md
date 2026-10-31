@@ -85,9 +85,9 @@ Related:
 - kicker "Failure mode 5 of 7";
 - definition "A request for help hands over criteria, structure, or meaning." (from `NAMEPLATE-DEFINITIONS.md`).
 
-The player opens on beat 0, the name card: 3 s, a 2 s hold, then a 1 s move into the corner. The plate "Invisible delegation · 5 of 7" stays in a reserved strip above the stage in every view. The final caption sets the name and definition directly above the faculty check, and the reduced-motion and print views show them.
+The player opens on beat 0, the name card: 4.2 s, a 3.2 s hold, then a 1 s move into the corner. The plate "Invisible delegation · 5 of 7" stays in a reserved strip above the stage in every view. The final caption sets the name and definition directly above the faculty check, and the reduced-motion and print views show them.
 
-Player time is figure time plus the card: 93.5 s. Every time in this storyboard is figure time, so beat 1 starts at player 3.0 s.
+Player time is figure time plus the card: 94.7 s. Every time in this storyboard is figure time, so beat 1 starts at player 4.2 s.
 - *At 390 × 844,* the caption band is fixed at the final caption's height (184 px). The controls stay on one row, with Restart shown as its icon. The whole player measures 840 px, and the controls never move.
 - *At 1280 × 720,* the stacked stage is used, and the player measures 677 px.
 - *At 1440 × 900,* the drawn stage is used.
@@ -142,7 +142,7 @@ In every case the plate strip is clear of content.
 - *A third, middle-path student* who asks the AI to propose criteria, then checks them against the task. It would make the figure about two contrasts. The page copy carries it.
 - *The fourth pair* ("counterarguments"). The page quotes the whole paragraph.
 
-**Running time.** 90.5 s in 9 beats, plus the 3 s name card: 93.5 s of player time (frame capture 85.6 s before its card, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 94.7 s).
+**Running time.** 90.5 s in 9 beats, plus the 4.2 s name card: 94.7 s of player time (frame capture 85.6 s before its card, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 94.7 s).
 
 **Book link target.** `../../book-v0/four-moves-book.html?spread=2` (Move 1, Frame the problem) until `book-v1/` exists.
 
@@ -191,10 +191,10 @@ The colour rule, palette, stage and elements are as in round 4 (lanes, cards, em
 
 ## 4. Beats
 
-Times are figure seconds; add 3.0 for player time. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second.
+Times are figure seconds; add 4.2 for player time. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second.
 
-### Beat 0 · player 0.0–3.0 s · The name card
-- **On screen:** "Failure mode 5 of 7" over "Invisible delegation", large and centred over the poster (the settled setup). It holds 2 s, then moves and shrinks over 1 s into the plate, "Invisible delegation · 5 of 7", in the strip above the stage's top-left corner, where it stays. The caption band is quiet.
+### Beat 0 · player 0.0–4.2 s · The name card
+- **On screen:** "Failure mode 5 of 7" over "Invisible delegation", large and centred over the poster (the settled setup). It holds 3.2 s, then moves and shrinks over 1 s into the plate, "Invisible delegation · 5 of 7", in the strip above the stage's top-left corner, where it stays. The caption band is quiet.
 - **Why:** it anchors the figure in its name before anything happens.
 
 ### Beat 1 · 0.0–9.5 s · The draft and three decisions
@@ -283,7 +283,7 @@ Times are figure seconds; add 3.0 for player time. In every beat the caption cha
 
 ## 5. Final frame
 
-The still at figure 90.5 s (player 93.5 s), as in round 4, with the plate above the stage and the name and definition above the check, except:
+The still at figure 90.5 s (player 94.7 s), as in round 4, with the plate above the stage and the name and definition above the check, except:
 - the second student's cards carry their decisions in red: "Evidence must back the call", "Lead with the call, then its evidence" and "Serves the ally's long-term interest";
 - the struck note reads "Be more decisive" over "evidence too thin".
 
@@ -297,7 +297,7 @@ As in round 4. The check paragraph now reads: "In the figure, both students have
 
 | Beat | Time (s) | Caption words | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- |
-| 0 · Name card | player 0.0–3.0 | 0 (name and kicker, 6 words) | 2.0 | 3.0 |
+| 0 · Name card | player 0.0–4.2 | 0 (name and kicker, 6 words) | 3.2 | 4.2 |
 | 1 · The draft and three decisions | 0.0–9.5 | 14 | 3.2 | 9.5 |
 | 2 · Feedback | 9.5–20.8 | 13 | 1.5 | 11.3 |
 | 3 · Structure and strategy | 20.8–32.9 | 10 | 1.5 | 12.1 |

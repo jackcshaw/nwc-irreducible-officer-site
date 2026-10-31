@@ -83,10 +83,10 @@ Related:
   - The narrow-screen spec says what stays on the stage.
 
 **Nameplate** (standard for all eight figures, at Jack's request: "anchor each figure in the stated name to help recall"; CONVENTIONS.md, `nameplate`):
-- *Beat 0, the name card (0–3 s player time).* "FAILURE MODE 2 OF 7" over "Fluency substitution", large and centred over the poster. It holds 2 s, then moves and shrinks into the corner over 1 s, with the caption band quiet. The waiting view before play shows the card over the poster.
+- *Beat 0, the name card (0–4.2 s player time).* "FAILURE MODE 2 OF 7" over "Fluency substitution", large and centred over the poster. It holds 3.2 s, then moves and shrinks into the corner over 1 s, with the caption band quiet. The waiting view before play shows the card over the poster.
 - *The corner plate,* "FLUENCY SUBSTITUTION · 2 OF 7", sits in the runtime's reserved 23 px strip above the stage in every beat and view: the drawn stage, the stacked stage, reduced motion, print, stills and video. It never covers the picture.
 - *The final frame* sets the name beside its definition, "Polished analysis stands in for owned reasoning." (`NAMEPLATE-DEFINITIONS.md`), directly above the faculty check. The reduced-motion and print views show it too.
-- *Time.* The figure's own times below are unchanged (figure time). Player time adds the 3 s card: the player runs 91.6 s, the scrubber reads 1:31 and `?t=` is in player time.
+- *Time.* The figure's own times below are unchanged (figure time). Player time adds the 4.2 s card: the player runs 92.8 s, the scrubber reads 1:32 and `?t=` is in player time.
 - *Fixed heights.* The last caption (name, definition, check) measures 173 px on desktop, 212 px below 720 px and 219 px at 390 px. The band is held at 174, 212 and 220 px, so the controls never move.
 - *Phone fit.* So the 390 px player fits 844 px, the stacked stage's paper tile shrinks to two lines at beat 7 and to one line at beat 8; its border stays, with "Both handed in this paper" above it. The whole player at 390 × 844 measures 825 px.
 
@@ -356,7 +356,7 @@ Times are absolute seconds. In every beat the caption changes first (0.3 s fade)
 
 ## 5. Final frame
 
-The still at 88.6 s figure time (91.6 s player time). It is also the reduced-motion view and the print view. Before play, the waiting view shows the name card over the poster: beat 1 settled (5.98 s figure time), the task card and the student. The corner plate, "FLUENCY SUBSTITUTION · 2 OF 7", sits in its strip above the stage throughout.
+The still at 88.6 s figure time (92.8 s player time). It is also the reduced-motion view and the print view. Before play, the waiting view shows the name card over the poster: beat 1 settled (5.98 s figure time), the task card and the student. The corner plate, "FLUENCY SUBSTITUTION · 2 OF 7", sits in its strip above the stage throughout.
 
 **Stage:** a table.
 - **Label column:**
@@ -432,11 +432,11 @@ Both students in the figure explain the call clearly without the paper. The seco
 
 Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and every total is at least twice the caption's reading time. Label words are new words inside the picture; motion includes any wait for the caption to be read once.
 
-Times are figure time; the player adds the 3 s name card in front (beat 0), so player time is figure time plus 3 s.
+Times are figure time; the player adds the 4.2 s name card in front (beat 0), so player time is figure time plus 4.2 s.
 
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · Name card | player 0.0–3.0 | 0 (band quiet) | — | — | 6 | 0.0 | 1.0 (move) | 2.0 (hold first) | 3.0 |
+| 0 · Name card | player 0.0–4.2 | 0 (band quiet) | — | — | 6 | 0.0 | 1.0 (move) | 3.2 (hold first) | 4.2 |
 | 1 · The task | 0.0–6.0 | 9 | 3.0 | 6.0 | 13 | 1.0 | 1.0 | 4.0 | 6.0 |
 | 2 · The AI drafts | 6.0–14.7 | 13 | 4.3 | 8.7 | 38 | 1.0 | 3.4 | 4.3 | 8.7 |
 | 3 · The student agrees | 14.7–23.5 | 13 | 4.3 | 8.7 | 16 | 1.0 | 6.3 | 1.5 | 8.8 |
@@ -447,7 +447,7 @@ Times are figure time; the player adds the 3 s name card in front (beat 0), so p
 | 8 · Change one fact | 63.9–70.4 | 3 | 1.0 | 2.0 | 15 | 1.0 | 0.6 | 4.9 | 6.5 |
 | 9 · The two answers | 70.4–81.4 | 14 | 4.7 | 9.3 | 27 | 1.0 | 7.1 | 2.9 | 11.0 |
 | 10 · Faculty check | 81.4–88.6 | 10 + 9 under it | 3.3 + 3.0 | 6.7 (check) | 0 | 0.0 | 4.0 | 3.2 | 7.2, then rests |
-| **Total** | | **114** | **38.0** | | **215** | | **46.0** | | **88.6 figure, 91.6 player** |
+| **Total** | | **114** | **38.0** | | **215** | | **46.0** | | **88.6 figure, 92.8 player** |
 
 Checks:
 - One idea per beat; movements run one after another.

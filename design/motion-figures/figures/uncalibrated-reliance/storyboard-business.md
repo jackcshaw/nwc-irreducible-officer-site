@@ -204,7 +204,7 @@ The cold-read tester couldn't reach the published abstract, so couldn't confirm 
 
 ## 8. Final frame and checks
 
-The final frame, at player time 93.6 s:
+The final frame, at player time 94.8 s:
 - **Top:** the task card and the four documents. The flyer callout reads "THEIR OFFER / Cheaper prints"; the records callout reads "OUR SALES / Lost: rush jobs / (not given to AI)", with "Lost: rush jobs" underlined.
 - **Plans:** both owners' plans, with Part 2 outlined. The second reads "Win them back: ~~loyalty discount~~ same-day service".
 - **The AI's column:** receded, with the frontier between its answers and "THEIR FLYER" under Part 2.

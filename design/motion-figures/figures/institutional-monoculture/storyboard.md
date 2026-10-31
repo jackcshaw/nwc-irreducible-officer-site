@@ -78,7 +78,7 @@ What flat keeps from the 3D idea: the papers never collapse. They stay where the
 15. *This is frame capture again, ten times.* Each student's frame is reasonable and each paper holds up. The failure appears only across the seminar, as one bracket around ten lines, and the check asks about the class.
 
 **Changes for the nameplate standard** (all eight figures, at Jack's request: "anchor each figure in the stated name to help recall"):
-- *The runtime's nameplate.* `mount(…, {nameplate: {name: 'Institutional monoculture', kicker: 'Failure mode 6 of 7', definition: 'Shared systems and defaults narrow the range of frames a group considers.'}})`. Beat 0 is a 3.0 s name card (2 s hold, 1 s move into the corner), "INSTITUTIONAL MONOCULTURE · 6 OF 7" sits in a reserved strip above the stage in every view, and the last caption sets the name and definition above the check. Player time is figure time plus 3.0 s: 99.3 s in all.
+- *The runtime's nameplate.* `mount(…, {nameplate: {name: 'Institutional monoculture', kicker: 'Failure mode 6 of 7', definition: 'Shared systems and defaults narrow the range of frames a group considers.'}})`. Beat 0 is a 4.2 s name card (3.2 s hold, 1 s move into the corner), "INSTITUTIONAL MONOCULTURE · 6 OF 7" sits in a reserved strip above the stage in every view, and the last caption sets the name and definition above the check. Player time is figure time plus 4.2 s: 100.5 s in all.
 - *Caption bands fixed at the measured final height,* so nothing moves when the name and definition join the check: 176 px on tall desktops, 92 px on laptop windows (the check, second line and definition one line each, at 20 px and 15 px), 220 px on phones. Laptop chrome is 166 px plus the 31 px plate allowance, so the stage still renders 13-unit labels at 11.1 px at 1366 × 657 and 12.6 px at 1280 × 720.
 - *The phone stage* hides the AI chip once its last message is gone (beat 10) and sets each imagined goal as one flowing line ("COUNTER THE RIVAL Outbid rival lenders · Block rival ports · …"), so the player measures 838 px at 390 × 844.
 
@@ -221,7 +221,7 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 | Goal brackets | The goals faculty judge the imagined problems set | Navy brackets with mono 13 labels: "COUNTER THE RIVAL" (3 lines), "BACK THE PARTNER" (4), "SECURE OUR NEEDS" (3) | Labels at (column + 8, Y + 22); brackets from Y + 28 |
 | "ALL DRAFTED WITH AI" | Each run's disclosure | Grey mono 13, under the grid. Stays | Large: (40, 432). Compact: (24, Y + 176) |
 | Sequence labels | The order each run worked in | Mono 13: seminar "AI OUTLINE → WRITE" ("AI OUTLINE" grey, "WRITE" ink), beside "The seminar" from beat 3 and under it from beat 8; imagined seminar "DEFINE PROBLEM → AI CHALLENGES → WRITE" ("DEFINE PROBLEM" red, "AI CHALLENGES" grey) | (24, Y + 28) |
-| Name card (beat 0) | Which failure mode this is | Drawn by the runtime: "FAILURE MODE 6 OF 7" (mono 13, muted) over "Institutional monoculture" (Serif 600, about 52 px), centred over the stage on a paper scrim for 2 s, then moving and shrinking into the plate over 1 s. The caption band stays quiet. Before play, the waiting view shows the card over the poster (beat 3 settled) | Centre of the stage, then the plate |
+| Name card (beat 0) | Which failure mode this is | Drawn by the runtime: "FAILURE MODE 6 OF 7" (mono 13, muted) over "Institutional monoculture" (Serif 600, about 52 px), centred over the stage on a paper scrim for 3.2 s, then moving and shrinking into the plate over 1 s. The caption band stays quiet. Before play, the waiting view shows the card over the poster (beat 3 settled) | Centre of the stage, then the plate |
 | Plate | The name, throughout | "INSTITUTIONAL MONOCULTURE · 6 OF 7", mono 12 ink, in a 23 px strip above the stage's top-left corner, in every beat and view (drawn stage, stacked stage, reduced motion, print, stills, video). It never covers the picture | Above the stage |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 11") and the caption in Serif 22 ink. In beat 11 the runtime sets the name ("INSTITUTIONAL MONOCULTURE", mono 13) beside the definition ("Shared systems and defaults narrow the range of frames a group considers."), then "FACULTY CHECK" beside the check in Serif italic, with "Line up each paper's problem, then ask what other frames the task could take." directly under it at the same size and style. Fixed heights: 176 px (tall desktop), 92 px (laptop windows), 220 px (phones) | Under the stage |
 | Beat list | Text equivalent and navigation | Eleven numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
@@ -252,11 +252,11 @@ The first seminar's lines share a goal and not a word: "rival" appears in three,
 
 ## 4. Beats
 
-Times below are the figure's own clock. The player adds the runtime's 3.0 s name card in front (beat 0), so player time is 3.0 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (caption words + new picture words) ÷ 3 + 1.5 s (section 7).
+Times below are the figure's own clock. The player adds the runtime's 4.2 s name card in front (beat 0), so player time is 4.2 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (caption words + new picture words) ÷ 3 + 1.5 s (section 7).
 
-### Beat 0 · player 0.0–3.0 s · The name card
+### Beat 0 · player 0.0–4.2 s · The name card
 
-- **On screen:** "Institutional monoculture", with "FAILURE MODE 6 OF 7" above it, large and centred over an empty stage for 2 s; over 1 s it moves and shrinks into the plate above the stage's top-left corner, where it stays. Drawn by the runtime.
+- **On screen:** "Institutional monoculture", with "FAILURE MODE 6 OF 7" above it, large and centred over an empty stage for 3.2 s; over 1 s it moves and shrinks into the plate above the stage's top-left corner, where it stays. Drawn by the runtime.
 - **Caption:** none; the caption band stays quiet.
 - **Notice:** the figure names the failure mode before anything happens.
 - **Why:** Jack's standard for all eight figures, so the viewer always knows which named failure mode is on screen.
@@ -383,7 +383,7 @@ Times below are the figure's own clock. The player adds the runtime's 3.0 s name
 
 ## 5. Final frame
 
-The still at 96.3 s on the figure's clock (99.3 s in the player). It is also the reduced-motion view, the print view and the poster (stage plus caption band).
+The still at 96.3 s on the figure's clock (100.5 s in the player). It is also the reduced-motion view, the print view and the poster (stage plus caption band).
 
 **Stage:**
 - **Top left:** the grey AI panel, marked "AI".
@@ -463,7 +463,7 @@ Reading time is caption words ÷ 3. Picture words are words new in that beat; la
 
 | Beat | Time (s) | Caption words | Picture words (new) | Required (s) | 2× caption (s) | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · The name card | player 0.0–3.0 | 0 | 7 (kicker 5, name 2) | 3.8 | 0 | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 | 3.0 (runtime standard, the same in all eight figures) |
+| 0 · The name card | player 0.0–4.2 | 0 | 7 (kicker 5, name 2) | 3.8 | 0 | 0.0 | 4.2 (3.2 hold, 1.0 move) | 0.0 | 4.2 (runtime standard, the same in all eight figures) |
 | 1 · A seminar, one task | 0.0–10.9 | 8 | 20 (EXAMPLE TASK 2, task 7, context 9, "The seminar" 2) | 10.8 | 5.3 | 1.0 | 5.9 | 4.0 | 10.9 |
 | 2 · The outlines come back alike | 10.9–18.3 | 11 | 1 ("AI") | 5.5 | 7.3 | 1.0 | 4.2 | 2.2 | 7.4 |
 | 3 · Their own papers | 18.3–26.3 | 12 | 7 ("ALL DRAFTED WITH AI" 4, "AI OUTLINE → WRITE" 3) | 7.8 | 8.0 | 1.0 | 5.1 | 1.9 | 8.0 |
@@ -475,14 +475,14 @@ Reading time is caption words ÷ 3. Picture words are words new in that beat; la
 | 9 · The AI challenges each frame | 66.1–74.3 | 9 | 11 (the AI's questions 9, "AI CHALLENGES" 2) | 8.2 | 6.0 | 1.0 | 5.1 | 2.1 | 8.2 |
 | 10 · Lined up again | 74.3–87.8 | 9 | 27 (seven new lines 21, two new goal labels 6) | 13.5 | 6.0 | 1.0 | 6.4 | 6.1 | 13.5 |
 | 11 · Faculty check | 87.8–96.3 | 7 + 14 second line | 0 | 8.5 | 4.7 (check) | 0.0 | 3.8 | 4.7 | 8.5, then rests |
-| **Total** | | **110** | **127** | | | **12.0** | **50.7** | **36.6** | **96.3 figure, 99.3 player** |
+| **Total** | | **110** | **127** | | | **12.0** | **50.7** | **36.6** | **96.3 figure, 100.5 player** |
 
 Checks:
-- Beats 1–11 meet their required time on the clock, including beat 11, which no longer leans on the rest after the figure ends. Beat 0 is the runtime's standard 3.0 s card for all eight figures; its seven words are a name and kicker that stay on screen in the plate, and its definition is read again under the check.
+- Beats 1–11 meet their required time on the clock, including beat 11, which no longer leans on the rest after the figure ends. Beat 0 is the runtime's standard 4.2 s card for all eight figures, which covers its seven words (3.8 s) and holds the kicker 3.2 s.
 - One idea per beat; movements run one after another. A row of ten (dots, requests, outlines, bubbles, papers, ticks, lines) runs as one staggered movement.
 - Changes a caption names wait until it can be read once: the outlines (beat 2, 3.7 s in), faculty's reading (beat 3, 4.0 s), the problem lines (beat 4, 2.0 s), the bracket (beat 5, 3.0 s), the trace line, grey bracket and pill (beat 6, 2.5 s), the faculty's question (beat 7, 3.0 s), the red lines (beat 8, 3.0 s), the AI's question card (beat 9, 3.0 s), the groups (beat 10, 3.0 s), and the second line under the check (beat 11, 3.0 s).
 - Lead-ins the caption's first clause describes start early: the requests (beat 2), the writing (beat 3), the first-line outlines (beat 4), the reading marks (beat 5), the AI's card (beat 6), the block move and the imagined seminar's arrival (beat 8), the red copies going up (beat 9), and the ticks on the imagined papers (beat 10).
 - Every hold is at least 1.5 s. Beat 7 has no movement until its question, which is the event its caption names.
 - Every settled picture label renders at 11 px or more at 1366 × 657 and 1280 × 720, counting scaled groups (`scripts/figure-shots.mjs`, `minRenderedTextPx…`). The AI's card keeps its full size in the compact layout for this reason.
 - No camera moves. The first seminar moves once and dims (beat 8), then returns (beat 10). Reduced motion shows the final frame.
-- Total 96.3 s on the figure's clock, 99.3 s in the player with the name card. Final verification found six beats short of the reading rule at 97.7 s; tighter captions and labels meet it in every beat while taking 1.4 s off the total.
+- Total 96.3 s on the figure's clock, 100.5 s in the player with the name card. Final verification found six beats short of the reading rule at 97.7 s; tighter captions and labels meet it in every beat while taking 1.4 s off the total.

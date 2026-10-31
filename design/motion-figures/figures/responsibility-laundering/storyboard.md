@@ -71,9 +71,9 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 - *Pacing.* No beat's timing or caption changed, so every beat still meets (words ÷ 3) + 1.5 s at every size. Only beat 8's "On screen" line and the summary describe the whole dot.
 
 **Changes for the name anchor** (Jack: "anchor each figure in the stated name to help recall"; the runtime's `nameplate` option, `CONVENTIONS.md`):
-- *Beat 0, the name card (player 0.0–3.0 s).* "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, sits large and centred over the stage for 2 s, then moves and shrinks over 1 s into a reserved strip above the stage's top-left corner, where "RESPONSIBILITY LAUNDERING · 7 OF 7" stays in every beat and view. The caption band stays quiet. Before play, the waiting view shows the card over the poster. On phones the card's name scales with the width (about 28 px at 390) so it stays on one line inside the stage.
+- *Beat 0, the name card (player 0.0–4.2 s).* "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, sits large and centred over the stage for 3.2 s, then moves and shrinks over 1 s into a reserved strip above the stage's top-left corner, where "RESPONSIBILITY LAUNDERING · 7 OF 7" stays in every beat and view. The caption band stays quiet. Before play, the waiting view shows the card over the poster. On phones the card's name scales with the width (about 28 px at 390) so it stays on one line inside the stage.
 - *Final frame.* The caption band reads "RESPONSIBILITY LAUNDERING" beside the definition Jack approved (`../../NAMEPLATE-DEFINITIONS.md`), "The model's recommendation makes responsibility feel shared, or easier to defend.", then "FACULTY CHECK" beside the check, then the move line. The long name wraps in the label column and the check is set at 22–27 px, so the band stays at the runtime's 144 px and the drawn stage still fits 1280 × 720.
-- *Clock.* The figure's own times don't change. The player adds the 3.0 s card in front: 93.2 s on the figure's clock, 96.2 s in the player (readout 1:36). `?t=` and the export hooks are in player time.
+- *Clock.* The figure's own times don't change. The player adds the 4.2 s card in front: 93.2 s on the figure's clock, 97.4 s in the player (readout 1:37). `?t=` and the export hooks are in player time.
 - *Phones.* The caption band is fixed at the measured final height, 194 px (188 px on tablets that stack). To keep the player inside 844 px, the stacked stage drops its separate names row: each student's red name now heads their card, the cards drop the "Drafted with AI" tag (the grey bands and the key's "WRITTEN BY AI" carry it), and the note row puts its label, "THEIR OWN NOTE · NOT HANDED IN →", in the first student's cell beside the second student's note. While faculty look, "FACULTY DON'T SEE THIS" replaces that label (the label fades out before it fades in) and only the note dims. The player measures 837 px in every beat.
 
 **Changes after figure cold read 2** (`tests/figure-read-2.md` and the orchestrator's notes):
@@ -141,7 +141,7 @@ Related, the companion's failure-mode lab (`labs/failure-mode-lab/cases.md`, res
 - *Showing the port actually close.* It would make the AI wrong and the figure about error.
 - *Asking the check verbatim on stage.* "Who owns the recommendation?" invites "I do" from both.
 
-**Running time.** 93.2 s in 9 beats on the figure's clock, 96.2 s in the player with the 3.0 s name card (frame capture 86.2 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 90.6 s, invisible delegation 101.6 s, institutional monoculture 90.5 s).
+**Running time.** 93.2 s in 9 beats on the figure's clock, 97.4 s in the player with the 4.2 s name card (frame capture 86.2 s, fluency substitution 88.6 s, premature synthesis 90.0 s, uncalibrated reliance 90.6 s, invisible delegation 101.6 s, institutional monoculture 90.5 s).
 
 **Book link target.** `../../book-v0/four-moves-book.html?spread=5` (Move 4, Own the decision) until `book-v1/` exists.
 
@@ -206,7 +206,7 @@ Two war-college students must recommend when to evacuate civilians from a port c
 | Bracket | The answer that accounts for the reliance | A red square bracket drawn down the left edge of the second student's row 2, inside their speech panel. The words stay ink | Second panel, row 2 |
 | The weight | Being answerable for the decision, if it proves wrong | A navy block 96 × 34, its top 4 units narrower on each side (a weight's shape), overhanging the copy's left edge, with paper-coloured mono 13 "ANSWERABLE". Hangs at the top of a copy's margin, falls down it, rests on the dot. One per copy | Sheet x −22 to 74; hangs y −6 to 28, rests y 122–156 |
 | Key | How to read the marks | Mono 13: an 18 × 12 grey band swatch and grey "WRITTEN BY AI" (beat 3); a red dot (radius 5) and red "A STUDENT'S DECISION" (beat 4); a dashed grey ring and grey "REASON HANDED TO THE AI" (beat 7) | Baseline 530, from x 24 |
-| Name card (beat 0) | Which failure mode this is | Drawn by the runtime: "FAILURE MODE 7 OF 7" (mono 13, muted) over "Responsibility laundering" (Serif 600, about 52 px; about 28 px on a 390 px phone), centred over the stage on a paper scrim for 2 s, then moving and shrinking into the plate | Centre of the stage, then the plate |
+| Name card (beat 0) | Which failure mode this is | Drawn by the runtime: "FAILURE MODE 7 OF 7" (mono 13, muted) over "Responsibility laundering" (Serif 600, about 52 px; about 28 px on a 390 px phone), centred over the stage on a paper scrim for 3.2 s, then moving and shrinking into the plate | Centre of the stage, then the plate |
 | Plate | The name, throughout | Mono 12 ink "RESPONSIBILITY LAUNDERING · 7 OF 7" in a 23 px strip above the stage, never over the picture | Above the stage's top-left corner |
 | Caption band | The words for each beat | Real text under the picture: a mono counter ("3 / 9") and the caption in Serif 22 ink. In beat 9, in two columns (labels left, words right): mono 13 "RESPONSIBILITY LAUNDERING" (wrapping to two lines) beside the definition in Serif 19; mono 13 "FACULTY CHECK" beside the check in Serif italic, 22–27 px; then directly under the check, at the same size and style, the move line. On phones the columns stack. Fixed at 144 px on desktop and 194 px on phones | Under the stage |
 | Beat list | Text equivalent and navigation | Beat 0, the name card, then nine numbered captions with "On screen" lines (visible in reduced-motion, print and narrow views; always available to screen readers). The current beat has a navy rule | Under the controls |
@@ -237,11 +237,11 @@ Two war-college students must recommend when to evacuate civilians from a port c
 
 ## 4. Beats
 
-Times are the figure's own clock. The player adds the runtime's 3.0 s name card in front (beat 0), so player time is 3.0 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (its caption plus the words the viewer must read in it) ÷ 3 + 1.5 s. Two waits are trimmed at the orchestrator's request (noted in the beats): answers type faster than they're read, and the weights hover 2.5 s.
+Times are the figure's own clock. The player adds the runtime's 4.2 s name card in front (beat 0), so player time is 4.2 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once, except a lead-in that the caption's first clause describes. Every beat lasts at least (its caption plus the words the viewer must read in it) ÷ 3 + 1.5 s. Two waits are trimmed at the orchestrator's request (noted in the beats): answers type faster than they're read, and the weights hover 2.5 s.
 
-### Beat 0 · player 0.0–3.0 s · The name card
+### Beat 0 · player 0.0–4.2 s · The name card
 
-- **What moves:** drawn by the runtime. "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, holds large and centred over a paper scrim for 2.0 s; over 1.0 s it moves and shrinks into the plate above the stage's top-left corner, and the scrim fades. The caption band stays quiet.
+- **What moves:** drawn by the runtime. "Responsibility laundering", with "FAILURE MODE 7 OF 7" above it, holds large and centred over a paper scrim for 3.2 s; over 1.0 s it moves and shrinks into the plate above the stage's top-left corner, and the scrim fades. The caption band stays quiet.
 - **Caption:** none. The beat list reads "Responsibility laundering · Failure mode 7 of 7".
 - **Notice:** the name of the failure mode, before anything happens.
 - **Why:** Jack's standard for all eight figures, so the viewer knows which failure mode is being interrogated. The definition comes back with the name above the check in beat 9.
@@ -365,7 +365,7 @@ Times are the figure's own clock. The player adds the runtime's 3.0 s name card 
 
 ## 5. Final frame
 
-The still at 93.2 s (96.2 s in the player). It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
+The still at 93.2 s (97.4 s in the player). It is also the reduced-motion view, the print view and the poster for social cards (stage plus caption band).
 
 **Plate,** above the stage: "RESPONSIBILITY LAUNDERING · 7 OF 7".
 
@@ -448,7 +448,7 @@ The rule: every beat lasts at least (caption words + on-screen words the viewer 
 
 | Beat | Time (s, figure clock; player +3.0) | Caption words | On-screen words | Needed (s) | Length (s) | Spare (s) | Lead (s) | Motion (s) | Hold (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · The name card | player 0.0–3.0 | 0 | 7 (kicker 5, name 2) | 3.8 | 3.0 (runtime standard, the same in all eight figures) | — | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 |
+| 0 · The name card | player 0.0–4.2 | 0 | 7 (kicker 5, name 2) | 3.8 | 4.2 (runtime standard, the same in all eight figures) | — | 0.0 | 4.2 (3.2 hold, 1.0 move) | 0.0 |
 | 1 · The task | 0.0–7.4 | 4 | 13 (task card 9, two names 4) | 7.2 | 7.4 | 0.2 | 1.0 | 1.4 | 5.0 |
 | 2 · Same prompt, same draft | 7.4–19.4 | 10 | 20 (draft 16, "copy · drafted with AI" 4) | 11.5 | 12.0 | 0.5 | 1.0 | 7.7 | 3.3 |
 | 3 · Both read it closely | 19.4–26.6 | 7 | 3 (key "Written by AI") | 4.8 | 7.2 | 2.4 | 1.0 | 4.7 | 1.5 |
@@ -461,7 +461,7 @@ The rule: every beat lasts at least (caption words + on-screen words the viewer 
 | **Total** | | **87** | **129** | | **93.2 figure, 96.2 player** | | **8.0** | **55.9** | **29.3** |
 
 Checks:
-- Beats 1–9 meet the rule (the spare column is never negative). Beat 0 is the runtime's standard 3.0 s card for all eight figures; its name stays on screen in the plate. The definition joins the check in beat 9 and the figure rests on that frame, so it is read without a time limit. Beats 3, 7 and 8 keep slack because their lengths are set by twice the caption's reading time, the motion and the 1.5 s hold.
+- Beats 1–9 meet the rule (the spare column is never negative). Beat 0 is the runtime's standard 4.2 s card for all eight figures, which covers its seven words (3.8 s); its name stays on screen in the plate. The definition joins the check in beat 9 and the figure rests on that frame, so it is read without a time limit. Beats 3, 7 and 8 keep slack because their lengths are set by twice the caption's reading time, the motion and the 1.5 s hold.
 - Changes a caption names wait until it can be read once: the note (beat 4, 4.7 s in), question 1 (beat 5, 2.6 s), question 2 (beat 6, 1.0 s), the outlines and split (beat 7, 3.7 s) and the line under the check (beat 9, 2.7 s after the check begins to rise). Trimmed at the orchestrator's request: the draft's rows (beat 2, 2.4 s in, 0.5 s after the sheet) and the first weight's fall (beat 8, 3.5 s in; the caption reads in 4.3 s).
 - Each answer types at about 5 words a second and stays readable at 3 words a second before the next answer begins: 10 and 9 words in beat 5, 8 and 19 in beat 6. All stay on screen to the end.
 - The note holds 4.5 s from its first word, its reading time (3.0 s) plus 1.5 s, before the second student's dot moves, and stays to the end.
@@ -469,4 +469,4 @@ Checks:
 - The note row dims and the "what faculty see" frame is up only while faculty ask (beats 5–6). The viewer's marks for the answers (the outlines, the halved dot and grey ring, and the bracket) appear only after both rounds of answers. Nothing red or first-person sits on or under a handed-in paper.
 - Nothing overlaps at 390 px: the overlays sit over empty space, the weights fall down each card's left edge, and the half dot travels up the card's left edge to "The analysis".
 - No camera moves. The draft divides into two copies once (beat 2). Reduced motion shows the final frame.
-- Total 93.2 s on the figure's clock; 96.2 s in the player, with the name card.
+- Total 93.2 s on the figure's clock; 97.4 s in the player, with the name card.

@@ -44,6 +44,9 @@ const resolve = (d) => (d.startsWith("/") ? d : join(ROOT, d));
 const URL0 = `http://127.0.0.1:${port}/figures/${SLUG}/index.html`;
 const SIZES = [[1440, 900], [1280, 720], [390, 844]];
 const cfg = JSON.parse(readFileSync(join(ROOT, `figures/${SLUG}/branches.json`), "utf8"));
+// Wall-clock wait after load for the name card's intro over question 1 to settle (2.2 s hold,
+// 0.8 s move; appropriate-reliance.js), with a second to spare.
+const INTRO = 3600;
 
 async function open(b, w, h, query = "", opts = {}) {
   const c = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, ...opts });
@@ -153,7 +156,7 @@ async function captureExtra(dir) {
     };
     const end = async () => { await p.focus("[data-mf-scrub]"); await p.keyboard.press("End"); await p.waitForTimeout(1500); };
     let { c, p, errors: e } = await open(b, w, h);
-    await p.waitForTimeout(2600); // the name card settles
+    await p.waitForTimeout(INTRO); // the name card settles
     await save("q1", { figure: true, page: true });
     await p.click("[data-mf-toggle]");
     await save("q1-play-no-call");
@@ -177,7 +180,7 @@ async function captureExtra(dir) {
     await c.close();
     // Both questions skipped.
     ({ c, p, errors: e } = await open(b, w, h));
-    await p.waitForTimeout(2600);
+    await p.waitForTimeout(INTRO);
     await p.click("[data-ar-skip]");
     await p.waitForTimeout(300);
     await end();
@@ -209,7 +212,7 @@ async function captureExtra(dir) {
     const sub = join(dir, "flows", "print-1440");
     mkdirSync(sub, { recursive: true });
     const { c, p, errors: e } = await open(b, 1440, 900);
-    await p.waitForTimeout(2600);
+    await p.waitForTimeout(INTRO);
     await p.emulateMedia({ media: "print" });
     await p.evaluate(() => window.dispatchEvent(new Event("beforeprint")));
     await p.waitForTimeout(600);

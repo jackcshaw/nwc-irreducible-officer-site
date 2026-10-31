@@ -2,7 +2,7 @@
 
 Edition `business`, workplace cast. Round 3 makes the final fixes after `tests/business-figure-read-2.md`, then the fixes from `tests/business-verify.md`. Built from `editions/business.json` on the core in `storyboard.md` (layout, motion, colour grammar, nameplate). This file lists what differs from PME. If it and the data disagree, the data is what ships.
 
-Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page. Runtime: 100.6 s on the figure clock, 103.6 s in the player (PME: 86.2 and 89.2).
+Open it with `index.html?edition=business`, or the "See this with: Workplace" link on the page. Runtime: 100.6 s on the figure clock, 104.8 s in the player (PME: 86.2 and 90.4).
 
 ## 1. Source and evidence
 
@@ -122,7 +122,7 @@ The cast supplies the role words: "student" becomes "analyst", "faculty" becomes
 
 ## 4. Pace
 
-Reading time is caption words ÷ 3. Each beat runs at least its reading time plus 1.5 s. Times are on the figure clock; add 3.0 s for the player.
+Reading time is caption words ÷ 3. Each beat runs at least its reading time plus 1.5 s. Times are on the figure clock; add 4.2 s for the player.
 
 | # | Start | Length (s) | Words | Reading + 1.5 (s) |
 | --- | --- | --- | --- | --- |
@@ -140,11 +140,11 @@ Reading time is caption words ÷ 3. Each beat runs at least its reading time plu
 | 12 | 75.25 | 9.9 | 14 | 6.2 |
 | 13 | 85.15 | 8.75 | 16 | 6.8 |
 | 14 | 93.9 | 6.7, then rests | 10 + 7 | 4.8 |
-| **Total** | | **100.6 (103.6 player)** | **162** | |
+| **Total** | | **100.6 (104.8 player)** | **162** | |
 
 ## 5. Final frame (business)
 
-Player 103.6 s.
+Player 104.8 s.
 - **Right:** the task card ("need the most help"); "THE MANAGER ASKS EACH ANALYST / Why this frame? / What would change it?"; and the check panel, showing two patients with the same predicted cost, one with more chronic conditions, and "Checked: …".
 - **Left, under "WHAT THE MANAGER RECEIVES":**
   - "First analyst": "Which patients cost the most?", with the red note "↓ Sicker patients ranked lower". The AI's grey frame and "NOTHING TO CHECK" are under it.

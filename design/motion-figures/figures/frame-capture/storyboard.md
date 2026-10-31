@@ -91,10 +91,10 @@ Related:
 
 **Changes for the name anchor** (Jack: "I tend to forget which named failure mode we're interrogating"; runtime `nameplate` option, CONVENTIONS.md):
 
-- *Beat 0, the name card (0.0–3.0 s player time).* "Frame capture", with "FAILURE MODE 1 OF 7" above it, sits large and centred over the stage for 2 s. Over 1 s it then moves and shrinks into the top-left corner. The caption band stays quiet. Before play, the waiting view shows this card over the poster.
+- *Beat 0, the name card (0.0–4.2 s player time).* "Frame capture", with "FAILURE MODE 1 OF 7" above it, sits large and centred over the stage for 3.2 s, the kicker's reading time. Over 1 s it then moves and shrinks into the top-left corner. The caption band stays quiet. Before play, the waiting view shows this card over the poster.
 - *The plate.* "FRAME CAPTURE · 1 OF 7" stays in a reserved 23 px strip above the stage's top-left corner in every beat and view: drawn stage, stacked stage, reduced motion, print, stills and video. Because the strip is reserved, it never covers the picture.
 - *Final frame.* The caption band reads "FRAME CAPTURE: The first plausible frame becomes the working frame, unexamined." (the role-neutral definition Jack approved, from `../../NAMEPLATE-DEFINITIONS.md`), then "FACULTY CHECK" beside the question, then the follow-up. Labels sit on the left and words on the right, so the band grows only 8 px on desktop. Frame capture keeps its drawn stage at 1280 × 720 (13-unit text renders at 11.1 px). Since the polish pass (October 30) it also keeps it at 1366 × 657 (11.0 px). Short windows 1200 px or wider (716 px tall or less) get a 100 px caption band with the check at 20 px and a 168 px `--mf-chrome`, as UR and AR do. Taller windows, and so the frame-diff sizes, don't change.
-- *Timing.* The figure's own clock is unchanged; the player adds the 3.0 s card, so the total is 89.2 s. Section 4 gives figure times; add 3.0 for player time, ?t= and the scrubber. The pacing table gives both.
+- *Timing.* The figure's own clock is unchanged; the player adds the 4.2 s card, so the total is 90.4 s. Section 4 gives figure times; add 4.2 for player time, ?t= and the scrubber. The pacing table gives both.
 - *Phones.* The caption band holds 222 px (the check with the name and definition). Stacked beats 6 and 11 no longer repeat the task card (it stays in beats 1–3 and 7), so the player fits at 780 px on a 390 × 844 screen.
 
 **Open questions for Jack.**
@@ -171,14 +171,14 @@ The JS measures the tallest beat whenever the width changes and holds it as the 
 
 ## 4. Beats
 
-Times in this section are the figure's own clock. The player adds the 3.0 s name card in front, so player time is 3.0 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
+Times in this section are the figure's own clock. The player adds the 4.2 s name card in front, so player time is 4.2 s later. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
 
-### Beat 0 · player 0.0–3.0 s · The name card
+### Beat 0 · player 0.0–4.2 s · The name card
 
 - **On screen at the start:** the stage, empty, with the plate's strip at the top, still blank. (Before play, the waiting view shows the card over the poster instead.)
 - **What moves:**
-  1. 0.0–2.0: "FAILURE MODE 1 OF 7" and "Frame capture" hold, large and centred, on a paper scrim.
-  2. 2.0–3.0: the card moves and shrinks into the top-left strip, where it becomes "FRAME CAPTURE · 1 OF 7"; the kicker and scrim fade as it goes.
+  1. 0.0–3.2: "FAILURE MODE 1 OF 7" and "Frame capture" hold, large and centred, on a paper scrim.
+  2. 3.2–4.2: the card moves and shrinks into the top-left strip, where it becomes "FRAME CAPTURE · 1 OF 7"; the kicker and scrim fade as it goes.
 - **Caption:** none; the caption band stays quiet.
 - **Notice:** the failure mode's name, then where it will stay.
 - **Why:** Jack forgets which named failure mode a figure interrogates. The name opens the figure and stays in view.
@@ -323,7 +323,7 @@ Times in this section are the figure's own clock. The player adds the 3.0 s name
 
 ## 5. Final frame
 
-The still at 86.2 s figure time (89.2 s player time). It is also the reduced-motion view, the print view and the social-card image (stage plus caption band). It shows the faculty side. The player's waiting frame before play (the runtime's `poster`) is the settled setup at 13.98 s: the task card, the student and the six dashed considerations.
+The still at 86.2 s figure time (90.4 s player time). It is also the reduced-motion view, the print view and the social-card image (stage plus caption band). It shows the faculty side. The player's waiting frame before play (the runtime's `poster`) is the settled setup at 13.98 s: the task card, the student and the six dashed considerations.
 
 **Stage:**
 - **Top right:** the task card, "EXAMPLE TASK" over "Recommend a response to an adversary's military buildup."
@@ -386,9 +386,9 @@ Both students in the figure would answer the first question the same way. The se
 
 Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and every total is at least twice the reading time. Label words are new words inside the picture.
 
-| Beat | Time (s, figure clock; player +3.0) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
+| Beat | Time (s, figure clock; player +4.2) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · The name card | player 0.0–3.0 | 0 | 0 | 0 | 5 (kicker, name) | 0.0 | 3.0 (2.0 hold, 1.0 move) | 0.0 | 3.0 |
+| 0 · The name card | player 0.0–4.2 | 0 | 0 | 0 | 5 (kicker, name) | 0.0 | 4.2 (3.2 hold, 1.0 move) | 0.0 | 4.2 |
 | 1 · The task | 0.0–6.0 | 7 | 2.3 | 4.7 | 11 | 1.0 | 1.0 | 4.0 | 6.0 |
 | 2 · Many things could matter | 6.0–14.0 | 12 | 4.0 | 8.0 | 13 | 1.0 | 2.6 | 4.4 | 8.0 |
 | 3 · A narrower frame | 14.0–23.0 | 13 | 4.3 | 8.7 | 5 | 1.0 | 5.2 | 2.8 | 9.0 |
@@ -400,11 +400,11 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 9 · The same paper | 64.7–71.5 | 10 | 3.3 | 6.7 | 3 | 1.0 | 3.2 | 2.6 | 6.8 |
 | 10 · Ask each student | 71.5–79.5 | 12 | 4.0 | 8.0 | 9 | 1.0 | 4.0 | 3.0 | 8.0 |
 | 11 · Faculty check | 79.5–86.2 | 10 + 7 second line | 3.3 + 2.3 | 6.7 (check) | 0 | 0.0 | 4.1 | 2.6 | 6.7, then rests |
-| **Total** | | **132** | **44.0** | | **73** | | **48.4** | | **86.2 figure, 89.2 player** |
+| **Total** | | **132** | **44.0** | | **73** | | **48.4** | | **86.2 figure, 90.4 player** |
 
 Checks:
 - One idea per beat; movements run one after another.
 - Changes a caption names wait until it can be read once: the narrowing (beat 3, 3.7 s in, one step at a time, then 3.2 s on the new title), the wipe (beat 7, 4.7 s), hiding the weighing (beat 9, 3.3 s), the reveal (beat 10, 4.0 s) and the second line (beat 11, 3.4 s after the check). In beat 8 the claim (grey to red) comes 6.1 s in.
 - Every hold is at least 1.5 s.
 - The camera moves are 1.9 s in, 2.4 s out and 2.2 s across, all eased and all under 2.5 s; reduced motion removes them.
-- Total 86.2 s on the figure's clock; 89.2 s in the player, with the name card.
+- Total 86.2 s on the figure's clock; 90.4 s in the player, with the name card.

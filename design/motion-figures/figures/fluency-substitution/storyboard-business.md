@@ -128,7 +128,7 @@ Reading is words ÷ 3 s, plus a 1.5 s hold. The PME rule, a beat at least twice 
 ## 8. Open points for Jack
 
 - **Role words.** Done: "associate" and "the partner" are now `castOverrides.workplace` (see "Classroom cast").
-- **Run time.** The changed fact's second line, the captioned colour beat and the longer caption 9 bring the business edition to 1:40, against 1:31 for PME.
+- **Run time.** The changed fact's second line, the captioned colour beat and the longer caption 9 bring the business edition to 1:41, against 1:32 for PME.
 
 ## Classroom cast (CLASSROOM-PLAN.md §2)
 

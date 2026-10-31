@@ -50,7 +50,7 @@ Related, Section VIII, reliance evidence: "Students identify which outputs they 
 10. *Faculty can grade correctness from the brief.* Beat 8: graders in the study rated AI users' work higher in quality. The two briefs are equally polished.
 11. *Faculty need to know where the error is.* They ask about each part in turn and hear the difference only on Part 2.
 
-**Nameplate** (October 28, Jack's standard for all eight): the runtime's `nameplate` adds beat 0, a 3 s name card, the corner strip and the name with its definition above the check. Player time is 93.6 s. On phones the caption band is fixed at the measured 220 px (160 px for the stacked stage at 720 px and wider); the phone stage's working marks became tabs on each box's top edge and its spacing tightened, so the whole player is 838 px at 390 × 844 and the controls never move.
+**Nameplate** (October 28, Jack's standard for all eight): the runtime's `nameplate` adds beat 0, a 4.2 s name card, the corner strip and the name with its definition above the check. Player time is 94.8 s. On phones the caption band is fixed at the measured 220 px (160 px for the stacked stage at 720 px and wider); the phone stage's working marks became tabs on each box's top edge and its spacing tightened, so the whole player is 838 px at 390 × 844 and the controls never move.
 
 **After final verification** (`tests/final-verify.md`, `CONSISTENCY.md`): the cast table matches the built harbor log; the page timer reads 1:30; following the family conventions, the students are named in red ("First student" from beat 5 and under each answer at the end; red column names on phones), the final frame has a key, the task card is Serif 16 on a 20-unit step, navy never dims below 60% (our side recedes to 60% at hand-in), phone labels are 13 px, the setup drops its running-time sentence, and the links follow the family's order with figure 8 last.
 
@@ -181,11 +181,11 @@ A war-college student must estimate two things for relief planners: how many sup
 
 Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. Each caption is readable at 3 words a second with at least 1.5 s of hold after the last movement. A change the caption is about waits until the caption can be read once, except a lead-in its first or main clause describes, and the study's bars, which start as the panel lands.
 
-### Beat 0 · the name card (3.0 s before the figure's own clock)
+### Beat 0 · the name card (4.2 s before the figure's own clock)
 
-- **What moves:** the runtime's nameplate. "FAILURE MODE 4 OF 7" over "Uncalibrated reliance", large and centred over a pale scrim on the poster frame, holds 2 s, then moves and shrinks over 1 s into the reserved strip above the stage, where "UNCALIBRATED RELIANCE · 4 OF 7" stays in every beat and view. The caption band is quiet.
+- **What moves:** the runtime's nameplate. "FAILURE MODE 4 OF 7" over "Uncalibrated reliance", large and centred over a pale scrim on the poster frame, holds 3.2 s, then moves and shrinks over 1 s into the reserved strip above the stage, where "UNCALIBRATED RELIANCE · 4 OF 7" stays in every beat and view. The caption band is quiet.
 - **Why:** Jack's standard for all eight figures: anchor each figure in its name. The definition, "Confident output is accepted without knowing whether the task fits the tool.", appears with the name above the faculty check in the final frame.
-- **Times below are figure time.** Player time (the scrubber, `?t=`, the readout) is figure time plus 3.0 s.
+- **Times below are figure time.** Player time (the scrubber, `?t=`, the readout) is figure time plus 4.2 s.
 
 ### Beat 1 · 0.0–8.6 s · The task and the reports
 
@@ -317,11 +317,11 @@ Both students give the same reason for Part 1. For Part 2, the first student's e
 
 ## 7. Pacing table
 
-Reading is caption words ÷ 3. Every beat holds at least 1.5 s after its last movement. Beat times are figure time; the name card adds 3.0 s in front.
+Reading is caption words ÷ 3. Every beat holds at least 1.5 s after its last movement. Beat times are figure time; the name card adds 4.2 s in front.
 
 | Beat | Time (s) | Caption words | Picture words | Reading (s) | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · Name card (player time) | 0.0–3.0 | 0 | 5 | 0.0 | 0.0 | 3.0 | 0.0 | 3.0 |
+| 0 · Name card (player time) | 0.0–4.2 | 0 | 5 | 0.0 | 0.0 | 4.2 | 0.0 | 4.2 |
 | 1 · The task and the reports | 0.0–8.6 | 12 | 29 | 4.0 | 1.0 | 5.7 | 1.9 | 8.6 |
 | 2 · Equal confidence | 8.6–15.6 | 6 | 24 | 2.0 | 1.0 | 3.5 | 2.5 | 7.0 |
 | 3 · Checks Part 1 | 15.6–23.1 | 12 | 5 | 4.0 | 1.0 | 4.5 | 2.0 | 7.5 |
@@ -332,7 +332,7 @@ Reading is caption words ÷ 3. Every beat holds at least 1.5 s after its last mo
 | 8 · The study | 58.4–67.9 | 16 | 29 | 5.3 | 1.0 | 3.5 | 5.0 | 9.5 |
 | 9 · Faculty point to each part | 67.9–83.9 | 14 | 31 | 4.7 | 1.0 | 13.5 | 1.5 | 16.0 |
 | 10 · Faculty check | 83.9–90.6 | 8 + 10 | 0 | 6.0 | 0.0 | 3.8 | 2.9 | 6.7, then rests |
-| **Total** | | **128** | **176** | | | **62.8** | | **90.6 figure time; 93.6 player time** |
+| **Total** | | **128** | **176** | | | **62.8** | | **90.6 figure time; 94.8 player time** |
 
 Checks:
 - The longest stillness is the 1.5 s pause on the second student's reading note (beat 6) and the 5.0 s panel hold (beat 8); beats 7–8 together hold still for about 8 s of 19, against 16 of 25 in round 4.

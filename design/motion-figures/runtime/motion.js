@@ -52,8 +52,9 @@
    - name: "Frame capture"; kicker: "Failure mode 1 of 7" (or "The skill");
      definition: the one-line "what goes wrong";
      plate: the corner text after the name (default: the kicker without
-     "Failure mode "); card: the opening card's length in seconds (default 3:
-     a 2 s hold, then a 1 s move into the corner).
+     "Failure mode "); card: the opening card's length in seconds (default 4.2:
+     a 3.2 s hold, then a 1 s move into the corner; the hold is the kicker's
+     reading time, "Failure mode 1 of 7" at 5 ÷ 3 + 1.5 = 3.17 s).
    The runtime then (1) opens on a large name card, centred over the stage,
    that moves and shrinks into the corner; (2) keeps "NAME · 1 OF 7" in a
    reserved strip above the stage's top-left corner in every view; (3) sets
@@ -192,11 +193,22 @@
 		// Nameplate (optional): the opening card adds C seconds before the figure's own t = 0.
 		// Everything below runs in player time; the figure keeps its own clock (toFig).
 		const plate = figure.nameplate || null;
-		const C = plate ? (plate.card ?? 3) : 0;
+		const C = plate ? (plate.card ?? 4.2) : 0;
 		const HOLD = Math.max(0, C - 1);
-		const toFig = (T) => Math.max(0, T - C);
-		const beats = C ? figure.beats.map((b) => ({...b, at: b.at + C, check: b.check && {...b.check, followAt: b.check.followAt == null ? b.check.followAt : b.check.followAt + C}})) : figure.beats;
-		const duration = figure.duration + C;
+		// Both ways rounded to the microsecond, so a moment typed or scrubbed in player time
+		// lands exactly on the figure's own constant: unrounded, (6 + 4.2) - 4.2 is
+		// 5.999999999999999, one step short of a beat at 6, and 117.9 + 4.2 is
+		// 122.10000000000001, past the scrubber's last step.
+		const us = (x) => Math.round(x * 1e6) / 1e6;
+		const toPlayer = (f) => us(f + C);
+		// The figure's own moments (beats, follow-ups, gates, poster, end) map back exactly, so a
+		// seek to one draws the figure at its own constant, even one with float noise from an
+		// edition's retiming (64.60000000000001).
+		const exact = new Map();
+		const mark = (f) => { const T = toPlayer(f); exact.set(T, f); return T; };
+		const toFig = (T) => exact.get(T) ?? Math.max(0, us(T - C));
+		const beats = C ? figure.beats.map((b) => ({...b, at: mark(b.at), check: b.check && {...b.check, followAt: b.check.followAt == null ? b.check.followAt : mark(b.check.followAt)}})) : figure.beats;
+		const duration = mark(figure.duration);
 		const toggle = root.querySelector('[data-mf-toggle]');
 		const list = root.querySelector('[data-mf-beats]');
 		const caption = root.querySelector('[data-mf-caption]');
@@ -265,13 +277,13 @@
 		let driving = false, printing = false;
 		// Optional poster: while a figure waits to play, it shows this settled moment
 		// instead of an empty first frame. Play still starts from 0.
-		const poster = figure.poster == null ? figure.poster : figure.poster + C;
+		const poster = figure.poster == null ? figure.poster : mark(figure.poster);
 		let waiting = false; // the waiting view shows the name card large over the poster
 		let capBody = null, capFollow = null;
 		// Optional gates (see the header): each stops playback once until resumed.
-		const gates = (figure.gates || []).map((g) => ({at: g.at + C, resumeAt: (g.resumeAt ?? g.at) + C, armed: true}));
+		const gates = (figure.gates || []).map((g) => ({at: mark(g.at), resumeAt: mark(g.resumeAt ?? g.at), armed: true}));
 		let gateOpen = -1;
-		const reducedAt = figure.reducedAt == null ? duration : figure.reducedAt + C;
+		const reducedAt = figure.reducedAt == null ? duration : mark(figure.reducedAt);
 
 		const label = (text) => {
 			if (!toggle) return;
@@ -456,7 +468,7 @@
 			let target = clamp(time, 0, duration);
 			// An unanswered gate can't be passed: the playhead stops there and the gate opens.
 			const lockFig = !force && figure.lockedAt ? figure.lockedAt() : null;
-			const lock = lockFig == null ? null : lockFig + C;
+			const lock = lockFig == null ? null : toPlayer(lockFig);
 			const wasOpen = gateOpen;
 			let lockGate = -1;
 			if (lock != null && target > lock + 0.001) {
@@ -577,7 +589,7 @@
 		addEventListener('beforeprint', () => { printing = true; pause(); draw(duration); });
 
 		// Test and export hook: seek to any moment without the clock.
-		const seek = (time) => { driving = true; pause(); draw(time + C); };
+		const seek = (time) => { driving = true; pause(); draw(toPlayer(time)); };
 		const api = {play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t), introCard, settleCard};
 		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { driving = true; pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C, introCard, settleCard};
 

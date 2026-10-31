@@ -53,7 +53,7 @@ Related:
 
 **Nameplate** (standard for all eight figures, at Jack's request: "anchor each figure in the stated name to help recall"):
 - The runtime's `nameplate` option: name "Premature synthesis", kicker "Failure mode 3 of 7", definition "The model connects the material before anyone has built the map." (from `NAMEPLATE-DEFINITIONS.md`).
-- Beat 0, a 3 s name card, comes before beat 1; player time is figure time plus 3 s (93.0 s in all). The strip above the stage reads "PREMATURE SYNTHESIS · 3 OF 7" throughout, and the last caption sets the name and definition beside "FACULTY CHECK".
+- Beat 0, a 4.2 s name card, comes before beat 1; player time is figure time plus 4.2 s (94.2 s in all). The strip above the stage reads "PREMATURE SYNTHESIS · 3 OF 7" throughout, and the last caption sets the name and definition beside "FACULTY CHECK".
 - The phone caption band is fixed at 222 px (the measured final caption) and the stacked desktop band at 144 px; the narrow stage is 466 px. Players: 816 px at 1440×900, 698 px at 1280×720, 830 px at 390×844, with the controls still.
 
 **PME polish pass** (October 30, 2026, approved by Jack: the business testers' fixes applied to PME):
@@ -202,11 +202,11 @@ Positions are viewBox units. Widths of text-sized elements and line breaks come 
 
 Times are absolute seconds. In every beat the caption changes first (0.3 s fade) and nothing in the picture moves for the first second. A change the caption is about starts only after the caption can be read once.
 
-### Beat 0 · name card (3.0 s before figure time 0)
+### Beat 0 · name card (4.2 s before figure time 0)
 
 - **On screen:** the poster (beat 1 settled) faint behind the name card: "FAILURE MODE 3 OF 7" over "Premature synthesis", large and centred.
-- **What moves:** the card holds 2 s, then moves and shrinks into the strip above the stage's top-left corner over 1 s, where it reads "PREMATURE SYNTHESIS · 3 OF 7" for the rest of the figure. The caption band is quiet.
-- **Why:** the figure opens on the name it is about, so a teacher can recall which failure mode they watched. Times below are figure time; the player adds 3 s.
+- **What moves:** the card holds 3.2 s, then moves and shrinks into the strip above the stage's top-left corner over 1 s, where it reads "PREMATURE SYNTHESIS · 3 OF 7" for the rest of the figure. The caption band is quiet.
+- **Why:** the figure opens on the name it is about, so a teacher can recall which failure mode they watched. Times below are figure time; the player adds 4.2 s.
 
 ### Beat 1 · 0.0–6.8 s · Six readings
 
@@ -417,7 +417,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 
 | Beat | Time (s) | Caption words | Reading (s) | 2× (s) | Label words | Lead (s) | Motion (s) | Hold (s) | Total (s) |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 · Name card | (−3.0)–0.0 | 0 | 0 | 0 | 5 | 0 | 1.0 | 2.0 | 3.0 |
+| 0 · Name card | (−4.2)–0.0 | 0 | 0 | 0 | 5 | 0 | 1.0 | 3.2 | 4.2 |
 | 1 · Six readings | 0.0–6.8 | 10 | 3.3 | 6.7 | 24 | 1.0 | 3.6 | 2.2 | 6.8 |
 | 2 · The AI connects them | 6.8–15.5 | 13 | 4.3 | 8.7 | 2 | 1.0 | 5.4 | 2.3 | 8.7 |
 | 3 · The map makes sense | 15.5–24.7 | 13 | 4.3 | 8.7 | 17 | 1.0 | 6.7 | 1.5 | 9.2 |
@@ -428,7 +428,7 @@ Reading time is caption words ÷ 3. The beat total is lead + motion + hold, and 
 | 8 · What evidence would change it? | 60.9–72.7 | 16 | 5.3 | 10.7 | 23 | 1.0 | 9.3 | 1.5 | 11.8 |
 | 9 · The second student applies it | 72.7–83.3 | 11 | 3.7 | 7.3 | 16 | 1.0 | 8.1 | 1.5 | 10.6 |
 | 10 · Faculty check | 83.3–90.0 | 8 + 9 second line | 2.7 + 3.0 | 5.3 (check) | 0 | 0.0 | 3.8 | 2.9 | 6.7, then rests |
-| **Total** | | **129** | **43.0** | | **134** | | **63.4** | | **93.0** (90.0 figure + 3.0 card) |
+| **Total** | | **129** | **43.0** | | **134** | | **63.4** | | **94.2** (90.0 figure + 4.2 card) |
 
 Checks:
 - One idea per beat; movements run one after another.
@@ -445,4 +445,4 @@ Checks:
   - Beat 9 carries 27 new words (caption, label, answer) in 10.6 s; the returning note repeats beat 4.
 - Both AI sweeps take 1.2 s. The papers' move aside takes 1.2 s, eased.
 - No camera moves. Reduced motion shows the final frame.
-- Total 93.0 s in the player: the 3.0 s name card, then 90.0 s of figure time.
+- Total 94.2 s in the player: the 4.2 s name card, then 90.0 s of figure time.

@@ -81,7 +81,7 @@ The beat list's "On screen" lines, the stacked-stage words and the page copy are
 
 ## Pace table
 
-Beat lengths are the core's (figure time; the player adds the 3 s name card). Each caption is read at 3 words a second plus a 1.5 s hold, and must fit its beat. New on-screen words get the same budget from when they appear; text that stays on screen to the end can be read in later beats.
+Beat lengths are the core's (figure time; the player adds the 4.2 s name card). Each caption is read at 3 words a second plus a 1.5 s hold, and must fit its beat. New on-screen words get the same budget from when they appear; text that stays on screen to the end can be read in later beats.
 
 | Beat | Length (s) | Caption words | Read + 1.5 (s) | Fits | New on-screen words | Read + 1.5 (s) | Time on screen |
 | --- | --- | --- | --- | --- | --- | --- | --- |

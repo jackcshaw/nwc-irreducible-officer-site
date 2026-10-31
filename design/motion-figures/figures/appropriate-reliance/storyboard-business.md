@@ -122,7 +122,7 @@ Every caption and on-screen text at 3 words a second, plus a 1.5 s hold, and the
 | 9 · The call | 96.2–108.2 | 18 | 7.5 | 15 | 11.0 | 12.0 | 12.0 | Yes. The new note "DEFENSIBLE · A WEEK LATE" (4 words) appears at 103.6 and holds 4.2 s, over its 1.3 s plus 1.5 s |
 | 10 · Reviewer's check | 108.2–117.9 | 15 + 12 | 10.5 | 9 (the key's verdict) + 13 (the bar notes) | 16.3 | 18.0 | 9.7, then rests | Yes (the last frame rests) |
 
-The name card (3 s before 0.0) is unchanged, as is the nameplate's definition in the last caption. No new note or label is added in this edition. On phones the task cards stay on the stacked stage through the final frame.
+The name card (4.2 s before 0.0) is unchanged, as is the nameplate's definition in the last caption. No new note or label is added in this edition. On phones the task cards stay on the stacked stage through the final frame.
 
 ## Verified figures (for the companion's source spine)
 

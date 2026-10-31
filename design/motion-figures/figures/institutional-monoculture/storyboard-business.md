@@ -52,7 +52,7 @@ Source: `tests/business-figure-read-2.md` and the coordinator's notes. Round 2 p
    - On phones the imagined paper rows stay until the second goal group forms, so their ticks show for about 2 s. The first run's rows give way when the first group forms.
    - All ten first-run lines are in the one frame. The page and captions say "each plan", and only the AI card says "almost every outline".
 
-The run is 94.0 s in the player.
+The run is 95.2 s in the player.
 
 ## Round 2: changes after figure cold read 1
 
@@ -173,11 +173,11 @@ The beat 7 box asks the check's first question. The manager sends the plans back
 
 PME's stricter combined rule (caption and picture words together, and twice the caption's reading time) isn't applied here; the coordinator asked for the run to be trimmed under about 95 s.
 
-Times are on the business clock (figure time; add 3.0 s for the player).
+Times are on the business clock (figure time; add 4.2 s for the player).
 
 | Beat | Time (s) | Beat (s) | Caption words | Caption read + 1.5 (s) | New texts (words): on screen from → read + 1.5 by |
 | --- | --- | --- | --- | --- | --- |
-| 0 · Name card | player 0.0–3.0 | 3.0 | 0 | — | name and kicker (7), runtime standard |
+| 0 · Name card | player 0.0–4.2 | 4.2 | 0 | — | name and kicker (7), runtime standard |
 | 1 | 0.0–9.1 | 9.1 | 6 | 3.5 | task card (10): 1.6 → 6.4; context (9): last item 6.9 → 9.1; "The team" (2): 2.3 → 4.5 |
 | 2 | 9.1–15.7 | 6.6 | 12 | 5.5 | "AI" (1): 10.5 → 12.3 |
 | 3 | 15.7–23.7 | 8.0 | 12 | 5.5 | "AI OUTLINE → WRITE", "ALL DRAFTED WITH AI" (7): 19.8 → 23.6 |
@@ -189,7 +189,7 @@ Times are on the business clock (figure time; add 3.0 s for the player).
 | 9 | 61.2–69.0 | 7.8 | 12 | 5.5 | the AI's questions (8): 64.4 → 68.6, on screen to 70.0; "AI CHALLENGES" (2): 64.5 → 66.7 |
 | 10 | 69.0–82.5 | 13.5 | 10 | 4.8 | three goal groups: 72.0, 73.2 and 74.4; the last group (12 words) settles at 75.4 → 80.9; "MORE FRAMES TO WEIGH…" (8): 77.2 → 81.4 |
 | 11 | 82.5–91.0 | 8.5 | 7 + 10 | follow-up at +3.0, read by +7.8 | source line (12): 84.0 → 89.5 |
-| **Total** | | **91.0 figure, 94.0 player** (PME 96.3, 99.3) | **115** | | |
+| **Total** | | **91.0 figure, 95.2 player** (PME 96.3, 100.5) | **115** | | |
 
 Notes:
 - The holds give beats 5 and 6 a second each after their main change. The ask card in beat 9 stays 5.6 s, against 4.2 s needed.
@@ -198,7 +198,7 @@ Notes:
 
 ## 6. Final frame (business)
 
-Player 94.0 s.
+Player 95.2 s.
 - **Top:** the AI panel; "NOT SEEN BY THE MANAGER" over the grey card "ALMOST EVERY OUTLINE OPENED / Differentiate on value", traced by a dashed line to the first run's grey bracket and its "AI'S FRAME" pill; the task card with its context.
 - **First run:** "The team", ten ticked plans, and "ONE FRAME / DIFFERENTIATE" over the ten lines. "THE MANAGER ASKS" sits over a dashed box holding "What frames are missing?". A navy line runs from that box down to "SENT BACK: WHAT ELSE COULD THE PROBLEM BE?".
 - **Below:** "Same team, imagined" with ten ticked plans, and, under the sent-back question, three bracketed goals: DIFFERENTIATE, MATCH ON COST and PARTNER OR LICENSE. The source line runs under them.

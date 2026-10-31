@@ -916,7 +916,7 @@
 		quietOpen = true; // a ?t= hold past a question opens it without moving the page
 		api = mount(root, {
 			duration: T.end, render, beats: BEATS, poster: GATES[0].at, gates: GATES, reducedAt: GATES[0].at,
-			// The name card adds 3 s of player time before the figure's own t = 0; every time
+			// The name card adds 4.2 s of player time before the figure's own t = 0; every time
 			// here (gates, locks, poster, reducedAt, api.seek) stays in figure time.
 			nameplate: NAMEPLATE,
 			lockedAt: () => (!resolved.g1 ? GATES[0].at : !resolved.g2 ? GATES[1].at : null),
@@ -946,7 +946,8 @@
 		// and settle the stage's layout now, so no later relayout redraws over the card.
 		if (fitOn) { fitFirstView(); syncStacked(); }
 		// The name card shows over that question, then settles into the corner once the
-		// figure is in view (1.2 s, then a 0.8 s move). The question is live underneath, and
+		// figure is in view (2.2 s, the kicker's reading time, "The skill" at 2 ÷ 3 + 1.5 =
+		// 2.17 s; then a 0.8 s move). The question is live underneath, and
 		// any touch, click, key, wheel or focus in the figure puts the card in its corner at
 		// once, so it never delays focus or covers the options while the reader acts.
 		if (!testMode && !reducedNow()) {
@@ -957,7 +958,7 @@
 				const e = entries[0];
 				if (e.intersectionRatio < 0.5 && e.intersectionRect.height < innerHeight * 0.5) return;
 				io.disconnect();
-				if (root.dataset.mfCard) api.settleCard(1.2, 0.8);
+				if (root.dataset.mfCard) api.settleCard(2.2, 0.8);
 			}, {threshold: [0, 0.25, 0.5, 0.75, 1]});
 			io.observe(shot);
 		}
