@@ -69,7 +69,9 @@ async function open(b, w, h, opts = {}) {
 
 async function capture(dir) {
   dir = resolve(dir);
-  const b = await chromium.launch();
+  // Full-tile raster avoids two antialiasing outputs for the same rounded SVG corner.
+  // This matches ar-regress; sampling and zero-pixel comparison are unchanged.
+  const b = await chromium.launch({ args: ["--disable-partial-raster"] });
   let count = 0;
   const errors = [];
   for (const [w, h] of SIZES) {
@@ -118,7 +120,7 @@ async function capture(dir) {
     await c.close();
   }
   await b.close();
-  writeFileSync(join(dir, "capture.json"), JSON.stringify({ slug, edition, cast, hide, freeze, target: url, fontLock: fonts?.sha256 || "", harness, browser: b.version(), sizes: SIZES, captured: count }, null, 1) + "\n");
+  writeFileSync(join(dir, "capture.json"), JSON.stringify({ slug, edition, cast, hide, freeze, target: url, fontLock: fonts?.sha256 || "", raster: "full-tile", harness, browser: b.version(), sizes: SIZES, captured: count }, null, 1) + "\n");
   return { count, errors };
 }
 
@@ -163,7 +165,7 @@ if (mode === "capture") {
   // A baseline captured with other flags differs for that reason alone: say so.
   const manifest = (d) => { const f = join(resolve(d), "capture.json"); return existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : null; };
   const ma = manifest(dirA), mb = manifest(dirB);
-  const flagsDiffer = ma && ["edition", "cast", "hide", "freeze", "fontLock", "harness", "browser"].filter((k) => (ma[k] || "") !== (mb[k] || ""));
+  const flagsDiffer = ma && ["edition", "cast", "hide", "freeze", "fontLock", "raster", "harness", "browser"].filter((k) => (ma[k] || "") !== (mb[k] || ""));
   console.log(JSON.stringify({ captured: r1.count, errors: r1.errors, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing, ...(flagsDiffer?.length ? { warning: `baseline captured with other flags: ${flagsDiffer.join(", ")}` } : {}), diffs: r.diffs.slice(0, 40) }, null, 1));
   process.exitCode = r1.errors.length || r.diffs.length || r.missing.length || flagsDiffer?.length || !ma ? 1 : 0;
 } else {

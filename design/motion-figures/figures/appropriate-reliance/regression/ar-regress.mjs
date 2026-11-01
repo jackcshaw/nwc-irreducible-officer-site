@@ -300,7 +300,7 @@ async function compare(base, cur) {
   }
   const ma = JSON.parse(readFileSync(join(base, "capture.json"), "utf8"));
   const mb = JSON.parse(readFileSync(join(cur, "capture.json"), "utf8"));
-  const receiptDiffs = ["edition", "cast", "hide", "freeze", "fontLock", "harness", "arHarness", "browser"].filter(key => ma[key] !== mb[key]);
+  const receiptDiffs = ["edition", "cast", "hide", "freeze", "fontLock", "raster", "harness", "arHarness", "browser"].filter(key => ma[key] !== mb[key]);
   return { files: files.length, same, diffs, missing, receiptDiffs, textStates: Object.keys(ta).length, textDiffs, wsOnly };
 }
 
