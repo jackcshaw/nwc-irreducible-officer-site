@@ -14,6 +14,11 @@
   };
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);
+  // Source pages fill their setup and stacked view after the first fonts.ready.
+  // Wait for those newly used faces before measuring the surrounding layout.
+  await document.fonts.ready;
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
   align();
   window.addEventListener('beforeprint', () => requestAnimationFrame(align));
   matchMedia('print').addEventListener('change', () => requestAnimationFrame(align));
