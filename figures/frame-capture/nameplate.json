@@ -1,0 +1,6 @@
+{
+  "name": "Frame capture",
+  "kicker": "Failure mode 1 of 7",
+  "definition": "The first plausible frame becomes the working frame, unexamined.",
+  "pageTitle": "Frame capture: who chose the frame?"
+}

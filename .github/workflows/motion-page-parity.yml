@@ -1,0 +1,82 @@
+name: motion page parity
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/motion-page-parity.yml'
+      - 'figures/**'
+      - 'media/figures/**'
+      - 'styles/figure-page.css'
+      - 'styles/masthead.css'
+      - 'scripts/figure-*.mjs'
+      - 'scripts/build-site.mjs'
+      - 'scripts/generate-figure-posters.mjs'
+      - 'scripts/check-figure-page-parity.mjs'
+      - 'tests/helpers/figure*'
+      - 'design/motion-figures/scripts/frame-diff.mjs'
+      - 'package-lock.json'
+permissions:
+  contents: read
+concurrency:
+  group: motion-pages-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {edition: pme, cast: seminar}
+          - {edition: business, cast: workplace}
+          - {edition: business, cast: classroom}
+          - {edition: business, cast: high-school}
+    env:
+      COMPANION_REPO_PATH: ../nwc-irreducible-officer-companion
+      WORKBENCH_REPO_PATH: ../nwc-faculty-workbench
+    steps:
+      - uses: actions/checkout@v4
+        with: {repository: jackcshaw/nwc-irreducible-officer-companion, ref: main, path: nwc-irreducible-officer-companion, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {repository: jackcshaw/nwc-faculty-workbench, ref: main, path: nwc-faculty-workbench, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: nwc-irreducible-officer-site
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm, cache-dependency-path: nwc-irreducible-officer-site/package-lock.json}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: astral-sh/setup-uv@v6
+      - name: Install and build the exact candidate
+        working-directory: nwc-irreducible-officer-site
+        run: npm ci && npx playwright install --with-deps chromium && npm run build
+      - name: Compare published factories and built players serially
+        working-directory: nwc-irreducible-officer-site
+        env:
+          EDITION: ${{ matrix.edition }}
+          CAST: ${{ matrix.cast }}
+        run: |
+          for slug in $(node -e 'console.log(JSON.parse(require("fs").readFileSync("figures/manifest.json")).figures.map(f=>f.slug).join(" "))'); do
+            node scripts/check-figure-page-parity.mjs "$slug" "$EDITION" "$CAST" "$RUNNER_TEMP/motion-pages/$slug"
+          done
+      - name: Retain receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-page-receipts-${{ matrix.cast }}
+          path: |
+            ${{ runner.temp }}/motion-pages/*/*.json
+            ${{ runner.temp }}/motion-pages/*/*.txt
+            ${{ runner.temp }}/motion-pages/*/*/capture.json
+          retention-days: 7
+      - name: Retain failed captures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-page-failure-${{ matrix.cast }}
+          path: ${{ runner.temp }}/motion-pages
+          compression-level: 0
+          retention-days: 7

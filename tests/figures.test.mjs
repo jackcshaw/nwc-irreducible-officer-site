@@ -1,0 +1,46 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import {join} from 'node:path';
+import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath} from '../scripts/figure-pages.mjs';
+import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
+const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
+const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
+assert.equal(manifest.figures.length,1);
+for(const figure of manifest.figures) {
+  const quote=quoteFor(figure,essay);
+  assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
+  assert.throws(()=>quoteFor(figure,''),/Missing/);
+  for(const id of ['business','pme']) assert.equal(readFileSync(join(root,'figures',figure.slug,'editions',id+'.json'),'utf8'),readFileSync(join(root,'design/motion-figures/figures',figure.slug,'editions',id+'.json'),'utf8'),'Port retains exact edition source');
+  const titles=new Set();
+  for(const variant of manifest.variants) {
+    const ed=resolveFigure(root,figure,variant),path=figurePath(figure,variant),html=readFileSync(join(root,'dist',path,'index.html'),'utf8');
+    assert.equal(ed.castId,variant.cast);assert.equal(ed.id,variant.edition);
+    assert(!/\{[A-Za-z_]+\}/.test(ed.page.setup));
+    assert(html.includes(`rel="canonical" href="https://judgmentlab.net${path}"`));
+    titles.add(html.match(/<title>(.*?)<\/title>/s)[1]);
+    assert.equal((html.match(/data-mf-beat-index=/g)||[]).length,ed.beats.length+1);
+    assert.equal((html.match(/class="figure-poster"/g)||[]).length,1);
+    assert(sitemap.includes(`https://judgmentlab.net${path}`));
+    assert(!/<a[^>]+href="[^\"]*book-v0/.test(html));
+    const data=JSON.parse(html.match(/id="figure-data" type="application\/json">(.*?)<\/script>/s)[1]);
+    assert.equal(data.edition.castId,variant.cast);
+    assert.equal(data.routes.length,4);
+    const ld=JSON.parse(html.match(/type="application\/ld\+json">(.*?)<\/script>/s)[1]);
+    assert.equal(ld[0]['@type'],'LearningResource');assert.equal(ld[1].itemListElement.length,3);
+    assert(!html.includes('design/motion-figures'));assert(!html.includes('parity-origin.js'));
+    const dir=join(root,'media/figures',figure.slug,variant.id),receipt=JSON.parse(readFileSync(join(dir,'manifest.json'),'utf8'));
+    assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
+    assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
+    assert(receipt.inputs['package-lock.json']);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,variant.id==='pme'?90.4:104.8);
+    assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
+    assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
+  }
+  assert.equal(titles.size,4);
+}
+for(const license of ['ibmplexmono','sourcesans3','sourceserif4']) assert(existsSync(join(root,'dist/assets/figures/fonts',license+'-OFL.txt')));
+const hub=readFileSync(join(root,'dist/failure-modes/index.html'),'utf8');
+assert.equal((hub.match(/<li>/g)||[]).length,1);
+assert(!hub.includes('runtime/motion.js'));
+assert(!readFileSync(join(root,'dist/index.html'),'utf8').includes('/assets/figures/runtime/motion.js'));
+console.log('Figure static routes, source boundaries, posters and metadata passed');
