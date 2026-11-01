@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frame Capture Figure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="figures.css">
+</head>
+<body>
+<div class="mock-bar"><b>Judgment Lab<i>.</i></b><span>Prototype: a motion figure in the essay, Section II</span></div>
+<p class="mock-note">Throwaway prototype. The figure plays once when it is mostly in view, then rests on its last frame. Add <code>?reduced</code> to see the reduced-motion version, or <code>?t=3.2</code> to hold one moment.</p>
+<main class="page">
+	<h2>II. What the Problem Looks Like</h2>
+	<p class="essay dim">These failure modes define the standard the second officer's method has to meet…</p>
+	<p class="essay"><strong>Frame capture</strong> occurs when the model supplies the first plausible frame and the student never achieves enough distance to revise it. The danger is not that the frame is obviously wrong; it may be entirely reasonable. It may simply define the problem too narrowly, privilege one set of interests over others, assume a theory of adversary behavior, or treat a structural constraint as fixed when it should be contested. Once accepted, later revisions improve the answer inside the wrong boundary. The frame capture is invisible inside the final product.</p>
+
+	<figure class="mf" id="frame-capture" aria-labelledby="fc-label" style="--beats:4">
+		<div class="mf-head">
+			<p class="mf-label" id="fc-label">Frame capture</p>
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the frame capture figure</span></button>
+		</div>
+		<div class="mf-stage">
+			<svg viewBox="0 0 800 450" aria-hidden="true" focusable="false"></svg>
+		</div>
+		<figcaption>
+			<span class="sr-only">An animated figure in four steps. The view starts close up on a draft. Grey crop brackets snap around two topics, adversary behavior and historical precedent. A red dot, standing for the student, writes and revises the draft three times inside the brackets, leaving red change bars in the margin. The view then pulls back: the bracketed draft is a small part of a wider situation, and four considerations sit outside it, untouched: alliance dynamics, domestic politics, a constraint treated as fixed, and whose interests count. The steps are listed below.</span>
+			<ol class="mf-beats" data-mf-beats></ol>
+		</figcaption>
+	</figure>
+
+	<p class="essay"><strong>Fluency substitution</strong> is easier to miss. AI produces the tone of analytic maturity (balanced paragraphs, caveats in the right places, the measured voice of a considered judgment) and the student mistakes well-ordered language for well-owned reasoning…</p>
+</main>
+<script src="motion.js"></script>
+<script src="frame-capture.js"></script>
+</body>
+</html>

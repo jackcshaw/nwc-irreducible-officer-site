@@ -1,0 +1,250 @@
+{
+ "_doc": "Responsibility laundering, business edition (workplace cast). Related case: Moffatt v. Air Canada, 2024 BCCRT 149 (Civil Resolution Tribunal, February 14, 2024); every quote on the page is from the decision, with its paragraph number. The retailer, the analysts, their AI, the chatbot, the 97% and the answers are constructed. Same layout and beats as PME. Business-only, gated on data: timeline.edits (its own clock: holds and a stretch stage beat 7; cuts trim static holds), split (the staged split), labels.source / narrow.source. See storyboard-business.md. Casts: workplace (the edition's own), classroom and high-school (byCast framing: students working a retailer's case for a business class, AI allowed and disclosed; 'answer for it' means to faculty or the teacher, for the work they submit).",
+ "id": "business",
+ "cast": "workplace",
+ "task": {
+  "label": "EXAMPLE TASK",
+  "text": "Should the support chatbot answer refund questions?"
+ },
+ "draft": {
+  "lines": [
+   [
+    "The analysis estimates",
+    "97% accuracy."
+   ],
+   [
+    "It is recommended that the chatbot",
+    "go live."
+   ]
+  ],
+  "phrase": "The analysis"
+ },
+ "note": {
+  "lines": [
+   "Rests on last quarter’s questions.",
+   "Recent: similar."
+  ]
+ },
+ "questions": [
+  "1 · If it misleads a customer, who made this call?",
+  "2 · Why did you rely on it?"
+ ],
+ "answers": {
+  "first": [
+   "“I did. I signed it.”",
+   "“The analysis estimated 97%. It seemed solid.”"
+  ],
+  "second": [
+   "“I did. I signed it.”",
+   "“It rests on last quarter’s questions. Recent ones matched, so I accepted it. I didn’t test exceptions.”"
+  ]
+ },
+ "labels": {
+  "noteRow": "THEIR OWN NOTE · NOT SENT",
+  "noNote": "—",
+  "dontSee": "{reviewer_doesnt_see|upper}",
+  "frame": "{what_reviewer_sees|upper}",
+  "copyFirst": "{first|upper}’S COPY",
+  "copySecond": "{second|upper}’S COPY",
+  "drafted": "DRAFTED WITH AI",
+  "weight": "ANSWERABLE",
+  "first": "{first}",
+  "second": "{second}",
+  "keyAI": "WRITTEN BY AI",
+  "keyDecision": "{A_person|upper}’S DECISION",
+  "keyHanded": "REASON HANDED TO THE AI",
+  "source": [
+   "Related case: Moffatt v. Air Canada (2024):",
+   "a company was held responsible",
+   "for what its chatbot told a customer."
+  ]
+ },
+ "narrow": {
+  "taskLabel": "Example task",
+  "noteRow": "Their own note · not sent →",
+  "dontSee": "{reviewer_doesnt_see}",
+  "frame": "{what_reviewer_sees}",
+  "weight": "Answerable",
+  "keyAI": "Written by AI",
+  "keyDecision": "{A_person}’s decision",
+  "keyHanded": "Reason handed to the AI",
+  "source": "Related case: Moffatt v. Air Canada (2024): a company was held responsible for what its chatbot told a customer.",
+  "sourceInView": true
+ },
+ "beats": [
+  {
+   "text": "Two {people}, one task.",
+   "detail": "a task card appears: \"Example task: Should the support chatbot answer refund questions?\" Two red dots appear, labelled {first} and {second}."
+  },
+  {
+   "text": "Suppose the same prompt gives both the same AI draft.",
+   "detail": "both dots pulse. A sheet fills at the centre in grey on a beige band: \"The analysis estimates 97% accuracy.\" \"It is recommended that the chatbot go live.\" It divides into two identical copies, labelled \"{first}'s copy, drafted with AI\" and \"{second}'s copy, drafted with AI\"."
+  },
+  {
+   "text": "Both {people} read it closely and agree.",
+   "detail": "a key below names the beige band \"Written by AI\". Both dots read along every line of their copies, at the same pace and at the same time. Nothing changes."
+  },
+  {
+   "text": "The first {person} signs. The second notes what the estimate rests on, then signs.",
+   "detail": "the first dot signs in red, and the key adds \"{A_person}'s decision\" in red. The second dot moves to a row labelled \"Their own note · not sent\" and writes a red note: \"Rests on last quarter's questions. Recent: similar.\" The first {person} has no note. Then the second dot signs. The note stays."
+  },
+  {
+   "text": "{reviewer_asks_each}.",
+   "detail": "the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two copies. \"1. If it misleads a customer, who made this call?\" Both {people} say, \"I did. I signed it.\""
+  },
+  {
+   "text": "{reviewer_ask} why.",
+   "detail": "\"2. Why did you rely on it?\" The first {person} says, \"The analysis estimated 97%. It seemed solid.\" The second says, \"It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't test exceptions.\""
+  },
+  {
+   "text": "The first gives the AI's reason. The second gives their own.",
+   "detail": "one change at a time. The frame goes and the note returns. \"The analysis\" is outlined in the first {person}'s second answer and on their copy. The first {person}'s dot parts into two halves. One half travels slowly up the copy's edge to \"The analysis estimates\", trailing a dashed line, and becomes a hollow dashed grey ring, keyed \"Reason handed to the AI\". It stays. Then a red bracket marks the second {person}'s second answer, their own reason; their dot stays whole."
+  },
+  {
+   "text": "Suppose it proves wrong. The AI can't answer for it. Both {people} will.",
+   "detail": "a navy weight labelled \"Answerable\" comes down the first copy's edge, past the AI's sentences and the grey ring, and comes to rest at the signature. As it does, the first {person}'s dot is whole again; the grey ring stays. A second weight does the same on the second copy."
+  },
+  {
+   "text": "{check}: Who owns the recommendation if it proves wrong?",
+   "list": "{check}: Who owns the recommendation if it proves wrong? Name one way it could prove wrong. Ask why they relied on it.",
+   "detail": "the questions appear under the picture at the same size. Both copies, the note, all four answers, the grey ring and both weights stay in view, with the source line: \"Related case: Moffatt v. Air Canada (2024): a company was held responsible for what its chatbot told a customer.\""
+  }
+ ],
+ "check": {
+  "label": "{check}",
+  "question": "Who owns the recommendation if it proves wrong?",
+  "follow": "Name one way it could prove wrong. Ask why they relied on it."
+ },
+ "page": {
+  "kicker": "Failure mode 7 of 7",
+  "title": "Responsibility laundering",
+  "description": "The model’s recommendation makes responsibility feel shared, or easier to defend. Two {people} sign the same AI draft, and {reviewer_ask_l} each why they relied on its estimate.",
+  "setup": "Suppose two {people} on a retailer's support team give an AI the same prompt, get the same draft, and sign it as written. What can happen next is responsibility laundering: the model's recommendation makes responsibility feel shared, or easier to defend. The retailer, the {people}, their AI, the chatbot and the 97% are constructed. Related case: *Moffatt v. Air Canada* (2024), in which a tribunal held an airline responsible for its chatbot's answers.",
+  "srTitle": "Responsibility laundering, an animated figure in nine beats after its name card",
+  "srSummary": "An animated figure, \"Responsibility laundering\", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two {people} on a retailer's support team, with an example task: should the support chatbot answer refund questions? Suppose the same prompt gives both the same AI draft, shown in grey, the figure's mark for words the AI wrote: \"The analysis estimates 97% accuracy. It is recommended that the chatbot go live.\" The draft divides into two copies, one for each {person}, both marked \"drafted with AI\". Both {people} read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled \"their own note · not sent\": \"Rests on last quarter's questions. Recent: similar.\" Then they sign. While {reviewer_ask_l}, the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two identical copies. {reviewer_asks_each}: \"If it misleads a customer, who made this call?\" Both say, \"I did. I signed it.\" Then: \"Why did you rely on it?\" The first says, \"The analysis estimated 97%. It seemed solid.\" The second says, \"It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't test exceptions.\" Then, one change at a time: the note returns; \"The analysis\" is outlined in the first {person}'s second answer and on their copy; the first {person}'s dot parts into two halves, and one half travels up to \"The analysis estimates\" and becomes a hollow dashed grey ring, keyed \"reason handed to the AI\", where it stays; a red bracket marks the second {person}'s second answer, their own reason, and their dot stays whole. Two navy weights labelled \"Answerable\" come down, one on each copy, past the AI's sentences, and rest on each {person}'s dot at the signature. As the first weight comes to rest, the first {person}'s dot is whole again; the grey ring stays. The figure ends on the name and its definition, \"The model’s recommendation makes responsibility feel shared, or easier to defend.\", above the {check_l}, with the source line: \"Related case: Moffatt v. Air Canada (2024): a company was held responsible for what its chatbot told a customer.\" Each beat is listed below with what is on screen.",
+  "checkHeading": "{check}",
+  "checkLines": [
+   "Who owns the recommendation if it proves wrong?",
+   "Name one way it could prove wrong. Ask why they relied on it."
+  ],
+  "checkFollow": "Both {people} signed the same recommendation. If it proves wrong, both answer for it inside the company, and the AI can't. Asked who made the call, both say they did. Asked why they relied on the AI's estimate, the first {person} repeats the analysis: 97%, and it seemed solid. The second says what the estimate rested on, why they accepted it, and the test they didn't run. Both answer for the call. Only the second can say what it rested on. That answer is hard to give without asking the question before signing, and the second {person}'s note shows they did. Whether relying on the estimate was justified is a separate check, covered by [uncalibrated reliance](../uncalibrated-reliance/?edition=business).",
+  "evidenceHeading": "A related case",
+  "evidence": [
+   "*Moffatt v. Air Canada* (2024) is a related case at the scale of an organization: who answers for an AI's answer? The airline argued, in effect, that its chatbot was responsible for its own answers, and a tribunal held the company responsible. It differs from the figure: the airline disowned its chatbot's answer, and the first {person} owns the call and hands off only the reason. The case also says nothing about employees signing an internal recommendation.",
+   "In November 2022, after a death in their family, a customer asked the chatbot on Air Canada's website about bereavement fares. The chatbot told them: \"If you need to travel immediately or have already travelled and would like to submit your ticket for a reduced bereavement rate, kindly do so within 90 days of the date your ticket was issued…\" (para. 15). Its answer linked to the airline's bereavement page (para. 16), which, the decision notes, said the policy does not apply to requests made after travel is complete (para. 17). The customer later learned from Air Canada employees that it \"did not permit retroactive applications\" (para. 2).",
+   "The tribunal summed up the airline's position: \"Air Canada argues it cannot be held liable for information provided by one of its agents, servants, or representatives – including a chatbot.\" It went on: \"In effect, Air Canada suggests the chatbot is a separate legal entity that is responsible for its own actions. This is a remarkable submission.\" (para. 27)",
+   "The decision goes on: \"It should be obvious to Air Canada that it is responsible for all the information on its website. It makes no difference whether the information comes from a static page or a chatbot.\" (para. 27) It found that Air Canada \"did not take reasonable care to ensure its chatbot was accurate\", and noted that the airline \"does not explain why customers should have to double-check information found in one part of its website on another part of its website\" (para. 28).",
+   "The order was against the airline: it was to pay $812.02, including $650.88 in damages (para. 44). In the figure, \"answer for it\" means inside the organization, to {reviewer} and the company. The figure makes no claim about anyone's personal legal liability.",
+   "The record has limits. It is one decision of British Columbia's Civil Resolution Tribunal, in a small claims dispute. It doesn't say how the chatbot worked or how it was tested: the decision notes that Air Canada \"did not provide any information about the nature of its chatbot\" (para. 14).",
+   "Source: *Moffatt v. Air Canada*, 2024 BCCRT 149, Civil Resolution Tribunal, February 14, 2024. Every quote is from the decision, with its paragraph number. The retailer, the {people}, their AI, the chatbot, the 97% and the answers are constructed."
+  ],
+  "quoteHeading": null,
+  "quotes": null,
+  "linksHeading": "Go further",
+  "linksNote": "The failure mode and the {check_l} come from an essay about judgment in military education. This page shows the same move on a support team.",
+  "links": [
+   {
+    "lead": "The case:",
+    "text": "Moffatt v. Air Canada, 2024 BCCRT 149",
+    "href": "https://www.canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html"
+   },
+   {
+    "lead": "Was the reliance justified?",
+    "text": "Uncalibrated reliance",
+    "href": "../uncalibrated-reliance/?edition=business"
+   },
+   {
+    "lead": "The original essay, written for military education:",
+    "text": "The Irreducible Officer, Section II",
+    "href": "https://judgmentlab.net/#ii-what-the-problem-looks-like"
+   }
+  ],
+  "editionNote": null
+ },
+ "timeline": {
+  "_doc": "Edits to the core clock, in core seconds. hold: freeze the core and add time. cut: skip a static stretch. stretch: play [at, to] slower by the factor. Applied in list order.",
+  "edits": [
+   {
+    "at": 16.5,
+    "cut": 1.4
+   },
+   {
+    "at": 49.6,
+    "cut": 2.0
+   },
+   {
+    "at": 71.3,
+    "hold": 1.5
+   },
+   {
+    "at": 71.3,
+    "to": 71.6,
+    "stretch": 3
+   },
+   {
+    "at": 71.6,
+    "hold": 0.8
+   },
+   {
+    "at": 71.6,
+    "to": 72.5,
+    "stretch": 3
+   },
+   {
+    "at": 72.5,
+    "hold": 1.5
+   },
+   {
+    "at": 82.2,
+    "cut": 0.4
+   },
+   {
+    "at": 93.1,
+    "hold": 1.0
+   }
+  ]
+ },
+ "split": {
+  "_doc": "The staged split: the halves part (apart, units), the travelling half (half, r) becomes the ring (ring, r); narrowHalf and narrowRing are the stacked view's sizes in px. (The dot is whole again as the Answerable weight lands in both editions: core.)",
+  "apart": 11,
+  "half": 4,
+  "ring": 9,
+  "narrowHalf": 10,
+  "narrowRing": 14
+ },
+ "casts": [
+  "workplace",
+  "classroom",
+  "high-school"
+ ],
+ "byCast": {
+  "classroom": {
+   "page.setup": "In a business {group} working a retailer's case, {reviewer} gives every student the same AI-drafted recommendation to review, then sign or revise. The case asks: should the retailer's support chatbot answer refund questions? The {group} allows AI, and each copy is tagged \"drafted with AI\", so identical copies are expected. Two {people} read it closely and sign it as written. What can happen next is responsibility laundering: the model's recommendation makes responsibility feel shared, or easier to defend. The retailer, the {people}, their AI, the chatbot and the 97% are constructed. Related case: *Moffatt v. Air Canada* (2024), in which a tribunal held an airline responsible for what its chatbot told a customer.",
+   "page.srSummary": "An animated figure, \"Responsibility laundering\", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two {people} working a retailer's case for a business {group}, with AI use allowed and disclosed, and an example task: should the support chatbot answer refund questions? {Reviewer} gives both the same AI draft to review, then sign or revise, shown in grey, the figure's mark for words the AI wrote: \"The analysis estimates 97% accuracy. It is recommended that the chatbot go live.\" The draft divides into two copies, one for each {person}, both marked \"drafted with AI\". Both {people} read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled \"their own note · not handed in\": \"Rests on last quarter's questions. Recent: similar.\" Then they sign. While {reviewer_ask_l}, the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two identical copies. {reviewer_asks_each}: \"If it misleads a customer, who made this call?\" Both say, \"I did. I signed it.\" Then: \"Why did you rely on it?\" The first says, \"The analysis estimated 97%. It seemed solid.\" The second says, \"It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't test exceptions.\" Then, one change at a time: the note returns; \"The analysis\" is outlined in the first {person}'s second answer and on their copy; the first {person}'s dot parts into two halves, and one half travels up to \"The analysis estimates\" and becomes a hollow dashed grey ring, keyed \"reason handed to the AI\", where it stays; a red bracket marks the second {person}'s second answer, their own reason, and their dot stays whole. Two navy weights labelled \"Answerable\" come down, one on each copy, past the AI's sentences, and rest on each {person}'s dot at the signature. As the first weight comes to rest, the first {person}'s dot is whole again; the grey ring stays. The figure ends on the name and its definition, \"The model’s recommendation makes responsibility feel shared, or easier to defend.\", above the {check_l}, with the source line: \"Related case: Moffatt v. Air Canada (2024): a company was held responsible for what its chatbot told a customer.\" Each beat is listed below with what is on screen.",
+   "page.checkFollow": "Both {people} signed the same recommendation. If it proves wrong, both answer for it to {reviewer}, for the work they submit, and the AI can't. Asked who made the call, both say they did. Asked why they relied on the AI's estimate, the first {person} repeats the analysis: 97%, and it seemed solid. The second says what the estimate rested on, why they accepted it, and the test they didn't run. Both answer for the call. Only the second can say what it rested on. That answer is hard to give without asking the question before signing, and the second {person}'s note shows they did. Whether relying on the estimate was justified is a separate check, covered by [uncalibrated reliance](../uncalibrated-reliance/?edition=business).",
+   "page.evidence.0": "*Moffatt v. Air Canada* (2024) is a related case at the scale of an organization: who answers for an AI's answer? The airline argued, in effect, that its chatbot was responsible for its own answers, and a tribunal held the company responsible. It differs from the figure: the airline disowned its chatbot's answer, and the first {person} owns the call and hands off only the reason. The case also says nothing about students signing a recommendation for a class.",
+   "page.evidence.4": "The order was against the airline: it was to pay $812.02, including $650.88 in damages (para. 44). In the figure, \"answer for it\" means to {reviewer}, for the work they submit. The figure makes no claim about anyone's personal legal liability.",
+   "page.linksNote": "The failure mode and the {check_l} come from an essay about judgment in military education. This page shows the same move in a business {group} working a retailer's case.",
+   "labels.noteRow": "THEIR OWN NOTE · NOT HANDED IN",
+   "narrow.noteRow": "Their own note · not handed in →",
+   "beats.3.detail": "the first dot signs in red, and the key adds \"{A_person}'s decision\" in red. The second dot moves to a row labelled \"Their own note · not handed in\" and writes a red note: \"Rests on last quarter's questions. Recent: similar.\" The first {person} has no note. Then the second dot signs. The note stays.",
+   "beats.1.text": "{Reviewer} gives both the same AI draft to review."
+  },
+  "high-school": {
+   "page.setup": "In a business {group} working a retailer's case, {reviewer} gives every student the same AI-drafted recommendation to review, then sign or revise. The case asks: should the retailer's support chatbot answer refund questions? The {group} allows AI, and each copy is tagged \"drafted with AI\", so identical copies are expected. Two {people} read it closely and sign it as written. What can happen next is responsibility laundering: the model's recommendation makes responsibility feel shared, or easier to defend. The retailer, the {people}, their AI, the chatbot and the 97% are constructed. Related case: *Moffatt v. Air Canada* (2024), in which a tribunal held an airline responsible for what its chatbot told a customer.",
+   "page.srSummary": "An animated figure, \"Responsibility laundering\", failure mode 7 of 7. It opens on its name, which then stays in the top-left corner. Two red dots stand for two {people} working a retailer's case for a business {group}, with AI use allowed and disclosed, and an example task: should the support chatbot answer refund questions? {Reviewer} gives both the same AI draft to review, then sign or revise, shown in grey, the figure's mark for words the AI wrote: \"The analysis estimates 97% accuracy. It is recommended that the chatbot go live.\" The draft divides into two copies, one for each {person}, both marked \"drafted with AI\". Both {people} read it closely, at the same pace, and agree. The first signs in red. The second first writes a red note in a row labelled \"their own note · not handed in\": \"Rests on last quarter's questions. Recent: similar.\" Then they sign. While {reviewer_ask_l}, the note row dims under \"{reviewer_doesnt_see}\", and a frame labelled \"{what_reviewer_sees}\" goes round the two identical copies. {reviewer_asks_each}: \"If it misleads a customer, who made this call?\" Both say, \"I did. I signed it.\" Then: \"Why did you rely on it?\" The first says, \"The analysis estimated 97%. It seemed solid.\" The second says, \"It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't try unusual requests.\" Then, one change at a time: the note returns; \"The analysis\" is outlined in the first {person}'s second answer and on their copy; the first {person}'s dot parts into two halves, and one half travels up to \"The analysis estimates\" and becomes a hollow dashed grey ring, keyed \"reason handed to the AI\", where it stays; a red bracket marks the second {person}'s second answer, their own reason, and their dot stays whole. Two navy weights labelled \"Answerable\" come down, one on each copy, past the AI's sentences, and rest on each {person}'s dot at the signature. As the first weight comes to rest, the first {person}'s dot is whole again; the grey ring stays. The figure ends on the name and its definition, \"The model’s recommendation makes responsibility feel shared, or easier to defend.\", above the {check_l}, with the source line: \"Related case: Moffatt v. Air Canada (2024): a company was held responsible for what its chatbot told a customer.\" Each beat is listed below with what is on screen.",
+   "page.checkFollow": "Both {people} signed the same recommendation. If it proves wrong, both answer for it to {reviewer}, for the work they submit, and the AI can't. Asked who made the call, both say they did. Asked why they relied on the AI's estimate, the first {person} repeats the analysis: 97%, and it seemed solid. The second says what the estimate rested on, why they accepted it, and what they didn't try: unusual requests, like a refund asked for late. Both answer for the call. Only the second can say what it rested on. That answer is hard to give without asking the question before signing, and the second {person}'s note shows they did. Whether relying on the estimate was justified is a separate check, covered by [uncalibrated reliance](../uncalibrated-reliance/?edition=business).",
+   "page.evidence.0": "*Moffatt v. Air Canada* (2024) is a related case at the scale of an organization: who answers for an AI's answer? The airline argued, in effect, that its chatbot was responsible for its own answers, and a tribunal held the company responsible. It differs from the figure: the airline disowned its chatbot's answer, and the first {person} owns the call and hands off only the reason. The case also says nothing about students signing a recommendation for a class.",
+   "page.evidence.4": "The order was against the airline: it was to pay $812.02, including $650.88 in damages (para. 44). In the figure, \"answer for it\" means to {reviewer}, for the work they submit. The figure makes no claim about anyone's personal legal liability.",
+   "page.linksNote": "The failure mode and the {check_l} come from an essay about judgment in military education. This page shows the same move in a business {group} working a retailer's case.",
+   "labels.noteRow": "THEIR OWN NOTE · NOT HANDED IN",
+   "narrow.noteRow": "Their own note · not handed in →",
+   "beats.3.detail": "the first dot signs in red, and the key adds \"{A_person}'s decision\" in red. The second dot moves to a row labelled \"Their own note · not handed in\" and writes a red note: \"Rests on last quarter's questions. Recent: similar.\" The first {person} has no note. Then the second dot signs. The note stays.",
+   "beats.1.text": "{Reviewer} gives both the same AI draft to review.",
+   "answers.second.1": "“It rests on last quarter’s questions. Recent ones matched, so I accepted it. I didn’t try unusual requests.”",
+   "beats.5.detail": "\"2. Why did you rely on it?\" The first {person} says, \"The analysis estimated 97%. It seemed solid.\" The second says, \"It rests on last quarter's questions. Recent ones matched, so I accepted it. I didn't try unusual requests.\"",
+   "page.evidence.1": "In November 2022, after a death in their family, a customer asked the chatbot on Air Canada's website about bereavement fares, the lower fares some airlines offer for travel after a death in the family. The chatbot told them: \"If you need to travel immediately or have already travelled and would like to submit your ticket for a reduced bereavement rate, kindly do so within 90 days of the date your ticket was issued…\" (para. 15). Its answer linked to the airline's bereavement page (para. 16), which, the decision notes, said the policy does not apply to requests made after travel is complete (para. 17). The customer later learned from Air Canada employees that it \"did not permit retroactive applications\" (para. 2): claims made after the trip.",
+   "page.evidence.5": "The record has limits. It is one decision of British Columbia's Civil Resolution Tribunal, which decides small claims (para. 7). It doesn't say how the chatbot worked or how it was tested: the decision notes that Air Canada \"did not provide any information about the nature of its chatbot\" (para. 14)."
+  }
+ }
+}
