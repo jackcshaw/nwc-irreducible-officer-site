@@ -56,6 +56,8 @@ test('unmount stops playback, removes hooks and restores static markup for remou
   await page.evaluate(() => { window.instance.play(); window.dispatchEvent(new Event('beforeprint')); });
   await expect(page.locator('#first [data-probe]')).not.toHaveAttribute('x');
   await page.evaluate(() => MotionFigures.mountFigure(document.getElementById('first'), {edition: {id: 'business'}}));
+  await page.evaluate(() => { window.instance.destroy(); window.instance.play(); });
+  expect(await page.evaluate(() => !!window.__motionFigures.first)).toBe(true);
   await expect(page.locator('#first [data-mf-beats] li')).toHaveCount(1);
   await page.locator('#first [data-mf-toggle]').click();
   await expect(page.locator('#first')).toHaveAttribute('data-state', 'playing');

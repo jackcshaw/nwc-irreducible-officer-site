@@ -679,7 +679,7 @@
 
 		// Test and export hook: seek to any moment without the clock.
 		const seek = (time) => { driving = true; pause(); draw(toPlayer(time)); };
-		const api = {destroy: () => instances.has(root) ? unmountFigure(root) : life.dispose(), play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t), introCard, settleCard};
+		const api = {destroy: () => { if (!life.disposed) { if (instances.has(root)) unmountFigure(root); else life.dispose(); } }, play, pause, seek, redraw: () => draw(t), resume, openGate, gateOpen: () => gateOpen, time: () => toFig(t), introCard, settleCard};
 		(window.__motionFigures ||= {})[root.id] = {duration, beats: beats.map((b) => b.at), settle, seek: (time) => { driving = true; pause(); draw(time, true); }, resume, openGate, gates: gates.map((g) => g.at), card: C, introCard, settleCard};
 
 		const hook = window.__motionFigures[root.id];
