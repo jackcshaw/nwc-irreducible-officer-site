@@ -41,6 +41,17 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
       ]
+    },
+    {
+      "slug": "fluency-substitution",
+      "kind": "failure-mode",
+      "order": 2,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "quoteStart": "Fluency substitution is easier to miss.",
+      "quoteEnd": "A paragraph that balances every consideration may never identify which risk actually matters most.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=5"
+      ]
     }
   ]
 }
