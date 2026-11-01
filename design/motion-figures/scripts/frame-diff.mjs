@@ -8,6 +8,8 @@
 //   node scripts/frame-diff.mjs <slug> capture <dir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]
 //   node scripts/frame-diff.mjs <slug> diff <baselineDir> <currentDir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]
 //
+// --font-lock=path replays a pinned font stylesheet and exact font bytes on both sides.
+// --url=URL targets a production path or isolated parity fixture.
 // --cast=id loads ?cast=id (a classroom cast of a business edition, CONVENTIONS.md, Editions).
 // --freeze turns off CSS transitions and animations, so a seek always shows the end state:
 // the beat list's colour change and stacked-view pulses otherwise differ between two
@@ -24,26 +26,34 @@
 // are byte-compared; when bytes differ, the pixels are compared in the browser and
 // the count of differing pixels (any channel off by more than 0) is reported.
 // Serve motion-figures/ first (python3 -m http.server 5291 --bind 127.0.0.1).
-import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
+import { chromium } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { loadFontLock } from "../../../scripts/figure-fonts.mjs";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const args = process.argv.slice(2);
-const flag = (name, def) => (args.find((a) => a.startsWith(`--${name}=`)) || `--${name}=${def}`).split("=")[1];
+const flag = (name, def) => (args.find((a) => a.startsWith(`--${name}=`)) || `--${name}=${def}`).slice(name.length + 3);
 const [slug, mode, dirA, dirB] = args.filter((a) => !a.startsWith("--"));
 const port = flag("port", "5291");
 const edition = flag("edition", "");
 const cast = flag("cast", "");
 const hide = flag("hide", "");
 const freeze = args.includes("--freeze");
+const fontLock = flag("font-lock", "");
+const fonts = fontLock ? loadFontLock(fontLock) : null;
+const harness = createHash("sha256").update(readFileSync(new URL(import.meta.url))).digest("hex");
 const root = new URL("../", import.meta.url).pathname;
 const resolve = (d) => (d.startsWith("/") ? d : join(root, d));
 const query = new URLSearchParams([["edition", edition], ["cast", cast]].filter(([, v]) => v)).toString();
-const url = `http://127.0.0.1:${port}/figures/${slug}/index.html${query ? `?${query}` : ""}`;
+const target = new URL(flag("url", `http://127.0.0.1:${port}/figures/${slug}/index.html`));
+for (const [key, value] of new URLSearchParams(query)) target.searchParams.set(key, value);
+const url = target.href;
 const SIZES = [[1440, 900], [1280, 720], [390, 844]];
 
 async function open(b, w, h, opts = {}) {
   const c = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, ...opts });
+  if (fonts) await fonts.install(c);
   if (hide) await c.addInitScript((css) => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = `${css}{display:none!important}`; document.head.append(s); }), hide);
   if (freeze) await c.addInitScript(() => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}"; document.head.append(s); }));
   const p = await c.newPage();
@@ -59,7 +69,9 @@ async function open(b, w, h, opts = {}) {
 
 async function capture(dir) {
   dir = resolve(dir);
-  const b = await chromium.launch();
+  // Full-tile raster avoids two antialiasing outputs for the same rounded SVG corner.
+  // This matches ar-regress; sampling and zero-pixel comparison are unchanged.
+  const b = await chromium.launch({ args: ["--disable-partial-raster"] });
   let count = 0;
   const errors = [];
   for (const [w, h] of SIZES) {
@@ -108,7 +120,7 @@ async function capture(dir) {
     await c.close();
   }
   await b.close();
-  writeFileSync(join(dir, "capture.json"), JSON.stringify({ slug, edition, cast, hide, freeze, sizes: SIZES, captured: count }, null, 1) + "\n");
+  writeFileSync(join(dir, "capture.json"), JSON.stringify({ slug, edition, cast, hide, freeze, target: url, fontLock: fonts?.sha256 || "", raster: "full-tile", harness, browser: b.version(), sizes: SIZES, captured: count }, null, 1) + "\n");
   return { count, errors };
 }
 
@@ -146,15 +158,16 @@ async function compare(base, cur) {
 if (mode === "capture") {
   const r = await capture(dirA);
   console.log(JSON.stringify({ captured: r.count, dir: dirA, errors: r.errors }, null, 1));
+  process.exitCode = r.errors.length ? 1 : 0;
 } else if (mode === "diff") {
   const r1 = await capture(dirB);
   const r = await compare(dirA, dirB);
   // A baseline captured with other flags differs for that reason alone: say so.
   const manifest = (d) => { const f = join(resolve(d), "capture.json"); return existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : null; };
   const ma = manifest(dirA), mb = manifest(dirB);
-  const flagsDiffer = ma && ["edition", "cast", "hide", "freeze"].filter((k) => (ma[k] || "") !== (mb[k] || ""));
+  const flagsDiffer = ma && ["edition", "cast", "hide", "freeze", "fontLock", "raster", "harness", "browser"].filter((k) => (ma[k] || "") !== (mb[k] || ""));
   console.log(JSON.stringify({ captured: r1.count, errors: r1.errors, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing, ...(flagsDiffer?.length ? { warning: `baseline captured with other flags: ${flagsDiffer.join(", ")}` } : {}), diffs: r.diffs.slice(0, 40) }, null, 1));
-  process.exitCode = r.diffs.length || r.missing.length ? 1 : 0;
+  process.exitCode = r1.errors.length || r.diffs.length || r.missing.length || flagsDiffer?.length || !ma ? 1 : 0;
 } else {
   console.log("usage: frame-diff.mjs <slug> capture <dir> | diff <baselineDir> <currentDir> [--edition=id] [--cast=id] [--hide=css] [--freeze] [--port=5291]");
   process.exitCode = 2;

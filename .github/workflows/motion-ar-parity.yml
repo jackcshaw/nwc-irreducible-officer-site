@@ -1,0 +1,110 @@
+name: motion figure parity
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/motion-ar-parity.yml'
+      - 'figures/runtime/**'
+      - 'figures/fonts/**'
+      - 'figures/casts.json'
+      - 'scripts/check-motion-parity.mjs'
+      - 'scripts/figure-fonts.mjs'
+      - 'tests/helpers/figure-parity-fixture.mjs'
+      - 'design/motion-figures/scripts/frame-diff.mjs'
+      - 'design/motion-figures/figures/appropriate-reliance/regression/ar-regress.mjs'
+      - 'package-lock.json'
+permissions:
+  contents: read
+concurrency:
+  group: motion-ar-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        figure: [frame-capture, fluency-substitution, premature-synthesis, uncalibrated-reliance, invisible-delegation, institutional-monoculture, responsibility-laundering, appropriate-reliance]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install browser
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Compare all four versions serially
+        env:
+          FIGURE: ${{ matrix.figure }}
+        run: |
+          node scripts/check-motion-parity.mjs frames "$FIGURE" pme seminar "$RUNNER_TEMP/motion-frames/pme-seminar"
+          for cast in workplace classroom high-school; do
+            node scripts/check-motion-parity.mjs frames "$FIGURE" business "$cast" "$RUNNER_TEMP/motion-frames/business-$cast"
+          done
+      - name: Retain receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-frames-receipts-${{ matrix.figure }}
+          path: |
+            ${{ runner.temp }}/motion-frames/*/*.json
+            ${{ runner.temp }}/motion-frames/*/*.txt
+            ${{ runner.temp }}/motion-frames/*/*/capture.json
+          retention-days: 7
+      - name: Retain failed captures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-frames-failure-${{ matrix.figure }}
+          path: ${{ runner.temp }}/motion-frames
+          compression-level: 0
+          retention-days: 7
+  interactive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {edition: pme, cast: seminar}
+          - {edition: business, cast: workplace}
+          - {edition: business, cast: classroom}
+          - {edition: business, cast: high-school}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install browser
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Compare source, branches and reader flows
+        run: node scripts/check-motion-parity.mjs interactive appropriate-reliance '${{ matrix.edition }}' '${{ matrix.cast }}' "$RUNNER_TEMP/motion-ar"
+      - name: Retain receipts and text snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-ar-receipts-${{ matrix.cast }}
+          path: |
+            ${{ runner.temp }}/motion-ar/*.json
+            ${{ runner.temp }}/motion-ar/*.txt
+            ${{ runner.temp }}/motion-ar/*/capture.json
+            ${{ runner.temp }}/motion-ar/*/texts.json
+          retention-days: 7
+      - name: Retain failed captures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motion-ar-failure-${{ matrix.cast }}
+          path: ${{ runner.temp }}/motion-ar
+          compression-level: 0
+          retention-days: 7

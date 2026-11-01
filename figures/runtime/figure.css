@@ -1,0 +1,160 @@
+/* Reviewed player styles; page chrome lives outside this component. */
+.mf {
+	--paper: #f6f1e8;
+	--paper-soft: #fbf8f2;
+	--paper-bright: #fffdfa;
+	--ink: #0a2242;
+	--body: #242a31;
+	--muted: #4d5360;
+	--stone: #5b564f;
+	--stone-faint: #847d74;
+	--faint: #d7d0c4;
+	--rail: #c9c5c0;
+	--navy-line: rgba(8, 35, 70, 0.1);
+	--navy-border: rgba(8, 35, 70, 0.15);
+	--navy-wash: rgba(8, 35, 70, 0.055);
+	--red: #b81b2b;
+	--serif: "Source Serif 4", Georgia, serif;
+	--sans: "Source Sans 3", system-ui, sans-serif;
+	--mono: "IBM Plex Mono", ui-monospace, monospace;
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.mf, .mf * { box-sizing: border-box; }
+.mf { font-family: var(--serif); }
+
+/* ---- the figure frame: same skin as the essay's .argument-insert ---------- */
+.mf {
+	margin: 34px 0 36px;
+	border: 1px solid var(--navy-border);
+	background: linear-gradient(90deg, rgba(8, 35, 70, 0.045), rgba(8, 35, 70, 0.018));
+	color: var(--body);
+}
+.mf::before { content: ""; display: block; height: 2px; background: linear-gradient(90deg, var(--ink) 0, var(--ink) 78px, var(--red) 78px, var(--red) 106px, transparent 106px); }
+.mf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px 10px 18px; border-bottom: 1px solid var(--navy-line); }
+.mf-label { margin: 0; color: var(--red); font: 600 12px/1.25 var(--mono); letter-spacing: 0.02em; }
+.mf-stage { position: relative; background: var(--paper); }
+.mf-stage svg { display: block; width: 100%; height: auto; }
+
+/* play / pause / replay: always visible, 44px target */
+.mf-toggle, .mf-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 600 15px/1 var(--sans); cursor: pointer; }
+.mf-toggle:focus-visible, .mf-btn:focus-visible, .mf-beats button:focus-visible, .mf-scrub:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.mf-icon { width: 10px; height: 10px; flex: none; background: var(--red); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.mf-toggle[data-state="pause"] .mf-icon { clip-path: none; background: linear-gradient(90deg, var(--red) 0 35%, transparent 35% 65%, var(--red) 65%); }
+.mf-toggle[data-state="replay"] .mf-icon { border-radius: 50%; clip-path: none; }
+@media (hover: hover) { .mf-toggle:hover, .mf-btn:hover { background: var(--ink); color: var(--paper); } }
+
+/* beats: the caption track and the text equivalent at once (v0 grid) */
+.mf-beats { list-style: none; margin: 0; padding: 10px 10px 12px; display: grid; grid-template-columns: repeat(var(--beats, 4), minmax(0, 1fr)); gap: 6px; border-top: 1px solid var(--navy-line); }
+.mf-beats button { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; width: 100%; min-height: 44px; padding: 8px 8px; border: 0; border-top: 2px solid var(--faint); background: none; color: var(--stone-faint); font: 500 15px/1.35 var(--sans); text-align: left; cursor: pointer; transition: color 200ms ease, border-color 200ms ease; }
+.mf-beats button.is-past { color: var(--muted); border-top-color: var(--rail); }
+.mf-beats button[aria-current] { color: var(--ink); border-top-color: var(--red); }
+.mf-n { font: 600 12px/1.6 var(--mono); }
+.mf-beats button[aria-current] .mf-n { color: var(--red); }
+@media (hover: hover) { .mf-beats button:hover { color: var(--ink); } }
+.mf.is-reduced .mf-beats button { color: var(--body); border-top-color: var(--rail); }
+.mf.is-reduced .mf-beats button[aria-current] { border-top-color: var(--red); }
+@media (max-width: 700px) {
+	.mf-beats:not(.is-list) { grid-template-columns: 1fr; }
+	.mf-beats:not(.is-list) button { border-top: 0; border-left: 2px solid var(--faint); }
+	.mf-beats:not(.is-list) button.is-past { border-left-color: var(--rail); }
+	.mf-beats:not(.is-list) button[aria-current] { border-left-color: var(--red); }
+}
+
+/* ---- v1 additions --------------------------------------------------------- */
+
+/* The shot: stage + caption band. Stills, video and the poster capture this. */
+.mf-shot { background: var(--paper); }
+/* The player fits the viewport: when the stage, caption band and controls are first
+   in view they fit together, so the stage's height is capped by what the caption band
+   and controls need (--mf-chrome). The SVG letterboxes inside its box (viewBox meet),
+   and legibility() measures the letterboxed scale. */
+.mf { --mf-chrome: 228px; }
+@media (max-width: 719px) { .mf { --mf-chrome: 250px; } }
+.mf-shot .mf-stage svg { max-height: calc(100vh - var(--mf-chrome) - var(--mf-plate, 0px)); max-height: calc(100svh - var(--mf-chrome) - var(--mf-plate, 0px)); }
+
+/* Caption band: real text directly under the picture. */
+.mf-caption { min-height: calc(2 * 1.35em + 28px); padding: 14px clamp(14px, 2.4vw, 28px); border-top: 1px solid var(--navy-line); font-size: clamp(18px, 1.9vw, 22px); line-height: 1.35; color: var(--ink); background: var(--paper); }
+.mf-cap { margin: 0; display: flex; gap: 14px; align-items: baseline; }
+.mf-count { flex: none; font: 600 12px/1 var(--mono); letter-spacing: 0.06em; color: var(--muted); min-width: 3.4em; }
+.mf-cap-text { max-width: 56ch; }
+.mf-caption.is-check { padding-top: 16px; padding-bottom: 18px; }
+/* Fixed height on desktop, sized for the check, so the controls never jump. */
+@media (min-width: 720px) { .mf-caption { min-height: 136px; } }
+.mf-check p { margin: 0; }
+.mf-check-label { font: 600 13px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
+.mf-check-q { margin-top: 6px !important; font: italic 400 clamp(22px, 2.6vw, 30px)/1.2 var(--serif); color: var(--ink); }
+.mf-follow { margin-top: 10px !important; font: 400 clamp(17px, 1.7vw, 20px)/1.3 var(--serif); color: var(--ink); }
+.mf-follow.is-equal { margin-top: 4px !important; font: italic 400 clamp(22px, 2.6vw, 30px)/1.2 var(--serif); }
+.mf-follow-label { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; margin-right: 6px; }
+
+/* Nameplate (runtime `nameplate` option): a reserved strip above the stage's top-left
+   corner holds "NAME · 1 OF 7" in every view; the opening card moves into it; the last
+   caption sets the name and definition above the check. --mf-plate adds the strip and
+   the taller check to the viewport fit. */
+.mf.has-nameplate { --mf-plate: 31px; }
+.mf.has-nameplate .mf-shot { position: relative; overflow: hidden; }
+.mf-platebar { display: flex; align-items: center; height: 23px; padding: 0 clamp(12px, 1.6vw, 18px); border-bottom: 1px solid var(--navy-line); background: var(--paper); }
+.mf-plate { font: 600 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.mf-namescrim { position: absolute; left: 0; right: 0; background: rgba(246, 241, 232, 0.9); pointer-events: none; }
+.mf-namecard { position: absolute; left: 0; top: 0; margin: 0; transform-origin: 0 0; text-align: center; pointer-events: none; }
+.mf-namecard p { margin: 0; }
+.mf-namecard-k { margin-bottom: 10px !important; font: 600 13px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.mf-namecard-n { font: 600 clamp(34px, 5vw, 56px)/1.05 var(--serif); color: var(--ink); white-space: nowrap; letter-spacing: -0.01em; }
+.mf-check.has-final { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 16px; row-gap: 3px; align-items: baseline; }
+.mf-check.has-final > p { margin: 0 !important; }
+.mf-check.has-final > .mf-follow { grid-column: 2; }
+.mf-final-name { font: 600 13px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
+.mf-final-def { font: 400 clamp(16px, 1.7vw, 19px)/1.25 var(--serif); color: var(--ink); }
+@media (min-width: 720px) { .mf.has-nameplate .mf-caption { min-height: 144px; } }
+@media (max-width: 559px) {
+	.mf-check.has-final { grid-template-columns: minmax(0, 1fr); }
+	.mf-check.has-final > .mf-follow { grid-column: 1; }
+	.mf-check.has-final > .mf-check-label { margin-top: 6px !important; }
+}
+.mf-beats.is-list li.mf-namebeat button { color: var(--muted); }
+.mf-beats.is-list li.mf-namebeat button[aria-current] { color: var(--ink); }
+
+/* Controls: play/pause, restart, scrubber, time. */
+.mf-controls { display: flex; align-items: center; gap: 10px; padding: 10px clamp(12px, 2vw, 18px); border-top: 1px solid var(--navy-line); background: var(--paper-soft); }
+.mf-controls .mf-toggle { min-width: 104px; justify-content: center; }
+/* Player chrome is ink: red stays reserved for a person's decisions in the picture. */
+.mf-controls .mf-icon { background: currentColor; }
+.mf-controls .mf-toggle[data-state="pause"] .mf-icon { background: linear-gradient(90deg, currentColor 0 35%, transparent 35% 65%, currentColor 65%); }
+.mf-restart-icon { width: 11px; height: 11px; flex: none; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; }
+.mf-scrub { flex: 1; min-width: 60px; height: 44px; margin: 0; accent-color: var(--ink); background: transparent; cursor: pointer; }
+.mf-time { flex: none; font: 500 13px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 8.5ch; text-align: right; }
+
+/* Vertical beat list with "On screen" details. */
+.mf-beats.is-list { display: block; padding: 6px clamp(8px, 1.6vw, 14px) 12px; counter-reset: none; }
+.mf-beats.is-list li { border-left: 2px solid var(--faint); margin: 0 0 2px; }
+.mf-beats.is-list li:has(button.is-past) { border-left-color: var(--rail); }
+.mf-beats.is-list li:has(button[aria-current]) { border-left-color: var(--ink); }
+.mf-beats.is-list button { border-top: 0; min-height: 40px; padding: 8px 10px; grid-template-columns: 2.2em 1fr; font-size: 16px; color: var(--muted); }
+.mf-beats.is-list button.is-past { color: var(--muted); }
+.mf-beats.is-list button[aria-current] { color: var(--ink); }
+.mf-beats.is-list button[aria-current] .mf-n { color: var(--ink); }
+.mf-beats.is-list button[aria-current] .mf-text { font-weight: 600; }
+.mf-detail { margin: -4px 0 8px; padding: 0 10px 0 calc(2.2em + 18px); font: 400 15px/1.45 var(--sans); color: var(--body); }
+.mf-detail-label { font-weight: 600; color: var(--ink); }
+/* Details are the text equivalent: always in the accessibility tree, shown
+   when the picture can't carry them (reduced motion, narrow, print). */
+.mf:not(.is-reduced):not(.is-narrow) .mf-detail { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mf.is-reduced .mf-beats.is-list button { color: var(--body); }
+
+@media (max-width: 560px) {
+	.mf-controls { flex-wrap: wrap; }
+	.mf-scrub { order: 3; flex-basis: 100%; }
+	.mf-time { margin-left: auto; }
+	.mf-cap { flex-direction: column; gap: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mf-beats button, .mf-toggle, .mf-btn { transition: none; }
+}
+
+/* Print: the final frame and the full text. */
+@media print {
+	.mf-controls { display: none; }
+	.mf .mf-detail { position: static !important; width: auto !important; height: auto !important; clip: auto !important; white-space: normal !important; }
+	.mf, .mf-shot { break-inside: avoid; }
+}
