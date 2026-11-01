@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 const root = process.cwd();
 const workbench = process.env.WORKBENCH_REPO_PATH || join(root, "../workbench");
@@ -24,3 +24,18 @@ for (const p of profiles) {
   }
 }
 console.log("single source passed: practice and rubric text come only from profiles.json");
+
+// Failure-mode table copy has one owner; new script modules cannot reintroduce it.
+const companion = process.env.COMPANION_REPO_PATH || join(root, "../companion");
+const failureModes = JSON.parse(readFileSync(join(companion, "audiences/failure-modes.json"), "utf8"));
+const siteScripts = readdirSync(join(root, "scripts"), {recursive: true})
+  .filter(f => /\.m?js$/.test(f))
+  .map(f => readFileSync(join(root, "scripts", f), "utf8")).join("\n");
+for (const row of failureModes) {
+  for (const key of ["whatGoesWrong", "check"]) {
+    const value = row[key];
+    assert(!siteScripts.includes(value) && !siteScripts.includes(JSON.stringify(value).slice(1, -1)),
+      `${row.slug}.${key} is duplicated in a site script; read the companion rows`);
+  }
+}
+console.log("single source passed: failure-mode table copy comes from the companion");
