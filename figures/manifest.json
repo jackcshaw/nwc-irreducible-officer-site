@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "variants": [
+    {
+      "id": "workplace",
+      "edition": "business",
+      "cast": "workplace",
+      "suffix": "",
+      "label": "Workplace"
+    },
+    {
+      "id": "classroom",
+      "edition": "business",
+      "cast": "classroom",
+      "suffix": "classroom/",
+      "label": "Classroom"
+    },
+    {
+      "id": "high-school",
+      "edition": "business",
+      "cast": "high-school",
+      "suffix": "high-school/",
+      "label": "High school"
+    },
+    {
+      "id": "pme",
+      "edition": "pme",
+      "cast": "seminar",
+      "suffix": "pme/",
+      "label": "PME"
+    }
+  ],
+  "figures": [
+    {
+      "slug": "frame-capture",
+      "kind": "failure-mode",
+      "order": 1,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "quoteStart": "Frame capture occurs when",
+      "quoteEnd": "The frame capture is invisible inside the final product.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=2"
+      ]
+    }
+  ]
+}

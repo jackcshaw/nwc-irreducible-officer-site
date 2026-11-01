@@ -1,3 +1,4 @@
+import {buildFigurePages} from "./figure-pages.mjs";
 import { parseFailureModes } from "./failure-modes.mjs";
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
@@ -230,7 +231,9 @@ writeFileSync(
   "utf8",
 );
 
-console.log("Built dist/index.html and downloadable assets");
+buildFigurePages({root, distDir, siteUrl, release, essayMarkdown, sourceSpineMarkdown, analytics: plausibleAnalytics()});
+
+console.log("Built dist/index.html, figure pages and downloadable assets");
 
 function readRequiredCompanionFile(relativePath) {
   const filePath = join(companionRepoPath, relativePath);
@@ -3486,5 +3489,6 @@ body:not([data-reading-essay="true"]) .toc {
   }
 }
 ${readFileSync(join(root,"styles/lab-refresh.css"),"utf8")}
+${readFileSync(join(root,"styles/masthead.css"),"utf8")}
 ${readFileSync(join(root,"styles/reel.css"),"utf8")}`;
 }

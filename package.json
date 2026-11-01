@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-site.mjs",
-    "test": "node tests/site-contract.test.mjs && node tests/audience-contract.test.mjs && node tests/alignment/replace-or-throw.test.mjs && node tests/alignment/single-source.test.mjs && node tests/alignment/retired-phrases.test.mjs && node tests/alignment/links.test.mjs && node tests/alignment/frame-check-sync.test.mjs && node tests/alignment/at-a-glance.test.mjs && node tests/failure-modes.test.mjs && node tests/figure-runtime.test.mjs && node tests/figure-assets.test.mjs && node tests/figure-fonts.test.mjs && node tests/figure-posters.test.mjs",
+    "test": "node tests/site-contract.test.mjs && node tests/audience-contract.test.mjs && node tests/alignment/replace-or-throw.test.mjs && node tests/alignment/single-source.test.mjs && node tests/alignment/retired-phrases.test.mjs && node tests/alignment/links.test.mjs && node tests/alignment/frame-check-sync.test.mjs && node tests/alignment/at-a-glance.test.mjs && node tests/failure-modes.test.mjs && node tests/figure-runtime.test.mjs && node tests/figure-assets.test.mjs && node tests/figure-fonts.test.mjs && node tests/figure-posters.test.mjs && node tests/figures.test.mjs && node tests/alignment/html-links.test.mjs",
     "test:browser": "playwright test",
-    "dev": "python3 -m http.server 5173 --directory dist"
+    "dev": "python3 -m http.server 5173 --directory dist",
+    "figures:posters": "node scripts/generate-figure-posters.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0"

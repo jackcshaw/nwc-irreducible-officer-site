@@ -1,9 +1,4 @@
 /* Judgment Lab: an editorial home for learning, conversation and practice. */
-.lab-masthead { background:var(--paper); border-top:7px solid var(--ink); }
-.masthead-inner {max-width:1160px;margin:auto;padding:44px 28px 38px;display:grid;grid-template-columns:1.3fr 1fr;align-items:center;gap:40px;}
-.package-brand {font-family:var(--font-display);font-size:clamp(48px,6.2vw,82px);font-weight:520;line-height:1.12;letter-spacing:-.035em;padding:0;white-space:normal;}
-.brand-period {color:var(--red);}
-.brand-purpose {font-family:var(--font-body);font-size:clamp(22px,2.2vw,28px);line-height:1.35;color:var(--ink);max-width:31ch;}
 .package-nav {display:block;padding:0 28px;background:var(--paper);backdrop-filter:none;border-top:1px solid var(--ink);border-bottom:1px solid var(--faint);letter-spacing:0;}
 .package-tabs {max-width:1104px;margin:auto;padding:0;display:grid;grid-template-columns:repeat(5,1fr);background:none;gap:0;}
 .package-tabs button {font-family:var(--font-body);font-size:20px;color:var(--ink);min-height:57px;padding:15px 12px;}
@@ -163,16 +158,7 @@ h2,h3 {line-height:1.25;}
 .discussion-library h2 {font-size:28px;margin-bottom:22px;}
 .discussion-library>a {display:block;font-size:21px;margin-top:24px;text-underline-offset:5px;}
 .discussion-library p {font-size:17px;line-height:1.5;color:var(--muted);margin-top:12px;}
-.lab-footer {max-width:1160px;margin:0 auto;padding:32px 28px 50px;border-top:1px solid var(--ink);display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:24px;align-items:baseline;}
-.lab-footer>a:first-child {font-family:var(--font-display);font-size:26px;text-decoration:none;color:var(--ink);}
-.lab-footer p,.lab-footer>a:last-of-type {font-size:16px;}
-.lab-footer .lab-version {grid-column:1/-1;margin:0;font-size:13px;color:var(--muted);}
-.skip-link {position:absolute;top:-100px;left:20px;z-index:100;background:var(--ink);color:var(--paper);padding:10px 18px;}
-.skip-link:focus {top:14px;}
 @media(max-width:900px) {
- .masthead-inner {grid-template-columns:1fr;gap:18px;padding:32px 24px;}
- .package-brand {font-size:64px;}
- .brand-purpose {font-size:24px;max-width:none;}
  .purpose-break {display:none;}
  .learn-opening {gap:30px;grid-template-columns:1fr 1fr;}
  .featured-reading {padding:28px 24px;}
@@ -182,12 +168,8 @@ h2,h3 {line-height:1.25;}
  .tool-grid .tool-card {grid-template-areas:"title desc" "name desc" "action action";}
  #workbench-concepts .tool-card {grid-template-areas:"title desc" "action action";}
  .tool-action {grid-area:action;text-align:left;}
- .lab-footer {grid-template-columns:1fr;gap:12px;}
 }
 @media(max-width:640px) {
- .masthead-inner {padding:28px 20px 26px;gap:16px;}
- .package-brand {font-size:clamp(43px,12vw,60px);}
- .brand-purpose {font-size:22px;line-height:1.35;max-width:27ch;}
  .package-nav {padding:0 8px;}
  .package-tabs {display:grid;grid-template-columns:repeat(5,1fr);width:100%;gap:0;}
  .package-tabs button {font-size:16px;padding:12px 3px;min-height:49px;}
@@ -234,10 +216,6 @@ h2,h3 {line-height:1.25;}
 @media(max-width:640px){.discussion-carry{align-items:flex-start;flex-direction:column;gap:12px;}}
 
 /* Settled B masthead: compact, left-aligned, all-navy italic purpose. */
-.lab-masthead {border-top:0;}
-.masthead-inner {display:block;max-width:1160px;padding:24px 28px;}
-.package-brand {display:inline-block;font-family:"Source Serif 4",Georgia,serif;font-size:54px;font-weight:600;line-height:1.12;letter-spacing:-.025em;}
-.brand-purpose {font-family:"Source Serif 4",Georgia,serif;font-style:italic;font-weight:400;font-synthesis:none;font-size:26px;line-height:1.35;color:var(--ink);max-width:none;margin:10px 0 0;}
 .package-nav {padding:0 28px;border-top:0;}
 .package-nav-inner {max-width:1104px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;border-top:1px solid var(--faint);}
 .package-tabs {display:flex;gap:30px;margin:0;max-width:none;width:auto;}
@@ -248,9 +226,6 @@ h2,h3 {line-height:1.25;}
 .audience-setting select {font:600 16px "Source Sans 3",sans-serif;color:var(--ink);border:0;border-radius:0;background:transparent;min-height:44px;padding:8px 24px 8px 6px;max-width:220px;}
 @media(max-width:900px){.package-tabs{gap:22px;}.package-nav-inner{gap:14px;}}
 @media(max-width:700px){
- .masthead-inner {padding:20px;}
- .package-brand {font-size:40px;}
- .brand-purpose {font-size:22px;line-height:1.3;margin-top:9px;max-width:30ch;}
  .package-nav {padding:0 20px;}
  .package-nav-inner {flex-direction:column;align-items:stretch;gap:0;border-top:0;}
  .audience-setting {order:-1;align-self:flex-start;margin-bottom:14px;}

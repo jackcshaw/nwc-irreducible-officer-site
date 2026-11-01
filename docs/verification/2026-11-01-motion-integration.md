@@ -60,3 +60,19 @@ All paths below are local verification artifacts, not production assets:
 - `/private/tmp/motion-runtime-build.log` and `/private/tmp/motion-runtime-node.log`: local candidate checks before commit.
 
 Historical failed/experimental captures remain preserved. None substitutes for the final candidate comparison or a hosted release check.
+
+## Runtime acceptance and merge
+
+[Site PR #38](https://github.com/jackcshaw/nwc-irreducible-officer-site/pull/38) merged at `997e940`. Exact head `5737d5d` passed alignment (build, Node checks, 104 browser checks) and the full parity workflow: 7,162 frame images, 5,008 AR interaction images and 128 text states matched. No quiet repeats were needed. The receipts were downloaded and checked against source `8def5a1`, the candidate SHA and full-tile raster. Independent visual review returned ship for runtime scope; documentation review found no gaps. This does not accept later production factories or pages.
+
+The live receipt rechecked before merge remained site `05ab9b0`, version `2026.10.27`. No deployment occurred. Local copies of CI receipts are retained under the runtime worktree's ignored `tmp/verification-5737d5d/`.
+
+## First-page verification method
+
+The frame-capture page PR ports the actual factory, markup and edition data, adds four static versions and the hub, and exercises poster generation. Normal builds validate committed receipts; they never launch a browser or read design files. Poster receipts include runtime, factory, markup, editions/casts, CSS, renderer/generator, package lock and font inputs. Each PNG embeds its origin.
+
+The first actual-factory fixture matched all 251 workplace source images. The first built-page comparison exposed inherited type metrics and an expanded print width; these were corrected. Further measurement found equal internal sizes and relative positions, with different fractional outer vertical positions under the two page headers. The capture-only `figure-capture-origin.js` wrapper aligns each component's outer top to document y=0 on source, factory fixture and built-page snapshot, including print. It changes no internal player style, coordinates, sampling or pixel tolerance. Its hash is recorded in the verification receipt. The original source archive and failed captures remain retained.
+
+The page workflow compares the source against its unchanged self-check, then the real factory in source page geometry, then the actual built player. Only the two whole-page PNGs are excluded from the last comparison because the new site chrome is intentional; stage, caption, controls, text list, source lines and print remain under the zero-diff gate. Whole-page visuals, static HTML and actual interactions are separate checks. The production build contains no capture normalizer. Consult the current page PR and its receipts for acceptance; this method note is not a claim that those gates have passed.
+
+The first-page local candidate passed build, Node contracts and all 114 browser checks before the final font-failure cases. The updated 12-test figure suite also passed after verifying blocked stylesheets and blocked font files leave the selected static version readable. Chromium may retain an inaccessible stylesheet object after a failed request; hydration checks its rules and treats read failures as a load failure. Exact-commit CI and the independent page visual review remain required. New visitor strings passed the writing-as-jack mechanical check and manual judgment review; the model judge could not run without its provider authentication. No automated voice pass is claimed.

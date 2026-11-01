@@ -1,3 +1,4 @@
+import {crc32} from 'node:zlib';
 import {readFileSync, writeFileSync, mkdirSync, realpathSync} from 'node:fs';
 import {relative, resolve, isAbsolute} from 'node:path';
 import {sha256} from './figure-assets.mjs';
@@ -18,6 +19,16 @@ export function pngInfo(bytes) {
   if (bytes.length < 24 || !bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10])) || bytes.subarray(12,16).toString() !== 'IHDR') throw new Error('Poster is not a PNG');
   return {sha256: sha256(bytes), width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20)};
 }
+// Keep the export's origin inside each PNG as well as in its receipt.
+export function withPNGOrigin(bytes, origin) {
+  pngInfo(bytes);
+  const data = Buffer.from('impeccable:prompt\0' + origin, 'latin1');
+  const chunk = Buffer.alloc(data.length + 12);
+  chunk.writeUInt32BE(data.length, 0); chunk.write('tEXt', 4, 'ascii'); data.copy(chunk, 8);
+  chunk.writeUInt32BE(crc32(chunk.subarray(4, -4)), chunk.length - 4);
+  if (bytes.subarray(-8, -4).toString() !== 'IEND') throw new Error('PNG lacks final IEND');
+  return Buffer.concat([bytes.subarray(0, -12), chunk, bytes.subarray(-12)]);
+}
 export function assertPosterReceipt(receipt, {root, inputs, outputDir, variant}) {
   if (receipt.schema !== 1 || receipt.variant !== variant) throw new Error('Wrong poster receipt version or variant');
   const current = posterInputHashes(root, inputs);
@@ -36,7 +47,7 @@ export async function generateFigurePosters({url, figureId, variant, questionFir
   const inputHashes = posterInputHashes(root, inputs);
   const fonts = loadFontLock(fontLock);
   const {chromium} = await import('@playwright/test');
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({args: ['--disable-partial-raster']});
   const errors = [];
   const outputs = {};
   try {
@@ -50,7 +61,7 @@ export async function generateFigurePosters({url, figureId, variant, questionFir
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.goto(url);
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForFunction(id => window.__motionFigures?.[id], figureId);
+    await page.waitForFunction(id => window.__motionFigures?.[id] && document.getElementById(id)?.hasAttribute('data-mf-ready'), figureId);
     const timing = await page.evaluate(id => {
       const player = window.__motionFigures[id]; return {duration: player.duration, gates: player.gates};
     }, figureId);
@@ -75,11 +86,13 @@ export async function generateFigurePosters({url, figureId, variant, questionFir
     if (errors.length) throw new Error(`Poster browser errors: ${errors.join('; ')}`);
     if (JSON.stringify(posterInputHashes(root, inputs)) !== JSON.stringify(inputHashes)) throw new Error('Poster inputs changed during capture');
     mkdirSync(outputDir, {recursive: true});
-    for (const [file, bytes] of Object.entries({'poster.png': poster, 'final.png': final, 'og.png': Buffer.from(share, 'base64')})) {
+    const origin = `Programmatic export of the reviewed ${figureId} figure, ${variant} version, derived from source 8def5a1 with the production factory and pinned fonts. The adjacent manifest.json records every input and output hash.`;
+    for (const [file, raw] of Object.entries({'poster.png': poster, 'final.png': final, 'og.png': Buffer.from(share, 'base64')})) {
+      const bytes = withPNGOrigin(raw, origin);
       outputs[file] = pngInfo(bytes); writeFileSync(resolve(outputDir, file), bytes);
     }
-    const receipt = {schema: 1, variant, questionFirst, posterTime, finalTime: timing.duration, viewport: [1440,900], browser: browser.version(), fontLock: fonts.sha256, inputs: inputHashes, outputs};
+    const receipt = {schema: 1, variant, questionFirst, posterTime, finalTime: timing.duration, viewport: [1440,900], browser: browser.version(), raster: 'full-tile', fontLock: fonts.sha256, inputs: inputHashes, outputs};
     writeFileSync(resolve(outputDir, 'manifest.json'), JSON.stringify(receipt, null, 2) + '\n');
     return receipt;
-  } finally { await browser.close(); }
+  } catch (error) { console.error(JSON.stringify({posterErrors: errors})); throw error; } finally { await browser.close(); }
 }
