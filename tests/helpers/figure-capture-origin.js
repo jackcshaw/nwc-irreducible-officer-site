@@ -1,16 +1,16 @@
-/* Capture-only surrounding-layout normalization. No player styles or drawing
-   coordinates change. Different page headers put the same component at different document
-   coordinates; align its outer top at document y=0 before comparing its pixels. */
+/* Capture-only surrounding-layout normalization. Offset the whole document so
+   the component starts at y=0. Moving only the figure would overlap page chrome
+   beneath its translucent border. Internal player styles and geometry stay intact. */
 (async () => {
   await document.fonts.ready;
   const root = document.querySelector('figure.mf');
   if (!root) return;
   while (!window.__motionFigures?.[root.id]) await new Promise(requestAnimationFrame);
   const align = () => {
-    const prior = parseFloat(root.style.top) || 0;
-    const original = root.getBoundingClientRect().top + window.scrollY - prior;
-    root.style.position = 'relative';
-    root.style.top = `${-original}px`;
+    document.body.style.position = 'relative';
+    document.body.style.top = '0px';
+    const original = root.getBoundingClientRect().top + window.scrollY;
+    document.body.style.top = `${-original}px`;
   };
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);

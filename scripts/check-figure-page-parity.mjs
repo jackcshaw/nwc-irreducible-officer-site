@@ -35,7 +35,7 @@ for (const [directory, htmlPath] of [[source, `figures/${slug}/index.html`], [ca
 }
 const receipt = {
   schema: 1, kind: `motion-production-page-parity`, slug, source: sourceSHA,
-  normalization: {kind: 'outer document top at y=0', script: sha(normalizer), scope: 'test-only HTML wrapper; no internal player style, geometry, sampling or tolerance change'},
+  normalization: {kind: 'whole-page offset; component document top at y=0', script: sha(normalizer), scope: 'test-only HTML wrapper; no internal player style, geometry, sampling or tolerance change'},
   candidate: execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim(),
   edition, cast, started: new Date().toISOString(), status: 'running',
   fixture: JSON.parse(readFileSync(join(candidate, 'fixture.json'), 'utf8')),
