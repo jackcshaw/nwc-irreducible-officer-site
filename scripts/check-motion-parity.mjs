@@ -34,17 +34,28 @@ const receipt = {
 const save = () => writeFileSync(join(out, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
 save();
 const servers = [];
-async function serve(directory, port) {
-  const child = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1', '--directory', directory], {stdio: 'ignore'});
+async function serve(directory) {
+  // Port zero lets the OS allocate a fresh port. Read this child's readiness line;
+  // a successful fetch from a pre-existing server is never proof of ownership.
+  const child = spawn('python3', ['-u', '-m', 'http.server', '0', '--bind', '127.0.0.1', '--directory', directory], {stdio: ['ignore', 'pipe', 'ignore']});
   servers.push(child);
+  const port = await new Promise((ok, fail) => {
+    let output = '';
+    const timer = setTimeout(() => fail(new Error('Owned server did not announce its port')), 5000);
+    const reject = error => { clearTimeout(timer); fail(error); };
+    child.once('error', reject);
+    child.once('exit', code => reject(new Error(`Owned server exited before readiness: ${code}`)));
+    child.stdout.on('data', data => {
+      output += data;
+      const match = output.match(/Serving HTTP on .* port (\d+)/);
+      if (match) { clearTimeout(timer); ok(Number(match[1])); }
+    });
+  });
   const url = `http://127.0.0.1:${port}/figures/${slug}/index.html`;
-  for (let i = 0; i < 50; i++) {
-    if (child.exitCode !== null) throw new Error(`Owned server failed on port ${port}`);
-    try { if ((await fetch(url)).ok) return url; } catch {}
-    await new Promise(ok => setTimeout(ok, 100));
-  }
-  throw new Error(`Owned server did not start on port ${port}`);
+  if (child.exitCode !== null || !(await fetch(url)).ok) throw new Error('Owned server is not serving the selected figure');
+  return url;
 }
+
 const flags = [`--edition=${edition}`, `--cast=${cast}`, '--freeze', `--font-lock=${join(root, 'figures/fonts/manifest.json')}`];
 const nonempty = value => Array.isArray(value) ? value.length > 0 : !!value;
 function run(stage, mode, directories, url) {
@@ -66,7 +77,7 @@ function hashes(directory) {
   return Object.fromEntries(walk(directory).sort().map(path => [relative(directory, path), sha(readFileSync(path))]));
 }
 try {
-  const sourceURL = await serve(source, 5393), candidateURL = await serve(candidate, 5395);
+  const sourceURL = await serve(source), candidateURL = await serve(candidate);
   const baseline = join(out, 'baseline');
   if (!run('baseline', 'capture', [baseline], sourceURL)) throw new Error('Source capture failed');
   for (const [stage, url] of [['source-self-check', sourceURL], ['candidate', candidateURL]]) {
