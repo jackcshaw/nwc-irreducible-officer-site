@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncalibrated Reliance</title>
+<meta name="description" data-ed-content="page.description" content="Uncalibrated reliance: confident output is accepted without knowing whether the task fits the tool, and asking about each part shows which answer was checked.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (a stage narrower than
+   880 px), the stage switches to a stacked text view driven by the same clock. */
+.fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock. Its
+   layout is fixed from the first frame (sections only fade in), and the caption band
+   has a fixed height, so the controls never move. */
+.ur-narrow { display: none; position: relative; }
+/* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
+#uncalibrated-reliance.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#uncalibrated-reliance.is-stacked .ur-narrow { display: block; padding: 7px clamp(12px, 3vw, 24px) 2px; background: var(--paper); }
+/* Fixed at the measured height of the last caption (name, definition and check). */
+#uncalibrated-reliance.is-stacked .mf-caption { height: 160px; overflow: hidden; }
+@media (max-width: 719px) { #uncalibrated-reliance.is-stacked .mf-caption { height: 220px; } }
+@media (max-width: 480px) {
+	#uncalibrated-reliance .mf-check-q, #uncalibrated-reliance .mf-follow.is-equal { font-size: 20px; }
+}
+.ur-n-sec { margin: 0 0 4px; }
+.ur-n-label { margin: 0 0 2px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.ur-n-grey { color: var(--stone); }
+.ur-n-task { margin: 0; padding: 4px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.3 var(--serif); color: var(--ink); }
+.ur-n-task .ur-n-label { display: inline; margin: 0 4px 0 0; }
+.ur-n-reports { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 5px; align-items: center; }
+.ur-n-chip { padding: 1px 5px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 13px/1.35 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
+.ur-n-chip.is-open { border-color: rgba(10, 34, 66, 0.6); }
+.ur-n-head2 { display: flex; justify-content: space-between; gap: 8px; }
+.ur-n-head { font: 600 13px/1.4 var(--sans); color: var(--ink); }
+.ur-n-off { font-style: italic; color: #5d6b80; }
+.ur-n-name { margin: 0 0 2px; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.ur-n-name::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
+.ur-n-who { float: right; margin-top: 2px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.ur-n-who::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
+.ur-n-gives { font: 600 12px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
+.ur-n-stack { display: inline-grid; }
+.ur-n-stack > span { grid-area: 1 / 1; }
+.ur-n-ai.is-looked { border-color: var(--stone); }
+.ur-n-ready { display: inline-block; transform-origin: center; }
+.is-pointed { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 3px; }
+.ur-n-calls { margin: 4px 0 0; padding: 2px 8px; border: 1px solid rgba(10, 34, 66, 0.3); background: var(--paper-bright); }
+.ur-n-call { margin: 0; font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.ur-n-call .is-under { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+.ur-n-tag { margin-left: 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); border-bottom: 1.5px solid var(--ink); white-space: nowrap; }
+.ur-n-ai { display: grid; grid-template-columns: auto 1fr auto; gap: 6px; align-items: baseline; padding: 3px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.ur-n-part { font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); white-space: nowrap; }
+.ur-n-ans { font: 400 13.5px/1.3 var(--serif); color: var(--stone); }
+.ur-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ur-n-band.is-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.ur-n-ins { color: var(--red); }
+.ur-n-ready { padding: 0 7px; border-radius: 9px; background: var(--stone); color: var(--paper-bright); font: 600 13px/1.45 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.ur-n-front { margin: 1px 0; font: 600 13px/1.25 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
+.ur-n-flabels { display: flex; justify-content: space-between; gap: 6px; letter-spacing: 0; white-space: nowrap; }
+.ur-n-front svg { display: block; width: 100%; height: 8px; }
+.ur-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ur-n-col { min-width: 0; }
+.ur-n-brief { position: relative; margin: 0 0 8px; padding: 4px 6px 3px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.3 var(--serif); color: var(--stone); }
+/* Working marks sit as tabs on each box's top edge, so they take no line of their own. */
+.ur-n-mark { position: absolute; top: -8px; right: 6px; padding: 0 3px; background: var(--paper-bright); font: 600 13px/1.2 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--red); }
+.ur-n-say { min-width: 0; padding: 3px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.ur-n-line { margin: 0 0 1px; font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.ur-n-evidence { position: absolute; left: clamp(12px, 3vw, 24px); right: clamp(12px, 3vw, 24px); top: 50%; transform: translateY(-50%); padding: 12px 14px; border: 1px solid var(--navy-border); background: var(--paper-bright); box-shadow: 3px 4px 0 rgba(10, 34, 66, 0.06); visibility: hidden; }
+.ur-n-ev { display: flex; justify-content: space-between; gap: 10px; margin: 0 0 4px; padding: 4px 0; border-bottom: 1px solid var(--navy-line); font: 400 15px/1.4 var(--sans); color: var(--ink); }
+.ur-n-evq { margin: 6px 0 4px; font: italic 400 15px/1.4 var(--serif); color: var(--ink); }
+.ur-n-src { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--muted); }
+/* Optional (business): the source line, the stacked stage's last line. */
+.ur-n-key { margin: 3px 0 0; font: 400 13px/1.3 var(--serif); color: var(--stone); }
+.ur-n-keyown { margin-left: 8px; font-weight: 600; color: var(--red); }
+.ur-n-keyown::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
+/* Classroom casts: smaller tabs (11 px), so a tab clears the plan text under it and the name above. */
+#uncalibrated-reliance[data-cast="classroom"] .ur-n-mark, #uncalibrated-reliance[data-cast="high-school"] .ur-n-mark { top: -7px; font-size: 11px; }
+.ur-n-srcline { margin: 2px 0 0; font: italic 400 13px/1.3 var(--serif); color: var(--ink); }
+/* Short laptop windows 1200 px wide and up (1366 × 657, 1280 × 657, 1440 × 700): with the
+   144 px band the picture would letterbox under 11 px and give way to the stacked stage.
+   Below 717 px tall the band is 100 px with tighter padding and the check at 20 px, so the
+   picture keeps 11 px labels: 657 − 168 − 31 = 458 px of stage. Taller windows, and so the
+   frame-diff sizes (1440 × 900, 1280 × 720), don't change. */
+@media (min-width: 1200px) and (max-height: 716px) {
+	#uncalibrated-reliance.has-nameplate { --mf-chrome: 168px; --mf-plate: 31px; }
+	#uncalibrated-reliance .mf-caption { height: 100px; min-height: 0; padding-top: 10px; padding-bottom: 10px; overflow: hidden; }
+	#uncalibrated-reliance .mf-check-q, #uncalibrated-reliance .mf-follow.is-equal { font-size: 20px; }
+	#uncalibrated-reliance .mf-final-def { font-size: 16px; }
+}
+</style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 4 of 7</p><h1>Uncalibrated reliance</h1><p class="fig-setup">Confident output is accepted without knowing whether the task fits the tool.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="business" data-cast-link="classroom">Classroom</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note" data-ed-section="page.editionNote">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+
+	<figure class="mf" id="uncalibrated-reliance" aria-labelledby="ur-title">
+		<p class="sr-only" id="ur-title" data-ed="page.srTitle"></p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="ur-narrow" data-ur-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the uncalibrated reliance figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:34</span>
+		</div>
+		<figcaption>
+			<p class="sr-only" data-ed="page.srSummary"></p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="ur-check-h">
+		<h2 id="ur-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+	</section>
+
+	<!-- Business: the study behind the example, in paragraphs (hidden when the edition has none). -->
+	<section class="fig-section" aria-labelledby="ur-study-h" data-ed-section="page.evidence" hidden>
+		<h2 id="ur-study-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-essay-h">
+		<h2 id="ur-essay-h" data-ed="page.quoteHeading"></h2>
+		<blockquote class="fig-quote">
+			<p data-ur-linked="page.quotes.0.text"></p>
+			<cite data-ed-rich="page.quotes.0.cite"></cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 18px">
+			<p data-ur-linked="page.quotes.1.text"></p>
+			<cite data-ed-rich="page.quotes.1.cite"></cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-evidence-h" data-ed-section="page.evidenceText">
+		<h2 id="ur-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<p class="fig-follow" data-ur-linked="page.evidenceText"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ur-links-h">
+		<h2 id="ur-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="uncalibrated-reliance.js"></script>
+</body>
+</html>

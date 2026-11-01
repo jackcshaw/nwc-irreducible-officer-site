@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluency Substitution</title>
+<meta name="description" data-ed-content="page.description" content="Fluency substitution: polished analysis stands in for owned reasoning, and changing one fact shows who owns the call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock
+   (.is-stacked, set by syncStacked). Its height is fixed at its tallest moment for
+   the current width, and the caption band has a fixed height, so the controls
+   never move. */
+.fs-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
+#fluency-substitution.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#fluency-substitution.is-stacked .fs-narrow { display: block; padding: 10px clamp(12px, 3vw, 24px) 4px; background: var(--paper); overflow: hidden; }
+#fluency-substitution.is-stacked .fs-narrow > .fs-n-sec { max-width: 760px; }
+/* The last caption (name, definition, check) measures 172 px on desktop, 212 px
+   below 720 px and 219 px at 390 px, so the band is held at that height throughout. */
+@media (min-width: 720px) { #fluency-substitution .mf-caption { min-height: 174px; } }
+/* Business (picture.laptop): laptop windows keep the drawn picture. A compact caption
+   band (name, definition, check and follow-up one line each) gives the picture the
+   height, so 13-unit labels stay at 11 px or more (11.1 px at 1366 × 657). The stacked
+   rules below still win if the picture is stacked anyway. */
+@media (min-width: 720px) and (max-height: 860px) {
+	#fluency-substitution.fs-laptop { --mf-chrome: 166px; }
+	#fluency-substitution.fs-laptop .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#fluency-substitution.fs-laptop .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#fluency-substitution.fs-laptop .mf-check-q, #fluency-substitution.fs-laptop .mf-follow.is-equal { font-size: 20px; }
+	#fluency-substitution.fs-laptop .mf-final-def { font-size: 15px; }
+}
+#fluency-substitution.is-stacked .mf-caption { height: 174px; overflow: hidden; }
+@media (max-width: 719px) { #fluency-substitution.is-stacked .mf-caption { height: 212px; } }
+@media (max-width: 480px) {
+	#fluency-substitution.is-stacked .mf-caption { height: 220px; }
+	/* The final frame, check and controls fit an 844 px phone screen. */
+	#fluency-substitution .mf-check-q, #fluency-substitution .mf-follow.is-equal { font-size: 20px; }
+}
+.fs-n-sec { margin: 0 0 8px; }
+.fs-n-sec[hidden] { display: none; }
+.fs-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
+.fs-n-sm { font-size: 13px; line-height: 1.55; }
+/* Business: the task stays on the stacked stage, as a single line from beat 3. */
+.fs-n-sec.is-compact { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fs-n-sec.is-compact .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-sec.is-compact .fs-n-task { display: inline; padding: 0; border: 0; background: none; font-size: 14px; }
+/* Business (task kept): tighter stacked rows so the phone player still fits 844 px. */
+.fs-keep-task .fs-n-sec { margin-bottom: 4px; }
+.fs-keep-task .fs-n-q { font-size: 13px; }
+.fs-keep-task .fs-n-txt { font-size: 13.5px; }
+/* Business: the answer boxes and the flowed paper set their own line height (an inline
+   span alone can't shrink the line box), so the phone final frame fits 844 px. */
+.fs-keep-task .fs-n-say { font-size: 13.5px; line-height: 1.4; }
+.fs-keep-task .fs-n-paper.is-flow { font-size: 13px; line-height: 1.5; }
+.fs-keep-task .fs-n-label { margin-bottom: 4px; }
+.fs-keep-task .fs-n-q { margin-bottom: 4px; }
+#fluency-substitution.is-stacked.fs-keep-task .fs-narrow { padding-top: 6px; }
+.fs-keep-task .fs-n-say { padding: 4px 7px; }
+.fs-keep-task .fs-n-who { margin-bottom: 2px; }
+.fs-keep-task .fs-n-key { margin-top: 2px; }
+/* Business (narrow.noteKept): from beat 7 only the second person's note stays in the
+   own-work section, under one label, so the final frame keeps it. */
+.fs-n-sec.is-note-only > .fs-n-label, .fs-n-sec.is-note-only .fs-n-cell-a { display: none; }
+/* Business: with no cut, the own-work section holds only the note, full width. */
+.fs-n-pair.fs-n-solo { display: block; }
+/* Business: the reviewer's added line reads at the answers' size, and the covered fallback is struck. */
+.fs-n-more { font-style: normal; font-weight: 600; }
+.fs-n-x { text-decoration: line-through; text-decoration-color: var(--ink); text-decoration-thickness: 2px; }
+.fs-n-paper.is-flow .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-paper.is-flow .fs-n-tile { display: inline; padding: 0; border: 0; }
+.fs-n-paper.is-flow .fs-n-tile p { display: inline; }
+/* Business: AI words in an answer take the answer's size (the draft's 15 px class
+   otherwise applies to answer segments too). */
+.fs-keep-task .fs-n-txt .fs-n-ai { font: inherit; }
+.fs-n-sec.is-note-only .fs-n-pair { display: block; }
+.fs-n-sec.is-note-only .fs-n-note { padding: 0; border: 0; background: none; font-size: 13.5px; }
+.fs-n-paper.is-inline { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fs-n-paper.is-inline .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-paper.is-inline .fs-n-tile { display: inline; padding: 0; border: 0; }
+.fs-n-paper.is-inline .fs-n-tile p { display: inline; }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.fs-source { display: none; }
+#fluency-substitution.is-stacked .fs-source:not([hidden]) { display: block; margin: 8px 0 0; padding: 0 clamp(12px, 3vw, 24px); font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+.fs-n-tile { padding: 6px 8px; border: 1px solid var(--navy-border); }
+.fs-n-tile .is-clamped { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fs-n-tile .is-one-line { -webkit-line-clamp: 1; }
+.fs-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fs-n-cell { min-width: 0; }
+.fs-n-act { margin: 0 0 3px; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.fs-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-band[hidden] { display: none; }
+.fs-n-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.fs-n-small { margin: 6px 0 0; font: 500 13px/1.35 var(--sans); color: var(--muted); }
+.fs-n-item { margin: 0 0 8px; }
+.fs-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.fs-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.fs-n-note { margin: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--red); }
+.fs-n-q { margin: 0 0 6px; font: italic 400 15px/1.35 var(--serif); color: var(--ink); }
+.fs-n-say { min-width: 0; padding: 5px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.fs-n-txt { font: 400 14px/1.4 var(--serif); }
+.fs-n-seg { padding: 1px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.fs-n-key-ai { color: var(--stone); }
+.fs-n-key-ai::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: 6px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; vertical-align: -1px; }
+.fs-n-key-own { color: var(--red); }
+.fs-n-key-own::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }
+</style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 2 of 7</p><h1>Fluency substitution</h1><p class="fig-setup">Polished analysis stands in for owned reasoning.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage); see CONVENTIONS.md, Editions. -->
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="business" data-cast-link="classroom">Classroom</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+
+	<figure class="mf" id="fluency-substitution" aria-labelledby="fs-title">
+		<p class="sr-only" id="fs-title" data-ed="page.srTitle"></p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="fs-narrow" data-fs-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the fluency substitution figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:32</span>
+		</div>
+		<p class="fs-source" data-fs-source hidden></p>
+		<figcaption>
+			<p class="sr-only" data-ed="page.srSummary"></p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="fs-check-h">
+		<h2 id="fs-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fs-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="fs-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fs-essay-h" data-ed-section="page.quote">
+		<h2 id="fs-essay-h" data-ed="page.quoteHeading"></h2>
+		<blockquote class="fig-quote">
+			<p data-fs-quote></p>
+			<cite data-ed-rich="page.cite"></cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="fs-links-h">
+		<h2 id="fs-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="fluency-substitution.js"></script>
+</body>
+</html>

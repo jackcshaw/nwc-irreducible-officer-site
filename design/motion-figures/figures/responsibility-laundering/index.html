@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Responsibility Laundering</title>
+<meta name="description" data-ed-content="page.description" content="The model’s recommendation makes responsibility feel shared, or easier to defend. Asking why each signer relied on the AI’s estimate shows who can account for it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock. Its
+   layout is fixed from the first frame (sections only fade in), and the caption band
+   has a fixed height, so the controls never move. */
+.rl-narrow { display: none; position: relative; }
+/* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
+#responsibility-laundering.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#responsibility-laundering.is-stacked .rl-narrow { display: block; padding: 6px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
+#responsibility-laundering.is-stacked .mf-caption { height: 136px; overflow: hidden; }
+@media (max-width: 719px) { #responsibility-laundering.is-stacked .mf-caption { height: 194px; } #responsibility-laundering.is-stacked .mf-caption.is-check { padding-top: 10px; padding-bottom: 10px; } }
+/* The final caption (name and definition over the check) must stay inside the runtime's
+   144 px desktop band, or the viewport fit at 1280 x 720 would drop to the stacked stage.
+   The long name wraps in its label column, and the check is set a little smaller. */
+@media (min-width: 720px) {
+	#responsibility-laundering .mf-check.has-final { grid-template-columns: min-content minmax(0, 1fr); }
+	/* A check label longer than the name's longest word ("REVIEWER'S CHECK") stays on one line. */
+	#responsibility-laundering .mf-check.has-final > .mf-check-label { white-space: nowrap; }
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: clamp(22px, 2.4vw, 27px); }
+	#responsibility-laundering.is-stacked .mf-caption { height: 188px; }
+}
+/* The opening name card is one line (the runtime sets it nowrap); this name is long, so on
+   phones it scales with the width to keep about 16 px clear on each side. */
+@media (max-width: 559px) { #responsibility-laundering .mf-namecard-n { font-size: clamp(22px, calc((100vw - 70px) / 11.3), 34px); } }
+/* Laptop windows below 700 px high (1366 x 657): a compact caption band and a smaller chrome
+   allowance give the picture the height, so 13-unit labels stay at 11 px or more and the drawn
+   stage shows. The name sits on one line beside the definition; check and follow at 20 px. */
+@media (min-width: 720px) and (max-height: 700px) {
+	#responsibility-laundering { --mf-chrome: 166px; }
+	#responsibility-laundering.has-nameplate .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#responsibility-laundering .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#responsibility-laundering .mf-check.has-final { grid-template-columns: max-content minmax(0, 1fr); }
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 20px; }
+	#responsibility-laundering .mf-final-def { font-size: 15px; }
+}
+@media (max-width: 480px) {
+	#responsibility-laundering .mf-check-q, #responsibility-laundering .mf-follow.is-equal { font-size: 18px; }
+	#responsibility-laundering .mf-final-def { font-size: 15px; }
+}
+.rl-n-sec { margin: 0 0 2px; }
+.rl-n-name { margin: 0 0 3px; }
+.rl-n-stack { padding-top: 7px; }
+.rl-n-label { margin: 0 0 4px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); }
+.rl-n-grey { color: var(--stone); }
+.rl-n-red { color: var(--red); }
+.rl-n-task { margin: 0; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--ink); }
+.rl-n-task .rl-n-label { display: inline; margin: 0 6px 0 0; }
+.rl-n-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.rl-n-pair > * { min-width: 0; }
+.rl-n-col { min-width: 0; }
+.rl-n-note { margin: 0; font: italic 400 13px/1.35 var(--serif); color: var(--red); }
+.rl-n-none { margin: 0; font: 400 14px/1.4 var(--serif); color: rgba(10, 34, 66, 0.45); }
+.rl-n-stack { position: relative; }
+.rl-n-draft { position: absolute; inset: calc(7px + 1.6em) 0 0 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-card { position: relative; min-width: 0; padding: 4px 7px 5px 19px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.rl-n-rel { position: relative; }
+.rl-n-over { position: absolute; left: 0; top: 0; margin: 0; padding: 0; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); opacity: 0; }
+.rl-n-frame { position: absolute; inset: 1px -4px -3px -4px; border: 1.5px solid var(--ink); border-radius: 6px; pointer-events: none; opacity: 0; }
+.rl-n-framelabel { position: absolute; left: 8px; top: -9px; padding: 0 5px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.rl-n-drop { position: absolute; left: 3px; width: 12px; height: 16px; background: var(--ink); clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%); visibility: hidden; }
+.rl-n-reader { position: absolute; left: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); visibility: hidden; }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.rl-source { display: none; }
+#responsibility-laundering.is-stacked .rl-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+.rl-n-src { margin: 4px 0 0; font: italic 400 13px/1.3 var(--serif); color: var(--ink); opacity: 0; }
+.is-outlined { outline: 1.5px solid var(--ink); outline-offset: 1px; border-radius: 2px; white-space: nowrap; }
+/* Business: in a spoken answer the outline hugs the phrase, so its top edge can't read as an
+   underline of the line above (the answers' line height is tight). */
+#responsibility-laundering[data-edition-id="business"] .rl-n-line .is-outlined { display: inline-block; line-height: 1.1; outline-offset: 0; }
+.rl-n-tag { margin: 0 0 3px; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); }
+.rl-n-row { position: relative; margin: 0 0 2px; font: 400 13px/1.32 var(--serif); color: var(--stone); }
+.rl-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.rl-n-sig svg { flex: 0 1 auto; min-width: 0; }
+.rl-n-sig { display: flex; align-items: center; gap: 5px; min-height: 22px; margin-top: 2px; border-top: 1px solid rgba(10, 34, 66, 0.3); padding-top: 3px; }
+.rl-n-dot { position: relative; width: 10px; height: 10px; flex: none; }
+.rl-n-dot i { position: absolute; top: 1.5px; width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+.rl-n-dot i:first-child { left: 1.5px; }
+.rl-n-dot i:last-child { left: 1.5px; }
+.rl-n-squiggle { font: italic 400 15px/1 var(--serif); color: var(--red); letter-spacing: -0.04em; }
+.rl-n-chip { margin-left: auto; padding: 1px 4px; background: var(--ink); color: var(--paper-bright); font: 600 12px/1.4 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.rl-n-half { position: absolute; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 1.8px dashed rgba(91, 86, 79, 0); background: transparent; }
+.rl-n-q { margin: 0 0 2px; font: italic 400 14px/1.35 var(--serif); color: var(--ink); }
+.rl-n-say { min-width: 0; padding: 3px 7px 2px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.rl-n-line { margin: 0 0 2px; padding-left: 7px; border-left: 2px solid transparent; font: 400 13px/1.22 var(--serif); color: var(--ink); }
+.rl-n-line.is-marked { border-left-color: var(--red); }
+.rl-n-key { display: flex; flex-wrap: wrap; gap: 2px 14px; margin: 2px 0 0; font: 600 12px/1.25 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.rl-n-key .sw { display: inline-block; width: 14px; height: 9px; margin-right: 5px; background: #ded5c4; vertical-align: -0.5px; }
+.rl-n-key .rg { display: inline-block; width: 10px; height: 10px; margin-right: 5px; box-sizing: border-box; border-radius: 50%; border: 1.6px dashed var(--stone); vertical-align: -1px; }
+.rl-n-key .rd { display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); }
+</style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 7 of 7</p><h1>Responsibility laundering</h1><p class="fig-setup">The model’s recommendation makes responsibility feel shared, or easier to defend.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage, and data-rl-rich for paragraphs with links); see CONVENTIONS.md, Editions. -->
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="business" data-cast-link="classroom">Classroom</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote"></p>
+
+	<figure class="mf" id="responsibility-laundering" aria-labelledby="rl-title">
+		<p class="sr-only" id="rl-title" data-ed="page.srTitle"></p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="rl-narrow" data-rl-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the responsibility laundering figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:37</span>
+		</div>
+		<p class="rl-source" data-rl-source hidden></p>
+		<figcaption>
+			<p class="sr-only" data-ed="page.srSummary"></p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="rl-check-h">
+		<h2 id="rl-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-rl-rich="page.checkFollow"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="rl-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-essay-h" data-ed-section="page.quotes">
+		<h2 id="rl-essay-h" data-ed="page.quoteHeading"></h2>
+		<blockquote class="fig-quote">
+			<div data-ed-lines="page.quotes.0.paras"></div>
+			<cite data-ed-rich="page.quotes.0.cite"></cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 18px">
+			<div data-ed-lines="page.quotes.1.paras"></div>
+			<cite data-ed-rich="page.quotes.1.cite"></cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="rl-links-h">
+		<h2 id="rl-links-h" data-ed="page.linksHeading"></h2>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="responsibility-laundering.js"></script>
+</body>
+</html>

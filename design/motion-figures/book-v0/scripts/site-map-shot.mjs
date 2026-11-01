@@ -1,0 +1,36 @@
+import { chromium } from "playwright";
+const out = process.argv[2]; const O = "http://127.0.0.1:5233";
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1440, height: 1000 }, storageState: { cookies: [], origins: [{ origin: O, localStorage: [{ name: "jl-reel-seen", value: "1" }] }] } });
+const p = await ctx.newPage();
+async function go(hash) { await p.goto(O + "/" + hash); await p.waitForTimeout(700); }
+await go("#learn");
+await p.screenshot({ path: `${out}/learn-top.png` });
+const learnInfo = await p.evaluate(() => { const panel = document.querySelector("[id^=panel-]:not([hidden])"); return { panel: panel && panel.id, h: document.documentElement.scrollHeight, method: document.querySelector(".method-band")?.getBoundingClientRect().top + scrollY }; });
+console.log("learn", JSON.stringify(learnInfo));
+await p.locator(".method-band").scrollIntoViewIfNeeded(); await p.evaluate(() => scrollBy(0, -200));
+await p.screenshot({ path: `${out}/learn-method.png` });
+await go("#essay");
+const ess = await p.evaluate(() => { const c = document.querySelector(".closing-standard"); const pil = document.querySelector(".pilot-sequence"); const fm = [...document.querySelectorAll(".argument-table")].map(t => t.getAttribute("aria-label")); return { closingTop: c && Math.round(c.getBoundingClientRect().top + scrollY), pilotTop: pil && Math.round(pil.getBoundingClientRect().top + scrollY), tables: fm, page: document.documentElement.scrollHeight }; });
+console.log("essay", JSON.stringify(ess));
+await p.screenshot({ path: `${out}/essay-top.png` });
+await p.locator(".closing-standard").first().scrollIntoViewIfNeeded(); await p.evaluate(() => scrollBy(0, -350));
+await p.screenshot({ path: `${out}/essay-closing.png` });
+await p.locator(".pilot-sequence").first().scrollIntoViewIfNeeded(); await p.evaluate(() => scrollBy(0, -300));
+await p.screenshot({ path: `${out}/essay-pilot.png` });
+await p.locator(".argument-table").first().scrollIntoViewIfNeeded(); await p.evaluate(() => scrollBy(0, -150));
+await p.screenshot({ path: `${out}/essay-failure.png` });
+await go("#pme");
+await p.screenshot({ path: `${out}/pme-top.png` });
+await p.evaluate(() => scrollBy(0, 700)); await p.screenshot({ path: `${out}/pme-2.png` });
+await go("#companion");
+await p.screenshot({ path: `${out}/practice-top.png` });
+await p.locator("#panel-companion .detail-band").first().scrollIntoViewIfNeeded(); await p.evaluate(() => scrollBy(0, -100));
+await p.screenshot({ path: `${out}/practice-failure.png` });
+const tabs = await p.evaluate(() => [...document.querySelectorAll("[data-mode-tab]")].map(t => t.dataset.modeTab + ":" + t.textContent.trim()));
+console.log("tabs", tabs.join(" | "));
+// phone learn
+const ph = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, storageState: { cookies: [], origins: [{ origin: O, localStorage: [{ name: "jl-reel-seen", value: "1" }] }] } });
+const q = await ph.newPage(); await q.goto(O + "/#learn"); await q.waitForTimeout(700);
+await q.screenshot({ path: `${out}/phone-learn.png` });
+await b.close();

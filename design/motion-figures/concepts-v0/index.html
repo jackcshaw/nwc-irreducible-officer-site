@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Figures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="figures.css">
+<style>
+.list { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 28px; }
+.list li { display: grid; grid-template-columns: 280px 1fr; gap: 22px; align-items: start; padding-top: 22px; border-top: 1px solid var(--faint); }
+.list img { width: 100%; height: auto; border: 1px solid var(--navy-border); }
+.list h2 { margin: 0 0 6px; padding: 0; border: 0; font-size: 24px; }
+.list p { margin: 0 0 10px; font: 400 17px/1.5 var(--sans); }
+.list a { color: var(--ink); font: 600 16px/1.4 var(--sans); }
+.tag { font: 600 12px/1 var(--mono); color: var(--red); letter-spacing: .04em; }
+@media (max-width: 700px) { .list li { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="mock-bar"><b>Judgment Lab<i>.</i></b><span>Motion figures: throwaway prototypes</span></div>
+<main class="page">
+	<p class="essay" style="margin-top:28px">Three prototypes for teaching the failure modes and appropriate reliance with motion. They share one runtime (<code>motion.js</code>) and one visual grammar: grey and navy are machine work, red is what a person decided. The proposal is in <code>proposal.md</code>.</p>
+	<ul class="list">
+		<li><img src="shots/rel-desktop-4-revealed.png" alt="">
+			<div><p class="tag">Interactive · Section V</p><h2>Make the call</h2><p>Appropriate reliance. Two look-alike tasks from the BCG study. You decide whether to rely on the AI for each, then the frontier draws itself between them, and correctness and quality move in opposite directions.</p><a href="reliance.html">Open the prototype</a> · <a href="shots/reliance-walkthrough.mp4">Walkthrough video</a></div></li>
+		<li><img src="shots/fc-t8.8.png" alt="">
+			<div><p class="tag">Motion figure · Section II</p><h2>The crop</h2><p>Frame capture. The camera starts tight on the model's frame, so you accept it too. The student revises three times inside it. Then the camera pulls back.</p><a href="frame-capture.html">Open the prototype</a> · <a href="shots/frame-capture.mp4">Video</a></div></li>
+		<li><img src="shots/mono-t9.4.png" alt="">
+			<div><p class="tag">3D sketch · Section II</p><h2>Turn the seminar</h2><p>Institutional monoculture. Thirty essays that look different. Turned to show how each defines the problem, they sit in one plane, and the other planes are empty.</p><a href="monoculture.html">Open the sketch</a> · <a href="shots/monoculture.mp4">Video</a></div></li>
+	</ul>
+</main>
+</body>
+</html>
