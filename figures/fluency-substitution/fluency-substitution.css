@@ -1,0 +1,103 @@
+
+/* Whenever a picture label would render under 11 px (the runtime's letterboxed
+   scale), the stage switches to a stacked text view driven by the same clock
+   (.is-stacked, set by syncStacked). Its height is fixed at its tallest moment for
+   the current width, and the caption band has a fixed height, so the controls
+   never move. */
+.fs-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its layout so text can still be measured. */
+.mf[data-mf-figure="fluency-substitution"].is-stacked .mf-stage { height: 0; overflow: hidden; }
+.mf[data-mf-figure="fluency-substitution"].is-stacked .fs-narrow { display: block; padding: 10px clamp(12px, 3vw, 24px) 4px; background: var(--paper); overflow: hidden; }
+.mf[data-mf-figure="fluency-substitution"].is-stacked .fs-narrow > .fs-n-sec { max-width: 760px; }
+/* The last caption (name, definition, check) measures 172 px on desktop, 212 px
+   below 720 px and 219 px at 390 px, so the band is held at that height throughout. */
+@media (min-width: 720px) { .mf[data-mf-figure="fluency-substitution"] .mf-caption { min-height: 174px; } }
+/* Business (picture.laptop): laptop windows keep the drawn picture. A compact caption
+   band (name, definition, check and follow-up one line each) gives the picture the
+   height, so 13-unit labels stay at 11 px or more (11.1 px at 1366 × 657). The stacked
+   rules below still win if the picture is stacked anyway. */
+@media (min-width: 720px) and (max-height: 860px) {
+	.mf[data-mf-figure="fluency-substitution"].fs-laptop { --mf-chrome: 166px; }
+	.mf[data-mf-figure="fluency-substitution"].fs-laptop .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	.mf[data-mf-figure="fluency-substitution"].fs-laptop .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	.mf[data-mf-figure="fluency-substitution"].fs-laptop .mf-check-q, .mf[data-mf-figure="fluency-substitution"].fs-laptop .mf-follow.is-equal { font-size: 20px; }
+	.mf[data-mf-figure="fluency-substitution"].fs-laptop .mf-final-def { font-size: 15px; }
+}
+.mf[data-mf-figure="fluency-substitution"].is-stacked .mf-caption { height: 174px; overflow: hidden; }
+@media (max-width: 719px) { .mf[data-mf-figure="fluency-substitution"].is-stacked .mf-caption { height: 212px; } }
+@media (max-width: 480px) {
+	.mf[data-mf-figure="fluency-substitution"].is-stacked .mf-caption { height: 220px; }
+	/* The final frame, check and controls fit an 844 px phone screen. */
+	.mf[data-mf-figure="fluency-substitution"] .mf-check-q, .mf[data-mf-figure="fluency-substitution"] .mf-follow.is-equal { font-size: 20px; }
+}
+.fs-n-sec { margin: 0 0 8px; }
+.fs-n-sec[hidden] { display: none; }
+.fs-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.fs-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.fs-n-ai { margin: 0; font: 400 15px/1.6 var(--serif); color: var(--stone); }
+.fs-n-sm { font-size: 13px; line-height: 1.55; }
+/* Business: the task stays on the stacked stage, as a single line from beat 3. */
+.fs-n-sec.is-compact { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fs-n-sec.is-compact .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-sec.is-compact .fs-n-task { display: inline; padding: 0; border: 0; background: none; font-size: 14px; }
+/* Business (task kept): tighter stacked rows so the phone player still fits 844 px. */
+.fs-keep-task .fs-n-sec { margin-bottom: 4px; }
+.fs-keep-task .fs-n-q { font-size: 13px; }
+.fs-keep-task .fs-n-txt { font-size: 13.5px; }
+/* Business: the answer boxes and the flowed paper set their own line height (an inline
+   span alone can't shrink the line box), so the phone final frame fits 844 px. */
+.fs-keep-task .fs-n-say { font-size: 13.5px; line-height: 1.4; }
+.fs-keep-task .fs-n-paper.is-flow { font-size: 13px; line-height: 1.5; }
+.fs-keep-task .fs-n-label { margin-bottom: 4px; }
+.fs-keep-task .fs-n-q { margin-bottom: 4px; }
+.mf[data-mf-figure="fluency-substitution"].is-stacked.fs-keep-task .fs-narrow { padding-top: 6px; }
+.fs-keep-task .fs-n-say { padding: 4px 7px; }
+.fs-keep-task .fs-n-who { margin-bottom: 2px; }
+.fs-keep-task .fs-n-key { margin-top: 2px; }
+/* Business (narrow.noteKept): from beat 7 only the second person's note stays in the
+   own-work section, under one label, so the final frame keeps it. */
+.fs-n-sec.is-note-only > .fs-n-label, .fs-n-sec.is-note-only .fs-n-cell-a { display: none; }
+/* Business: with no cut, the own-work section holds only the note, full width. */
+.fs-n-pair.fs-n-solo { display: block; }
+/* Business: the reviewer's added line reads at the answers' size, and the covered fallback is struck. */
+.fs-n-more { font-style: normal; font-weight: 600; }
+.fs-n-x { text-decoration: line-through; text-decoration-color: var(--ink); text-decoration-thickness: 2px; }
+.fs-n-paper.is-flow .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-paper.is-flow .fs-n-tile { display: inline; padding: 0; border: 0; }
+.fs-n-paper.is-flow .fs-n-tile p { display: inline; }
+/* Business: AI words in an answer take the answer's size (the draft's 15 px class
+   otherwise applies to answer segments too). */
+.fs-keep-task .fs-n-txt .fs-n-ai { font: inherit; }
+.fs-n-sec.is-note-only .fs-n-pair { display: block; }
+.fs-n-sec.is-note-only .fs-n-note { padding: 0; border: 0; background: none; font-size: 13.5px; }
+.fs-n-paper.is-inline { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fs-n-paper.is-inline .fs-n-label { display: inline; margin: 0 6px 0 0; }
+.fs-n-paper.is-inline .fs-n-tile { display: inline; padding: 0; border: 0; }
+.fs-n-paper.is-inline .fs-n-tile p { display: inline; }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.fs-source { display: none; }
+.mf[data-mf-figure="fluency-substitution"].is-stacked .fs-source:not([hidden]) { display: block; margin: 8px 0 0; padding: 0 clamp(12px, 3vw, 24px); font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+.fs-n-tile { padding: 6px 8px; border: 1px solid var(--navy-border); }
+.fs-n-tile .is-clamped { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fs-n-tile .is-one-line { -webkit-line-clamp: 1; }
+.fs-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fs-n-cell { min-width: 0; }
+.fs-n-act { margin: 0 0 3px; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.fs-n-band { background: #ded5c4; padding: 1px 2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-band[hidden] { display: none; }
+.fs-n-struck { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.fs-n-small { margin: 6px 0 0; font: 500 13px/1.35 var(--sans); color: var(--muted); }
+.fs-n-item { margin: 0 0 8px; }
+.fs-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.fs-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.fs-n-note { margin: 0; padding: 6px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.4 var(--serif); color: var(--red); }
+.fs-n-q { margin: 0 0 6px; font: italic 400 15px/1.35 var(--serif); color: var(--ink); }
+.fs-n-say { min-width: 0; padding: 5px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.fs-n-txt { font: 400 14px/1.4 var(--serif); }
+.fs-n-seg { padding: 1px 0; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.fs-n-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.fs-n-key-ai { color: var(--stone); }
+.fs-n-key-ai::before { content: ""; display: inline-block; width: 16px; height: 10px; margin-right: 6px; border: 1px solid var(--stone); border-radius: 2px; background: #ded5c4; vertical-align: -1px; }
+.fs-n-key-own { color: var(--red); }
+.fs-n-key-own::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 0; }

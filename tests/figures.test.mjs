@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
-import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath} from '../scripts/figure-pages.mjs';
+import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote} from '../scripts/figure-pages.mjs';
 import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
 const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
 const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
-assert.equal(manifest.figures.length,1);
+assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution']);
 for(const figure of manifest.figures) {
   const quote=quoteFor(figure,essay);
   assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
@@ -32,15 +32,20 @@ for(const figure of manifest.figures) {
     assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
     assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
     assert(receipt.inputs['package-lock.json']);
-    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,variant.id==='pme'?90.4:104.8);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101}})[figure.slug][variant.edition]);
     assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
     assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
   }
   assert.equal(titles.size,4);
 }
 for(const license of ['ibmplexmono','sourcesans3','sourceserif4']) assert(existsSync(join(root,'dist/assets/figures/fonts',license+'-OFL.txt')));
+const quoted=renderEssayQuote(root,'A *measured* claim ([source](https://example.org/?a=1&b=2)).');
+assert.equal(quoted,'A <em>measured</em> claim (<a href="https://example.org/?a=1&amp;b=2">source</a>).');
+assert(!renderEssayQuote(root,'[unsafe](javascript:alert(1))').includes('<a'));
+const fsPage=readFileSync(join(root,'dist/failure-modes/fluency-substitution/pme/index.html'),'utf8');
+assert(fsPage.includes('<a href="https://ojs.aut.ac.nz/pjtel/article/view/246">Chow et al., 2026</a>'));
 const hub=readFileSync(join(root,'dist/failure-modes/index.html'),'utf8');
-assert.equal((hub.match(/<li>/g)||[]).length,1);
+assert.equal((hub.match(/<li>/g)||[]).length,2);
 assert(!hub.includes('runtime/motion.js'));
 assert(!readFileSync(join(root,'dist/index.html'),'utf8').includes('/assets/figures/runtime/motion.js'));
 console.log('Figure static routes, source boundaries, posters and metadata passed');
