@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Institutional Monoculture</title>
+<meta name="description" data-ed-content="page.description" content="Institutional monoculture: shared systems and defaults narrow the range of frames a group considers, and lining up every problem statement shows it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+.fig-follow a { color: var(--ink); text-underline-offset: 3px; }
+.fig-evidence { margin: 10px 0 0; padding-left: 20px; font-size: 18px; line-height: 1.5; color: var(--body); }
+.fig-evidence li { margin: 0 0 8px; }
+/* The check's second line runs to two lines, so the caption band is sized for
+   both on desktop and the player's chrome allowance grows to match. */
+#institutional-monoculture { --mf-chrome: 268px; }
+@media (min-width: 720px) { #institutional-monoculture .mf-caption { min-height: 176px; } }
+@media (max-width: 719px) { #institutional-monoculture { --mf-chrome: 290px; } }
+/* Phones: the opening card's name scales to fit the stage (25 characters at about 11.2 em). */
+@media (max-width: 559px) { #institutional-monoculture .mf-namecard-n { font-size: clamp(22px, calc((100vw - 70px) / 11.3), 34px); } }
+/* Laptop windows: a compact caption band (one line for the check's second line) gives
+   the picture the height, so it scales to fit with every label at 11 px or more. */
+@media (min-width: 720px) and (max-height: 860px) {
+	#institutional-monoculture { --mf-chrome: 166px; }
+	#institutional-monoculture .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#institutional-monoculture .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 20px; }
+	#institutional-monoculture .mf-final-def { font-size: 15px; }
+}
+
+/* The picture stays whenever the figure is 480 px wide or more; narrower, the stage
+   switches to a stacked text view driven by the same clock. */
+.im-narrow { display: none; }
+#institutional-monoculture.is-stacked .mf-stage { height: 0; overflow: hidden; }
+#institutional-monoculture.is-stacked .im-narrow { display: block; padding: 8px clamp(10px, 3vw, 24px) 4px; background: var(--paper); }
+@media (max-width: 480px) {
+	#institutional-monoculture .mf-check-q, #institutional-monoculture .mf-follow.is-equal { font-size: 18px; }
+	#institutional-monoculture .mf-caption { min-height: 220px; padding-top: 10px; padding-bottom: 10px; }
+}
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls in the stacked view (shown only when the edition has one). */
+.im-source { display: none; }
+#institutional-monoculture.is-stacked .im-source:not([hidden]) { display: block; margin: 8px 0 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+.im-narrow p { margin: 0; }
+.im-n-task { margin: 0 0 6px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 13px/1.35 var(--serif); color: var(--ink); }
+.im-n-task b, .im-n-ai b { font: 600 12px/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.im-n-task b { margin-right: 4px; }
+.im-n-ctx { margin-top: 3px !important; padding-top: 3px; border-top: 1px solid var(--navy-line); }
+.im-n-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin: 0 0 8px !important; padding: 4px 8px; border: 1.5px solid rgba(91, 86, 79, 0.7); border-radius: 5px; background: rgba(222, 213, 196, 0.45); color: var(--stone); font: 400 13px/1.3 var(--serif); transition: box-shadow 160ms ease; }
+.im-n-ai.is-pulse { box-shadow: 0 0 0 3px rgba(10, 34, 66, 0.25); }
+/* Business keeps the AI line to the end, so it runs inline after the label to save height. */
+.im-n-ai.is-keep { display: block; }
+.im-n-ai.is-keep b { margin-right: 8px; }
+.im-n-open i { padding: 0 3px; background: #ded5c4; }
+.im-n-run { margin: 0 0 8px; padding-top: 6px; border-top: 1px solid var(--navy-line); }
+.im-n-who { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; margin: 0 0 6px !important; font: 600 13px/1.3 var(--sans); color: var(--red); }
+.im-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.im-n-seq { font: 600 12px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+.im-n-seq .g { color: var(--stone); }
+.im-n-seq .r { color: var(--red); }
+/* One row of ten papers, big enough to watch change; the one changing pulses. */
+.im-n-grid { display: grid; grid-template-columns: repeat(10, 22px); gap: 6px; padding-top: 8px; }
+.im-n-paper { position: relative; display: block; width: 22px; height: 27px; border: 1px solid rgba(10, 34, 66, 0.25); background: var(--paper-bright); transition: box-shadow 160ms ease; }
+.im-n-paper.is-pulse { box-shadow: 0 0 0 2px var(--ink); }
+.im-n-paper .ln { position: absolute; left: 3px; top: 4px; width: 12px; height: 2.5px; background: var(--ink); opacity: 0; }
+.im-n-paper .body { position: absolute; left: 3px; right: 3px; top: 10px; bottom: 3px; background: repeating-linear-gradient(180deg, rgba(10, 34, 66, 0.7) 0 2px, transparent 2px 5px); opacity: 0; }
+.im-n-paper:nth-child(3n+2) .body { background: repeating-linear-gradient(90deg, rgba(10, 34, 66, 0.7) 0 3px, transparent 3px 6px) bottom / 100% 55% no-repeat, repeating-linear-gradient(180deg, rgba(10, 34, 66, 0.7) 0 2px, transparent 2px 5px) top / 100% 40% no-repeat; }
+.im-n-paper:nth-child(3n) .body { background: repeating-linear-gradient(180deg, rgba(10, 34, 66, 0.7) 0 1.5px, transparent 1.5px 3px); }
+.im-n-paper.is-outline { background: #ded5c4; border-color: rgba(91, 86, 79, 0.6); }
+.im-n-paper.is-outline .body { opacity: 1; background: repeating-linear-gradient(180deg, rgba(91, 86, 79, 0.8) 0 2px, transparent 2px 5px); }
+.im-n-paper.is-outline .ln { opacity: 1; background: var(--stone); }
+.im-n-paper.is-written .body, .im-n-paper.is-written .ln { opacity: 1; }
+.im-n-paper.is-red .ln { opacity: 1; background: var(--red); width: 16px; }
+.im-n-paper .note { position: absolute; left: 3px; right: 2px; top: 8px; height: 6px; background: #ded5c4; border: 1px solid rgba(91, 86, 79, 0.8); border-radius: 3px 3px 3px 0; display: none; }
+.im-n-paper.has-note .note { display: block; }
+.im-n-paper.has-note .body { top: 17px; }
+.im-n-paper .tick { position: absolute; right: -4px; top: -9px; font: 700 11px/1 var(--sans); color: var(--ink); visibility: hidden; }
+.im-n-paper.is-ticked .tick { visibility: visible; }
+.im-n-tag { margin-top: 4px !important; font: 600 12px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
+.im-n-board { margin-top: 6px; }
+.im-n-frame { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 3px !important; font: 600 12px/1.4 var(--mono); text-transform: uppercase; color: var(--ink); }
+.im-n-pill { display: inline-block; padding: 0 7px; border: 1.2px solid rgba(91, 86, 79, 0.8); border-radius: 9px; background: #ded5c4; color: var(--stone); font: 600 12px/1.4 var(--mono); }
+.im-n-q { display: inline-block; margin-left: auto; padding: 0 12px; border: 1.5px dashed rgba(10, 34, 66, 0.5); font: italic 400 17px/1.25 var(--serif); text-transform: none; color: rgba(10, 34, 66, 0.65); transition: border-color 160ms ease; }
+.im-n-q.is-pulse { border-color: var(--ink); }
+/* An edition can put the manager's question in words under the list (business). */
+.im-n-ask { margin: 6px 0 0 !important; padding: 2px 10px; border: 1.5px dashed rgba(10, 34, 66, 0.5); font: italic 400 14px/1.3 var(--serif); color: var(--ink); transition: border-color 160ms ease; }
+.im-n-ask.is-pulse { border-color: var(--ink); }
+/* Business keeps the AI's opening line (marked unseen by the manager) and a compact first-run list to the end. */
+.im-n-unseen { display: inline-block; margin-left: 6px; font: 600 11px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); }
+.im-n-choose { margin: 2px 0 0 !important; font: 600 11px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.im-n-compact { margin: 2px 0 0 !important; padding: 2px 8px 3px; border: 1.5px solid var(--stone); font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.im-n-lines { list-style: none; margin: 0; padding: 3px 8px; border: 1.5px solid var(--ink); columns: 2; column-gap: 12px; font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.im-n-lines li { break-inside: avoid; padding-left: 10px; text-indent: -10px; }
+.im-n-lines li::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 5px; border-radius: 50%; background: transparent; vertical-align: 2px; }
+.im-n-lines li.is-read::before { background: var(--ink); }
+.im-n-lines.is-open { border-color: transparent; }
+.im-n-lines.is-ai { border-color: var(--stone); }
+/* An edition with longer lines (business questions) sets them one per line, so none wraps mid-phrase. */
+.im-n-lines.is-one { columns: 1; }
+.im-n-group { margin: 0 0 4px !important; padding: 2px 8px 3px; border: 1.5px solid var(--ink); font: 400 13px/1.3 var(--serif); color: var(--ink); }
+.im-n-group b { margin-right: 6px; font: 600 12px/1.3 var(--mono); text-transform: uppercase; color: var(--ink); }
+</style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 6 of 7</p><h1>Institutional monoculture</h1><p class="fig-setup">Shared systems and defaults narrow the range of frames a group considers.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<!-- Every visible word on this page comes from editions/<id>.json and ../../casts.json
+	     (MotionFigures.fillPage, plus the figure's own fill for text with links:
+	     data-im-linked, data-im-linked-items, data-im-lead); see CONVENTIONS.md, Editions. -->
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="business" data-cast-link="classroom">Classroom</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote" data-ed-section="page.editionNote">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+
+	<figure class="mf" id="institutional-monoculture" aria-labelledby="im-title">
+		<p class="sr-only" id="im-title" data-ed="page.srTitle"></p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="im-narrow" data-im-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the institutional monoculture figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:40</span>
+		</div>
+		<p class="im-source" data-im-source hidden></p>
+		<figcaption>
+			<p class="sr-only" data-ed="page.srSummary"></p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="im-check-h">
+		<h2 id="im-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+		<p class="fig-follow" data-im-lead="page.about"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="im-study-h" data-ed-section="page.study" hidden>
+		<h2 id="im-study-h" data-ed="page.studyHeading"></h2>
+		<div data-ed-lines="page.study" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="im-essay-h" data-ed-section="page.quote">
+		<h2 id="im-essay-h" data-ed="page.quoteHeading"></h2>
+		<blockquote class="fig-quote">
+			<p data-im-linked="page.quote"></p>
+			<cite data-ed-rich="page.cite"></cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="im-evidence-h" data-ed-section="page.evidence">
+		<h2 id="im-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-follow"></div>
+		<ul class="fig-evidence" data-im-linked-items="page.evidenceList"></ul>
+	</section>
+
+	<section class="fig-section" aria-labelledby="im-links-h">
+		<h2 id="im-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
+		<p class="fig-follow" data-ed-rich="page.linksNote" data-ed-section="page.linksNote" hidden></p>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="institutional-monoculture.js"></script>
+</body>
+</html>

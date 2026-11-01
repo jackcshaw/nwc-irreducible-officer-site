@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Premature Synthesis</title>
+<meta name="description" data-ed-content="page.description" content="Premature synthesis: the model connects the material before anyone has built the map, and only the person who built the connections can say what would change them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../runtime/figures.css">
+<style>
+/* Whenever a picture label would render under 11 px (phones, and short windows such
+   as 1280×720, at the runtime's letterboxed scale), the stage switches to a stacked
+   text view driven by the same clock (13–16 px). syncStacked() in the JS sets the class. */
+.ps-narrow { display: none; }
+/* Collapsed, not display:none: the SVG keeps its box so it can still be measured. */
+#premature-synthesis.is-stacked .mf-stage { height: 0; overflow: hidden; }
+/* Fixed heights (the tallest beat, and the check) so the caption and controls never move. */
+#premature-synthesis.is-stacked .ps-narrow { display: block; min-height: 466px; padding: 8px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
+/* The last caption carries the name and definition above the check: 144 px on desktop,
+   222 px on phones (measured at 390 px), fixed from the start. */
+#premature-synthesis.is-stacked .mf-caption { min-height: 144px; }
+@media (max-width: 719px) { #premature-synthesis.is-stacked .mf-caption { min-height: 222px; } }
+/* Editions with laptop: true (PME): in laptop windows a compact caption band keeps the drawn
+   picture at 1280 × 720 and 1366 × 657, with 13-unit labels at 11 px or more (IM's convention). */
+@media (min-width: 720px) and (max-height: 860px) {
+	#premature-synthesis.ps-laptop { --mf-chrome: 166px; }
+	#premature-synthesis.ps-laptop .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	#premature-synthesis.ps-laptop .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	#premature-synthesis.ps-laptop .mf-check-q, #premature-synthesis.ps-laptop .mf-follow.is-equal { font-size: 20px; }
+	#premature-synthesis.ps-laptop .mf-final-def { font-size: 15px; }
+}
+@media (max-width: 480px) {
+	#premature-synthesis .mf-check-q, #premature-synthesis .mf-follow.is-equal { font-size: 20px; }
+}
+.ps-n-sec { margin: 0 0 12px; }
+.ps-n-sec[hidden] { display: none; }
+.ps-n-label { margin: 0 0 6px; font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.ps-n-task { margin: 0; padding: 8px 10px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.ps-n-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ps-n-card { padding: 5px 8px 6px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 600 14px/1.3 var(--sans); color: var(--ink); }
+.ps-n-card b { margin-right: 4px; font: 600 13px/1 var(--mono); }
+.ps-n-card.is-read { box-shadow: inset 0 -4px 0 rgba(10, 34, 66, 0.45); }
+.ps-n-links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 6px; }
+.ps-n-chip { padding: 1px 8px; border-radius: 12px; font: 600 14px/1.5 var(--mono); }
+.ps-n-chip.is-ai { color: var(--stone); border: 1.5px dashed var(--stone); }
+.ps-n-chip.is-ai.is-taken { border-style: solid; }
+.ps-n-chip.is-main { border-width: 3px; }
+.ps-n-chip.is-own { color: var(--red); border: 1.5px solid var(--red); }
+.ps-n-chip.is-struck { text-decoration: line-through; text-decoration-thickness: 2px; }
+.ps-n-chip.is-struck::after { content: " ✕"; }
+.ps-n-note { margin: 0 0 8px; font: italic 400 15px/1.4 var(--serif); color: var(--red); }
+.ps-n-inline { font: 400 14px/1.4 var(--sans); color: var(--stone); }
+.ps-n-small { margin: 4px 0 0; font: 500 14px/1.4 var(--sans); color: var(--muted); }
+.ps-n-paper { min-width: 0; padding: 7px 9px; border: 1px solid var(--navy-border); background: var(--paper-bright); }
+.ps-n-ptitle { margin: 2px 0; font: 600 15px/1.3 var(--serif); color: var(--ink); }
+.ps-n-tags { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--ink); }
+.ps-n-ai { margin: 3px 0 0; font: 600 13px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--stone); }
+.ps-n-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ps-n-who { display: block; margin: 0 0 3px; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.ps-n-who::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.ps-n-row { margin: 0 0 8px; }
+.ps-n-order { margin: 0; font: 500 13px/1.4 var(--mono); color: var(--ink); }
+.ps-n-order .is-ai { color: var(--stone); }
+.ps-n-order .is-own { color: var(--red); }
+.ps-n-sketch { margin: 2px 0 0; font: 400 14px/1.4 var(--sans); color: var(--ink); }
+.ps-n-q { margin: 0 0 6px; font: italic 400 16px/1.35 var(--serif); color: var(--ink); }
+.ps-n-say { margin: 0 0 6px; padding: 6px 9px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); }
+.ps-n-say[hidden] { display: none; }
+.ps-n-txt { font: 400 15px/1.4 var(--serif); color: var(--ink); }
+.ps-n-llabel { font: 600 13px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--red); }
+.ps-n-lnote { margin: 2px 0 0; font: italic 400 15px/1.4 var(--serif); color: var(--red); }
+/* Business: the task as one line kept to the final frame. */
+.ps-n-tl { margin: 0 0 10px; font: 400 14px/1.35 var(--serif); color: var(--ink); }
+.ps-n-tlk { font: 600 13px/1 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+#premature-synthesis[data-edition-id="business"] .ps-n-sec { margin-bottom: 8px; }
+#premature-synthesis[data-edition-id="business"] .ps-n-row { margin-bottom: 4px; }
+#premature-synthesis[data-edition-id="business"] .ps-n-tl { margin-bottom: 8px; }
+#premature-synthesis[data-edition-id="business"] .ps-n-label { margin-bottom: 4px; }
+#premature-synthesis[data-edition-id="business"] .ps-n-say { margin-bottom: 4px; }
+/* An edition's source line: in the SVG's final frame on the picture stage; under the
+   controls on the stacked stage (shown only when the edition has one). */
+.ps-source { display: none; }
+#premature-synthesis.is-stacked .ps-source:not([hidden]) { display: block; margin: 8px clamp(12px, 3vw, 24px) 0; font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+</style>
+<!-- Editions: hide the page until its edition fills it, so no edition's words flash before
+     first paint; after 3 s show a neutral loading state and keep waiting (CONVENTIONS.md, Editions). -->
+<style>html.ed-pending .fig-page { visibility: hidden; } html.ed-loading .fig-page { position: relative; } html.ed-loading .fig-page > * { visibility: hidden; } html.ed-loading .fig-page::before { content: attr(data-loading); position: absolute; top: 28px; font: 500 16px/1.4 var(--sans, system-ui, sans-serif); color: var(--muted, #5b6472); }</style>
+<script>(function (d) { d.setAttribute('data-ed-gate', ''); d.classList.add('ed-pending'); setTimeout(function () { if (!d.classList.contains('ed-pending')) return; var m = document.querySelector('main.fig-page'); if (m && !m.hasAttribute('data-loading')) m.setAttribute('data-loading', document.title + ': loading\u2026'); d.classList.remove('ed-pending'); d.classList.add('ed-loading'); }, 3000); })(document.documentElement);</script>
+</head>
+<body>
+<header class="fig-top">
+	<a class="brand" href="https://judgmentlab.net/">Judgment Lab<i>.</i></a>
+	<nav aria-label="Judgment Lab"><a href="https://judgmentlab.net/#ii-what-the-problem-looks-like">Essay</a> · <a href="https://judgmentlab.net/#companion">Practice</a></nav>
+</header>
+
+<main class="fig-page">
+	<noscript><div class="fig-noscript"><p class="fig-kicker">Failure mode 3 of 7</p><h1>Premature synthesis</h1><p class="fig-setup">The model connects the material before anyone has built the map.</p><p><em>This figure needs JavaScript to play.</em></p></div></noscript>
+	<p class="fig-kicker" data-ed="page.kicker"></p>
+	<h1 data-ed="page.title"></h1>
+	<p class="fig-setup" data-ed-rich="page.setup"></p>
+	<nav class="fig-editions" aria-label="Choose an example">See this with: <a data-edition-link="business">Workplace</a> · <a data-edition-link="business" data-cast-link="classroom">Classroom</a> · <a data-edition-link="pme">PME</a></nav>
+	<p class="fig-edition-note" data-ed-rich="page.editionNote">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>
+
+	<figure class="mf" id="premature-synthesis" aria-labelledby="ps-title">
+		<p class="sr-only" id="ps-title" data-ed="page.srTitle"></p>
+		<div class="mf-shot" data-mf-shot>
+			<div class="mf-stage">
+				<svg viewBox="0 0 960 540" aria-hidden="true" focusable="false"></svg>
+			</div>
+			<div class="ps-narrow" data-ps-narrow aria-hidden="true"></div>
+			<div class="mf-caption" data-mf-caption aria-hidden="true"></div>
+		</div>
+		<div class="mf-controls">
+			<button class="mf-toggle" type="button" data-mf-toggle><span class="mf-icon" aria-hidden="true"></span><span data-mf-label>Play</span><span class="sr-only"> the premature synthesis figure</span></button>
+			<button class="mf-btn" type="button" data-mf-replay><span class="mf-restart-icon" aria-hidden="true"></span>Restart</button>
+			<input class="mf-scrub" type="range" data-mf-scrub aria-label="Scrub through the figure" value="0">
+			<span class="mf-time" data-mf-time aria-hidden="true">0:00 / 1:34</span>
+		</div>
+		<p class="ps-source" data-ps-source hidden></p>
+		<figcaption>
+			<p class="sr-only" data-ed="page.srSummary"></p>
+			<ol class="mf-beats is-list" data-mf-beats aria-label="Beats"></ol>
+		</figcaption>
+	</figure>
+
+	<section class="fig-section" aria-labelledby="ps-check-h">
+		<h2 id="ps-check-h" data-ed="page.checkHeading"></h2>
+		<div data-ed-lines="page.checkLines" data-ed-class="fig-check"></div>
+		<p class="fig-follow" data-ed-rich="page.checkFollow"></p>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ps-evidence-h" data-ed-section="page.evidence" hidden>
+		<h2 id="ps-evidence-h" data-ed="page.evidenceHeading"></h2>
+		<div data-ed-lines="page.evidence" data-ed-class="fig-ed-evidence"></div>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ps-essay-h" data-ed-section="page.quoteHeading">
+		<h2 id="ps-essay-h" data-ed="page.quoteHeading"></h2>
+		<blockquote class="fig-quote">
+			<p data-ed-rich="page.quote"></p>
+			<cite data-ed-rich="page.cite"></cite>
+		</blockquote>
+		<blockquote class="fig-quote" style="margin-top: 22px">
+			<p data-ed-rich="page.quote2"></p>
+			<cite data-ed-rich="page.cite2"></cite>
+		</blockquote>
+	</section>
+
+	<section class="fig-section" aria-labelledby="ps-links-h">
+		<h2 id="ps-links-h" data-ed="page.linksHeading"></h2>
+		<ul class="fig-links" data-ed-links="page.links"></ul>
+	</section>
+</main>
+
+<script src="../../runtime/motion.js"></script>
+<script src="premature-synthesis.js"></script>
+</body>
+</html>
