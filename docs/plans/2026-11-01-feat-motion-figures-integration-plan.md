@@ -10,7 +10,7 @@ scope: Implementation approved; later editorial and release gates remain
 
 Put the eight completed figures on their own pages, then connect them to the essay, Practice, the four-moves book and the setting pages. Every figure will have pre-rendered workplace, higher-education, high-school and PME versions. Preserve the reviewed pictures, timing and interactions as they enter the site.
 
-**Approval recorded November 1:** Jack approved this plan and its recommended first-page defaults. Implementation may begin. D12, later editorial gates and release/deployment approval remain pending as identified below. This approval does not publish the figures.
+**Approval recorded November 1:** Jack approved this plan and its recommended first-page defaults. Implementation may begin. Later editorial gates and release/deployment approval remain pending as identified below. D12 is included in the approved first-page defaults. This approval does not publish the figures.
 
 ## 1. Ownership and the starting point
 
@@ -52,7 +52,7 @@ The November 1 handoff and October 30 decisions supersede stale portions of the 
 
 ## 3. Decisions for Jack
 
-Jack accepted D1–D6 and D11 on November 1. D12 and the later decisions remain open until their corresponding gates. The recommendations below retain their rationale for review.
+Jack accepted D1–D6, D11 and D12 on November 1. The later decisions remain open until their corresponding gates. The recommendations below retain their rationale for review.
 
 ### Blocking the first public figure pages
 
@@ -134,7 +134,7 @@ Resolve data with the same pure `resolveEdition` implementation used by the runt
 
 Include per-version canonical/OG tags, a 1200×630 OG image, Twitter card, and—if D5 is accepted—valid `LearningResource` and breadcrumb data plus sitemap entries. Describe the workplace audience as well as educational audiences accurately. Reuse the site's existing analytics inclusion, with no new events. The reel remains a homepage behavior.
 
-**Appropriate reliance needs a separate rendering contract.** The ordinary “show final frame and all beats” fallback would reveal its suggested calls before the reader answers. Proposed implementation, subject to D12:
+**Appropriate reliance needs a separate rendering contract.** The ordinary “show final frame and all beats” fallback would reveal its suggested calls before the reader answers. Implementation contract approved under D12:
 
 - Initial HTML presents the live question, question-first poster, safe setup and available beat text. Later reveal fragments live in inert templates until the matching answer or skip; no answer text is placed in the rendered/accessibility tree merely at opacity zero.
 - A `<noscript>` reading version contains the full pre-rendered text, question first, then explicitly labelled native disclosures for the results and reasoning. A JS-enabled load failure offers that same deliberate reading fallback without changing the version. This is a readable alternative, not simulated evidence that the reader made a call.
@@ -188,6 +188,8 @@ The flat book supports `/?move=frame|calibrate|garden|own#learn` and `/?book=<sl
 ## 8. Tests and frame-preservation gates
 
 ### Preserve the reviewed frames
+
+**Implementation note, November 1:** source checks exposed varying upstream font bytes. Pin the stylesheet/fonts with hashes and licenses, replay that lock for source captures, and serve those same bytes locally in the candidate. The source archive and lock remain immutable while candidate drafting and serial reference captures proceed. All required source and candidate comparisons still gate the runtime PR; no tolerance is relaxed. Poster generation will use the same locked inputs.
 
 1. Record source SHA, files/hashes, installed Chromium/Playwright versions, font resources, edition/cast and viewport in an integration receipt. Existing PNGs may predate the final polish/name-card change or have different `--freeze` flags; do not assume their currency.
 2. Before changing a figure/runtime, serve a frozen export of the approved source on an owned quiet port. Capture each of the four variants with `design/motion-figures/scripts/frame-diff.mjs`, always with `--freeze`. Self-diff a second unchanged capture: zero differing/missing images before using it as the new integration baseline. Preserve historical baselines; do not overwrite them.
@@ -248,8 +250,8 @@ Preserve the prior release receipt/artifact for recovery. If post-deploy verific
 
 This plan is complete when saved at `docs/plans/2026-11-01-feat-motion-figures-integration-plan.md` on the isolated planning branch and shared with Jack (a docs PR is optional). Only this review document is changed in Step 1.
 
-**Blocking later work:** D12 for interactive pre-rendering, B1–B3 for the book, D9 for setting links, and the other later decisions at their PRs. The implementation plan and D1–D6/D11 are approved. Every production port must independently pass its frame and behavior gates.
+**Blocking later work:** B1–B3 for the book, D9 for setting links, and the other later decisions at their PRs. The implementation plan and D1–D6/D11/D12 are approved. Every production port must independently pass its frame and behavior gates.
 
 **Patch later:** voiceover, video packs, custom error page, extra analytics and optional page turns. These do not prevent the approved core integration from proceeding.
 
-**Next decision gates:** Confirm D12 before the interactive port, D9 before setting links and the book decisions before book implementation. Approval to implement does not authorize release or deployment.
+**Next decision gates:** Confirm D9 before setting links and the book decisions before book implementation. Approval to implement does not authorize release or deployment.

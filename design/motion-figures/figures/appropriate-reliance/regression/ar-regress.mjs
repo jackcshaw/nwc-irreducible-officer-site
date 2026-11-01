@@ -25,23 +25,28 @@
 // snapshots; --freeze turns off CSS transitions and animations, as frame-diff's does.
 // diff captures into <currentDir>, then compares every baseline file: PNGs byte for byte,
 // then pixel by pixel; text snapshots key by key. Serve motion-figures/ first.
-import { chromium } from "/Users/jackcshaw-2/dev/comprendo-clients/nwc-irreducible-officer-site-motion/node_modules/playwright/index.mjs";
+import { loadFontLock } from "../../../../../scripts/figure-fonts.mjs";
+import { createHash } from "node:crypto";
+import { chromium } from "@playwright/test";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
 
 const SLUG = "appropriate-reliance";
 const args = process.argv.slice(2);
-const flag = (name, def) => (args.find((a) => a.startsWith(`--${name}=`)) || `--${name}=${def}`).split("=")[1];
+const flag = (name, def) => args.find((a) => a.startsWith(`--${name}=`))?.slice(name.length + 3) ?? def;
 const [mode, dirA, dirB] = args.filter((a) => !a.startsWith("--"));
 const port = flag("port", "5291");
 const edition = flag("edition", "");
 const cast = flag("cast", "");
 const hide = flag("hide", "");
 const freeze = args.includes("--freeze");
+const fontLock = flag("font-lock", "");
+const fonts = fontLock ? loadFontLock(fontLock) : null;
+const arHarness = createHash("sha256").update(readFileSync(new URL(import.meta.url))).digest("hex");
 const ROOT = new URL("../../../", import.meta.url).pathname; // motion-figures/
 const resolve = (d) => (d.startsWith("/") ? d : join(ROOT, d));
-const URL0 = `http://127.0.0.1:${port}/figures/${SLUG}/index.html`;
+const URL0 = flag("url", `http://127.0.0.1:${port}/figures/${SLUG}/index.html`);
 const SIZES = [[1440, 900], [1280, 720], [390, 844]];
 const cfg = JSON.parse(readFileSync(join(ROOT, `figures/${SLUG}/branches.json`), "utf8"));
 // Wall-clock wait after load for the name card's intro over question 1 to settle (2.2 s hold,
@@ -50,6 +55,7 @@ const INTRO = 3600;
 
 async function open(b, w, h, query = "", opts = {}) {
   const c = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, ...opts });
+  if (fonts) await fonts.install(c);
   if (hide) await c.addInitScript((css) => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = `${css}{display:none!important}`; document.head.append(s); }), hide);
   if (freeze) await c.addInitScript(() => document.addEventListener("DOMContentLoaded", () => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation:none!important}"; document.head.append(s); }));
   const qs = new URLSearchParams(query.replace(/^\?/, ""));
@@ -60,7 +66,9 @@ async function open(b, w, h, query = "", opts = {}) {
   const errors = [];
   p.on("pageerror", (e) => errors.push(e.message));
   p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
-  await p.goto(URL0 + query);
+  const target = new URL(URL0);
+  for (const [key, value] of qs) target.searchParams.set(key, value);
+  await p.goto(target.href);
   await p.evaluate(() => document.fonts.ready);
   await p.waitForFunction((id) => window.__motionFigures?.[id], SLUG, { timeout: 20000 });
   await p.waitForTimeout(400);
@@ -77,13 +85,15 @@ const still = async (p, sel, path) => {
   await p.waitForTimeout(60);
   // Two matching shots in a row, so a still never catches raster still settling (seen in
   // the stacked view at 1280 × 720 while other browsers loaded the machine).
+  let matched = false;
   let prev = await p.locator(sel).first().screenshot();
   for (let i = 0; i < 4; i++) {
     await p.waitForTimeout(150);
     const cur = await p.locator(sel).first().screenshot();
-    if (cur.equals(prev)) break;
+    if (cur.equals(prev)) { matched = true; break; }
     prev = cur;
   }
+  if (!matched) throw new Error(`Capture did not settle: ${path}`);
   writeFileSync(path, prev);
   await p.evaluate(() => { for (const el of document.querySelectorAll("[data-unstuck]")) { el.style.position = ""; delete el.dataset.unstuck; } });
 };
@@ -234,9 +244,11 @@ async function captureExtra(dir) {
 async function capture(dir) {
   dir = resolve(dir);
   mkdirSync(dir, { recursive: true });
-  const out = execFileSync("node", [join(ROOT, "scripts/frame-diff.mjs"), SLUG, "capture", dir, `--port=${port}`, ...(edition ? [`--edition=${edition}`] : []), ...(cast ? [`--cast=${cast}`] : []), ...(hide ? [`--hide=${hide}`] : []), ...(freeze ? ["--freeze"] : [])], { encoding: "utf8" });
+  const out = execFileSync("node", [join(ROOT, "scripts/frame-diff.mjs"), SLUG, "capture", dir, `--port=${port}`, `--url=${URL0}`, ...(fontLock ? [`--font-lock=${fontLock}`] : []), ...(edition ? [`--edition=${edition}`] : []), ...(cast ? [`--cast=${cast}`] : []), ...(hide ? [`--hide=${hide}`] : []), ...(freeze ? ["--freeze"] : [])], { encoding: "utf8" });
   const fd = JSON.parse(out);
   const r = await captureExtra(dir);
+  const receiptFile = join(dir, "capture.json");
+  writeFileSync(receiptFile, JSON.stringify({...JSON.parse(readFileSync(receiptFile, "utf8")), arHarness}, null, 1) + "\n");
   return { frames: fd.captured, extra: r.count, errors: [...fd.errors, ...r.errors] };
 }
 
@@ -286,21 +298,26 @@ async function compare(base, cur) {
       }
     }
   }
-  return { files: files.length, same, diffs, missing, textStates: Object.keys(ta).length, textDiffs, wsOnly };
+  const ma = JSON.parse(readFileSync(join(base, "capture.json"), "utf8"));
+  const mb = JSON.parse(readFileSync(join(cur, "capture.json"), "utf8"));
+  const receiptDiffs = ["edition", "cast", "hide", "freeze", "fontLock", "harness", "arHarness", "browser"].filter(key => ma[key] !== mb[key]);
+  return { files: files.length, same, diffs, missing, receiptDiffs, textStates: Object.keys(ta).length, textDiffs, wsOnly };
 }
 
 if (mode === "capture") {
-  console.log(JSON.stringify(await capture(dirA), null, 1));
+  const result = await capture(dirA);
+  console.log(JSON.stringify(result, null, 1));
+  process.exitCode = result.errors.length ? 1 : 0;
 } else if (mode === "diff") {
   const r1 = await capture(dirB);
   const r = await compare(dirA, dirB);
-  console.log(JSON.stringify({ captured: r1, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40), missingFiles: r.missing.slice(0, 20) }, null, 1));
-  process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length ? 1 : 0;
+  console.log(JSON.stringify({ captured: r1, compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, receiptDiffs: r.receiptDiffs, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40), missingFiles: r.missing.slice(0, 20) }, null, 1));
+  process.exitCode = r1.errors.length || r.diffs.length || r.missing.length || r.textDiffs.length || r.receiptDiffs.length ? 1 : 0;
 } else if (mode === "compare") {
   // Compare two existing captures without capturing again.
   const r = await compare(dirA, dirB);
-  console.log(JSON.stringify({ compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40) }, null, 1));
-  process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length ? 1 : 0;
+  console.log(JSON.stringify({ compared: r.files, identical: r.same, differing: r.diffs.length, missing: r.missing.length, textStates: r.textStates, receiptDiffs: r.receiptDiffs, textDiffs: r.textDiffs.slice(0, 30), domTextWhitespaceOnly: r.wsOnly, diffs: r.diffs.slice(0, 40) }, null, 1));
+  process.exitCode = r.diffs.length || r.missing.length || r.textDiffs.length || r.receiptDiffs.length ? 1 : 0;
 } else {
   console.log("usage: ar-regress.mjs capture <dir> | diff <baselineDir> <currentDir> | compare <baselineDir> <currentDir> [--port=5291] [--edition=id] [--cast=id] [--hide=css] [--freeze]");
   process.exitCode = 2;

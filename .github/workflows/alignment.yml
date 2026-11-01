@@ -76,7 +76,7 @@ jobs:
         run: npm test
       - name: Browser checks
         working-directory: nwc-irreducible-officer-site
-        run: npm run test:browser
+        run: npm run test:browser -- --workers=1
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
