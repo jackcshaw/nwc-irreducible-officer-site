@@ -50,13 +50,13 @@
     "figures/fonts/fonts.css": "e91a1bbcf61c5f6e14b1c997f9abab7e6e204bbc6793bbfb2ae0518d2b375840",
     "figures/fonts/google-fonts.css": "6af12cf2821f2258a956feb78009c4730b90f686dd4733f08296de6dcff615c3",
     "figures/fonts/manifest.json": "98e9ccd46802c8f5014deda2ca58207ee232ba478d090d071878d1100f83c855",
-    "figures/manifest.json": "c9c71046d572378085f4394e6e3a7ac4c225a1c628476a09c1df06d4cbac1aa7",
+    "figures/manifest.json": "35edb73db5b82875c5ebdd859e0b14d3cf856a63b01c737d00f71aefd3a165d6",
     "figures/page.js": "d38a9e8d1e81b791219551a5cbce914e2c9847bc67145d90ef7ac2602fba85db",
     "figures/responsibility-laundering/editions/business.json": "0832d91e5d2ee71b7d0a17a60017f43e0a87de26c9bfc15efc9c14690bbf2e47",
     "figures/responsibility-laundering/editions/pme.json": "b7b22a205f4cd03292730870cb8f7822d97dc98c572a9a1b2a826e5b65b21052",
     "figures/responsibility-laundering/nameplate.json": "a865213d153a1daa000d3622c198297459beb46e6965a64d8ce354c33da50a56",
     "figures/responsibility-laundering/player.html": "018e9693515f2fe23f665a3e37f0c303d37eb1ff3d015c22435c4bdee722a7e2",
-    "figures/responsibility-laundering/responsibility-laundering.css": "633fdb05cd43b6d044c74bdb7b84107868a7b6ce1f7092b9ee65641d11f705c9",
+    "figures/responsibility-laundering/responsibility-laundering.css": "89cc403d4b631b9306923966769b3e7adbcc9c93c1c21d60613a20d065c210cd",
     "figures/responsibility-laundering/responsibility-laundering.js": "d928bfeeb8b0694ddedc6d5f6ffed763573d73eead675009ee2b9ff61dae09f9",
     "figures/runtime/figure.css": "eaad6a40d9510c2d725eb2ab96a9671667f646d76d5b8f50884ae77090144520",
     "figures/runtime/motion.js": "5e55466b48a6a2f96f6c5776585a937b62124c0e34b6b94af6b2f2a59352237a",
@@ -71,17 +71,17 @@
   },
   "outputs": {
     "poster.png": {
-      "sha256": "3826241f5b8e9bc431efd49b55a9ce2dfe87340676dd48a64e17c73916711c2a",
+      "sha256": "5a292236a4f975886d4f47d3177c252752054c8291a61e41b4fabd5275f75f37",
       "width": 1038,
       "height": 751
     },
     "final.png": {
-      "sha256": "3826241f5b8e9bc431efd49b55a9ce2dfe87340676dd48a64e17c73916711c2a",
+      "sha256": "5a292236a4f975886d4f47d3177c252752054c8291a61e41b4fabd5275f75f37",
       "width": 1038,
       "height": 751
     },
     "og.png": {
-      "sha256": "74d326b11d51f6cdc87adf796f29af61fc5842510431f900ee2ac394e7dbd3cf",
+      "sha256": "622d3e7153706b608311ecbe6326e8d9a15b6c1f8056c04520dd3ee8ccef12b7",
       "width": 1200,
       "height": 630
     }
