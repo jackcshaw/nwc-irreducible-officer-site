@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
-import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote,checkedEssayExcerpt,linkedMarkdown,renderLinked} from '../scripts/figure-pages.mjs';
+import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote,checkedEssayExcerpt,linkedMarkdown,renderLinked,figureLink} from '../scripts/figure-pages.mjs';
 import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
 const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
 const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
-assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance']);
+assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance','invisible-delegation']);
 for(const figure of manifest.figures) {
   const quote=quoteFor(figure,essay);
   assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
@@ -32,7 +32,7 @@ for(const figure of manifest.figures) {
     assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
     assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
     assert(receipt.inputs['package-lock.json']);
-    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8}})[figure.slug][variant.edition]);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8},'invisible-delegation':{pme:99.1,business:99.1}})[figure.slug][variant.edition]);
     assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
     assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
   }
@@ -45,7 +45,7 @@ assert(!renderEssayQuote(root,'[unsafe](javascript:alert(1))').includes('<a'));
 const fsPage=readFileSync(join(root,'dist/failure-modes/fluency-substitution/pme/index.html'),'utf8');
 assert(fsPage.includes('<a href="https://ojs.aut.ac.nz/pjtel/article/view/246">Chow et al., 2026</a>'));
 const hub=readFileSync(join(root,'dist/failure-modes/index.html'),'utf8');
-assert.equal((hub.match(/<li>/g)||[]).length,4);
+assert.equal((hub.match(/<li>/g)||[]).length,5);
 assert(!hub.includes('runtime/motion.js'));
 assert(!readFileSync(join(root,'dist/index.html'),'utf8').includes('/assets/figures/runtime/motion.js'));
 console.log('Figure static routes, source boundaries, posters and metadata passed');
@@ -73,3 +73,15 @@ assert.throws(()=>linkedMarkdown([{text:'bad',href:'javascript:alert(1)'}]),/Inv
 const urPme=readFileSync(join(root,'dist/failure-modes/uncalibrated-reliance/pme/index.html'),'utf8');
 assert(urPme.includes('<p class="figure-setting-note">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>'));
 assert(!urPme.includes('<p class="figure-setting-note">true</p>'));
+
+for(const variant of manifest.variants) {
+ assert.equal(figureLink(manifest,variant,'../frame-capture/'),figurePath(manifest.figures[0],variant));
+ assert.equal(figureLink(manifest,variant,'../frame-capture/?edition=business'),figurePath(manifest.figures[0],variant));
+}
+assert.throws(()=>figureLink(manifest,manifest.variants[0],'../unpublished/'),/Unpublished/);
+assert.throws(()=>figureLink(manifest,manifest.variants[0],'javascript:alert(1)'),/Unsupported/);
+assert.equal(linkedMarkdown('Plain source quotation.'),'Plain source quotation.');
+const idPme=readFileSync(join(root,'dist/failure-modes/invisible-delegation/pme/index.html'),'utf8');
+const idEdition=resolveFigure(root,manifest.figures.find(f=>f.slug==='invisible-delegation'),manifest.variants[3]);
+for(const q of idEdition.page.quotes)assert(idPme.includes(renderEssayQuote(root,q.text)));
+assert(idPme.includes('href="/failure-modes/frame-capture/pme/"'));

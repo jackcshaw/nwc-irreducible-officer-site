@@ -52,6 +52,7 @@ export function checkedEssayExcerpt(quote,essay) {
   return clean.slice(start,start+quote.length);
 }
 export function linkedMarkdown(segments) {
+  if(typeof segments==='string') return segments;
   return (segments||[]).map(segment=>{
     if(typeof segment==='string') return segment;
     if(typeof segment.text!=='string' || !/^https:\/\//.test(segment.href)) throw new Error('Invalid linked figure text');
@@ -107,6 +108,18 @@ function shell({title,description,path,siteUrl,release,assets,body,head='',scrip
   const canonical=new URL(path,siteUrl).href;
   return `<!doctype html><html lang="en" data-ed-gate><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} | Judgment Lab</title><meta name="description" content="${escape(description)}"><link rel="canonical" href="${escape(canonical)}"><meta property="og:type" content="article"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${escape(canonical)}"><link rel="stylesheet" href="${assets['fonts/fonts.css'].url}"><link rel="stylesheet" href="${assets['figure-page.css'].url}"><link rel="stylesheet" href="${assets['masthead.css'].url}">${head}${analytics}</head><body><a class="skip-link" href="#main">Skip to content</a><header class="lab-masthead" aria-label="Judgment Lab"><div class="masthead-inner"><a class="package-brand" href="/#overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a><p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p></div></header><nav class="figure-nav" aria-label="Learning paths"><a href="/#overview">Learn</a><a href="/#discuss">Discuss</a><a href="/#companion">Practice</a><a href="/#workbench">Design</a><a href="/#sources">References</a></nav><main class="fig-page" id="main" tabindex="-1">${body}</main><footer class="lab-footer"><a href="/#overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="/#sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escape(release.version)} · ${escape(release.commits.site)}</p></footer>${scripts}</body></html>`;
 }
+// Source figure-to-figure links retain the current static setting.
+export function figureLink(manifest,variant,href) {
+  const relative=href.match(/^\.\.\/([a-z-]+)\/(?:\?edition=(?:business|pme))?$/);
+  if(relative) {
+    const target=manifest.figures.find(f=>f.slug===relative[1]);
+    if(!target) throw new Error(`Unpublished figure link: ${href}`);
+    return figurePath(target,variant);
+  }
+  if(href.startsWith('https://judgmentlab.net/')) return href.slice('https://judgmentlab.net'.length);
+  if(!href.startsWith('https://')) throw new Error(`Unsupported figure link: ${href}`);
+  return href;
+}
 export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics=''}) {
   const ed=resolveFigure(root,figure,variant),p=ed.page,rich=runtimeData(root).rich,path=figurePath(figure,variant);
   const routes=manifest.variants.map(v=>({...v,path:figurePath(figure,v)}));
@@ -116,7 +129,7 @@ export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,re
   const image=new URL(poster.og,siteUrl).href;
   const title=`${ed.nameplate.pageTitle} — ${variant.label}`;
   const structured=[{'@context':'https://schema.org','@type':'LearningResource',name:title,description:p.description,url:new URL(path,siteUrl).href,image,inLanguage:'en',learningResourceType:'Animated figure',timeRequired:`PT${receipt.finalTime}S`,audience:{'@type':'Audience',audienceType:variant.id==='pme'?'Professional military education':variant.id==='classroom'?'Higher education':variant.id==='high-school'?'High-school educators':'Workplace'}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{name:'Judgment Lab',item:new URL('/',siteUrl).href},{name:'AI failure modes',item:new URL('/failure-modes/',siteUrl).href},{name:ed.nameplate.name,item:new URL(path,siteUrl).href}].map((x,i)=>({'@type':'ListItem',position:i+1,...x}))}];
-  const links=p.links.filter(l=>!figure.unpublishedLinks.includes(l.href)).map(l=>`<li>${escape(l.lead)} <a href="${escape(l.href.replace('https://judgmentlab.net/','/'))}">${escape(l.text)}</a></li>`).join('');
+  const links=p.links.filter(l=>!figure.unpublishedLinks.includes(l.href)).map(l=>`<li>${escape(l.lead)} <a href="${escape(figureLink(manifest,variant,l.href))}">${escape(l.text)}</a></li>`).join('');
   const duration=`${Math.floor(receipt.finalTime/60)}:${String(Math.floor(receipt.finalTime%60)).padStart(2,'0')}`;
   const body=`<nav class="figure-crumb" aria-label="Breadcrumb"><a href="/failure-modes/">AI failure modes</a> / ${escape(p.title)}</nav><header class="figure-intro"><p class="fig-kicker">${escape(p.kicker)}</p><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p class="figure-setting-note">PME means professional military education. The Classroom version is also available for high school.</p>${['classroom','high-school'].includes(variant.id)?`<nav class="figure-variant-links" aria-label="Classroom version"><a href="${routes[1].path}"${variant.id==='classroom'?' aria-current="page"':''}>Higher education</a><a href="${routes[2].path}"${variant.id==='high-school'?' aria-current="page"':''}>High school</a></nav>`:''}<p>${rich(p.setup)}</p>${p.editionNote?`<p class="figure-setting-note">${rich(p.editionNote===true?"PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay.":p.editionNote)}</p>`:''}<p class="figure-duration">${duration} · <a href="#figure-beats" data-read-figure>Read the figure</a></p></header><p class="figure-load-error" data-figure-status hidden>The animation could not load. You can read every beat below.</p>${playerMarkup(root,figure,ed,poster)}<article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}<p>${rich(p.checkFollow)}</p></section>${p.evidence?`<section><h2>${escape(p.evidenceHeading)}</h2>${p.evidence.map(x=>`<p>${rich(x)}</p>`).join('')}</section>`:''}<section><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2>${essayQuoteMarkup(root,figure,p,quote)}</section>${p.evidenceText?`<section><h2>${escape(p.evidenceHeading)}</h2><p>${renderLinked(root,p.evidenceText)}</p></section>`:''}<section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">All failure modes</a></p></section></article>`;
   const head=`<link rel="stylesheet" href="${assets['runtime/figure.css'].url}"><link rel="stylesheet" href="${assets[`${figure.slug}/${figure.slug}.css`].url}"><meta property="og:image" content="${escape(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">${jsonScript(structured)}</script>`;
@@ -144,6 +157,10 @@ export function buildFigurePages({root,distDir,siteUrl,release,essayMarkdown,sou
       for(const expected of ['no detectable average change','nearly 10% worse','may have benefited by over 15%','0.20-standard-deviations','advice that entrepreneurs chose to implement','exploratory','effect sizes differ']) if(!study.includes(expected)) throw new Error(`Uncalibrated-reliance evidence boundary changed: ${expected}`);
       const frontier=sourceSpineMarkdown.split('\n').find(l=>l.startsWith("- Dell'Acqua, Mollick,")) || '';
       for(const expected of ['84.5%','70.6%','60%','19 percentage points','regardless of the correctness','10% level']) if(!frontier.includes(expected)) throw new Error(`Frontier evidence boundary changed: ${expected}`);
+    }
+    if(figure.slug==='invisible-delegation') {
+      const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Lee, Sarkar,')) || '';
+      for(const expected of ['319 knowledge workers','936 first-hand examples','self-reported','correlations',"each quote is one participant's",'Microsoft Research and Carnegie Mellon University']) if(!study.includes(expected)) throw new Error(`Invisible-delegation evidence boundary changed: ${expected}`);
     }
     for(const variant of manifest.variants) {
       const ed=resolveFigure(root,figure,variant);
