@@ -111,9 +111,9 @@ for(const [suffix,cast] of variants) {
     const relativeTop=()=>root.querySelector('.mf-controls').getBoundingClientRect().top-root.getBoundingClientRect().top;
     player.seek(0);const before=relativeTop();player.seek(player.duration);
     const caption=root.querySelector('.mf-caption'),follow=root.querySelector('.mf-follow');
-    return {before,after:relativeTop(),visibleBottom:caption.getBoundingClientRect().bottom,textBottom:follow.getBoundingClientRect().bottom};
+    return {before,after:relativeTop(),visibleBottom:caption.getBoundingClientRect().bottom,textBottom:follow.getBoundingClientRect().bottom,captionWidth:caption.clientWidth,captionHeight:caption.clientHeight,viewport:innerWidth,documentWidth:document.documentElement.clientWidth,font:getComputedStyle(follow).font,fonts:document.fonts.status};
    });
-   expect(result.textBottom).toBeLessThanOrEqual(result.visibleBottom);
+   expect(result.textBottom,JSON.stringify({width,cast,...result})).toBeLessThanOrEqual(result.visibleBottom);
    expect(Math.abs(result.after-result.before)).toBeLessThan(1);
   }
  });
