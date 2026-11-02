@@ -22,5 +22,5 @@ export function renderPracticeFigures(root,protocol) {
     const title=figureCardData(root,figure,variant).title;
     return `<pre class="copy-block practice-prompt" hidden tabindex="0" role="region" aria-label="${escape(title)} lab prompt"><code id="practice-prompt-${figure.slug}" data-session-prompt data-mode-prompt="${figure.slug}">${escape(protocol+'\n\nFocus on '+title+'.')}</code></pre>`;
   }).join('');
-  return `<p>Choose a failure mode to examine. Open its figure, or copy a prompt to test it with your AI assistant. Begin with your setting’s essay as an educator, then adapt the method to your teaching.</p><p data-practice-unselected><button class="quiet-action" type="button" data-choose-practice-setting>Choose your setting</button> to open its figures and lab prompts.</p>${groups}${prompts}`;
+  return `<p>Choose a failure mode to examine. Open its figure, or copy a prompt to test it with your AI assistant. Begin with your setting’s essay as an educator, then adapt the method to your teaching.</p><p data-practice-unselected><button class="quiet-action" type="button" data-choose-practice-setting>Choose your setting</button></p>${groups}${prompts}`;
 }

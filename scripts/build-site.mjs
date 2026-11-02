@@ -590,7 +590,7 @@ function buildCompanionMode() {
       </div>
     </section>
 
-    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. Begin with your setting’s essay as an educator, then transfer to your teaching. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p>${renderPracticeFigures(root,labPrompt())}<div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
+    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p>${renderPracticeFigures(root,labPrompt())}<div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
         <h2>Paste this once into your AI assistant.</h2>
