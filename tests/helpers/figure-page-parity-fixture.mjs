@@ -3,7 +3,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
-import {loadFigures,resolveFigure,playerMarkup,renderEssayQuote,renderLinked} from '../../scripts/figure-pages.mjs';
+import {loadFigures,resolveFigure,playerMarkup,renderEssayQuote,renderLinked,runtimeData} from '../../scripts/figure-pages.mjs';
 import {sha256} from '../../scripts/figure-assets.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const [source,output,slug,edition,cast]=process.argv.slice(2);
@@ -24,6 +24,9 @@ const sourceValue=path=>path.split('.').reduce((value,key)=>value?.[key],ed);
 html=html.replace(/(<([a-z]+)[^>]*data-im-linked="([^"]+)"[^>]*>)<\/\2>/g,(_,open,tag,path)=>open+renderEssayQuote(root,sourceValue(path)||'')+`</${tag}>`);
 html=html.replace(/(<ul[^>]*data-im-linked-items="([^"]+)"[^>]*>)<\/ul>/g,(_,open,path)=>open+(sourceValue(path)||[]).map(item=>`<li>${renderEssayQuote(root,item)}</li>`).join('')+'</ul>');
 html=html.replace(/(<p[^>]*data-im-lead="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>{const value=sourceValue(path);return open+(value?`<strong>${renderEssayQuote(root,value.lead)}</strong> ${renderEssayQuote(root,value.text)}`:'')+'</p>';});
+// Preserve the source page's linked explanatory paragraph (production maps
+// its cross-figure link to a static setting; this fixture keeps source URLs).
+html=html.replace(/(<p[^>]*data-rl-rich="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>open+runtimeData(root).rich(sourceValue(path)||'').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2">$1</a>')+'</p>');
 const data=JSON.stringify(ed).replace(/</g,'\\u003c');
 html=html.replace('</body>',`<script>const edition=${data};MotionFigures.fillPage(document,edition);document.querySelectorAll('[data-fs-quote]').forEach(node=>{node.innerHTML=${JSON.stringify(renderEssayQuote(root,ed.page.quote||''))};});MotionFigures.mountFigure(document.getElementById('${slug}'),{edition,standalone:true}).then(()=>{document.getElementById('${slug}').dataset.mfReady='';});</script></body>`);
 writeFileSync(join(dir,'index.html'),html);

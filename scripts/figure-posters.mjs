@@ -43,7 +43,7 @@ export function assertPosterReceipt(receipt, {root, inputs, outputDir, variant})
 
 // Called explicitly after building the candidate pages, never by the normal build.
 // The caller supplies the full dependency set (including this generator and fonts).
-export async function generateFigurePosters({url, figureId, variant, questionFirst = false, root, inputs, outputDir, fontLock}) {
+export async function generateFigurePosters({url, figureId, variant, questionFirst = false, sourceCommit = '8def5a1', root, inputs, outputDir, fontLock}) {
   const inputHashes = posterInputHashes(root, inputs);
   const fonts = loadFontLock(fontLock);
   const {chromium} = await import('@playwright/test');
@@ -86,7 +86,7 @@ export async function generateFigurePosters({url, figureId, variant, questionFir
     if (errors.length) throw new Error(`Poster browser errors: ${errors.join('; ')}`);
     if (JSON.stringify(posterInputHashes(root, inputs)) !== JSON.stringify(inputHashes)) throw new Error('Poster inputs changed during capture');
     mkdirSync(outputDir, {recursive: true});
-    const origin = `Programmatic export of the reviewed ${figureId} figure, ${variant} version, derived from source 8def5a1 with the production factory and pinned fonts. The adjacent manifest.json records every input and output hash.`;
+    const origin = `Programmatic export of the reviewed ${figureId} figure, ${variant} version, derived from source ${sourceCommit.slice(0,7)} with the production factory and pinned fonts. The adjacent manifest.json records every input and output hash.`;
     for (const [file, raw] of Object.entries({'poster.png': poster, 'final.png': final, 'og.png': Buffer.from(share, 'base64')})) {
       const bytes = withPNGOrigin(raw, origin);
       outputs[file] = pngInfo(bytes); writeFileSync(resolve(outputDir, file), bytes);

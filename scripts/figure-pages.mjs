@@ -23,6 +23,7 @@ export function loadFigures(root) {
   const seen=new Set();
   for(const figure of manifest.figures) {
     if(!/^[a-z]+(?:-[a-z]+)*$/.test(figure.slug) || seen.has(figure.slug) || figure.kind!=='failure-mode') throw new Error('Invalid or duplicate figure');
+    if(figure.sourceCommit && !/^[a-f0-9]{40}$/.test(figure.sourceCommit)) throw new Error('Invalid figure source commit');
     seen.add(figure.slug);
   }
   return {...manifest,figures:[...manifest.figures].sort((a,b)=>a.order-b.order)};
@@ -62,14 +63,21 @@ export function linkedMarkdown(segments) {
 export function renderLinked(root,segments) {
   return renderEssayQuote(root,linkedMarkdown(segments));
 }
+export function quotationParagraphs(entry) {
+  return entry.paras || [linkedMarkdown(entry.text)];
+}
+export function checkQuotation(entry,essay) {
+  for(const text of quotationParagraphs(entry)) checkedEssayExcerpt(text.startsWith('… ')?text.slice(2):text,essay);
+  return quotationParagraphs(entry);
+}
 function essayQuoteMarkup(root,figure,page,quote) {
-  const entries=page.quotes?.map((q,i)=>({text:linkedMarkdown(q.text),cite:q.cite,section:i?figure.additionalEssaySection:figure.essaySection})) || [
+  const entries=page.quotes?.map((q,i)=>({paras:quotationParagraphs(q),cite:q.cite,section:i?figure.additionalEssaySection:figure.essaySection})) || [
     {text:quote,cite:'The Irreducible Officer, Section II, What the Problem Looks Like',section:figure.essaySection},
     ...(page.quote2?[{text:page.quote2,cite:page.cite2,section:'vi-friction-as-developmental-design'}]:[])
   ];
   return entries.map(q=>{
     if(!q.section) throw new Error('Missing quotation section');
-    return `<blockquote><p>${renderEssayQuote(root,q.text)}</p><cite><a href="/#${escape(q.section)}">${runtimeData(root).rich(q.cite)}</a></cite></blockquote>`;
+    return `<blockquote><p>${(q.paras||[q.text]).map(text=>renderEssayQuote(root,text)).join('</p><p>')}</p><cite><a href="/#${escape(q.section)}">${runtimeData(root).rich(q.cite)}</a></cite></blockquote>`;
   }).join('');
 }
 export function figureInputs(root,slug) {
@@ -120,6 +128,13 @@ export function figureLink(manifest,variant,href) {
   if(!href.startsWith('https://')) throw new Error(`Unsupported figure link: ${href}`);
   return href;
 }
+export function renderFigureText(root,manifest,variant,text) {
+  const rich=runtimeData(root).rich;
+  return String(text??'').split(/(\[[^\]]+\]\([^)\s]+\))/).map(part=>{
+    const link=part.match(/^\[([^\]]+)\]\(([^)\s]+)\)$/);
+    return link?`<a href="${escape(figureLink(manifest,variant,link[2]))}">${rich(link[1])}</a>`:rich(part);
+  }).join('');
+}
 export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics=''}) {
   const ed=resolveFigure(root,figure,variant),p=ed.page,rich=runtimeData(root).rich,path=figurePath(figure,variant);
   const routes=manifest.variants.map(v=>({...v,path:figurePath(figure,v)}));
@@ -131,7 +146,7 @@ export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,re
   const structured=[{'@context':'https://schema.org','@type':'LearningResource',name:title,description:p.description,url:new URL(path,siteUrl).href,image,inLanguage:'en',learningResourceType:'Animated figure',timeRequired:`PT${receipt.finalTime}S`,audience:{'@type':'Audience',audienceType:variant.id==='pme'?'Professional military education':variant.id==='classroom'?'Higher education':variant.id==='high-school'?'High-school educators':'Workplace'}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{name:'Judgment Lab',item:new URL('/',siteUrl).href},{name:'AI failure modes',item:new URL('/failure-modes/',siteUrl).href},{name:ed.nameplate.name,item:new URL(path,siteUrl).href}].map((x,i)=>({'@type':'ListItem',position:i+1,...x}))}];
   const links=p.links.filter(l=>!figure.unpublishedLinks.includes(l.href)).map(l=>`<li>${escape(l.lead)} <a href="${escape(figureLink(manifest,variant,l.href))}">${escape(l.text)}</a></li>`).join('');
   const duration=`${Math.floor(receipt.finalTime/60)}:${String(Math.floor(receipt.finalTime%60)).padStart(2,'0')}`;
-  const body=`<nav class="figure-crumb" aria-label="Breadcrumb"><a href="/failure-modes/">AI failure modes</a> / ${escape(p.title)}</nav><header class="figure-intro"><p class="fig-kicker">${escape(p.kicker)}</p><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p class="figure-setting-note">PME means professional military education. The Classroom version is also available for high school.</p>${['classroom','high-school'].includes(variant.id)?`<nav class="figure-variant-links" aria-label="Classroom version"><a href="${routes[1].path}"${variant.id==='classroom'?' aria-current="page"':''}>Higher education</a><a href="${routes[2].path}"${variant.id==='high-school'?' aria-current="page"':''}>High school</a></nav>`:''}<p>${rich(p.setup)}</p>${p.editionNote?`<p class="figure-setting-note">${rich(p.editionNote===true?"PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay.":p.editionNote)}</p>`:''}<p class="figure-duration">${duration} · <a href="#figure-beats" data-read-figure>Read the figure</a></p></header><p class="figure-load-error" data-figure-status hidden>The animation could not load. You can read every beat below.</p>${playerMarkup(root,figure,ed,poster)}<article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}<p>${rich(p.checkFollow)}</p>${p.about?`<p><strong>${rich(p.about.lead)}</strong> ${rich(p.about.text)}</p>`:''}</section>${p.study?`<section><h2>${escape(p.studyHeading)}</h2>${p.study.map(x=>`<p>${rich(x)}</p>`).join('')}</section>`:''}${p.evidence?`<section><h2>${escape(p.evidenceHeading)}</h2>${p.evidence.map(x=>`<p>${rich(x)}</p>`).join('')}${p.evidenceList?`<ul>${p.evidenceList.map(x=>`<li>${renderEssayQuote(root,x)}</li>`).join('')}</ul>`:''}</section>`:''}<section><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2>${essayQuoteMarkup(root,figure,p,quote)}</section>${p.evidenceText?`<section><h2>${escape(p.evidenceHeading)}</h2><p>${renderLinked(root,p.evidenceText)}</p></section>`:''}<section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">All failure modes</a></p></section></article>`;
+  const body=`<nav class="figure-crumb" aria-label="Breadcrumb"><a href="/failure-modes/">AI failure modes</a> / ${escape(p.title)}</nav><header class="figure-intro"><p class="fig-kicker">${escape(p.kicker)}</p><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p class="figure-setting-note">PME means professional military education. The Classroom version is also available for high school.</p>${['classroom','high-school'].includes(variant.id)?`<nav class="figure-variant-links" aria-label="Classroom version"><a href="${routes[1].path}"${variant.id==='classroom'?' aria-current="page"':''}>Higher education</a><a href="${routes[2].path}"${variant.id==='high-school'?' aria-current="page"':''}>High school</a></nav>`:''}<p>${rich(p.setup)}</p>${p.editionNote?`<p class="figure-setting-note">${rich(p.editionNote===true?"PME (professional military education): the original example from *The Irreducible Officer*, the National War College essay.":p.editionNote)}</p>`:''}<p class="figure-duration">${duration} · <a href="#figure-beats" data-read-figure>Read the figure</a></p></header><p class="figure-load-error" data-figure-status hidden>The animation could not load. You can read every beat below.</p>${playerMarkup(root,figure,ed,poster)}<article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}<p>${renderFigureText(root,manifest,variant,p.checkFollow)}</p>${p.about?`<p><strong>${rich(p.about.lead)}</strong> ${rich(p.about.text)}</p>`:''}</section>${p.study?`<section><h2>${escape(p.studyHeading)}</h2>${p.study.map(x=>`<p>${rich(x)}</p>`).join('')}</section>`:''}${p.evidence?`<section><h2>${escape(p.evidenceHeading)}</h2>${p.evidence.map(x=>`<p>${rich(x)}</p>`).join('')}${p.evidenceList?`<ul>${p.evidenceList.map(x=>`<li>${renderEssayQuote(root,x)}</li>`).join('')}</ul>`:''}</section>`:''}<section><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2>${essayQuoteMarkup(root,figure,p,quote)}</section>${p.evidenceText?`<section><h2>${escape(p.evidenceHeading)}</h2><p>${renderLinked(root,p.evidenceText)}</p></section>`:''}<section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">All failure modes</a></p></section></article>`;
   const head=`<link rel="stylesheet" href="${assets['runtime/figure.css'].url}"><link rel="stylesheet" href="${assets[`${figure.slug}/${figure.slug}.css`].url}"><meta property="og:image" content="${escape(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">${jsonScript(structured)}</script>`;
   const scripts=`<script id="figure-data" type="application/json">${jsonScript({edition:ed,routes})}</script><script defer src="${assets['runtime/motion.js'].url}"></script><script defer src="${assets[`${figure.slug}/${figure.slug}.js`].url}"></script><script defer src="${assets['page.js'].url}"></script>`;
   return shell({title,description:p.description,path,siteUrl,release,assets,body,head,scripts,analytics});
@@ -169,10 +184,14 @@ export function buildFigurePages({root,distDir,siteUrl,release,essayMarkdown,sou
         for(const term of terms)if(!study.includes(term))throw new Error(`Monoculture evidence boundary changed: ${term}`);
       }
     }
+    if(figure.slug==='responsibility-laundering') {
+      const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Moffatt v. Air Canada,'))||'';
+      for(const term of ['$812.02','$650.88','one small-claims decision',"don't read it as precedent",'nothing to say about staff who sign a recommendation','did not provide any information about the nature of its chatbot']) if(!study.includes(term))throw new Error(`Responsibility-laundering evidence boundary changed: ${term}`);
+    }
     for(const variant of manifest.variants) {
       const ed=resolveFigure(root,figure,variant);
       if(ed.page.quote2) checkedEssayExcerpt(ed.page.quote2,essayMarkdown);
-      for(const q of ed.page.quotes||[]) checkedEssayExcerpt(linkedMarkdown(q.text),essayMarkdown);
+      for(const q of ed.page.quotes||[]) checkQuotation(q,essayMarkdown);
       const dir=join(root,'media/figures',figure.slug,variant.id),receipt=readJSON(join(dir,'manifest.json'));
       assertPosterReceipt(receipt,{root,inputs,outputDir:dir,variant:variant.id});
       const base=`/media/figures/${figure.slug}/${variant.id}`;

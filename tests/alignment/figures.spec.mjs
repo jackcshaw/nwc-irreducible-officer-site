@@ -6,6 +6,7 @@ const figures=[
  {slug:'uncalibrated-reliance',businessBeats:11,pmeBeats:11},
  {slug:'invisible-delegation',businessBeats:10,pmeBeats:10},
  {slug:'institutional-monoculture',businessBeats:12,pmeBeats:12},
+ {slug:'responsibility-laundering',businessBeats:10,pmeBeats:10},
 ];
 const variants=[['','workplace'],['classroom/','classroom'],['high-school/','high-school'],['pme/','seminar']];
 for(const {slug,businessBeats,pmeBeats} of figures) {
@@ -84,9 +85,9 @@ test('legacy edition query becomes a matching static route',async({page})=>{
 });
 test('hub lists published figures in order without downloading players',async({page})=>{
  const requested=[];page.on('request',r=>requested.push(r.url()));await page.goto('/failure-modes/');
- await expect(page.locator('.figure-index>li')).toHaveCount(6);
- await expect(page.locator('.figure-index h2')).toHaveText(['Frame capture','Fluency substitution','Premature synthesis','Uncalibrated reliance','Invisible delegation','Institutional monoculture']);
- expect(requested.some(u=>/runtime\/motion.js|frame-capture\.js|fluency-substitution\.js|premature-synthesis\.js|uncalibrated-reliance\.js|invisible-delegation\.js|institutional-monoculture\.js/.test(u))).toBe(false);
+ await expect(page.locator('.figure-index>li')).toHaveCount(7);
+ await expect(page.locator('.figure-index h2')).toHaveText(['Frame capture','Fluency substitution','Premature synthesis','Uncalibrated reliance','Invisible delegation','Institutional monoculture','Responsibility laundering']);
+ expect(requested.some(u=>/runtime\/motion.js|frame-capture\.js|fluency-substitution\.js|premature-synthesis\.js|uncalibrated-reliance\.js|invisible-delegation\.js|institutional-monoculture\.js|responsibility-laundering\.js/.test(u))).toBe(false);
 });
 for(const [asset,pattern] of [['font stylesheet','**/assets/figures/fonts/fonts.css?*'],['font files','**/assets/figures/fonts/*.woff2?*']]) {
  test(`failed ${asset} keeps the readable static version`,async({page})=>{
@@ -96,5 +97,24 @@ for(const [asset,pattern] of [['font stylesheet','**/assets/figures/fonts/fonts.
   await expect(page.locator('[data-mf-ready]')).toHaveCount(0);await expect(page.locator('.figure-poster')).toBeVisible();
   await expect(page.locator('[data-mf-beat-index="13"] .mf-detail')).toBeVisible();
   await expect(page.locator('[data-mf-figure]')).toHaveAttribute('data-cast','classroom');
+ });
+}
+
+for(const [suffix,cast] of variants) {
+ test(`responsibility laundering ${cast}: small-phone check fits and controls stay fixed`,async({page})=>{
+  for(const width of [320,360,375,390]) {
+   await page.setViewportSize({width,height:844});
+   await page.goto('/failure-modes/responsibility-laundering/'+suffix+'?t=0');
+   await expect(page.locator('[data-mf-ready]')).toHaveCount(1);
+   const result=await page.evaluate(()=>{
+    const root=document.querySelector('[data-mf-figure]'),player=window.__motionFigures[root.id];
+    const relativeTop=()=>root.querySelector('.mf-controls').getBoundingClientRect().top-root.getBoundingClientRect().top;
+    player.seek(0);const before=relativeTop();player.seek(player.duration);
+    const caption=root.querySelector('.mf-caption'),follow=root.querySelector('.mf-follow');
+    return {before,after:relativeTop(),visibleBottom:caption.getBoundingClientRect().bottom,textBottom:follow.getBoundingClientRect().bottom,captionWidth:caption.clientWidth,captionHeight:caption.clientHeight,viewport:innerWidth,documentWidth:document.documentElement.clientWidth,font:getComputedStyle(follow).font,fonts:document.fonts.status};
+   });
+   expect(result.textBottom,JSON.stringify({width,cast,...result})).toBeLessThanOrEqual(result.visibleBottom);
+   expect(Math.abs(result.after-result.before)).toBeLessThan(1);
+  }
  });
 }
