@@ -978,6 +978,7 @@ MotionFigures.define('appropriate-reliance', (root, {edition, scope = root, life
 		// Complete the poster handoff before the final first-view measurement.
 		// The factory is synchronous; failure restores the original fallback via unmount.
 		root.dataset.mfReady = '';
+		syncStickyVar();
 		if (fitOn) { fitFirstView(); syncStacked(); }
 		// The name card shows over that question, then settles into the corner once the
 		// figure is in view (2.2 s, the kicker's reading time, "The skill" at 2 ÷ 3 + 1.5 =

@@ -37,7 +37,7 @@ for(const [suffix,cast] of variants) {
  test(`appropriate reliance ${cast}: no-JS and blocked scripts offer deliberate reading`,async({browser,baseURL})=>{
   const context=await browser.newContext({javaScriptEnabled:false});const p=await context.newPage();await p.goto(baseURL+route(suffix));
   await expect(p.locator('.figure-fallback .figure-poster')).toBeVisible();await expect(p.locator('.ar-reading-version')).toBeVisible();
-  expect(await p.locator('body').innerText()).not.toContain('84.5%');await p.locator('.ar-reading-version details').first().locator('summary').click();expect(await p.locator('body').innerText()).toContain('84.5%');await context.close();
+  expect(await p.locator('body').innerText()).not.toContain('84.5%');await p.locator('.ar-reading-version details').first().locator('summary').click();expect(await p.locator('body').innerText()).toContain('84.5%');await p.emulateMedia({media:'print'});await expect(p.locator('[data-ar-printq]')).toBeHidden();await expect(p.locator('.ar-reading-version')).toBeVisible();await context.close();
   const blocked=await browser.newContext();const b=await blocked.newPage();await b.route('**/*.js?*',r=>r.abort());await b.goto(baseURL+route(suffix));await noAnswers(b);
   await b.locator(`.figure-duration a[href="${route(suffix)}reading/"]`).click();await expect(b).toHaveURL(new RegExp(route(suffix)+'reading/'));await expect(b.locator('.ar-reading-version')).toBeVisible();
   await b.locator('.ar-reading-version details').first().locator('summary').click();expect(await b.locator('body').innerText()).toContain('84.5%');await blocked.close();
@@ -45,6 +45,7 @@ for(const [suffix,cast] of variants) {
  test(`appropriate reliance ${cast}: printing restores waiting question and locks`,async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await ready(page,suffix);await noAnswers(page);
   await page.evaluate(()=>dispatchEvent(new Event('beforeprint')));await expect(page.locator('[data-ar-printq-svg] svg')).toHaveCount(1);
+  expect(await page.evaluate(()=>!!(document.querySelector('[data-ar-printq]').compareDocumentPosition(document.querySelector('figure'))&Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
   expect(await page.locator('[data-ar-after]').textContent()).toContain('A good answer');
   await page.evaluate(()=>dispatchEvent(new Event('afterprint')));await noAnswers(page);await expect(page.locator('[data-ar-gate="0"]')).toBeVisible();
  });
@@ -74,12 +75,15 @@ for(const [suffix,cast] of variants) {
    await page.setViewportSize({width,height});await ready(page,suffix);await page.evaluate(()=>document.fonts.ready);
    const fit=await page.evaluate(()=>{
     const r=document.querySelector('figure'),button=r.querySelector('[data-ar-continue]').getBoundingClientRect(),cap=r.querySelector('.ar-capwrap').getBoundingClientRect(),band=r.querySelector('.ar-n-band').getBoundingClientRect();
-    return {width:innerWidth,height:innerHeight,overflow:document.documentElement.scrollWidth-innerWidth,scrollY,stacked:r.classList.contains('is-stacked'),buttonTop:button.top,buttonBottom:button.bottom,bandBottom:band.bottom,captionTop:cap.top};
+    return {width:innerWidth,height:innerHeight,overflow:document.documentElement.scrollWidth-innerWidth,scrollY,stacked:r.classList.contains('is-stacked'),buttonTop:button.top,buttonBottom:button.bottom,uncovered:r.querySelector('[data-ar-continue]').contains(document.elementFromPoint(button.x+button.width/2,button.y+button.height/2)),bandBottom:band.bottom,captionTop:cap.top};
    });
    expect(fit.overflow,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(0);
    expect(fit.buttonBottom,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(height);
    expect(fit.buttonTop,JSON.stringify({cast,...fit})).toBeGreaterThanOrEqual(0);
+   expect(fit.uncovered,JSON.stringify({cast,...fit})).toBe(true);
    if(fit.stacked&&width<=390&&['classroom','high-school'].includes(cast))expect(fit.bandBottom,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(fit.captionTop+1);
+   await page.locator('[data-ar-skip]').click();await expect(page.locator('[data-ar-gate="1"]')).toBeVisible();
+   expect(await page.locator('[data-ar-continue]').evaluate(button=>{const r=button.getBoundingClientRect();return button.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2));})).toBe(true);
   }
  });
  test(`appropriate reliance ${cast}: reading print exposes closed disclosures`,async({page})=>{

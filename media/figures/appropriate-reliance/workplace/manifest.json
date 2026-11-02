@@ -13,7 +13,7 @@
   "fontLock": "98e9ccd46802c8f5014deda2ca58207ee232ba478d090d071878d1100f83c855",
   "inputs": {
     "figures/appropriate-reliance/appropriate-reliance.css": "1ac5e6d18d9950f9b5144560e60a80b6c82e05183570a46e1d8137c5d907c8ca",
-    "figures/appropriate-reliance/appropriate-reliance.js": "82b716de620946fcd01493d568f62a334a905938636ede393831cdc9aeb5cbf0",
+    "figures/appropriate-reliance/appropriate-reliance.js": "c1c7c9287e6e2838fd65caadec07d7bbb8326e71fc437a904e20ca4dbfcef420",
     "figures/appropriate-reliance/editions/business.json": "7f7459e8782ae0663c2b2c16b06a4b96bf189b05b27f6e59f3b518a717ee0893",
     "figures/appropriate-reliance/editions/pme.json": "eb88d65a1d34fffadaf9189403c04ce3ba2b16cd459745452eb87d71e82668a3",
     "figures/appropriate-reliance/nameplate.json": "1718c71d875592394c1e31cf0f4632b25d52c7df108616d4d15993f0fe387f5a",
@@ -63,10 +63,10 @@
     "package-lock.json": "f4f1ddb6dbc0256767d889f5385d5cfd91c8f1b3e61aa3bff3eba08be3ced244",
     "scripts/figure-assets.mjs": "bce26830b92b82f93dac11008ce0e4d27c973743c1cec77bf5f1fe5ca0523c00",
     "scripts/figure-fonts.mjs": "f8c274a46c63ba8dc890f5da555332e75818b248624978455f06ff78d106a8e2",
-    "scripts/figure-pages.mjs": "3e3cb8e33656de7bd07afbc65750b7b9eb2bc423a7f5a1c75c6f67e5e07e1c7e",
+    "scripts/figure-pages.mjs": "19a5560c437ca6c894a3dd621c1cdab3a6f1cd5f47e69e4add535069c273a866",
     "scripts/figure-posters.mjs": "625fdafa3072ea27c998d8085e863d802d536bcfff730b824da9872ad7e2f0bb",
     "scripts/generate-figure-posters.mjs": "3b0218bfb6bacb849166aa7f3206225e84c6fce9023248fafbc4cc5b9a74745c",
-    "styles/figure-page.css": "27af2c4648e04ba1577ff5a19458ee6808a1d01cca47fb27fbddc601e9f2a9f3",
+    "styles/figure-page.css": "aec6a877db9262c6e9c7eae287f18efe92dc694771ba552f6e8104fa3d60e5d6",
     "styles/masthead.css": "1a2ef59af731535fdaf2249fea21c157a0696dfe81bdca63548630e0becba0cc"
   },
   "outputs": {

@@ -70,4 +70,4 @@ p { margin:0 0 18px; }
 .ar-reading-version summary {cursor:pointer;font-weight:600;}
 .ar-reading-version li {margin:16px 0;}
 .ar-reading-version .figure-poster {margin:20px 0;}
-@media print { .ar-reading-version details::details-content {display:block;content-visibility:visible!important;} .ar-reading-version summary {font-weight:600;} }
+@media print { .ar-page-shell .ar-printq:has([data-ar-printq-svg]:empty) {display:none;} .ar-reading-version details::details-content {display:block;content-visibility:visible!important;} .ar-reading-version summary {font-weight:600;} }
