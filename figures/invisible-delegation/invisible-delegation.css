@@ -1,0 +1,111 @@
+
+/* Whenever a picture label would render under 11 px (a stage narrower than
+   880 px), the stage switches to a stacked text view driven by the same clock. */
+.fig-quote a, .fig-follow a { color: var(--ink); text-underline-offset: 3px; }
+.id-narrow { display: none; }
+/* An edition's source line: in the SVG on the drawn stage; under the controls on the stacked stage. */
+.id-source { display: none; }
+.mf[data-mf-figure="invisible-delegation"].is-stacked .id-source:not([hidden]) { display: block; margin: 8px 0 0; padding: 0 clamp(12px, 2vw, 18px); font: italic 400 14px/1.4 var(--serif); color: var(--ink); }
+/* Collapsed, not display:none: the SVG keeps its width so it can still be measured. */
+.mf[data-mf-figure="invisible-delegation"].is-stacked .mf-stage { height: 0; overflow: hidden; }
+.mf[data-mf-figure="invisible-delegation"].is-stacked .id-narrow { display: block; padding: 3px clamp(10px, 3vw, 24px) 1px; background: var(--paper); }
+/* Laptop windows keep the drawn picture (IM's convention, as in PS): at 720 px wide or more and
+   860 px high or less, a compact caption band lets the picture scale up, so 13-unit text stays at
+   11 px or more at 1280 × 720 and 1366 × 657. */
+@media (min-width: 720px) and (max-height: 860px) {
+	.mf[data-mf-figure="invisible-delegation"] { --mf-chrome: 166px; }
+	.mf[data-mf-figure="invisible-delegation"]:not(.is-stacked) .mf-caption { min-height: 92px; padding-top: 8px; padding-bottom: 8px; font-size: 19px; }
+	.mf[data-mf-figure="invisible-delegation"]:not(.is-stacked) .mf-caption.is-check { padding-top: 8px; padding-bottom: 8px; }
+	.mf[data-mf-figure="invisible-delegation"]:not(.is-stacked) .mf-check-q, .mf[data-mf-figure="invisible-delegation"]:not(.is-stacked) .mf-follow.is-equal { font-size: 20px; }
+	.mf[data-mf-figure="invisible-delegation"]:not(.is-stacked) .mf-final-def { font-size: 15px; }
+}
+@media (max-width: 480px) {
+	/* The final frame, check and controls fit an 844 px phone screen: the caption band
+	   is fixed at the final caption's height (name, definition and check), and the
+	   controls stay on one row, with Restart shown as its icon. */
+	.mf[data-mf-figure="invisible-delegation"] .mf-controls { flex-wrap: nowrap; gap: 8px; }
+	.mf[data-mf-figure="invisible-delegation"] .mf-scrub { order: 0; flex: 1 1 0; flex-basis: 0; min-width: 0; }
+	.mf[data-mf-figure="invisible-delegation"] .mf-time { margin-left: 0; min-width: 0; font-size: 12px; }
+	.mf[data-mf-figure="invisible-delegation"] [data-mf-replay] { min-width: 44px; padding: 0 12px; justify-content: center; }
+	.mf[data-mf-figure="invisible-delegation"] .id-restart-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+	.mf[data-mf-figure="invisible-delegation"] .mf-controls .mf-toggle { min-width: 92px; }
+	.mf[data-mf-figure="invisible-delegation"] .mf-check-q, .mf[data-mf-figure="invisible-delegation"] .mf-follow.is-equal { font-size: 20px; }
+	.mf[data-mf-figure="invisible-delegation"] .mf-caption { min-height: 184px; padding-top: 10px; padding-bottom: 10px; }
+	/* Tighter phone spacing, so the cards' turn arrows and the follow-up still fit 844 px. */
+	.mf[data-mf-figure="invisible-delegation"] .id-n-cell { margin: 0; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-q { line-height: 1.2; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-fac { line-height: 1.25; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-say { padding: 3px 6px; line-height: 1.25; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-notes { margin-bottom: 2px; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-chip { margin-top: 1px !important; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-decided { line-height: 1.2; }
+}
+.id-narrow p { margin: 0; }
+.id-narrow [hidden] { display: none !important; }
+.id-n-task { margin: 0 0 3px; padding: 5px 8px; border: 1px solid var(--navy-border); background: var(--paper-bright); font: 400 14px/1.35 var(--serif); color: var(--ink); }
+.id-n-task b { margin-right: 4px; font: 600 12px/1 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.id-n-rubric span { font-style: italic; }
+.id-n-rubric.is-lit { margin: 0 -4px; padding: 0 4px; background: rgba(10, 34, 66, 0.12); box-shadow: inset 3px 0 0 var(--ink); }
+.id-n-rubric.is-consulted span { text-decoration: underline; text-decoration-color: rgba(10, 34, 66, 0.45); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.id-n-fac { margin: 0 0 2px !important; font: italic 400 16px/1.3 var(--serif); color: var(--ink); }
+.id-n-fac b { margin-right: 6px; font: 600 12px/1.3 var(--mono); font-style: normal; letter-spacing: 0.05em; text-transform: uppercase; }
+.id-n-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.id-n-col { min-width: 0; }
+.id-n-who { display: flex; justify-content: space-between; gap: 6px; margin: 0 0 1px !important; font: 600 13px/1.2 var(--sans); color: var(--red); }
+.id-n-who .id-n-draft { font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.id-n-who > span:first-child::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 50%; background: var(--red); vertical-align: 1px; }
+.id-n-paper { display: flex; flex-wrap: wrap; gap: 0 8px; margin: 0 0 3px !important; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; }
+.id-n-draft { color: var(--ink); }
+.id-n-rev { color: var(--stone); }
+.id-n-notes { position: relative; margin: 8px 0 4px; padding: 7px 6px 3px; background: rgba(222, 213, 196, 0.6); border: 1px solid rgba(91, 86, 79, 0.35); font: 400 13px/1.3 var(--serif); color: var(--stone); }
+.id-n-notes b { position: absolute; top: -8px; left: 4px; padding: 0 3px; background: var(--paper); font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
+.id-n-note i { display: inline-block; width: 1.1em; font-style: normal; color: var(--ink); }
+.id-n-note.is-struck span { text-decoration: line-through; text-decoration-color: var(--red); text-decoration-thickness: 2px; }
+.id-n-reason { padding-left: 1.1em; font-style: italic; color: var(--red); }
+.id-n-keys { display: flex; flex-wrap: wrap; gap: 2px 12px; margin: 0 0 2px !important; font: 600 12px/1.35 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); }
+.id-n-keys span { display: inline-flex; align-items: center; gap: 4px; }
+.id-n-keys span::before { content: ""; width: 12px; height: 9px; border: 1.5px dashed rgba(10, 34, 66, 0.45); }
+.id-n-keys .is-ai::before { border: 1.5px solid var(--stone); background: #ded5c4; }
+.id-n-keys .is-own { color: var(--red); }
+.id-n-keys .is-own::before { border: 1.5px solid var(--red); }
+.id-n-keys .is-uns::before { border-color: var(--stone); }
+.id-n-key { display: flex; align-items: center; gap: 5px; margin: 0 0 2px !important; font: 600 12px/1.3 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.id-n-key::before { content: ""; flex: none; width: 13px; height: 9px; border: 1.5px dashed var(--stone); }
+.id-n-cell { margin: 0 0 1px; }
+.id-n-q { font: italic 400 14px/1.25 var(--serif); color: var(--ink); }
+.id-n-q .is-red { color: var(--red); }
+.id-n-uns { margin: 1px 0 0 !important; white-space: nowrap; font: 600 12px/1.45 var(--mono); letter-spacing: 0; text-transform: uppercase; color: var(--ink); }
+.id-n-ghost { display: inline-block; margin-left: 2px; padding: 0 2px; border: 1.5px dashed var(--stone); font: italic 400 12px/1.3 var(--serif); letter-spacing: 0; text-transform: none; color: var(--stone); }
+.id-n-chip { margin: 2px 0 0 !important; padding: 1px 6px 2px; border: 1.5px dashed rgba(10, 34, 66, 0.45); background: var(--paper-bright); font: 600 13px/1.25 var(--sans); color: var(--ink); }
+/* Without lanes (phones; wide stacked stages without lanes), each card hangs under its own request: indented, with a turn arrow,
+   so a request doesn't read as belonging to the card above it. */
+.id-narrow .id-n-chip { position: relative; margin-left: 13px !important; }
+.id-narrow .id-n-chip::before { content: "↳"; position: absolute; left: -14px; top: 0; font: 400 13px/1.3 var(--sans); color: rgba(10, 34, 66, 0.55); }
+.id-n-chip b { display: block; font: 600 12px/1.3 var(--mono); letter-spacing: 0.03em; text-transform: uppercase; color: var(--muted); }
+.id-n-chip.is-ai { border: 1.5px solid var(--stone); background: #ded5c4; color: var(--stone); }
+.id-n-chip.is-ai b { color: var(--stone); }
+.id-n-chip.is-own { border: 1.5px solid var(--red); color: var(--red); }
+.id-n-chip.is-own b { color: var(--red); }
+.id-n-decided { display: block; font: italic 400 13px/1.25 var(--serif); color: var(--red); }
+/* The pulse thickens the outline without changing the chip's size, so the stage never grows. */
+.id-n-chip.is-pulse { box-shadow: 0 0 0 1.5px var(--red); }
+.id-n-source { margin: 6px 0 0 !important; font: italic 400 13px/1.35 var(--serif); color: var(--ink); }
+.id-n-lanes { display: none; }
+@media (min-width: 600px) {
+	/* Wide stacked stage with lanes: each cell is a two-lane track, and a chip slides across it. */
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 2px 0 0 !important; font: 600 13px/1.3 var(--mono); letter-spacing: 0.02em; text-transform: uppercase; }
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-lanes span:first-child { color: var(--red); }
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-lanes span:last-child { color: var(--stone); }
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-chip { width: calc(50% - 3px); }
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-chip { margin-left: 0 !important; }
+	.mf[data-mf-figure="invisible-delegation"] .has-lanes .id-n-chip::before { content: none; }
+}
+.id-n-say b { display: block; font: 600 12px/1.3 var(--sans); color: var(--red); }
+.id-n-say { margin: 2px 0 0 !important; padding: 4px 7px; border: 1px solid rgba(10, 34, 66, 0.25); border-radius: 8px; background: var(--paper-bright); font: 400 13px/1.3 var(--serif); color: var(--ink); }
+@media (min-width: 600px) {
+	/* A wide stacked stage (a short laptop window) sets the evidence at 14–16 px. */
+	.mf[data-mf-figure="invisible-delegation"] .id-n-task, .mf[data-mf-figure="invisible-delegation"] .id-n-notes, .mf[data-mf-figure="invisible-delegation"] .id-n-q, .mf[data-mf-figure="invisible-delegation"] .id-n-say { font-size: 15px; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-uns, .mf[data-mf-figure="invisible-delegation"] .id-n-ghost, .mf[data-mf-figure="invisible-delegation"] .id-n-chip { font-size: 14px; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-chip b, .mf[data-mf-figure="invisible-delegation"] .id-n-notes b, .mf[data-mf-figure="invisible-delegation"] .id-n-key, .mf[data-mf-figure="invisible-delegation"] .id-n-paper, .mf[data-mf-figure="invisible-delegation"] .id-n-who .id-n-draft { font-size: 13px; }
+	.mf[data-mf-figure="invisible-delegation"] .id-n-grid { gap: 20px; }
+}

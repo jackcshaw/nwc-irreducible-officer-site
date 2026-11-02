@@ -77,6 +77,18 @@
         "../appropriate-reliance/",
         "../appropriate-reliance/?edition=business"
       ]
+    },
+    {
+      "slug": "invisible-delegation",
+      "kind": "failure-mode",
+      "order": 5,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "additionalEssaySection": "v-appropriate-reliance-as-a-teachable-competency",
+      "quoteStart": "Invisible delegation occurs when",
+      "quoteEnd": "The student believes they are working; the model has already done the framing.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=2"
+      ]
     }
   ]
 }
