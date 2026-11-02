@@ -9,6 +9,9 @@
 .mf[data-mf-figure="responsibility-laundering"].is-stacked .rl-narrow { display: block; padding: 6px clamp(12px, 3vw, 24px) 4px; background: var(--paper); }
 .mf[data-mf-figure="responsibility-laundering"].is-stacked .mf-caption { height: 136px; overflow: hidden; }
 @media (max-width: 719px) { .mf[data-mf-figure="responsibility-laundering"].is-stacked .mf-caption { height: 194px; } .mf[data-mf-figure="responsibility-laundering"].is-stacked .mf-caption.is-check { padding-top: 10px; padding-bottom: 10px; } }
+/* Small phones need one more definition line. Reserve the complete final check
+   from the first frame so the controls stay fixed throughout playback. */
+@media (max-width: 389px) { .mf[data-mf-figure="responsibility-laundering"].is-stacked .mf-caption { height: 224px; } }
 /* The final caption (name and definition over the check) must stay inside the runtime's
    144 px desktop band, or the viewport fit at 1280 x 720 would drop to the stacked stage.
    The long name wraps in its label column, and the check is set a little smaller. */

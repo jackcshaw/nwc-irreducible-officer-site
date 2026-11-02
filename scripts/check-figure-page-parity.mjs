@@ -15,7 +15,9 @@ if (!variants.has(`${edition}/${cast}`) || !destination) throw new Error('Usage:
 const out = resolve(destination);
 if (existsSync(out)) throw new Error('Use a new output directory; never overwrite verification evidence');
 mkdirSync(out, {recursive: true});
-const sourceSHA = '8def5a10d90260db2b0ef4393f1421b14762731c';
+const figure = JSON.parse(readFileSync(join(root, 'figures/manifest.json'), 'utf8')).figures.find(f => f.slug === slug);
+const sourceSHA = figure?.sourceCommit || '8def5a10d90260db2b0ef4393f1421b14762731c';
+if (!/^[a-f0-9]{40}$/.test(sourceSHA)) throw new Error('Invalid reviewed source commit');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const source = join(out, 'source-files'), candidate = join(out, 'candidate-files');
 mkdirSync(source);

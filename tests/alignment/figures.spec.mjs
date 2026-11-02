@@ -99,3 +99,22 @@ for(const [asset,pattern] of [['font stylesheet','**/assets/figures/fonts/fonts.
   await expect(page.locator('[data-mf-figure]')).toHaveAttribute('data-cast','classroom');
  });
 }
+
+for(const [suffix,cast] of variants) {
+ test(`responsibility laundering ${cast}: small-phone check fits and controls stay fixed`,async({page})=>{
+  for(const width of [320,360,375,390]) {
+   await page.setViewportSize({width,height:844});
+   await page.goto('/failure-modes/responsibility-laundering/'+suffix+'?t=0');
+   await expect(page.locator('[data-mf-ready]')).toHaveCount(1);
+   const result=await page.evaluate(()=>{
+    const root=document.querySelector('[data-mf-figure]'),player=window.__motionFigures[root.id];
+    const relativeTop=()=>root.querySelector('.mf-controls').getBoundingClientRect().top-root.getBoundingClientRect().top;
+    player.seek(0);const before=relativeTop();player.seek(player.duration);
+    const caption=root.querySelector('.mf-caption'),follow=root.querySelector('.mf-follow');
+    return {before,after:relativeTop(),visibleBottom:caption.getBoundingClientRect().bottom,textBottom:follow.getBoundingClientRect().bottom};
+   });
+   expect(result.textBottom).toBeLessThanOrEqual(result.visibleBottom);
+   expect(Math.abs(result.after-result.before)).toBeLessThan(1);
+  }
+ });
+}

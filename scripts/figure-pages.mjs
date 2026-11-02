@@ -23,6 +23,7 @@ export function loadFigures(root) {
   const seen=new Set();
   for(const figure of manifest.figures) {
     if(!/^[a-z]+(?:-[a-z]+)*$/.test(figure.slug) || seen.has(figure.slug) || figure.kind!=='failure-mode') throw new Error('Invalid or duplicate figure');
+    if(figure.sourceCommit && !/^[a-f0-9]{40}$/.test(figure.sourceCommit)) throw new Error('Invalid figure source commit');
     seen.add(figure.slug);
   }
   return {...manifest,figures:[...manifest.figures].sort((a,b)=>a.order-b.order)};
