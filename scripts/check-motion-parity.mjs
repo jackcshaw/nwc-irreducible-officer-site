@@ -5,6 +5,7 @@ import {resolve, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 
+const productionFactory = process.argv.includes('--production-factory');
 const root = fileURLToPath(new URL('../', import.meta.url));
 const [kind, slug, edition, cast, destination] = process.argv.slice(2);
 const slugs = new Set(["frame-capture", "fluency-substitution", "premature-synthesis", "uncalibrated-reliance", "invisible-delegation", "institutional-monoculture", "responsibility-laundering", "appropriate-reliance"]);
@@ -20,10 +21,10 @@ const source = join(out, 'source-files'), candidate = join(out, 'candidate-files
 mkdirSync(source);
 writeFileSync(join(out, 'source.tar'), execFileSync('git', ['archive', sourceSHA, 'design/motion-figures'], {cwd: root, maxBuffer: 32 * 1024 * 1024}));
 execFileSync('tar', ['-xf', join(out, 'source.tar'), '-C', source, '--strip-components=2']);
-execFileSync('node', [join(root, 'tests/helpers/figure-parity-fixture.mjs'), source, candidate], {cwd: root});
+execFileSync('node', [join(root, productionFactory?'tests/helpers/figure-page-parity-fixture.mjs':'tests/helpers/figure-parity-fixture.mjs'), source, candidate, ...(productionFactory?[slug,edition,cast]:[])], {cwd: root});
 const harness = join(root, kind === 'frames' ? 'design/motion-figures/scripts/frame-diff.mjs' : 'design/motion-figures/figures/appropriate-reliance/regression/ar-regress.mjs');
 const receipt = {
-  schema: 1, kind: `motion-${kind}-runtime-parity`, slug, source: sourceSHA,
+  schema: 1, kind: `motion-${kind}-${productionFactory?'production-factory':'runtime'}-parity`, slug, source: sourceSHA,
   candidate: execFileSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'}).trim(),
   edition, cast, started: new Date().toISOString(), status: 'running',
   fixture: JSON.parse(readFileSync(join(candidate, 'fixture.json'), 'utf8')),
@@ -52,7 +53,11 @@ async function serve(directory) {
     });
   });
   const url = `http://127.0.0.1:${port}/figures/${slug}/index.html`;
-  if (child.exitCode !== null || !(await fetch(url)).ok) throw new Error('Owned server is not serving the selected figure');
+  const response = await fetch(url);
+  // Drain the readiness response before synchronous browser work blocks Node.
+  // Leaving its body pending can trip Undici's parser when the socket closes.
+  const ready = response.ok; await response.arrayBuffer();
+  if (child.exitCode !== null || !ready) throw new Error('Owned server is not serving the selected figure');
   return url;
 }
 

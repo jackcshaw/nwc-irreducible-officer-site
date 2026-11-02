@@ -28,7 +28,7 @@ try {
   });
   for(const variant of manifest.variants) {
     console.log(`Exporting ${slug}/${variant.id}`);
-    await generateFigurePosters({url:`http://127.0.0.1:${port}/${variant.id}/?t=0`,figureId:slug,variant:variant.id,sourceCommit:figure.sourceCommit,root,inputs:figureInputs(root,slug),outputDir:join(root,'media/figures',slug,variant.id),fontLock:join(root,'figures/fonts/manifest.json')});
+    await generateFigurePosters({url:`http://127.0.0.1:${port}/${variant.id}/?t=0`,figureId:slug,variant:variant.id,questionFirst:figure.kind==='competency',sourceCommit:figure.sourceCommit,root,inputs:figureInputs(root,slug),outputDir:join(root,'media/figures',slug,variant.id),fontLock:join(root,'figures/fonts/manifest.json')});
   }
   console.log(`Generated four poster receipts; export fixture retained at ${out}`);
 } finally {server.kill('SIGTERM')}

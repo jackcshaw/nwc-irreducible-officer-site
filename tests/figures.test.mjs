@@ -5,7 +5,7 @@ import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQu
 import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
 const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
 const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
-assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance','invisible-delegation','institutional-monoculture','responsibility-laundering']);
+assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance','invisible-delegation','institutional-monoculture','responsibility-laundering','appropriate-reliance']);
 for(const figure of manifest.figures) {
   const quote=quoteFor(figure,essay);
   assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
@@ -19,21 +19,21 @@ for(const figure of manifest.figures) {
     assert(html.includes(`rel="canonical" href="https://judgmentlab.net${path}"`));
     titles.add(html.match(/<title>(.*?)<\/title>/s)[1]);
     assert.equal((html.match(/data-mf-beat-index=/g)||[]).length,ed.beats.length+1);
-    assert.equal((html.match(/class="figure-poster"/g)||[]).length,1);
+    assert.equal((html.match(/class="figure-poster"/g)||[]).length,figure.kind==='competency'?3:1);
     assert(sitemap.includes(`https://judgmentlab.net${path}`));
     assert(!/<a[^>]+href="[^\"]*book-v0/.test(html));
     const data=JSON.parse(html.match(/id="figure-data" type="application\/json">(.*?)<\/script>/s)[1]);
     assert.equal(data.edition.castId,variant.cast);
     assert.equal(data.routes.length,4);
     const ld=JSON.parse(html.match(/type="application\/ld\+json">(.*?)<\/script>/s)[1]);
-    assert.equal(ld[0]['@type'],'LearningResource');assert.equal(ld[1].itemListElement.length,3);
+    assert.equal(ld[0]['@type'],'LearningResource');assert.equal(ld[1].itemListElement.length,figure.kind==='competency'?2:3);
     assert(!html.includes('design/motion-figures'));assert(!html.includes('parity-origin.js'));
     const dir=join(root,'media/figures',figure.slug,variant.id),receipt=JSON.parse(readFileSync(join(dir,'manifest.json'),'utf8'));
     assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
     assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
     assert(receipt.inputs['package-lock.json']);
-    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8},'invisible-delegation':{pme:99.1,business:99.1},'institutional-monoculture':{pme:100.5,business:95.2},'responsibility-laundering':{pme:97.4,business:100.8}})[figure.slug][variant.edition]);
-    assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8},'invisible-delegation':{pme:99.1,business:99.1},'institutional-monoculture':{pme:100.5,business:95.2},'responsibility-laundering':{pme:97.4,business:100.8},'appropriate-reliance':{pme:122.1,business:122.1}})[figure.slug][variant.edition]);
+    if(figure.kind==='competency') { assert.equal(receipt.questionFirst,true);assert.equal(receipt.posterTime,25.5+4.2);assert.notEqual(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);const reading=readFileSync(join(root,'dist',path,'reading/index.html'),'utf8');assert(reading.includes('<details>'));assert(!reading.includes('src="/assets/figures/runtime/motion.js'));assert(sitemap.includes(`https://judgmentlab.net${path}reading/`)); } else assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
     assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
   }
   assert.equal(titles.size,4);
@@ -66,7 +66,7 @@ for(const variant of manifest.variants) {
   assert(html.includes(renderLinked(root,q.text)));
  }
  if(ed.page.evidenceText)assert(html.includes(renderLinked(root,ed.page.evidenceText)));
- assert(!html.includes('href="../appropriate-reliance/'));
+ assert(html.includes(`href="/appropriate-reliance/${variant.suffix}"`));
 }
 assert.throws(()=>linkedMarkdown([{text:'bad',href:'javascript:alert(1)'}]),/Invalid/);
 

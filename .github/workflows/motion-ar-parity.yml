@@ -3,6 +3,10 @@ on:
   pull_request:
     paths:
       - '.github/workflows/motion-ar-parity.yml'
+      - 'figures/appropriate-reliance/**'
+      - 'figures/page.js'
+      - 'scripts/figure-pages.mjs'
+      - 'tests/helpers/figure-page-parity-fixture.mjs'
       - 'figures/runtime/**'
       - 'figures/fonts/**'
       - 'figures/casts.json'
@@ -87,8 +91,8 @@ jobs:
         with: {python-version: '3.12'}
       - name: Install browser
         run: npm ci && npx playwright install --with-deps chromium
-      - name: Compare source, branches and reader flows
-        run: node scripts/check-motion-parity.mjs interactive appropriate-reliance '${{ matrix.edition }}' '${{ matrix.cast }}' "$RUNNER_TEMP/motion-ar"
+      - name: Compare source and production factory branches and reader flows
+        run: node scripts/check-motion-parity.mjs interactive appropriate-reliance '${{ matrix.edition }}' '${{ matrix.cast }}' "$RUNNER_TEMP/motion-ar" --production-factory
       - name: Retain receipts and text snapshots
         if: always()
         uses: actions/upload-artifact@v4
