@@ -69,3 +69,7 @@ for(const variant of manifest.variants) {
  assert(!html.includes('href="../appropriate-reliance/'));
 }
 assert.throws(()=>linkedMarkdown([{text:'bad',href:'javascript:alert(1)'}]),/Invalid/);
+
+const urPme=readFileSync(join(root,'dist/failure-modes/uncalibrated-reliance/pme/index.html'),'utf8');
+assert(urPme.includes('<p class="figure-setting-note">PME (professional military education): the original example from <em>The Irreducible Officer</em>, the National War College essay.</p>'));
+assert(!urPme.includes('<p class="figure-setting-note">true</p>'));
