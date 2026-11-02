@@ -1,0 +1,13 @@
+/* Static entry points use the essay's ink, paper and typography. */
+.motion-figure-card {margin:30px 0 40px;border-block:1px solid var(--faint);scroll-margin-top:112px;break-inside:avoid;}
+.motion-figure-entry {display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center;padding:24px 0;color:var(--ink);text-decoration:none;}
+.motion-figure-entry img {display:block;width:100%;height:auto;}
+.motion-figure-copy {min-width:0;}
+.motion-figure-card .motion-figure-copy h3 {margin:0 0 14px;font-size:26px;line-height:1.2;}
+.motion-figure-card .motion-figure-check {margin:0 0 10px;font-size:20px;line-height:1.4;font-style:italic;}
+.motion-figure-card .motion-figure-follow {margin:0 0 18px;font-size:17px;line-height:1.45;}
+.motion-figure-action {font-family:var(--font-body);font-size:16px;color:var(--red);text-decoration:underline;text-underline-offset:.2em;}
+.motion-figure-entry:focus-visible {outline:2px solid var(--ink);outline-offset:6px;}
+@media(hover:hover) {.motion-figure-entry:hover .motion-figure-action {color:var(--ink);}}
+@media(max-width:600px) {.motion-figure-entry {grid-template-columns:minmax(0,1fr);gap:18px;padding:22px 0;}.motion-figure-card .motion-figure-copy h3 {font-size:25px;}}
+@media print {.motion-figure-card {margin:18px 0;}.motion-figure-entry {gap:18px;padding:14px 0;}.motion-figure-card .motion-figure-copy h3 {font-size:18pt;}.motion-figure-card .motion-figure-check {font-size:12pt;}.motion-figure-card .motion-figure-follow,.motion-figure-action {font-size:10pt;}}

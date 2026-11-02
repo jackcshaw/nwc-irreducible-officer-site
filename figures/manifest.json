@@ -40,7 +40,8 @@
       "quoteEnd": "The frame capture is invisible inside the final product.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
-      ]
+      ],
+      "essayAnchorEnd": "The frame capture is invisible inside the final product."
     },
     {
       "slug": "fluency-substitution",
@@ -51,7 +52,8 @@
       "quoteEnd": "A paragraph that balances every consideration may never identify which risk actually matters most.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=5"
-      ]
+      ],
+      "essayAnchorEnd": "may never identify which risk actually matters most."
     },
     {
       "slug": "premature-synthesis",
@@ -62,7 +64,8 @@
       "quoteEnd": "The student has bypassed the developmental struggle of forming a mental map and inherited one instead.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
-      ]
+      ],
+      "essayAnchorEnd": "forming a mental map and inherited one instead."
     },
     {
       "slug": "uncalibrated-reliance",
@@ -74,7 +77,8 @@
       "quoteEnd": "Appropriate reliance requires the student to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required before discovering the error downstream.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=3"
-      ]
+      ],
+      "essayAnchorEnd": "before discovering the error downstream."
     },
     {
       "slug": "invisible-delegation",
@@ -86,7 +90,8 @@
       "quoteEnd": "The student believes they are working; the model has already done the framing.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
-      ]
+      ],
+      "essayAnchorEnd": "the model has already done the framing."
     },
     {
       "slug": "institutional-monoculture",
@@ -97,7 +102,8 @@
       "quoteEnd": "the seminar is meant to develop.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
-      ]
+      ],
+      "essayAnchorEnd": "the range of strategic imagination the seminar is meant to develop."
     },
     {
       "slug": "responsibility-laundering",
@@ -110,7 +116,8 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=5"
       ],
-      "sourceCommit": "e30b12c4521e9aa7156d2348bcff000d8ab62d4a"
+      "sourceCommit": "e30b12c4521e9aa7156d2348bcff000d8ab62d4a",
+      "essayAnchorEnd": "who chose the frame does not have a satisfying answer."
     },
     {
       "slug": "appropriate-reliance",
@@ -122,7 +129,8 @@
       "quoteEnd": "what independent checks are required before the output governs the work.",
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=3"
-      ]
+      ],
+      "essayAnchorEnd": "what independent checks are required before the output governs the work."
     }
   ]
 }
