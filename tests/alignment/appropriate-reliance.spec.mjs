@@ -91,3 +91,15 @@ for(const [suffix,cast] of variants) {
   await page.emulateMedia({media:'print'});await expect(result.locator('p').first()).toBeVisible();
  });
 }
+
+for(const [suffix,cast] of variants) test(`appropriate reliance ${cast}: print keeps full diagram scale and restores screen`,async({page})=>{
+ await page.emulateMedia({reducedMotion:'reduce'});await ready(page,suffix);
+ await page.locator('[data-ar-gate="0"] [data-ar-opt="b"]').click();await page.locator('[data-ar-continue]').click();
+ await page.locator('[data-ar-gate="1"] [data-ar-opt="move"]').click();await page.locator('[data-ar-continue]').click();
+ const screen=await page.locator('.mf-stage svg').boundingBox();
+ await page.emulateMedia({media:'print'});await page.evaluate(()=>dispatchEvent(new Event('beforeprint')));
+ const printed=await page.locator('.mf-stage svg').evaluate(svg=>({height:svg.getBoundingClientRect().height,width:svg.getBoundingClientRect().width,viewBoxHeight:svg.viewBox.baseVal.height,viewBoxWidth:svg.viewBox.baseVal.width}));
+ expect(printed.height/printed.width).toBeCloseTo(printed.viewBoxHeight/printed.viewBoxWidth,2);
+ await page.emulateMedia({media:'screen'});await page.evaluate(()=>dispatchEvent(new Event('afterprint')));
+ const restored=await page.locator('.mf-stage svg').boundingBox();expect(restored.height).toBeCloseTo(screen.height,0);expect(restored.width).toBeCloseTo(screen.width,0);
+});
