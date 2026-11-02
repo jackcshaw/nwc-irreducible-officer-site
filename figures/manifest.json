@@ -52,6 +52,17 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=5"
       ]
+    },
+    {
+      "slug": "premature-synthesis",
+      "kind": "failure-mode",
+      "order": 3,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "quoteStart": "Premature synthesis appears when",
+      "quoteEnd": "The student has bypassed the developmental struggle of forming a mental map and inherited one instead.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=4"
+      ]
     }
   ]
 }

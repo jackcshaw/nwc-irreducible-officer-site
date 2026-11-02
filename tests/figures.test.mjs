@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
-import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote} from '../scripts/figure-pages.mjs';
+import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote,checkedEssayExcerpt} from '../scripts/figure-pages.mjs';
 import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
 const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
 const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
-assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution']);
+assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis']);
 for(const figure of manifest.figures) {
   const quote=quoteFor(figure,essay);
   assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
@@ -32,7 +32,7 @@ for(const figure of manifest.figures) {
     assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
     assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
     assert(receipt.inputs['package-lock.json']);
-    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101}})[figure.slug][variant.edition]);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2}})[figure.slug][variant.edition]);
     assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
     assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
   }
@@ -45,7 +45,15 @@ assert(!renderEssayQuote(root,'[unsafe](javascript:alert(1))').includes('<a'));
 const fsPage=readFileSync(join(root,'dist/failure-modes/fluency-substitution/pme/index.html'),'utf8');
 assert(fsPage.includes('<a href="https://ojs.aut.ac.nz/pjtel/article/view/246">Chow et al., 2026</a>'));
 const hub=readFileSync(join(root,'dist/failure-modes/index.html'),'utf8');
-assert.equal((hub.match(/<li>/g)||[]).length,2);
+assert.equal((hub.match(/<li>/g)||[]).length,3);
 assert(!hub.includes('runtime/motion.js'));
 assert(!readFileSync(join(root,'dist/index.html'),'utf8').includes('/assets/figures/runtime/motion.js'));
 console.log('Figure static routes, source boundaries, posters and metadata passed');
+
+const supplemental=JSON.parse(readFileSync(join(root,'figures/premature-synthesis/editions/pme.json'))).page.quote2;
+assert.equal(checkedEssayExcerpt(supplemental,essay),supplemental);
+assert.throws(()=>checkedEssayExcerpt(supplemental,essay+supplemental),/ambiguous/);
+assert.throws(()=>checkedEssayExcerpt('An invented quotation.',essay),/Missing/);
+const psPage=readFileSync(join(root,'dist/failure-modes/premature-synthesis/pme/index.html'),'utf8');
+assert(psPage.includes(renderEssayQuote(root,supplemental)));
+assert(psPage.includes('href="/#vi-friction-as-developmental-design"'));
