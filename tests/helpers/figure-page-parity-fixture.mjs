@@ -27,8 +27,13 @@ html=html.replace(/(<p[^>]*data-im-lead="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>{
 // Preserve the source page's linked explanatory paragraph (production maps
 // its cross-figure link to a static setting; this fixture keeps source URLs).
 html=html.replace(/(<p[^>]*data-rl-rich="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>open+runtimeData(root).rich(sourceValue(path)||'').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2">$1</a>')+'</p>');
+if(slug==='appropriate-reliance') {
+ html=html.replace('id="ar-after"','id="ar-after" data-ar-after');
+ html=html.replace(/(<([a-z]+)[^>]*data-ar-ed-rich="([^"]+)"[^>]*>)<\/\2>/g,(_,open,tag,path)=>open+renderEssayQuote(root,sourceValue(path)||'')+`</${tag}>`);
+ html=html.replace(/(<p[^>]*data-ar-plate[^>]*>)<\/p>/g,(_,open)=>open+`${ed.nameplate.name} · ${ed.nameplate.kicker}</p>`);
+}
 const data=JSON.stringify(ed).replace(/</g,'\\u003c');
-html=html.replace('</body>',`<script>const edition=${data};MotionFigures.fillPage(document,edition);document.querySelectorAll('[data-fs-quote]').forEach(node=>{node.innerHTML=${JSON.stringify(renderEssayQuote(root,ed.page.quote||''))};});MotionFigures.mountFigure(document.getElementById('${slug}'),{edition,standalone:true}).then(()=>{document.getElementById('${slug}').dataset.mfReady='';});</script></body>`);
+html=html.replace('</body>',`<script>const edition=${data};MotionFigures.fillPage(document,edition);document.querySelectorAll('[data-fs-quote]').forEach(node=>{node.innerHTML=${JSON.stringify(renderEssayQuote(root,ed.page.quote||''))};});MotionFigures.mountFigure(document.getElementById('${slug}'),{edition,scope:document,standalone:true}).then(()=>{document.getElementById('${slug}').dataset.mfReady='';});</script></body>`);
 writeFileSync(join(dir,'index.html'),html);
 const js=readFileSync(join(root,'figures',slug,slug+'.js'));writeFileSync(join(dir,slug+'.js'),js);
 const receiptPath=join(resolve(output),'fixture.json'),receipt=JSON.parse(readFileSync(receiptPath,'utf8'));

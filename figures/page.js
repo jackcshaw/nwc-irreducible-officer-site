@@ -21,7 +21,7 @@
     catch { return false; } // A failed request can leave an inaccessible sheet.
   });
   if (!window.MotionFigures || !stylesReady) { status.hidden = false; return; }
-  MotionFigures.mountFigure(root, {edition: data.edition, scope: root, standalone: true})
+  MotionFigures.mountFigure(root, {edition: data.edition, scope: root.closest('[data-figure-instance]') || root, standalone: true})
     .then(() => { root.dataset.mfReady = ''; status.hidden = true; document.querySelectorAll('[data-read-figure]').forEach(link => { link.hash = root.querySelector('[data-mf-beats]').id; }); })
     .catch(() => { status.hidden = false; });
 })();

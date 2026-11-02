@@ -105,7 +105,15 @@ const snapshot = (p) => p.evaluate(([id, hide]) => {
   const body = document.body.cloneNode(true);
   if (hide) body.querySelectorAll(hide).forEach((n) => n.remove());
   // <noscript> content is raw text while scripts run, never shown: not a page word.
-  body.querySelectorAll("noscript").forEach((n) => n.remove());
+  body.querySelectorAll("noscript,script").forEach((n) => n.remove());
+  // D12 stores source-hidden words in inert fragments. Reconstruct only this
+  // detached inventory clone; visibleText still comes from the untouched page.
+  // Source checkLinesAfter were runtime-only, so their unrevealed template is
+  // excluded here and verified separately against edition data in route tests.
+  body.querySelectorAll('[data-ar-check-after] > template').forEach(n=>n.remove());
+  let fragments;
+  while((fragments=[...body.querySelectorAll('template[data-ar-fragment]')]).length)
+    for(const fragment of fragments) fragment.replaceWith(fragment.content.cloneNode(true));
   return {
     domText: sq(body.textContent),
     visibleText: sq(document.body.innerText),
@@ -117,7 +125,7 @@ const snapshot = (p) => p.evaluate(([id, hide]) => {
     lockedBeats: [...root.querySelectorAll("[data-mf-beats] > li")].map((li) => (li.classList.contains("is-locked") ? 1 : 0) + (li.querySelector("button").disabled ? 2 : 0)),
     hidden: Object.fromEntries([["sum1", "[data-ar-sum1]"], ["sum2", "[data-ar-sum2]"], ["sum3", "[data-ar-sum3]"], ["after", "#ar-after"], ["afterLocked", "[data-ar-after-locked]"], ["gate1", '[data-ar-gate="0"]'], ["gate2", '[data-ar-gate="1"]'], ["gatebar", "[data-ar-gatebar]"], ["prompt", "[data-ar-prompt]"]].map(([k, s]) => [k, q(s)?.hidden ?? null])),
     afterOpen: q("#ar-after")?.open ?? null,
-    labels: [...root.querySelectorAll("label, legend, button")].map((n) => sq(n.textContent)),
+    labels: [...body.querySelector(`#${id}`).querySelectorAll("label, legend, button")].map((n) => sq(n.textContent)),
   };
 }, [SLUG, hide]);
 

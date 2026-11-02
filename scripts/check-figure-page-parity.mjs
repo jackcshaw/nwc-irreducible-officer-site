@@ -29,8 +29,9 @@ const harness = join(root, kind === 'frames' ? 'design/motion-figures/scripts/fr
 // surface. Immutable source.tar and source drawing/runtime bytes stay retained.
 const built = join(out, 'built-files'); cpSync(join(root, 'dist'), built, {recursive:true});
 const suffix = cast === 'workplace' ? '' : cast === 'seminar' ? 'pme/' : `${cast}/`;
+const builtPath = `${figure.kind==='competency'?'':'/failure-modes'}/${slug}/${suffix}`;
 const normalizer = readFileSync(join(root, 'tests/helpers/figure-capture-origin.js'));
-for (const [directory, htmlPath] of [[source, `figures/${slug}/index.html`], [candidate, `figures/${slug}/index.html`], [built, `failure-modes/${slug}/${suffix}index.html`]]) {
+for (const [directory, htmlPath] of [[source, `figures/${slug}/index.html`], [candidate, `figures/${slug}/index.html`], [built, `${builtPath.slice(1)}index.html`]]) {
   writeFileSync(join(directory, 'parity-origin.js'), normalizer);
   const path = join(directory, htmlPath);
   writeFileSync(path, readFileSync(path, 'utf8').replace('</body>', '<script src="/parity-origin.js"></script></body>'));
@@ -109,7 +110,7 @@ try {
     else if (!/^page-\d+\.png$/.test(name)) writeFileSync(dest, readFileSync(path));
   }};
   copyComponent(baseline);
-  const builtURL = await serve(built, `/failure-modes/${slug}/${suffix}`);
+  const builtURL = await serve(built, builtPath);
   receipt.builtScope = {excluded: ['page-1440.png', 'page-390.png'], reason: 'New surrounding page chrome; all stage, captions, controls, beat list, source and print pixels remain compared.'}; save();
   if (!run('built-page', 'diff', [componentBase, join(out, 'built-page')], builtURL) &&
       !run('built-page-quiet-repeat', 'diff', [componentBase, join(out, 'built-page-quiet-repeat')], builtURL)) throw new Error('Built page differs after one quiet repeat');

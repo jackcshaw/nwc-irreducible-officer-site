@@ -73,9 +73,7 @@
       "quoteStart": "Uncalibrated reliance begins with",
       "quoteEnd": "Appropriate reliance requires the student to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required before discovering the error downstream.",
       "unpublishedLinks": [
-        "../../book-v0/four-moves-book.html?spread=3",
-        "../appropriate-reliance/",
-        "../appropriate-reliance/?edition=business"
+        "../../book-v0/four-moves-book.html?spread=3"
       ]
     },
     {
@@ -113,6 +111,18 @@
         "../../book-v0/four-moves-book.html?spread=5"
       ],
       "sourceCommit": "e30b12c4521e9aa7156d2348bcff000d8ab62d4a"
+    },
+    {
+      "slug": "appropriate-reliance",
+      "kind": "competency",
+      "order": 8,
+      "essaySection": "v-appropriate-reliance-as-a-teachable-competency",
+      "additionalEssaySection": "v-appropriate-reliance-as-a-teachable-competency",
+      "quoteStart": "AI improved performance on some tasks and degraded it on others,",
+      "quoteEnd": "what independent checks are required before the output governs the work.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=3"
+      ]
     }
   ]
 }

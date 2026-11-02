@@ -22,13 +22,13 @@ export function loadFigures(root) {
   if(manifest.variants.map(v=>`${v.edition}/${v.cast}/${v.suffix}`).join('|')!==expected.join('|')) throw new Error('Unexpected figure routes');
   const seen=new Set();
   for(const figure of manifest.figures) {
-    if(!/^[a-z]+(?:-[a-z]+)*$/.test(figure.slug) || seen.has(figure.slug) || figure.kind!=='failure-mode') throw new Error('Invalid or duplicate figure');
+    if(!/^[a-z]+(?:-[a-z]+)*$/.test(figure.slug) || seen.has(figure.slug) || !['failure-mode','competency'].includes(figure.kind)) throw new Error('Invalid or duplicate figure');
     if(figure.sourceCommit && !/^[a-f0-9]{40}$/.test(figure.sourceCommit)) throw new Error('Invalid figure source commit');
     seen.add(figure.slug);
   }
   return {...manifest,figures:[...manifest.figures].sort((a,b)=>a.order-b.order)};
 }
-export const figurePath=(figure,variant)=>`/failure-modes/${figure.slug}/${variant.suffix}`;
+export const figurePath=(figure,variant)=>`${figure.kind==='competency'?'':'/failure-modes'}/${figure.slug}/${variant.suffix}`;
 export function resolveFigure(root,figure,variant) {
   const raw=readJSON(join(root,'figures',figure.slug,'editions',`${variant.edition}.json`));
   if(!(raw.casts || [raw.cast]).includes(variant.cast)) throw new Error('Unsupported figure cast');
@@ -72,7 +72,7 @@ export function checkQuotation(entry,essay) {
 }
 function essayQuoteMarkup(root,figure,page,quote) {
   const entries=page.quotes?.map((q,i)=>({paras:quotationParagraphs(q),cite:q.cite,section:i?figure.additionalEssaySection:figure.essaySection})) || [
-    {text:quote,cite:'The Irreducible Officer, Section II, What the Problem Looks Like',section:figure.essaySection},
+    {text:quote,cite:figure.kind==='competency'?'The Irreducible Officer, Section V, Appropriate Reliance as a Teachable Competency':'The Irreducible Officer, Section II, What the Problem Looks Like',section:figure.essaySection},
     ...(page.quote2?[{text:page.quote2,cite:page.cite2,section:'vi-friction-as-developmental-design'}]:[])
   ];
   return entries.map(q=>{
@@ -110,15 +110,15 @@ export function playerMarkup(root,figure,edition,poster) {
   html=html.replace('aria-label="Beats"></ol>',`id="figure-beats" aria-label="Beats">${list}</ol>`);
   if(!edition.page.teacherNote) html=html.replace(/<aside class="fc-teacher"[\s\S]*?<\/aside>/,'');
   if(poster) html=html.replace('<div class="mf-shot"',`<div class="figure-fallback"><img class="figure-poster" src="${escape(poster.url)}" width="${poster.width}" height="${poster.height}" alt="${escape(edition.nameplate.definition)}"><p><a href="#figure-beats" data-read-figure>Read the figure</a></p></div>\n<div class="mf-shot"`);
-  return html;
+  return figure.kind==='competency'?gateRelianceMarkup(html,edition):html;
 }
-function shell({title,description,path,siteUrl,release,assets,body,head='',scripts='',analytics=''}) {
+function shell({title,description,path,siteUrl,release,assets,body,head='',scripts='',analytics='',bodyClass=''}) {
   const canonical=new URL(path,siteUrl).href;
-  return `<!doctype html><html lang="en" data-ed-gate><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} | Judgment Lab</title><meta name="description" content="${escape(description)}"><link rel="canonical" href="${escape(canonical)}"><meta property="og:type" content="article"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${escape(canonical)}"><link rel="stylesheet" href="${assets['fonts/fonts.css'].url}"><link rel="stylesheet" href="${assets['figure-page.css'].url}"><link rel="stylesheet" href="${assets['masthead.css'].url}">${head}${analytics}</head><body><a class="skip-link" href="#main">Skip to content</a><header class="lab-masthead" aria-label="Judgment Lab"><div class="masthead-inner"><a class="package-brand" href="/#overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a><p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p></div></header><nav class="figure-nav" aria-label="Learning paths"><a href="/#overview">Learn</a><a href="/#discuss">Discuss</a><a href="/#companion">Practice</a><a href="/#workbench">Design</a><a href="/#sources">References</a></nav><main class="fig-page" id="main" tabindex="-1">${body}</main><footer class="lab-footer"><a href="/#overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="/#sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escape(release.version)} · ${escape(release.commits.site)}</p></footer>${scripts}</body></html>`;
+  return `<!doctype html><html lang="en" data-ed-gate><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escape(title)} | Judgment Lab</title><meta name="description" content="${escape(description)}"><link rel="canonical" href="${escape(canonical)}"><meta property="og:type" content="article"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${escape(canonical)}"><link rel="stylesheet" href="${assets['fonts/fonts.css'].url}"><link rel="stylesheet" href="${assets['figure-page.css'].url}"><link rel="stylesheet" href="${assets['masthead.css'].url}">${head}${analytics}</head><body class="${escape(bodyClass)}"><a class="skip-link" href="#main">Skip to content</a><header class="lab-masthead" aria-label="Judgment Lab"><div class="masthead-inner"><a class="package-brand" href="/#overview">Judgment Lab<span class="brand-period" aria-hidden="true">.</span></a><p class="brand-purpose">Strengthening human judgment in AI-enabled work.</p></div></header><nav class="figure-nav" aria-label="Learning paths"><a href="/#overview">Learn</a><a href="/#discuss">Discuss</a><a href="/#companion">Practice</a><a href="/#workbench">Design</a><a href="/#sources">References</a></nav><main class="fig-page" id="main" tabindex="-1">${body}</main><footer class="lab-footer"><a href="/#overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="/#sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escape(release.version)} · ${escape(release.commits.site)}</p></footer>${scripts}</body></html>`;
 }
 // Source figure-to-figure links retain the current static setting.
 export function figureLink(manifest,variant,href) {
-  const relative=href.match(/^\.\.\/([a-z-]+)\/(?:\?edition=(?:business|pme))?$/);
+  const relative=href.match(/^\.\.\/([a-z-]+)\/(?:\?edition=(?:business|pme)(?:&cast=(?:workplace|classroom|high-school|seminar))?)?$/);
   if(relative) {
     const target=manifest.figures.find(f=>f.slug===relative[1]);
     if(!target) throw new Error(`Unpublished figure link: ${href}`);
@@ -135,7 +135,46 @@ export function renderFigureText(root,manifest,variant,text) {
     return link?`<a href="${escape(figureLink(manifest,variant,link[2]))}">${rich(link[1])}</a>`:rich(part);
   }).join('');
 }
+// Answers are available for deliberate reading, but never pre-rendered as live
+// interactive text. Template content is absent from find and accessibility trees.
+const inertFragment = html => `<template data-ar-fragment>${html}</template>`;
+export function gateRelianceMarkup(html, edition) {
+  html=html.replace(/(<li data-mf-beat-index="(\d+)"[^>]*>)([\s\S]*?)(<\/li>)/g,(_,open,index,body,close)=>{
+    if(+index<3)return open+body+close;
+    body=body.replace(/(<span class="mf-text")>([\s\S]*?)<\/span>/,(_,tag,text)=>`${tag} data-ar-inert>${inertFragment(text)}</span>`);
+    body=body.replace(/(<p class="mf-detail")>([\s\S]*?)<\/p>/,(_,tag,text)=>`${tag} data-ar-inert>${inertFragment(text)}</p>`);
+    return open.replace(/>$/,' class="is-locked">')+body+`<span class="ar-locked">${escape(edition.gates.locked)}</span>`+close;
+  });
+  return html.replace(/(<p[^>]*data-ar-sum[23][^>]*>)([\s\S]*?)(<\/p>)/g,(_,open,text,close)=>open.replace(/>$/,' data-ar-inert>')+inertFragment(text)+close);
+}
+export function relianceReadingMarkup(root,ed,poster) {
+  const rich=runtimeData(root).rich,p=ed.page;
+  const beats=(start,end)=>`<ol start="${start+1}">${ed.beats.slice(start,end).map(b=>`<li><p>${rich(b.list||b.text)}</p><p>${rich(b.detail)}</p></li>`).join('')}</ol>`;
+  return `<section class="ar-reading-version"><h2>Read the question and results</h2><p>This reading version presents the figure’s questions, results and reasoning. It does not record your choices.</p>${poster?`<img class="figure-poster" src="${escape(poster.url)}" width="${poster.width}" height="${poster.height}" alt="${escape(p.printCaption)}">`:''}<p>${rich(p.srSummary[0])}</p>${beats(0,3)}<details><summary>After the first question: results and the next question</summary><p>${rich(p.srSummary[1])}</p>${beats(3,8)}</details><details><summary>After the second question: results and reasoning</summary><p>${rich(p.srSummary[2])}</p>${beats(8,10)}${p.after.map(item=>`<h3>${escape(item.heading)}</h3><p>${renderEssayQuote(root,item.text)}</p>`).join('')}${poster?`<img class="figure-poster" src="${escape(poster.final)}" alt="${escape(ed.nameplate.definition)}">`:''}</details></section>`;
+}
+export function relianceAssociatedMarkup(root,ed) {
+  const p=ed.page,rich=runtimeData(root).rich;
+  return `<div class="ar-printq" data-ar-printq data-ar-owned aria-hidden="true"><p class="ar-printq-plate">${escape(ed.nameplate.name)} · ${escape(ed.nameplate.kicker)}</p><p class="fig-kicker">${escape(p.printKicker)}</p><div data-ar-printq-svg></div><p class="ar-printq-cap">${escape(p.printCaption)}</p></div><article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}${(p.checkLinesAfter||[]).map((line,i)=>`<p class="figure-check" data-ed="page.checkLines.${p.checkLines.length+i}" data-ar-inert data-ar-owned data-ar-check-after>${inertFragment(escape(line))}</p>`).join('')}</section><section><h2>${escape(p.howHeading)}</h2><p>${rich(p.how)}</p><p class="figure-setting-note">PME means professional military education. Its example comes from <em>The Irreducible Officer</em>, the National War College essay.</p></section><p class="ar-after-locked" data-ar-after-locked data-ar-owned>${escape(p.afterLocked)}</p><details class="ar-after" data-ar-after data-ar-owned data-ar-inert hidden>${inertFragment(`<summary>${escape(p.afterSummary)}</summary>${p.after.map(item=>`<h3>${escape(item.heading)}</h3><p class="fig-follow">${renderEssayQuote(root,item.text)}</p>`).join('')}`)}</details></article>`;
+}
+function renderReliancePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics='',reading=false}) {
+  const ed=resolveFigure(root,figure,variant),p=ed.page,rich=runtimeData(root).rich;
+  const route=figurePath(figure,variant),path=reading?route+'reading/':route;
+  const routes=manifest.variants.map(v=>({...v,path:figurePath(figure,v)}));
+  const switches=routes.map(r=>`<a href="${r.path}${reading?'reading/':''}"${r.id===variant.id?' aria-current="page"':''}>${r.id==='classroom'?'Higher education':r.label}</a>`).join('');
+  const links=p.links.filter(l=>!figure.unpublishedLinks.includes(l.href)).map(l=>`<li>${escape(l.lead)} <a href="${escape(figureLink(manifest,variant,l.href))}">${escape(l.text)}</a></li>`).join('');
+  const intro=`<header class="ar-page-intro"><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p>${rich(p.setup)}</p></header>`;
+  const after=`<section class="figure-reading"><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2>${essayQuoteMarkup(root,figure,p,quote)}<section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">Explore the seven failure modes</a></p></section></section>`;
+  const readingText=relianceReadingMarkup(root,ed,poster);
+  const body=intro+(reading?`<p><a href="${route}">Open the interactive figure</a></p>${readingText}${after}`:`<div data-figure-instance>${playerMarkup(root,figure,ed,poster)}<p class="figure-load-error" data-figure-status hidden>The interactive figure could not load. <a href="${route}reading/">Read the question and results</a>.</p><p class="figure-duration">About 2 minutes of playback, plus time for your calls. <a href="${route}reading/">Read the question and results</a>.</p>${relianceAssociatedMarkup(root,ed)}${after}<noscript>${readingText}</noscript></div>`);
+  const title=`${ed.nameplate.pageTitle} — ${variant.label}${reading?' — Reading version':''}`;
+  const structured=[{'@context':'https://schema.org','@type':'LearningResource',name:title,description:p.description,url:new URL(path,siteUrl).href,image:new URL(poster.og,siteUrl).href,inLanguage:'en',learningResourceType:reading?'Reading exercise':'Interactive figure'},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{name:'Judgment Lab',item:new URL('/',siteUrl).href},{name:ed.nameplate.name,item:new URL(route,siteUrl).href}].map((x,i)=>({'@type':'ListItem',position:i+1,...x}))}];
+  const head=`<link rel="stylesheet" href="${assets['runtime/figure.css'].url}"><link rel="stylesheet" href="${assets[`${figure.slug}/${figure.slug}.css`].url}"><meta property="og:image" content="${escape(new URL(poster.og,siteUrl).href)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">${jsonScript(structured)}</script>`;
+  const scripts=reading?'':`<script id="figure-data" type="application/json">${jsonScript({edition:ed,routes})}</script><script defer src="${assets['runtime/motion.js'].url}"></script><script defer src="${assets[`${figure.slug}/${figure.slug}.js`].url}"></script><script defer src="${assets['page.js'].url}"></script>`;
+  return shell({title,description:p.description,path,siteUrl,release,assets,body,head,scripts,analytics,bodyClass:'ar-page-shell'});
+}
+
 export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics=''}) {
+  if(figure.kind==='competency')return renderReliancePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics});
   const ed=resolveFigure(root,figure,variant),p=ed.page,rich=runtimeData(root).rich,path=figurePath(figure,variant);
   const routes=manifest.variants.map(v=>({...v,path:figurePath(figure,v)}));
   const classroom=variant.id==='high-school'?'high-school':'classroom';
@@ -167,7 +206,7 @@ export function buildFigurePages({root,distDir,siteUrl,release,essayMarkdown,sou
       const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Shen & Tamkin,')) || '';
       for(const expected of ['52 developers','17% score difference','no significant speed gain','did not pre-register','Generation-Then-Comprehension (two people, 86%','Conceptual Inquiry (seven people, 65%','AI Delegation (four people, 39%','quiz straight after','groups of two to seven']) if(!study.includes(expected)) throw new Error(`Premature-synthesis evidence boundary changed: ${expected}`);
     }
-    if(figure.slug==='uncalibrated-reliance') {
+    if(['uncalibrated-reliance','appropriate-reliance'].includes(figure.slug)) {
       const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Otis,')) || '';
       for(const expected of ['no detectable average change','nearly 10% worse','may have benefited by over 15%','0.20-standard-deviations','advice that entrepreneurs chose to implement','exploratory','effect sizes differ']) if(!study.includes(expected)) throw new Error(`Uncalibrated-reliance evidence boundary changed: ${expected}`);
       const frontier=sourceSpineMarkdown.split('\n').find(l=>l.startsWith("- Dell'Acqua, Mollick,")) || '';
@@ -196,13 +235,16 @@ export function buildFigurePages({root,distDir,siteUrl,release,essayMarkdown,sou
       assertPosterReceipt(receipt,{root,inputs,outputDir:dir,variant:variant.id});
       const base=`/media/figures/${figure.slug}/${variant.id}`;
       for(const file of ['poster.png','final.png','og.png']) { const dest=join(distDir,base,file);mkdirSync(dirname(dest),{recursive:true});copyFileSync(join(dir,file),dest); }
-      const poster={url:`${base}/poster.png?v=${receipt.outputs['poster.png'].sha256}`,og:`${base}/og.png?v=${receipt.outputs['og.png'].sha256}`,...receipt.outputs['poster.png']};
+      const poster={final:`${base}/final.png?v=${receipt.outputs['final.png'].sha256}`,url:`${base}/poster.png?v=${receipt.outputs['poster.png'].sha256}`,og:`${base}/og.png?v=${receipt.outputs['og.png'].sha256}`,...receipt.outputs['poster.png']};
       const path=figurePath(figure,variant),dest=join(distDir,path,'index.html');mkdirSync(dirname(dest),{recursive:true});
       writeFileSync(dest,renderFigurePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics}));pages.push(path);
-      if(variant.id==='workplace') {const ed=resolveFigure(root,figure,variant);cards.push(`<li><a href="${path}" tabindex="-1" aria-hidden="true"><img src="${poster.url}" width="${poster.width}" height="${poster.height}" alt=""></a><div><h2><a href="${path}">${escape(ed.page.title)}</a></h2><p>${escape(ed.nameplate.definition)}</p><p class="figure-check">${escape(ed.check.question)}</p><a href="${path}">Open the figure</a></div></li>`);}
+      if(figure.kind==='competency') { const readingPath=path+'reading/';mkdirSync(join(distDir,readingPath),{recursive:true});writeFileSync(join(distDir,readingPath,'index.html'),renderReliancePage({root,figure,variant,manifest,assets,siteUrl,release,quote,poster,receipt,analytics,reading:true}));pages.push(readingPath); }
+      if(variant.id==='workplace' && figure.kind==='failure-mode') {const ed=resolveFigure(root,figure,variant);cards.push(`<li><a href="${path}" tabindex="-1" aria-hidden="true"><img src="${poster.url}" width="${poster.width}" height="${poster.height}" alt=""></a><div><h2><a href="${path}">${escape(ed.page.title)}</a></h2><p>${escape(ed.nameplate.definition)}</p><p class="figure-check">${escape(ed.check.question)}</p><a href="${path}">Open the figure</a></div></li>`);}
     }
   }
-  const body=`<h1>AI failure modes</h1><p class="figure-intro figure-description">Watch how AI can shape a problem and the work that follows. Each figure includes questions to use when reviewing that work.</p><ol class="figure-index">${cards.join('')}</ol>`;
+  const warmup=manifest.figures.find(f=>f.kind==='competency');
+  const warmupMarkup=warmup?`<section class="figure-reading"><h2>Appropriate reliance</h2><p>Make a call about where to rely on AI, then inspect the reasons.</p><a href="${figurePath(warmup,manifest.variants[0])}">Try the warm-up</a></section>`:'';
+  const body=`<h1>AI failure modes</h1><p class="figure-intro figure-description">Watch how AI can shape a problem and the work that follows. Each figure includes questions to use when reviewing that work.</p><ol class="figure-index">${cards.join('')}</ol>${warmupMarkup}`;
   mkdirSync(join(distDir,'failure-modes'),{recursive:true});writeFileSync(join(distDir,'failure-modes/index.html'),shell({title:'AI failure modes',description:'Animated examples and questions for reviewing AI-enabled work.',path:'/failure-modes/',siteUrl,release,assets,body,analytics}));
   const urls=['/','/failure-modes/',...pages];
   writeFileSync(join(distDir,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(p=>`<url><loc>${escape(new URL(p,siteUrl).href)}</loc></url>`).join('')}</urlset>`);
