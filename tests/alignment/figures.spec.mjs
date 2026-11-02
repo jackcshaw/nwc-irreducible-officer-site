@@ -3,6 +3,7 @@ const figures=[
  {slug:'frame-capture',businessBeats:15,pmeBeats:12},
  {slug:'fluency-substitution',businessBeats:13,pmeBeats:11},
  {slug:'premature-synthesis',businessBeats:11,pmeBeats:11},
+ {slug:'uncalibrated-reliance',businessBeats:11,pmeBeats:11},
 ];
 const variants=[['','workplace'],['classroom/','classroom'],['high-school/','high-school'],['pme/','seminar']];
 for(const {slug,businessBeats,pmeBeats} of figures) {
@@ -81,9 +82,9 @@ test('legacy edition query becomes a matching static route',async({page})=>{
 });
 test('hub lists published figures in order without downloading players',async({page})=>{
  const requested=[];page.on('request',r=>requested.push(r.url()));await page.goto('/failure-modes/');
- await expect(page.locator('.figure-index>li')).toHaveCount(3);
- await expect(page.locator('.figure-index h2')).toHaveText(['Frame capture','Fluency substitution','Premature synthesis']);
- expect(requested.some(u=>/runtime\/motion.js|frame-capture\.js|fluency-substitution\.js|premature-synthesis\.js/.test(u))).toBe(false);
+ await expect(page.locator('.figure-index>li')).toHaveCount(4);
+ await expect(page.locator('.figure-index h2')).toHaveText(['Frame capture','Fluency substitution','Premature synthesis','Uncalibrated reliance']);
+ expect(requested.some(u=>/runtime\/motion.js|frame-capture\.js|fluency-substitution\.js|premature-synthesis\.js|uncalibrated-reliance\.js/.test(u))).toBe(false);
 });
 for(const [asset,pattern] of [['font stylesheet','**/assets/figures/fonts/fonts.css?*'],['font files','**/assets/figures/fonts/*.woff2?*']]) {
  test(`failed ${asset} keeps the readable static version`,async({page})=>{

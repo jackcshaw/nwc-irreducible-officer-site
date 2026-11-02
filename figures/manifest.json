@@ -63,6 +63,20 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
       ]
+    },
+    {
+      "slug": "uncalibrated-reliance",
+      "kind": "failure-mode",
+      "order": 4,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "additionalEssaySection": "v-appropriate-reliance-as-a-teachable-competency",
+      "quoteStart": "Uncalibrated reliance begins with",
+      "quoteEnd": "Appropriate reliance requires the student to identify which part of the task they are delegating, what evidence would justify that delegation, and what independent checks are required before discovering the error downstream.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=3",
+        "../appropriate-reliance/",
+        "../appropriate-reliance/?edition=business"
+      ]
     }
   ]
 }
