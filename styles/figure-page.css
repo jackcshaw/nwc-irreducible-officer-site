@@ -49,3 +49,6 @@ p { margin:0 0 18px; }
 @media(max-width:1159px) { .figure-nav { margin:0 28px; } }
 @media(max-width:700px) { .fig-page { padding:24px 16px 48px; } .figure-nav { margin:0 20px; gap:18px; font-size:16px; } .figure-description { font-size:21px; } .figure-index li { grid-template-columns:1fr; gap:20px; } }
 @media print { .figure-nav,.figure-switch,.figure-variant-links,.figure-setting-note,.figure-crumb,.skip-link { display:none; }  .figure-reading { max-width:none; } .lab-footer { display:block; } }
+
+/* Keep separately cited essay excerpts visibly distinct. */
+.figure-reading blockquote + blockquote { margin-top: 22px; }

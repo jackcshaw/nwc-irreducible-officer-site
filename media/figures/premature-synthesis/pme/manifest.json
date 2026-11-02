@@ -66,7 +66,7 @@
     "scripts/figure-pages.mjs": "1d50f3a73f08d5e503e246cc8cbfb3bb3ea8878d5a3c8c085c97ed12878fbac5",
     "scripts/figure-posters.mjs": "d5eafbde6bedf0e5bbafc760f4f623c6cc5c77a2639cfc51aa5664d93a535a33",
     "scripts/generate-figure-posters.mjs": "cb40370871b44470c9796db83252825621cf2d9eda894351d865b04b70c65b3c",
-    "styles/figure-page.css": "16fbc6c3a2e327e51bb3cfd24de0a71deeae7a37c782669826d4ed8012c19823",
+    "styles/figure-page.css": "dc40dcc3c7a10b975b4ab0b2b3822a9d2b734e140fc305e7cb25be4fffc384bf",
     "styles/masthead.css": "1a2ef59af731535fdaf2249fea21c157a0696dfe81bdca63548630e0becba0cc"
   },
   "outputs": {
