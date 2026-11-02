@@ -51,6 +51,26 @@ export function checkedEssayExcerpt(quote,essay) {
   if(!quote || start<0 || clean.indexOf(quote,start+1)!==-1) throw new Error('Missing or ambiguous supplemental essay quotation');
   return clean.slice(start,start+quote.length);
 }
+export function linkedMarkdown(segments) {
+  return (segments||[]).map(segment=>{
+    if(typeof segment==='string') return segment;
+    if(typeof segment.text!=='string' || !/^https:\/\//.test(segment.href)) throw new Error('Invalid linked figure text');
+    return `[${segment.text}](${segment.href})`;
+  }).join('');
+}
+export function renderLinked(root,segments) {
+  return renderEssayQuote(root,linkedMarkdown(segments));
+}
+function essayQuoteMarkup(root,figure,page,quote) {
+  const entries=page.quotes?.map((q,i)=>({text:linkedMarkdown(q.text),cite:q.cite,section:i?figure.additionalEssaySection:figure.essaySection})) || [
+    {text:quote,cite:'The Irreducible Officer, Section II, What the Problem Looks Like',section:figure.essaySection},
+    ...(page.quote2?[{text:page.quote2,cite:page.cite2,section:'vi-friction-as-developmental-design'}]:[])
+  ];
+  return entries.map(q=>{
+    if(!q.section) throw new Error('Missing quotation section');
+    return `<blockquote><p>${renderEssayQuote(root,q.text)}</p><cite><a href="/#${escape(q.section)}">${runtimeData(root).rich(q.cite)}</a></cite></blockquote>`;
+  }).join('');
+}
 export function figureInputs(root,slug) {
   const fonts=readJSON(join(root,'figures/fonts/manifest.json'));
   return ['package-lock.json','figures/manifest.json','figures/casts.json','figures/runtime/motion.js','figures/runtime/figure.css','figures/page.js',
@@ -98,7 +118,7 @@ export function renderFigurePage({root,figure,variant,manifest,assets,siteUrl,re
   const structured=[{'@context':'https://schema.org','@type':'LearningResource',name:title,description:p.description,url:new URL(path,siteUrl).href,image,inLanguage:'en',learningResourceType:'Animated figure',timeRequired:`PT${receipt.finalTime}S`,audience:{'@type':'Audience',audienceType:variant.id==='pme'?'Professional military education':variant.id==='classroom'?'Higher education':variant.id==='high-school'?'High-school educators':'Workplace'}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{name:'Judgment Lab',item:new URL('/',siteUrl).href},{name:'AI failure modes',item:new URL('/failure-modes/',siteUrl).href},{name:ed.nameplate.name,item:new URL(path,siteUrl).href}].map((x,i)=>({'@type':'ListItem',position:i+1,...x}))}];
   const links=p.links.filter(l=>!figure.unpublishedLinks.includes(l.href)).map(l=>`<li>${escape(l.lead)} <a href="${escape(l.href.replace('https://judgmentlab.net/','/'))}">${escape(l.text)}</a></li>`).join('');
   const duration=`${Math.floor(receipt.finalTime/60)}:${String(Math.floor(receipt.finalTime%60)).padStart(2,'0')}`;
-  const body=`<nav class="figure-crumb" aria-label="Breadcrumb"><a href="/failure-modes/">AI failure modes</a> / ${escape(p.title)}</nav><header class="figure-intro"><p class="fig-kicker">${escape(p.kicker)}</p><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p class="figure-setting-note">PME means professional military education. The Classroom version is also available for high school.</p>${['classroom','high-school'].includes(variant.id)?`<nav class="figure-variant-links" aria-label="Classroom version"><a href="${routes[1].path}"${variant.id==='classroom'?' aria-current="page"':''}>Higher education</a><a href="${routes[2].path}"${variant.id==='high-school'?' aria-current="page"':''}>High school</a></nav>`:''}<p>${rich(p.setup)}</p>${p.editionNote?`<p class="figure-setting-note">${rich(p.editionNote)}</p>`:''}<p class="figure-duration">${duration} · <a href="#figure-beats" data-read-figure>Read the figure</a></p></header><p class="figure-load-error" data-figure-status hidden>The animation could not load. You can read every beat below.</p>${playerMarkup(root,figure,ed,poster)}<article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}<p>${rich(p.checkFollow)}</p></section>${p.evidence?`<section><h2>${escape(p.evidenceHeading)}</h2>${p.evidence.map(x=>`<p>${rich(x)}</p>`).join('')}</section>`:''}<section><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2><blockquote><p>${renderEssayQuote(root,quote)}</p><cite><a href="/#${figure.essaySection}">The Irreducible Officer, Section II, What the Problem Looks Like</a></cite></blockquote>${p.quote2?`<blockquote><p>${renderEssayQuote(root,p.quote2)}</p><cite><a href="/#vi-friction-as-developmental-design">${rich(p.cite2)}</a></cite></blockquote>`:''}</section><section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">All failure modes</a></p></section></article>`;
+  const body=`<nav class="figure-crumb" aria-label="Breadcrumb"><a href="/failure-modes/">AI failure modes</a> / ${escape(p.title)}</nav><header class="figure-intro"><p class="fig-kicker">${escape(p.kicker)}</p><h1>${escape(p.title)}</h1><nav class="figure-switch" aria-label="Figure setting">${switches}</nav><p class="figure-setting-note">PME means professional military education. The Classroom version is also available for high school.</p>${['classroom','high-school'].includes(variant.id)?`<nav class="figure-variant-links" aria-label="Classroom version"><a href="${routes[1].path}"${variant.id==='classroom'?' aria-current="page"':''}>Higher education</a><a href="${routes[2].path}"${variant.id==='high-school'?' aria-current="page"':''}>High school</a></nav>`:''}<p>${rich(p.setup)}</p>${p.editionNote?`<p class="figure-setting-note">${rich(p.editionNote)}</p>`:''}<p class="figure-duration">${duration} · <a href="#figure-beats" data-read-figure>Read the figure</a></p></header><p class="figure-load-error" data-figure-status hidden>The animation could not load. You can read every beat below.</p>${playerMarkup(root,figure,ed,poster)}<article class="figure-reading" id="figure-reading"><section><h2>${escape(p.checkHeading)}</h2>${p.checkLines.map(x=>`<p class="figure-check">${rich(x)}</p>`).join('')}<p>${rich(p.checkFollow)}</p></section>${p.evidence?`<section><h2>${escape(p.evidenceHeading)}</h2>${p.evidence.map(x=>`<p>${rich(x)}</p>`).join('')}</section>`:''}<section><h2>${variant.id==='pme'?'From the essay':'From the original PME essay'}</h2>${essayQuoteMarkup(root,figure,p,quote)}</section>${p.evidenceText?`<section><h2>${escape(p.evidenceHeading)}</h2><p>${renderLinked(root,p.evidenceText)}</p></section>`:''}<section><h2>${escape(p.linksHeading)}</h2><ul>${links}</ul>${p.linksNote?`<p>${rich(p.linksNote)}</p>`:''}<p><a href="/failure-modes/">All failure modes</a></p></section></article>`;
   const head=`<link rel="stylesheet" href="${assets['runtime/figure.css'].url}"><link rel="stylesheet" href="${assets[`${figure.slug}/${figure.slug}.css`].url}"><meta property="og:image" content="${escape(image)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><script type="application/ld+json">${jsonScript(structured)}</script>`;
   const scripts=`<script id="figure-data" type="application/json">${jsonScript({edition:ed,routes})}</script><script defer src="${assets['runtime/motion.js'].url}"></script><script defer src="${assets[`${figure.slug}/${figure.slug}.js`].url}"></script><script defer src="${assets['page.js'].url}"></script>`;
   return shell({title,description:p.description,path,siteUrl,release,assets,body,head,scripts,analytics});
@@ -119,9 +139,16 @@ export function buildFigurePages({root,distDir,siteUrl,release,essayMarkdown,sou
       const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Shen & Tamkin,')) || '';
       for(const expected of ['52 developers','17% score difference','no significant speed gain','did not pre-register','Generation-Then-Comprehension (two people, 86%','Conceptual Inquiry (seven people, 65%','AI Delegation (four people, 39%','quiz straight after','groups of two to seven']) if(!study.includes(expected)) throw new Error(`Premature-synthesis evidence boundary changed: ${expected}`);
     }
+    if(figure.slug==='uncalibrated-reliance') {
+      const study=sourceSpineMarkdown.split('\n').find(l=>l.startsWith('- Otis,')) || '';
+      for(const expected of ['no detectable average change','nearly 10% worse','may have benefited by over 15%','0.20-standard-deviations','advice that entrepreneurs chose to implement','exploratory','effect sizes differ']) if(!study.includes(expected)) throw new Error(`Uncalibrated-reliance evidence boundary changed: ${expected}`);
+      const frontier=sourceSpineMarkdown.split('\n').find(l=>l.startsWith("- Dell'Acqua, Mollick,")) || '';
+      for(const expected of ['84.5%','70.6%','60%','19 percentage points','regardless of the correctness','10% level']) if(!frontier.includes(expected)) throw new Error(`Frontier evidence boundary changed: ${expected}`);
+    }
     for(const variant of manifest.variants) {
       const ed=resolveFigure(root,figure,variant);
       if(ed.page.quote2) checkedEssayExcerpt(ed.page.quote2,essayMarkdown);
+      for(const q of ed.page.quotes||[]) checkedEssayExcerpt(linkedMarkdown(q.text),essayMarkdown);
       const dir=join(root,'media/figures',figure.slug,variant.id),receipt=readJSON(join(dir,'manifest.json'));
       assertPosterReceipt(receipt,{root,inputs,outputDir:dir,variant:variant.id});
       const base=`/media/figures/${figure.slug}/${variant.id}`;

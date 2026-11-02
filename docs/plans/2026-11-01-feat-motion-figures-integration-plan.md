@@ -52,7 +52,7 @@ The November 1 handoff and October 30 decisions supersede stale portions of the 
 
 ## 3. Decisions for Jack
 
-Jack accepted D1–D6, D11 and D12 on November 1. The later decisions remain open until their corresponding gates. The recommendations below retain their rationale for review.
+Jack accepted D1–D6, D11 and D12 on November 1. He subsequently approved M7/M8 explicitly: preserve appropriate reliance's live first question and institutional monoculture's flat lineup. The other later decisions remain open until their corresponding gates. The recommendations below retain their rationale for review.
 
 ### Blocking the first public figure pages
 
@@ -79,7 +79,7 @@ Jack accepted D1–D6, D11 and D12 on November 1. The later decisions remain ope
 | B3 | Garden-path definition and setting lines? | Review the prototype definition against the essay and Jack's voice before use; retain the friction distinction. Draw HE/high-school lines from their guides, mark them as proposals, and review them before publication. Gate: PR 6. |
 | D10 | Where does the book's player fit? | Use a wide dialog outside the book's transformed faces, following `book-v1`, with the same production player component. Keep “Open the figure” as a plain link. Gate: PR 7. This replaces the old in-spread recommendation. |
 | B4 | Page turns; cover or contents? | Defer page turns. If Jack later wants them, use a separate PR, open at contents, retain an optional cover, flat reading and instant reduced-motion navigation. Gate: optional PR 8. |
-| M7/M8 | Interactive opening and flat monoculture? | Keep appropriate reliance's live first question and institutional monoculture's flat lineup. Preserve the tested teaching sequence. Gate: their port PRs. |
+| M7/M8 — approved | Interactive opening and flat monoculture? | Jack approved both existing designs on November 1: keep appropriate reliance's live first question and institutional monoculture's flat lineup. Their port PRs still require all preservation/behavior gates. |
 
 Provisional book mapping (a teaching organization, not a claim that each failure belongs exclusively to one move):
 
