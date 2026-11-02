@@ -16,10 +16,14 @@
     // document's layout at its normalized origin before capturing. This is one
     // synchronous refresh: no player styles, geometry, timing or pixels are
     // masked, and no intermediate hidden state reaches a frame.
-    const display = document.body.style.display;
-    document.body.style.display = 'none';
-    void document.body.offsetHeight;
-    document.body.style.display = display;
+    // Other figures retain their established capture lifecycle: rebuilding
+    // their layout can disturb source-specific measurement caches.
+    if (root.id === 'institutional-monoculture') {
+      const display = document.body.style.display;
+      document.body.style.display = 'none';
+      void document.body.offsetHeight;
+      document.body.style.display = display;
+    }
   };
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);
