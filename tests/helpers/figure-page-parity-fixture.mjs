@@ -17,6 +17,13 @@ html=html.replace(/<script>[\s\S]*?<\/script>/g,'').replace('<html lang="en">','
 html=html.replace(/<style>[\s\S]*?<\/style>/,`<style>${readFileSync(join(root,'figures',slug,slug+'.css'),'utf8')}</style>`);
 html=html.replace(/<figure\b[\s\S]*?<\/figure>/,playerMarkup(root,figure,ed));
 html=html.replace(/(<p[^>]*data-ur-linked="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>open+renderLinked(root,path.split('.').reduce((value,key)=>value?.[key],ed))+'</p>');
+// Source-only page hooks are filled here because the production factory owns only
+// its player. Keep their exact source markup so whole-page fixture parity remains
+// a useful check; the built route has its own static renderer.
+const sourceValue=path=>path.split('.').reduce((value,key)=>value?.[key],ed);
+html=html.replace(/(<([a-z]+)[^>]*data-im-linked="([^"]+)"[^>]*>)<\/\2>/g,(_,open,tag,path)=>open+renderEssayQuote(root,sourceValue(path)||'')+`</${tag}>`);
+html=html.replace(/(<ul[^>]*data-im-linked-items="([^"]+)"[^>]*>)<\/ul>/g,(_,open,path)=>open+(sourceValue(path)||[]).map(item=>`<li>${renderEssayQuote(root,item)}</li>`).join('')+'</ul>');
+html=html.replace(/(<p[^>]*data-im-lead="([^"]+)"[^>]*>)<\/p>/g,(_,open,path)=>{const value=sourceValue(path);return open+(value?`<strong>${renderEssayQuote(root,value.lead)}</strong> ${renderEssayQuote(root,value.text)}`:'')+'</p>';});
 const data=JSON.stringify(ed).replace(/</g,'\\u003c');
 html=html.replace('</body>',`<script>const edition=${data};MotionFigures.fillPage(document,edition);document.querySelectorAll('[data-fs-quote]').forEach(node=>{node.innerHTML=${JSON.stringify(renderEssayQuote(root,ed.page.quote||''))};});MotionFigures.mountFigure(document.getElementById('${slug}'),{edition,standalone:true}).then(()=>{document.getElementById('${slug}').dataset.mfReady='';});</script></body>`);
 writeFileSync(join(dir,'index.html'),html);

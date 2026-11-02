@@ -52,7 +52,7 @@ The November 1 handoff and October 30 decisions supersede stale portions of the 
 
 ## 3. Decisions for Jack
 
-Jack accepted D1–D6, D11 and D12 on November 1. He subsequently approved M7/M8 explicitly: preserve appropriate reliance's live first question and institutional monoculture's flat lineup. The other later decisions remain open until their corresponding gates. The recommendations below retain their rationale for review.
+Jack accepted D1–D6, D11 and D12 on November 1. He subsequently approved M7/M8 explicitly: preserve appropriate reliance's live first question and institutional monoculture's flat lineup. Jack subsequently approved D7–D9 and B1–B3/D10 in the exact saved proposals linked below; page turns (B4) and release remain deferred. The recommendations below retain their rationale for review.
 
 ### Blocking the first public figure pages
 
@@ -250,8 +250,16 @@ Preserve the prior release receipt/artifact for recovery. If post-deploy verific
 
 This plan is complete when saved at `docs/plans/2026-11-01-feat-motion-figures-integration-plan.md` on the isolated planning branch and shared with Jack (a docs PR is optional). Only this review document is changed in Step 1.
 
-**Blocking later work:** B1–B3 for the book, D9 for setting links, and the other later decisions at their PRs. The implementation plan and D1–D6/D11/D12 are approved. Every production port must independently pass its frame and behavior gates.
+**Blocking later work:** No remaining editorial approval gates for the drafted placement and flat-book work. The implementation plan, D1–D12, M7/M8 and B1–B3 are approved at the scope of the saved drafts. Every production port must independently pass its frame and behavior gates.
 
 **Patch later:** voiceover, video packs, custom error page, extra analytics and optional page turns. These do not prevent the approved core integration from proceeding.
 
-**Next decision gates:** Confirm D9 before setting links and the book decisions before book implementation. Approval to implement does not authorize release or deployment.
+**Next decision gates:** B4 page turns remain deferred. Approval to implement does not authorize release or deployment.
+
+### Approved later-surface proposals
+
+Jack approved both drafts in this session after PR #43 merged:
+- [D7–D9: essay, Practice and setting placements](2026-11-01-motion-placement-approved.md), including exact new copy and the correction to the lab prompt's seven-mode claim.
+- [B1–B3/D10: flat four-moves book and explicit dialog playback](2026-11-01-motion-book-approved.md), preserving the shared foundation.
+
+The copied proposal text is the approved review artifact; any draft/status language within it describes its state when submitted. Implement in the plan's dependency order after all eight standalone pages. No page turns, release or deployment approved.

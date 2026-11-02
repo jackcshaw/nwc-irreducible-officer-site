@@ -89,6 +89,17 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
       ]
+    },
+    {
+      "slug": "institutional-monoculture",
+      "kind": "failure-mode",
+      "order": 6,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "quoteStart": "Institutional monoculture is the class-level version",
+      "quoteEnd": "the seminar is meant to develop.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=4"
+      ]
     }
   ]
 }
