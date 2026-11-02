@@ -1,3 +1,4 @@
+import {placePMEEssayCards} from "./figure-cards.mjs";
 import {buildFigurePages} from "./figure-pages.mjs";
 import { parseFailureModes } from "./failure-modes.mjs";
 import { createHash } from "node:crypto";
@@ -214,9 +215,9 @@ if (!existsSync(pdfPath)) {
 }
 
 const essayToc = collectHeadings(essayMarkdown, { skipFirstH2: true });
-const essayHtml = placeEssayFigures(
+const essayHtml = placePMEEssayCards(placeEssayFigures(
   renderMarkdown(essayMarkdown, { skipFirstH1: true, skipFirstH2: true }),
-);
+), root);
 
 writeFileSync(
   join(distDir, "index.html"),
@@ -367,6 +368,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   ${plausibleAnalytics()}
   <script>${reelEligibility()}</script>
   <style>${css()}</style>
+  <noscript><style>html {scroll-behavior:auto} #panel-essay {display:block}</style></noscript>
 </head>
 <body data-active-mode="overview">
   <a class="skip-link" href="#top">Skip to content</a>
@@ -3490,5 +3492,6 @@ body:not([data-reading-essay="true"]) .toc {
 }
 ${readFileSync(join(root,"styles/lab-refresh.css"),"utf8")}
 ${readFileSync(join(root,"styles/masthead.css"),"utf8")}
-${readFileSync(join(root,"styles/reel.css"),"utf8")}`;
+${readFileSync(join(root,"styles/reel.css"),"utf8")}
+${readFileSync(join(root,"styles/figure-cards.css"),"utf8")}`;
 }
