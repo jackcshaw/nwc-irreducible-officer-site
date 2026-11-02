@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
-import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote,checkedEssayExcerpt,linkedMarkdown,renderLinked,figureLink} from '../scripts/figure-pages.mjs';
+import {loadFigures,resolveFigure,quoteFor,figureInputs,figurePath,renderEssayQuote,checkedEssayExcerpt,linkedMarkdown,renderLinked,figureLink,renderFigureText,quotationParagraphs,checkQuotation} from '../scripts/figure-pages.mjs';
 import {assertPosterReceipt} from '../scripts/figure-posters.mjs';
 const root=process.cwd(),manifest=loadFigures(root),essay=readFileSync(join(root,'content/the-irreducible-officer.md'),'utf8');
 const sitemap=readFileSync(join(root,'dist/sitemap.xml'),'utf8');
-assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance','invisible-delegation','institutional-monoculture']);
+assert.deepEqual(manifest.figures.map(f=>f.slug),['frame-capture','fluency-substitution','premature-synthesis','uncalibrated-reliance','invisible-delegation','institutional-monoculture','responsibility-laundering']);
 for(const figure of manifest.figures) {
   const quote=quoteFor(figure,essay);
   assert.throws(()=>quoteFor(figure,essay+'\n\n'+quote),/ambiguous/);
@@ -32,7 +32,7 @@ for(const figure of manifest.figures) {
     assertPosterReceipt(receipt,{root,inputs:figureInputs(root,figure.slug),outputDir:dir,variant:variant.id});
     assert(readFileSync(join(dir,'poster.png')).includes(Buffer.from('impeccable:prompt')));
     assert(receipt.inputs['package-lock.json']);
-    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8},'invisible-delegation':{pme:99.1,business:99.1},'institutional-monoculture':{pme:100.5,business:95.2}})[figure.slug][variant.edition]);
+    assert.equal(receipt.raster,'full-tile');assert.equal(receipt.finalTime,({'frame-capture':{pme:90.4,business:104.8},'fluency-substitution':{pme:92.8,business:101},'premature-synthesis':{pme:94.2,business:94.2},'uncalibrated-reliance':{pme:94.8,business:94.8},'invisible-delegation':{pme:99.1,business:99.1},'institutional-monoculture':{pme:100.5,business:95.2},'responsibility-laundering':{pme:97.4,business:100.8}})[figure.slug][variant.edition]);
     assert.equal(receipt.outputs['poster.png'].sha256,receipt.outputs['final.png'].sha256);
     assert(existsSync(join(root,'dist',`media/figures/${figure.slug}/${variant.id}/og.png`)));
   }
@@ -45,7 +45,7 @@ assert(!renderEssayQuote(root,'[unsafe](javascript:alert(1))').includes('<a'));
 const fsPage=readFileSync(join(root,'dist/failure-modes/fluency-substitution/pme/index.html'),'utf8');
 assert(fsPage.includes('<a href="https://ojs.aut.ac.nz/pjtel/article/view/246">Chow et al., 2026</a>'));
 const hub=readFileSync(join(root,'dist/failure-modes/index.html'),'utf8');
-assert.equal((hub.match(/<li>/g)||[]).length,6);
+assert.equal((hub.match(/<li>/g)||[]).length,7);
 assert(!hub.includes('runtime/motion.js'));
 assert(!readFileSync(join(root,'dist/index.html'),'utf8').includes('/assets/figures/runtime/motion.js'));
 console.log('Figure static routes, source boundaries, posters and metadata passed');
@@ -95,3 +95,17 @@ for(const variant of manifest.variants) {
  for(const item of ed.page.evidenceList||[])assert(reading.includes(renderEssayQuote(root,item)));
  if(variant.id==='pme')assert(reading.includes('href="/failure-modes/premature-synthesis/pme/"'));
 }
+
+for(const variant of manifest.variants) {
+ const figure=manifest.figures.find(f=>f.slug==='responsibility-laundering'),ed=resolveFigure(root,figure,variant);
+ const html=readFileSync(join(root,'dist',figurePath(figure,variant),'index.html'),'utf8');
+ const reading=html.split('<article class="figure-reading"')[1].split('</article>')[0];
+ assert(reading.includes(renderFigureText(root,manifest,variant,ed.page.checkFollow)));
+ assert(reading.includes(`href="${figurePath(manifest.figures.find(f=>f.slug==='uncalibrated-reliance'),variant)}"`));
+ for(const q of ed.page.quotes||[])for(const paragraph of checkQuotation(q,essay))assert(reading.includes(renderEssayQuote(root,paragraph)));
+ if(variant.id==='pme')assert(reading.includes('href="/#vii-accountability-is-structural"'));
+}
+assert.throws(()=>checkQuotation({paras:['… A fabricated excerpt.']},essay),/Missing/);
+assert.throws(()=>checkQuotation({paras:['… The human remains responsible for the final judgment.']},essay+' The human remains responsible for the final judgment.'),/ambiguous/);
+assert.throws(()=>renderFigureText(root,manifest,manifest.variants[0],'[unsafe](javascript:bad)'),/Unsupported/);
+assert.equal(renderFigureText(root,manifest,manifest.variants[0],'[A & B](https://example.org/?a=1&b=2)'),'<a href="https://example.org/?a=1&amp;b=2">A &amp; B</a>');

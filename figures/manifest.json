@@ -100,6 +100,18 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
       ]
+    },
+    {
+      "slug": "responsibility-laundering",
+      "kind": "failure-mode",
+      "order": 7,
+      "essaySection": "ii-what-the-problem-looks-like",
+      "additionalEssaySection": "vii-accountability-is-structural",
+      "quoteStart": "Responsibility laundering is the final danger.",
+      "quoteEnd": "the question of who chose the frame does not have a satisfying answer.",
+      "unpublishedLinks": [
+        "../../book-v0/four-moves-book.html?spread=5"
+      ]
     }
   ]
 }
