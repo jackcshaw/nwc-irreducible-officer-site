@@ -63,10 +63,10 @@
     "package-lock.json": "f4f1ddb6dbc0256767d889f5385d5cfd91c8f1b3e61aa3bff3eba08be3ced244",
     "scripts/figure-assets.mjs": "bce26830b92b82f93dac11008ce0e4d27c973743c1cec77bf5f1fe5ca0523c00",
     "scripts/figure-fonts.mjs": "f8c274a46c63ba8dc890f5da555332e75818b248624978455f06ff78d106a8e2",
-    "scripts/figure-pages.mjs": "57e1bf59a23bccf56ea5accfc7f778cab1b366ebc64e8f430f03d0bd818608d6",
+    "scripts/figure-pages.mjs": "3e3cb8e33656de7bd07afbc65750b7b9eb2bc423a7f5a1c75c6f67e5e07e1c7e",
     "scripts/figure-posters.mjs": "625fdafa3072ea27c998d8085e863d802d536bcfff730b824da9872ad7e2f0bb",
     "scripts/generate-figure-posters.mjs": "3b0218bfb6bacb849166aa7f3206225e84c6fce9023248fafbc4cc5b9a74745c",
-    "styles/figure-page.css": "31018564c60673851eaaa90cfd63536814491a6cf633dbb0218bcd21dad16bc3",
+    "styles/figure-page.css": "27af2c4648e04ba1577ff5a19458ee6808a1d01cca47fb27fbddc601e9f2a9f3",
     "styles/masthead.css": "1a2ef59af731535fdaf2249fea21c157a0696dfe81bdca63548630e0becba0cc"
   },
   "outputs": {

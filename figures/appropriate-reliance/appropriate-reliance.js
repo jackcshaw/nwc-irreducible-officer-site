@@ -975,6 +975,9 @@ MotionFigures.define('appropriate-reliance', (root, {edition, scope = root, life
 		if (!testMode) { quietOpen = true; api.openGate(0); quietOpen = false; }
 		// The runtime has added the nameplate strip above the stage: fit the first view again
 		// and settle the stage's layout now, so no later relayout redraws over the card.
+		// Complete the poster handoff before the final first-view measurement.
+		// The factory is synchronous; failure restores the original fallback via unmount.
+		root.dataset.mfReady = '';
 		if (fitOn) { fitFirstView(); syncStacked(); }
 		// The name card shows over that question, then settles into the corner once the
 		// figure is in view (2.2 s, the kicker's reading time, "The skill" at 2 ÷ 3 + 1.5 =

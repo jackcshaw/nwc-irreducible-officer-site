@@ -33,6 +33,10 @@
   await new Promise(requestAnimationFrame);
   await new Promise(requestAnimationFrame);
   align();
+  // AR's public resize handler budgets its first view from the document position.
+  // Re-measure after the outer offset so source and built page use the same origin.
+  // This invokes the unchanged responsive code; real page fit is tested separately.
+  if (root.id === 'appropriate-reliance') window.dispatchEvent(new Event('resize'));
   window.addEventListener('beforeprint', () => requestAnimationFrame(align));
   matchMedia('print').addEventListener('change', () => requestAnimationFrame(align));
 })();

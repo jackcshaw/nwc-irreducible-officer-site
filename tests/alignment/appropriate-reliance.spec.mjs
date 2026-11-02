@@ -20,6 +20,8 @@ for(const [suffix,cast] of variants) {
   expect(await page.locator('[data-ar-sum2]').textContent()).toContain('84.5%');expect(await page.locator('[data-ar-sum3]').textContent()).toBe('');
   await page.locator('[data-ar-gate="1"] [data-ar-opt="move"]').click();await page.locator('[data-ar-continue]').click();
   await expect(page.locator('[data-ar-after]')).toBeVisible();expect(await page.locator('[data-ar-after]').textContent()).toContain('A good answer');
+  const checks=await page.evaluate(()=>JSON.parse(document.getElementById('figure-data').textContent).edition.page.checkLinesAfter||[]);
+  await expect(page.locator('[data-ar-check-after]')).toHaveText(checks);
   await expect(page.locator('.mf-beats .is-locked')).toHaveCount(0);
   await page.locator('[data-mf-replay]').click();await noAnswers(page);await expect(page.locator('.mf-beats .is-locked')).toHaveCount(7);
   await expect(page.locator('[data-ar-live]')).toHaveText('');
@@ -65,3 +67,23 @@ test('appropriate reliance: two instances isolate choices and teardown restores 
   const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);second.destroy();scope.remove();return{isolated,scoped,restored,survives,unique:ids.length===new Set(ids).size};
  });expect(result).toEqual({isolated:true,scoped:true,restored:true,survives:true,unique:true});
 });
+for(const [suffix,cast] of variants) {
+ test(`appropriate reliance ${cast}: live first question remains usable at review sizes`,async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});
+  for(const [width,height] of [[1440,900],[1366,657],[768,1024],[390,844],[375,812]]) {
+   await page.setViewportSize({width,height});await ready(page,suffix);await page.evaluate(()=>document.fonts.ready);
+   const fit=await page.evaluate(()=>{
+    const r=document.querySelector('figure'),button=r.querySelector('[data-ar-continue]').getBoundingClientRect(),cap=r.querySelector('.ar-capwrap').getBoundingClientRect(),band=r.querySelector('.ar-n-band').getBoundingClientRect();
+    return {width:innerWidth,height:innerHeight,overflow:document.documentElement.scrollWidth-innerWidth,scrollY,stacked:r.classList.contains('is-stacked'),buttonTop:button.top,buttonBottom:button.bottom,bandBottom:band.bottom,captionTop:cap.top};
+   });
+   expect(fit.overflow,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(0);
+   expect(fit.buttonBottom,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(height);
+   expect(fit.buttonTop,JSON.stringify({cast,...fit})).toBeGreaterThanOrEqual(0);
+   if(fit.stacked&&width<=390&&['classroom','high-school'].includes(cast))expect(fit.bandBottom,JSON.stringify({cast,...fit})).toBeLessThanOrEqual(fit.captionTop+1);
+  }
+ });
+ test(`appropriate reliance ${cast}: reading print exposes closed disclosures`,async({page})=>{
+  await page.goto(route(suffix)+'reading/');const result=page.locator('.ar-reading-version details').first();await expect(result).not.toHaveAttribute('open','');
+  await page.emulateMedia({media:'print'});await expect(result.locator('p').first()).toBeVisible();
+ });
+}

@@ -53,7 +53,11 @@ async function serve(directory) {
     });
   });
   const url = `http://127.0.0.1:${port}/figures/${slug}/index.html`;
-  if (child.exitCode !== null || !(await fetch(url)).ok) throw new Error('Owned server is not serving the selected figure');
+  const response = await fetch(url);
+  // Drain the readiness response before synchronous browser work blocks Node.
+  // Leaving its body pending can trip Undici's parser when the socket closes.
+  const ready = response.ok; await response.arrayBuffer();
+  if (child.exitCode !== null || !ready) throw new Error('Owned server is not serving the selected figure');
   return url;
 }
 
