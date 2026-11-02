@@ -11,3 +11,14 @@
 @media(hover:hover) {.motion-figure-entry:hover .motion-figure-action {color:var(--ink);}}
 @media(max-width:600px) {.motion-figure-entry {grid-template-columns:minmax(0,1fr);gap:18px;padding:22px 0;}.motion-figure-card .motion-figure-copy h3 {font-size:25px;}}
 @media print {.motion-figure-card {margin:18px 0;}.motion-figure-entry {gap:18px;padding:14px 0;}.motion-figure-card .motion-figure-copy h3 {font-size:18pt;}.motion-figure-card .motion-figure-check {font-size:12pt;}.motion-figure-card .motion-figure-follow,.motion-figure-action {font-size:10pt;}}
+
+/* Practice keeps the same editorial rules and existing copy controls. */
+.practice-warmup {padding:24px 0;margin:28px 0;border-block:1px solid var(--faint);}
+.practice-warmup h3,.practice-figure h3 {margin:0 0 12px;font-size:26px;line-height:1.2;}
+.practice-warmup p,.practice-figure p {max-width:72ch;margin:0 0 14px;font-size:18px;line-height:1.55;}
+.practice-figures {list-style:none;padding:0;margin:0;}
+.practice-figure {padding:28px 0;border-bottom:1px solid var(--faint);break-inside:avoid;}
+.practice-check {font-style:italic;}
+.practice-figure .practice-adaptation {font-size:16px;color:var(--muted);}
+.practice-figure .action-row {margin-top:20px;}
+@media(max-width:600px) {.practice-figure {padding:24px 0;}.practice-figure .action-row {gap:16px;}}
