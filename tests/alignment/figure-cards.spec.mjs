@@ -24,9 +24,9 @@ for(const width of [1440,390,375])test(`essay entries fit ${width}px and keep vi
 test('PME entry and standalone return link work without JavaScript',async({browser,baseURL})=>{
  const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();await page.goto(baseURL+'/#figure-frame-capture');
  await expect(page.locator('#figure-frame-capture')).toBeVisible();await page.locator('#figure-frame-capture a').click();await expect(page).toHaveURL(/\/failure-modes\/frame-capture\/pme\/$/);
- await page.locator('a[href="/#figure-frame-capture"]').click();await expect(page.locator('#figure-frame-capture')).toBeVisible();await context.close();
+ await page.locator('a[href="/?audience=pme#figure-frame-capture"]').click();await expect(page.locator('#figure-frame-capture')).toBeVisible();await context.close();
 });
 test('standalone figure returns to its essay card and print retains all entries',async({page})=>{
- await page.goto('/failure-modes/invisible-delegation/pme/');await page.locator('a[href="/#figure-invisible-delegation"]').click();await expect(page.locator('#panel-essay')).toBeVisible();await expect(page).toHaveURL(/#figure-invisible-delegation$/);
+ await page.goto('/failure-modes/invisible-delegation/pme/');await page.locator('a[href="/?audience=pme#figure-invisible-delegation"]').click();await expect(page.locator('#panel-essay')).toBeVisible();await expect(page).toHaveURL(/#figure-invisible-delegation$/);
  await page.emulateMedia({media:'print'});for(const slug of slugs)await expect(page.locator(card(slug))).toBeVisible();
 });

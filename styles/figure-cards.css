@@ -22,3 +22,11 @@
 .practice-figure .practice-adaptation {font-size:16px;color:var(--muted);}
 .practice-figure .action-row {margin-top:20px;}
 @media(max-width:600px) {.practice-figure {padding:24px 0;}.practice-figure .action-row {gap:16px;}}
+
+.motion-collection-entry { margin:48px 0; padding:28px 0; border-block:1px solid var(--faint); max-width:72ch; }
+.setting-motion-entry { margin:48px 0; }
+.setting-motion-entry .motion-figure-card { margin:20px 0; }
+.related-motion-links { display:flex; flex-wrap:wrap; gap:12px 24px; margin:20px 0; }
+
+.motion-collection-entry h2 { margin:0 0 14px; }
+.motion-collection-entry p { margin:0 0 20px; font-size:20px; line-height:1.55; }

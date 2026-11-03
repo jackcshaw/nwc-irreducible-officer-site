@@ -1,6 +1,7 @@
 import {renderPracticeFigures,adaptedModes,adaptationPrompt} from "./figure-practice.mjs";
-import {placePMEEssayCards} from "./figure-cards.mjs";
-import {buildFigurePages} from "./figure-pages.mjs";
+import {placePMEEssayCards,placeAudienceEssayCards,renderFigureCard,figureCardData} from "./figure-cards.mjs";
+import {buildFigurePages,loadFigures} from "./figure-pages.mjs";
+import {teachingVariants,hubPath,discussionFigures,workbenchFigures} from "./figure-navigation.mjs";
 import { parseFailureModes } from "./failure-modes.mjs";
 import { createHash } from "node:crypto";
 import {adaptTool, matrixMarkdown, matrixSvg} from "./workbench-audiences.mjs";
@@ -369,7 +370,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
   ${plausibleAnalytics()}
   <script>${reelEligibility()}</script>
   <style>${css()}</style>
-  <noscript><style>html {scroll-behavior:auto} #panel-essay {display:block}</style></noscript>
+  <noscript><style>html {scroll-behavior:auto} #panel-essay,#panel-he-essay,#panel-k12-essay {display:block}</style></noscript>
 </head>
 <body data-active-mode="overview">
   <a class="skip-link" href="#top">Skip to content</a>
@@ -424,7 +425,7 @@ function buildHtml({ essayToc, overviewHtml, essayHtml, companionHtml, workbench
     </div>
   </main>
 
-  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
+  <footer class="lab-footer"><a href="#overview" data-mode-link="overview">Judgment Lab</a><p>Strengthening human judgment in AI-enabled work.</p><a href="/failure-modes/" data-motion-collection>Explore the motion figures</a><a href="#sources" data-mode-link="sources">Explore the evidence and its limits</a><p class="lab-version">Version ${escapeHtml(release.version)} · ${escapeHtml(release.commits.site)}</p></footer>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
   ${reelDialog()}
 
@@ -500,6 +501,7 @@ function buildOverviewMode() {
         ${audiences.map(a => `<a class="audience-path" href="#${a.id}" data-mode-link="${a.id}"><h2>${escapeHtml(a.title)}</h2><p>${escapeHtml(a.question)}</p><span>${escapeHtml(a.summary)}</span><strong>Open this setting →</strong></a>`).join("")}
       </div>
     </section>
+    <section class="motion-collection-entry"><h2>See where judgment can disappear</h2><p>Explore seven failure modes in AI-enabled work, then try a question about appropriate reliance. Each figure offers a concrete example and a check to bring back to your own work.</p><a class="quiet-action" href="/failure-modes/" data-motion-collection>Explore the motion figures</a></section>
     <section class="method-band"><h2>One method, different teaching decisions</h2><p>Own the purpose. Examine the frame. Calibrate reliance. Defend the decision. Change the conditions.</p><p>Every setting builds foundations inside the work while learners direct AI. High school is the first K–12 starting point; younger-grade adaptations are still to come.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Read the shared foundation</a></section>
     <section class="learning-paths" aria-label="Ways to use the Lab">
       <a href="#discuss" data-mode-link="discuss"><h2>Discuss</h2><p>Bring an example. Challenge one of five claims with colleagues.</p><span>Open Judgment in Practice →</span></a>
@@ -517,7 +519,7 @@ function buildDiscussMode() {
     <section class="discussion-opening"><h2>Where does the judgment happen?</h2><p>A student submits an excellent paper with help from an AI agent. The agent helped define the problem and develop the argument. Which choices can the student explain—and what happens when an assumption changes?</p><p>Start with an example from your work. Whose decision is it, and what would make their understanding visible?</p><p class="source-note">Fictional education example adapted from <a href="#essay" data-mode-link="essay">The Irreducible Officer</a>.</p></section>
     <p class="discussion-setting" data-discussion-setting>Choose a setting above to frame the discussion for your audience.</p>
     <section class="discussion-claims" aria-label="Five claims to challenge">
-      ${discussionClaims.map(c=>`<details id="discuss-${c.id}" class="discussion-claim"><summary>${escapeHtml(c.title)}</summary><div class="discussion-body"><p class="discussion-question">${escapeHtml(c.question)}</p><div class="discussion-columns"><section><h3>A fictional example</h3><p>${escapeHtml(c.example)}</p></section><section><h3>A serious objection</h3><p>${escapeHtml(c.objection)}</p></section></div><h3>Discuss</h3><p>${escapeHtml(c.discussion)}</p><div class="discussion-sources">${c.sources.map(source=>`<a href="${escapeHtml(source.href)}" target="_blank" rel="noreferrer">${escapeHtml(source.label)}</a>`).join("")}</div><a class="quiet-action" href="#companion" data-mode-link="companion" data-discussion-claim="${c.id}">Test this claim in Practice</a></div></details>`).join("")}
+      ${discussionClaims.map(c=>`<details id="discuss-${c.id}" class="discussion-claim"><summary>${escapeHtml(c.title)}</summary><div class="discussion-body"><p class="discussion-question">${escapeHtml(c.question)}</p><div class="discussion-columns"><section><h3>A fictional example</h3><p>${escapeHtml(c.example)}</p></section><section><h3>A serious objection</h3><p>${escapeHtml(c.objection)}</p></section></div><h3>Discuss</h3><p>${escapeHtml(c.discussion)}</p>${relatedFigureLinks([discussionFigures[c.id]])}<div class="discussion-sources">${c.sources.map(source=>`<a href="${escapeHtml(source.href)}" target="_blank" rel="noreferrer">${escapeHtml(source.label)}</a>`).join("")}</div><a class="quiet-action" href="#companion" data-mode-link="companion" data-discussion-claim="${c.id}">Test this claim in Practice</a></div></details>`).join("")}
     </section>
     <section class="discussion-close"><h2>Take one judgment back to your work.</h2><p>Name a choice that could disappear inside AI assistance. Decide what the person responsible should explain or demonstrate.</p><div class="action-row"><a class="copy-button primary" href="#workbench" data-mode-link="workbench">Design a teaching activity</a><a class="quiet-action" href="#sources" data-mode-link="sources">Examine the evidence</a></div></section>
     <div class="discussion-library"><h2>Continue the conversation</h2><a href="https://judgment-in-practice.web.app/case.html" target="_blank" rel="noreferrer">A school-leadership case: accurate data, an incomplete picture →</a><p>This case concerns adult institutional decisions. The high-school learning exercises address different responsibilities.</p><a href="https://judgment-in-practice.web.app/reading.html" target="_blank" rel="noreferrer">Further reading: seven patterns of AI-assisted work →</a><p>The five claims and objections above come from Jack Shaw’s <a href="https://judgment-in-practice.web.app/" target="_blank" rel="noreferrer">Judgment in Practice</a>, originally prepared for EduFish. Links retain the original evidence notes and their limits.</p></div>
@@ -543,12 +545,24 @@ function editionLinks() {
 function buildCompanionEssay(a) {
   const markdown = readRequiredCompanionFile(a.essayFile);
   const prefix = a.essayMode + "-";
-  const body = prefixIds(renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>"), prefix)
+  let body = prefixIds(renderMarkdown(markdown,{skipFirstH1:true,skipFirstH2:true}).replaceAll("*The Irreducible Officer*", "<em>The Irreducible Officer</em>"), prefix)
     .replace(/href="(?!https?:|#)([^"]+)"/g,(_,path)=>`href="assets/${path.startsWith("../") ? path.slice(3) : "essays/"+path}"`);
+  body = placeAudienceEssayCards(body,root,a.id,renderMarkdown);
   const subtitle = markdown.split("\n").find(line=>line.startsWith("## ")).slice(3);
   return `<div class="companion-edition"><div class="published">Companion testing edition · September 2026</div><section class="essay-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(subtitle)}</p><div class="action-row"><a class="quiet-action" href="assets/${a.essayFile}" download>Download essay</a><a class="quiet-action" href="#companion" data-mode-link="companion">Test the argument in Practice</a><a class="quiet-action" href="#${a.id}" data-mode-link="${a.id}" data-open-guide>Open the teaching guide</a></div></section><article class="essay article-body">${body}</article><section class="detail-band"><h2>Read across settings</h2>${editionLinks()}</section></div>`;
 }
 
+function relatedFigureLinks(slugs, audience='') {
+  const manifest=loadFigures(root),variant=manifest.variants.find(v=>v.id===(teachingVariants[audience]||'workplace'));
+  return `<div class="related-motion-links">${slugs.map(slug=>{
+    const figure=manifest.figures.find(f=>f.slug===slug),c=figureCardData(root,figure,variant);
+    return `<a href="${escapeHtml(c.href)}" data-motion-figure="${slug}">Explore ${escapeHtml(c.title.toLowerCase())}</a>`;
+  }).join('')}</div>`;
+}
+function settingFigure(audience) {
+  const manifest=loadFigures(root),variant=manifest.variants.find(v=>v.id===teachingVariants[audience]),figure=manifest.figures.find(f=>f.slug==='frame-capture');
+  return `<section class="setting-motion-entry"><h2>Examine the frame</h2>${renderFigureCard(root,figure,variant,`setting-${audience}-figure-frame-capture`)}<a class="quiet-action" href="${hubPath(variant)}">Explore all the motion figures</a></section>`;
+}
 function buildAudienceMode(a) {
   return `<div class="surface audience-surface"><div class="nwc-rule" aria-hidden="true"><span></span></div>
     <section class="surface-hero"><h1>${escapeHtml(a.essayTitle)}</h1><p class="dek">${escapeHtml(a.question)}</p><p>${escapeHtml(a.summary)}</p>
@@ -556,6 +570,7 @@ function buildAudienceMode(a) {
     <div class="action-row"><a class="copy-button primary" href="#${a.essayMode}" data-mode-link="${a.essayMode}">Read the essay</a></div>
     <nav class="hero-routes" aria-label="More in this setting"><a href="#discuss" data-mode-link="discuss">Discuss</a><a href="#companion" data-mode-link="companion">Practice</a><a href="#workbench" data-mode-link="workbench">Design</a></nav></section>
     ${buildOpeningPractice(a.id, a.id)}
+    ${settingFigure(a.id)}
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide"><p><a class="quiet-action" href="assets/audiences/${a.file}" download>Download this guide</a></p>${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/" + a.file), {skipFirstH1: true}).replace(/href="\.\.\/essays\/(he|k12)\.md" target="_blank" rel="noreferrer"/g, (_,id)=>`href="#${id}-essay" data-mode-link="${id}-essay"`), a.id + "-")}</article></details>
   </div>`;
 }
@@ -874,6 +889,7 @@ function buildWorkbenchMode(tools, concepts) {
         <aside class="use-note">
           <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
+          <div id="workbench-motion-links" hidden></div>
         </aside>
         <article class="template-rendered article-body" id="workbench-doc-view" aria-label="Selected document">${selected.html}</article>
         <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
@@ -1435,6 +1451,9 @@ const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-
 function applyAudience(id) {
   currentWorkbenchAudience = audienceLabels[id] ? id : "";
   const label = audienceLabels[id];
+  const motionSuffix = {pme:"pme/",he:"classroom/",k12:"high-school/"}[id] || "";
+  document.querySelectorAll("[data-motion-collection]").forEach(el=>el.href="/failure-modes/"+motionSuffix);
+  document.querySelectorAll("[data-motion-figure]").forEach(el=>el.href="/failure-modes/"+el.dataset.motionFigure+"/"+motionSuffix);
   document.querySelectorAll("[data-practice-figures-audience]").forEach(el=>el.hidden=el.dataset.practiceFiguresAudience!==id);
   document.querySelector("[data-practice-unselected]").hidden=Boolean(label);
   document.querySelectorAll(".practice-prompt").forEach(el=>{el.hidden=true;el.style.removeProperty("display");});
@@ -1996,6 +2015,10 @@ function renderWorkbenchDocument(item, isFromConcept = false) {
   document.getElementById("selected-tool-note").textContent = item.useNote || (isFromConcept ? "Read it here, or download it to share with a colleague." : "");
   document.getElementById("workbench-template").textContent = item.markdown;
   document.getElementById("workbench-doc-view").innerHTML = item.html;
+  const motionLinks = document.getElementById("workbench-motion-links");
+  const motionMarkup = ${JSON.stringify(Object.fromEntries(['',...Object.keys(teachingVariants)].map(a=>[a,Object.fromEntries(Object.entries(workbenchFigures).map(([id,slugs])=>[id,relatedFigureLinks(slugs,a)]))])))};
+  motionLinks.innerHTML = isFromConcept ? "" : (motionMarkup[currentWorkbenchAudience]?.[item.id] || "");
+  motionLinks.hidden = !motionLinks.innerHTML;
   const glance = document.getElementById("wb-glance");
   const rows = (item.glance || []).map((g) => {
     const row = document.createElement("div");
