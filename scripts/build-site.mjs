@@ -629,6 +629,11 @@ function buildCompanionMode() {
         ${starterPromptCards()}
       </div>
     </section>
+
+    <section class="detail-band practice-reading">
+      <h2>Further reading</h2>
+      <p><a href="https://every.to/working-overtime/how-i-escaped-ai-autopilot-rerun" target="_blank" rel="noreferrer">Katie Parrott, “How I Escaped AI Autopilot”</a> — a practitioner’s account of writing down your own view before asking AI, creating distance between generation and review, and explaining why you accept an AI suggestion. A useful set of workflow ideas to try; the essay’s research discussion is not evidence that this lab improves learning. Every may require signup for full access.</p>
+    </section>
   </div>`;
 }
 
