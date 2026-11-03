@@ -1,7 +1,8 @@
 import {escape,loadFigures} from './figure-pages.mjs';
 import {figureCardData} from './figure-cards.mjs';
 
-export const teachingVariants={pme:'pme',he:'classroom',k12:'high-school'};
+import {teachingVariants} from './figure-navigation.mjs';
+export {teachingVariants} from './figure-navigation.mjs';
 export const adaptedModes={pme:[],he:['uncalibrated-reliance','responsibility-laundering'],k12:['premature-synthesis','uncalibrated-reliance','responsibility-laundering']};
 export const adaptationPrompt="This mode is named in the original PME essay, not in my selected edition. Use its original passage to examine the claim, then use my audience guide for teaching transfer. Treat the classroom example as a proposal, not evidence that the method has been validated in this setting.";
 export function renderPracticeFigures(root,protocol) {

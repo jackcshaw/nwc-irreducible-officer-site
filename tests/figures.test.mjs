@@ -56,7 +56,7 @@ assert.throws(()=>checkedEssayExcerpt(supplemental,essay+supplemental),/ambiguou
 assert.throws(()=>checkedEssayExcerpt('An invented quotation.',essay),/Missing/);
 const psPage=readFileSync(join(root,'dist/failure-modes/premature-synthesis/pme/index.html'),'utf8');
 assert(psPage.includes(renderEssayQuote(root,supplemental)));
-assert(psPage.includes('href="/#vi-friction-as-developmental-design"'));
+assert(psPage.includes('href="/?audience=pme#vi-friction-as-developmental-design"'));
 
 for(const variant of manifest.variants) {
  const figure=manifest.figures.find(f=>f.slug==='uncalibrated-reliance');const ed=resolveFigure(root,figure,variant);
@@ -103,7 +103,7 @@ for(const variant of manifest.variants) {
  assert(reading.includes(renderFigureText(root,manifest,variant,ed.page.checkFollow)));
  assert(reading.includes(`href="${figurePath(manifest.figures.find(f=>f.slug==='uncalibrated-reliance'),variant)}"`));
  for(const q of ed.page.quotes||[])for(const paragraph of checkQuotation(q,essay))assert(reading.includes(renderEssayQuote(root,paragraph)));
- if(variant.id==='pme')assert(reading.includes('href="/#vii-accountability-is-structural"'));
+ if(variant.id==='pme')assert(reading.includes('href="/?audience=pme#vii-accountability-is-structural"'));
 }
 assert.throws(()=>checkQuotation({paras:['… A fabricated excerpt.']},essay),/Missing/);
 assert.throws(()=>checkQuotation({paras:['… The human remains responsible for the final judgment.']},essay+' The human remains responsible for the final judgment.'),/ambiguous/);

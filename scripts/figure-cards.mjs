@@ -25,3 +25,16 @@ export function placePMEEssayCards(html,root) {
   }
   return html;
 }
+
+// Adapted essays name fewer modes. Insert only after their own exact passages.
+export function placeAudienceEssayCards(html,root,audience,renderMarkdown) {
+  const manifest=loadFigures(root),variant=manifest.variants.find(v=>v.id===(audience==='he'?'classroom':'high-school'));
+  for(const figure of manifest.figures) {
+    const paragraph=figure.audienceParagraphs?.[audience];
+    if(!paragraph) continue;
+    const anchor=renderMarkdown(paragraph).trim();
+    if(html.split(anchor).length!==2) throw new Error(`Missing or ambiguous ${audience} essay card anchor: ${figure.slug}`);
+    html=html.replace(anchor,anchor+'\n'+renderFigureCard(root,figure,variant,`${audience}-essay-figure-${figure.slug}`));
+  }
+  return html;
+}

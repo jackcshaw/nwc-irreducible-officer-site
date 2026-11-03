@@ -6,6 +6,7 @@ on:
       - 'figures/appropriate-reliance/**'
       - 'figures/page.js'
       - 'scripts/figure-pages.mjs'
+      - 'scripts/figure-navigation.mjs'
       - 'tests/helpers/figure-page-parity-fixture.mjs'
       - 'figures/runtime/**'
       - 'figures/fonts/**'

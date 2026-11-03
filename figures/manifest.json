@@ -41,7 +41,11 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
       ],
-      "essayAnchorEnd": "The frame capture is invisible inside the final product."
+      "essayAnchorEnd": "The frame capture is invisible inside the final product.",
+      "audienceParagraphs": {
+        "he": "**Frame capture.** The model's definition of productivity becomes the memo's definition. Later drafts improve the prose inside the wrong boundary.",
+        "k12": "**Frame capture.** The model's standard of success becomes the student's. Her revisions polish the essay inside a boundary she never chose."
+      }
     },
     {
       "slug": "fluency-substitution",
@@ -53,7 +57,11 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=5"
       ],
-      "essayAnchorEnd": "may never identify which risk actually matters most."
+      "essayAnchorEnd": "may never identify which risk actually matters most.",
+      "audienceParagraphs": {
+        "he": "**Fluency substitution.** The balanced paragraph sounds like judgment. It weighs every study and never decides which one this firm should care about most.",
+        "k12": "**Fluency substitution.** \"Mixed but largely successful\" sounds like a historian weighing evidence. It weighs everything and commits to nothing a reader could argue with."
+      }
     },
     {
       "slug": "premature-synthesis",
@@ -65,7 +73,10 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
       ],
-      "essayAnchorEnd": "forming a mental map and inherited one instead."
+      "essayAnchorEnd": "forming a mental map and inherited one instead.",
+      "audienceParagraphs": {
+        "he": "**Premature synthesis.** The model connected three studies before the student knew enough about their designs to see that they measured different things in different workforces."
+      }
     },
     {
       "slug": "uncalibrated-reliance",
@@ -91,7 +102,11 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=2"
       ],
-      "essayAnchorEnd": "the model has already done the framing."
+      "essayAnchorEnd": "the model has already done the framing.",
+      "audienceParagraphs": {
+        "he": "**Invisible delegation.** \"Summarize the research\" handed over the criterion. The student believed she was asking for help with reading. She was also asking the model to decide what counted.",
+        "k12": "**Invisible delegation.** \"Write an essay\" handed over the most important decision in the assignment, which is what success should mean. The student thought she was asking for help writing."
+      }
     },
     {
       "slug": "institutional-monoculture",
@@ -103,7 +118,11 @@
       "unpublishedLinks": [
         "../../book-v0/four-moves-book.html?spread=4"
       ],
-      "essayAnchorEnd": "the range of strategic imagination the seminar is meant to develop."
+      "essayAnchorEnd": "the range of strategic imagination the seminar is meant to develop.",
+      "audienceParagraphs": {
+        "he": "**Institutional monoculture.** Give the same assignment to thirty students using similar tools and similar prompts, and many will turn in some version of \"the evidence is mixed; hybrid is the balance.\" The memos will differ in structure and sources while sharing one framing of the question. A seminar that should surface competing frames ends up comparing phrasings of a single one ([Deng, Brucks & Toubia, 2026](https://arxiv.org/abs/2602.20408)).",
+        "k12": "**Institutional monoculture.** Thirty students with similar tools will turn in many versions of \"mixed but largely successful.\" The essays will differ in their examples and share one standard. A class discussion meant to surface competing arguments will mostly compare wording."
+      }
     },
     {
       "slug": "responsibility-laundering",

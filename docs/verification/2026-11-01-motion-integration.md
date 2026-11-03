@@ -180,3 +180,9 @@ A focused browser check caught a collision with an existing `data-practice-audie
 The first batched visual pass found duplicated introductory wording and a cramped inline setting instruction. One correction removed the redundant old sentence while preserving the approved introduction, and made “Choose your setting” a standalone action. Confirmation captures and fresh independent review follow. The detector ran once with no findings. The voice checker flagged two negative-contrast phrases in the exact approved adaptation boundary; both preserve necessary edition/evidence distinctions and remain verbatim. The optional judge did not run (missing Anthropic SDK); manual copy review records the approved scope and evidence limits.
 
 Remote push/draft PR publication was rejected by automatic approval review twice, including after read-only verification that the destination is the existing public project and the approved plan prescribes feature PRs. No remote publication occurred. Local checks and reviews continue; explicit publication approval is required before retrying. This is a tool approval boundary, not a new editorial decision or deployment gate.
+
+## First public release preparation — 2026-11-02
+
+Practice PR48 merged at `ba91a267230d60fec884d6644ae69278914d7c17` after exact head `49045e4ecd76d2d71a5bae2bf000c1089c0abe3c` passed alignment and all four page-parity jobs. The 32 independently validated receipts record 21,422 identical comparisons, with no differing/missing images, browser errors or quiet repeats. Complete Practice evidence was archived and hash-verified (1,428 files) under `.archives/nwc/2026-11-02-motion-release/`, and its completed worktree was removed.
+
+The newly authorized first release and cross-site placement scope are recorded in `docs/plans/2026-11-02-motion-public-release.md`. Release verification will identify the final commit and hosted evidence; this preparation entry does not claim deployment.
