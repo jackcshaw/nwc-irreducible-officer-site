@@ -1,3 +1,4 @@
+import {renderPracticeFigures,adaptedModes,adaptationPrompt} from "./figure-practice.mjs";
 import {placePMEEssayCards} from "./figure-cards.mjs";
 import {buildFigurePages} from "./figure-pages.mjs";
 import { parseFailureModes } from "./failure-modes.mjs";
@@ -589,7 +590,7 @@ function buildCompanionMode() {
       </div>
     </section>
 
-    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. Begin with your setting’s essay as an educator, then transfer to your teaching. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p><p>Frame capture · Fluency substitution · Premature synthesis · Uncalibrated reliance · Invisible delegation · Institutional monoculture · Responsibility laundering</p><div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
+    <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p>${renderPracticeFigures(root,labPrompt())}<div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
         <h2>Paste this once into your AI assistant.</h2>
@@ -627,7 +628,7 @@ Use my stated audience, or ask which setting I want. Read ESSAY for PME, ESSAY H
 function labPrompt() {
   return `Run the Judgment Lab interactive failure-mode session. Use an attached judgment-lab-interactive-context.md if provided; otherwise read ${siteUrl}/assets/judgment-lab-interactive-context.md in full. If you cannot read the complete file, ask me to attach or paste it before proceeding.
 
-Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Read the selected edition: the-irreducible-officer.md for PME, essays/he.md for HE, or essays/k12.md for high school. Begin with that essay and help me choose one of its seven failure modes. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
+Follow labs/failure-mode-lab/facilitator.md. Use my stated audience or ask for my setting. Read the selected edition: the-irreducible-officer.md for PME, essays/he.md for HE, or essays/k12.md for high school. Begin with that essay and help me choose a failure mode to test. Collect my judgment before presenting the constructed contribution. Ask one question at a time and WAIT. Do not reveal case notes early unless I ask. Test my reasons, change a consequential condition, and let me retain or revise my view. Then use the audience guide to adapt the method to my teaching objective and learners' readiness. Save a short record of my actual decisions, support used, proposals, and open questions. Do not certify competence or invent classroom evidence.`;
 }
 
 function workbenchSetupPrompt(id = null) {
@@ -1434,6 +1435,9 @@ const promptBases = new Map(Array.from(document.querySelectorAll("[data-session-
 function applyAudience(id) {
   currentWorkbenchAudience = audienceLabels[id] ? id : "";
   const label = audienceLabels[id];
+  document.querySelectorAll("[data-practice-figures-audience]").forEach(el=>el.hidden=el.dataset.practiceFiguresAudience!==id);
+  document.querySelector("[data-practice-unselected]").hidden=Boolean(label);
+  document.querySelectorAll(".practice-prompt").forEach(el=>{el.hidden=true;el.style.removeProperty("display");});
   const selectedEssayMode = id === "he" || id === "k12" ? id + "-essay" : "essay";
   document.querySelectorAll("[data-selected-essay]").forEach(el=>{el.href="#"+selectedEssayMode;el.dataset.modeLink=selectedEssayMode;});
   const discussionSetting = {pme:"Discuss a professional recommendation: who framed it, who can authorize it, and what risk remains?",he:"Discuss an assignment in your discipline: which inference should the student own, and what evidence would demonstrate it?",k12:"Discuss as educators first: which concepts have been taught, what support is needed, and which choices can students own? Adult institutional duties remain with adults."};
@@ -1457,7 +1461,8 @@ function applyAudience(id) {
     const claim = new URL(location.href).searchParams.get("claim");
     const claimFocus = {learning:"Fluency substitution: distinguish assisted output from evidence of understanding",approval:"Frame capture: examine the judgment made before approval",friction:"Premature synthesis: distinguish useful support from lost practice",better:"Invisible delegation: inspect who supplied the criteria",frames:"Institutional monoculture: test whether different answers share the same frame"};
     const discussionContext = claimFocus[claim] && ["failure-mode-prompt","setup-prompt","workbench-setup-prompt"].includes(el.id) ? "Coming from the group discussion, I want to examine " + claimFocus[claim] + ". Help me test this claim; do not assume it is correct.\\n\\n" : "";
-    el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide and its matching full essay edition.\\n\\n" : "") + local;
+    const adaptation = ((${JSON.stringify(adaptedModes)}[id] || []).includes(el.dataset.modePrompt)) ? "\\n\\n" + ${JSON.stringify(adaptationPrompt)} : "";
+    el.textContent = discussionContext + (label ? "My setting is " + label + ". Use the " + id.toUpperCase() + " audience guide and its matching full essay edition.\\n\\n" : "") + local + adaptation;
   });
   if (typeof refreshWorkbench === "function") refreshWorkbench();
   markSetting(currentWorkbenchAudience);
@@ -1933,6 +1938,8 @@ function copyTextToClipboard(text) {
     else reject(new Error("copy command failed"));
   });
 }
+
+document.querySelector("[data-choose-practice-setting]").addEventListener("click",()=>document.getElementById("lab-audience").focus());
 
 document.querySelectorAll("[data-copy-target]").forEach((button) => {
   button.addEventListener("click", async () => {
