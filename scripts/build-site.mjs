@@ -916,7 +916,7 @@ function buildSourcesMode() {
       <h1>References</h1>
       <p class="dek">The evidence map separates the essay's claims from the sources and open questions behind them.</p>
       <p>
-        Start with a topic below, then follow the notes to original sources and their limits. The formal reference list remains at the end of each essay.
+        Use this as the working source spine for claim audits and deeper reading. Start with a topic, then follow the notes to original sources and their limits. The formal reference list remains at the end of each essay.
       </p>
     </section>
     <section class="reference-feature">
