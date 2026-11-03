@@ -28,6 +28,6 @@ Hosted checks cover all 36 figure/reading pages, metadata and player readiness; 
 
 ## Evidence and workspace closeout
 
-Release evidence is retained under `../.archives/nwc/2026-11-02-motion-release/`, including source/worktree archives with file-hash receipts, CI artifacts and summaries, independent reviews, original screenshots, build/test logs, preview and production comparisons, and live release provenance. The archive is preservation evidence, not a build source. Remote branches are retained. The active-work index records any remaining intentional checkouts; completed motion worktrees are retired through Git after archive verification.
+Release evidence is retained under `../.archives/nwc/2026-11-02-motion-release/`, including source/worktree archives with file-hash receipts, CI artifacts and summaries, independent reviews, original screenshots, build/test logs, preview and production comparisons, and live release provenance. The archive is preservation evidence, not a build source. Remote branches are retained. Practice and site-access checkouts have been archived and retired. At the time of this documentation commit, the release checkout remains active for closeout; its archive and removal follow this documentation PR’s merge and are tracked separately in the archive receipt and active-work index.
 
 Deployment establishes the published artifact, not educational validity. The classroom examples remain proposed adaptations for educator testing.
