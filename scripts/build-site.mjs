@@ -605,6 +605,10 @@ function buildCompanionMode() {
       </div>
     </section>
 
+    <section class="detail-band practice-reading">
+      <h2>Further reading</h2>
+      <p><a href="https://every.to/working-overtime/how-i-escaped-ai-autopilot-rerun" target="_blank" rel="noreferrer">Katie Parrott, “How I Escaped AI Autopilot”</a> — a practitioner’s account of writing down your own view before asking AI, creating distance between generation and review, and explaining why you accept an AI suggestion. A useful set of workflow ideas to try; the essay’s research discussion is not evidence that this lab improves learning. Every may require signup for full access.</p>
+    </section>
     <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p>${renderPracticeFigures(root,labPrompt())}<div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
@@ -630,10 +634,6 @@ function buildCompanionMode() {
       </div>
     </section>
 
-    <section class="detail-band practice-reading">
-      <h2>Further reading</h2>
-      <p><a href="https://every.to/working-overtime/how-i-escaped-ai-autopilot-rerun" target="_blank" rel="noreferrer">Katie Parrott, “How I Escaped AI Autopilot”</a> — a practitioner’s account of writing down your own view before asking AI, creating distance between generation and review, and explaining why you accept an AI suggestion. A useful set of workflow ideas to try; the essay’s research discussion is not evidence that this lab improves learning. Every may require signup for full access.</p>
-    </section>
   </div>`;
 }
 
