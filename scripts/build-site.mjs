@@ -605,10 +605,6 @@ function buildCompanionMode() {
       </div>
     </section>
 
-    <section class="detail-band practice-reading">
-      <h2>Further reading</h2>
-      <p><a href="https://every.to/working-overtime/how-i-escaped-ai-autopilot-rerun" target="_blank" rel="noreferrer">Katie Parrott, “How I Escaped AI Autopilot”</a> — a practitioner’s account of writing down your own view before asking AI, creating distance between generation and review, and explaining why you accept an AI suggestion. A useful set of workflow ideas to try; the essay’s research discussion is not evidence that this lab improves learning. Every may require signup for full access.</p>
-    </section>
     <section class="detail-band"><h2 class="band-label">Test a failure mode</h2><p>Current setting: <strong data-audience-current>Choose your setting above</strong>. <a href="#essay" data-selected-essay data-mode-link="essay">Read your setting’s essay</a>.</p>${renderPracticeFigures(root,labPrompt())}<div class="action-row"><button class="copy-button primary" type="button" data-copy-target="failure-mode-prompt">Copy interactive lab prompt</button><a class="quiet-action" href="assets/judgment-lab-interactive-context.md" download>Download lab context</a></div>${copyBlock("failure-mode-prompt", labPrompt())}</section>
     <section class="setup-panel">
       <div class="panel-heading">
@@ -920,12 +916,17 @@ function buildSourcesMode() {
       <h1>References</h1>
       <p class="dek">The evidence map separates the essay's claims from the sources and open questions behind them.</p>
       <p>
-        Use this as the working source spine for claim audits and deeper
-        reading. The formal reference list remains at the end of the essay.
+        Start with a topic below, then follow the notes to original sources and their limits. The formal reference list remains at the end of each essay.
       </p>
     </section>
-    <section class="detail-band"><h2 class="band-label">Essay editions and changes</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Download the section and claim comparison</a></section>
-    <section class="detail-band"><h2 class="band-label">Shared method and audience limits</h2><p>Read the shared foundation alongside the original source spine. HE and high-school examples are constructed teaching proposals. The source notes are not a substitute for inspecting the original papers, and this refresh adds no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
+    <section class="reference-feature">
+      <h2>A workflow practice to consider</h2>
+      <p><a href="https://every.to/working-overtime/how-i-escaped-ai-autopilot-rerun" target="_blank" rel="noreferrer">Katie Parrott, “How I Escaped AI Autopilot”</a></p>
+      <p>Parrott describes three habits: write your own view before asking AI, create distance between generation and review, and explain why you accept a suggestion. It is practitioner guidance with a discussion of related research; it does not establish that Judgment Lab improves learning. Every may require signup for full access.</p>
+      <p class="reference-kind">Practitioner essay · Workflow, review, and appropriate reliance</p>
+    </section>
+    <section class="detail-band"><h2 class="band-label">Choose an essay edition</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Compare sections and claims across editions</a></section>
+    <section class="detail-band"><h2 class="band-label">Start with the shared method</h2><p>The shared foundation explains the method across settings. HE and high-school examples are constructed teaching proposals. Source notes are not a substitute for inspecting the original papers, and the companion makes no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
     <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}), "shared-")}</article></details>
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article></details>
     <article class="source-spine article-body">
@@ -2829,6 +2830,32 @@ h1 {
 
 .source-spine li {
   margin-bottom: 12px;
+}
+
+.reference-feature {
+  max-width: 900px;
+  margin: 30px 0 42px;
+  padding: 26px 0 24px;
+  border-block: 1px solid var(--ink);
+}
+.reference-feature h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(25px, 2.6vw, 32px);
+  font-weight: 560;
+  line-height: 1.25;
+}
+.reference-feature p {
+  max-width: 70ch;
+  margin: 10px 0;
+  font-size: 18px;
+  line-height: 1.55;
+}
+.reference-feature p:first-of-type {font-size: 21px;}
+.reference-feature .reference-kind {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 15px;
 }
 
 .tool-grid {
