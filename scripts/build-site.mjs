@@ -889,8 +889,8 @@ function buildWorkbenchMode(tools, concepts) {
         <aside class="use-note">
           <h3 class="band-label">How to use it</h3>
           <p id="selected-tool-note">${escapeHtml(selected.useNote)}</p>
+          <div id="workbench-motion-links" hidden></div>
         </aside>
-        <div id="workbench-motion-links" hidden></div>
         <article class="template-rendered article-body" id="workbench-doc-view" aria-label="Selected document">${selected.html}</article>
         <pre hidden><code id="workbench-template">${escapeHtml(selected.markdown.trim())}</code></pre>
       </div>

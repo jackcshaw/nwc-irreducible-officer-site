@@ -27,3 +27,6 @@
 .setting-motion-entry { margin:48px 0; }
 .setting-motion-entry .motion-figure-card { margin:20px 0; }
 .related-motion-links { display:flex; flex-wrap:wrap; gap:12px 24px; margin:20px 0; }
+
+.motion-collection-entry h2 { margin:0 0 14px; }
+.motion-collection-entry p { margin:0 0 20px; font-size:20px; line-height:1.55; }

@@ -29,6 +29,7 @@ test('Discuss and Design links switch in place without stale audience or irrelev
  await page.locator('#lab-audience').selectOption('k12');await expect(page.locator('#discuss-learning [data-motion-figure]')).toHaveAttribute('href','/failure-modes/fluency-substitution/high-school/');
  await page.goto('/?audience=he#wb-doc-assessment-and-oral-defense-rubric');
  await expect(page.locator('#workbench-motion-links a')).toHaveCount(2);
+ expect((await page.locator('#workbench-motion-links').boundingBox()).y).toBeLessThan((await page.locator('#workbench-doc-view').boundingBox()).y);
  await expect(page.locator('#workbench-motion-links a').last()).toHaveAttribute('href','/failure-modes/responsibility-laundering/classroom/');
  await page.locator('#lab-audience').selectOption('pme');await expect(page.locator('#workbench-motion-links a').last()).toHaveAttribute('href','/failure-modes/responsibility-laundering/pme/');
  await page.goto('/?audience=he#wb-doc-frame-check');await expect(page.locator('#workbench-motion-links a')).toHaveCount(1);
