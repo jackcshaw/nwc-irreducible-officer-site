@@ -1,6 +1,6 @@
 {
   "name": "nwc-irreducible-officer-site",
-  "version": "2026.11.2",
+  "version": "2026.11.3",
   "private": true,
   "type": "module",
   "scripts": {
