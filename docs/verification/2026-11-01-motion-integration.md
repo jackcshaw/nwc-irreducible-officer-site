@@ -186,3 +186,7 @@ Remote push/draft PR publication was rejected by automatic approval review twice
 Practice PR48 merged at `ba91a267230d60fec884d6644ae69278914d7c17` after exact head `49045e4ecd76d2d71a5bae2bf000c1089c0abe3c` passed alignment and all four page-parity jobs. The 32 independently validated receipts record 21,422 identical comparisons, with no differing/missing images, browser errors or quiet repeats. Complete Practice evidence was archived and hash-verified (1,428 files) under `.archives/nwc/2026-11-02-motion-release/`, and its completed worktree was removed.
 
 The newly authorized first release and cross-site placement scope are recorded in `docs/plans/2026-11-02-motion-public-release.md`. Release verification will identify the final commit and hosted evidence; this preparation entry does not claim deployment.
+
+## Public release closeout
+
+The first public motion release is complete. See [the release verification record](2026-11-02-motion-public-release.md) for the accepted candidate, exact-head CI, merged release build, hosted file comparisons and evidence archive. Earlier no-deployment notes above describe their historical stages.

@@ -63,11 +63,13 @@ git checkout main
 git pull --ff-only
 ```
 
-Then create a short-lived branch only when needed:
+## Short-lived worktrees
 
-```sh
-git checkout -b codex/<short-task-name>
-```
+Jack requested one canonical folder per repository and ongoing cleanup of completed work. Keep feature and release checkouts under `../.worktrees/nwc-site/<task>/`, `../.worktrees/nwc-companion/<task>/`, or `../.worktrees/nwc-workbench/<task>/`; do not create task folders beside the canonical repositories. Maintain `../.worktrees/README.md` as the active-work index, naming each checkout's owner, branch, purpose and PR.
+
+Create each checkout from current remote main. For site builds, always set `COMPANION_REPO_PATH` and `WORKBENCH_REPO_PATH` to the clean canonical source repositories; the grouped layout does not support the old sibling-path defaults.
+
+At PR or task completion, verify merge or recovery status, archive unique ignored/untracked evidence under `../.archives/nwc/` with file-hash verification, then remove the completed checkout through `git worktree remove`. Remove safely merged local branches and retain remote branches. Do not remove another owner's active checkout or treat an archive as a build source. Update the active-work index in the same closeout.
 
 Do not begin new work in `/private/tmp` clones, Downloads, archived folders, old Proof exports, or stale PR branches.
 
