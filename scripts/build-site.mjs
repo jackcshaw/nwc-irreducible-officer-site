@@ -930,13 +930,13 @@ function buildSourcesMode() {
       <p>Choose a topic to scan the sources, see what each contributes, and follow the original evidence.</p>
       <nav aria-label="Source topics">${collectHeadings(sourceSpineMarkdown).map(({text,id}) => `<a href="#ref-${escapeHtml(id)}" data-reference-topic="ref-${escapeHtml(id)}">${escapeHtml(text)}<span aria-hidden="true"> ↓</span></a>`).join("")}</nav>
     </section>
+    <article class="source-spine article-body">
+      ${prefixIds(renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true }), "ref-")}
+    </article>
     <section class="detail-band"><h2 class="band-label">Choose an essay edition</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Compare sections and claims across editions</a></section>
     <section class="detail-band"><h2 class="band-label">Start with the shared method</h2><p>The shared foundation explains the method across settings. HE and high-school examples are constructed teaching proposals. Source notes are not a substitute for inspecting the original papers, and the companion makes no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
     <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}), "shared-")}</article></details>
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article></details>
-    <article class="source-spine article-body">
-      ${prefixIds(renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true }), "ref-")}
-    </article>
   </div>`;
 }
 
