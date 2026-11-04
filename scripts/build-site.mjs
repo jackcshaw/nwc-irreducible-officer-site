@@ -925,12 +925,17 @@ function buildSourcesMode() {
       <p>Parrott describes three habits: write your own view before asking AI, create distance between generation and review, and explain why you accept a suggestion. It is practitioner guidance with a discussion of related research; it does not establish that Judgment Lab improves learning. Every may require signup for full access.</p>
       <p class="reference-kind">Practitioner essay · Workflow, review, and appropriate reliance</p>
     </section>
+    <section class="reference-topics" aria-labelledby="reference-topics-title">
+      <h2 id="reference-topics-title">What are you investigating?</h2>
+      <p>Choose a topic to scan the sources, see what each contributes, and follow the original evidence.</p>
+      <nav aria-label="Source topics">${collectHeadings(sourceSpineMarkdown).map(({text,id}) => `<a href="#ref-${escapeHtml(id)}" data-reference-topic="ref-${escapeHtml(id)}">${escapeHtml(text)}<span aria-hidden="true"> ↓</span></a>`).join("")}</nav>
+    </section>
     <section class="detail-band"><h2 class="band-label">Choose an essay edition</h2>${editionLinks()}<a class="quiet-action" href="assets/essays/adaptation-map.md" download>Compare sections and claims across editions</a></section>
     <section class="detail-band"><h2 class="band-label">Start with the shared method</h2><p>The shared foundation explains the method across settings. HE and high-school examples are constructed teaching proposals. Source notes are not a substitute for inspecting the original papers, and the companion makes no claim of cross-domain validation.</p><a class="quiet-action" href="assets/audiences/shared-foundations.md" download>Download the shared foundation</a></section>
     <details class="foundation-detail"><summary>Read the shared foundation</summary><article class="article-body">${prefixIds(renderMarkdown(readRequiredCompanionFile("audiences/shared-foundations.md"), {skipFirstH1: true}), "shared-")}</article></details>
     <details class="edition-toc teaching-guide"><summary>Teaching guide and review notes (reveals the case analysis)</summary><article class="article-body audience-guide">${renderMarkdown(readRequiredCompanionFile("sources/audience-foundations.md"))}</article></details>
     <article class="source-spine article-body">
-      ${renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true })}
+      ${prefixIds(renderMarkdown(sourceSpineMarkdown, { skipFirstH1: true }), "ref-")}
     </article>
   </div>`;
 }
@@ -1444,6 +1449,13 @@ function slugify(value) {
 function clientJs() {
   return `const buttons = Array.from(document.querySelectorAll("[data-mode-tab]"));
 const modeLinks = Array.from(document.querySelectorAll("[data-mode-link]"));
+document.querySelectorAll("[data-reference-topic]").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    const heading = document.getElementById(link.dataset.referenceTopic);
+    if (heading) heading.scrollIntoView({ behavior: smoothBehavior(), block: "start" });
+  });
+});
 const essaySectionLinks = Array.from(document.querySelectorAll("[data-essay-section-link]"));
 const views = Array.from(document.querySelectorAll("[data-mode]"));
 const modeAliases = {learn:"overview",practice:"companion",design:"workbench",references:"sources"};
@@ -2857,6 +2869,28 @@ h1 {
   color: var(--muted);
   font-size: 15px;
 }
+.reference-topics {
+  max-width: 900px;
+  margin: 36px 0 42px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--faint);
+}
+.reference-topics h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(25px, 2.6vw, 32px);
+  font-weight: 560;
+  line-height: 1.25;
+}
+.reference-topics p {max-width: 68ch;font-size:18px;line-height:1.5;margin:8px 0 20px;}
+.reference-topics nav {display:flex;flex-wrap:wrap;gap:10px 24px;}
+.reference-topics nav a {padding:7px 0;color:var(--ink);font-size:17px;font-weight:580;text-decoration-color:var(--red);text-underline-offset:5px;}
+.reference-topics nav a span {color:var(--red);font-size:14px;}
+.reference-topics nav a:focus-visible {outline:2px solid var(--red);outline-offset:4px;}
+.source-spine.article-body li {margin:0 0 22px;padding:0 0 20px;border-bottom:1px solid var(--faint);line-height:1.55;}
+.source-spine.article-body li a:first-of-type {display:inline-block;margin:2px 3px 3px 0;font-weight:650;text-decoration-thickness:1.5px;text-underline-offset:4px;}
+.source-spine.article-body li a:first-of-type:hover {text-decoration-thickness:2.5px;}
+.source-spine.article-body li::marker {color:var(--red);}
 
 .tool-grid {
   margin-bottom: 22px;
